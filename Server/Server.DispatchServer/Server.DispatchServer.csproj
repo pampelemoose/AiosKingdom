@@ -57,8 +57,10 @@
     <Compile Include="CommandManager.cs" />
     <Compile Include="Commands\ACommand.cs" />
     <Compile Include="Commands\ClientAuthenticateCommand.cs" />
+    <Compile Include="Commands\ClientServerListCommand.cs" />
     <Compile Include="DataRepositories\DispatchDbContext.cs" />
     <Compile Include="DataRepositories\UserRepository.cs" />
+    <Compile Include="GameServerManager.cs" />
     <Compile Include="Migrations\201804230318216_InitialMigration.cs" />
     <Compile Include="Migrations\201804230318216_InitialMigration.Designer.cs">
       <DependentUpon>201804230318216_InitialMigration.cs</DependentUpon>
