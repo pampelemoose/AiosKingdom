@@ -12,7 +12,6 @@ namespace AiosKingdom
 		{
 			InitializeComponent();
 
-
             MainPage = new MainPage();
         }
 

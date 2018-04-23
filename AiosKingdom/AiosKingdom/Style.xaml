@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AiosKingdom.Style">
+
+    <Color x:Key="LightMainColor">Aqua</Color>
+    <Color x:Key="MainColor">Blue</Color>
+    <Color x:Key="DarkMainColor">Teal</Color>
+    <Color x:Key="LightBackgroundColor">Aqua</Color>
+    <Color x:Key="BackgroundColor">#02A8C4</Color>
+    <Color x:Key="DarkBackgroundColor">Teal</Color>
+
+    <Color x:Key="ItemQualityColor_Common">White</Color>
+    <Color x:Key="ItemQualityColor_Uncommon">Green</Color>
+    <Color x:Key="ItemQualityColor_Rare">Aqua</Color>
+    <Color x:Key="ItemQualityColor_Epic">Purple</Color>
+    <Color x:Key="ItemQualityColor_Legendary">Yellow</Color>
+
+    <Color x:Key="BookQualityColor_TierFive">Blue</Color>
+    <Color x:Key="BookQualityColor_TierFour">Green</Color>
+    <Color x:Key="BookQualityColor_TierThree">Yellow</Color>
+    <Color x:Key="BookQualityColor_TierTwo">Orange</Color>
+    <Color x:Key="BookQualityColor_TierOne">Red</Color>
+
+    <Color x:Key="StatColor_Stamina">Lime</Color>
+    <Color x:Key="StatColor_Energy">Blue</Color>
+    <Color x:Key="StatColor_Strength">Red</Color>
+    <Color x:Key="StatColor_Agility">Green</Color>
+    <Color x:Key="StatColor_Intelligence">Aqua</Color>
+    <Color x:Key="StatColor_Wisdom">Teal</Color>
+
+
+    <Style x:Key="LoginButton" TargetType="Button">
+        <Setter Property="BorderColor" Value="{StaticResource BackgroundColor}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderRadius" Value="5" />
+        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+    </Style>
+
+    <Style x:Key="LoginEntry" TargetType="Entry">
+        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource MainColor}" />
+        <Setter Property="TextColor" Value="{StaticResource MainColor}" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="MenuButton" TargetType="Button">
+        <Setter Property="BorderColor" Value="{StaticResource BackgroundColor}" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="BorderRadius" Value="5" />
+        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+    </Style>
+
+    <Style x:Key="TitleLabel" TargetType="Label">
+        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+        <Setter Property="FontSize" Value="40" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="MenuList" TargetType="ListView">
+        <Setter Property="RowHeight" Value="50" />
+        <Setter Property="SeparatorVisibility" Value="None" />
+        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+    </Style>
+
+    <DataTemplate x:Key="MenuListItem">
+        <ViewCell>
+            <Grid 
+                BackgroundColor="{StaticResource LightBackgroundColor}"
+                Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label 
+                    Grid.Row="0" 
+                    Grid.Column="0" 
+                    TextColor="{StaticResource MainColor}" 
+                    FontAttributes="Italic" 
+                    FontSize="22" 
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" 
+                    Text="{Binding Title}" />
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="UserListItem">
+        <ViewCell>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Text="Username : " />
+                <Label Grid.Column="1" Text="{Binding Username}" />
+                <Button Grid.Column="2" Text="Edit" 
+                        Command="{Binding Source={x:Reference UsersPage}, Path=BindingContext.EditUserAction}" 
+                        CommandParameter="{Binding .}"/>
+                <Button Grid.Column="3" Text="Show" 
+                        Command="{Binding Source={x:Reference UsersPage}, Path=BindingContext.GoToUserAction}" 
+                        CommandParameter="{Binding .}"/>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="BodyValuesListItem">
+        <ViewCell>
+            <Frame 
+                Padding="0"
+                Margin="5">
+                <Frame.Triggers>
+                    <DataTrigger TargetType="Frame" Binding="{Binding IsShared}" Value="False">
+                        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+                        <Setter Property="OutlineColor" Value="{StaticResource LightBackgroundColor}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Frame" Binding="{Binding IsShared}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+                        <Setter Property="OutlineColor" Value="{StaticResource BackgroundColor}" />
+                    </DataTrigger>
+                </Frame.Triggers>
+                <Grid BackgroundColor="{StaticResource LightBackgroundColor}">
+                    <Grid.Triggers>
+                        <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="False">
+                            <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+                        </DataTrigger>
+                    </Grid.Triggers>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label 
+                        Grid.Row="0" 
+                        Grid.Column="0" 
+                        FontAttributes="Bold" 
+                        FontSize="22" 
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center" 
+                        Text="{Binding Date, StringFormat='{0:D}'}">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsShared}" Value="False">
+                                <Setter Property="TextColor" Value="{StaticResource MainColor}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsShared}" Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource LightMainColor}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+
+                    <Grid   Grid.Row="1"
+                            BackgroundColor="{StaticResource DarkBackgroundColor}">
+                        <Grid.Triggers>
+                            <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="False">
+                                <Setter Property="BackgroundColor" Value="{StaticResource DarkBackgroundColor}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+                            </DataTrigger>
+                        </Grid.Triggers>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label 
+                            Grid.Column="0" 
+                            FontAttributes="Bold" 
+                            FontSize="16" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" 
+                            Text="Height :" />
+
+                        <Label 
+                            Grid.Column="1" 
+                            FontAttributes="Italic" 
+                            FontSize="16" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Start" 
+                            Text="{Binding Height, StringFormat='{0} cm'}" />
+
+                        <BoxView 
+                            Grid.ColumnSpan="2"
+                            BackgroundColor="Gray"
+                            WidthRequest="2"
+                            HeightRequest="20"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center" />
+
+                        <Label 
+                            Grid.Column="2" 
+                            FontAttributes="Bold" 
+                            FontSize="16" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" 
+                            Text="Weight :" />
+
+                        <Label 
+                            Grid.Column="3" 
+                            FontAttributes="Italic" 
+                            FontSize="16" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Start" 
+                            Text="{Binding Weight, StringFormat='{0} kg'}}" />
+                    </Grid>
+                </Grid>
+            </Frame>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="BodyValuesListItemAction">
+        <Button
+            BackgroundColor="{StaticResource LightBackgroundColor}"
+            TextColor="{StaticResource MainColor}"
+            Text="{Binding IsShared, Converter={StaticResource shareable}"
+            Command="{Binding ShareDatasAction}">
+        </Button>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DrugUsesItem">
+        <ViewCell>
+            <Frame 
+                Padding="0"
+                Margin="5">
+
+                <Frame.Triggers>
+                    <DataTrigger TargetType="Frame" Binding="{Binding IsShared}" Value="False">
+                        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+                        <Setter Property="OutlineColor" Value="{StaticResource LightBackgroundColor}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Frame" Binding="{Binding IsShared}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+                        <Setter Property="OutlineColor" Value="{StaticResource BackgroundColor}" />
+                    </DataTrigger>
+                </Frame.Triggers>
+
+                <Grid BackgroundColor="{StaticResource LightBackgroundColor}">
+                    <Grid.Triggers>
+                        <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="False">
+                            <Setter Property="BackgroundColor" Value="{StaticResource DarkBackgroundColor}" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+                        </DataTrigger>
+                    </Grid.Triggers>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+
+                    <Label 
+                        Grid.Row="0" 
+                        Grid.Column="0" 
+                        FontAttributes="Bold" 
+                        FontSize="22" 
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center" 
+                        Text="{Binding Date, StringFormat='{0:D}'}">
+
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsShared}" Value="False">
+                                <Setter Property="TextColor" Value="{StaticResource MainColor}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsShared}" Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource DarkMainColor}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </Grid>
+            </Frame>
+            <ViewCell.ContextActions>
+                <MenuItem 
+                    Text="Show"
+                    Command="{Binding DetailsAction}"
+                />
+            </ViewCell.ContextActions>
+        </ViewCell>
+    </DataTemplate>
+
+</ResourceDictionary>

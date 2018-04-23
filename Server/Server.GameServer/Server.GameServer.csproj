@@ -59,6 +59,10 @@
     <Compile Include="Commands\DispatchServerConnectCommand.cs" />
     <Compile Include="Commands\DispatchServerInfosCommand.cs" />
     <Compile Include="DataRepositories\GameDbContext.cs" />
+    <Compile Include="Migrations\201804230321494_InitialMigration.cs" />
+    <Compile Include="Migrations\201804230321494_InitialMigration.Designer.cs">
+      <DependentUpon>201804230321494_InitialMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,7 +72,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201804230321494_InitialMigration.resx">
+      <DependentUpon>201804230321494_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DataModels\DataModels.csproj">
       <Project>{dc146b2f-0846-47aa-a9a8-cd86a8815398}</Project>
