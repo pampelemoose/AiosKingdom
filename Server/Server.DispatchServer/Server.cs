@@ -87,8 +87,10 @@ namespace Server.DispatchServer
         private void SetupClientDelegates()
         {
             _commandArgCount.Add(Network.CommandCodes.Client_Authenticate, 2);
+            _commandArgCount.Add(Network.CommandCodes.Client_ServerList, 0);
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_ServerList, (args) => { return new Commands.ClientServerListCommand(args); });
         }
 
         private void Run()
@@ -483,6 +485,8 @@ namespace Server.DispatchServer
                 case Network.CommandCodes.Client_Authenticate:
                     retVal.IsValid = true;
                     retVal.Args = new string[2] { args[0], args[1] };
+                    break;
+                case Network.CommandCodes.Client_ServerList:
                     break;
                 default:
                     retVal.IsValid = false;

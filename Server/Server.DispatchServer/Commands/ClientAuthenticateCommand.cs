@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,7 +17,7 @@ namespace Server.DispatchServer.Commands
             string username = _args.Args[0];
             string password = _args.Args[1];
 
-            /*var userExists = Datas.DispatchRepository.UserRepository.GetByCredentials(username, password);
+            var userExists = DataRepositories.UserRepository.GetByCredentials(username, password);
             if (userExists != null)
             {
                 Console.WriteLine($"User [{userExists.Username}] connected.");
@@ -42,7 +43,7 @@ namespace Server.DispatchServer.Commands
                     Code = Network.CommandCodes.Client_Authenticate,
                     Json = JsonConvert.SerializeObject(Guid.Empty)
                 };
-            }*/
+            }
 
             return ret;
         }

@@ -16,6 +16,14 @@ namespace Server.DispatchServer.DataRepositories
             }
         }
 
+        public static DataModels.User GetByCredentials(string username, string password)
+        {
+            using (var context = new DispatchDbContext())
+            {
+                return context.Users.FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(password));
+            }
+        }
+
         public static bool Create(DataModels.User user)
         {
             using (var context = new DispatchDbContext())

@@ -7,8 +7,9 @@ namespace Server.DispatchServer.DataRepositories
 {
     public class DispatchDbContext : DbContext
     {
+        // User ID=sa;Password=Test1337
         public DispatchDbContext()
-            : base("Data Source=.;Initial Catalog=DispatchDb;User ID=sa;Password=Test1337")
+            : base("Data Source=.;Initial Catalog=DispatchDb;Trusted_Connection=True;")
         {
         }
 

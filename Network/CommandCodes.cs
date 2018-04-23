@@ -10,5 +10,7 @@ namespace Network
         public const int Gameserver_Infos = 1;
 
         public const int Client_Authenticate = 10;
+        public const int Client_ServerList = 11;
+
     }
 }

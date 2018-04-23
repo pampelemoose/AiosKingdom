@@ -8,8 +8,9 @@ namespace Server.GameServer.DataRepositories
 {
     public class GameDbContext : DbContext
     {
+        // User ID=sa;Password=Test1337
         public GameDbContext()
-            : base($"Data Source=.;Initial Catalog={ConfigurationManager.AppSettings.Get("DbName2")};User ID=sa;Password=Test1337")
+            : base($"Data Source=.;Initial Catalog={ConfigurationManager.AppSettings.Get("DbName2")};Trusted_Connection=True;")
         {
         }
 
