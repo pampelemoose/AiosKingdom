@@ -8,10 +8,56 @@
         <vm:MasterPageViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout
+            BackgroundColor="#02A8C4">
+            <ListView 
+                Grid.Row="1"
+                Style="{StaticResource MenuList}"
+                ItemTemplate="{StaticResource MenuListItem}"
+                ItemsSource="{Binding Menus}" 
+                SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+
+                <!--<ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="5,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>-->
+                <!-- <Image Source="{Binding IconSource}" /> -->
+                <!--
+                                <Label 
+                                    Style="{StaticResource MenuLabel}"
+                                    Grid.Column="1" Text="{Binding Title}" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>-->
+
+            </ListView>
+
+            <Grid
+                Margin="5, 0, 5, 5"
+                HeightRequest="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Style="{StaticResource MenuButton}"
+                    Text="Disconnect"
+                    Command="{Binding DisconnectAction}"/>
+
+                <Button
+                    Grid.Column="1"
+                    Style="{StaticResource MenuButton}"
+                    IsVisible="{Binding OnSoulList}"
+                    Text="Souls"
+                    Command="{Binding BackToSoulListAction}"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

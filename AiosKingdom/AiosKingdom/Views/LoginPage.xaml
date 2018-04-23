@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+             x:Class="AiosKingdom.Views.LoginPage"
+             Title="{Binding Title}">
+    <ContentPage.BindingContext>
+        <vm:LoginPageViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid
+            BackgroundColor="Teal"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+            <Grid
+                Padding="100, 20"
+                VerticalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                </Grid.RowDefinitions>
+
+                <!--custom:NoHelperEntry -->
+                <Entry
+                    Grid.Row="0"
+                    Placeholder="Username" 
+                    Text="{Binding Username}"/>
+                <Entry 
+                    Grid.Row="1"
+                    Placeholder="Password" 
+                    Text="{Binding Password}" 
+                    IsPassword="true" />
+                <Button 
+                    Grid.Row="2"
+                    Text="Log In" 
+                    BackgroundColor="Navy"
+                    Command="{Binding LogInAction}" />
+            </Grid>
+            <Grid
+                BackgroundColor="Black"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                IsVisible="{Binding IsLoading, Mode=TwoWay}">
+                <Grid
+                    VerticalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="100"/>
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        TextColor="Aqua"
+                        Text="{Binding Message}"/>
+                    <ActivityIndicator
+                        Grid.Row="1"
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalOptions="CenterAndExpand"
+                        Color="Aqua"
+                        Scale="4"
+                        IsRunning="true" />
+                </Grid>
+            </Grid>
+            <Grid
+                BackgroundColor="Red"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                IsVisible="{Binding IsError, Mode=TwoWay}">
+                <StackLayout
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center">
+                    <Label 
+                        Text="{Binding Message}"/>
+                    <Button 
+                        Text="Connect"
+                        Command="{Binding TryToConnectAction}"/>
+                </StackLayout>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

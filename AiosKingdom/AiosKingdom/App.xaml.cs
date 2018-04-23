@@ -1,7 +1,4 @@
-﻿using System;
-
-using AiosKingdom.Views;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace AiosKingdom
 {
@@ -12,7 +9,15 @@ namespace AiosKingdom
 		{
 			InitializeComponent();
 
-            MainPage = new MainPage();
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.Disconnected, (sender) => {
+                MainPage = new Views.LoginPage();
+            });
+
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.InitialDatasReceived, (sender) => {
+                MainPage = new MainPage();
+            });
+
+            MainPage = new Views.LoginPage();
         }
 
 		protected override void OnStart ()
