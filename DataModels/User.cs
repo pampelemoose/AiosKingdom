@@ -15,5 +15,18 @@ namespace DataModels
 
         [Required, MinLength(8), MaxLength(25)]
         public string Password { get; set; }
+
+        public static string EncryptPassword(string password)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(password);
+            System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
+            byte[] hash = sha256.ComputeHash(bytes);
+            string hashString = string.Empty;
+            foreach (byte x in hash)
+            {
+                hashString += String.Format("{0:x2}", x);
+            }
+            return hashString;
+        }
     }
 }
