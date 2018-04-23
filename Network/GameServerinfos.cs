@@ -6,6 +6,7 @@ namespace Network
 {
     public struct GameServerInfos
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public int SlotsLimit { get; set; }
         public int SlotsAvailable { get; set; }

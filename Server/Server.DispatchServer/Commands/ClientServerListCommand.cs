@@ -19,7 +19,7 @@ namespace Server.DispatchServer.Commands
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Client_Authenticate,
-                Json = JsonConvert.SerializeObject("")
+                Json = JsonConvert.SerializeObject(GameServerManager.Instance.ServerInfos)
             };
             ret.Succeeded = true;
 

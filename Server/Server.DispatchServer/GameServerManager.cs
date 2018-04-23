@@ -161,5 +161,13 @@ namespace Server.DispatchServer
                 }
             }
         }
+
+        public List<Network.GameServerInfos> ServerInfos
+        {
+            get
+            {
+                return _servers.Select(s => s.Value.Infos).ToList();
+            }
+        }
     }
 }

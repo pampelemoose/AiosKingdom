@@ -16,6 +16,7 @@ namespace Server.GameServer.Commands
         {
             var gameInfos = new Network.GameServerInfos // TODO : Get real infos
             {
+                Id = Guid.NewGuid(),
                 Name = "Some Name",
                 Difficulty = "Much Hard",
                 SlotsLimit = 100,
