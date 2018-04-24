@@ -61,23 +61,14 @@
                         HorizontalOptions="CenterAndExpand"
                         Color="Aqua"
                         Scale="4"
-                        IsRunning="true" />
+                        IsRunning="true"
+                        IsVisible="{Binding ShowButton, Converter={StaticResource inverseBoolean}}}"/>
+                    <Button
+                        Grid.Row="1"
+                        Text="Ok"
+                        Command="{Binding CloseMessage}"
+                        IsVisible="{Binding ShowButton}"/>
                 </Grid>
-            </Grid>
-            <Grid
-                BackgroundColor="Red"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="FillAndExpand"
-                IsVisible="{Binding IsError, Mode=TwoWay}">
-                <StackLayout
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center">
-                    <Label 
-                        Text="{Binding Message}"/>
-                    <Button 
-                        Text="Connect"
-                        Command="{Binding TryToConnectAction}"/>
-                </StackLayout>
             </Grid>
         </Grid>
     </ContentPage.Content>

@@ -11,14 +11,30 @@ namespace AiosKingdom.ViewModels
         public LoginPageViewModel()
             : base(null)
         {
+            _stopLoadingAction = new Command(() =>
+            {
+                ShowButton = false;
+                IsLoading = false;
+            });
+
+            _tryToConnectAction = new Command(() =>
+            {
+                Message = "Connecting to the server. Please wait...";
+                IsLoading = true;
+                ShowButton = false;
+
+                NetworkManager.Instance.ConnectToServer();
+            });
+
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.ConnectionSuccessful, (sender) => {
                 IsLoading = false;
             });
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ConnectionFailed, (sender, arg) => {
-                IsLoading = false;
-                IsError = true;
+                IsLoading = true;
+                ShowButton = true;
                 Message = arg;
+                CloseMessage = _tryToConnectAction;
             });
             
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful, (sender) => {
@@ -26,9 +42,9 @@ namespace AiosKingdom.ViewModels
             });
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed, (sender, arg) => {
-                IsLoading = false;
-                IsError = true;
+                ShowButton = true;
                 Message = arg;
+                CloseMessage = _stopLoadingAction;
             });
 
             NetworkManager.Instance.ConnectToServer();
@@ -36,7 +52,9 @@ namespace AiosKingdom.ViewModels
 
         ~LoginPageViewModel()
         {
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.ConnectionSuccessful);
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.ConnectionFailed);
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful);
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed);
         }
 
@@ -75,17 +93,6 @@ namespace AiosKingdom.ViewModels
             }
         }
 
-        private bool _isError;
-        public bool IsError
-        {
-            get { return _isError; }
-            set
-            {
-                _isError = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         private string _message = "Connecting to the server. Please wait...";
         public string Message
         {
@@ -97,16 +104,30 @@ namespace AiosKingdom.ViewModels
             }
         }
 
-        private ICommand _tryToConnectAction;
-        public ICommand TryToConnectAction =>
-        _tryToConnectAction ?? (_tryToConnectAction = new Command(() =>
+        private bool _showButton;
+        public bool ShowButton
         {
-            Message = "Connecting to the server. Please wait...";
-            IsLoading = true;
-            IsError = false;
+            get { return _showButton; }
+            set
+            {
+                _showButton = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-            NetworkManager.Instance.ConnectToServer();
-        }));
+        private ICommand _tryToConnectAction;
+        private ICommand _stopLoadingAction;
+
+        private ICommand _closeMessage;
+        public ICommand CloseMessage
+        {
+            get { return _closeMessage; }
+            set
+            {
+                _closeMessage = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         private Command _logInAction;
         public ICommand LogInAction =>

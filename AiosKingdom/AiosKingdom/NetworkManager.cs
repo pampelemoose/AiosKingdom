@@ -31,7 +31,6 @@ namespace AiosKingdom
 
         private NetworkManager()
         {
-            _dispatch = new TcpClient();
         }
 
         private void RunDispatch()
@@ -80,13 +79,20 @@ namespace AiosKingdom
                         if (!Guid.Empty.Equals(authToken))
                         {
                             _authToken = authToken;
-                            MessagingCenter.Send(this, MessengerCodes.ConnectionSuccessful);
+                            MessagingCenter.Send(this, MessengerCodes.LoginSuccessful);
+                            AskServerInfos();
                         }
 
-                        MessagingCenter.Send(this, MessengerCodes.ConnectionFailed);
+                        MessagingCenter.Send(this, MessengerCodes.LoginFailed, "Credentials not matching any existing account.");
                     }
                     break;
+                case Network.CommandCodes.Client_ServerList:
+                    {
+                        var servers = JsonConvert.DeserializeObject<List<Network.GameServerInfos>>(message.Json);
+                        
 
+                    }
+                    break;
                 /*case Network.ClientCodes.Ping:
                     {
                         _timedOut = DateTime.Now.Ticks;
@@ -188,11 +194,25 @@ namespace AiosKingdom
         {
             try
             {
-                await Task.Delay(1000);
-                _dispatch.Connect("10.0.2.2", 1337);
-                _isDispatchRunning = true;
-                Task.Factory.StartNew(RunDispatch, TaskCreationOptions.LongRunning);
-                MessagingCenter.Send(this, MessengerCodes.ConnectionSuccessful);
+                _dispatch = new TcpClient();
+                var result = _dispatch.BeginConnect("10.0.2.2", 1337, (asyncResult) => {
+                    try
+                    {
+                        _isDispatchRunning = true;
+                        Task.Factory.StartNew(RunDispatch, TaskCreationOptions.LongRunning);
+                        MessagingCenter.Send(this, MessengerCodes.ConnectionSuccessful);
+                        _dispatch.EndConnect(asyncResult);
+                    }
+                    catch (SocketException sockE)
+                    {
+                        MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, sockE.Message);
+                    }
+                }, null);
+
+                if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(1)))
+                {
+                    MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, "Server unreachable.. Please try again later..");
+                }
                 return;
             }
             catch (SocketException sockE)
@@ -235,7 +255,29 @@ namespace AiosKingdom
             var bytes = encoder.GetBytes(json + '|');
             var client = _dispatch.Client;
 
-            client.Send(bytes);
+            try
+            {
+                var result = client.BeginSend(bytes, 0, bytes.Length, SocketFlags.Broadcast, (asyncResult) =>
+                {
+                    try
+                    {
+                        client.EndSend(asyncResult);
+                    }
+                    catch (SocketException sockE)
+                    {
+                        MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, sockE.Message);
+                    }
+                }, null);
+
+                if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(2)))
+                {
+                    MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, "Connection lost, please reconnect..");
+                }
+            }
+            catch (SocketException sockE)
+            {
+                MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, sockE.Message);
+            }
         }
     }
 }

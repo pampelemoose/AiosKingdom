@@ -248,7 +248,9 @@ namespace Server.DispatchServer
 
             foreach (var client in ClientsManager.Instance.Clients)
             {
+                Console.WriteLine($"client [{client.Key}] socket shutdown.");
                 client.Value.Shutdown(SocketShutdown.Both);
+                client.Value.Close();
             }
 
             _updateGameserverInfos.Stop();

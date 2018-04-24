@@ -23,6 +23,7 @@
             <converters:BookQualityToColorConverter x:Key="bookQualityToColor" />
             <converters:StatToColorConverter x:Key="statToColor" />
             <converters:ListToHeightConverter x:Key="listToHeight" />
+            <converters:InverseBooleanConverter x:Key="inverseBoolean" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

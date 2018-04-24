@@ -43,6 +43,7 @@ namespace Server.DispatchServer.Commands
                     Code = Network.CommandCodes.Client_Authenticate,
                     Json = JsonConvert.SerializeObject(Guid.Empty)
                 };
+                ret.Succeeded = true;
             }
 
             return ret;
