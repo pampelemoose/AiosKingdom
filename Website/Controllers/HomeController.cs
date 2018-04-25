@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Website.Authentication;
 
 namespace Website.Controllers
 {
     public class HomeController : Controller
     {
-        [Authorize]
+        [CustomAuthorize(Roles = "User")]
         public ActionResult Index()
         {
             ViewBag.Message = "Your application description page.";

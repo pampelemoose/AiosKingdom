@@ -28,13 +28,16 @@ namespace DataModels.Items
         [Key]
         public Guid Id { get; set; }
 
-        [Required, MaxLength(50)]
+        [Required(ErrorMessage = "Name required"), MinLength(4), MaxLength(50)]
+        [Display(Name = "Name")]
         public string Name { get; set; }
 
-        [Required, MaxLength(200)]
+        [Required(ErrorMessage = "Description required"), MinLength(4), MaxLength(200)]
+        [Display(Name = "Description")]
         public string Description { get; set; }
 
         private string _image = "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";
+        [Display(Name = "Image")]
         public string Image
         {
             get { return _image; }
@@ -42,20 +45,26 @@ namespace DataModels.Items
         }
 
         private ItemType _type;
-        [Required]
+        [Required(ErrorMessage = "Type required")]
+        [Display(Name = "Type")]
         public ItemType Type
         {
             get { return _type; }
             private set { _type = value; }
         }
 
-        [Required]
+        [Required(ErrorMessage = "Quality required")]
+        [Display(Name = "Quality")]
         public ItemQuality Quality { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "ItemLevel required")]
+        [Display(Name = "Item Level")]
+        [Range(0, 400)]
         public int ItemLevel { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "UseLevelRequired required")]
+        [Display(Name = "Level Required")]
+        [Range(0, 400)]
         public int UseLevelRequired { get; set; }
 
         public AItem(ItemType type)

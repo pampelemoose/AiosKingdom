@@ -1,24 +1,78 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+
+    background-color: #2E4172;
+    color: #061539;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+.card, .list-group-item {
+    background-color: #061539;
+    color: #7887AB;
+    border-color: #4F628E;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+.legendary {
+    border-color: #ffeb10;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+.legendary > .card-header {
+    background-color: #ffeb10;
+    color: #061539;
+}
+
+.legendary-text {
+    color: #ffeb10;
+}
+
+.epic {
+    border-color: #b915ff;
+}
+
+.epic > .card-header {
+    background-color: #b915ff;
+    color: #061539;
+}
+
+.epic-text {
+    color: #b915ff;
+}
+
+.rare {
+    border-color: #4551ff;
+}
+
+.rare > .card-header {
+    background-color: #4551ff;
+    color: #061539;
+}
+
+.rare-text {
+    color: #4551ff;
+}
+
+.uncommon {
+    border-color: #42ff0e;
+}
+
+.uncommon > .card-header {
+    background-color: #42ff0e;
+    color: #061539;
+}
+
+.uncommon-text {
+    color: #42ff0e;
+}
+
+.common {
+    border-color: #232323;
+}
+
+.common > .card-header {
+    background-color: #232323;
+    color: #7887AB;
+}
+
+.common-text {
+    color: #7887AB;
 }

@@ -58,14 +58,7 @@
     <Compile Include="Commands\ACommand.cs" />
     <Compile Include="Commands\ClientAuthenticateCommand.cs" />
     <Compile Include="Commands\ClientServerListCommand.cs" />
-    <Compile Include="DataRepositories\DispatchDbContext.cs" />
-    <Compile Include="DataRepositories\UserRepository.cs" />
     <Compile Include="GameServerManager.cs" />
-    <Compile Include="Migrations\201804230318216_InitialMigration.cs" />
-    <Compile Include="Migrations\201804230318216_InitialMigration.Designer.cs">
-      <DependentUpon>201804230318216_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
@@ -79,15 +72,14 @@
       <Project>{dc146b2f-0846-47aa-a9a8-cd86a8815398}</Project>
       <Name>DataModels</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\DataRepositories\DataRepositories.csproj">
+      <Project>{603f0313-3e25-4142-8487-cec37669e0de}</Project>
+      <Name>DataRepositories</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Network\Network.csproj">
       <Project>{fd6a34fe-f77d-4f4c-a342-d52ced5a9937}</Project>
       <Name>Network</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201804230318216_InitialMigration.resx">
-      <DependentUpon>201804230318216_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

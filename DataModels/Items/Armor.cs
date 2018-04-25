@@ -19,17 +19,33 @@ namespace DataModels.Items
 
     public class Armor : AItem
     {
-        [Required]
+        [Required(ErrorMessage = "Part required")]
+        [Display(Name = "Part")]
         public ArmorPart Part { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "ArmorValue required")]
+        [Display(Name = "Armor Value")]
+        [Range(0, 400)]
         public int ArmorValue { get; set; }
 
+        [Display(Name = "Stats")]
         public List<ItemStat> Stats { get; set; }
 
         public Armor()
             : base(ItemType.Armor)
         {
+        }
+
+        public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Name.Length < 4)
+                yield return new ValidationResult("Must enter a name (min 4 char)", new[] { "Name" });
+
+            if (Description.Length < 4)
+                yield return new ValidationResult("Must enter a description (min 4 char)", new[] { "Description" });
+
+            if (ItemLevel < 1)
+                yield return new ValidationResult("Item Level must be superior than 0", new[] { "ItemLevel" });
         }
     }
 }

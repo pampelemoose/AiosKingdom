@@ -10,11 +10,21 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
-        [Required, MinLength(4)]
+        [Required, MinLength(4), ConcurrencyCheck]
         public string Username { get; set; }
 
         [Required, MinLength(8), MaxLength(25)]
         public string Password { get; set; }
+
+        [Required, EmailAddress, ConcurrencyCheck]
+        public string Email { get; set; }
+
+        public List<Role> Roles { get; set; }
+
+        [Required]
+        public Guid ActivationCode { get; set; }
+
+        public bool IsActivated { get; set; }
 
         public static string EncryptPassword(string password)
         {
