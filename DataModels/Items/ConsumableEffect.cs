@@ -20,18 +20,23 @@ namespace DataModels.Items
         public Guid ConsumableId { get; set; }
         public Consumable Consumable { get; set; }
 
+        [Display(Name = "Name")]
         [Required, MaxLength(50)]
         public string Name { get; set; }
 
+        [Display(Name = "Description")]
         [Required, MaxLength(200)]
         public string Description { get; set; }
 
+        [Display(Name = "Type")]
         [Required]
         public EffectType Type { get; set; }
 
+        [Display(Name = "AffectValue")]
         [Required]
         public float AffectValue { get; set; }
 
+        [Display(Name = "AffectTime")]
         [Required]
         public int AffectTime { get; set; }
     }

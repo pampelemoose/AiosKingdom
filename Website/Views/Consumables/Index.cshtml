@@ -1,10 +1,10 @@
-﻿@model Website.Models.ArmorFilter
+﻿@model Website.Models.ConsumableFilter
 
 @{
-    ViewBag.Title = "Armors";
+    ViewBag.Title = "Index";
 }
 
-<h2>Armors</h2>
+<h2>Consumables</h2>
 
 <div class="row">
     <div class="card col-12">
@@ -45,13 +45,6 @@
                     </div>
 
                     <div class="form-group col-6">
-                        @Html.LabelFor(model => model.Part, htmlAttributes: new { @class = "control-label" })
-                        <div>
-                            @Html.EnumDropDownListFor(model => model.Part, new { @class = "form-control" })
-                        </div>
-                    </div>
-
-                    <div class="form-group col-6">
                         <div class="col-md-offset-2 col-md-10">
                             <input type="submit" value="Filter" class="btn btn-default" />
                         </div>
@@ -63,7 +56,7 @@
 </div>
 
 <div class="row">
-    @foreach (var armor in Model.Armors)
+    @foreach (var armor in Model.Consumables)
     {
         <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
             <div class="card text-center mt-3 @armor.Quality.ToString().ToLower()">
@@ -74,10 +67,9 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item ">
                         <div class="row">
-                            <div class="col-6 @armor.Quality.ToString().ToLower()-text">
+                            <div class="col-12 @armor.Quality.ToString().ToLower()-text">
                                 <strong>@armor.Quality</strong>
                             </div>
-                            <div class="col-6">@armor.Part</div>
                         </div>
                     </li>
                     <li class="list-group-item">
@@ -92,25 +84,19 @@
                             <div class="col-4">@armor.ItemLevel</div>
                         </div>
                     </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-8">Armor</div>
-                            <div class="col-4">@armor.ArmorValue</div>
-                        </div>
-                    </li>
                 </ul>
                 <div class="card-body font-weight-light font-italic">
                     @armor.Description
                 </div>
                 <ul class="list-group list-group-flush">
-                    @if (armor.Stats != null)
+                    @if (armor.Effects != null)
                     {
-                        foreach (var stat in armor.Stats)
+                        foreach (var effect in armor.Effects)
                         {
-                            <li class="list-group-item">
+                            <li class="list-group-item" data-toggle="popover" title="@effect.Type - @effect.AffectValue" data-content="@effect.Description">
                                 <div class="row">
-                                    <div class="col-8">@stat.Type</div>
-                                    <div class="col-4"><strong>+ @stat.StatValue</strong></div>
+                                    <div class="col-8">@effect.Name</div>
+                                    <div class="col-4"><strong>@effect.AffectTime</strong></div>
                                 </div>
                             </li>
                         }

@@ -89,27 +89,24 @@ namespace Website.Controllers
                     return View(registrationView);
                 }
 
-                using (var context = new DataRepositories.DispatchDbContext())
+                var role = DataRepositories.UserRepository.Roles.FirstOrDefault(r => r.Name.Equals("User"));
+                var user = new DataModels.User
                 {
-                    var role = context.Roles.FirstOrDefault(r => r.Name.Equals("User"));
-                    var user = new DataModels.User
-                    {
-                        Id = Guid.NewGuid(),
-                        Username = registrationView.Username,
-                        Password = DataModels.User.EncryptPassword(registrationView.Password),
-                        Email = registrationView.Email,
-                        ActivationCode = registrationView.ActivationCode,
-                        IsActivated = false,
-                        Roles = new List<DataModels.Role> { role }
-                    };
+                    Id = Guid.NewGuid(),
+                    Username = registrationView.Username,
+                    Password = DataModels.User.EncryptPassword(registrationView.Password),
+                    Email = registrationView.Email,
+                    ActivationCode = registrationView.ActivationCode,
+                    IsActivated = false,
+                    Roles = new List<DataModels.Role> { role }
+                };
 
-                    context.Users.Add(user);
-                    context.SaveChanges();
+                if (DataRepositories.UserRepository.Create(user))
+                {
+                    VerificationEmail(registrationView.Email, registrationView.ActivationCode.ToString());
+                    messageRegistration = "Your account has been created.";
+                    statusRegistration = true;
                 }
-
-                VerificationEmail(registrationView.Email, registrationView.ActivationCode.ToString());
-                messageRegistration = "Your account has been created.";
-                statusRegistration = true;
             }
 
             ViewBag.Message = messageRegistration;

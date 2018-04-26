@@ -1,26 +1,7 @@
-﻿@model List<DataModels.User>
-
-@{
+﻿@{
     ViewBag.Title = "Home Page";
 }
 
 <div class="row">
     <h2>@ViewBag.Message</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Username</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model)
-            {
-                <tr>
-                    <td>
-                        @user.Username
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
 </div>

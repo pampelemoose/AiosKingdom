@@ -11,6 +11,14 @@ namespace DataRepositories
     {
         private static DispatchDbContext _context = new DispatchDbContext();
 
+        public static List<DataModels.Role> Roles
+        {
+            get
+            {
+                return _context.Roles.ToList();
+            }
+        }
+
         public static List<DataModels.User> GetAll()
         {
             return _context.Users.ToList();
@@ -23,34 +31,31 @@ namespace DataRepositories
 
         public static bool Create(DataModels.User user)
         {
-            using (var context = new DispatchDbContext())
+            if (_context.Users.FirstOrDefault(u => u.Username.Equals(user.Username)) != null)
+                return false;
+
+            if (user.Id.Equals(Guid.Empty))
             {
-                if (context.Users.FirstOrDefault(u => u.Username.Equals(user.Username)) != null)
-                    return false;
-
-                if (user.Id.Equals(Guid.Empty))
-                {
-                    user.Id = Guid.NewGuid();
-                }
-
-                context.Users.Add(user);
-                try
-                {
-                    context.SaveChanges();
-                }
-                catch (DbEntityValidationException e)
-                {
-                    foreach (var error in e.EntityValidationErrors)
-                    {
-                        foreach (var mess in error.ValidationErrors)
-                        {
-                            Console.WriteLine(mess.ErrorMessage);
-                        }
-                    }
-                    return false;
-                }
-                return true;
+                user.Id = Guid.NewGuid();
             }
+
+            _context.Users.Add(user);
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var error in e.EntityValidationErrors)
+                {
+                    foreach (var mess in error.ValidationErrors)
+                    {
+                        Console.WriteLine(mess.ErrorMessage);
+                    }
+                }
+                return false;
+            }
+            return true;
         }
     }
 }

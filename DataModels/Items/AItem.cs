@@ -59,12 +59,12 @@ namespace DataModels.Items
 
         [Required(ErrorMessage = "ItemLevel required")]
         [Display(Name = "Item Level")]
-        [Range(0, 400)]
+        [Range(1, 400, ErrorMessage = "ItemLevel should be higher than 0")]
         public int ItemLevel { get; set; }
 
         [Required(ErrorMessage = "UseLevelRequired required")]
         [Display(Name = "Level Required")]
-        [Range(0, 400)]
+        [Range(1, 400)]
         public int UseLevelRequired { get; set; }
 
         public AItem(ItemType type)

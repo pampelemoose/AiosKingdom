@@ -9,19 +9,11 @@ namespace Website.Controllers
 {
     public class HomeController : Controller
     {
-        [CustomAuthorize(Roles = "User")]
         public ActionResult Index()
         {
             ViewBag.Message = "Your application description page.";
 
-            List<DataModels.User> users = new List<DataModels.User>();
-
-            using (var context = new DataRepositories.DispatchDbContext())
-            {
-                users = context.Users.ToList();
-            }
-
-            return View(users);
+            return View();
         }
     }
 }

@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArmorRepository.cs" />
+    <Compile Include="ConsumableRepository.cs" />
     <Compile Include="DispatchDbContext.cs" />
     <Compile Include="GameDbContext.cs" />
     <Compile Include="GameDbContextFactory.cs" />
