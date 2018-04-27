@@ -57,6 +57,10 @@
     <Compile Include="Migrations\Dispatch\201804270848247_InitialMigration.Designer.cs">
       <DependentUpon>201804270848247_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Dispatch\201804270955556_UpdateMigration.cs" />
+    <Compile Include="Migrations\Dispatch\201804270955556_UpdateMigration.Designer.cs">
+      <DependentUpon>201804270955556_UpdateMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Dispatch\DispatchConfiguration.cs" />
     <Compile Include="Migrations\Game\201804270821163_InitialMigration.cs" />
     <Compile Include="Migrations\Game\201804270821163_InitialMigration.Designer.cs">
@@ -79,6 +83,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\Dispatch\201804270848247_InitialMigration.resx">
       <DependentUpon>201804270848247_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Dispatch\201804270955556_UpdateMigration.resx">
+      <DependentUpon>201804270955556_UpdateMigration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Game\201804270821163_InitialMigration.resx">
       <DependentUpon>201804270821163_InitialMigration.cs</DependentUpon>
