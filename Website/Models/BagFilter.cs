@@ -6,9 +6,12 @@ using System.Web;
 
 namespace Website.Models
 {
-    public class ConsumableFilter : AItemFilterModel<DataModels.Items.Consumable>
+    public class BagFilter : AItemFilterModel<DataModels.Items.Bag>
     {
-        public override List<DataModels.Items.Consumable> FilterList(List<DataModels.Items.Consumable> list)
+        [Display(Name = "SlotCount")]
+        public int SlotCount { get; set; }
+
+        public override List<DataModels.Items.Bag> FilterList(List<DataModels.Items.Bag> list)
         {
             if (!string.IsNullOrEmpty(Name))
             {
@@ -28,6 +31,11 @@ namespace Website.Models
             if (UseLevelRequired > 0)
             {
                 list = list.Where(a => a.UseLevelRequired.Equals(UseLevelRequired)).ToList();
+            }
+
+            if (SlotCount > 0)
+            {
+                list = list.Where(a => a.SlotCount.Equals(SlotCount)).ToList();
             }
 
             return list;

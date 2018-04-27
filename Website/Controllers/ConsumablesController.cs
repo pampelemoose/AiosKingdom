@@ -13,7 +13,7 @@ namespace Website.Controllers
         {
             var consumables = DataRepositories.ConsumableRepository.GetAll();
 
-            filter.Consumables = filter.FilterList(consumables);
+            filter.Items = filter.FilterList(consumables);
 
             return View(filter);
         }

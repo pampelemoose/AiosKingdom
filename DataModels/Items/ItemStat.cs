@@ -11,9 +11,9 @@ namespace DataModels.Items
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Armor")]
-        public Guid ArmorId { get; set; }
-        public Armor Armor { get; set; }
+        [ForeignKey("Item")]
+        public Guid ItemId { get; set; }
+        public AEquipableItem Item { get; set; }
 
         [Required]
         public Soul.Stats Type { get; set; }

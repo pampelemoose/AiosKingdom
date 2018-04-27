@@ -5,9 +5,6 @@ using System.Runtime.CompilerServices;
 
 using Xamarin.Forms;
 
-using AiosKingdom.Models;
-using AiosKingdom.Services;
-
 namespace AiosKingdom.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged

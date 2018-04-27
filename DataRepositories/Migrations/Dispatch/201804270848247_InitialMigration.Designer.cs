@@ -13,7 +13,7 @@ namespace DataRepositories.Migrations.Dispatch
         
         string IMigrationMetadata.Id
         {
-            get { return "201804250659429_InitialMigration"; }
+            get { return "201804270848247_InitialMigration"; }
         }
         
         string IMigrationMetadata.Source

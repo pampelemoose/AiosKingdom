@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -8,13 +7,13 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class ArmorsController : Controller
+    public class BagsController : Controller
     {
-        public ActionResult Index(Models.ArmorFilter filter)
+        public ActionResult Index(Models.BagFilter filter)
         {
-            var armors = DataRepositories.ArmorRepository.GetAll();
+            var bags = DataRepositories.BagRepository.GetAll();
 
-            filter.Items = filter.FilterList(armors);
+            filter.Items = filter.FilterList(bags);
 
             return View(filter);
         }
@@ -23,70 +22,69 @@ namespace Website.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            var armor = new DataModels.Items.Armor();
-            armor.Stats = new List<DataModels.Items.ItemStat>();
+            var bag = new DataModels.Items.Bag();
+            bag.Stats = new List<DataModels.Items.ItemStat>();
 
             foreach (DataModels.Soul.Stats en in Enum.GetValues(typeof(DataModels.Soul.Stats)))
             {
-                armor.Stats.Add(new DataModels.Items.ItemStat
+                bag.Stats.Add(new DataModels.Items.ItemStat
                 {
                     Type = en
                 });
             }
-
-            return View(armor);
+            return View(bag);
         }
 
         [CustomAuthorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(DataModels.Items.Armor armor)
+        public ActionResult Create(DataModels.Items.Bag bag)
         {
             if (ModelState.IsValid)
             {
                 bool haveErrors = false;
-                if (string.IsNullOrEmpty(armor.Name))
+                if (string.IsNullOrEmpty(bag.Name))
                 {
                     ModelState.AddModelError("Name", "Must specify a name.");
                     haveErrors = true;
                 }
 
-                if (string.IsNullOrEmpty(armor.Description))
+                if (string.IsNullOrEmpty(bag.Description))
                 {
                     ModelState.AddModelError("Description", "Must specify a description");
                     haveErrors = true;
                 }
 
-                if (armor.ItemLevel < 1)
+                if (bag.ItemLevel < 1)
                 {
                     ModelState.AddModelError("ItemLevel", "Must be > 0");
                     haveErrors = true;
                 }
 
-                if (armor.UseLevelRequired < 1)
+                if (bag.UseLevelRequired < 1)
                 {
                     ModelState.AddModelError("UseLevelRequired", "Must be > 0");
                     haveErrors = true;
                 }
 
-                if (armor.ArmorValue < 1)
+                if (bag.SlotCount < 1)
                 {
-                    ModelState.AddModelError("ArmorValue", "Must be > 0");
+                    ModelState.AddModelError("SlotCount", "Must be > 0");
                     haveErrors = true;
                 }
 
-                if (haveErrors) return View(armor);
+                if (haveErrors) return View(bag);
 
-                armor.Id = Guid.NewGuid();
-                armor.Stats.RemoveAll(s => s.StatValue == 0);
+                bag.Id = Guid.NewGuid();
+                bag.Stats.RemoveAll(s => s.StatValue == 0);
 
-                if (DataRepositories.ArmorRepository.Create(armor))
+                if (DataRepositories.BagRepository.Create(bag))
                 {
                     return RedirectToAction("Index");
                 }
             }
 
-            return View(armor);
+            return View(bag);
         }
     }
 }

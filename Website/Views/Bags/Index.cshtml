@@ -1,10 +1,10 @@
-﻿@model Website.Models.ConsumableFilter
+﻿@model Website.Models.BagFilter
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Bags";
 }
 
-<h2>Consumables</h2>
+<h2>Bags</h2>
 
 <div class="row">
     <div class="card col-12">
@@ -45,6 +45,13 @@
                     </div>
 
                     <div class="form-group col-6">
+                        @Html.LabelFor(model => model.SlotCount, htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            @Html.EditorFor(model => model.SlotCount, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-6">
                         <div class="col-md-offset-2 col-md-10">
                             <input type="submit" value="Filter" class="btn btn-default" />
                         </div>
@@ -56,47 +63,53 @@
 </div>
 
 <div class="row">
-    @foreach (var armor in Model.Items)
+    @foreach (var bag in Model.Items)
     {
         <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-            <div class="card text-center mt-3 @armor.Quality.ToString().ToLower()">
-                <img class="card-img-top" src="@armor.Image">
+            <div class="card text-center mt-3 @bag.Quality.ToString().ToLower()">
+                <img class="card-img-top" src="@bag.Image">
                 <div class="card-header">
-                    @armor.Name
+                    @bag.Name
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item ">
                         <div class="row">
-                            <div class="col-12 @armor.Quality.ToString().ToLower()-text">
-                                <strong>@armor.Quality</strong>
+                            <div class="col-12 @bag.Quality.ToString().ToLower()-text">
+                                <strong>@bag.Quality</strong>
                             </div>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-8">Level Required</div>
-                            <div class="col-4">@armor.UseLevelRequired</div>
+                            <div class="col-4">@bag.UseLevelRequired</div>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-8">Item Level</div>
-                            <div class="col-4">@armor.ItemLevel</div>
+                            <div class="col-4">@bag.ItemLevel</div>
                         </div>
                     </li>
                 </ul>
                 <div class="card-body font-weight-light font-italic">
-                    @armor.Description
+                    @bag.Description
                 </div>
                 <ul class="list-group list-group-flush">
-                    @if (armor.Effects != null)
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-8">SlotCount</div>
+                            <div class="col-4"><strong>+ @bag.SlotCount</strong></div>
+                        </div>
+                    </li>
+                    @if (bag.Stats != null)
                     {
-                        foreach (var effect in armor.Effects)
+                        foreach (var stat in bag.Stats)
                         {
-                            <li tabindex="0" class="list-group-item" data-toggle="popover" data-trigger="focus" title="@effect.Type - @effect.AffectValue" data-content="@effect.Description">
+                            <li class="list-group-item">
                                 <div class="row">
-                                    <div class="col-8">@effect.Name</div>
-                                    <div class="col-4"><strong>@effect.AffectTime</strong></div>
+                                    <div class="col-8">@stat.Type</div>
+                                    <div class="col-4"><strong>+ @stat.StatValue</strong></div>
                                 </div>
                             </li>
                         }

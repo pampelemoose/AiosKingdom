@@ -17,7 +17,7 @@ namespace DataModels.Items
         Hand = 7
     }
 
-    public class Armor : AItem
+    public class Armor : AEquipableItem
     {
         [Required(ErrorMessage = "Part required")]
         [Display(Name = "Part")]
@@ -27,9 +27,6 @@ namespace DataModels.Items
         [Display(Name = "Armor Value")]
         [Range(1, 400)]
         public int ArmorValue { get; set; }
-
-        [Display(Name = "Stats")]
-        public List<ItemStat> Stats { get; set; }
 
         public Armor()
             : base(ItemType.Armor)

@@ -28,6 +28,7 @@
                     <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
                     <li class="nav-item">@Html.ActionLink("Armors", "Index", "Armors", null, new { @class = "nav-link" })</li>
                     <li class="nav-item">@Html.ActionLink("Consumables", "Index", "Consumables", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Bags", "Index", "Bags", null, new { @class = "nav-link" })</li>
                 </ul>
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
@@ -86,6 +87,13 @@
                                 @Html.ActionLink("Create", "Create", "Consumables", null, new { @class = "dropdown-item" })
                             </div>
                         </li>
+                        <li class="nav-item dropup">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                               role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Bags</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Create", "Create", "Bags", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -93,7 +101,9 @@
     }
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/popper")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/sitejs")
     @RenderSection("scripts", required: false)
 </body>
 </html>

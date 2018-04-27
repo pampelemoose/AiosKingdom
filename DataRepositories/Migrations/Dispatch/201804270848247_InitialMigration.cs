@@ -8,12 +8,10 @@ namespace DataRepositories.Migrations.Dispatch
         public override void Up()
         {
             CreateTable(
-                "dbo.Armors",
+                "dbo.AEquipableItems",
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Part = c.Int(nullable: false),
-                        ArmorValue = c.Int(nullable: false),
                         Name = c.String(),
                         Description = c.String(),
                         Image = c.String(),
@@ -21,6 +19,10 @@ namespace DataRepositories.Migrations.Dispatch
                         Quality = c.Int(nullable: false),
                         ItemLevel = c.Int(nullable: false),
                         UseLevelRequired = c.Int(nullable: false),
+                        Part = c.Int(),
+                        ArmorValue = c.Int(),
+                        SlotCount = c.Int(),
+                        Discriminator = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -29,29 +31,13 @@ namespace DataRepositories.Migrations.Dispatch
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        ArmorId = c.Guid(nullable: false),
+                        ItemId = c.Guid(nullable: false),
                         Type = c.Int(nullable: false),
                         StatValue = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Armors", t => t.ArmorId, cascadeDelete: true)
-                .Index(t => t.ArmorId);
-            
-            CreateTable(
-                "dbo.Bags",
-                c => new
-                    {
-                        Id = c.Guid(nullable: false),
-                        SlotCount = c.Int(nullable: false),
-                        Name = c.String(),
-                        Description = c.String(),
-                        Image = c.String(),
-                        Type = c.Int(nullable: false),
-                        Quality = c.Int(nullable: false),
-                        ItemLevel = c.Int(nullable: false),
-                        UseLevelRequired = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
+                .ForeignKey("dbo.AEquipableItems", t => t.ItemId, cascadeDelete: true)
+                .Index(t => t.ItemId);
             
             CreateTable(
                 "dbo.Books",
@@ -171,13 +157,13 @@ namespace DataRepositories.Migrations.Dispatch
             DropForeignKey("dbo.ConsumableEffects", "ConsumableId", "dbo.Consumables");
             DropForeignKey("dbo.Inscriptions", "PageId", "dbo.Pages");
             DropForeignKey("dbo.Pages", "BookId", "dbo.Books");
-            DropForeignKey("dbo.ItemStats", "ArmorId", "dbo.Armors");
+            DropForeignKey("dbo.ItemStats", "ItemId", "dbo.AEquipableItems");
             DropIndex("dbo.UserRoles", new[] { "Role_Id" });
             DropIndex("dbo.UserRoles", new[] { "User_Id" });
             DropIndex("dbo.ConsumableEffects", new[] { "ConsumableId" });
             DropIndex("dbo.Inscriptions", new[] { "PageId" });
             DropIndex("dbo.Pages", new[] { "BookId" });
-            DropIndex("dbo.ItemStats", new[] { "ArmorId" });
+            DropIndex("dbo.ItemStats", new[] { "ItemId" });
             DropTable("dbo.UserRoles");
             DropTable("dbo.Users");
             DropTable("dbo.Roles");
@@ -186,9 +172,8 @@ namespace DataRepositories.Migrations.Dispatch
             DropTable("dbo.Inscriptions");
             DropTable("dbo.Pages");
             DropTable("dbo.Books");
-            DropTable("dbo.Bags");
             DropTable("dbo.ItemStats");
-            DropTable("dbo.Armors");
+            DropTable("dbo.AEquipableItems");
         }
     }
 }

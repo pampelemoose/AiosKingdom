@@ -48,18 +48,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArmorRepository.cs" />
+    <Compile Include="BagRepository.cs" />
     <Compile Include="ConsumableRepository.cs" />
     <Compile Include="DispatchDbContext.cs" />
     <Compile Include="GameDbContext.cs" />
     <Compile Include="GameDbContextFactory.cs" />
-    <Compile Include="Migrations\Dispatch\201804250659429_InitialMigration.cs" />
-    <Compile Include="Migrations\Dispatch\201804250659429_InitialMigration.Designer.cs">
-      <DependentUpon>201804250659429_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\Dispatch\201804270848247_InitialMigration.cs" />
+    <Compile Include="Migrations\Dispatch\201804270848247_InitialMigration.Designer.cs">
+      <DependentUpon>201804270848247_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Dispatch\DispatchConfiguration.cs" />
-    <Compile Include="Migrations\Game\201804250659190_InitialMigration.cs" />
-    <Compile Include="Migrations\Game\201804250659190_InitialMigration.Designer.cs">
-      <DependentUpon>201804250659190_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\Game\201804270821163_InitialMigration.cs" />
+    <Compile Include="Migrations\Game\201804270821163_InitialMigration.Designer.cs">
+      <DependentUpon>201804270821163_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\GameConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,11 +77,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\Dispatch\201804250659429_InitialMigration.resx">
-      <DependentUpon>201804250659429_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Dispatch\201804270848247_InitialMigration.resx">
+      <DependentUpon>201804270848247_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Game\201804250659190_InitialMigration.resx">
-      <DependentUpon>201804250659190_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Game\201804270821163_InitialMigration.resx">
+      <DependentUpon>201804270821163_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

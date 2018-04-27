@@ -6,22 +6,12 @@ using System.Web;
 
 namespace Website.Models
 {
-    public class ArmorFilter
+    public class ArmorFilter : AItemFilterModel<DataModels.Items.Armor>
     {
-        [Display(Name = "Name")]
-        public string Name { get; set; }
-        [Display(Name = "Quality")]
-        public DataModels.Items.ItemQuality? Quality { get; set; }
-        [Display(Name = "ItemLevel")]
-        public int ItemLevel { get; set; }
-        [Display(Name = "LevelRequired")]
-        public int UseLevelRequired { get; set; }
         [Display(Name = "Part")]
         public DataModels.Items.ArmorPart? Part { get; set; }
 
-        public List<DataModels.Items.Armor> Armors { get; set; }
-
-        public List<DataModels.Items.Armor> FilterList(List<DataModels.Items.Armor> list)
+        public override List<DataModels.Items.Armor> FilterList(List<DataModels.Items.Armor> list)
         {
             if (!string.IsNullOrEmpty(Name))
             {

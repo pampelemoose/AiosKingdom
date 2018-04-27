@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DataModels.Items
 {
-    public class Bag : AItem
+    public class Bag : AEquipableItem
     {
         [Required]
         public int SlotCount { get; set; }
