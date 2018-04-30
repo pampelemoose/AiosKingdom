@@ -25,14 +25,14 @@ namespace Server.DispatchServer
         private Dictionary<Guid, Socket> _clients;
         private Dictionary<Guid, Guid> _authTokens;
 
-        private Dictionary<Guid, Guid> _authIds;
+        private Dictionary<Guid, Guid> _userIds;
 
         private ClientsManager()
         {
             _clients = new Dictionary<Guid, Socket>();
             _authTokens = new Dictionary<Guid, Guid>();
 
-            _authIds = new Dictionary<Guid, Guid>();
+            _userIds = new Dictionary<Guid, Guid>();
         }
 
         public Dictionary<Guid, Socket> Clients => _clients;
@@ -72,7 +72,7 @@ namespace Server.DispatchServer
         {
             _clients.Clear();
             _authTokens.Clear();
-            _authIds.Clear();
+            _userIds.Clear();
         }
 
         public void AuthenticateClient(Guid clientId, Guid token)
@@ -80,26 +80,26 @@ namespace Server.DispatchServer
             _authTokens.Add(clientId, token);
         }
 
-        public void SetAuthId(Guid token, Guid id)
+        public void SetUserId(Guid token, Guid id)
         {
-            _authIds.Add(token, id);
+            _userIds.Add(token, id);
         }
 
-        public Guid GetAuthId(Guid token)
+        public Guid GetUserId(Guid token)
         {
-            if (_authIds.ContainsKey(token))
+            if (_userIds.ContainsKey(token))
             {
-                return _authIds[token];
+                return _userIds[token];
             }
 
             return Guid.Empty;
         }
 
-        public void RemoveAuthId(Guid token)
+        public void RemoveUserId(Guid token)
         {
-            if (_authIds.ContainsKey(token))
+            if (_userIds.ContainsKey(token))
             {
-                _authIds.Remove(token);
+                _userIds.Remove(token);
             }
         }
 

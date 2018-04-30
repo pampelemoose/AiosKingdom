@@ -10,11 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace AiosKingdom.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class LoginPage : ContentPage
+	public partial class ServerListPage : ContentPage
 	{
-		public LoginPage()
+		public ServerListPage ()
 		{
-			InitializeComponent();
+			InitializeComponent ();
 		}
 	}
 }

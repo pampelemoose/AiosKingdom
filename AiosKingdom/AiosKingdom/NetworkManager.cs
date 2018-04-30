@@ -80,17 +80,19 @@ namespace AiosKingdom
                         {
                             _authToken = authToken;
                             MessagingCenter.Send(this, MessengerCodes.LoginSuccessful);
-                            AskServerInfos();
                         }
-
-                        MessagingCenter.Send(this, MessengerCodes.LoginFailed, "Credentials not matching any existing account.");
+                        else
+                        {
+                            MessagingCenter.Send(this, MessengerCodes.LoginFailed, "Credentials not matching any existing account.");
+                        }
                     }
                     break;
                 case Network.CommandCodes.Client_ServerList:
                     {
                         var servers = JsonConvert.DeserializeObject<List<Network.GameServerInfos>>(message.Json);
-                        
-
+                        DatasManager.Instance.ServerInfos = servers;
+                        _serverListRequested = false;
+                        MessagingCenter.Send(this, MessengerCodes.InitialDatasReceived);
                     }
                     break;
                 /*case Network.ClientCodes.Ping:
@@ -195,7 +197,8 @@ namespace AiosKingdom
             try
             {
                 _dispatch = new TcpClient();
-                var result = _dispatch.BeginConnect("10.0.2.2", 1337, (asyncResult) => {
+                var result = _dispatch.BeginConnect("10.0.2.2", 1337, (asyncResult) =>
+                {
                     try
                     {
                         _isDispatchRunning = true;
@@ -209,7 +212,7 @@ namespace AiosKingdom
                     }
                 }, null);
 
-                if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(1)))
+                if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
                 {
                     MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, "Server unreachable.. Please try again later..");
                 }
@@ -235,16 +238,20 @@ namespace AiosKingdom
             SendJson(JsonConvert.SerializeObject(retMess));
         }
 
-        public void AskServerInfos()
+        private bool _serverListRequested = false;
+        public void AskServerInfos(bool reset = true)
         {
-            var args = new string[1];
-            args[0] = _authToken.ToString();
+            if (_serverListRequested) return;
+
+            var args = new string[0];
             var retMess = new Network.Message
             {
                 Code = Network.CommandCodes.Client_ServerList,
-                Json = JsonConvert.SerializeObject(args)
+                Json = JsonConvert.SerializeObject(args),
+                Token = _authToken
             };
             SendJson(JsonConvert.SerializeObject(retMess));
+            _serverListRequested = true;
         }
 
         #endregion
@@ -253,15 +260,14 @@ namespace AiosKingdom
         {
             var encoder = new ASCIIEncoding();
             var bytes = encoder.GetBytes(json + '|');
-            var client = _dispatch.Client;
 
             try
             {
-                var result = client.BeginSend(bytes, 0, bytes.Length, SocketFlags.Broadcast, (asyncResult) =>
+                var result = _dispatch.Client.BeginSend(bytes, 0, bytes.Length, SocketFlags.None, (asyncResult) =>
                 {
                     try
                     {
-                        client.EndSend(asyncResult);
+                        _dispatch.Client.EndSend(asyncResult);
                     }
                     catch (SocketException sockE)
                     {
@@ -269,7 +275,7 @@ namespace AiosKingdom
                     }
                 }, null);
 
-                if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(2)))
+                if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
                 {
                     MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, "Connection lost, please reconnect..");
                 }

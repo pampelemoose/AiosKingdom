@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AiosKingdom.Views.ServerListPage"
+             xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+             Title="{Binding Title}">
+    <ContentPage.BindingContext>
+        <vm:ServerListPageViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0">
+                <Button Text="Refresh" Command="{Binding RefreshServersAction}" />
+            </Grid>
+
+            <ListView
+                Grid.Row="1"
+                ItemsSource="{Binding ServerInfos}"
+                RowHeight="80">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid
+                                BackgroundColor="Red">
+                                <Label Text="{Binding Online}"/>
+                                <Label Text="{Binding SoulCount}"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Grid
+                Grid.Row="1"
+                BackgroundColor="Black"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                IsVisible="{Binding ShowList, Converter={StaticResource inverseBoolean}}">
+                <Grid
+                    VerticalOptions="Center">
+                    <Label
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        TextColor="Aqua"
+                        Text="No servers online, please refresh in a few minutes..."/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

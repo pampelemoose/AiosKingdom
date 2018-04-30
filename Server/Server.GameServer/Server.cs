@@ -298,6 +298,7 @@ namespace Server.GameServer
         {
             Commands.CommandArgs retVal = new Commands.CommandArgs
             {
+                ClientId = clientId,
                 CommandCode = message.Code,
                 IsValid = ClientsManager.Instance.IsAuth(clientId, message.Token),
                 Args = new string[0]

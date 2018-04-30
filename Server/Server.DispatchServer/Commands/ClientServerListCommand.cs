@@ -16,10 +16,23 @@ namespace Server.DispatchServer.Commands
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
+            var id = ClientsManager.Instance.GetUserId(ret.ClientId);
+            var infos = GameServerManager.Instance.ServerInfos.ToArray();
+            var slots = DataRepositories.UserRepository.GetById(id).ServerSlots;
+
+            for (int i = 0; i < infos.Length; ++i)
+            {
+                var soulOnServer = slots.Where(s => s.ServerIdentifier.Equals(infos[i].Name)).ToList();
+                if (soulOnServer != null)
+                {
+                    infos[i].SoulCount = soulOnServer.Count;
+                }
+            }
+
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Client_Authenticate,
-                Json = JsonConvert.SerializeObject(GameServerManager.Instance.ServerInfos)
+                Code = Network.CommandCodes.Client_ServerList,
+                Json = JsonConvert.SerializeObject(infos.ToList())
             };
             ret.Succeeded = true;
 

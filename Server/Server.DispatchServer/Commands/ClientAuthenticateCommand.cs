@@ -25,7 +25,7 @@ namespace Server.DispatchServer.Commands
                 var token = Guid.NewGuid();
 
                 ClientsManager.Instance.AuthenticateClient(_args.ClientId, token);
-                ClientsManager.Instance.SetAuthId(token, userExists.Id);
+                ClientsManager.Instance.SetUserId(_args.ClientId, userExists.Id);
 
                 ret.ClientResponse = new Network.Message
                 {

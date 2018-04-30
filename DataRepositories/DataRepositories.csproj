@@ -61,6 +61,10 @@
     <Compile Include="Migrations\Dispatch\201804270955556_UpdateMigration.Designer.cs">
       <DependentUpon>201804270955556_UpdateMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Dispatch\201804300916241_UserServerSlotRelation.cs" />
+    <Compile Include="Migrations\Dispatch\201804300916241_UserServerSlotRelation.Designer.cs">
+      <DependentUpon>201804300916241_UserServerSlotRelation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Dispatch\DispatchConfiguration.cs" />
     <Compile Include="Migrations\Game\201804270821163_InitialMigration.cs" />
     <Compile Include="Migrations\Game\201804270821163_InitialMigration.Designer.cs">
@@ -86,6 +90,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Dispatch\201804270955556_UpdateMigration.resx">
       <DependentUpon>201804270955556_UpdateMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Dispatch\201804300916241_UserServerSlotRelation.resx">
+      <DependentUpon>201804300916241_UserServerSlotRelation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Game\201804270821163_InitialMigration.resx">
       <DependentUpon>201804270821163_InitialMigration.cs</DependentUpon>

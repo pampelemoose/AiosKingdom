@@ -34,6 +34,7 @@ namespace Server.DispatchServer
         }
 
         private List<string> _serverKeys;
+        private object _serverLock= new object();
         private Dictionary<string, GameServerLink> _servers;
 
         private GameServerManager()
@@ -53,13 +54,10 @@ namespace Server.DispatchServer
 
                 if (_servers.ContainsKey(key))
                 {
-                    Console.WriteLine($"Need to update.");
                     link = _servers[key];
                 }
                 else
                 {
-                    Console.WriteLine($"Need to connect.");
-
                     link = new GameServerLink();
                     var connectionInfos = address.Split(':');
                     link.Client = new TcpClient();
@@ -67,7 +65,6 @@ namespace Server.DispatchServer
                     try
                     {
                         link.Client.Connect(connectionInfos[0], int.Parse(connectionInfos[1]));
-                        Console.WriteLine($"Connected !");
 
                         var retMess = new Network.Message
                         {
@@ -77,13 +74,12 @@ namespace Server.DispatchServer
                         var bytes = encoder.GetBytes(JsonConvert.SerializeObject(retMess) + '|');
 
                         link.Client.Client.Send(bytes);
-                        Console.WriteLine($"Asking server authToken.");
                         _servers.Add(key, link);
                     }
                     catch (SocketException sockEx)
                     {
                         link.Online = false;
-                        Console.WriteLine($"Server is not online... [{sockEx.Message}]");
+                        Console.WriteLine($"Server is not online(1)... [{sockEx.Message}]");
                     }
                 }
 
@@ -102,14 +98,18 @@ namespace Server.DispatchServer
                             var bytes = encoder.GetBytes(JsonConvert.SerializeObject(retMess) + '|');
 
                             link.Client.Client.Send(bytes);
-                            Console.WriteLine($"Asking server Infos.");
                         }
                         catch (SocketException sockEx)
                         {
                             link.Online = false;
-                            Console.WriteLine($"Server is not online... [{sockEx.Message}]");
+                            Console.WriteLine($"Server is not online(2)... [{sockEx.Message}]");
                         }
                     }
+                }
+
+                lock (_serverLock)
+                {
+                    _servers[key] = link;
                 }
             }
         }
@@ -154,20 +154,30 @@ namespace Server.DispatchServer
                     catch (SocketException sockEx)
                     {
                         link.Online = false;
-                        Console.WriteLine($"Server is not online... [{sockEx.Message}]");
+                        Console.WriteLine($"Server is not online(3)... [{sockEx.Message}]");
                     }
 
-                    _servers[key] = link;
+                    lock (_serverLock)
+                    {
+                        _servers[key] = link;
+                    }
                 }
+                else
+                {
+                    lock (_serverLock)
+                    {
+                        _servers.Remove(key);
+                    }
+                }
+            }
+
+            lock (_serverLock)
+            {
+                _serverInfos = _servers.ToList().Select(s => s.Value.Infos).ToList();
             }
         }
 
-        public List<Network.GameServerInfos> ServerInfos
-        {
-            get
-            {
-                return _servers.Select(s => s.Value.Infos).ToList();
-            }
-        }
+        private List<Network.GameServerInfos> _serverInfos;
+        public List<Network.GameServerInfos> ServerInfos => _serverInfos;
     }
 }

@@ -24,9 +24,20 @@ namespace DataRepositories
             return _context.Users.ToList();
         }
 
+        public static DataModels.User GetById(Guid id)
+        {
+            return _context.Users
+                .Include(r => r.Roles)
+                .Include(s => s.ServerSlots)
+                .FirstOrDefault(u => u.Id.Equals(id));
+        }
+
         public static DataModels.User GetByCredentials(string username, string password)
         {
-            return _context.Users.Include(r => r.Roles).FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(password));
+            return _context.Users
+                .Include(r => r.Roles)
+                .Include(s => s.ServerSlots)
+                .FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(password));
         }
 
         public static bool Create(DataModels.User user)

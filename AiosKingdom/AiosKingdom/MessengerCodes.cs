@@ -14,5 +14,7 @@ namespace AiosKingdom
         public static string LoginFailed = "loginFailed";
 
         public static string InitialDatasReceived = "initialDatasReceived";
+
+        public static string ConnectedToServer = "connectedToServer";
     }
 }

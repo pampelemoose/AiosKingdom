@@ -26,6 +26,15 @@ namespace DataModels
 
         public bool IsActivated { get; set; }
 
+        private int _soulSlots = 1;
+        public int SoulSlots
+        {
+            get { return _soulSlots; }
+            set { _soulSlots = value; }
+        }
+
+        public List<UserServerSlot> ServerSlots { get; set; }
+
         public static string EncryptPassword(string password)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(password);

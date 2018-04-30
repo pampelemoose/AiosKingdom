@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -26,22 +27,27 @@ namespace AiosKingdom.ViewModels
                 NetworkManager.Instance.ConnectToServer();
             });
 
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.ConnectionSuccessful, (sender) => {
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.ConnectionSuccessful, (sender) =>
+            {
                 IsLoading = false;
             });
 
-            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ConnectionFailed, (sender, arg) => {
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ConnectionFailed, (sender, arg) =>
+            {
                 IsLoading = true;
                 ShowButton = true;
                 Message = arg;
                 CloseMessage = _tryToConnectAction;
             });
-            
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful, (sender) => {
-                Message = "Logged In ! Receiving Soul list..";
+
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful, (sender) =>
+            {
+                Message = "Logged In ! Receiving Server list..";
+                NetworkManager.Instance.AskServerInfos();
             });
 
-            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed, (sender, arg) => {
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed, (sender, arg) =>
+            {
                 ShowButton = true;
                 Message = arg;
                 CloseMessage = _stopLoadingAction;
@@ -134,8 +140,10 @@ namespace AiosKingdom.ViewModels
         _logInAction ?? (_logInAction = new Command(() =>
         {
             LogIn();
-        }, () => {
-            return !string.IsNullOrEmpty(_username) && !string.IsNullOrEmpty(_password); }));
+        }, () =>
+        {
+            return !string.IsNullOrEmpty(_username) && !string.IsNullOrEmpty(_password);
+        }));
 
         private void LogIn()
         {
