@@ -20,5 +20,6 @@ namespace AiosKingdom
 
         public static string ShowSoulList = "showSoulList";
         public static string SoulListReceived = "soulListReceived";
+        public static string SoulCreationFailed = "soulCreationFailed";
     }
 }

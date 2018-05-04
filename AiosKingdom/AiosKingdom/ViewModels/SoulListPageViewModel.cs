@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -17,6 +18,16 @@ namespace AiosKingdom.ViewModels
             {
                 IsLoading = false;
                 NotifyPropertyChanged(nameof(Souls));
+            });
+
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SoulCreationFailed, (sender, message) =>
+            {
+                Message = message;
+                Task.Run(() =>
+                {
+                    Task.Delay(2000);
+                    IsLoading = false;
+                });
             });
 
             NetworkManager.Instance.ConnectToGameServer(connection);
@@ -45,5 +56,14 @@ namespace AiosKingdom.ViewModels
         }
 
         public List<DataModels.Soul> Souls => DatasManager.Instance.Souls;
+
+        private ICommand _createSoulAction;
+        public ICommand CreateSoulAction =>
+            _createSoulAction ?? (_createSoulAction = new Command(() =>
+            {
+                NetworkManager.Instance.CreateSoul("test");
+                IsLoading = true;
+                Message = "Creating new soul...";
+            }));
     }
 }

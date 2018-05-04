@@ -337,9 +337,22 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_CreateSoul:
                     {
-                        var souls = JsonConvert.DeserializeObject<List<DataModels.Soul>>(message.Json);
-                        DatasManager.Instance.Souls = souls;
-                        MessagingCenter.Send(this, MessengerCodes.SoulListReceived);
+                        var result = JsonConvert.DeserializeObject<Network.CreateObjectResult>(message.Json);
+                        if (result.Success)
+                        {
+                            var args = new string[0];
+                            var retMess = new Network.Message
+                            {
+                                Code = Network.CommandCodes.Client_SoulList,
+                                Json = JsonConvert.SerializeObject(args),
+                                Token = _gameAuthToken
+                            };
+                            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+                        }
+                        else
+                        {
+                            MessagingCenter.Send(this, MessengerCodes.SoulCreationFailed, result.Message);
+                        }
                     }
                     break;
                 case Network.CommandCodes.Client_SoulList:
@@ -354,6 +367,18 @@ namespace AiosKingdom
             }
 
             return true;
+        }
+
+        public void CreateSoul(string soulname)
+        {
+            var args = new string[1];
+            args[0] = soulname;
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_CreateSoul,
+                Json = JsonConvert.SerializeObject(args)
+            };
+            SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
         }
 
         private void SendJsonToGame(string json)
