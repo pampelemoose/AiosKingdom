@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Network
 {
-    public struct GameServerInfos
+    public class GameServerInfos
     {
         public Guid Id { get; set; }
         public bool Online { get; set; }
@@ -13,5 +13,10 @@ namespace Network
         public int SlotsLimit { get; set; }
         public int SlotsAvailable { get; set; }
         public string Difficulty { get; set; }
+
+        public string Availability
+        {
+            get { return $"{SlotsAvailable} / {SlotsLimit}"; }
+        }
     }
 }

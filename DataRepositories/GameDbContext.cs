@@ -10,7 +10,7 @@ namespace DataRepositories
     {
         // User ID=sa;Password=Test1337
         public GameDbContext(string dbName)
-            : base($"Data Source=.;Initial Catalog={/*ConfigurationManager.AppSettings.Get("DbName2")*/dbName};Trusted_Connection=True;")
+            : base($"Data Source=.;Initial Catalog={/*ConfigurationManager.AppSettings.Get("DbName")*/dbName};Trusted_Connection=True;")
         {
         }
 

@@ -25,5 +25,6 @@ namespace AiosKingdom
         }
 
         public List<Network.GameServerInfos> ServerInfos { get; set; }
+        public List<DataModels.Soul> Souls { get; set; }
     }
 }

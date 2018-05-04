@@ -1,54 +1,89 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AiosKingdom.Views.ServerListPage"
              xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+             x:Class="AiosKingdom.Views.ServerListPage"
              Title="{Binding Title}">
-    <ContentPage.BindingContext>
-        <vm:ServerListPageViewModel />
-    </ContentPage.BindingContext>
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="Refresh" Command="{Binding RefreshServersAction}"></ToolbarItem>
+    </ContentPage.ToolbarItems>
     
     <ContentPage.Content>
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <Grid
-                Grid.Row="0">
-                <Button Text="Refresh" Command="{Binding RefreshServersAction}" />
-            </Grid>
-
             <ListView
-                Grid.Row="1"
                 ItemsSource="{Binding ServerInfos}"
+                SelectedItem="{Binding SelectedInfo, Mode=TwoWay}"
                 RowHeight="80">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <Grid
-                                BackgroundColor="Red">
-                                <Label Text="{Binding Online}"/>
-                                <Label Text="{Binding SoulCount}"/>
+                                Margin="5">
+                                <Grid.Triggers>
+                                    <DataTrigger TargetType="Grid" Binding="{Binding Online}" Value="False">
+                                        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Grid" Binding="{Binding Online}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+                                    </DataTrigger>
+                                </Grid.Triggers>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="8*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                    Grid.Column="0"
+                                    FontSize="40"
+                                    FontAttributes="Bold"
+                                    Margin="5, 0"
+                                    VerticalTextAlignment="Center"
+                                    Text="{Binding Name}"/>
+
+                                <Label 
+                                    Grid.Column="1"
+                                    FontSize="50"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SoulCount}"/>
+                                <Label 
+                                    Grid.Column="2"
+                                    FontSize="30"
+                                    FontAttributes="Bold"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="End"
+                                    Text="{Binding Availability}"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
             <Grid
-                Grid.Row="1"
                 BackgroundColor="Black"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand"
-                IsVisible="{Binding ShowList, Converter={StaticResource inverseBoolean}}">
+                IsVisible="{Binding IsLoading, Mode=TwoWay}">
                 <Grid
                     VerticalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="100"/>
+                    </Grid.RowDefinitions>
+
                     <Label
+                        Grid.Row="0"
                         VerticalOptions="Center"
                         HorizontalOptions="Center"
                         TextColor="Aqua"
-                        Text="No servers online, please refresh in a few minutes..."/>
+                        Text="{Binding Message}"/>
+                    <ActivityIndicator
+                        Grid.Row="1"
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalOptions="CenterAndExpand"
+                        Color="Aqua"
+                        Scale="2"
+                        IsRunning="true"/>
                 </Grid>
             </Grid>
         </Grid>

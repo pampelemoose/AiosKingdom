@@ -32,9 +32,9 @@ namespace Server.GameServer.Commands
         {
             CommandResult ret = new CommandResult { Succeeded = false };
 
-            ret = ExecuteLogic(ret);
-
             ret.ClientId = _args.ClientId;
+
+            ret = ExecuteLogic(ret);
 
             return ret;
         }

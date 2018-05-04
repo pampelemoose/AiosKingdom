@@ -13,7 +13,7 @@ namespace DataModels
         [Required, MinLength(4), ConcurrencyCheck]
         public string Username { get; set; }
 
-        [Required, MinLength(8), MaxLength(25)]
+        [Required]
         public string Password { get; set; }
 
         [Required, EmailAddress, ConcurrencyCheck]

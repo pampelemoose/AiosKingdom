@@ -13,5 +13,10 @@ namespace DataRepositories
         {
             return new GameDbContext("RealPG_GameServer_1");
         }
+
+        private GameDbContext Create(string connectionString)
+        {
+            return new GameDbContext(connectionString);
+        }
     }
 }

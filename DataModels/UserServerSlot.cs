@@ -11,10 +11,7 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
-        [ForeignKey("User")]
-        public Guid UserId { get; set; }
-        public User User { get; set; }
-
-        public string ServerIdentifier { get; set; }
+        public Guid ServerId { get; set; }
+        public Guid SoulId { get; set; }
     }
 }

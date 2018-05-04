@@ -13,6 +13,9 @@ namespace DataRepositories
         {
         }
 
+        public DbSet<DataModels.GameServer> Servers { get; set; }
+        public DbSet<DataModels.GameServerToken> Tokens { get; set; }
+
         public DbSet<DataModels.User> Users { get; set; }
         public DbSet<DataModels.Role> Roles { get; set; }
 

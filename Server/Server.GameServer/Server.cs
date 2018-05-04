@@ -22,13 +22,16 @@ namespace Server.GameServer
         private Dictionary<int, int> _commandArgCount;
         private List<Commands.CommandResult> _responses;
 
+        private DataModels.GameServer _config;
+
         public Server()
         {
             ThreadStart del = new ThreadStart(Run);
             _thread = new Thread(del);
 
             _flushCommands = new System.Timers.Timer(1000);
-            _flushCommands.Elapsed += (sender, e) => {
+            _flushCommands.Elapsed += (sender, e) =>
+            {
                 FlushCommands();
             };
             _flushCommands.AutoReset = true;
@@ -36,26 +39,27 @@ namespace Server.GameServer
 
             _commandManager = new CommandManager();
 
-            _delegates = new Dictionary<int, Func<Commands.CommandArgs, Commands.ACommand>>();
             _commandArgCount = new Dictionary<int, int>();
+            _delegates = new Dictionary<int, Func<Commands.CommandArgs, Commands.ACommand>>();
             _responses = new List<Commands.CommandResult>();
 
-            _commandArgCount.Add(Network.CommandCodes.Gameserver_Connect, 1);
-            _commandArgCount.Add(Network.CommandCodes.Gameserver_Infos, 0);
-
-            _delegates.Add(Network.CommandCodes.Gameserver_Connect, (args) => { return new Commands.DispatchServerConnectCommand(args); });
-            _delegates.Add(Network.CommandCodes.Gameserver_Infos, (args) => { return new Commands.DispatchServerInfosCommand(args); });
+            SetupClientDelegates();
         }
 
         public void Start()
         {
-            string host = ConfigurationManager.AppSettings.Get("Host");
-            string portStr = ConfigurationManager.AppSettings.Get("Port");
-            int port = int.Parse(portStr);
+            var configId = Guid.Parse(ConfigurationManager.AppSettings.Get("ConfigId"));
+            _config = DataRepositories.GameServerRepository.GetById(configId);
 
-            Console.WriteLine($"Starting TCPListener at address : {host}.{port} ...");
+            if (_config == null || (_config != null && _config.Online))
+            {
+                Console.WriteLine("Wrong Config Id or Server already running... Specify a valid GameServer Id present in DB and a server isnt already running.");
+                return;
+            }
 
-            _listener = new TcpListener(IPAddress.Parse(host), port);
+            Console.WriteLine($"Starting TCPListener at address : {_config.Host}:{_config.Port} ...");
+
+            _listener = new TcpListener(IPAddress.Parse(_config.Host), _config.Port);
 
             _thread.Start();
 
@@ -65,6 +69,15 @@ namespace Server.GameServer
         public void Stop()
         {
             _isRunning = false;
+        }
+
+        private void SetupClientDelegates()
+        {
+            _commandArgCount.Add(Network.CommandCodes.Client_Authenticate, 1);
+            _commandArgCount.Add(Network.CommandCodes.Client_SoulList, 0);
+
+            _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_SoulList, (args) => { return new Commands.ClientSoulListCommand(args); });
         }
 
         private void Run()
@@ -79,7 +92,6 @@ namespace Server.GameServer
                 if (_listener.Pending())
                 {
                     Socket newClient = _listener.AcceptSocket();
-                    Console.WriteLine($"New connection from {newClient.RemoteEndPoint}");
 
                     ClientsManager.Instance.AddClient(Guid.NewGuid(), newClient);
 
@@ -319,12 +331,11 @@ namespace Server.GameServer
                         retVal.Args = new string[1] { args[0] };
                     }
                     break;*/
-                case Network.CommandCodes.Gameserver_Connect:
+                case Network.CommandCodes.Client_Authenticate:
                     retVal.IsValid = true;
-                    retVal.Args = new string[1] { clientId.ToString() };
+                    retVal.Args = new string[1] { args[0] };
                     break;
-                case Network.CommandCodes.Gameserver_Infos:
-
+                case Network.CommandCodes.Client_SoulList:
                     break;
                 default:
                     retVal.IsValid = false;

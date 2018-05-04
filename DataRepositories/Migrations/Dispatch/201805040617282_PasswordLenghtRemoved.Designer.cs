@@ -7,13 +7,13 @@ namespace DataRepositories.Migrations.Dispatch
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class UserServerSlotRelation : IMigrationMetadata
+    public sealed partial class PasswordLenghtRemoved : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UserServerSlotRelation));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(PasswordLenghtRemoved));
         
         string IMigrationMetadata.Id
         {
-            get { return "201804300916241_UserServerSlotRelation"; }
+            get { return "201805040617282_PasswordLenghtRemoved"; }
         }
         
         string IMigrationMetadata.Source

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DataModels
@@ -21,7 +22,7 @@ namespace DataModels
         public Guid Id { get; set; }
 
         [Required]
-        public Guid SoulId { get; set; }
+        public Guid UserId { get; set; }
 
         [MaxLength(25)]
         public string Name { get; set; }
@@ -38,7 +39,7 @@ namespace DataModels
         public int CurrentExperience { get; set; }
 
         public int Stamina { get; set; }
-        public int Mana { get; set; }
+        public int Energy { get; set; }
         public int Strength { get; set; }
         public int Agility { get; set; }
         public int Intelligence { get; set; }

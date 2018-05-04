@@ -15,6 +15,8 @@ namespace AiosKingdom.Views
 		public ServerListPage ()
 		{
 			InitializeComponent ();
+
+            BindingContext = new ViewModels.ServerListPageViewModel(Navigation);
 		}
 	}
 }

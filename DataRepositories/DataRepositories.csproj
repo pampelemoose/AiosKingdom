@@ -53,25 +53,23 @@
     <Compile Include="DispatchDbContext.cs" />
     <Compile Include="GameDbContext.cs" />
     <Compile Include="GameDbContextFactory.cs" />
-    <Compile Include="Migrations\Dispatch\201804270848247_InitialMigration.cs" />
-    <Compile Include="Migrations\Dispatch\201804270848247_InitialMigration.Designer.cs">
-      <DependentUpon>201804270848247_InitialMigration.cs</DependentUpon>
+    <Compile Include="GameServerRepository.cs" />
+    <Compile Include="Migrations\Dispatch\201805040530403_InitialMigration.cs" />
+    <Compile Include="Migrations\Dispatch\201805040530403_InitialMigration.Designer.cs">
+      <DependentUpon>201805040530403_InitialMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Dispatch\201804270955556_UpdateMigration.cs" />
-    <Compile Include="Migrations\Dispatch\201804270955556_UpdateMigration.Designer.cs">
-      <DependentUpon>201804270955556_UpdateMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Dispatch\201804300916241_UserServerSlotRelation.cs" />
-    <Compile Include="Migrations\Dispatch\201804300916241_UserServerSlotRelation.Designer.cs">
-      <DependentUpon>201804300916241_UserServerSlotRelation.cs</DependentUpon>
+    <Compile Include="Migrations\Dispatch\201805040617282_PasswordLenghtRemoved.cs" />
+    <Compile Include="Migrations\Dispatch\201805040617282_PasswordLenghtRemoved.Designer.cs">
+      <DependentUpon>201805040617282_PasswordLenghtRemoved.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Dispatch\DispatchConfiguration.cs" />
-    <Compile Include="Migrations\Game\201804270821163_InitialMigration.cs" />
-    <Compile Include="Migrations\Game\201804270821163_InitialMigration.Designer.cs">
-      <DependentUpon>201804270821163_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\Game\201805040610179_InitialMigration.cs" />
+    <Compile Include="Migrations\Game\201805040610179_InitialMigration.Designer.cs">
+      <DependentUpon>201805040610179_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\GameConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TokenRepository.cs" />
     <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,22 +78,19 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataModels\DataModels.csproj">
-      <Project>{dc146b2f-0846-47aa-a9a8-cd86a8815398}</Project>
+      <Project>{5617d24d-807a-445f-ac2f-6774b442761e}</Project>
       <Name>DataModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\Dispatch\201804270848247_InitialMigration.resx">
-      <DependentUpon>201804270848247_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Dispatch\201805040530403_InitialMigration.resx">
+      <DependentUpon>201805040530403_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Dispatch\201804270955556_UpdateMigration.resx">
-      <DependentUpon>201804270955556_UpdateMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Dispatch\201805040617282_PasswordLenghtRemoved.resx">
+      <DependentUpon>201805040617282_PasswordLenghtRemoved.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Dispatch\201804300916241_UserServerSlotRelation.resx">
-      <DependentUpon>201804300916241_UserServerSlotRelation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Game\201804270821163_InitialMigration.resx">
-      <DependentUpon>201804270821163_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Game\201805040610179_InitialMigration.resx">
+      <DependentUpon>201805040610179_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

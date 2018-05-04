@@ -23,7 +23,7 @@ namespace AiosKingdom
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    MainPage = new Views.ServerListPage();
+                    MainPage = new NavigationPage(new Views.ServerListPage());
                 });
             });
 

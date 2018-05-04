@@ -28,6 +28,27 @@ namespace DataRepositories.Migrations.Dispatch
 
             context.Roles.Add(new DataModels.Role { Name = "Parent" });
             context.Roles.Add(new DataModels.Role { Name = "Child" });
+
+            /*context.Servers.Add(new DataModels.GameServer
+            {
+                Id = Guid.NewGuid(),
+                DatabaseName = "RealPG_GameServer_1",
+                Name = "Server 1",
+                Host = "127.0.0.1",
+                Port = 4242,
+                Difficulty = DataModels.ServerDifficulty.Easy,
+                SlotLimit = 100
+            });
+
+            context.Users.Add(new DataModels.User
+            {
+                Id = Guid.NewGuid(),
+                Username = "pampe",
+                Password = DataModels.User.EncryptPassword("pampe123"),
+                Email = "pampe@lemoosecorp.com",
+                IsActivated = true,
+                Roles = context.Roles.ToList()
+            });*/
         }
     }
 }

@@ -12,8 +12,8 @@ namespace DataRepositories.Migrations.Dispatch
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Name = c.String(),
-                        Description = c.String(),
+                        Name = c.String(nullable: false, maxLength: 50),
+                        Description = c.String(nullable: false, maxLength: 200),
                         Image = c.String(),
                         Type = c.Int(nullable: false),
                         Quality = c.Int(nullable: false),
@@ -22,6 +22,9 @@ namespace DataRepositories.Migrations.Dispatch
                         Part = c.Int(),
                         ArmorValue = c.Int(),
                         SlotCount = c.Int(),
+                        WeaponType = c.Int(),
+                        MinDamages = c.Int(),
+                        MaxDamages = c.Int(),
                         Discriminator = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id);
@@ -44,7 +47,7 @@ namespace DataRepositories.Migrations.Dispatch
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Name = c.String(),
+                        Name = c.String(nullable: false, maxLength: 50),
                         Quality = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
@@ -55,7 +58,7 @@ namespace DataRepositories.Migrations.Dispatch
                     {
                         Id = c.Guid(nullable: false),
                         BookId = c.Guid(nullable: false),
-                        Description = c.String(),
+                        Description = c.String(nullable: false, maxLength: 50),
                         Image = c.String(),
                         StatCost = c.Int(nullable: false),
                         Rank = c.Int(nullable: false),
@@ -71,7 +74,7 @@ namespace DataRepositories.Migrations.Dispatch
                     {
                         Id = c.Guid(nullable: false),
                         PageId = c.Guid(nullable: false),
-                        Description = c.String(),
+                        Description = c.String(nullable: false, maxLength: 50),
                         Type = c.Int(nullable: false),
                         BaseValue = c.Int(nullable: false),
                         StatType = c.Int(nullable: false),
@@ -88,8 +91,8 @@ namespace DataRepositories.Migrations.Dispatch
                     {
                         Id = c.Guid(nullable: false),
                         ConsumableId = c.Guid(nullable: false),
-                        Name = c.String(),
-                        Description = c.String(),
+                        Name = c.String(nullable: false, maxLength: 50),
+                        Description = c.String(nullable: false, maxLength: 200),
                         Type = c.Int(nullable: false),
                         AffectValue = c.Single(nullable: false),
                         AffectTime = c.Int(nullable: false),
@@ -103,8 +106,8 @@ namespace DataRepositories.Migrations.Dispatch
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Name = c.String(),
-                        Description = c.String(),
+                        Name = c.String(nullable: false, maxLength: 50),
+                        Description = c.String(nullable: false, maxLength: 200),
                         Image = c.String(),
                         Type = c.Int(nullable: false),
                         Quality = c.Int(nullable: false),
@@ -127,11 +130,62 @@ namespace DataRepositories.Migrations.Dispatch
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Username = c.String(),
-                        Password = c.String(),
-                        Email = c.String(),
+                        Username = c.String(nullable: false),
+                        Password = c.String(nullable: false, maxLength: 25),
+                        Email = c.String(nullable: false),
                         ActivationCode = c.Guid(nullable: false),
                         IsActivated = c.Boolean(nullable: false),
+                        SoulSlots = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.UserServerSlots",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        ServerId = c.Guid(nullable: false),
+                        SoulId = c.Guid(nullable: false),
+                        User_Id = c.Guid(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Users", t => t.User_Id)
+                .Index(t => t.User_Id);
+            
+            CreateTable(
+                "dbo.GameServers",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        DatabaseName = c.String(nullable: false),
+                        Host = c.String(nullable: false),
+                        Port = c.Int(nullable: false),
+                        Online = c.Boolean(nullable: false),
+                        Name = c.String(nullable: false),
+                        Difficulty = c.Int(nullable: false),
+                        SlotLimit = c.Int(nullable: false),
+                        SlotAvailable = c.Int(nullable: false),
+                        BaseExperience = c.Int(nullable: false),
+                        ExperiencePerLevelRatio = c.Single(nullable: false),
+                        SpiritsPerLevelUp = c.Int(nullable: false),
+                        EmbersPerLevelUp = c.Int(nullable: false),
+                        BaseHealth = c.Int(nullable: false),
+                        HealthPerLevelRatio = c.Single(nullable: false),
+                        HealthPerStaminaRatio = c.Single(nullable: false),
+                        BaseMana = c.Int(nullable: false),
+                        ManaPerLevelRatio = c.Single(nullable: false),
+                        ManaPerEnergyRatio = c.Single(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.GameServerTokens",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        Token = c.Guid(nullable: false),
+                        UserId = c.Guid(nullable: false),
+                        CreatedAt = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -152,6 +206,7 @@ namespace DataRepositories.Migrations.Dispatch
         
         public override void Down()
         {
+            DropForeignKey("dbo.UserServerSlots", "User_Id", "dbo.Users");
             DropForeignKey("dbo.UserRoles", "Role_Id", "dbo.Roles");
             DropForeignKey("dbo.UserRoles", "User_Id", "dbo.Users");
             DropForeignKey("dbo.ConsumableEffects", "ConsumableId", "dbo.Consumables");
@@ -160,11 +215,15 @@ namespace DataRepositories.Migrations.Dispatch
             DropForeignKey("dbo.ItemStats", "ItemId", "dbo.AEquipableItems");
             DropIndex("dbo.UserRoles", new[] { "Role_Id" });
             DropIndex("dbo.UserRoles", new[] { "User_Id" });
+            DropIndex("dbo.UserServerSlots", new[] { "User_Id" });
             DropIndex("dbo.ConsumableEffects", new[] { "ConsumableId" });
             DropIndex("dbo.Inscriptions", new[] { "PageId" });
             DropIndex("dbo.Pages", new[] { "BookId" });
             DropIndex("dbo.ItemStats", new[] { "ItemId" });
             DropTable("dbo.UserRoles");
+            DropTable("dbo.GameServerTokens");
+            DropTable("dbo.GameServers");
+            DropTable("dbo.UserServerSlots");
             DropTable("dbo.Users");
             DropTable("dbo.Roles");
             DropTable("dbo.Consumables");

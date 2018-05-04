@@ -16,7 +16,6 @@ namespace Server.DispatchServer
         private TcpListener _listener;
         private bool _isRunning;
 
-        private System.Timers.Timer _updateGameserverInfos;
         private System.Timers.Timer _flushCommands;
 
         private CommandManager _commandManager;
@@ -28,13 +27,6 @@ namespace Server.DispatchServer
         {
             ThreadStart del = new ThreadStart(Run);
             _thread = new Thread(del);
-
-            _updateGameserverInfos = new System.Timers.Timer(10000);
-            _updateGameserverInfos.Elapsed += (sender, e) => {
-                GameServerManager.Instance.SetupGameServers();
-            };
-            _updateGameserverInfos.AutoReset = true;
-            _updateGameserverInfos.Enabled = true;
 
             _flushCommands = new System.Timers.Timer(1000);
             _flushCommands.Elapsed += (sender, e) => {
@@ -58,7 +50,7 @@ namespace Server.DispatchServer
             string portStr = ConfigurationManager.AppSettings.Get("Port");
             int port = int.Parse(portStr);
 
-            Console.WriteLine($"Starting TCPListener at address : {host}.{port} ...");
+            Console.WriteLine($"Starting TCPListener at address : {host}:{port} ...");
 
             _listener = new TcpListener(IPAddress.Parse(host), port);
 
@@ -76,18 +68,18 @@ namespace Server.DispatchServer
         {
             _commandArgCount.Add(Network.CommandCodes.Client_Authenticate, 2);
             _commandArgCount.Add(Network.CommandCodes.Client_ServerList, 0);
+            _commandArgCount.Add(Network.CommandCodes.Client_AnnounceGameConnection, 1);
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_ServerList, (args) => { return new Commands.ClientServerListCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_AnnounceGameConnection, (args) => { return new Commands.ClientAnnounceGameConnectionCommand(args); });
         }
 
         private void Run()
         {
             _listener.Start();
             Console.WriteLine($"TCP Server is running.");
-
-            GameServerManager.Instance.SetupGameServers();
-            _updateGameserverInfos.Start();
+            
             _flushCommands.Start();
 
             while (_isRunning)
@@ -95,7 +87,6 @@ namespace Server.DispatchServer
                 if (_listener.Pending())
                 {
                     Socket newClient = _listener.AcceptSocket();
-                    Console.WriteLine($"New connection from {newClient.RemoteEndPoint}");
 
                     ClientsManager.Instance.AddClient(Guid.NewGuid(), newClient);
 
@@ -242,8 +233,6 @@ namespace Server.DispatchServer
                         }
                     }
                 }
-
-                GameServerManager.Instance.ReceiveServerInfos();
             }
 
             foreach (var client in ClientsManager.Instance.Clients)
@@ -253,7 +242,6 @@ namespace Server.DispatchServer
                 client.Value.Close();
             }
 
-            _updateGameserverInfos.Stop();
             _flushCommands.Stop();
 
             _listener.Stop();
@@ -261,8 +249,6 @@ namespace Server.DispatchServer
 
             _thread.Abort();
         }
-
-        
 
         private void FlushCommands()
         {
@@ -355,6 +341,9 @@ namespace Server.DispatchServer
                     retVal.Args = new string[2] { args[0], args[1] };
                     break;
                 case Network.CommandCodes.Client_ServerList:
+                    break;
+                case Network.CommandCodes.Client_AnnounceGameConnection:
+                    retVal.Args = new string[1] { args[0] };
                     break;
                 default:
                     retVal.IsValid = false;

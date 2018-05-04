@@ -161,6 +161,7 @@
     <Compile Include="Controllers\BagsController.cs" />
     <Compile Include="Controllers\ConsumablesController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\GameServersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -267,6 +268,8 @@
     <Content Include="Views\Consumables\Create.cshtml" />
     <Content Include="Views\Bags\Index.cshtml" />
     <Content Include="Views\Bags\Create.cshtml" />
+    <Content Include="Views\GameServers\Index.cshtml" />
+    <Content Include="Views\GameServers\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -276,7 +279,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataModels\DataModels.csproj">
-      <Project>{dc146b2f-0846-47aa-a9a8-cd86a8815398}</Project>
+      <Project>{5617d24d-807a-445f-ac2f-6774b442761e}</Project>
       <Name>DataModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataRepositories\DataRepositories.csproj">
