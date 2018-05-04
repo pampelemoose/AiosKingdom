@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Server.GameServer.Commands
 {
     public class ClientCreateSoulCommand : ACommand
     {
-        public ClientCreateSoulCommand(CommandArgs args) 
+        public ClientCreateSoulCommand(CommandArgs args)
             : base(args)
         {
         }
@@ -22,6 +23,7 @@ namespace Server.GameServer.Commands
             var soul = new DataModels.Soul
             {
                 Id = Guid.NewGuid(),
+                ServerId = Guid.Parse(ConfigurationManager.AppSettings.Get("ConfigId")),
                 Name = soulName,
                 UserId = userId,
                 Level = 1,
@@ -45,15 +47,24 @@ namespace Server.GameServer.Commands
             };
             soul.Equipment = equipment;
 
-            if (GameRepository.CreateSoul(soul))
+            var result = DataRepositories.SoulRepository.CreateSoul(soul);
+            var objectResult = new Network.CreateObjectResult
             {
-                ret.ClientResponse = new Network.Message
-                {
-                    Code = Network.CommandCodes.Client_SoulList,
-                    Json = JsonConvert.SerializeObject(souls)
-                };
-                ret.Succeeded = true;
+                Success = result,
+                Message = "Soul created !"
+            };
+
+            if (!result)
+            {
+                objectResult.Message = "Soulname already in use. Please enter another one.";
             }
+
+            ret.ClientResponse = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_SoulList,
+                Json = JsonConvert.SerializeObject(objectResult)
+            };
+            ret.Succeeded = true;
 
             return ret;
         }

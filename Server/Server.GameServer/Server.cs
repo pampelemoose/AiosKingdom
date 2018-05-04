@@ -335,6 +335,9 @@ namespace Server.GameServer
                     retVal.IsValid = true;
                     retVal.Args = new string[1] { args[0] };
                     break;
+                case Network.CommandCodes.Client_CreateSoul:
+                    retVal.Args = new string[1] { args[0] };
+                    break;
                 case Network.CommandCodes.Client_SoulList:
                     break;
                 default:

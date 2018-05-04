@@ -50,25 +50,19 @@
     <Compile Include="ArmorRepository.cs" />
     <Compile Include="BagRepository.cs" />
     <Compile Include="ConsumableRepository.cs" />
-    <Compile Include="DispatchDbContext.cs" />
-    <Compile Include="GameDbContext.cs" />
-    <Compile Include="GameDbContextFactory.cs" />
+    <Compile Include="AiosKingdomContext.cs" />
     <Compile Include="GameServerRepository.cs" />
-    <Compile Include="Migrations\Dispatch\201805040530403_InitialMigration.cs" />
-    <Compile Include="Migrations\Dispatch\201805040530403_InitialMigration.Designer.cs">
-      <DependentUpon>201805040530403_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201805040926514_InitialMigration.cs" />
+    <Compile Include="Migrations\201805040926514_InitialMigration.Designer.cs">
+      <DependentUpon>201805040926514_InitialMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Dispatch\201805040617282_PasswordLenghtRemoved.cs" />
-    <Compile Include="Migrations\Dispatch\201805040617282_PasswordLenghtRemoved.Designer.cs">
-      <DependentUpon>201805040617282_PasswordLenghtRemoved.cs</DependentUpon>
+    <Compile Include="Migrations\201805040935249_GameServer_RemoveDatabaseName.cs" />
+    <Compile Include="Migrations\201805040935249_GameServer_RemoveDatabaseName.Designer.cs">
+      <DependentUpon>201805040935249_GameServer_RemoveDatabaseName.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Dispatch\DispatchConfiguration.cs" />
-    <Compile Include="Migrations\Game\201805040610179_InitialMigration.cs" />
-    <Compile Include="Migrations\Game\201805040610179_InitialMigration.Designer.cs">
-      <DependentUpon>201805040610179_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Game\GameConfiguration.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SoulRepository.cs" />
     <Compile Include="TokenRepository.cs" />
     <Compile Include="UserRepository.cs" />
   </ItemGroup>
@@ -83,14 +77,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\Dispatch\201805040530403_InitialMigration.resx">
-      <DependentUpon>201805040530403_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805040926514_InitialMigration.resx">
+      <DependentUpon>201805040926514_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Dispatch\201805040617282_PasswordLenghtRemoved.resx">
-      <DependentUpon>201805040617282_PasswordLenghtRemoved.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Game\201805040610179_InitialMigration.resx">
-      <DependentUpon>201805040610179_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805040935249_GameServer_RemoveDatabaseName.resx">
+      <DependentUpon>201805040935249_GameServer_RemoveDatabaseName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

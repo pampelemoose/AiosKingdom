@@ -9,7 +9,7 @@ namespace DataRepositories
 {
     public static class UserRepository
     {
-        private static DispatchDbContext _context = new DispatchDbContext();
+        private static AiosKingdomContext _context = new AiosKingdomContext();
 
         public static List<DataModels.Role> Roles
         {
@@ -28,7 +28,7 @@ namespace DataRepositories
         {
             return _context.Users
                 .Include(r => r.Roles)
-                .Include(s => s.ServerSlots)
+                .Include(s => s.Souls)
                 .FirstOrDefault(u => u.Id.Equals(id));
         }
 
@@ -36,7 +36,7 @@ namespace DataRepositories
         {
             return _context.Users
                 .Include(r => r.Roles)
-                .Include(s => s.ServerSlots)
+                .Include(s => s.Souls)
                 .FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(password));
         }
 

@@ -17,7 +17,7 @@ namespace Server.GameServer.Commands
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var userId = ClientsManager.Instance.GetUserId(ret.ClientId);
-            var souls = GameRepository.GetSoulsByUserId(userId);
+            var souls = DataRepositories.SoulRepository.GetSoulsByUserId(userId);
 
             ret.ClientResponse = new Network.Message
             {

@@ -10,7 +10,7 @@ namespace DataRepositories
 {
     public static class BagRepository
     {
-        private static DispatchDbContext _context = new DispatchDbContext();
+        private static AiosKingdomContext _context = new AiosKingdomContext();
 
         public static List<DataModels.Items.Bag> GetAll()
         {

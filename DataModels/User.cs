@@ -33,7 +33,7 @@ namespace DataModels
             set { _soulSlots = value; }
         }
 
-        public List<UserServerSlot> ServerSlots { get; set; }
+        public List<Soul> Souls { get; set; }
 
         public static string EncryptPassword(string password)
         {

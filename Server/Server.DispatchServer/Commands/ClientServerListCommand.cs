@@ -18,7 +18,7 @@ namespace Server.DispatchServer.Commands
         {
             var id = ClientsManager.Instance.GetUserId(ret.ClientId);
             var servers = DataRepositories.GameServerRepository.GetAll();
-            var slots = DataRepositories.UserRepository.GetById(id).ServerSlots;
+            var slots = DataRepositories.UserRepository.GetById(id).Souls;
             var infos = new List<Network.GameServerInfos>();
 
             foreach (var server in servers)

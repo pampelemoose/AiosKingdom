@@ -335,6 +335,13 @@ namespace AiosKingdom
                         }
                     }
                     break;
+                case Network.CommandCodes.Client_CreateSoul:
+                    {
+                        var souls = JsonConvert.DeserializeObject<List<DataModels.Soul>>(message.Json);
+                        DatasManager.Instance.Souls = souls;
+                        MessagingCenter.Send(this, MessengerCodes.SoulListReceived);
+                    }
+                    break;
                 case Network.CommandCodes.Client_SoulList:
                     {
                         var souls = JsonConvert.DeserializeObject<List<DataModels.Soul>>(message.Json);

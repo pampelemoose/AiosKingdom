@@ -120,7 +120,7 @@ namespace Website.Controllers
         {
             bool statusAccount = false;
 
-            using (var context = new DataRepositories.DispatchDbContext())
+            using (var context = new DataRepositories.AiosKingdomContext())
             {
                 Guid aId = Guid.Parse(id);
                 var user = context.Users.FirstOrDefault(u => u.ActivationCode.Equals(aId));

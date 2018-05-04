@@ -9,7 +9,7 @@ namespace DataRepositories
 {
     public static class GameServerRepository
     {
-        private static DispatchDbContext _context = new DispatchDbContext();
+        private static AiosKingdomContext _context = new AiosKingdomContext();
 
         public static List<DataModels.GameServer> GetAll()
         {
@@ -23,7 +23,7 @@ namespace DataRepositories
 
         public static bool Create(DataModels.GameServer server)
         {
-            if (_context.Servers.FirstOrDefault(u => u.DatabaseName.Equals(server.DatabaseName)) != null)
+            if (_context.Servers.FirstOrDefault(u => u.Name.Equals(server.Name)) != null)
                 return false;
 
             if (server.Id.Equals(Guid.Empty))

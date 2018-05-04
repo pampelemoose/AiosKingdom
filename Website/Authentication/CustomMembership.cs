@@ -13,7 +13,7 @@ namespace Website.Authentication
         {
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                using (var context = new DataRepositories.DispatchDbContext())
+                using (var context = new DataRepositories.AiosKingdomContext())
                 {
                     var pwd = DataModels.User.EncryptPassword(password);
                     var user = context.Users.FirstOrDefault(u => u.Username.Equals(username) 
@@ -28,7 +28,7 @@ namespace Website.Authentication
 
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
-            using (var context = new DataRepositories.DispatchDbContext())
+            using (var context = new DataRepositories.AiosKingdomContext())
             {
                 var user = context.Users.Include(u => u.Roles).FirstOrDefault(u => u.Username.Equals(username));
 
@@ -43,7 +43,7 @@ namespace Website.Authentication
 
         public override string GetUserNameByEmail(string email)
         {
-            using (var context = new DataRepositories.DispatchDbContext())
+            using (var context = new DataRepositories.AiosKingdomContext())
             {
                 var user = context.Users.FirstOrDefault(u => u.Email.Equals(email));
 

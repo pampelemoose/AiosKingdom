@@ -9,7 +9,7 @@ namespace DataRepositories
 {
     public static class TokenRepository
     {
-        private static DispatchDbContext _context = new DispatchDbContext();
+        private static AiosKingdomContext _context = new AiosKingdomContext();
 
         public static DataModels.GameServerToken Get(Guid token)
         {

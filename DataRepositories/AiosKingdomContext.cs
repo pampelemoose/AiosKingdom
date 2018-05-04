@@ -5,11 +5,11 @@ using System.Text;
 
 namespace DataRepositories
 {
-    public class DispatchDbContext : DbContext
+    public class AiosKingdomContext : DbContext
     {
         // User ID=sa;Password=Test1337
-        public DispatchDbContext()
-            : base("Data Source=.;Initial Catalog=DispatchDb;Trusted_Connection=True;")
+        public AiosKingdomContext()
+            : base("Data Source=.;Initial Catalog=AiosKingdom;Trusted_Connection=True;")
         {
         }
 
@@ -28,5 +28,9 @@ namespace DataRepositories
         public DbSet<DataModels.Skills.Book> Books { get; set; }
         public DbSet<DataModels.Skills.Page> Pages { get; set; }
         public DbSet<DataModels.Skills.Inscription> Inscriptions { get; set; }
+
+        public DbSet<DataModels.Soul> Souls { get; set; }
+        public DbSet<DataModels.Equipment> Equipments { get; set; }
+        public DbSet<DataModels.InventorySlot> Inventories { get; set; }
     }
 }

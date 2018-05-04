@@ -20,7 +20,7 @@ namespace Website.Authentication
             {
                 var userRoles = new string[] { };
 
-                using (var context = new DataRepositories.DispatchDbContext())
+                using (var context = new DataRepositories.AiosKingdomContext())
                 {
                     var user = context.Users.FirstOrDefault(u => u.Username.Equals(username));
 

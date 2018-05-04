@@ -1,29 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
+using System.Data.Entity.Validation;
 
-namespace Server.GameServer
+namespace DataRepositories
 {
-    public static class GameRepository
+    public static class SoulRepository
     {
-        private static DataRepositories.GameDbContext _context = GetContext();
-
-        private static DataRepositories.GameDbContext GetContext()
-        {
-            var id = Guid.Parse(ConfigurationManager.AppSettings.Get("ConfigId"));
-
-            var config = DataRepositories.GameServerRepository.GetById(id);
-            if (config != null)
-            {
-                return new DataRepositories.GameDbContext(config.DatabaseName);
-            }
-
-            return null;
-        }
+        private static AiosKingdomContext _context = new AiosKingdomContext();
 
         public static List<DataModels.Soul> GetSoulsByUserId(Guid id)
         {
@@ -46,8 +33,22 @@ namespace Server.GameServer
                 return false;
             }
 
-
-
+            _context.Souls.Add(soul);
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var error in e.EntityValidationErrors)
+                {
+                    foreach (var mess in error.ValidationErrors)
+                    {
+                        Console.WriteLine(mess.ErrorMessage);
+                    }
+                }
+                return false;
+            }
             return true;
         }
     }

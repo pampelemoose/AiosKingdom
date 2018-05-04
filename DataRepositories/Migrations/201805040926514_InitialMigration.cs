@@ -1,4 +1,4 @@
-namespace DataRepositories.Migrations.Dispatch
+namespace DataRepositories.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
@@ -117,40 +117,65 @@ namespace DataRepositories.Migrations.Dispatch
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.Roles",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.Users",
+                "dbo.Equipments",
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Username = c.String(nullable: false),
-                        Password = c.String(nullable: false, maxLength: 25),
-                        Email = c.String(nullable: false),
-                        ActivationCode = c.Guid(nullable: false),
-                        IsActivated = c.Boolean(nullable: false),
-                        SoulSlots = c.Int(nullable: false),
+                        Bag = c.Guid(nullable: false),
+                        Head = c.Guid(nullable: false),
+                        Shoulder = c.Guid(nullable: false),
+                        Torso = c.Guid(nullable: false),
+                        Belt = c.Guid(nullable: false),
+                        Pants = c.Guid(nullable: false),
+                        Leg = c.Guid(nullable: false),
+                        Feet = c.Guid(nullable: false),
+                        Hand = c.Guid(nullable: false),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Souls", t => t.Id)
+                .Index(t => t.Id);
             
             CreateTable(
-                "dbo.UserServerSlots",
+                "dbo.Souls",
                 c => new
                     {
                         Id = c.Guid(nullable: false),
                         ServerId = c.Guid(nullable: false),
-                        SoulId = c.Guid(nullable: false),
-                        User_Id = c.Guid(),
+                        UserId = c.Guid(nullable: false),
+                        Name = c.String(maxLength: 25),
+                        TimePlayed = c.Single(nullable: false),
+                        Level = c.Int(nullable: false),
+                        CurrentExperience = c.Int(nullable: false),
+                        Stamina = c.Int(nullable: false),
+                        Energy = c.Int(nullable: false),
+                        Strength = c.Int(nullable: false),
+                        Agility = c.Int(nullable: false),
+                        Intelligence = c.Int(nullable: false),
+                        Wisdom = c.Int(nullable: false),
+                        Spirits = c.Int(nullable: false),
+                        Embers = c.Int(nullable: false),
+                        Shards = c.Int(nullable: false),
+                        Bits = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Users", t => t.User_Id)
-                .Index(t => t.User_Id);
+                .ForeignKey("dbo.GameServers", t => t.ServerId, cascadeDelete: true)
+                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.ServerId)
+                .Index(t => t.UserId);
+            
+            CreateTable(
+                "dbo.InventorySlots",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        SoulId = c.Guid(nullable: false),
+                        Type = c.Int(nullable: false),
+                        ItemId = c.Guid(nullable: false),
+                        Quantity = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Souls", t => t.SoulId, cascadeDelete: true)
+                .Index(t => t.SoulId);
             
             CreateTable(
                 "dbo.GameServers",
@@ -179,6 +204,29 @@ namespace DataRepositories.Migrations.Dispatch
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.Users",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        Username = c.String(nullable: false),
+                        Password = c.String(nullable: false),
+                        Email = c.String(nullable: false),
+                        ActivationCode = c.Guid(nullable: false),
+                        IsActivated = c.Boolean(nullable: false),
+                        SoulSlots = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.Roles",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.GameServerTokens",
                 c => new
                     {
@@ -190,42 +238,50 @@ namespace DataRepositories.Migrations.Dispatch
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.UserRoles",
+                "dbo.RoleUsers",
                 c => new
                     {
-                        User_Id = c.Guid(nullable: false),
                         Role_Id = c.Int(nullable: false),
+                        User_Id = c.Guid(nullable: false),
                     })
-                .PrimaryKey(t => new { t.User_Id, t.Role_Id })
-                .ForeignKey("dbo.Users", t => t.User_Id, cascadeDelete: true)
+                .PrimaryKey(t => new { t.Role_Id, t.User_Id })
                 .ForeignKey("dbo.Roles", t => t.Role_Id, cascadeDelete: true)
-                .Index(t => t.User_Id)
-                .Index(t => t.Role_Id);
+                .ForeignKey("dbo.Users", t => t.User_Id, cascadeDelete: true)
+                .Index(t => t.Role_Id)
+                .Index(t => t.User_Id);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.UserServerSlots", "User_Id", "dbo.Users");
-            DropForeignKey("dbo.UserRoles", "Role_Id", "dbo.Roles");
-            DropForeignKey("dbo.UserRoles", "User_Id", "dbo.Users");
+            DropForeignKey("dbo.Equipments", "Id", "dbo.Souls");
+            DropForeignKey("dbo.Souls", "UserId", "dbo.Users");
+            DropForeignKey("dbo.RoleUsers", "User_Id", "dbo.Users");
+            DropForeignKey("dbo.RoleUsers", "Role_Id", "dbo.Roles");
+            DropForeignKey("dbo.Souls", "ServerId", "dbo.GameServers");
+            DropForeignKey("dbo.InventorySlots", "SoulId", "dbo.Souls");
             DropForeignKey("dbo.ConsumableEffects", "ConsumableId", "dbo.Consumables");
             DropForeignKey("dbo.Inscriptions", "PageId", "dbo.Pages");
             DropForeignKey("dbo.Pages", "BookId", "dbo.Books");
             DropForeignKey("dbo.ItemStats", "ItemId", "dbo.AEquipableItems");
-            DropIndex("dbo.UserRoles", new[] { "Role_Id" });
-            DropIndex("dbo.UserRoles", new[] { "User_Id" });
-            DropIndex("dbo.UserServerSlots", new[] { "User_Id" });
+            DropIndex("dbo.RoleUsers", new[] { "User_Id" });
+            DropIndex("dbo.RoleUsers", new[] { "Role_Id" });
+            DropIndex("dbo.InventorySlots", new[] { "SoulId" });
+            DropIndex("dbo.Souls", new[] { "UserId" });
+            DropIndex("dbo.Souls", new[] { "ServerId" });
+            DropIndex("dbo.Equipments", new[] { "Id" });
             DropIndex("dbo.ConsumableEffects", new[] { "ConsumableId" });
             DropIndex("dbo.Inscriptions", new[] { "PageId" });
             DropIndex("dbo.Pages", new[] { "BookId" });
             DropIndex("dbo.ItemStats", new[] { "ItemId" });
-            DropTable("dbo.UserRoles");
+            DropTable("dbo.RoleUsers");
             DropTable("dbo.GameServerTokens");
-            DropTable("dbo.GameServers");
-            DropTable("dbo.UserServerSlots");
-            DropTable("dbo.Users");
             DropTable("dbo.Roles");
+            DropTable("dbo.Users");
+            DropTable("dbo.GameServers");
+            DropTable("dbo.InventorySlots");
+            DropTable("dbo.Souls");
+            DropTable("dbo.Equipments");
             DropTable("dbo.Consumables");
             DropTable("dbo.ConsumableEffects");
             DropTable("dbo.Inscriptions");
