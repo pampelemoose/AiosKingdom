@@ -10,13 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace AiosKingdom.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ServerListPage : ContentPage
+	public partial class DashboardPage : ContentPage
 	{
-		public ServerListPage(List<Network.GameServerInfos> serverList)
+		public DashboardPage ()
 		{
-			InitializeComponent();
-
-            BindingContext = new ViewModels.ServerListPageViewModel(Navigation, serverList);
+			InitializeComponent ();
 		}
 	}
 }

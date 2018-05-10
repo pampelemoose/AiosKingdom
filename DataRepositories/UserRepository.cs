@@ -9,64 +9,77 @@ namespace DataRepositories
 {
     public static class UserRepository
     {
-        private static AiosKingdomContext _context = new AiosKingdomContext();
-
         public static List<DataModels.Role> Roles
         {
             get
             {
-                return _context.Roles.ToList();
+                using (var context = new AiosKingdomContext())
+                {
+                    return context.Roles.ToList();
+                }
             }
         }
 
         public static List<DataModels.User> GetAll()
         {
-            return _context.Users.ToList();
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Users.ToList();
+            }
         }
 
         public static DataModels.User GetById(Guid id)
         {
-            return _context.Users
-                .Include(r => r.Roles)
-                .Include(s => s.Souls)
-                .FirstOrDefault(u => u.Id.Equals(id));
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Users
+                    .Include(r => r.Roles)
+                    .Include(s => s.Souls)
+                    .FirstOrDefault(u => u.Id.Equals(id));
+            }
         }
 
         public static DataModels.User GetByCredentials(string username, string password)
         {
-            return _context.Users
-                .Include(r => r.Roles)
-                .Include(s => s.Souls)
-                .FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(password));
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Users
+                    .Include(r => r.Roles)
+                    .Include(s => s.Souls)
+                    .FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(password));
+            }
         }
 
         public static bool Create(DataModels.User user)
         {
-            if (_context.Users.FirstOrDefault(u => u.Username.Equals(user.Username)) != null)
-                return false;
+            using (var context = new AiosKingdomContext())
+            {
+                if (context.Users.FirstOrDefault(u => u.Username.Equals(user.Username)) != null)
+                    return false;
 
-            if (user.Id.Equals(Guid.Empty))
-            {
-                user.Id = Guid.NewGuid();
-            }
-
-            _context.Users.Add(user);
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var error in e.EntityValidationErrors)
+                if (user.Id.Equals(Guid.Empty))
                 {
-                    foreach (var mess in error.ValidationErrors)
-                    {
-                        Console.WriteLine(mess.ErrorMessage);
-                    }
+                    user.Id = Guid.NewGuid();
                 }
-                return false;
+
+                context.Users.Add(user);
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var error in e.EntityValidationErrors)
+                    {
+                        foreach (var mess in error.ValidationErrors)
+                        {
+                            Console.WriteLine(mess.ErrorMessage);
+                        }
+                    }
+                    return false;
+                }
+                return true;
             }
-            return true;
         }
     }
 }

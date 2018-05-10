@@ -9,61 +9,71 @@ namespace DataRepositories
 {
     public static class TokenRepository
     {
-        private static AiosKingdomContext _context = new AiosKingdomContext();
-
         public static DataModels.GameServerToken Get(Guid token)
         {
-            return _context.Tokens.FirstOrDefault(t => t.Token.Equals(token));
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Tokens.FirstOrDefault(t => t.Token.Equals(token));
+            }
         }
 
         public static DataModels.GameServerToken Create(Guid userId)
         {
-            var token = new DataModels.GameServerToken
+            using (var context = new AiosKingdomContext())
             {
-                Id = Guid.NewGuid(),
-                Token = Guid.NewGuid(),
-                UserId = userId,
-                CreatedAt = DateTime.Now
-            };
-
-            _context.Tokens.Add(token);
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var error in e.EntityValidationErrors)
+                var token = new DataModels.GameServerToken
                 {
-                    foreach (var mess in error.ValidationErrors)
-                    {
-                        Console.WriteLine(mess.ErrorMessage);
-                    }
+                    Id = Guid.NewGuid(),
+                    Token = Guid.NewGuid(),
+                    UserId = userId,
+                    CreatedAt = DateTime.Now
+                };
+
+                context.Tokens.Add(token);
+                try
+                {
+                    context.SaveChanges();
                 }
-                return null;
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var error in e.EntityValidationErrors)
+                    {
+                        foreach (var mess in error.ValidationErrors)
+                        {
+                            Console.WriteLine(mess.ErrorMessage);
+                        }
+                    }
+                    return null;
+                }
+                return token;
             }
-            return token;
         }
 
         public static bool Remove(DataModels.GameServerToken token)
         {
-            _context.Tokens.Remove(token);
-            try
+            using (var context = new AiosKingdomContext())
             {
-                _context.SaveChanges();
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var error in e.EntityValidationErrors)
+                var online = context.Tokens.FirstOrDefault(t => t.Id.Equals(token.Id));
+                if (online == null) return false;
+
+                context.Tokens.Remove(online);
+                try
                 {
-                    foreach (var mess in error.ValidationErrors)
-                    {
-                        Console.WriteLine(mess.ErrorMessage);
-                    }
+                    context.SaveChanges();
                 }
-                return false;
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var error in e.EntityValidationErrors)
+                    {
+                        foreach (var mess in error.ValidationErrors)
+                        {
+                            Console.WriteLine(mess.ErrorMessage);
+                        }
+                    }
+                    return false;
+                }
+                return true;
             }
-            return true;
         }
     }
 }

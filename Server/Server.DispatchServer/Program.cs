@@ -15,7 +15,7 @@ namespace Server.DispatchServer
             sb.AppendLine("================================================================================\n");
             Console.WriteLine(sb.ToString());
 
-            RequireAdminAuth();
+            //RequireAdminAuth(); // TODO : Needed or not ?
 
             Server server = new Server();
             server.Start();

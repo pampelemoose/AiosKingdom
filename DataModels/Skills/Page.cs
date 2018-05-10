@@ -11,8 +11,8 @@ namespace DataModels.Skills
         [Key]
         public Guid Id { get; set; }
 
-        [ForeignKey("Book")]
         public Guid BookId { get; set; }
+        [ForeignKey("BookId")]
         public Book Book { get; set; }
 
         [Required, MaxLength(50)]

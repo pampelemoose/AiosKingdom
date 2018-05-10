@@ -1,0 +1,533 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+             x:Class="AiosKingdom.Views.DashboardPage"
+             Title="{Binding Title}">
+    <ContentPage.BindingContext>
+        <vm:DashboardPageViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="1.5*" />
+            </Grid.ColumnDefinitions>
+
+            <!--Grid 
+                Grid.Column="0"
+                Grid.Row="0">
+                <Image Source="{Binding Head, Converter={StaticResource objectToImage}}"/>
+                <Button
+                    BackgroundColor="Transparent"
+                    Command="{Binding HeadAction}" />
+            </Grid-->
+
+            <Grid
+                Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid 
+                    Grid.Row="0">
+                    <Image Source="{Binding Soul.Equipment.Head, Converter={StaticResource objectToImage}}"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding HeadAction}" />
+                </Grid>
+
+                <Grid 
+                    Grid.Row="1">
+                    <Image Source="{Binding Soul.Equipment.Shoulder, Converter={StaticResource objectToImage}}"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding ShoulderAction}" />
+                </Grid>
+
+                <Grid 
+                    Grid.Row="2">
+                    <Image Source="{Binding Soul.Equipment.Torso, Converter={StaticResource objectToImage}}"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding TorsoAction}" />
+                </Grid>
+
+                <Grid 
+                    Grid.Row="3">
+                    <Image Source="{Binding Soul.Equipment.Hand, Converter={StaticResource objectToImage}}"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding HandAction}" />
+                </Grid>
+            </Grid>
+
+            <Grid
+                Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid 
+                    Grid.Row="0">
+                    <Image Source="{Binding Soul.Equipment.Belt, Converter={StaticResource objectToImage}}"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding BeltAction}" />
+                </Grid>
+
+                <Grid 
+                    Grid.Row="1">
+                    <Image Source="{Binding Soul.Equipment.Leg, Converter={StaticResource objectToImage}}"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding LegAction}" />
+                </Grid>
+
+                <Grid 
+                    Grid.Row="2">
+                    <Image Source="{Binding Soul.Equipment.Pants, Converter={StaticResource objectToImage}}"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding PantsAction}" />
+                </Grid>
+
+                <Grid 
+                    Grid.Row="3">
+                    <Image Source="{Binding Soul.Equipment.Feet, Converter={StaticResource objectToImage}}"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding FeetAction}" />
+                </Grid>
+            </Grid>
+
+            <Grid
+                Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Image 
+                    Grid.Row="3"
+                    Source="{Binding Soul.Equipment.Bag, Converter={StaticResource objectToImage}}"/>
+            </Grid>
+
+            <!--<Grid
+                Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="140"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+
+                <Grid 
+                    Grid.Row="0"
+                    BackgroundColor="Fuchsia"
+                    HeightRequest="140">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="70"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0"
+                        ColumnSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="9*" />
+                        </Grid.ColumnDefinitions>
+
+                        <ContentView
+                            Grid.Column="0"
+                            Padding="8"
+                            BackgroundColor="Gray">
+                            <Label
+                                BackgroundColor="Silver"
+                                TextColor="Black"
+                                FontSize="30"
+                                FontAttributes="Bold"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Datas.CurrentLevel}"/>
+                        </ContentView>
+                        <Grid
+                            Grid.Column="1"
+                            RowSpacing="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <ContentView
+                                Grid.Row="0"
+                                Padding="5"
+                                BackgroundColor="Gray">
+                                <Label
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    TextColor="Black"
+                                    Text="{Binding Soul.Name}" />
+                            </ContentView>
+
+                            <Grid
+                                Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label
+                                    Grid.Column="0"
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    Text="{Binding Datas.CurrentExperience}" />
+                                <Label
+                                    Grid.Column="1"
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    Text="{Binding Datas.RequiredExperience}" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                    <Grid
+                        Grid.Row="1"
+                        RowSpacing="0"
+                        ColumnSpacing="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ContentView
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Padding="5, 5, 0, 2.5"
+                            BackgroundColor="Purple">
+                            <Label
+                                BackgroundColor="Lime"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Text="Health"/>
+                        </ContentView>
+
+                        <ContentView
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Padding="0, 5, 5, 2.5"
+                            BackgroundColor="Purple">
+                            <Label
+                                BackgroundColor="Lime"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding Datas.MaxHealth}"/>
+                        </ContentView>
+
+                        <ContentView
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Padding="5, 2.5, 0, 5"
+                            BackgroundColor="Purple">
+                            <Label
+                                BackgroundColor="Blue"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Text="Mana"/>
+                        </ContentView>
+
+                        <ContentView
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Padding="0, 2.5, 5, 5"
+                            BackgroundColor="Purple">
+                            <Label
+                                BackgroundColor="Blue"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding Datas.MaxMana}"/>
+                        </ContentView>
+                    </Grid>
+                </Grid>
+
+                <Grid
+                    Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Grid.Column="0"
+                            Text="Item level"/>
+                        <Label 
+                            Grid.Column="1"
+                            Text="{Binding Datas.ItemLevel}"/>
+                    </Grid>
+                    <Grid
+                        Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Grid.Column="0"
+                            Text="Armor"/>
+                        <Label 
+                            Grid.Column="1"
+                            Text="{Binding Datas.Armor}"/>
+                    </Grid>
+                </Grid>
+
+                <Grid
+                    Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0"
+                        Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Grid.Column="0"
+                            Text="Stamina"/>
+                        <Label 
+                            Grid.Column="1"
+                            Text="{Binding Datas.TotalStamina}"/>
+                    </Grid>
+
+                    <Grid
+                        Grid.Row="1"
+                        Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Grid.Column="0"
+                            Text="Energy"/>
+                        <Label 
+                            Grid.Column="1"
+                            Text="{Binding Datas.TotalEnergy}"/>
+                    </Grid>
+                    <Grid
+                        Grid.Row="2"
+                        Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Grid.Column="0"
+                            Text="Strength"/>
+                        <Label 
+                            Grid.Column="1"
+                            Text="{Binding Datas.TotalStrength}"/>
+                    </Grid>
+                    <Grid
+                        Grid.Row="0"
+                        Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Grid.Column="0"
+                            Text="Agility"/>
+                        <Label 
+                            Grid.Column="1"
+                            Text="{Binding Datas.TotalAgility}"/>
+                    </Grid>
+                    <Grid
+                        Grid.Row="1"
+                        Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Grid.Column="0"
+                            Text="Intelligence"/>
+                        <Label 
+                            Grid.Column="1"
+                            Text="{Binding Datas.TotalIntelligence}"/>
+                    </Grid>
+                    <Grid
+                        Grid.Row="2"
+                        Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Grid.Column="0"
+                            Text="Wisdom"/>
+                        <Label 
+                            Grid.Column="1"
+                            Text="{Binding Datas.TotalWisdom}"/>
+                    </Grid>
+                </Grid>
+                <Grid
+                    Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label 
+                        Grid.Column="0"
+                        Text="{Binding Datas.Spirits}"/>
+                    <Label 
+                        Grid.Column="1"
+                        Text="{Binding Datas.Embers}"/>
+                    <Label 
+                        Grid.Column="2"
+                        Text="{Binding Datas.Shards}"/>
+                    <Label 
+                        Grid.Column="3"
+                        Text="{Binding Datas.Bits}"/>
+                </Grid>
+            </Grid>-->
+
+            <!--<Grid
+                Grid.Column="2"
+                BackgroundColor="{Binding SelectedDto.Armor.Quality, Converter={StaticResource itemQualityToColor}}"
+                IsVisible="{Binding ShowArmorDetails}">
+                <Grid
+                    BackgroundColor="Transparent"
+                    WidthRequest="200"
+                    HorizontalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="100" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        BackgroundColor="Transparent"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding SelectedDto.Armor.Name}"/>
+
+                    <Grid
+                        Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            Grid.Column="0"
+                            Source="{Binding SelectedDto.Armor.Image, Converter={StaticResource objectToImage}}" />
+                        <Grid
+                            Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <ContentView
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                BackgroundColor="Blue"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedDto.Armor.UseLevelRequired}"/>
+                            </ContentView>
+                            <ContentView
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                BackgroundColor="Gray"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedDto.Armor.ItemLevel}"/>
+                            </ContentView>
+                            <ContentView
+                                Grid.Row="1"
+                                Grid.ColumnSpan="2"
+                                BackgroundColor="Gray"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedDto.Armor.ArmorValue}"/>
+                            </ContentView>
+                        </Grid>
+                    </Grid>
+                    <ListView
+                        Grid.Row="2"
+                        BackgroundColor="Transparent"
+                        ItemsSource="{Binding SelectedDto.Stats}"
+                        HeightRequest="{Binding SelectedDto.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
+                        RowHeight="20"
+                        SeparatorVisibility="None"
+                        IsEnabled="false">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="10*" />
+                                            <ColumnDefinition Width="2*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label 
+                                            Grid.Column="0"
+                                            Text="{Binding Type}" />
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="{Binding StatValue}" />
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>-->
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

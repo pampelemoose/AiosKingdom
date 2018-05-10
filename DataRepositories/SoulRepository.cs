@@ -10,46 +10,87 @@ namespace DataRepositories
 {
     public static class SoulRepository
     {
-        private static AiosKingdomContext _context = new AiosKingdomContext();
-
         public static List<DataModels.Soul> GetSoulsByUserId(Guid id)
         {
-            return _context.Souls
-                .Include(s => s.Equipment)
-                .Include(s => s.Inventory)
-                .Where(s => s.UserId.Equals(id)).ToList();
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Souls
+                    .Where(s => s.UserId.Equals(id)).ToList();
+            }
+        }
+
+        public static DataModels.Soul GetById(Guid id)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Souls
+                    .Include(s => s.Equipment)
+                    .Include(s => s.Inventory)
+                    .FirstOrDefault(s => s.Id.Equals(id));
+            }
         }
 
         public static bool CreateSoul(DataModels.Soul soul)
         {
-            var nameUsed = _context.Souls.FirstOrDefault(s => s.Name.Equals(soul.Name));
-            if (nameUsed != null)
+            using (var context = new AiosKingdomContext())
             {
-                return false;
-            }
-
-            if (soul.Id.Equals(Guid.Empty))
-            {
-                return false;
-            }
-
-            _context.Souls.Add(soul);
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var error in e.EntityValidationErrors)
+                var nameUsed = context.Souls.FirstOrDefault(s => s.Name.Equals(soul.Name));
+                if (nameUsed != null)
                 {
-                    foreach (var mess in error.ValidationErrors)
-                    {
-                        Console.WriteLine(mess.ErrorMessage);
-                    }
+                    return false;
                 }
-                return false;
+
+                if (soul.Id.Equals(Guid.Empty))
+                {
+                    return false;
+                }
+
+                context.Souls.Add(soul);
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var error in e.EntityValidationErrors)
+                    {
+                        foreach (var mess in error.ValidationErrors)
+                        {
+                            Console.WriteLine(mess.ErrorMessage);
+                        }
+                    }
+                    return false;
+                }
+                return true;
             }
-            return true;
+        }
+
+        public static bool Update(DataModels.Soul soul)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                var online = context.Souls.FirstOrDefault(s => s.Id.Equals(soul.Id));
+                if (online == null) return false;
+
+                online.TimePlayed = soul.TimePlayed;
+
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var error in e.EntityValidationErrors)
+                    {
+                        foreach (var mess in error.ValidationErrors)
+                        {
+                            Console.WriteLine(mess.ErrorMessage);
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            }
         }
     }
 }

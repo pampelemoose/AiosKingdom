@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,8 +40,13 @@ namespace AiosKingdom
 
         #region Dispatch Functions
 
+        private DateTime _dispatchTimedOut;
+
         private void RunDispatch()
         {
+            _isDispatchRunning = true;
+            _dispatchTimedOut = DateTime.Now;
+
             while (_isDispatchRunning)
             {
                 var bufferSize = _dispatch.Available;
@@ -67,16 +74,31 @@ namespace AiosKingdom
                         }
                     }
                 }
-            }
 
-            _dispatch.Client.Close();
-            _dispatch.Close();
+                var diff = DateTime.Now - _dispatchTimedOut;
+                if (diff.TotalSeconds > 10)
+                {
+                    MessagingCenter.Send(this, MessengerCodes.Disconnected, "Timed out.");
+                    _isDispatchRunning = false;
+                }
+            }
         }
 
         private bool ProcessDispatchMessage(Network.Message message)
         {
             switch (message.Code)
             {
+                case Network.CommandCodes.Ping:
+                    {
+                        var args = new string[0];
+                        var retMess = new Network.Message
+                        {
+                            Code = Network.CommandCodes.Ping,
+                            Json = JsonConvert.SerializeObject(args)
+                        };
+                        SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
+                    }
+                    break;
                 case Network.CommandCodes.Client_Authenticate:
                     {
                         var authToken = JsonConvert.DeserializeObject<Guid>(message.Json);
@@ -95,9 +117,8 @@ namespace AiosKingdom
                 case Network.CommandCodes.Client_ServerList:
                     {
                         var servers = JsonConvert.DeserializeObject<List<Network.GameServerInfos>>(message.Json);
-                        DatasManager.Instance.ServerInfos = servers;
                         _serverListRequested = false;
-                        MessagingCenter.Send(this, MessengerCodes.InitialDatasReceived);
+                        MessagingCenter.Send(this, MessengerCodes.ServerListReceived, servers);
                     }
                     break;
                 case Network.CommandCodes.Client_AnnounceGameConnection:
@@ -110,6 +131,8 @@ namespace AiosKingdom
                     return false;
             }
 
+            _dispatchTimedOut = DateTime.Now;
+
             return true;
         }
 
@@ -118,11 +141,10 @@ namespace AiosKingdom
             try
             {
                 _dispatch = new TcpClient();
-                var result = _dispatch.BeginConnect("10.0.2.2", 1337, (asyncResult) =>
+                var result = _dispatch.BeginConnect("127.0.0.1", 1337, (asyncResult) =>
                 {
                     try
                     {
-                        _isDispatchRunning = true;
                         Task.Factory.StartNew(RunDispatch, TaskCreationOptions.LongRunning);
                         MessagingCenter.Send(this, MessengerCodes.ConnectionSuccessful);
                         _dispatch.EndConnect(asyncResult);
@@ -143,6 +165,15 @@ namespace AiosKingdom
             {
                 MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, sockE.Message);
                 return;
+            }
+        }
+
+        public void Disconnect()
+        {
+            if (_dispatch.Connected)
+            {
+                _dispatch.Client.Close();
+                _dispatch.Close();
             }
         }
 
@@ -173,16 +204,6 @@ namespace AiosKingdom
             };
             SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
             _serverListRequested = true;
-
-            Device.StartTimer(TimeSpan.FromSeconds(10), () =>
-            {
-                if (_serverListRequested)
-                {
-                    _serverListRequested = false;
-                    AskServerInfos();
-                }
-                return false;
-            });
         }
 
         public void AnnounceGameServerConnection(Guid serverId)
@@ -213,18 +234,18 @@ namespace AiosKingdom
                     }
                     catch (SocketException sockE)
                     {
-                        MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, sockE.Message);
+                        MessagingCenter.Send(this, MessengerCodes.Disconnected, sockE.Message);
                     }
                 }, null);
 
                 if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
                 {
-                    MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, "Connection lost, please reconnect..");
+                    MessagingCenter.Send(this, MessengerCodes.Disconnected, "Connection lost, please reconnect..");
                 }
             }
             catch (SocketException sockE)
             {
-                MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, sockE.Message);
+                MessagingCenter.Send(this, MessengerCodes.Disconnected, sockE.Message);
             }
         }
 
@@ -232,16 +253,17 @@ namespace AiosKingdom
 
         #region Game Function
 
+        private DateTime _gameTimedOut;
+
         public void ConnectToGameServer(Network.GameServerConnection connection)
         {
             try
             {
                 _game = new TcpClient();
-                var result = _game.BeginConnect(/*connection.Host*/"10.0.2.2", connection.Port, (asyncResult) =>
+                var result = _game.BeginConnect(connection.Host/*"10.0.2.2"*/, connection.Port, (asyncResult) =>
                 {
                     try
                     {
-                        _isGameRunning = true;
                         Task.Factory.StartNew(RunGame, TaskCreationOptions.LongRunning);
                         _game.EndConnect(asyncResult);
                     }
@@ -273,8 +295,20 @@ namespace AiosKingdom
             }
         }
 
+        public void DisconnectGame()
+        {
+            if (_game.Connected)
+            {
+                _game.Client.Close();
+                _game.Close();
+            }
+        }
+
         private void RunGame()
         {
+            _isGameRunning = true;
+            _gameTimedOut = DateTime.Now;
+
             while (_isGameRunning)
             {
                 var bufferSize = _game.Available;
@@ -302,16 +336,31 @@ namespace AiosKingdom
                         }
                     }
                 }
-            }
 
-            _game.Client.Close();
-            _game.Close();
+                var diff = DateTime.Now - _gameTimedOut;
+                if (diff.TotalSeconds > 10)
+                {
+                    MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, "Timed out.");
+                    _isGameRunning = false;
+                }
+            }
         }
 
         private bool ProcessGameMessage(Network.Message message)
         {
             switch (message.Code)
             {
+                case Network.CommandCodes.Ping:
+                    {
+                        var args = new string[0];
+                        var retMess = new Network.Message
+                        {
+                            Code = Network.CommandCodes.Ping,
+                            Json = JsonConvert.SerializeObject(args)
+                        };
+                        SendJsonToGame(JsonConvert.SerializeObject(retMess));
+                    }
+                    break;
                 case Network.CommandCodes.Client_Authenticate:
                     {
                         var authToken = JsonConvert.DeserializeObject<Guid>(message.Json);
@@ -358,13 +407,21 @@ namespace AiosKingdom
                 case Network.CommandCodes.Client_SoulList:
                     {
                         var souls = JsonConvert.DeserializeObject<List<DataModels.Soul>>(message.Json);
-                        DatasManager.Instance.Souls = souls;
-                        MessagingCenter.Send(this, MessengerCodes.SoulListReceived);
+                        MessagingCenter.Send(this, MessengerCodes.SoulListReceived, souls);
+                    }
+                    break;
+                case Network.CommandCodes.Client_ConnectSoul:
+                    {
+                        var soul = JsonConvert.DeserializeObject<DataModels.Soul>(message.Json);
+                        DatasManager.Instance.Soul = soul;
+                        MessagingCenter.Send(this, MessengerCodes.SoulConnected);
                     }
                     break;
                 default:
                     return false;
             }
+
+            _gameTimedOut = DateTime.Now;
 
             return true;
         }
@@ -376,9 +433,23 @@ namespace AiosKingdom
             var retMess = new Network.Message
             {
                 Code = Network.CommandCodes.Client_CreateSoul,
-                Json = JsonConvert.SerializeObject(args)
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
             };
-            SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void ConnectSoul(Guid id)
+        {
+            var args = new string[1];
+            args[0] = id.ToString();
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_ConnectSoul,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
         }
 
         private void SendJsonToGame(string json)
@@ -396,18 +467,18 @@ namespace AiosKingdom
                     }
                     catch (SocketException sockE)
                     {
-                        //MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, sockE.Message);
+                        MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, sockE.Message);
                     }
                 }, null);
 
                 if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
                 {
-                    //MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, "Connection lost, please reconnect..");
+                    MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, "Connection lost, please reconnect..");
                 }
             }
             catch (SocketException sockE)
             {
-                //MessagingCenter.Send(this, MessengerCodes.ConnectionFailed, sockE.Message);
+                MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, $"{sockE.StackTrace} : {sockE.Message}");
             }
         }
 

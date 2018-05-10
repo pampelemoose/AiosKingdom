@@ -26,6 +26,7 @@ namespace Server.GameServer
         private Dictionary<Guid, Guid> _authTokens;
 
         private Dictionary<Guid, Guid> _userIds;
+        private Dictionary<Guid, DateTime> _pings;
 
         private ClientsManager()
         {
@@ -33,6 +34,7 @@ namespace Server.GameServer
             _authTokens = new Dictionary<Guid, Guid>();
 
             _userIds = new Dictionary<Guid, Guid>();
+            _pings = new Dictionary<Guid, DateTime>();
         }
 
         public Dictionary<Guid, Socket> Clients => _clients;
@@ -51,6 +53,11 @@ namespace Server.GameServer
                 if (_authTokens.ContainsKey(id))
                 {
                     _authTokens.Remove(id);
+                }
+
+                if (_pings.ContainsKey(id))
+                {
+                    _pings.Remove(id);
                 }
                 return true;
             }
@@ -73,6 +80,7 @@ namespace Server.GameServer
             _clients.Clear();
             _authTokens.Clear();
             _userIds.Clear();
+            _pings.Clear();
         }
 
         public void AuthenticateClient(Guid clientId, Guid token)
@@ -113,6 +121,29 @@ namespace Server.GameServer
             }
 
             return false;
+        }
+
+        public void Ping(Guid clientId)
+        {
+            if (_pings.ContainsKey(clientId))
+            {
+                _pings[clientId] = DateTime.Now;
+            }
+            else
+            {
+                _pings.Add(clientId, DateTime.Now);
+            }
+        }
+
+        public double GetPing(Guid clientId)
+        {
+            if (_pings.ContainsKey(clientId))
+            {
+                var diff = DateTime.Now - _pings[clientId];
+                return diff.TotalSeconds;
+            }
+
+            return 0.0f;
         }
     }
 }

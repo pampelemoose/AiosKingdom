@@ -38,14 +38,12 @@ namespace Server.GameServer.Commands
                 Spirits = 0, // TODO : get value from config
                 Embers = 0, // TODO : get value from config
                 Shards = 0,
-                Bits = 0
+                Bits = 0,
+                Equipment = new DataModels.Equipment
+                {
+                    Id = Guid.NewGuid()
+                }
             };
-            var equipment = new DataModels.Equipment
-            {
-                Id = Guid.NewGuid(),
-                Soul = soul
-            };
-            soul.Equipment = equipment;
 
             var result = DataRepositories.SoulRepository.CreateSoul(soul);
             var objectResult = new Network.CreateObjectResult
@@ -61,7 +59,7 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Client_SoulList,
+                Code = Network.CommandCodes.Client_CreateSoul,
                 Json = JsonConvert.SerializeObject(objectResult)
             };
             ret.Succeeded = true;

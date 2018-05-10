@@ -8,15 +8,11 @@ namespace AiosKingdom.ViewModels
 {
     public class ServerListPageViewModel : BaseViewModel
     {
-        public ServerListPageViewModel(INavigation nav)
+        public ServerListPageViewModel(INavigation nav, List<Network.GameServerInfos> serverList)
             : base(nav)
         {
             Title = "Server List";
-
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.InitialDatasReceived, (sender) =>
-            {
-                NotifyPropertyChanged(nameof(ServerInfos));
-            });
+            ServerInfos = serverList;
 
             MessagingCenter.Subscribe<NetworkManager, Network.GameServerConnection>(this, MessengerCodes.GameServerDatasReceived, (sender, connection) =>
             {
@@ -50,15 +46,17 @@ namespace AiosKingdom.ViewModels
             }
         }
 
+        private List<Network.GameServerInfos> _serverInfos;
         public List<Network.GameServerInfos> ServerInfos
         {
-            get
+            get { return _serverInfos; }
+            set
             {
-                return DatasManager.Instance.ServerInfos;
+                _serverInfos = value;
+                NotifyPropertyChanged();
             }
         }
 
-        private Network.GameServerInfos _selectedInfo;
         public Network.GameServerInfos SelectedInfo
         {
             get { return null; }

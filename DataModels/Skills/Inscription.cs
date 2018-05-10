@@ -17,8 +17,8 @@ namespace DataModels.Skills
         [Key]
         public Guid Id { get; set; }
 
-        [ForeignKey("Page")]
         public Guid PageId { get; set; }
+        [ForeignKey("PageId")]
         public Page Page { get; set; }
 
         [Required, MaxLength(50)]

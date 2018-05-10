@@ -14,20 +14,15 @@ namespace AiosKingdom.ViewModels
         {
             Message = "Waiting Soul List..";
 
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulListReceived, (sender) =>
+            MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, souls) =>
             {
+                Souls = souls;
                 IsLoading = false;
-                NotifyPropertyChanged(nameof(Souls));
             });
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SoulCreationFailed, (sender, message) =>
             {
-                Message = message;
-                Task.Run(() =>
-                {
-                    Task.Delay(2000);
-                    IsLoading = false;
-                });
+                IsLoading = false;
             });
 
             NetworkManager.Instance.ConnectToGameServer(connection);
@@ -55,7 +50,33 @@ namespace AiosKingdom.ViewModels
             }
         }
 
-        public List<DataModels.Soul> Souls => DatasManager.Instance.Souls;
+        private List<DataModels.Soul> _souls;
+        public List<DataModels.Soul> Souls
+        {
+            get { return _souls; }
+            set
+            {
+                _souls = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private DataModels.Soul _selectedSoul;
+        public DataModels.Soul SelectedSoul
+        {
+            get { return null; }
+            set
+            {
+                if (value != null)
+                {
+                    NetworkManager.Instance.ConnectSoul(value.Id);
+                    IsLoading = true;
+                    Message = $"Connecting {value.Name}, please wait...";
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
 
         private ICommand _createSoulAction;
         public ICommand CreateSoulAction =>

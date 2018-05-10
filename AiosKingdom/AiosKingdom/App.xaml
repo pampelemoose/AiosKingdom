@@ -16,6 +16,7 @@
             <converters:StatToColorConverter x:Key="statToColor" />
             <converters:ListToHeightConverter x:Key="listToHeight" />
             <converters:InverseBooleanConverter x:Key="inverseBoolean" />
+            <converters:ObjectToImageConverter x:Key="objectToImage" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

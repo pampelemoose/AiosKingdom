@@ -21,12 +21,12 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
-        [ForeignKey("Server")]
         public Guid ServerId { get; set; }
+        [ForeignKey("ServerId")]
         public GameServer Server { get; set; }
 
-        [ForeignKey("User")]
         public Guid UserId { get; set; }
+        [ForeignKey("UserId")]
         public User User { get; set; }
 
         [MaxLength(25)]
@@ -60,7 +60,10 @@ namespace DataModels
         public int Shards { get; set; } // GameTime Coins
         public int Bits { get; set; } // Basic Coins
 
+        public Guid EquipmentId { get; set; }
+        [ForeignKey("EquipmentId")]
         public Equipment Equipment { get; set; }
+
         public List<InventorySlot> Inventory { get; set; }
         //public List<Datas.Models.Skills.Book> Knowledge { get; set; }
     }

@@ -11,8 +11,8 @@ namespace DataModels.Items
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Item")]
         public Guid ItemId { get; set; }
+        [ForeignKey("ItemId")]
         public AEquipableItem Item { get; set; }
 
         [Required]

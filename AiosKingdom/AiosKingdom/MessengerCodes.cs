@@ -13,13 +13,14 @@ namespace AiosKingdom
         public static string LoginSuccessful = "loginSuccessful";
         public static string LoginFailed = "loginFailed";
 
-        public static string InitialDatasReceived = "initialDatasReceived";
+        public static string ServerListReceived = "initialDatasReceived";
         public static string GameServerDatasReceived = "gameServerDatasReceived";
-
-        public static string ConnectedToServer = "connectedToServer";
+        public static string GameServerDisconnected = "gameServerDisconnected";
 
         public static string ShowSoulList = "showSoulList";
         public static string SoulListReceived = "soulListReceived";
         public static string SoulCreationFailed = "soulCreationFailed";
+
+        public static string SoulConnected = "soulConnected";
     }
 }

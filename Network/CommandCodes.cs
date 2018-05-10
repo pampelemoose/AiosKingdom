@@ -13,5 +13,8 @@ namespace Network
 
         public const int Client_SoulList = 10;
         public const int Client_CreateSoul = 11;
+        public const int Client_ConnectSoul = 12;
+
+        public const int Ping = 10000;
     }
 }

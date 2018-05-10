@@ -12,12 +12,6 @@ namespace AiosKingdom.ViewModels
         public LoginPageViewModel()
             : base(null)
         {
-            _stopLoadingAction = new Command(() =>
-            {
-                ShowButton = false;
-                IsLoading = false;
-            });
-
             _tryToConnectAction = new Command(() =>
             {
                 Message = "Connecting to the server. Please wait...";
@@ -48,9 +42,7 @@ namespace AiosKingdom.ViewModels
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed, (sender, arg) =>
             {
-                ShowButton = true;
-                Message = arg;
-                CloseMessage = _stopLoadingAction;
+                IsLoading = false;
             });
 
             NetworkManager.Instance.ConnectToServer();
@@ -122,7 +114,6 @@ namespace AiosKingdom.ViewModels
         }
 
         private ICommand _tryToConnectAction;
-        private ICommand _stopLoadingAction;
 
         private ICommand _closeMessage;
         public ICommand CloseMessage

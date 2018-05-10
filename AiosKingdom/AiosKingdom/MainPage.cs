@@ -45,7 +45,7 @@ namespace AiosKingdom
             {
                 Title = "Menu"
             };
-            Detail = new NavigationPage(new Views.DefaultPage());
+            Detail = new NavigationPage(new Views.DashboardPage());
         }
     }
 }

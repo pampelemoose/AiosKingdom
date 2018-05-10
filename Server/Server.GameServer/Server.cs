@@ -57,6 +57,9 @@ namespace Server.GameServer
                 return;
             }
 
+            _config.Online = true;
+            DataRepositories.GameServerRepository.Update(_config);
+
             Console.WriteLine($"Starting TCPListener at address : {_config.Host}:{_config.Port} ...");
 
             _listener = new TcpListener(IPAddress.Parse(_config.Host), _config.Port);
@@ -69,15 +72,26 @@ namespace Server.GameServer
         public void Stop()
         {
             _isRunning = false;
+
+            _config.Online = false;
+            DataRepositories.GameServerRepository.Update(_config);
         }
 
         private void SetupClientDelegates()
         {
+            _commandArgCount.Add(Network.CommandCodes.Ping, 0);
+
             _commandArgCount.Add(Network.CommandCodes.Client_Authenticate, 1);
             _commandArgCount.Add(Network.CommandCodes.Client_SoulList, 0);
+            _commandArgCount.Add(Network.CommandCodes.Client_CreateSoul, 1);
+            _commandArgCount.Add(Network.CommandCodes.Client_ConnectSoul, 1);
+
+            _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_SoulList, (args) => { return new Commands.ClientSoulListCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_CreateSoul, (args) => { return new Commands.ClientCreateSoulCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_ConnectSoul, (args) => { return new Commands.ClientConnectSoulCommand(args); });
         }
 
         private void Run()
@@ -93,24 +107,13 @@ namespace Server.GameServer
                 {
                     Socket newClient = _listener.AcceptSocket();
 
-                    ClientsManager.Instance.AddClient(Guid.NewGuid(), newClient);
+                    var clientId = Guid.NewGuid();
+                    ClientsManager.Instance.AddClient(clientId, newClient);
 
-                    /*var pingMess = new Network.Message
-                    {
-                        Code = Network.ClientCodes.Ping,
-                        Json = JsonConvert.SerializeObject(0)
-                    };
-                    var pingStr = DependencyService.Get<IRMessageEncoder>().GetBytes(JsonConvert.SerializeObject(pingMess));
-                    var sentSize = newClient.Send(pingStr); // TODO : Check sent size for missed datas
-
-                    var id = Guid.NewGuid();
-                    _pings.Add(id, DateTime.Now.TimeOfDay);
-
-                    ClientsManager.Instance.AddClient(id, newClient);*/
+                    AddPingerToClient(clientId);
                 }
 
-                /*List<Guid> disconnectedClients = new List<Guid>();
-                Dictionary<Guid, TimeSpan> updatedPings = new Dictionary<Guid, TimeSpan>();
+                /*Dictionary<Guid, TimeSpan> updatedPings = new Dictionary<Guid, TimeSpan>();
                 foreach (var ping in _pings)
                 {
                     var socket = ClientsManager.Instance.Clients[ping.Key];
@@ -177,19 +180,17 @@ namespace Server.GameServer
 
                 _pings = updatedPings;
 
-                _server?.TimeoutPlayers(disconnectedClients);
+                _server?.TimeoutPlayers(disconnectedClients);*/
 
-                foreach (var disc in disconnectedClients)
-                {
-                    if (ClientsManager.Instance.RemoveClient(disc))
-                    {
-                        _pings.Remove(disc);
-                        Server.Runtime.Console.Instance.AddMessage($"{disc} Disconnected.");
-                    }
-                }*/
-
+                List<Guid> disconnectedClients = new List<Guid>();
                 foreach (var client in ClientsManager.Instance.Clients)
                 {
+                    if (ClientsManager.Instance.GetPing(client.Key) > 10)
+                    {
+                        disconnectedClients.Add(client.Key);
+                        continue;
+                    }
+
                     var socket = client.Value;
                     int bufferSize = socket.Available;
                     if (bufferSize > 0)
@@ -209,9 +210,24 @@ namespace Server.GameServer
 
                             if (commandArgs.IsValid)
                             {
+                                ClientsManager.Instance.Ping(commandArgs.ClientId);
+
                                 AddCommand(commandArgs);
                             }
                         }
+                    }
+                }
+
+                foreach (var disc in disconnectedClients)
+                {
+                    var socket = ClientsManager.Instance.Clients[disc];
+
+                    if (ClientsManager.Instance.RemoveClient(disc))
+                    {
+                        socket.Shutdown(SocketShutdown.Both);
+                        socket.Close();
+
+                        Console.WriteLine($"{disc} Timed out.");
                     }
                 }
 
@@ -222,19 +238,46 @@ namespace Server.GameServer
                     if (!Guid.Empty.Equals(response.ClientId)
                         && ClientsManager.Instance.Clients.ContainsKey(response.ClientId))
                     {
-                        var socket = ClientsManager.Instance.Clients[response.ClientId];
+                        try
+                        {
+                            var socket = ClientsManager.Instance.Clients[response.ClientId];
 
-                        var jsonObj = JsonConvert.SerializeObject(response.ClientResponse);
-                        var encoder = new ASCIIEncoding();
-                        var mess = encoder.GetBytes(jsonObj);
-                        var sentSize = socket.Send(mess); // TODO : Check sent size for missed datas
+                            var jsonObj = JsonConvert.SerializeObject(response.ClientResponse);
+                            var encoder = new ASCIIEncoding();
+                            var mess = encoder.GetBytes(jsonObj);
+
+                            var result = socket.BeginSend(mess, 0, mess.Length, SocketFlags.None, (asyncResult) =>
+                            {
+                                try
+                                {
+                                    socket.EndSend(asyncResult);
+                                }
+                                catch (SocketException sockE)
+                                {
+                                    Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
+                                }
+                            }, null);
+
+                            if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
+                            {
+                                Console.WriteLine($"Socket is not connected..");
+                            }
+
+                            //var sentSize = socket.Send(mess); // TODO : Check sent size for missed datas
+                        }
+                        catch (SocketException sockEx)
+                        {
+                            Console.WriteLine($"Server is not online(1)... [{sockEx.Message}]");
+                        }
                     }
                 }
             }
 
             foreach (var client in ClientsManager.Instance.Clients)
             {
+                Console.WriteLine($"client [{client.Key}] socket shutdown.");
                 client.Value.Shutdown(SocketShutdown.Both);
+                client.Value.Close();
             }
 
             _flushCommands.Stop();
@@ -243,6 +286,30 @@ namespace Server.GameServer
             Console.WriteLine($"TCP Server stopped.");
 
             _thread.Abort();
+        }
+
+        private void AddPingerToClient(Guid clientId)
+        {
+            /*var timer = new System.Timers.Timer(1000);
+            timer.Elapsed += (sender, e) => {
+                AddCommand(new Commands.CommandArgs
+                {
+                    Args = new string[0],
+                    ClientId = clientId,
+                    CommandCode = Network.CommandCodes.Ping,
+                    IsValid = true
+                });
+            };
+            timer.AutoReset = true;
+            timer.Enabled = true;
+            _pingers.Add(clientId, timer);*/
+            AddCommand(new Commands.CommandArgs
+            {
+                Args = new string[0],
+                ClientId = clientId,
+                CommandCode = Network.CommandCodes.Ping,
+                IsValid = true
+            });
         }
 
         private void FlushCommands()
@@ -331,6 +398,9 @@ namespace Server.GameServer
                         retVal.Args = new string[1] { args[0] };
                     }
                     break;*/
+                case Network.CommandCodes.Ping:
+                    retVal.IsValid = true;
+                    break;
                 case Network.CommandCodes.Client_Authenticate:
                     retVal.IsValid = true;
                     retVal.Args = new string[1] { args[0] };
@@ -339,6 +409,9 @@ namespace Server.GameServer
                     retVal.Args = new string[1] { args[0] };
                     break;
                 case Network.CommandCodes.Client_SoulList:
+                    break;
+                case Network.CommandCodes.Client_ConnectSoul:
+                    retVal.Args = new string[1] { args[0] };
                     break;
                 default:
                     retVal.IsValid = false;

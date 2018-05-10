@@ -8,9 +8,8 @@ namespace DataModels
 {
     public class Equipment
     {
-        [ForeignKey("Soul")]
+        [Key]
         public Guid Id { get; set; }
-        public Soul Soul { get; set; }
 
         public Guid Bag { get; set; }
         public Guid Head { get; set; }

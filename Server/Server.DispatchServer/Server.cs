@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Server.DispatchServer
 {
@@ -17,6 +18,7 @@ namespace Server.DispatchServer
         private bool _isRunning;
 
         private System.Timers.Timer _flushCommands;
+        private Dictionary<Guid, System.Timers.Timer> _pingers;
 
         private CommandManager _commandManager;
         private Dictionary<int, int> _commandArgCount;
@@ -34,6 +36,8 @@ namespace Server.DispatchServer
             };
             _flushCommands.AutoReset = true;
             _flushCommands.Enabled = true;
+
+            _pingers = new Dictionary<Guid, System.Timers.Timer>();
 
             _commandManager = new CommandManager();
 
@@ -66,9 +70,13 @@ namespace Server.DispatchServer
 
         private void SetupClientDelegates()
         {
+            _commandArgCount.Add(Network.CommandCodes.Ping, 0);
+
             _commandArgCount.Add(Network.CommandCodes.Client_Authenticate, 2);
             _commandArgCount.Add(Network.CommandCodes.Client_ServerList, 0);
             _commandArgCount.Add(Network.CommandCodes.Client_AnnounceGameConnection, 1);
+
+            _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_ServerList, (args) => { return new Commands.ClientServerListCommand(args); });
@@ -88,24 +96,21 @@ namespace Server.DispatchServer
                 {
                     Socket newClient = _listener.AcceptSocket();
 
-                    ClientsManager.Instance.AddClient(Guid.NewGuid(), newClient);
+                    var clientId = Guid.NewGuid();
+                    ClientsManager.Instance.AddClient(clientId, newClient);
 
-                    /*var pingMess = new Network.Message
-                    {
-                        Code = Network.ClientCodes.Ping,
-                        Json = JsonConvert.SerializeObject(0)
-                    };
-                    var pingStr = DependencyService.Get<IRMessageEncoder>().GetBytes(JsonConvert.SerializeObject(pingMess));
-                    var sentSize = newClient.Send(pingStr); // TODO : Check sent size for missed datas
-
-                    var id = Guid.NewGuid();
-                    _pings.Add(id, DateTime.Now.TimeOfDay);
-
-                    ClientsManager.Instance.AddClient(id, newClient);*/
+                    AddPingerToClient(clientId);
                 }
 
+                List<Guid> disconnectedClients = new List<Guid>();
                 foreach (var client in ClientsManager.Instance.Clients)
                 {
+                    if (ClientsManager.Instance.GetPing(client.Key) > 10)
+                    {
+                        disconnectedClients.Add(client.Key);
+                        continue;
+                    }
+
                     var socket = client.Value;
 
                     int bufferSize = socket.Available;
@@ -126,14 +131,15 @@ namespace Server.DispatchServer
 
                             if (commandArgs.IsValid)
                             {
+                                ClientsManager.Instance.Ping(commandArgs.ClientId);
+
                                 AddCommand(commandArgs);
                             }
                         }
                     }
                 }
-
-                /*List<Guid> disconnectedClients = new List<Guid>();
-                Dictionary<Guid, TimeSpan> updatedPings = new Dictionary<Guid, TimeSpan>();
+  
+                /*Dictionary<Guid, TimeSpan> updatedPings = new Dictionary<Guid, TimeSpan>();
                 foreach (var ping in _pings)
                 {
                     var socket = ClientsManager.Instance.Clients[ping.Key];
@@ -200,16 +206,20 @@ namespace Server.DispatchServer
 
                 _pings = updatedPings;
 
-                _server?.TimeoutPlayers(disconnectedClients);
+                _server?.TimeoutPlayers(disconnectedClients);*/
 
                 foreach (var disc in disconnectedClients)
                 {
+                    var socket = ClientsManager.Instance.Clients[disc];
+
                     if (ClientsManager.Instance.RemoveClient(disc))
                     {
-                        _pings.Remove(disc);
-                        Server.Runtime.Console.Instance.AddMessage($"{disc} Disconnected.");
+                        socket.Shutdown(SocketShutdown.Both);
+                        socket.Close();
+
+                        Console.WriteLine($"{disc} Timed out.");
                     }
-                }*/
+                }
 
                 while (_responses.Count > 0)
                 {
@@ -225,11 +235,29 @@ namespace Server.DispatchServer
                             var jsonObj = JsonConvert.SerializeObject(response.ClientResponse);
                             var encoder = new ASCIIEncoding();
                             var mess = encoder.GetBytes(jsonObj);
-                            var sentSize = socket.Send(mess); // TODO : Check sent size for missed datas
+
+                            var result = socket.BeginSend(mess, 0, mess.Length, SocketFlags.None, (asyncResult) =>
+                            {
+                                try
+                                {
+                                    socket.EndSend(asyncResult);
+                                }
+                                catch (SocketException sockE)
+                                {
+                                    Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
+                                }
+                            }, null);
+
+                            if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
+                            {
+                                Console.WriteLine($"Socket is not connected..");
+                            }
+
+                            //var sentSize = socket.Send(mess); // TODO : Check sent size for missed datas
                         }
                         catch (SocketException sockEx)
                         {
-                            Console.WriteLine($"Server is not online... [{sockEx.Message}]");
+                            Console.WriteLine($"Server is not online(1)... [{sockEx.Message}]");
                         }
                     }
                 }
@@ -248,6 +276,30 @@ namespace Server.DispatchServer
             Console.WriteLine($"TCP Server stopped.");
 
             _thread.Abort();
+        }
+
+        private void AddPingerToClient(Guid clientId)
+        {
+            /*var timer = new System.Timers.Timer(1000);
+            timer.Elapsed += (sender, e) => {
+                AddCommand(new Commands.CommandArgs
+                {
+                    Args = new string[0],
+                    ClientId = clientId,
+                    CommandCode = Network.CommandCodes.Ping,
+                    IsValid = true
+                });
+            };
+            timer.AutoReset = true;
+            timer.Enabled = true;
+            _pingers.Add(clientId, timer);*/
+            AddCommand(new Commands.CommandArgs
+            {
+                Args = new string[0],
+                ClientId = clientId,
+                CommandCode = Network.CommandCodes.Ping,
+                IsValid = true
+            });
         }
 
         private void FlushCommands()
@@ -336,6 +388,9 @@ namespace Server.DispatchServer
                         retVal.Args = new string[1] { args[0] };
                     }
                     break;*/
+                case Network.CommandCodes.Ping:
+                    retVal.IsValid = true;
+                    break;
                 case Network.CommandCodes.Client_Authenticate:
                     retVal.IsValid = true;
                     retVal.Args = new string[2] { args[0], args[1] };
