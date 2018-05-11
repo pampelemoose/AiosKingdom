@@ -17,15 +17,6 @@
                 <ColumnDefinition Width="1.5*" />
             </Grid.ColumnDefinitions>
 
-            <!--Grid 
-                Grid.Column="0"
-                Grid.Row="0">
-                <Image Source="{Binding Head, Converter={StaticResource objectToImage}}"/>
-                <Button
-                    BackgroundColor="Transparent"
-                    Command="{Binding HeadAction}" />
-            </Grid-->
-
             <Grid
                 Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -40,7 +31,8 @@
                     <Image Source="{Binding Soul.Equipment.Head, Converter={StaticResource objectToImage}}"/>
                     <Button
                         BackgroundColor="Transparent"
-                        Command="{Binding HeadAction}" />
+                        Command="{Binding ShowArmorAction}"
+                        CommandParameter="{Binding Soul.Equipment.Head}"/>
                 </Grid>
 
                 <Grid 
@@ -124,7 +116,7 @@
                     Source="{Binding Soul.Equipment.Bag, Converter={StaticResource objectToImage}}"/>
             </Grid>
 
-            <!--<Grid
+            <Grid
                 Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="140"/>
@@ -161,7 +153,7 @@
                                 FontAttributes="Bold"
                                 VerticalTextAlignment="Center"
                                 HorizontalTextAlignment="Center"
-                                Text="{Binding Datas.CurrentLevel}"/>
+                                Text="{Binding Soul.Level}"/>
                         </ContentView>
                         <Grid
                             Grid.Column="1"
@@ -193,7 +185,7 @@
                                     Grid.Column="0"
                                     HorizontalTextAlignment="Center"
                                     VerticalTextAlignment="Center"
-                                    Text="{Binding Datas.CurrentExperience}" />
+                                    Text="{Binding Soul.CurrentExperience}" />
                                 <Label
                                     Grid.Column="1"
                                     HorizontalTextAlignment="Center"
@@ -408,23 +400,25 @@
 
                     <Label 
                         Grid.Column="0"
-                        Text="{Binding Datas.Spirits}"/>
+                        Text="{Binding Soul.Spirits}"/>
                     <Label 
                         Grid.Column="1"
-                        Text="{Binding Datas.Embers}"/>
+                        Text="{Binding Soul.Embers}"/>
                     <Label 
                         Grid.Column="2"
-                        Text="{Binding Datas.Shards}"/>
+                        Text="{Binding Soul.Shards}"/>
                     <Label 
                         Grid.Column="3"
-                        Text="{Binding Datas.Bits}"/>
+                        Text="{Binding Soul.Bits}"/>
                 </Grid>
-            </Grid>-->
+            </Grid>
 
-            <!--<Grid
+            <Grid
                 Grid.Column="2"
                 BackgroundColor="{Binding SelectedDto.Armor.Quality, Converter={StaticResource itemQualityToColor}}"
                 IsVisible="{Binding ShowArmorDetails}">
+                <!--
+                
                 <Grid
                     BackgroundColor="Transparent"
                     WidthRequest="200"
@@ -526,8 +520,8 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                </Grid>
-            </Grid>-->
+                </Grid>-->
+            </Grid>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

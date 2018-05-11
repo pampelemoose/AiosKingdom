@@ -11,14 +11,15 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
-        public Guid Bag { get; set; }
-        public Guid Head { get; set; }
-        public Guid Shoulder { get; set; }
-        public Guid Torso { get; set; }
-        public Guid Belt { get; set; }
-        public Guid Pants { get; set; }
-        public Guid Leg { get; set; }
-        public Guid Feet { get; set; }
-        public Guid Hand { get; set; }
+        public Items.Bag Bag { get; set; }
+
+        public Items.Armor Head { get; set; }
+        public Items.Armor Shoulder { get; set; }
+        public Items.Armor Torso { get; set; }
+        public Items.Armor Belt { get; set; }
+        public Items.Armor Pants { get; set; }
+        public Items.Armor Leg { get; set; }
+        public Items.Armor Feet { get; set; }
+        public Items.Armor Hand { get; set; }
     }
 }

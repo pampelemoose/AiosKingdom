@@ -18,6 +18,14 @@ namespace DataRepositories
             }
         }
 
+        public static DataModels.Items.Armor GetById(Guid id)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Armors.Include(a => a.Stats).FirstOrDefault(a => a.Id.Equals(id));
+            }
+        }
+
         public static bool Create(DataModels.Items.Armor armor)
         {
             using (var context = new AiosKingdomContext())

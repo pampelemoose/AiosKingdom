@@ -234,7 +234,7 @@ namespace Server.DispatchServer
 
                             var jsonObj = JsonConvert.SerializeObject(response.ClientResponse);
                             var encoder = new ASCIIEncoding();
-                            var mess = encoder.GetBytes(jsonObj);
+                            var mess = encoder.GetBytes(jsonObj + "|");
 
                             var result = socket.BeginSend(mess, 0, mess.Length, SocketFlags.None, (asyncResult) =>
                             {
@@ -382,12 +382,6 @@ namespace Server.DispatchServer
 
             switch (message.Code)
             {
-                /*case Network.ServerCodes.Item_Armor_List_Command:
-                    {
-                        retVal.CommandCode = Network.ServerCodes.Item_Armor_List_Command;
-                        retVal.Args = new string[1] { args[0] };
-                    }
-                    break;*/
                 case Network.CommandCodes.Ping:
                     retVal.IsValid = true;
                     break;

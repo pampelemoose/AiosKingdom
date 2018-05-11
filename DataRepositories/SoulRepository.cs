@@ -25,7 +25,17 @@ namespace DataRepositories
             {
                 return context.Souls
                     .Include(s => s.Equipment)
+                    .Include(e => e.Equipment.Bag)
+                    .Include(e => e.Equipment.Head)
+                    .Include(e => e.Equipment.Shoulder)
+                    .Include(e => e.Equipment.Torso)
+                    .Include(e => e.Equipment.Belt)
+                    .Include(e => e.Equipment.Hand)
+                    .Include(e => e.Equipment.Pants)
+                    .Include(e => e.Equipment.Leg)
+                    .Include(e => e.Equipment.Feet)
                     .Include(s => s.Inventory)
+                    .Include(s => s.Inventory.Select(i => i.Item))
                     .FirstOrDefault(s => s.Id.Equals(id));
             }
         }

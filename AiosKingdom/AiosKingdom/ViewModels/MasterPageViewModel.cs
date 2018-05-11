@@ -64,7 +64,7 @@ namespace AiosKingdom.ViewModels
             _menus.Add(new MasterPageItem
             {
                 TargetType = typeof(Views.DashboardPage),
-                Title = "Market"
+                Title = "Dashboard"
             });
         }
 

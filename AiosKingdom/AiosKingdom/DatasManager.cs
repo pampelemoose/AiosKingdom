@@ -25,5 +25,8 @@ namespace AiosKingdom
         }
 
         public DataModels.Soul Soul { get; set; }
+        public Network.SoulDatas Datas { get; set; }
+
+        public List<DataModels.Items.Armor> Armors { get; set; }
     }
 }

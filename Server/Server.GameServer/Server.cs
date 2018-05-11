@@ -86,12 +86,18 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Client_CreateSoul, 1);
             _commandArgCount.Add(Network.CommandCodes.Client_ConnectSoul, 1);
 
+            _commandArgCount.Add(Network.CommandCodes.Client_SoulDatas, 0);
+            _commandArgCount.Add(Network.CommandCodes.Client_CurrentSoulDatas, 0);
+
             _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_SoulList, (args) => { return new Commands.ClientSoulListCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_CreateSoul, (args) => { return new Commands.ClientCreateSoulCommand(args); });
-            _delegates.Add(Network.CommandCodes.Client_ConnectSoul, (args) => { return new Commands.ClientConnectSoulCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_ConnectSoul, (args) => { return new Commands.ClientConnectSoulCommand(args, _config); });
+
+            _delegates.Add(Network.CommandCodes.Client_SoulDatas, (args) => { return new Commands.ClientSoulDatasCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_CurrentSoulDatas, (args) => { return new Commands.ClientCurrentSoulDatasCommand(args); });
         }
 
         private void Run()
@@ -191,6 +197,11 @@ namespace Server.GameServer
                         continue;
                     }
 
+                    /*if (ClientsManager.Instance.GetPing(client.Key) > 8)
+                    {
+                        AddPingerToClient(client.Key);
+                    }*/
+
                     var socket = client.Value;
                     int bufferSize = socket.Available;
                     if (bufferSize > 0)
@@ -222,6 +233,11 @@ namespace Server.GameServer
                 {
                     var socket = ClientsManager.Instance.Clients[disc];
 
+                    if (SoulManager.Instance.DisconnectSoul(disc))
+                    {
+                        Console.WriteLine($"{disc} Soul disconnected.");
+                    }
+
                     if (ClientsManager.Instance.RemoveClient(disc))
                     {
                         socket.Shutdown(SocketShutdown.Both);
@@ -244,7 +260,7 @@ namespace Server.GameServer
 
                             var jsonObj = JsonConvert.SerializeObject(response.ClientResponse);
                             var encoder = new ASCIIEncoding();
-                            var mess = encoder.GetBytes(jsonObj);
+                            var mess = encoder.GetBytes(jsonObj + "|");
 
                             var result = socket.BeginSend(mess, 0, mess.Length, SocketFlags.None, (asyncResult) =>
                             {
@@ -275,10 +291,17 @@ namespace Server.GameServer
 
             foreach (var client in ClientsManager.Instance.Clients)
             {
+                if (SoulManager.Instance.DisconnectSoul(client.Key))
+                {
+                    Console.WriteLine($"{client.Key} Soul disconnected.");
+                }
+
                 Console.WriteLine($"client [{client.Key}] socket shutdown.");
                 client.Value.Shutdown(SocketShutdown.Both);
                 client.Value.Close();
             }
+
+            ClientsManager.Instance.Clear();
 
             _flushCommands.Stop();
 
@@ -412,6 +435,10 @@ namespace Server.GameServer
                     break;
                 case Network.CommandCodes.Client_ConnectSoul:
                     retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Client_SoulDatas:
+                    break;
+                case Network.CommandCodes.Client_CurrentSoulDatas:
                     break;
                 default:
                     retVal.IsValid = false;

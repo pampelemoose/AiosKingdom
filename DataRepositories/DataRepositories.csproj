@@ -52,17 +52,9 @@
     <Compile Include="ConsumableRepository.cs" />
     <Compile Include="AiosKingdomContext.cs" />
     <Compile Include="GameServerRepository.cs" />
-    <Compile Include="Migrations\201805040926514_InitialMigration.cs" />
-    <Compile Include="Migrations\201805040926514_InitialMigration.Designer.cs">
-      <DependentUpon>201805040926514_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805040935249_GameServer_RemoveDatabaseName.cs" />
-    <Compile Include="Migrations\201805040935249_GameServer_RemoveDatabaseName.Designer.cs">
-      <DependentUpon>201805040935249_GameServer_RemoveDatabaseName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805080243382_ForeignKeyFix.cs" />
-    <Compile Include="Migrations\201805080243382_ForeignKeyFix.Designer.cs">
-      <DependentUpon>201805080243382_ForeignKeyFix.cs</DependentUpon>
+    <Compile Include="Migrations\201805110717123_InitialMigration.cs" />
+    <Compile Include="Migrations\201805110717123_InitialMigration.Designer.cs">
+      <DependentUpon>201805110717123_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,14 +73,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805040926514_InitialMigration.resx">
-      <DependentUpon>201805040926514_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805040935249_GameServer_RemoveDatabaseName.resx">
-      <DependentUpon>201805040935249_GameServer_RemoveDatabaseName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805080243382_ForeignKeyFix.resx">
-      <DependentUpon>201805080243382_ForeignKeyFix.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805110717123_InitialMigration.resx">
+      <DependentUpon>201805110717123_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

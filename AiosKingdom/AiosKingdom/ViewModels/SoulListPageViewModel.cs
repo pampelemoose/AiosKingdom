@@ -25,6 +25,11 @@ namespace AiosKingdom.ViewModels
                 IsLoading = false;
             });
 
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SoulConnectionFailed, (sender, message) =>
+            {
+                IsLoading = false;
+            });
+
             NetworkManager.Instance.ConnectToGameServer(connection);
         }
 

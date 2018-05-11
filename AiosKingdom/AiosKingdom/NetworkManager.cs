@@ -412,9 +412,29 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_ConnectSoul:
                     {
+                        var result = JsonConvert.DeserializeObject<Network.CreateObjectResult>(message.Json);
+                        if (result.Success)
+                        {
+                            MessagingCenter.Send(this, MessengerCodes.SoulConnected);
+                        }
+                        else
+                        {
+                            MessagingCenter.Send(this, MessengerCodes.SoulConnectionFailed, result.Message);
+                        }
+                    }
+                    break;
+                case Network.CommandCodes.Client_SoulDatas:
+                    {
                         var soul = JsonConvert.DeserializeObject<DataModels.Soul>(message.Json);
                         DatasManager.Instance.Soul = soul;
-                        MessagingCenter.Send(this, MessengerCodes.SoulConnected);
+                        MessagingCenter.Send(this, MessengerCodes.SoulUpdated);
+                    }
+                    break;
+                case Network.CommandCodes.Client_CurrentSoulDatas:
+                    {
+                        var soulDatas = JsonConvert.DeserializeObject<Network.SoulDatas>(message.Json);
+                        DatasManager.Instance.Datas = soulDatas;
+                        MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
                     }
                     break;
                 default:
@@ -446,6 +466,30 @@ namespace AiosKingdom
             var retMess = new Network.Message
             {
                 Code = Network.CommandCodes.Client_ConnectSoul,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void AskSoulDatas()
+        {
+            var args = new string[0];
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_SoulDatas,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void AskSoulCurrentDatas()
+        {
+            var args = new string[0];
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_CurrentSoulDatas,
                 Json = JsonConvert.SerializeObject(args),
                 Token = _gameAuthToken
             };

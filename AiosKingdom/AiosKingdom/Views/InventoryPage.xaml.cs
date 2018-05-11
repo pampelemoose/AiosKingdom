@@ -10,11 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace AiosKingdom.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class DashboardPage : ContentPage
+	public partial class InventoryPage : ContentPage
 	{
-		public DashboardPage()
+		public InventoryPage ()
 		{
-			InitializeComponent();
+			InitializeComponent ();
 		}
 	}
 }

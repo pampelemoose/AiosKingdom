@@ -9,9 +9,12 @@ namespace Server.GameServer.Commands
 {
     public class ClientConnectSoulCommand : ACommand
     {
-        public ClientConnectSoulCommand(CommandArgs args) 
+        private DataModels.GameServer _config;
+
+        public ClientConnectSoulCommand(CommandArgs args, DataModels.GameServer config) 
             : base(args)
         {
+            _config = config;
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
@@ -20,13 +23,26 @@ namespace Server.GameServer.Commands
             var soul = DataRepositories.SoulRepository.GetById(soulId);
             if (soul != null)
             {
-                ret.ClientResponse = new Network.Message
+                if (SoulManager.Instance.ConnectSoul(ret.ClientId, soul))
                 {
-                    Code = Network.CommandCodes.Client_ConnectSoul,
-                    Json = JsonConvert.SerializeObject(soul)
-                };
-                ret.Succeeded = true;
+                    SoulManager.Instance.UpdateCurrentDatas(ret.ClientId, _config);
+
+                    ret.ClientResponse = new Network.Message
+                    {
+                        Code = Network.CommandCodes.Client_ConnectSoul,
+                        Json = JsonConvert.SerializeObject(new Network.CreateObjectResult { Success = true, Message = "Soul Connected" })
+                    };
+                    ret.Succeeded = true;
+                    return ret;
+                }
             }
+
+            ret.ClientResponse = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_ConnectSoul,
+                Json = JsonConvert.SerializeObject(new Network.CreateObjectResult { Success = false, Message = "Could not connect soul" })
+            };
+            ret.Succeeded = true;
 
             return ret;
         }

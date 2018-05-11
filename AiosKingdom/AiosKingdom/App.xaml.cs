@@ -25,7 +25,7 @@ namespace AiosKingdom
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    //NetworkManager.Instance.DisconnectGame();
+                    NetworkManager.Instance.DisconnectGame();
                     MainPage = new NavigationPage(new Views.ServerListPage(new List<Network.GameServerInfos>()));
                 });
             });

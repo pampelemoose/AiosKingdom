@@ -22,5 +22,11 @@ namespace AiosKingdom
         public static string SoulCreationFailed = "soulCreationFailed";
 
         public static string SoulConnected = "soulConnected";
+        public static string SoulConnectionFailed = "soulConnectionFailed";
+        public static string SoulUpdated = "soulUpdated";
+        public static string SoulDatasUpdated = "soulDatasUpdated";
+
+        public static string ArmorListUpdated = "armorListUpdated";
+        public static string InventoryUpdated = "inventoryUpdated";
     }
 }
