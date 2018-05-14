@@ -89,6 +89,9 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Client_SoulDatas, 0);
             _commandArgCount.Add(Network.CommandCodes.Client_CurrentSoulDatas, 0);
 
+            _commandArgCount.Add(Network.CommandCodes.Client_MarketList, 0);
+            _commandArgCount.Add(Network.CommandCodes.Client_BuyMarketItem, 1);
+
             _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
@@ -98,6 +101,9 @@ namespace Server.GameServer
 
             _delegates.Add(Network.CommandCodes.Client_SoulDatas, (args) => { return new Commands.ClientSoulDatasCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_CurrentSoulDatas, (args) => { return new Commands.ClientCurrentSoulDatasCommand(args); });
+
+            _delegates.Add(Network.CommandCodes.Client_MarketList, (args) => { return new Commands.ClientMarketListCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_BuyMarketItem, (args) => { return new Commands.ClientBuyMarketItemCommand(args); });
         }
 
         private void Run()
@@ -262,24 +268,42 @@ namespace Server.GameServer
                             var encoder = new ASCIIEncoding();
                             var mess = encoder.GetBytes(jsonObj + "|");
 
-                            var result = socket.BeginSend(mess, 0, mess.Length, SocketFlags.None, (asyncResult) =>
+                            object tmpLock = new object();
+                            int offset = 0;
+                            int sent = 0;
+
+                            do
                             {
                                 try
                                 {
-                                    socket.EndSend(asyncResult);
+                                    sent = socket.Send(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None);
+                                    offset += sent;
                                 }
                                 catch (SocketException sockE)
                                 {
                                     Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
                                 }
-                            }, null);
 
-                            if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
-                            {
-                                Console.WriteLine($"Socket is not connected..");
-                            }
+                                /*var result = socket.BeginSend(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None, (asyncResult) =>
+                                {
+                                    try
+                                    {
+                                        sent = socket.EndSend(asyncResult);
+                                        offset += sent;
+                                        Console.WriteLine($"(0)sent[{sent}]");
+                                    }
+                                    catch (SocketException sockE)
+                                    {
+                                        Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
+                                    }
+                                }, null);
 
-                            //var sentSize = socket.Send(mess); // TODO : Check sent size for missed datas
+                                if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
+                                {
+                                    Console.WriteLine($"Socket is not connected..");
+                                }*/
+
+                            } while (sent == 256);
                         }
                         catch (SocketException sockEx)
                         {
@@ -439,6 +463,11 @@ namespace Server.GameServer
                 case Network.CommandCodes.Client_SoulDatas:
                     break;
                 case Network.CommandCodes.Client_CurrentSoulDatas:
+                    break;
+                case Network.CommandCodes.Client_MarketList:
+                    break;
+                case Network.CommandCodes.Client_BuyMarketItem:
+                    retVal.Args = new string[1] { args[0] };
                     break;
                 default:
                     retVal.IsValid = false;

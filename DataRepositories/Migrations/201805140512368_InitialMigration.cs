@@ -232,6 +232,25 @@ namespace DataRepositories.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.MarketSlots",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        ServerId = c.Guid(nullable: false),
+                        Type = c.Int(nullable: false),
+                        ItemId = c.Guid(nullable: false),
+                        SellerId = c.Guid(),
+                        Quantity = c.Int(nullable: false),
+                        ShardPrice = c.Int(nullable: false),
+                        BitPrice = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.AItems", t => t.ItemId, cascadeDelete: true)
+                .ForeignKey("dbo.Souls", t => t.SellerId)
+                .Index(t => t.ItemId)
+                .Index(t => t.SellerId);
+            
+            CreateTable(
                 "dbo.GameServerTokens",
                 c => new
                     {
@@ -259,6 +278,8 @@ namespace DataRepositories.Migrations
         
         public override void Down()
         {
+            DropForeignKey("dbo.MarketSlots", "SellerId", "dbo.Souls");
+            DropForeignKey("dbo.MarketSlots", "ItemId", "dbo.AItems");
             DropForeignKey("dbo.Souls", "UserId", "dbo.Users");
             DropForeignKey("dbo.RoleUsers", "User_Id", "dbo.Users");
             DropForeignKey("dbo.RoleUsers", "Role_Id", "dbo.Roles");
@@ -281,6 +302,8 @@ namespace DataRepositories.Migrations
             DropForeignKey("dbo.ItemStats", "ItemId", "dbo.AItems");
             DropIndex("dbo.RoleUsers", new[] { "User_Id" });
             DropIndex("dbo.RoleUsers", new[] { "Role_Id" });
+            DropIndex("dbo.MarketSlots", new[] { "SellerId" });
+            DropIndex("dbo.MarketSlots", new[] { "ItemId" });
             DropIndex("dbo.Souls", new[] { "EquipmentId" });
             DropIndex("dbo.Souls", new[] { "UserId" });
             DropIndex("dbo.Souls", new[] { "ServerId" });
@@ -301,6 +324,7 @@ namespace DataRepositories.Migrations
             DropIndex("dbo.ItemStats", new[] { "ItemId" });
             DropTable("dbo.RoleUsers");
             DropTable("dbo.GameServerTokens");
+            DropTable("dbo.MarketSlots");
             DropTable("dbo.Roles");
             DropTable("dbo.Users");
             DropTable("dbo.GameServers");

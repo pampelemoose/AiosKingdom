@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Network
 {
-    public struct CreateObjectResult
+    public struct MessageResult
     {
         public bool Success { get; set; }
         public string Message { get; set; }

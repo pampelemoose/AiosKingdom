@@ -23,7 +23,7 @@ namespace Server.GameServer.Commands
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Client_SoulDatas,
-                    Json = JsonConvert.SerializeObject(datas)
+                    Json = JsonConvert.SerializeObject(datas, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })
                 };
                 ret.Succeeded = true;
             }

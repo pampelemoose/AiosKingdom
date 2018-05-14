@@ -1,17 +1,282 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
              x:Class="AiosKingdom.Views.InventoryPage"
              Title="{Binding Title}">
-    <ContentPage.BindingContext>
+    <TabbedPage.BindingContext>
         <vm:InventoryPageViewModel />
-    </ContentPage.BindingContext>
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
-</ContentPage>
+    </TabbedPage.BindingContext>
+    <TabbedPage.Children>
+        <ContentPage Title="Armors">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="0"
+                    BackgroundColor="{Binding SelectedArmorSlot.Quality, Converter={StaticResource itemQualityToColor}}"
+                    IsVisible="{Binding ArmorSlotIsSelected}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            Grid.Column="0"
+                            Source="{Binding SelectedArmorSlot, Converter={StaticResource objectToImage}}" />
+                        <Grid
+                            Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <ContentView
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                BackgroundColor="Blue"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedArmorSlot.UseLevelRequired}"/>
+                            </ContentView>
+                            <ContentView
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                BackgroundColor="Gray"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedArmorSlot.ItemLevel}"/>
+                            </ContentView>
+                            <ContentView
+                                Grid.Row="1"
+                                Grid.ColumnSpan="2"
+                                BackgroundColor="Gray"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedArmorSlot.ArmorValue}"/>
+                            </ContentView>
+                        </Grid>
+                    </Grid>
+                    <ListView
+                        Grid.Row="1"
+                        BackgroundColor="Transparent"
+                        ItemsSource="{Binding SelectedArmor.Stats}"
+                        HeightRequest="{Binding SelectedArmor.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
+                        RowHeight="20"
+                        SeparatorVisibility="None"
+                        IsEnabled="false">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="10*" />
+                                            <ColumnDefinition Width="2*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label 
+                                            Grid.Column="0"
+                                            Text="{Binding Type}" />
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="{Binding StatValue}" />
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button
+                        Grid.Row="2"
+                        Margin="5"
+                        Style="{StaticResource MenuButton}"
+                        Text="Equip"
+                        Command="{Binding ArmorSlotEquipAction}"/>
+                </Grid>
+
+                <ListView
+                    Grid.Column="1"
+                    BackgroundColor="Transparent"
+                    ItemsSource="{Binding Armors}"
+                    SelectedItem="{Binding SelectedArmorSlot}"
+                    RowHeight="50"
+                    SeparatorVisibility="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid 
+                                    Margin="0, 5, 0, 0"
+                                    VerticalOptions="CenterAndExpand">
+                                    <ContentView
+                                        BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
+                                        Padding="5, 0, 0, 0">
+                                        <Label
+                                            TextColor="Aqua"
+                                            FontAttributes="Bold"
+                                            FontSize="25"
+                                            VerticalTextAlignment="Center"
+                                            Text="{Binding Item.Name}"/>
+                                    </ContentView>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </ContentPage>
+        <ContentPage Title="Consumables">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="0"
+                    BackgroundColor="{Binding SelectedConsumableSlot.Consumable.Quality, Converter={StaticResource itemQualityToColor}}"
+                    IsVisible="{Binding ConsumableSlotIsSelected}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            Grid.Column="0"
+                            Source="{Binding SelectedConsumableSlot.Consumable, Converter={StaticResource objectToImage}}" />
+                        <Grid
+                            Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <ContentView
+                                Grid.Row="0"
+                                BackgroundColor="Blue"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedConsumableSlot.Consumable.UseLevelRequired}"/>
+                            </ContentView>
+                            <ContentView
+                                Grid.Row="1"
+                                BackgroundColor="Gray"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedConsumableSlot.Consumable.ItemLevel}"/>
+                            </ContentView>
+                        </Grid>
+                    </Grid>
+
+                    <ListView
+                        Grid.Row="1"
+                        BackgroundColor="Transparent"
+                        IsEnabled="false"
+                        ItemsSource="{Binding SelectedConsumableSlot.Effects}"
+                        HeightRequest="{Binding SelectedConsumableSlot.Effects, Converter={StaticResource listToHeight}, ConverterParameter=20}"
+                        RowHeight="20"
+                        SeparatorVisibility="None">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="10*" />
+                                            <ColumnDefinition Width="2*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label 
+                                            Grid.Column="0"
+                                            Text="{Binding Type}" />
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="{Binding AffectValue}" />
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+
+                <ListView
+                    Grid.Column="1"
+                    BackgroundColor="Transparent"
+                    ItemsSource="{Binding Consumables}"
+                    SelectedItem="{Binding SelectedConsumableSlot}"
+                    RowHeight="50"
+                    SeparatorVisibility="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid 
+                                    Margin="0, 5, 0, 0"
+                                    ColumnSpacing="0">
+                                    <ContentView
+                                        BackgroundColor="{Binding Consumable.Quality, Converter={StaticResource itemQualityToColor}}"
+                                        Padding="5, 0, 0, 0">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="10*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label
+                                                Grid.Column="0"
+                                                TextColor="Aqua"
+                                                FontAttributes="Bold"
+                                                FontSize="25"
+                                                VerticalTextAlignment="Center"
+                                                Text="{Binding Consumable.Name}"/>
+                                            <Label
+                                                Grid.Column="1"
+                                                TextColor="Black"
+                                                FontAttributes="Bold"
+                                                FontSize="10"
+                                                VerticalTextAlignment="End"
+                                                Text="{Binding Quantity}"/>
+                                        </Grid>
+                                    </ContentView>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </ContentPage>
+    </TabbedPage.Children>
+</TabbedPage>

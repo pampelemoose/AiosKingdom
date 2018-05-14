@@ -18,6 +18,19 @@ namespace DataRepositories.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
+            foreach (var entity in context.Roles)
+                context.Roles.Remove(entity);
+
+            foreach (var entity in context.Users)
+                context.Users.Remove(entity);
+
+            foreach (var entity in context.Servers)
+                context.Servers.Remove(entity);
+
+            foreach (var entity in context.Market)
+                context.Market.Remove(entity);
+
+            context.SaveChanges();
 
             context.Roles.Add(new DataModels.Role { Name = "User" });
             context.Roles.Add(new DataModels.Role { Name = "Admin" });

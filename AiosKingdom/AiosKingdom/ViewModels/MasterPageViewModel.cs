@@ -66,6 +66,16 @@ namespace AiosKingdom.ViewModels
                 TargetType = typeof(Views.DashboardPage),
                 Title = "Dashboard"
             });
+            _menus.Add(new MasterPageItem
+            {
+                TargetType = typeof(Views.InventoryPage),
+                Title = "Inventory"
+            });
+            _menus.Add(new MasterPageItem
+            {
+                TargetType = typeof(Views.MarketPage),
+                Title = "Market"
+            });
         }
 
         public event Action<Type> PageChangeTriggered;

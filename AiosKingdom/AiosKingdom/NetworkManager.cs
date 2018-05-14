@@ -33,6 +33,7 @@ namespace AiosKingdom
         private TcpClient _game;
         private bool _isGameRunning;
         private Guid _gameAuthToken;
+        private string _gameBuffer;
 
         private NetworkManager()
         {
@@ -54,15 +55,22 @@ namespace AiosKingdom
                 if (bufferSize > 0)
                 {
                     var client = _dispatch.Client;
+                    string bufferStr = string.Empty;
+                    int received = 0;
 
-                    byte[] buffer = new byte[bufferSize];
-                    client.Receive(buffer);
+                    do
+                    {
+                        byte[] buffer = new byte[bufferSize > 256 ? 256 : bufferSize];
+                        received = client.Receive(buffer);
+                        if (received > 0)
+                            bufferStr += Encoding.UTF8.GetString(buffer);
+                        bufferSize -= received;
+                    } while (received == 256);
 
-                    var bufferStr = Encoding.UTF8.GetString(buffer);
                     var messages = bufferStr.Split('|');
                     foreach (var message in messages)
                     {
-                        if (string.IsNullOrEmpty(message))
+                        if (string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(message))
                             continue;
 
                         var fromJson = JsonConvert.DeserializeObject<Network.Message>(message);
@@ -316,23 +324,38 @@ namespace AiosKingdom
                 if (bufferSize > 0)
                 {
                     var client = _game.Client;
+                    string bufferStr = _gameBuffer;
+                    _gameBuffer = string.Empty;
+                    int received = 0;
 
-                    byte[] buffer = new byte[bufferSize];
-                    client.Receive(buffer);
+                    do
+                    {
+                        byte[] buffer = new byte[bufferSize > 256 ? 256 : bufferSize];
+                        received = client.Receive(buffer);
+                        if (received > 0)
+                            bufferStr += Encoding.UTF8.GetString(buffer);
+                        bufferSize -= received;
+                    } while (received == 256);
 
-                    var bufferStr = Encoding.UTF8.GetString(buffer);
-                    var messages = bufferStr.Split('|');
+                    var messages = bufferStr.Trim().Split('|');
                     foreach (var message in messages)
                     {
-                        if (string.IsNullOrEmpty(message))
+                        if (string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(message))
                             continue;
 
-                        var fromJson = JsonConvert.DeserializeObject<Network.Message>(message);
-
-                        if (!ProcessGameMessage(fromJson))
+                        try
                         {
-                            /*_message = buffer;
-                            NotifyPropertyChanged(nameof(Message));*/
+                            var fromJson = JsonConvert.DeserializeObject<Network.Message>(message);
+
+                            if (!ProcessGameMessage(fromJson))
+                            {
+                                /*_message = buffer;
+                                NotifyPropertyChanged(nameof(Message));*/
+                            }
+                        }
+                        catch
+                        {
+                            _gameBuffer += message;
                         }
                     }
                 }
@@ -386,7 +409,7 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_CreateSoul:
                     {
-                        var result = JsonConvert.DeserializeObject<Network.CreateObjectResult>(message.Json);
+                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
                         if (result.Success)
                         {
                             var args = new string[0];
@@ -412,7 +435,7 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_ConnectSoul:
                     {
-                        var result = JsonConvert.DeserializeObject<Network.CreateObjectResult>(message.Json);
+                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
                         if (result.Success)
                         {
                             MessagingCenter.Send(this, MessengerCodes.SoulConnected);
@@ -425,7 +448,7 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_SoulDatas:
                     {
-                        var soul = JsonConvert.DeserializeObject<DataModels.Soul>(message.Json);
+                        var soul = JsonConvert.DeserializeObject<DataModels.Soul>(message.Json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                         DatasManager.Instance.Soul = soul;
                         MessagingCenter.Send(this, MessengerCodes.SoulUpdated);
                     }
@@ -435,6 +458,23 @@ namespace AiosKingdom
                         var soulDatas = JsonConvert.DeserializeObject<Network.SoulDatas>(message.Json);
                         DatasManager.Instance.Datas = soulDatas;
                         MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
+                    }
+                    break;
+                case Network.CommandCodes.Client_MarketList:
+                    {
+                        var items = JsonConvert.DeserializeObject<List<DataModels.MarketSlot>>(message.Json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                        DatasManager.Instance.MarketItems = items;
+                        MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
+                    }
+                    break;
+                case Network.CommandCodes.Client_BuyMarketItem:
+                    {
+                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
+                        if (result.Success)
+                        {
+                            AskSoulDatas();
+                            AskMarketItems();
+                        }
                     }
                     break;
                 default:
@@ -490,6 +530,31 @@ namespace AiosKingdom
             var retMess = new Network.Message
             {
                 Code = Network.CommandCodes.Client_CurrentSoulDatas,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void AskMarketItems()
+        {
+            var args = new string[0];
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_MarketList,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void BuyMarketItem(Guid slotId)
+        {
+            var args = new string[1];
+            args[0] = slotId.ToString();
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_BuyMarketItem,
                 Json = JsonConvert.SerializeObject(args),
                 Token = _gameAuthToken
             };

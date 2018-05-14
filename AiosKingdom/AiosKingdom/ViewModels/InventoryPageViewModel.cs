@@ -8,8 +8,8 @@ namespace AiosKingdom.ViewModels
 {
     public class InventoryPageViewModel : BaseViewModel
     {
-        public InventoryPageViewModel(INavigation nav)
-            : base(nav)
+        public InventoryPageViewModel()
+            : base(null)
         {
             Title = "Inventory";
 
@@ -18,19 +18,37 @@ namespace AiosKingdom.ViewModels
                 SetInventories();
                 //NotifyPropertyChanged(nameof(Soul));
             });
+
+            SetInventories();
         }
 
-        private List<ArmorInventorySlot> _armors;
-        public List<ArmorInventorySlot> Armors => _armors;
+        private List<DataModels.InventorySlot> _armors;
+        public List<DataModels.InventorySlot> Armors => _armors;
 
-        private ArmorInventorySlot _selectedArmorSlot;
-        public ArmorInventorySlot SelectedArmorSlot
+        private DataModels.Items.Armor _selectedArmor;
+        public DataModels.Items.Armor SelectedArmor
+        {
+            get { return _selectedArmor; }
+            set
+            {
+                _selectedArmor = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private DataModels.InventorySlot _selectedArmorSlot;
+        public DataModels.InventorySlot SelectedArmorSlot
         {
             get { return _selectedArmorSlot; }
             set
             {
                 _selectedArmorSlot = value;
                 _armorSlotIsSelected = _selectedArmorSlot != null;
+                _armorSlotEquipAction?.ChangeCanExecute();
+
+                if (_selectedArmorSlot != null)
+                    SelectedArmor = _selectedArmorSlot.Item as DataModels.Items.Armor;
+
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(ArmorSlotIsSelected));
                 NotifyPropertyChanged(nameof(ArmorSlotEquipAction));
@@ -40,16 +58,18 @@ namespace AiosKingdom.ViewModels
         private bool _armorSlotIsSelected;
         public bool ArmorSlotIsSelected => _armorSlotIsSelected;
 
-        public ICommand ArmorSlotEquipAction
-        {
-            get { return (_selectedArmorSlot != null ? _selectedArmorSlot.EquipAction : null); }
-        }
+        private Command _armorSlotEquipAction;
+        public ICommand ArmorSlotEquipAction =>
+            _armorSlotEquipAction ?? (_armorSlotEquipAction = new Command(() =>
+            {
 
-        private List<ConsumableInventorySlot> _consumables;
-        public List<ConsumableInventorySlot> Consumables => _consumables;
+            }, () => { return _armorSlotIsSelected && _selectedArmorSlot.Item.UseLevelRequired < +DatasManager.Instance.Soul.Level; }));
 
-        private ConsumableInventorySlot _selectedConsumableSlot;
-        public ConsumableInventorySlot SelectedConsumableSlot
+        private List<DataModels.InventorySlot> _consumables;
+        public List<DataModels.InventorySlot> Consumables => _consumables;
+
+        private DataModels.InventorySlot _selectedConsumableSlot;
+        public DataModels.InventorySlot SelectedConsumableSlot
         {
             get { return _selectedConsumableSlot; }
             set
@@ -66,9 +86,9 @@ namespace AiosKingdom.ViewModels
 
         private void SetInventories()
         {
-            _armors = new List<ArmorInventorySlot>();
+            _armors = new List<DataModels.InventorySlot>();
             SelectedArmorSlot = null;
-            _consumables = new List<ConsumableInventorySlot>();
+            _consumables = new List<DataModels.InventorySlot>();
             SelectedConsumableSlot = null;
 
             foreach (var slot in DatasManager.Instance.Soul.Inventory)
@@ -77,18 +97,12 @@ namespace AiosKingdom.ViewModels
                 {
                     case DataModels.Items.ItemType.Armor:
                         {
-                            _armors.Add(new ArmorInventorySlot(
-                                DatasManager.Instance.Armors?.FirstOrDefault(a => a.Armor.Id.Equals(slot.ItemId)),
-                                slot.Id
-                            ));
+                            _armors.Add(slot);
                         }
                         break;
                     case DataModels.Items.ItemType.Consumable:
                         {
-                            _consumables.Add(new ConsumableInventorySlot(
-                                DatasManager.Instance.Consumables?.FirstOrDefault(a => a.Consumable.Id.Equals(slot.ItemId)),
-                                slot.Quantity
-                            ));
+                            _consumables.Add(slot);
                         }
                         break;
                 }

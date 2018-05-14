@@ -36,6 +36,7 @@ namespace DataRepositories
                     .Include(e => e.Equipment.Feet)
                     .Include(s => s.Inventory)
                     .Include(s => s.Inventory.Select(i => i.Item))
+                    .Include("Inventory.Item.Stats")
                     .FirstOrDefault(s => s.Id.Equals(id));
             }
         }
@@ -79,10 +80,18 @@ namespace DataRepositories
         {
             using (var context = new AiosKingdomContext())
             {
-                var online = context.Souls.FirstOrDefault(s => s.Id.Equals(soul.Id));
+                var online = context.Souls
+                    .Include(s => s.Inventory)
+                    .FirstOrDefault(s => s.Id.Equals(soul.Id));
+
                 if (online == null) return false;
 
                 online.TimePlayed = soul.TimePlayed;
+                //online.Inventory = soul.Inventory;
+                online.Spirits = soul.Spirits;
+                online.Embers = soul.Embers;
+                online.Shards = soul.Shards;
+                online.Bits = soul.Bits;
 
                 try
                 {

@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+             x:Class="AiosKingdom.Views.MarketPage"
+             Title="{Binding Title}">
+    <ContentPage.BindingContext>
+        <vm:MarketPageViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid
+                Grid.Column="0"
+                BackgroundColor="{Binding SelectedItem.Item.Quality, Converter={StaticResource itemQualityToColor}}"
+                IsVisible="{Binding IsItemSelected}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="150" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                </Grid.RowDefinitions>
+
+                <Grid
+                    Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image
+                        Grid.Column="0"
+                        Source="{Binding SelectedItem.Item, Converter={StaticResource objectToImage}}" />
+                    <Grid
+                        Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <ContentView
+                            Grid.Row="0"
+                            BackgroundColor="Blue"
+                            Padding="5">
+                            <Label
+                                BackgroundColor="Gray"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding SelectedItem.Item.UseLevelRequired}"/>
+                        </ContentView>
+                        <ContentView
+                            Grid.Row="1"
+                            BackgroundColor="Gray"
+                            Padding="5">
+                            <Label
+                                BackgroundColor="Gray"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding SelectedItem.Item.ItemLevel}"/>
+                        </ContentView>
+                    </Grid>
+                </Grid>
+                <Grid
+                    Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ContentView
+                        Grid.Column="0"
+                        BackgroundColor="Gray"
+                        Padding="5">
+                        <Label
+                            BackgroundColor="Gray"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding SelectedItem.ShardPrice}"/>
+                    </ContentView>
+                    <ContentView
+                        Grid.Column="1"
+                        BackgroundColor="Gray"
+                        Padding="5">
+                        <Label
+                            BackgroundColor="Gray"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding SelectedItem.BitPrice}"/>
+                    </ContentView>
+                </Grid>
+                <Button
+                    Grid.Row="3"
+                    Margin="5"
+                    Style="{StaticResource MenuButton}"
+                    Text="Buy"
+                    Command="{Binding BuyItemAction}"/>
+            </Grid>
+
+            <Grid
+                Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Picker 
+                    Grid.Row="0" 
+                    ItemsSource="{Binding FilterList}" 
+                    SelectedItem="{Binding Filter}" />
+
+                <ListView 
+                    Grid.Row="1"
+                    ItemsSource="{Binding Items}" 
+                    SelectedItem="{Binding SelectedItem}"
+                    RowHeight="30"
+                    SeparatorVisibility="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="30" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        Grid.Column="0" 
+                                        VerticalTextAlignment="Center"
+                                        FontSize="22"
+                                        Text="{Binding Item.Name}" />
+
+                                    <Grid
+                                        Grid.Column="2">
+                                        <Label
+                                            VerticalTextAlignment="Center"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding Slot.Quantity}" />
+                                    </Grid>
+
+                                    <!--Grid
+                                        Grid.Column="4">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        
+                                        <Button 
+                                            Grid.Row="0" 
+                                            Text="-" 
+                                            Command="{Binding Source={x:Reference ArmorsPage}, Path=BindingContext.RemoveArmorAction}" 
+                                            CommandParameter="{Binding .}"/>
+                                        <Button 
+                                            Grid.Row="1" 
+                                            Text="Edit" 
+                                            Command="{Binding Source={x:Reference ArmorsPage}, Path=BindingContext.EditArmorAction}" 
+                                            CommandParameter="{Binding .}"/>
+                                    </Grid-->
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

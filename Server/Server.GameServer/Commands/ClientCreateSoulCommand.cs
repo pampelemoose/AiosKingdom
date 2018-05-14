@@ -46,7 +46,7 @@ namespace Server.GameServer.Commands
             };
 
             var result = DataRepositories.SoulRepository.CreateSoul(soul);
-            var objectResult = new Network.CreateObjectResult
+            var objectResult = new Network.MessageResult
             {
                 Success = result,
                 Message = "Soul created !"

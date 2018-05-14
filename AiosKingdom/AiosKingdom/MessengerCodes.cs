@@ -28,5 +28,6 @@ namespace AiosKingdom
 
         public static string ArmorListUpdated = "armorListUpdated";
         public static string InventoryUpdated = "inventoryUpdated";
+        public static string MarketUpdated = "marketUpdated";
     }
 }

@@ -17,6 +17,9 @@ namespace Network
         public const int Client_SoulDatas = 13;
         public const int Client_CurrentSoulDatas = 14;
 
-        public const int Ping = 10000;
+        public const int Client_MarketList = 20;
+        public const int Client_BuyMarketItem = 21;
+
+        public const int Ping = -1;
     }
 }

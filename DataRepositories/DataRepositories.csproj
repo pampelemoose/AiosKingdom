@@ -52,9 +52,14 @@
     <Compile Include="ConsumableRepository.cs" />
     <Compile Include="AiosKingdomContext.cs" />
     <Compile Include="GameServerRepository.cs" />
-    <Compile Include="Migrations\201805110717123_InitialMigration.cs" />
-    <Compile Include="Migrations\201805110717123_InitialMigration.Designer.cs">
-      <DependentUpon>201805110717123_InitialMigration.cs</DependentUpon>
+    <Compile Include="MarketRepository.cs" />
+    <Compile Include="Migrations\201805140512368_InitialMigration.cs" />
+    <Compile Include="Migrations\201805140512368_InitialMigration.Designer.cs">
+      <DependentUpon>201805140512368_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805140653142_InventorySlot_SoulRefRemoved.cs" />
+    <Compile Include="Migrations\201805140653142_InventorySlot_SoulRefRemoved.Designer.cs">
+      <DependentUpon>201805140653142_InventorySlot_SoulRefRemoved.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,8 +78,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805110717123_InitialMigration.resx">
-      <DependentUpon>201805110717123_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805140512368_InitialMigration.resx">
+      <DependentUpon>201805140512368_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805140653142_InventorySlot_SoulRefRemoved.resx">
+      <DependentUpon>201805140653142_InventorySlot_SoulRefRemoved.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

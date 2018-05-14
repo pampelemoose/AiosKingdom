@@ -10,21 +10,21 @@ namespace AiosKingdom.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            /*if (value is Guid)
+            if (value is DataModels.Items.Armor)
             {
-                var dto = value as DataDtos.ArmorDto;
+                var dto = value as DataModels.Items.Armor;
 
-                if (!string.IsNullOrEmpty(dto.Armor.Image))
-                    return dto.Armor.Image;
+                if (!string.IsNullOrEmpty(dto.Image))
+                    return dto.Image;
             }
 
-            if (value is DataDtos.ConsumableDto)
+            if (value is DataModels.Items.Consumable)
             {
-                var dto = value as DataDtos.ConsumableDto;
+                var dto = value as DataModels.Items.Consumable;
 
-                if (!string.IsNullOrEmpty(dto.Consumable.Image))
-                    return dto.Consumable.Image;
-            }*/
+                if (!string.IsNullOrEmpty(dto.Image))
+                    return dto.Image;
+            }
 
             return "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";
 

@@ -57,9 +57,11 @@
     <Compile Include="CommandManager.cs" />
     <Compile Include="Commands\ACommand.cs" />
     <Compile Include="Commands\ClientAuthenticateCommand.cs" />
+    <Compile Include="Commands\ClientBuyMarketItemCommand.cs" />
     <Compile Include="Commands\ClientConnectSoulCommand.cs" />
     <Compile Include="Commands\ClientCreateSoulCommand.cs" />
     <Compile Include="Commands\ClientCurrentSoulDatasCommand.cs" />
+    <Compile Include="Commands\ClientMarketListCommand.cs" />
     <Compile Include="Commands\ClientSoulDatasCommand.cs" />
     <Compile Include="Commands\ClientSoulListCommand.cs" />
     <Compile Include="Commands\PingCommand.cs" />

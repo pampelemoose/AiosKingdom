@@ -28,5 +28,7 @@ namespace AiosKingdom
         public Network.SoulDatas Datas { get; set; }
 
         public List<DataModels.Items.Armor> Armors { get; set; }
+
+        public List<DataModels.MarketSlot> MarketItems { get; set; }
     }
 }

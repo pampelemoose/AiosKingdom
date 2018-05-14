@@ -163,6 +163,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\GameServersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MarketController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -173,6 +174,8 @@
     <Compile Include="Models\ArmorFilter.cs" />
     <Compile Include="Models\BagFilter.cs" />
     <Compile Include="Models\ConsumableFilter.cs" />
+    <Compile Include="Models\MarketSlotFilter.cs" />
+    <Compile Include="Models\MarketSlotModel.cs" />
     <Compile Include="Models\UserFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -270,6 +273,8 @@
     <Content Include="Views\Bags\Create.cshtml" />
     <Content Include="Views\GameServers\Index.cshtml" />
     <Content Include="Views\GameServers\Create.cshtml" />
+    <Content Include="Views\Market\Index.cshtml" />
+    <Content Include="Views\Market\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

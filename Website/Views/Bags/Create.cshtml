@@ -83,6 +83,7 @@
                         @Html.EditorFor(model => model.Stats[i].StatValue, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 </div>
+                @Html.HiddenFor(model => model.Stats[i].Type)
             }
         }
 

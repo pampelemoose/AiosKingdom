@@ -11,9 +11,8 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
+        [Required]
         public Guid SoulId { get; set; }
-        [ForeignKey("SoulId")]
-        public Soul Soul { get; set; }
 
         [Required]
         public Items.ItemType Type { get; set; }
