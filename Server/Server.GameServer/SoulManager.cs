@@ -92,6 +92,14 @@ namespace Server.GameServer
             return null;
         }
 
+        public void UpdateSoul(Guid token, DataModels.Soul soul)
+        {
+            if (_souls.ContainsKey(token))
+            {
+                _souls[token] = soul;
+            }
+        }
+
         public Network.SoulDatas GetDatas(Guid token)
         {
             if (_soulDatas.ContainsKey(token))

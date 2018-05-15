@@ -25,7 +25,7 @@ namespace DataRepositories
             {
                 return context.Souls
                     .Include(s => s.Equipment)
-                    .Include(s => s.Inventory)
+                    .Include(s => s.Inventory.OrderBy(i => i.LootedAt))
                     .FirstOrDefault(s => s.Id.Equals(id));
             }
         }
@@ -70,14 +70,28 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 var online = context.Souls
+                    .Include(s => s.Equipment)
                     .Include(s => s.Inventory)
                     .FirstOrDefault(s => s.Id.Equals(soul.Id));
 
                 if (online == null) return false;
 
                 online.TimePlayed = soul.TimePlayed;
+
+                // EQUIPMENT
+                online.Equipment.Head = soul.Equipment.Head;
+                online.Equipment.Shoulder = soul.Equipment.Shoulder;
+                online.Equipment.Torso = soul.Equipment.Torso;
+                online.Equipment.Belt = soul.Equipment.Belt;
+                online.Equipment.Hand = soul.Equipment.Hand;
+                online.Equipment.Pants = soul.Equipment.Pants;
+                online.Equipment.Leg = soul.Equipment.Leg;
+                online.Equipment.Feet = soul.Equipment.Feet;
+
+                // INVENTORY
+                var old = online.Inventory;
                 online.Inventory = new List<DataModels.InventorySlot>();
-                foreach (var item in soul.Inventory)
+                foreach (var item in soul.Inventory.OrderBy(i => i.LootedAt).ToList())
                 {
                     if (Guid.Empty.Equals(item.Id))
                     {
@@ -88,9 +102,18 @@ namespace DataRepositories
                     {
                         var inv = context.Inventories.FirstOrDefault(i => i.Id.Equals(item.Id));
                         inv.Quantity = item.Quantity;
+                        inv.ItemId = item.ItemId;
                         online.Inventory.Add(inv);
+                        old.Remove(old.FirstOrDefault(o => o.Id.Equals(item.Id)));
                     }
                 }
+
+                foreach (var toDel in old)
+                {
+                    context.Inventories.Remove(toDel);
+                }
+
+                // MONEY VALUES
                 online.Spirits = soul.Spirits;
                 online.Embers = soul.Embers;
                 online.Shards = soul.Shards;

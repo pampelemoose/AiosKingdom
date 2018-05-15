@@ -91,6 +91,7 @@ namespace Server.GameServer
 
             _commandArgCount.Add(Network.CommandCodes.Client_MarketList, 0);
             _commandArgCount.Add(Network.CommandCodes.Client_BuyMarketItem, 1);
+            _commandArgCount.Add(Network.CommandCodes.Client_EquipItem, 1);
 
             _commandArgCount.Add(Network.CommandCodes.ArmorList, 0);
 
@@ -106,6 +107,7 @@ namespace Server.GameServer
 
             _delegates.Add(Network.CommandCodes.Client_MarketList, (args) => { return new Commands.ClientMarketListCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_BuyMarketItem, (args) => { return new Commands.ClientBuyMarketItemCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_EquipItem, (args) => { return new Commands.ClientEquipItemCommand(args, _config); });
 
             _delegates.Add(Network.CommandCodes.ArmorList, (args) => { return new Commands.ArmorListCommand(args); });
         }
@@ -474,6 +476,9 @@ namespace Server.GameServer
                 case Network.CommandCodes.Client_MarketList:
                     break;
                 case Network.CommandCodes.Client_BuyMarketItem:
+                    retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Client_EquipItem:
                     retVal.Args = new string[1] { args[0] };
                     break;
 

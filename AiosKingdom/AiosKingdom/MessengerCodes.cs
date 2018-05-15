@@ -26,8 +26,6 @@ namespace AiosKingdom
         public static string SoulUpdated = "soulUpdated";
         public static string SoulDatasUpdated = "soulDatasUpdated";
 
-        public static string ArmorListUpdated = "armorListUpdated";
-        public static string InventoryUpdated = "inventoryUpdated";
         public static string MarketUpdated = "marketUpdated";
     }
 }

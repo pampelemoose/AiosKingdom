@@ -42,7 +42,8 @@ namespace Server.GameServer.Commands
                 ItemId = marketItem.ItemId,
                 Type = marketItem.Type,
                 Quantity = 1,
-                SoulId = datas.Id
+                SoulId = datas.Id,
+                LootedAt = DateTime.Now
             });
             DataRepositories.SoulRepository.Update(datas);
 

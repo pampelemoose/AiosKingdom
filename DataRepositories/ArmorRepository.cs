@@ -22,7 +22,7 @@ namespace DataRepositories
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Armors.Include(a => a.Stats).FirstOrDefault(a => a.Id.Equals(id));
+                return context.Armors.Include(a => a.Stats).FirstOrDefault(a => a.ItemId.Equals(id));
             }
         }
 

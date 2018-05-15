@@ -28,11 +28,11 @@
 
                 <Grid 
                     Grid.Row="0">
-                    <Image Source="{Binding Soul.Equipment.Head, Converter={StaticResource objectToImage}}"/>
+                    <Image Source="{Binding Head, Converter={StaticResource objectToImage}}"/>
                     <Button
                         BackgroundColor="Transparent"
                         Command="{Binding ShowArmorAction}"
-                        CommandParameter="{Binding Soul.Equipment.Head}"/>
+                        CommandParameter="{Binding Head}"/>
                 </Grid>
 
                 <Grid 
@@ -415,10 +415,8 @@
 
             <Grid
                 Grid.Column="2"
-                BackgroundColor="{Binding SelectedDto.Armor.Quality, Converter={StaticResource itemQualityToColor}}"
+                BackgroundColor="{Binding SelectedItem.Quality, Converter={StaticResource itemQualityToColor}}"
                 IsVisible="{Binding ShowArmorDetails}">
-                <!--
-                
                 <Grid
                     BackgroundColor="Transparent"
                     WidthRequest="200"
@@ -434,7 +432,7 @@
                         BackgroundColor="Transparent"
                         VerticalTextAlignment="Center"
                         HorizontalTextAlignment="Center"
-                        Text="{Binding SelectedDto.Armor.Name}"/>
+                        Text="{Binding SelectedItem.Name}"/>
 
                     <Grid
                         Grid.Row="1">
@@ -445,7 +443,7 @@
 
                         <Image
                             Grid.Column="0"
-                            Source="{Binding SelectedDto.Armor.Image, Converter={StaticResource objectToImage}}" />
+                            Source="{Binding SelectedItem, Converter={StaticResource objectToImage}}" />
                         <Grid
                             Grid.Column="1">
                             <Grid.RowDefinitions>
@@ -466,7 +464,7 @@
                                     BackgroundColor="Gray"
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedDto.Armor.UseLevelRequired}"/>
+                                    Text="{Binding SelectedItem.UseLevelRequired}"/>
                             </ContentView>
                             <ContentView
                                 Grid.Row="0"
@@ -477,7 +475,7 @@
                                     BackgroundColor="Gray"
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedDto.Armor.ItemLevel}"/>
+                                    Text="{Binding SelectedItem.ItemLevel}"/>
                             </ContentView>
                             <ContentView
                                 Grid.Row="1"
@@ -488,15 +486,15 @@
                                     BackgroundColor="Gray"
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedDto.Armor.ArmorValue}"/>
+                                    Text="{Binding SelectedItem.ArmorValue}"/>
                             </ContentView>
                         </Grid>
                     </Grid>
                     <ListView
                         Grid.Row="2"
                         BackgroundColor="Transparent"
-                        ItemsSource="{Binding SelectedDto.Stats}"
-                        HeightRequest="{Binding SelectedDto.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
+                        ItemsSource="{Binding SelectedItem.Stats}"
+                        HeightRequest="{Binding SelectedItem.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
                         RowHeight="20"
                         SeparatorVisibility="None"
                         IsEnabled="false">
@@ -520,7 +518,7 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                </Grid>-->
+                </Grid>
             </Grid>
         </Grid>
     </ContentPage.Content>

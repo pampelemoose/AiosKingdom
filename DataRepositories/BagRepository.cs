@@ -22,7 +22,7 @@ namespace DataRepositories
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Bags.Include(a => a.Stats).FirstOrDefault(b => b.Id.Equals(id));
+                return context.Bags.Include(a => a.Stats).FirstOrDefault(b => b.ItemId.Equals(id));
             }
         }
 

@@ -57,6 +57,10 @@
     <Compile Include="Migrations\201805150334276_InitialMigration.Designer.cs">
       <DependentUpon>201805150334276_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805150755424_InventoryLootedAtTime.cs" />
+    <Compile Include="Migrations\201805150755424_InventoryLootedAtTime.Designer.cs">
+      <DependentUpon>201805150755424_InventoryLootedAtTime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SoulRepository.cs" />
@@ -77,6 +81,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201805150334276_InitialMigration.resx">
       <DependentUpon>201805150334276_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805150755424_InventoryLootedAtTime.resx">
+      <DependentUpon>201805150755424_InventoryLootedAtTime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

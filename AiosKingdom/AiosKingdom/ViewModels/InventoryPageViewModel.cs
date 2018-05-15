@@ -14,7 +14,7 @@ namespace AiosKingdom.ViewModels
         {
             Title = "Inventory";
 
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.InventoryUpdated, (sender) =>
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulUpdated, (sender) =>
             {
                 SetInventories();
             });
@@ -48,8 +48,8 @@ namespace AiosKingdom.ViewModels
         public ICommand ArmorSlotEquipAction =>
             _armorSlotEquipAction ?? (_armorSlotEquipAction = new Command(() =>
             {
-
-            }, () => { return _armorSlotIsSelected && _selectedArmor.Item.UseLevelRequired < DatasManager.Instance.Soul.Level; }));
+                NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
+            }, () => { return _armorSlotIsSelected && _selectedArmor.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
 
         private List<DataModels.InventorySlot> _consumables;
         public List<DataModels.InventorySlot> Consumables => _consumables;
@@ -73,7 +73,9 @@ namespace AiosKingdom.ViewModels
         private void SetInventories()
         {
             _armors = new List<Models.InventoryItemModel<DataModels.Items.Armor>>();
-            SelectedArmor = null;
+            _selectedArmor = null;
+            _armorSlotIsSelected = false;
+
             _consumables = new List<DataModels.InventorySlot>();
             SelectedConsumableSlot = null;
 
@@ -98,6 +100,10 @@ namespace AiosKingdom.ViewModels
             }
 
             NotifyPropertyChanged(nameof(Armors));
+            NotifyPropertyChanged(nameof(SelectedArmor));
+            NotifyPropertyChanged(nameof(ArmorSlotIsSelected));
+            NotifyPropertyChanged(nameof(ArmorSlotEquipAction));
+
             NotifyPropertyChanged(nameof(Consumables));
         }
     }

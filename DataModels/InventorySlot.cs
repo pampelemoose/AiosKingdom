@@ -27,5 +27,8 @@ namespace DataModels
             get { return _quantity; }
             set { _quantity = value; }
         }
+
+        [Required]
+        public DateTime LootedAt { get; set; }
     }
 }

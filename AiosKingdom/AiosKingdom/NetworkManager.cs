@@ -478,6 +478,16 @@ namespace AiosKingdom
                         }
                     }
                     break;
+                case Network.CommandCodes.Client_EquipItem:
+                    {
+                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
+                        if (result.Success)
+                        {
+                            AskSoulDatas();
+                            AskSoulCurrentDatas();
+                        }
+                    }
+                    break;
 
                 case Network.CommandCodes.ArmorList:
                     {
@@ -576,6 +586,19 @@ namespace AiosKingdom
             var retMess = new Network.Message
             {
                 Code = Network.CommandCodes.Client_BuyMarketItem,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void EquipItem(Guid slotId)
+        {
+            var args = new string[1];
+            args[0] = slotId.ToString();
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_EquipItem,
                 Json = JsonConvert.SerializeObject(args),
                 Token = _gameAuthToken
             };

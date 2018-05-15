@@ -34,6 +34,9 @@ namespace DataRepositories.Migrations
             foreach (var entity in context.Market)
                 context.Market.Remove(entity);
 
+            foreach (var entity in context.Equipments)
+                context.Equipments.Remove(entity);
+
             context.SaveChanges();
 
             context.Versions.Add(new DataModels.Version { Id = Guid.NewGuid(), Low = 1, Mid = 0, High = 0 });
