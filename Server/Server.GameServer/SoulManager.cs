@@ -118,75 +118,83 @@ namespace Server.GameServer
 
             var equipment = soul.Equipment;
 
-            if (equipment.Head != null)
+            if (!Guid.Empty.Equals(equipment.Head))
             {
-                var item = equipment.Head;
+                var item = DataRepositories.ArmorRepository.GetById(equipment.Head);
 
                 data.ItemLevel += item.ItemLevel;
                 data.Armor += item.ArmorValue;
                 AddStatValue(data, item.Stats);
             }
 
-            if (equipment.Shoulder != null)
+            if (!Guid.Empty.Equals(equipment.Shoulder))
             {
-                var item = equipment.Shoulder;
+                var item = DataRepositories.ArmorRepository.GetById(equipment.Shoulder);
 
                 data.ItemLevel += item.ItemLevel;
                 data.Armor += item.ArmorValue;
                 AddStatValue(data, item.Stats);
             }
 
-            if (equipment.Torso != null)
+            if (!Guid.Empty.Equals(equipment.Torso))
             {
-                var item = equipment.Torso;
+                var item = DataRepositories.ArmorRepository.GetById(equipment.Torso);
 
                 data.ItemLevel += item.ItemLevel;
                 data.Armor += item.ArmorValue;
                 AddStatValue(data, item.Stats);
             }
 
-            if (equipment.Belt != null)
+            if (!Guid.Empty.Equals(equipment.Belt))
             {
-                var item = equipment.Belt;
+                var item = DataRepositories.ArmorRepository.GetById(equipment.Belt);
 
                 data.ItemLevel += item.ItemLevel;
                 data.Armor += item.ArmorValue;
                 AddStatValue(data, item.Stats);
             }
 
-            if (equipment.Hand != null)
+            if (!Guid.Empty.Equals(equipment.Hand))
             {
-                var item = equipment.Hand;
+                var item = DataRepositories.ArmorRepository.GetById(equipment.Hand);
 
                 data.ItemLevel += item.ItemLevel;
                 data.Armor += item.ArmorValue;
                 AddStatValue(data, item.Stats);
             }
 
-            if (equipment.Leg != null)
+            if (!Guid.Empty.Equals(equipment.Leg))
             {
-                var item = equipment.Leg;
+                var item = DataRepositories.ArmorRepository.GetById(equipment.Leg);
 
                 data.ItemLevel += item.ItemLevel;
                 data.Armor += item.ArmorValue;
                 AddStatValue(data, item.Stats);
             }
 
-            if (equipment.Pants != null)
+            if (!Guid.Empty.Equals(equipment.Pants))
             {
-                var item = equipment.Pants;
+                var item = DataRepositories.ArmorRepository.GetById(equipment.Pants);
 
                 data.ItemLevel += item.ItemLevel;
                 data.Armor += item.ArmorValue;
                 AddStatValue(data, item.Stats);
             }
 
-            if (equipment.Feet != null)
+            if (!Guid.Empty.Equals(equipment.Feet))
             {
-                var item = equipment.Feet;
+                var item = DataRepositories.ArmorRepository.GetById(equipment.Feet);
 
                 data.ItemLevel += item.ItemLevel;
                 data.Armor += item.ArmorValue;
+                AddStatValue(data, item.Stats);
+            }
+
+            if (!Guid.Empty.Equals(equipment.Bag))
+            {
+                var item = DataRepositories.BagRepository.GetById(equipment.Bag);
+
+                data.ItemLevel += item.ItemLevel;
                 AddStatValue(data, item.Stats);
             }
         }

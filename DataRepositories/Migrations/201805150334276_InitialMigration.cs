@@ -8,10 +8,14 @@ namespace DataRepositories.Migrations
         public override void Up()
         {
             CreateTable(
-                "dbo.AItems",
+                "dbo.Armors",
                 c => new
                     {
                         Id = c.Guid(nullable: false),
+                        Part = c.Int(nullable: false),
+                        ArmorValue = c.Int(nullable: false),
+                        VersionId = c.Guid(nullable: false),
+                        ItemId = c.Guid(nullable: false),
                         Name = c.String(nullable: false, maxLength: 50),
                         Description = c.String(nullable: false, maxLength: 200),
                         Image = c.String(),
@@ -19,13 +23,6 @@ namespace DataRepositories.Migrations
                         Quality = c.Int(nullable: false),
                         ItemLevel = c.Int(nullable: false),
                         UseLevelRequired = c.Int(nullable: false),
-                        Part = c.Int(),
-                        ArmorValue = c.Int(),
-                        SlotCount = c.Int(),
-                        WeaponType = c.Int(),
-                        MinDamages = c.Int(),
-                        MaxDamages = c.Int(),
-                        Discriminator = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -37,16 +34,40 @@ namespace DataRepositories.Migrations
                         ItemId = c.Guid(nullable: false),
                         Type = c.Int(nullable: false),
                         StatValue = c.Int(nullable: false),
+                        Armor_Id = c.Guid(),
+                        Bag_Id = c.Guid(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AItems", t => t.ItemId, cascadeDelete: true)
-                .Index(t => t.ItemId);
+                .ForeignKey("dbo.Armors", t => t.Armor_Id)
+                .ForeignKey("dbo.Bags", t => t.Bag_Id)
+                .Index(t => t.Armor_Id)
+                .Index(t => t.Bag_Id);
+            
+            CreateTable(
+                "dbo.Bags",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        SlotCount = c.Int(nullable: false),
+                        VersionId = c.Guid(nullable: false),
+                        ItemId = c.Guid(nullable: false),
+                        Name = c.String(nullable: false, maxLength: 50),
+                        Description = c.String(nullable: false, maxLength: 200),
+                        Image = c.String(),
+                        Type = c.Int(nullable: false),
+                        Quality = c.Int(nullable: false),
+                        ItemLevel = c.Int(nullable: false),
+                        UseLevelRequired = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.Books",
                 c => new
                     {
                         Id = c.Guid(nullable: false),
+                        VersionId = c.Guid(nullable: false),
+                        BookId = c.Guid(nullable: false),
                         Name = c.String(nullable: false, maxLength: 50),
                         Quality = c.Int(nullable: false),
                     })
@@ -98,43 +119,42 @@ namespace DataRepositories.Migrations
                         AffectTime = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AItems", t => t.ConsumableId, cascadeDelete: true)
+                .ForeignKey("dbo.Consumables", t => t.ConsumableId, cascadeDelete: true)
                 .Index(t => t.ConsumableId);
+            
+            CreateTable(
+                "dbo.Consumables",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        VersionId = c.Guid(nullable: false),
+                        ItemId = c.Guid(nullable: false),
+                        Name = c.String(nullable: false, maxLength: 50),
+                        Description = c.String(nullable: false, maxLength: 200),
+                        Image = c.String(),
+                        Type = c.Int(nullable: false),
+                        Quality = c.Int(nullable: false),
+                        ItemLevel = c.Int(nullable: false),
+                        UseLevelRequired = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.Equipments",
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Bag_Id = c.Guid(),
-                        Belt_Id = c.Guid(),
-                        Feet_Id = c.Guid(),
-                        Hand_Id = c.Guid(),
-                        Head_Id = c.Guid(),
-                        Leg_Id = c.Guid(),
-                        Pants_Id = c.Guid(),
-                        Shoulder_Id = c.Guid(),
-                        Torso_Id = c.Guid(),
+                        Bag = c.Guid(nullable: false),
+                        Head = c.Guid(nullable: false),
+                        Shoulder = c.Guid(nullable: false),
+                        Torso = c.Guid(nullable: false),
+                        Belt = c.Guid(nullable: false),
+                        Pants = c.Guid(nullable: false),
+                        Leg = c.Guid(nullable: false),
+                        Feet = c.Guid(nullable: false),
+                        Hand = c.Guid(nullable: false),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AItems", t => t.Bag_Id)
-                .ForeignKey("dbo.AItems", t => t.Belt_Id)
-                .ForeignKey("dbo.AItems", t => t.Feet_Id)
-                .ForeignKey("dbo.AItems", t => t.Hand_Id)
-                .ForeignKey("dbo.AItems", t => t.Head_Id)
-                .ForeignKey("dbo.AItems", t => t.Leg_Id)
-                .ForeignKey("dbo.AItems", t => t.Pants_Id)
-                .ForeignKey("dbo.AItems", t => t.Shoulder_Id)
-                .ForeignKey("dbo.AItems", t => t.Torso_Id)
-                .Index(t => t.Bag_Id)
-                .Index(t => t.Belt_Id)
-                .Index(t => t.Feet_Id)
-                .Index(t => t.Hand_Id)
-                .Index(t => t.Head_Id)
-                .Index(t => t.Leg_Id)
-                .Index(t => t.Pants_Id)
-                .Index(t => t.Shoulder_Id)
-                .Index(t => t.Torso_Id);
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.InventorySlots",
@@ -147,10 +167,25 @@ namespace DataRepositories.Migrations
                         Quantity = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AItems", t => t.ItemId, cascadeDelete: true)
                 .ForeignKey("dbo.Souls", t => t.SoulId, cascadeDelete: true)
-                .Index(t => t.SoulId)
-                .Index(t => t.ItemId);
+                .Index(t => t.SoulId);
+            
+            CreateTable(
+                "dbo.MarketSlots",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        ServerId = c.Guid(nullable: false),
+                        Type = c.Int(nullable: false),
+                        ItemId = c.Guid(nullable: false),
+                        SellerId = c.Guid(),
+                        Quantity = c.Int(nullable: false),
+                        ShardPrice = c.Int(nullable: false),
+                        BitPrice = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Souls", t => t.SellerId)
+                .Index(t => t.SellerId);
             
             CreateTable(
                 "dbo.Souls",
@@ -188,6 +223,7 @@ namespace DataRepositories.Migrations
                 c => new
                     {
                         Id = c.Guid(nullable: false),
+                        VersionId = c.Guid(nullable: false),
                         Host = c.String(nullable: false),
                         Port = c.Int(nullable: false),
                         Online = c.Boolean(nullable: false),
@@ -232,25 +268,6 @@ namespace DataRepositories.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.MarketSlots",
-                c => new
-                    {
-                        Id = c.Guid(nullable: false),
-                        ServerId = c.Guid(nullable: false),
-                        Type = c.Int(nullable: false),
-                        ItemId = c.Guid(nullable: false),
-                        SellerId = c.Guid(),
-                        Quantity = c.Int(nullable: false),
-                        ShardPrice = c.Int(nullable: false),
-                        BitPrice = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AItems", t => t.ItemId, cascadeDelete: true)
-                .ForeignKey("dbo.Souls", t => t.SellerId)
-                .Index(t => t.ItemId)
-                .Index(t => t.SellerId);
-            
-            CreateTable(
                 "dbo.GameServerTokens",
                 c => new
                     {
@@ -258,6 +275,17 @@ namespace DataRepositories.Migrations
                         Token = c.Guid(nullable: false),
                         UserId = c.Guid(nullable: false),
                         CreatedAt = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.Versions",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        Low = c.Int(nullable: false),
+                        Mid = c.Int(nullable: false),
+                        High = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -279,64 +307,47 @@ namespace DataRepositories.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.MarketSlots", "SellerId", "dbo.Souls");
-            DropForeignKey("dbo.MarketSlots", "ItemId", "dbo.AItems");
             DropForeignKey("dbo.Souls", "UserId", "dbo.Users");
             DropForeignKey("dbo.RoleUsers", "User_Id", "dbo.Users");
             DropForeignKey("dbo.RoleUsers", "Role_Id", "dbo.Roles");
             DropForeignKey("dbo.Souls", "ServerId", "dbo.GameServers");
             DropForeignKey("dbo.InventorySlots", "SoulId", "dbo.Souls");
             DropForeignKey("dbo.Souls", "EquipmentId", "dbo.Equipments");
-            DropForeignKey("dbo.InventorySlots", "ItemId", "dbo.AItems");
-            DropForeignKey("dbo.Equipments", "Torso_Id", "dbo.AItems");
-            DropForeignKey("dbo.Equipments", "Shoulder_Id", "dbo.AItems");
-            DropForeignKey("dbo.Equipments", "Pants_Id", "dbo.AItems");
-            DropForeignKey("dbo.Equipments", "Leg_Id", "dbo.AItems");
-            DropForeignKey("dbo.Equipments", "Head_Id", "dbo.AItems");
-            DropForeignKey("dbo.Equipments", "Hand_Id", "dbo.AItems");
-            DropForeignKey("dbo.Equipments", "Feet_Id", "dbo.AItems");
-            DropForeignKey("dbo.Equipments", "Belt_Id", "dbo.AItems");
-            DropForeignKey("dbo.Equipments", "Bag_Id", "dbo.AItems");
-            DropForeignKey("dbo.ConsumableEffects", "ConsumableId", "dbo.AItems");
+            DropForeignKey("dbo.ConsumableEffects", "ConsumableId", "dbo.Consumables");
             DropForeignKey("dbo.Inscriptions", "PageId", "dbo.Pages");
             DropForeignKey("dbo.Pages", "BookId", "dbo.Books");
-            DropForeignKey("dbo.ItemStats", "ItemId", "dbo.AItems");
+            DropForeignKey("dbo.ItemStats", "Bag_Id", "dbo.Bags");
+            DropForeignKey("dbo.ItemStats", "Armor_Id", "dbo.Armors");
             DropIndex("dbo.RoleUsers", new[] { "User_Id" });
             DropIndex("dbo.RoleUsers", new[] { "Role_Id" });
-            DropIndex("dbo.MarketSlots", new[] { "SellerId" });
-            DropIndex("dbo.MarketSlots", new[] { "ItemId" });
             DropIndex("dbo.Souls", new[] { "EquipmentId" });
             DropIndex("dbo.Souls", new[] { "UserId" });
             DropIndex("dbo.Souls", new[] { "ServerId" });
-            DropIndex("dbo.InventorySlots", new[] { "ItemId" });
+            DropIndex("dbo.MarketSlots", new[] { "SellerId" });
             DropIndex("dbo.InventorySlots", new[] { "SoulId" });
-            DropIndex("dbo.Equipments", new[] { "Torso_Id" });
-            DropIndex("dbo.Equipments", new[] { "Shoulder_Id" });
-            DropIndex("dbo.Equipments", new[] { "Pants_Id" });
-            DropIndex("dbo.Equipments", new[] { "Leg_Id" });
-            DropIndex("dbo.Equipments", new[] { "Head_Id" });
-            DropIndex("dbo.Equipments", new[] { "Hand_Id" });
-            DropIndex("dbo.Equipments", new[] { "Feet_Id" });
-            DropIndex("dbo.Equipments", new[] { "Belt_Id" });
-            DropIndex("dbo.Equipments", new[] { "Bag_Id" });
             DropIndex("dbo.ConsumableEffects", new[] { "ConsumableId" });
             DropIndex("dbo.Inscriptions", new[] { "PageId" });
             DropIndex("dbo.Pages", new[] { "BookId" });
-            DropIndex("dbo.ItemStats", new[] { "ItemId" });
+            DropIndex("dbo.ItemStats", new[] { "Bag_Id" });
+            DropIndex("dbo.ItemStats", new[] { "Armor_Id" });
             DropTable("dbo.RoleUsers");
+            DropTable("dbo.Versions");
             DropTable("dbo.GameServerTokens");
-            DropTable("dbo.MarketSlots");
             DropTable("dbo.Roles");
             DropTable("dbo.Users");
             DropTable("dbo.GameServers");
             DropTable("dbo.Souls");
+            DropTable("dbo.MarketSlots");
             DropTable("dbo.InventorySlots");
             DropTable("dbo.Equipments");
+            DropTable("dbo.Consumables");
             DropTable("dbo.ConsumableEffects");
             DropTable("dbo.Inscriptions");
             DropTable("dbo.Pages");
             DropTable("dbo.Books");
+            DropTable("dbo.Bags");
             DropTable("dbo.ItemStats");
-            DropTable("dbo.AItems");
+            DropTable("dbo.Armors");
         }
     }
 }

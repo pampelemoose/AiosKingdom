@@ -92,6 +92,8 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Client_MarketList, 0);
             _commandArgCount.Add(Network.CommandCodes.Client_BuyMarketItem, 1);
 
+            _commandArgCount.Add(Network.CommandCodes.ArmorList, 0);
+
             _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
@@ -104,6 +106,8 @@ namespace Server.GameServer
 
             _delegates.Add(Network.CommandCodes.Client_MarketList, (args) => { return new Commands.ClientMarketListCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_BuyMarketItem, (args) => { return new Commands.ClientBuyMarketItemCommand(args); });
+
+            _delegates.Add(Network.CommandCodes.ArmorList, (args) => { return new Commands.ArmorListCommand(args); });
         }
 
         private void Run()
@@ -452,6 +456,7 @@ namespace Server.GameServer
                     retVal.IsValid = true;
                     retVal.Args = new string[1] { args[0] };
                     break;
+
                 case Network.CommandCodes.Client_CreateSoul:
                     retVal.Args = new string[1] { args[0] };
                     break;
@@ -460,14 +465,19 @@ namespace Server.GameServer
                 case Network.CommandCodes.Client_ConnectSoul:
                     retVal.Args = new string[1] { args[0] };
                     break;
+
                 case Network.CommandCodes.Client_SoulDatas:
                     break;
                 case Network.CommandCodes.Client_CurrentSoulDatas:
                     break;
+
                 case Network.CommandCodes.Client_MarketList:
                     break;
                 case Network.CommandCodes.Client_BuyMarketItem:
                     retVal.Args = new string[1] { args[0] };
+                    break;
+
+                case Network.CommandCodes.ArmorList:
                     break;
                 default:
                     retVal.IsValid = false;

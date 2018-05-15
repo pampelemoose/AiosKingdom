@@ -79,7 +79,7 @@
                             BackgroundColor="Gray"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="Center"
-                            Text="{Binding SelectedItem.ShardPrice}"/>
+                            Text="{Binding SelectedItem.Slot.ShardPrice}"/>
                     </ContentView>
                     <ContentView
                         Grid.Column="1"
@@ -89,7 +89,7 @@
                             BackgroundColor="Gray"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="Center"
-                            Text="{Binding SelectedItem.BitPrice}"/>
+                            Text="{Binding SelectedItem.Slot.BitPrice}"/>
                     </ContentView>
                 </Grid>
                 <Button

@@ -439,6 +439,7 @@ namespace AiosKingdom
                         if (result.Success)
                         {
                             MessagingCenter.Send(this, MessengerCodes.SoulConnected);
+                            AskArmorList();
                         }
                         else
                         {
@@ -477,6 +478,14 @@ namespace AiosKingdom
                         }
                     }
                     break;
+
+                case Network.CommandCodes.ArmorList:
+                    {
+                        var armors = JsonConvert.DeserializeObject<List<DataModels.Items.Armor>>(message.Json);
+                        DatasManager.Instance.Armors = armors;
+                    }
+                    break;
+
                 default:
                     return false;
             }
@@ -484,6 +493,18 @@ namespace AiosKingdom
             _gameTimedOut = DateTime.Now;
 
             return true;
+        }
+
+        public void AskArmorList()
+        {
+            var args = new string[0];
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.ArmorList,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
         }
 
         public void CreateSoul(string soulname)

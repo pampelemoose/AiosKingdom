@@ -18,6 +18,8 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
+        public Guid VersionId { get; set; }
+
         [Required]
         public string Host { get; set; }
         [Required]

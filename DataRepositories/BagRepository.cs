@@ -18,6 +18,14 @@ namespace DataRepositories
             }
         }
 
+        public static DataModels.Items.Bag GetById(Guid id)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Bags.Include(a => a.Stats).FirstOrDefault(b => b.Id.Equals(id));
+            }
+        }
+
         public static bool Create(DataModels.Items.Bag bag)
         {
             using (var context = new AiosKingdomContext())

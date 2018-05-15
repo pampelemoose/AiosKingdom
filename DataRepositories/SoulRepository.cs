@@ -25,18 +25,7 @@ namespace DataRepositories
             {
                 return context.Souls
                     .Include(s => s.Equipment)
-                    .Include(e => e.Equipment.Bag)
-                    .Include(e => e.Equipment.Head)
-                    .Include(e => e.Equipment.Shoulder)
-                    .Include(e => e.Equipment.Torso)
-                    .Include(e => e.Equipment.Belt)
-                    .Include(e => e.Equipment.Hand)
-                    .Include(e => e.Equipment.Pants)
-                    .Include(e => e.Equipment.Leg)
-                    .Include(e => e.Equipment.Feet)
                     .Include(s => s.Inventory)
-                    .Include(s => s.Inventory.Select(i => i.Item))
-                    .Include("Inventory.Item.Stats")
                     .FirstOrDefault(s => s.Id.Equals(id));
             }
         }
@@ -87,7 +76,21 @@ namespace DataRepositories
                 if (online == null) return false;
 
                 online.TimePlayed = soul.TimePlayed;
-                //online.Inventory = soul.Inventory;
+                online.Inventory = new List<DataModels.InventorySlot>();
+                foreach (var item in soul.Inventory)
+                {
+                    if (Guid.Empty.Equals(item.Id))
+                    {
+                        item.Id = Guid.NewGuid();
+                        online.Inventory.Add(item);
+                    }
+                    else
+                    {
+                        var inv = context.Inventories.FirstOrDefault(i => i.Id.Equals(item.Id));
+                        inv.Quantity = item.Quantity;
+                        online.Inventory.Add(inv);
+                    }
+                }
                 online.Spirits = soul.Spirits;
                 online.Embers = soul.Embers;
                 online.Shards = soul.Shards;

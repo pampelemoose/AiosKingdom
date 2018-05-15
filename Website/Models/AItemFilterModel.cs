@@ -8,6 +8,11 @@ namespace Website.Models
 {
     public abstract class AItemFilterModel<T>
     {
+        [Required]
+        public Guid SelectedVersion { get; set; }
+        [Display(Name = "Version")]
+        public List<DataModels.Version> VersionList { get; set; }
+
         [Display(Name = "Name")]
         public string Name { get; set; }
         [Display(Name = "Quality")]

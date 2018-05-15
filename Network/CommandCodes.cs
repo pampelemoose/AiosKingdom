@@ -20,6 +20,10 @@ namespace Network
         public const int Client_MarketList = 20;
         public const int Client_BuyMarketItem = 21;
 
+        public const int ArmorList = 30;
+        public const int ConsumableList = 31;
+        public const int BagList = 32;
+
         public const int Ping = -1;
     }
 }

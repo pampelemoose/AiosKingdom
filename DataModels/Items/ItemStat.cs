@@ -12,8 +12,6 @@ namespace DataModels.Items
         public int Id { get; set; }
 
         public Guid ItemId { get; set; }
-        [ForeignKey("ItemId")]
-        public AEquipableItem Item { get; set; }
 
         [Required]
         public Soul.Stats Type { get; set; }

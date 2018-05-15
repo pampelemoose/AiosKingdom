@@ -39,7 +39,6 @@ namespace Server.GameServer.Commands
 
             datas.Inventory.Add(new DataModels.InventorySlot
             {
-                Id = Guid.NewGuid(),
                 ItemId = marketItem.ItemId,
                 Type = marketItem.Type,
                 Quantity = 1,

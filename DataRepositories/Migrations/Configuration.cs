@@ -18,6 +18,10 @@ namespace DataRepositories.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
+
+            foreach (var entity in context.Versions)
+                context.Versions.Remove(entity);
+
             foreach (var entity in context.Roles)
                 context.Roles.Remove(entity);
 
@@ -31,6 +35,8 @@ namespace DataRepositories.Migrations
                 context.Market.Remove(entity);
 
             context.SaveChanges();
+
+            context.Versions.Add(new DataModels.Version { Id = Guid.NewGuid(), Low = 1, Mid = 0, High = 0 });
 
             context.Roles.Add(new DataModels.Role { Name = "User" });
             context.Roles.Add(new DataModels.Role { Name = "Admin" });
@@ -57,6 +63,7 @@ namespace DataRepositories.Migrations
             context.Servers.Add(new DataModels.GameServer
             {
                 Id = Guid.NewGuid(),
+                VersionId = context.Versions.First().Id,
                 Host = "127.0.0.1",
                 Port = 4242,
                 Name = "Server 1",

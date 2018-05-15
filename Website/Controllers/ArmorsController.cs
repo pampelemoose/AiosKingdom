@@ -14,6 +14,7 @@ namespace Website.Controllers
         {
             var armors = DataRepositories.ArmorRepository.GetAll();
 
+            filter.VersionList = DataRepositories.VersionRepository.GetAll();
             filter.Items = filter.FilterList(armors);
 
             return View(filter);
@@ -23,7 +24,8 @@ namespace Website.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            var armor = new DataModels.Items.Armor();
+            var armor = new Models.ArmorModel();
+            armor.VersionList = DataRepositories.VersionRepository.GetAll();
             armor.Stats = new List<DataModels.Items.ItemStat>();
 
             foreach (DataModels.Soul.Stats en in Enum.GetValues(typeof(DataModels.Soul.Stats)))
@@ -40,53 +42,66 @@ namespace Website.Controllers
         [CustomAuthorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(DataModels.Items.Armor armor)
+        public ActionResult Create(Models.ArmorModel armorModel)
         {
             if (ModelState.IsValid)
             {
                 bool haveErrors = false;
-                if (string.IsNullOrEmpty(armor.Name))
+                if (string.IsNullOrEmpty(armorModel.Name))
                 {
                     ModelState.AddModelError("Name", "Must specify a name.");
                     haveErrors = true;
                 }
 
-                if (string.IsNullOrEmpty(armor.Description))
+                if (string.IsNullOrEmpty(armorModel.Description))
                 {
                     ModelState.AddModelError("Description", "Must specify a description");
                     haveErrors = true;
                 }
 
-                if (armor.ItemLevel < 1)
+                if (armorModel.ItemLevel < 1)
                 {
                     ModelState.AddModelError("ItemLevel", "Must be > 0");
                     haveErrors = true;
                 }
 
-                if (armor.UseLevelRequired < 1)
+                if (armorModel.UseLevelRequired < 1)
                 {
                     ModelState.AddModelError("UseLevelRequired", "Must be > 0");
                     haveErrors = true;
                 }
 
-                if (armor.ArmorValue < 1)
+                if (armorModel.ArmorValue < 1)
                 {
                     ModelState.AddModelError("ArmorValue", "Must be > 0");
                     haveErrors = true;
                 }
 
-                if (haveErrors) return View(armor);
+                if (haveErrors) return View(armorModel);
 
-                armor.Id = Guid.NewGuid();
-                armor.Stats.RemoveAll(s => s.StatValue == 0);
+                armorModel.Stats.RemoveAll(s => s.StatValue == 0);
 
-                if (DataRepositories.ArmorRepository.Create(armor))
+                if (DataRepositories.ArmorRepository.Create(new DataModels.Items.Armor
+                {
+                    Id = Guid.NewGuid(),
+                    VersionId = armorModel.SelectedVersion,
+                    ItemId = Guid.NewGuid(),
+                    Name = armorModel.Name,
+                    Description = armorModel.Description,
+                    Image = armorModel.Image,
+                    ItemLevel = armorModel.ItemLevel,
+                    Quality = armorModel.Quality,
+                    Part = armorModel.Part,
+                    UseLevelRequired = armorModel.UseLevelRequired,
+                    ArmorValue = armorModel.ArmorValue,
+                    Stats = armorModel.Stats
+                }))
                 {
                     return RedirectToAction("Index");
                 }
             }
 
-            return View(armor);
+            return View(armorModel);
         }
     }
 }

@@ -18,9 +18,8 @@ namespace DataModels
 
         public Items.ItemType Type { get; set; }
 
+        [Required]
         public Guid ItemId { get; set; }
-        [ForeignKey("ItemId")]
-        public Items.AItem Item { get; set; }
 
         public Guid? SellerId { get; set; }
         [ForeignKey("SellerId")]

@@ -14,9 +14,7 @@ namespace DataRepositories
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Market
-                    .Include(a => a.Item)
-                    .Include(a => a.Seller).ToList();
+                return context.Market.ToList();
             }
         }
 
@@ -25,7 +23,6 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 return context.Market
-                    .Include(a => a.Item)
                     .Include(a => a.Seller)
                     .FirstOrDefault(a => a.Id.Equals(id));
             }

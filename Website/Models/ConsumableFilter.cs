@@ -10,6 +10,11 @@ namespace Website.Models
     {
         public override List<DataModels.Items.Consumable> FilterList(List<DataModels.Items.Consumable> list)
         {
+            if (!Guid.Empty.Equals(SelectedVersion))
+            {
+                list = list.Where(a => a.VersionId.Equals(SelectedVersion)).ToList();
+            }
+
             if (!string.IsNullOrEmpty(Name))
             {
                 list = list.Where(a => a.Name.Contains(Name)).ToList();

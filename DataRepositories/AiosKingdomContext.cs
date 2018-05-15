@@ -13,6 +13,8 @@ namespace DataRepositories
         {
         }
 
+        public DbSet<DataModels.Version> Versions { get; set; }
+
         public DbSet<DataModels.GameServer> Servers { get; set; }
         public DbSet<DataModels.GameServerToken> Tokens { get; set; }
 

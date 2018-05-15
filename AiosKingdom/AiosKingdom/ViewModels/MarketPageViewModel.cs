@@ -34,14 +34,14 @@ namespace AiosKingdom.ViewModels
 
         public List<DataModels.Items.ItemType> FilterList => Enum.GetValues(typeof(DataModels.Items.ItemType)).Cast<DataModels.Items.ItemType>().ToList();
 
-        private List<DataModels.MarketSlot> _items;
-        public List<DataModels.MarketSlot> Items => _items;
+        private List<Models.MarketItemModel> _items;
+        public List<Models.MarketItemModel> Items => _items;
 
         private bool _isItemSelected;
         public bool IsItemSelected => _isItemSelected;
 
-        private DataModels.MarketSlot _selectedItem;
-        public DataModels.MarketSlot SelectedItem
+        private Models.MarketItemModel _selectedItem;
+        public Models.MarketItemModel SelectedItem
         {
             get { return _selectedItem; }
             set
@@ -58,18 +58,41 @@ namespace AiosKingdom.ViewModels
         public ICommand BuyItemAction =>
         _buyItemAction ?? (_buyItemAction = new Command(() =>
         {
-            NetworkManager.Instance.BuyMarketItem(_selectedItem.Id);
+            NetworkManager.Instance.BuyMarketItem(_selectedItem.Slot.Id);
         }, () =>
         {
-            return DatasManager.Instance.Soul?.Shards >= _selectedItem?.ShardPrice
-                       && DatasManager.Instance.Soul?.Bits >= _selectedItem?.BitPrice;
+            return DatasManager.Instance.Soul?.Shards >= _selectedItem?.Slot.ShardPrice
+                       && DatasManager.Instance.Soul?.Bits >= _selectedItem?.Slot.BitPrice;
         }));
 
         private void SetItems()
         {
             _selectedItem = null;
             _isItemSelected = false;
-            _items = DatasManager.Instance.MarketItems?.Where(i => i.Type == _filter).ToList();
+            _items = new List<Models.MarketItemModel>();
+
+            if (DatasManager.Instance.MarketItems == null) return;
+
+            foreach (var slot in DatasManager.Instance.MarketItems?.Where(i => i.Type == _filter).ToList())
+            {
+                DataModels.Items.AItem itm = null;
+
+                switch (slot.Type)
+                {
+                    case DataModels.Items.ItemType.Armor:
+                        itm = DatasManager.Instance.Armors.FirstOrDefault(i => i.ItemId.Equals(slot.ItemId));
+                        break;
+                    /*case DataModels.Items.ItemType.Consumable:
+                        itm = DatasManager.Instance.Consumables.FirstOrDefault(i => i.Consumable.Id.Equals(slot.ItemId)).Consumable;
+                        break;*/
+                }
+
+                _items.Add(new Models.MarketItemModel
+                {
+                    Slot = slot,
+                    Item = itm
+                });
+            }
 
             NotifyPropertyChanged(nameof(SelectedItem));
             NotifyPropertyChanged(nameof(IsItemSelected));

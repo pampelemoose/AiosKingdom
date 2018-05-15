@@ -1,37 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Linq;
+using System.Web;
 
-namespace DataModels.Items
+namespace Website.Models
 {
-    public enum ItemType
+    public class ArmorModel
     {
-        Consumable = 0,
-        Bag = 1,
-        Armor = 2,
-        Weapon = 3,
-        Jewelry = 4
-    }
-
-    public enum ItemQuality
-    {
-        Common = 0,
-        Uncommon = 1,
-        Rare = 2,
-        Epic = 3,
-        Legendary = 4
-    }
-
-    public abstract class AItem
-    {
-        [Key]
-        public Guid Id { get; set; }
-
-        public Guid VersionId { get; set; }
-
         [Required]
-        public Guid ItemId { get; set; }
+        public Guid SelectedVersion { get; set; }
+        [Display(Name = "Version")]
+        public List<DataModels.Version> VersionList { get; set; }
 
         [Required(ErrorMessage = "Name required"), MinLength(4), MaxLength(50)]
         [Display(Name = "Name")]
@@ -49,18 +29,9 @@ namespace DataModels.Items
             set { _image = value; }
         }
 
-        private ItemType _type;
-        [Required(ErrorMessage = "Type required")]
-        [Display(Name = "Type")]
-        public ItemType Type
-        {
-            get { return _type; }
-            private set { _type = value; }
-        }
-
         [Required(ErrorMessage = "Quality required")]
         [Display(Name = "Quality")]
-        public ItemQuality Quality { get; set; }
+        public DataModels.Items.ItemQuality Quality { get; set; }
 
         [Required(ErrorMessage = "ItemLevel required")]
         [Display(Name = "Item Level")]
@@ -72,9 +43,16 @@ namespace DataModels.Items
         [Range(1, 400)]
         public int UseLevelRequired { get; set; }
 
-        public AItem(ItemType type)
-        {
-            _type = type;
-        }
+        [Required(ErrorMessage = "Part required")]
+        [Display(Name = "Part")]
+        public DataModels.Items.ArmorPart Part { get; set; }
+
+        [Required(ErrorMessage = "ArmorValue required")]
+        [Display(Name = "Armor Value")]
+        [Range(1, 400)]
+        public int ArmorValue { get; set; }
+
+        [Display(Name = "Stats")]
+        public List<DataModels.Items.ItemStat> Stats { get; set; }
     }
 }

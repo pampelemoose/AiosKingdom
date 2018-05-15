@@ -13,6 +13,7 @@ namespace Website.Controllers
         {
             var bags = DataRepositories.BagRepository.GetAll();
 
+            filter.VersionList = DataRepositories.VersionRepository.GetAll();
             filter.Items = filter.FilterList(bags);
 
             return View(filter);
@@ -22,7 +23,9 @@ namespace Website.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            var bag = new DataModels.Items.Bag();
+            var bag = new Models.BagModel();
+
+            bag.VersionList = DataRepositories.VersionRepository.GetAll();
             bag.Stats = new List<DataModels.Items.ItemStat>();
 
             foreach (DataModels.Soul.Stats en in Enum.GetValues(typeof(DataModels.Soul.Stats)))
@@ -38,7 +41,7 @@ namespace Website.Controllers
         [CustomAuthorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(DataModels.Items.Bag bag)
+        public ActionResult Create(Models.BagModel bag)
         {
             if (ModelState.IsValid)
             {
@@ -75,10 +78,22 @@ namespace Website.Controllers
 
                 if (haveErrors) return View(bag);
 
-                bag.Id = Guid.NewGuid();
                 bag.Stats.RemoveAll(s => s.StatValue == 0);
 
-                if (DataRepositories.BagRepository.Create(bag))
+                if (DataRepositories.BagRepository.Create(new DataModels.Items.Bag
+                {
+                    Id = Guid.NewGuid(),
+                    VersionId = bag.SelectedVersion,
+                    ItemId = Guid.NewGuid(),
+                    Name = bag.Name,
+                    Description = bag.Description,
+                    Image = bag.Image,
+                    ItemLevel = bag.ItemLevel,
+                    Quality = bag.Quality,
+                    UseLevelRequired = bag.UseLevelRequired,
+                    SlotCount = bag.SlotCount,
+                    Stats = bag.Stats
+                }))
                 {
                     return RedirectToAction("Index");
                 }

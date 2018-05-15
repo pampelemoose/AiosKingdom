@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -16,38 +17,23 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.InventoryUpdated, (sender) =>
             {
                 SetInventories();
-                //NotifyPropertyChanged(nameof(Soul));
             });
 
             SetInventories();
         }
 
-        private List<DataModels.InventorySlot> _armors;
-        public List<DataModels.InventorySlot> Armors => _armors;
+        private List<Models.InventoryItemModel<DataModels.Items.Armor>> _armors;
+        public List<Models.InventoryItemModel<DataModels.Items.Armor>> Armors => _armors;
 
-        private DataModels.Items.Armor _selectedArmor;
-        public DataModels.Items.Armor SelectedArmor
+        private Models.InventoryItemModel<DataModels.Items.Armor> _selectedArmor;
+        public Models.InventoryItemModel<DataModels.Items.Armor> SelectedArmor
         {
             get { return _selectedArmor; }
             set
             {
                 _selectedArmor = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private DataModels.InventorySlot _selectedArmorSlot;
-        public DataModels.InventorySlot SelectedArmorSlot
-        {
-            get { return _selectedArmorSlot; }
-            set
-            {
-                _selectedArmorSlot = value;
-                _armorSlotIsSelected = _selectedArmorSlot != null;
+                _armorSlotIsSelected = _selectedArmor != null;
                 _armorSlotEquipAction?.ChangeCanExecute();
-
-                if (_selectedArmorSlot != null)
-                    SelectedArmor = _selectedArmorSlot.Item as DataModels.Items.Armor;
 
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(ArmorSlotIsSelected));
@@ -63,7 +49,7 @@ namespace AiosKingdom.ViewModels
             _armorSlotEquipAction ?? (_armorSlotEquipAction = new Command(() =>
             {
 
-            }, () => { return _armorSlotIsSelected && _selectedArmorSlot.Item.UseLevelRequired < +DatasManager.Instance.Soul.Level; }));
+            }, () => { return _armorSlotIsSelected && _selectedArmor.Item.UseLevelRequired < DatasManager.Instance.Soul.Level; }));
 
         private List<DataModels.InventorySlot> _consumables;
         public List<DataModels.InventorySlot> Consumables => _consumables;
@@ -86,8 +72,8 @@ namespace AiosKingdom.ViewModels
 
         private void SetInventories()
         {
-            _armors = new List<DataModels.InventorySlot>();
-            SelectedArmorSlot = null;
+            _armors = new List<Models.InventoryItemModel<DataModels.Items.Armor>>();
+            SelectedArmor = null;
             _consumables = new List<DataModels.InventorySlot>();
             SelectedConsumableSlot = null;
 
@@ -97,7 +83,10 @@ namespace AiosKingdom.ViewModels
                 {
                     case DataModels.Items.ItemType.Armor:
                         {
-                            _armors.Add(slot);
+                            _armors.Add(new Models.InventoryItemModel<DataModels.Items.Armor> {
+                                Slot = slot,
+                                Item = DatasManager.Instance.Armors.FirstOrDefault(a => a.ItemId.Equals(slot.ItemId))
+                            });
                         }
                         break;
                     case DataModels.Items.ItemType.Consumable:

@@ -19,6 +19,11 @@ namespace DataModels.Skills
         [Key]
         public Guid Id { get; set; }
 
+        public Guid VersionId { get; set; }
+
+        [Required]
+        public Guid BookId { get; set; }
+
         [Required, MaxLength(50)]
         public string Name { get; set; }
 
