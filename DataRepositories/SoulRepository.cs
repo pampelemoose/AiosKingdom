@@ -25,7 +25,7 @@ namespace DataRepositories
             {
                 return context.Souls
                     .Include(s => s.Equipment)
-                    .Include(s => s.Inventory.OrderBy(i => i.LootedAt))
+                    .Include(s => s.Inventory)
                     .FirstOrDefault(s => s.Id.Equals(id));
             }
         }
@@ -91,7 +91,7 @@ namespace DataRepositories
                 // INVENTORY
                 var old = online.Inventory;
                 online.Inventory = new List<DataModels.InventorySlot>();
-                foreach (var item in soul.Inventory.OrderBy(i => i.LootedAt).ToList())
+                foreach (var item in soul.Inventory)
                 {
                     if (Guid.Empty.Equals(item.Id))
                     {

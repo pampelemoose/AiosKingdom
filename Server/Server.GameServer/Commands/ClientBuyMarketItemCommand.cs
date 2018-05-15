@@ -35,17 +35,49 @@ namespace Server.GameServer.Commands
             datas.Shards -= marketItem.ShardPrice;
             datas.Bits -= marketItem.BitPrice;
 
-            //PlayerLootItem(soulId, marketItem.ItemId, marketItem.Type, 1);
-
-            datas.Inventory.Add(new DataModels.InventorySlot
+            switch (marketItem.Type)
             {
-                ItemId = marketItem.ItemId,
-                Type = marketItem.Type,
-                Quantity = 1,
-                SoulId = datas.Id,
-                LootedAt = DateTime.Now
-            });
-            DataRepositories.SoulRepository.Update(datas);
+                case DataModels.Items.ItemType.Armor:
+                case DataModels.Items.ItemType.Bag:
+                case DataModels.Items.ItemType.Weapon:
+                case DataModels.Items.ItemType.Jewelry:
+                    {
+                        datas.Inventory.Add(new DataModels.InventorySlot
+                        {
+                            ItemId = marketItem.ItemId,
+                            Type = marketItem.Type,
+                            Quantity = 1,
+                            SoulId = datas.Id,
+                            LootedAt = DateTime.Now
+                        });
+                        DataRepositories.SoulRepository.Update(datas);
+                    }
+                    break;
+                case DataModels.Items.ItemType.Consumable:
+                    {
+                        var exists = datas.Inventory.FirstOrDefault(i => i.ItemId.Equals(marketItem.ItemId));
+                        if (exists != null)
+                        {
+                            datas.Inventory.Remove(exists);
+                            ++exists.Quantity;
+                            datas.Inventory.Add(exists);
+                            DataRepositories.SoulRepository.Update(datas);
+                        }
+                        else
+                        {
+                            datas.Inventory.Add(new DataModels.InventorySlot
+                            {
+                                ItemId = marketItem.ItemId,
+                                Type = marketItem.Type,
+                                Quantity = 1,
+                                SoulId = datas.Id,
+                                LootedAt = DateTime.Now
+                            });
+                            DataRepositories.SoulRepository.Update(datas);
+                        }
+                    }
+                    break;
+            }
 
             if (marketItem.Quantity > 0)
             {

@@ -165,6 +165,7 @@ namespace DataRepositories.Migrations
                         Type = c.Int(nullable: false),
                         ItemId = c.Guid(nullable: false),
                         Quantity = c.Int(nullable: false),
+                        LootedAt = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Souls", t => t.SoulId, cascadeDelete: true)

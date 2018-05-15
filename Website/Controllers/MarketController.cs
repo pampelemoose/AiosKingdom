@@ -28,6 +28,16 @@ namespace Website.Controllers
                 slot.Items.Add(armor);
             }
 
+            foreach (var bag in DataRepositories.BagRepository.GetAll())
+            {
+                slot.Items.Add(bag);
+            }
+
+            foreach (var consumable in DataRepositories.ConsumableRepository.GetAll())
+            {
+                slot.Items.Add(consumable);
+            }
+
             return View(slot);
         }
 
@@ -50,7 +60,7 @@ namespace Website.Controllers
                 if (DataRepositories.MarketRepository.Create(new DataModels.MarketSlot {
                     Id = Guid.NewGuid(),
                     ServerId = slot.SelectedServer,
-                    Type = DataModels.Items.ItemType.Armor,
+                    Type = slot.Type,
                     ItemId = slot.SelectedItem,
                     Quantity = slot.Quantity,
                     ShardPrice = slot.ShardPrice,

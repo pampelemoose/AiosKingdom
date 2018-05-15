@@ -51,17 +51,17 @@ namespace AiosKingdom.ViewModels
                 NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
             }, () => { return _armorSlotIsSelected && _selectedArmor.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
 
-        private List<DataModels.InventorySlot> _consumables;
-        public List<DataModels.InventorySlot> Consumables => _consumables;
+        private List<Models.InventoryItemModel<DataModels.Items.Consumable>> _consumables;
+        public List<Models.InventoryItemModel<DataModels.Items.Consumable>> Consumables => _consumables;
 
-        private DataModels.InventorySlot _selectedConsumableSlot;
-        public DataModels.InventorySlot SelectedConsumableSlot
+        private Models.InventoryItemModel<DataModels.Items.Consumable> _selectedConsumable;
+        public Models.InventoryItemModel<DataModels.Items.Consumable> SelectedConsumable
         {
-            get { return _selectedConsumableSlot; }
+            get { return _selectedConsumable; }
             set
             {
-                _selectedConsumableSlot = value;
-                _consumableSlotIsSelected = _selectedConsumableSlot != null;
+                _selectedConsumable = value;
+                _consumableSlotIsSelected = _selectedConsumable != null;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(ConsumableSlotIsSelected));
             }
@@ -76,16 +76,17 @@ namespace AiosKingdom.ViewModels
             _selectedArmor = null;
             _armorSlotIsSelected = false;
 
-            _consumables = new List<DataModels.InventorySlot>();
-            SelectedConsumableSlot = null;
+            _consumables = new List<Models.InventoryItemModel<DataModels.Items.Consumable>>();
+            SelectedConsumable = null;
 
-            foreach (var slot in DatasManager.Instance.Soul.Inventory)
+            foreach (var slot in DatasManager.Instance.Soul.Inventory.OrderBy(i => i.LootedAt).ToList())
             {
                 switch (slot.Type)
                 {
                     case DataModels.Items.ItemType.Armor:
                         {
-                            _armors.Add(new Models.InventoryItemModel<DataModels.Items.Armor> {
+                            _armors.Add(new Models.InventoryItemModel<DataModels.Items.Armor>
+                            {
                                 Slot = slot,
                                 Item = DatasManager.Instance.Armors.FirstOrDefault(a => a.ItemId.Equals(slot.ItemId))
                             });
@@ -93,7 +94,11 @@ namespace AiosKingdom.ViewModels
                         break;
                     case DataModels.Items.ItemType.Consumable:
                         {
-                            _consumables.Add(slot);
+                            _consumables.Add(new Models.InventoryItemModel<DataModels.Items.Consumable>
+                            {
+                                Slot = slot,
+                                Item = DatasManager.Instance.Consumables.FirstOrDefault(a => a.ItemId.Equals(slot.ItemId))
+                            });
                         }
                         break;
                 }

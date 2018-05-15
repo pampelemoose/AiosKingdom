@@ -94,6 +94,8 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Client_EquipItem, 1);
 
             _commandArgCount.Add(Network.CommandCodes.ArmorList, 0);
+            _commandArgCount.Add(Network.CommandCodes.ConsumableList, 0);
+            _commandArgCount.Add(Network.CommandCodes.BagList, 0);
 
             _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
@@ -110,6 +112,8 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Client_EquipItem, (args) => { return new Commands.ClientEquipItemCommand(args, _config); });
 
             _delegates.Add(Network.CommandCodes.ArmorList, (args) => { return new Commands.ArmorListCommand(args); });
+            _delegates.Add(Network.CommandCodes.ConsumableList, (args) => { return new Commands.ConsumableListCommand(args); });
+            _delegates.Add(Network.CommandCodes.BagList, (args) => { return new Commands.BagListCommand(args); });
         }
 
         private void Run()
@@ -483,6 +487,10 @@ namespace Server.GameServer
                     break;
 
                 case Network.CommandCodes.ArmorList:
+                    break;
+                case Network.CommandCodes.ConsumableList:
+                    break;
+                case Network.CommandCodes.BagList:
                     break;
                 default:
                     retVal.IsValid = false;

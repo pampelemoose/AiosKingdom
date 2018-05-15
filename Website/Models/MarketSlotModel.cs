@@ -12,6 +12,9 @@ namespace Website.Models
         [Display(Name = "Server")]
         public List<DataModels.GameServer> Servers { get; set; }
 
+        [Display(Name = "Type")]
+        public DataModels.Items.ItemType Type { get; set; }
+
         public Guid SelectedItem { get; set; }
         [Display(Name = "Item")]
         public List<DataModels.Items.AItem> Items { get; set; }

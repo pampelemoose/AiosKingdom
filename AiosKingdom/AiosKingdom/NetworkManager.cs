@@ -440,6 +440,8 @@ namespace AiosKingdom
                         {
                             MessagingCenter.Send(this, MessengerCodes.SoulConnected);
                             AskArmorList();
+                            AskConsumableList();
+                            AskBagList();
                         }
                         else
                         {
@@ -495,6 +497,18 @@ namespace AiosKingdom
                         DatasManager.Instance.Armors = armors;
                     }
                     break;
+                case Network.CommandCodes.ConsumableList:
+                    {
+                        var consumable = JsonConvert.DeserializeObject<List<DataModels.Items.Consumable>>(message.Json);
+                        DatasManager.Instance.Consumables = consumable;
+                    }
+                    break;
+                case Network.CommandCodes.BagList:
+                    {
+                        var bags = JsonConvert.DeserializeObject<List<DataModels.Items.Bag>>(message.Json);
+                        DatasManager.Instance.Bags = bags;
+                    }
+                    break;
 
                 default:
                     return false;
@@ -511,6 +525,30 @@ namespace AiosKingdom
             var retMess = new Network.Message
             {
                 Code = Network.CommandCodes.ArmorList,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void AskConsumableList()
+        {
+            var args = new string[0];
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.ConsumableList,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void AskBagList()
+        {
+            var args = new string[0];
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.BagList,
                 Json = JsonConvert.SerializeObject(args),
                 Token = _gameAuthToken
             };

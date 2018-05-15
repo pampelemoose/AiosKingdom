@@ -28,6 +28,8 @@ namespace AiosKingdom
         public Network.SoulDatas Datas { get; set; }
 
         public List<DataModels.Items.Armor> Armors { get; set; }
+        public List<DataModels.Items.Consumable> Consumables { get; set; }
+        public List<DataModels.Items.Bag> Bags { get; set; }
 
         public List<DataModels.MarketSlot> MarketItems { get; set; }
     }

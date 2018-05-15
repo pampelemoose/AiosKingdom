@@ -156,7 +156,7 @@
 
                 <Grid
                     Grid.Column="0"
-                    BackgroundColor="{Binding SelectedConsumableSlot.Consumable.Quality, Converter={StaticResource itemQualityToColor}}"
+                    BackgroundColor="{Binding SelectedConsumable.Item.Quality, Converter={StaticResource itemQualityToColor}}"
                     IsVisible="{Binding ConsumableSlotIsSelected}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="100" />
@@ -172,7 +172,7 @@
 
                         <Image
                             Grid.Column="0"
-                            Source="{Binding SelectedConsumableSlot.Consumable, Converter={StaticResource objectToImage}}" />
+                            Source="{Binding SelectedConsumable.Item, Converter={StaticResource objectToImage}}" />
                         <Grid
                             Grid.Column="1">
                             <Grid.RowDefinitions>
@@ -188,7 +188,7 @@
                                     BackgroundColor="Gray"
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedConsumableSlot.Consumable.UseLevelRequired}"/>
+                                    Text="{Binding SelectedConsumable.Item.UseLevelRequired}"/>
                             </ContentView>
                             <ContentView
                                 Grid.Row="1"
@@ -198,7 +198,7 @@
                                     BackgroundColor="Gray"
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedConsumableSlot.Consumable.ItemLevel}"/>
+                                    Text="{Binding SelectedConsumable.Item.ItemLevel}"/>
                             </ContentView>
                         </Grid>
                     </Grid>
@@ -207,8 +207,8 @@
                         Grid.Row="1"
                         BackgroundColor="Transparent"
                         IsEnabled="false"
-                        ItemsSource="{Binding SelectedConsumableSlot.Effects}"
-                        HeightRequest="{Binding SelectedConsumableSlot.Effects, Converter={StaticResource listToHeight}, ConverterParameter=20}"
+                        ItemsSource="{Binding SelectedConsumable.Item.Effects}"
+                        HeightRequest="{Binding SelectedConsumable.Item.Effects, Converter={StaticResource listToHeight}, ConverterParameter=20}"
                         RowHeight="20"
                         SeparatorVisibility="None">
                         <ListView.ItemTemplate>
@@ -237,7 +237,7 @@
                     Grid.Column="1"
                     BackgroundColor="Transparent"
                     ItemsSource="{Binding Consumables}"
-                    SelectedItem="{Binding SelectedConsumableSlot}"
+                    SelectedItem="{Binding SelectedConsumable}"
                     RowHeight="50"
                     SeparatorVisibility="None">
                     <ListView.ItemTemplate>
@@ -247,7 +247,7 @@
                                     Margin="0, 5, 0, 0"
                                     ColumnSpacing="0">
                                     <ContentView
-                                        BackgroundColor="{Binding Consumable.Quality, Converter={StaticResource itemQualityToColor}}"
+                                        BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
                                         Padding="5, 0, 0, 0">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -261,14 +261,14 @@
                                                 FontAttributes="Bold"
                                                 FontSize="25"
                                                 VerticalTextAlignment="Center"
-                                                Text="{Binding Consumable.Name}"/>
+                                                Text="{Binding Item.Name}"/>
                                             <Label
                                                 Grid.Column="1"
                                                 TextColor="Black"
                                                 FontAttributes="Bold"
                                                 FontSize="10"
                                                 VerticalTextAlignment="End"
-                                                Text="{Binding Quantity}"/>
+                                                Text="{Binding Slot.Quantity}"/>
                                         </Grid>
                                     </ContentView>
                                 </Grid>

@@ -17,8 +17,6 @@ namespace DataModels.Items
         public Guid Id { get; set; }
 
         public Guid ConsumableId { get; set; }
-        [ForeignKey("ConsumableId")]
-        public Consumable Consumable { get; set; }
 
         [Display(Name = "Name")]
         [Required, MaxLength(50)]
