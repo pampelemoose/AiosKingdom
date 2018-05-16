@@ -490,6 +490,16 @@ namespace AiosKingdom
                         }
                     }
                     break;
+                case Network.CommandCodes.Client_UseSpiritPills:
+                    {
+                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
+                        if (result.Success)
+                        {
+                            AskSoulDatas();
+                            AskSoulCurrentDatas();
+                        }
+                    }
+                    break;
 
                 case Network.CommandCodes.ArmorList:
                     {
@@ -637,6 +647,20 @@ namespace AiosKingdom
             var retMess = new Network.Message
             {
                 Code = Network.CommandCodes.Client_EquipItem,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void UseSpiritPills(DataModels.Soul.Stats statType, int quantity)
+        {
+            var args = new string[2];
+            args[0] = statType.ToString();
+            args[1] = quantity.ToString();
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_UseSpiritPills,
                 Json = JsonConvert.SerializeObject(args),
                 Token = _gameAuthToken
             };

@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+             x:Class="AiosKingdom.Views.SpiritPillsPage"
+             Title="{Binding Title}">
+    <ContentPage.BindingContext>
+        <vm:SpiritPillsPageViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid
+                Grid.Column="0"
+                BackgroundColor="{Binding StatType, Converter={StaticResource statToColor}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="200" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Label
+                    Grid.Row="1"
+                    BackgroundColor="Transparent"
+                    TextColor="Black"
+                    VerticalTextAlignment="Center"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding StatType}" />
+
+                <ContentView
+                    Grid.Row="2"
+                    Padding="5"
+                    BackgroundColor="Silver">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button
+                            Grid.Column="0"
+                            Text="-"
+                            Command="{Binding DecreasePillAmountAction}" />
+                        <Label
+                            Grid.Column="1"
+                            BackgroundColor="Black"
+                            TextColor="Silver"
+                            Text="{Binding PillsAmount}" />
+                        <Label
+                            Grid.Column="2"
+                            BackgroundColor="Black"
+                            TextColor="Silver"
+                            Text="{Binding Spirits}" />
+                        <Button
+                            Grid.Column="3"
+                            Text="+"
+                            Command="{Binding IncreasePillAmountAction}" />
+                    </Grid>
+                </ContentView>
+
+                <Button
+                    Grid.Row="3"
+                    Text="Use"
+                    Command="{Binding UsePillAction}" />
+            </Grid>
+
+            <Grid
+                Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid
+                    Grid.Row="0"
+                    BackgroundColor="Black"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        BackgroundColor="{StaticResource StatColor_Stamina}"
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Stamina"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding StaminaPillsAction}" />
+                </Grid>
+
+                <Grid
+                    Grid.Row="1"
+                    BackgroundColor="Black"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        BackgroundColor="{StaticResource StatColor_Energy}"
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Energy"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding EnergyPillsAction}" />
+                </Grid>
+
+                <Grid
+                    Grid.Row="2"
+                    BackgroundColor="Black"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource StatColor_Strength}"
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Strength"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding StrengthPillsAction}" />
+                </Grid>
+
+                <Grid
+                    Grid.Row="3"
+                    BackgroundColor="Black"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource StatColor_Agility}"
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Agility"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding AgilityPillsAction}" />
+                </Grid>
+
+                <Grid
+                    Grid.Row="4"
+                    BackgroundColor="Black"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource StatColor_Intelligence}"
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Intelligence"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding IntelligencePillsAction}" />
+                </Grid>
+
+                <Grid
+                    Grid.Row="5"
+                    BackgroundColor="Black"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource StatColor_Wisdom}"
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Wisdom"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding WisdomPillsAction}" />
+                </Grid>
+
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

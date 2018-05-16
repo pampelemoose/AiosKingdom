@@ -73,6 +73,11 @@ namespace AiosKingdom.ViewModels
             });
             _menus.Add(new MasterPageItem
             {
+                TargetType = typeof(Views.SpiritPillsPage),
+                Title = "Spirit Pills"
+            });
+            _menus.Add(new MasterPageItem
+            {
                 TargetType = typeof(Views.MarketPage),
                 Title = "Market"
             });

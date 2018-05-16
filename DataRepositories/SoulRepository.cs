@@ -113,6 +113,14 @@ namespace DataRepositories
                     context.Inventories.Remove(toDel);
                 }
 
+                // STATS
+                online.Stamina = soul.Stamina;
+                online.Energy = soul.Energy;
+                online.Strength = soul.Strength;
+                online.Agility = soul.Agility;
+                online.Intelligence = soul.Intelligence;
+                online.Wisdom = soul.Wisdom;
+
                 // MONEY VALUES
                 online.Spirits = soul.Spirits;
                 online.Embers = soul.Embers;

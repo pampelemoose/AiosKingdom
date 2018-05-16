@@ -92,6 +92,7 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Client_MarketList, 0);
             _commandArgCount.Add(Network.CommandCodes.Client_BuyMarketItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Client_EquipItem, 1);
+            _commandArgCount.Add(Network.CommandCodes.Client_UseSpiritPills, 2);
 
             _commandArgCount.Add(Network.CommandCodes.ArmorList, 0);
             _commandArgCount.Add(Network.CommandCodes.ConsumableList, 0);
@@ -110,6 +111,7 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Client_MarketList, (args) => { return new Commands.ClientMarketListCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_BuyMarketItem, (args) => { return new Commands.ClientBuyMarketItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_EquipItem, (args) => { return new Commands.ClientEquipItemCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Client_UseSpiritPills, (args) => { return new Commands.ClientUseSpiritPillsCommand(args, _config); });
 
             _delegates.Add(Network.CommandCodes.ArmorList, (args) => { return new Commands.ArmorListCommand(args); });
             _delegates.Add(Network.CommandCodes.ConsumableList, (args) => { return new Commands.ConsumableListCommand(args); });
@@ -484,6 +486,9 @@ namespace Server.GameServer
                     break;
                 case Network.CommandCodes.Client_EquipItem:
                     retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Client_UseSpiritPills:
+                    retVal.Args = new string[2] { args[0], args[1] };
                     break;
 
                 case Network.CommandCodes.ArmorList:
