@@ -46,39 +46,6 @@ namespace Website.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool haveErrors = false;
-                if (string.IsNullOrEmpty(armorModel.Name))
-                {
-                    ModelState.AddModelError("Name", "Must specify a name.");
-                    haveErrors = true;
-                }
-
-                if (string.IsNullOrEmpty(armorModel.Description))
-                {
-                    ModelState.AddModelError("Description", "Must specify a description");
-                    haveErrors = true;
-                }
-
-                if (armorModel.ItemLevel < 1)
-                {
-                    ModelState.AddModelError("ItemLevel", "Must be > 0");
-                    haveErrors = true;
-                }
-
-                if (armorModel.UseLevelRequired < 1)
-                {
-                    ModelState.AddModelError("UseLevelRequired", "Must be > 0");
-                    haveErrors = true;
-                }
-
-                if (armorModel.ArmorValue < 1)
-                {
-                    ModelState.AddModelError("ArmorValue", "Must be > 0");
-                    haveErrors = true;
-                }
-
-                if (haveErrors) return View(armorModel);
-
                 armorModel.Stats.RemoveAll(s => s.StatValue == 0);
 
                 if (DataRepositories.ArmorRepository.Create(new DataModels.Items.Armor
@@ -101,6 +68,7 @@ namespace Website.Controllers
                 }
             }
 
+            armorModel.VersionList = DataRepositories.VersionRepository.GetAll();
             return View(armorModel);
         }
     }

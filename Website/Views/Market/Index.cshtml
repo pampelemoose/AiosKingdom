@@ -1,7 +1,75 @@
-﻿
+﻿@model Website.Models.MarketSlotFilter
+
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Market Items</h2>
 
+<div class="row">
+    <div class="card col-12">
+        <div class="card-header" data-toggle="collapse" href="#filter-body" aria-expanded="false" aria-controls="filter-body">
+            Filters
+        </div>
+        <div class="card-body collapse" id="filter-body">
+            @using (Html.BeginForm())
+            {
+                <div class="form-row">
+                    <hr />
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.Servers, htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            @Html.DropDownListFor(model => model.SelectedServer, new SelectList(Model.Servers, "Id", "Name"), new {  @class = "form-control" })
+                
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-6">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Filter" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var slot in Model.Slots)
+    {
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <div class="card text-center mt-3">
+                <div class="card-header">
+                    @slot.ItemId
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-8">Quantity</div>
+                            <div class="col-4">@slot.Quantity</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-8">Shard Price</div>
+                            <div class="col-4">@slot.ShardPrice</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-8">Bit Price</div>
+                            <div class="col-4">@slot.BitPrice</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    }
+</div>

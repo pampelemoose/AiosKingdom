@@ -45,39 +45,6 @@ namespace Website.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool haveErrors = false;
-                if (string.IsNullOrEmpty(bag.Name))
-                {
-                    ModelState.AddModelError("Name", "Must specify a name.");
-                    haveErrors = true;
-                }
-
-                if (string.IsNullOrEmpty(bag.Description))
-                {
-                    ModelState.AddModelError("Description", "Must specify a description");
-                    haveErrors = true;
-                }
-
-                if (bag.ItemLevel < 1)
-                {
-                    ModelState.AddModelError("ItemLevel", "Must be > 0");
-                    haveErrors = true;
-                }
-
-                if (bag.UseLevelRequired < 1)
-                {
-                    ModelState.AddModelError("UseLevelRequired", "Must be > 0");
-                    haveErrors = true;
-                }
-
-                if (bag.SlotCount < 1)
-                {
-                    ModelState.AddModelError("SlotCount", "Must be > 0");
-                    haveErrors = true;
-                }
-
-                if (haveErrors) return View(bag);
-
                 bag.Stats.RemoveAll(s => s.StatValue == 0);
 
                 if (DataRepositories.BagRepository.Create(new DataModels.Items.Bag
@@ -99,6 +66,7 @@ namespace Website.Controllers
                 }
             }
 
+            bag.VersionList = DataRepositories.VersionRepository.GetAll();
             return View(bag);
         }
     }

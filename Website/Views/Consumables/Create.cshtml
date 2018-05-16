@@ -82,7 +82,6 @@
                             @Html.Label(Model.Effects[i].Type.ToString(), htmlAttributes: new { @class = "control-label" })
                         </div>
                         <div class="card-body collapse" id="effect_@Model.Effects[i].Type.ToString().ToLower()">
-
                             <div class="form-group">
                                 @Html.LabelFor(model => model.Effects[i].Name, htmlAttributes: new { @class = "control-label" })
                                 <div>

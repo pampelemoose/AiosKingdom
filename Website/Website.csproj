@@ -159,6 +159,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArmorsController.cs" />
     <Compile Include="Controllers\BagsController.cs" />
+    <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\ConsumablesController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\GameServersController.cs" />
@@ -175,10 +176,13 @@
     <Compile Include="Models\ArmorModel.cs" />
     <Compile Include="Models\BagFilter.cs" />
     <Compile Include="Models\BagModel.cs" />
+    <Compile Include="Models\BookFilter.cs" />
+    <Compile Include="Models\BookModel.cs" />
     <Compile Include="Models\ConsumableFilter.cs" />
     <Compile Include="Models\ConsumableModel.cs" />
     <Compile Include="Models\MarketSlotFilter.cs" />
     <Compile Include="Models\MarketSlotModel.cs" />
+    <Compile Include="Models\PageModel.cs" />
     <Compile Include="Models\UserFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -278,6 +282,8 @@
     <Content Include="Views\GameServers\Create.cshtml" />
     <Content Include="Views\Market\Index.cshtml" />
     <Content Include="Views\Market\Create.cshtml" />
+    <Content Include="Views\Books\Index.cshtml" />
+    <Content Include="Views\Books\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

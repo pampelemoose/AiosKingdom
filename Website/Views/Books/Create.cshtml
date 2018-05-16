@@ -1,0 +1,162 @@
+﻿@model Website.Models.BookModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.VersionList, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Quality, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.PageCount, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.PageCount, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PageCount, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @if (Model != null && Model.Pages != null)
+    {
+        for (var i = 0; i < Model.Pages.Count; i++)
+        {
+            <hr />
+            <div class="form-group">
+                @Html.LabelFor(model => Model.Pages[i].Description, htmlAttributes: new { @class = "control-label col-md-2 offset-md-2" })
+                <div class="col-md-8 offset-md-2">
+                    @Html.EditorFor(model => Model.Pages[i].Description, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.Pages[i].Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => Model.Pages[i].Image, htmlAttributes: new { @class = "control-label col-md-2 offset-md-2" })
+                <div class="col-md-8 offset-md-2">
+                    @Html.EditorFor(model => Model.Pages[i].Image, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.Pages[i].Image, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => Model.Pages[i].StatCost, htmlAttributes: new { @class = "control-label col-md-2 offset-md-2" })
+                <div class="col-md-8 offset-md-2">
+                    @Html.EditorFor(model => Model.Pages[i].StatCost, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.Pages[i].StatCost, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => Model.Pages[i].Rank, htmlAttributes: new { @class = "control-label col-md-2 offset-md-2" })
+                <div class="col-md-8 offset-md-2">
+                    @Html.EditorFor(model => Model.Pages[i].Rank, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.Pages[i].Rank, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => Model.Pages[i].ManaCost, htmlAttributes: new { @class = "control-label col-md-2 offset-md-2" })
+                <div class="col-md-8 offset-md-2">
+                    @Html.EditorFor(model => Model.Pages[i].ManaCost, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.Pages[i].ManaCost, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => Model.Pages[i].InscriptionCount, htmlAttributes: new { @class = "control-label col-md-2 offset-md-2" })
+                <div class="col-md-8 offset-md-2">
+                    @Html.EditorFor(model => Model.Pages[i].InscriptionCount, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.Pages[i].InscriptionCount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            if (Model.Pages[i] != null && Model.Pages[i].Inscriptions != null)
+            {
+                for (var j = 0; j < Model.Pages[i].Inscriptions.Count; j++)
+                {
+                    <hr />
+                    <div class="form-group">
+                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Description, htmlAttributes: new { @class = "control-label col-md-2 offset-md-4" })
+                        <div class="col-md-6 offset-md-4">
+                            @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].Description, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Type, htmlAttributes: new { @class = "control-label col-md-2 offset-md-4" })
+                        <div class="col-md-6 offset-md-4">
+                            @Html.EnumDropDownListFor(model => Model.Pages[i].Inscriptions[j].Type, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Type, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].BaseValue, htmlAttributes: new { @class = "control-label col-md-2 offset-md-4" })
+                        <div class="col-md-6 offset-md-4">
+                            @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].BaseValue, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].BaseValue, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].StatType, htmlAttributes: new { @class = "control-label col-md-2 offset-md-4" })
+                        <div class="col-md-6 offset-md-4">
+                            @Html.EnumDropDownListFor(model => Model.Pages[i].Inscriptions[j].StatType, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].StatType, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Ratio, htmlAttributes: new { @class = "control-label col-md-2 offset-md-4" })
+                        <div class="col-md-6 offset-md-4">
+                            @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].Ratio, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Ratio, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Duration, htmlAttributes: new { @class = "control-label col-md-2 offset-md-4" })
+                        <div class="col-md-6 offset-md-4">
+                            @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].Duration, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Duration, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                }
+            }
+        }
+    }
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger">
+            <strong>Error!</strong> @ViewBag.Message
+        </div>
+    }
+}
+
+<script>
+
+</script>

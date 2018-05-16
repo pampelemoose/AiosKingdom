@@ -18,17 +18,19 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     @*<li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ menu.name }}</a>
-            <div class="dropdown-menu {% if sub.link == controller_link %}active{% endif %}" aria-labelledby="navbarDropdown">
-                {% for sub in menu.subMenu %}
-                <a class="dropdown-item" href="{{ path(sub.link) }}">{{ sub.name }}</a>
-                {% endfor %}
-            </div>
-        </li>*@
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ menu.name }}</a>
+                            <div class="dropdown-menu {% if sub.link == controller_link %}active{% endif %}" aria-labelledby="navbarDropdown">
+                                {% for sub in menu.subMenu %}
+                                <a class="dropdown-item" href="{{ path(sub.link) }}">{{ sub.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </li>*@
                     <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
                     <li class="nav-item">@Html.ActionLink("Armors", "Index", "Armors", null, new { @class = "nav-link" })</li>
                     <li class="nav-item">@Html.ActionLink("Consumables", "Index", "Consumables", null, new { @class = "nav-link" })</li>
                     <li class="nav-item">@Html.ActionLink("Bags", "Index", "Bags", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Market", "Index", "Market", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Books", "Index", "Books", null, new { @class = "nav-link" })</li>
                 </ul>
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
@@ -48,16 +50,12 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
+    <main role="main" class="container mt-5">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+    </main>
     @if (User.IsInRole("SuperAdmin"))
     {
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom admin-bar">
             <div class="container">
                 <a class="navbar-brand" href="#">Admin</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -109,12 +107,24 @@
                                 @Html.ActionLink("Create", "Create", "Market", null, new { @class = "dropdown-item" })
                             </div>
                         </li>
+
+                        <li class="nav-item dropup">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                               role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Books</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Create", "Create", "Books", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     }
-
+    <footer class="footer">
+        <div class="container">
+            <span>&copy; @DateTime.Now.Year - My ASP.NET Application</span>
+        </div>
+    </footer>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/popper")
     @Scripts.Render("~/bundles/bootstrap")

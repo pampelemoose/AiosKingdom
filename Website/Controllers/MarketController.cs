@@ -10,9 +10,14 @@ namespace Website.Controllers
     public class MarketController : Controller
     {
         // GET: Market
-        public ActionResult Index()
+        public ActionResult Index(Models.MarketSlotFilter filter)
         {
-            return View();
+            var slots = DataRepositories.MarketRepository.GetAll();
+
+            filter.Servers = DataRepositories.GameServerRepository.GetAll();
+            filter.Slots = filter.FilterList(slots); 
+
+            return View(filter);
         }
 
         [CustomAuthorize(Roles = "SuperAdmin")]
@@ -48,15 +53,6 @@ namespace Website.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool haveErrors = false;
-                if (slot.BitPrice < 1)
-                {
-                    ModelState.AddModelError("BitPrice", "Must be > 0");
-                    haveErrors = true;
-                }
-
-                if (haveErrors) return View(slot);
-
                 if (DataRepositories.MarketRepository.Create(new DataModels.MarketSlot {
                     Id = Guid.NewGuid(),
                     ServerId = slot.SelectedServer,
@@ -71,6 +67,7 @@ namespace Website.Controllers
                 }
             }
 
+            slot.Servers = DataRepositories.GameServerRepository.GetAll();
             return View(slot);
         }
     }

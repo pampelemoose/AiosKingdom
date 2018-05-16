@@ -46,33 +46,6 @@ namespace Website.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool haveErrors = false;
-                if (string.IsNullOrEmpty(consumable.Name))
-                {
-                    ModelState.AddModelError("Name", "Must specify a name.");
-                    haveErrors = true;
-                }
-
-                if (string.IsNullOrEmpty(consumable.Description))
-                {
-                    ModelState.AddModelError("Description", "Must specify a description");
-                    haveErrors = true;
-                }
-
-                if (consumable.ItemLevel < 1)
-                {
-                    ModelState.AddModelError("ItemLevel", "Must be > 0");
-                    haveErrors = true;
-                }
-
-                if (consumable.UseLevelRequired < 1)
-                {
-                    ModelState.AddModelError("UseLevelRequired", "Must be > 0");
-                    haveErrors = true;
-                }
-
-                if (haveErrors) return View(consumable);
-
                 consumable.Effects.RemoveAll(s => string.IsNullOrEmpty(s.Name));
                 consumable.Effects.RemoveAll(s => string.IsNullOrEmpty(s.Description));
                 consumable.Effects.RemoveAll(s => s.AffectValue <= 0);
@@ -96,6 +69,7 @@ namespace Website.Controllers
                 }
             }
 
+            consumable.VersionList = DataRepositories.VersionRepository.GetAll();
             return View(consumable);
         }
     }
