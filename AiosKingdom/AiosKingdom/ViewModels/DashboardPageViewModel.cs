@@ -19,6 +19,13 @@ namespace AiosKingdom.ViewModels
                 NotifyPropertyChanged(nameof(Soul));
 
                 NotifyPropertyChanged(nameof(Head));
+                NotifyPropertyChanged(nameof(Shoulder));
+                NotifyPropertyChanged(nameof(Torso));
+                NotifyPropertyChanged(nameof(Belt));
+                NotifyPropertyChanged(nameof(Hand));
+                NotifyPropertyChanged(nameof(Leg));
+                NotifyPropertyChanged(nameof(Pants));
+                NotifyPropertyChanged(nameof(Feet));
             });
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulDatasUpdated, (sender) =>
@@ -65,7 +72,10 @@ namespace AiosKingdom.ViewModels
 
                 if (armor == null) return;
 
-                ShowArmorDetails = !ShowArmorDetails;
+                if (_selectedItem == null || (_selectedItem != null && _selectedItem == armor))
+                {
+                    ShowArmorDetails = !ShowArmorDetails;
+                }
 
                 if (ShowArmorDetails)
                 {

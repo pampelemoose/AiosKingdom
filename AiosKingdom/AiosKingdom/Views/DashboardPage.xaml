@@ -37,26 +37,29 @@
 
                 <Grid 
                     Grid.Row="1">
-                    <Image Source="{Binding Soul.Equipment.Shoulder, Converter={StaticResource objectToImage}}"/>
+                    <Image Source="{Binding Shoulder, Converter={StaticResource objectToImage}}"/>
                     <Button
                         BackgroundColor="Transparent"
-                        Command="{Binding ShoulderAction}" />
+                        Command="{Binding ShowArmorAction}"
+                        CommandParameter="{Binding Shoulder}"/>
                 </Grid>
 
                 <Grid 
                     Grid.Row="2">
-                    <Image Source="{Binding Soul.Equipment.Torso, Converter={StaticResource objectToImage}}"/>
+                    <Image Source="{Binding Torso, Converter={StaticResource objectToImage}}"/>
                     <Button
                         BackgroundColor="Transparent"
-                        Command="{Binding TorsoAction}" />
+                        Command="{Binding ShowArmorAction}"
+                        CommandParameter="{Binding Torso}"/>
                 </Grid>
 
                 <Grid 
                     Grid.Row="3">
-                    <Image Source="{Binding Soul.Equipment.Hand, Converter={StaticResource objectToImage}}"/>
+                    <Image Source="{Binding Hand, Converter={StaticResource objectToImage}}"/>
                     <Button
                         BackgroundColor="Transparent"
-                        Command="{Binding HandAction}" />
+                        Command="{Binding ShowArmorAction}"
+                        CommandParameter="{Binding Hand}"/>
                 </Grid>
             </Grid>
 
@@ -71,34 +74,38 @@
 
                 <Grid 
                     Grid.Row="0">
-                    <Image Source="{Binding Soul.Equipment.Belt, Converter={StaticResource objectToImage}}"/>
+                    <Image Source="{Binding Belt, Converter={StaticResource objectToImage}}"/>
                     <Button
                         BackgroundColor="Transparent"
-                        Command="{Binding BeltAction}" />
+                        Command="{Binding ShowArmorAction}"
+                        CommandParameter="{Binding Belt}"/>
                 </Grid>
 
                 <Grid 
                     Grid.Row="1">
-                    <Image Source="{Binding Soul.Equipment.Leg, Converter={StaticResource objectToImage}}"/>
+                    <Image Source="{Binding Leg, Converter={StaticResource objectToImage}}"/>
                     <Button
                         BackgroundColor="Transparent"
-                        Command="{Binding LegAction}" />
+                        Command="{Binding ShowArmorAction}"
+                        CommandParameter="{Binding Leg}"/>
                 </Grid>
 
                 <Grid 
                     Grid.Row="2">
-                    <Image Source="{Binding Soul.Equipment.Pants, Converter={StaticResource objectToImage}}"/>
+                    <Image Source="{Binding Pants, Converter={StaticResource objectToImage}}"/>
                     <Button
                         BackgroundColor="Transparent"
-                        Command="{Binding PantsAction}" />
+                        Command="{Binding ShowArmorAction}"
+                        CommandParameter="{Binding Pants}"/>
                 </Grid>
 
                 <Grid 
                     Grid.Row="3">
-                    <Image Source="{Binding Soul.Equipment.Feet, Converter={StaticResource objectToImage}}"/>
+                    <Image Source="{Binding Feet, Converter={StaticResource objectToImage}}"/>
                     <Button
                         BackgroundColor="Transparent"
-                        Command="{Binding FeetAction}" />
+                        Command="{Binding ShowArmorAction}"
+                        CommandParameter="{Binding Feet}"/>
                 </Grid>
             </Grid>
 

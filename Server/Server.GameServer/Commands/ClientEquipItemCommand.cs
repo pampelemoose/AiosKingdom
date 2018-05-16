@@ -49,118 +49,111 @@ namespace Server.GameServer.Commands
                                         }
                                     }
                                     break;
-                                /*case DataModels.Items.ArmorPart.Shoulder:
+                                case DataModels.Items.ArmorPart.Shoulder:
                                     {
-                                        if (Guid.Empty.Equals(equipment.Shoulder))
+                                        if (Guid.Empty.Equals(datas.Equipment.Shoulder))
                                         {
-                                            equipment.Shoulder = item.Armor.Id;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.DeleteById(itemSlot.Id);
+                                            datas.Equipment.Shoulder = item.ItemId;
                                         }
                                         else
                                         {
-                                            Guid toSwap = equipment.Shoulder;
-                                            equipment.Shoulder = item.Armor.Id;
+                                            Guid toSwap = datas.Equipment.Shoulder;
+                                            datas.Equipment.Shoulder = item.ItemId;
                                             itemSlot.ItemId = toSwap;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.Update(itemSlot);
+                                            datas.Inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
                                 case DataModels.Items.ArmorPart.Torso:
                                     {
-                                        if (Guid.Empty.Equals(equipment.Torso))
+                                        if (Guid.Empty.Equals(datas.Equipment.Torso))
                                         {
-                                            equipment.Torso = item.Armor.Id;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.DeleteById(itemSlot.Id);
+                                            datas.Equipment.Torso = item.ItemId;
                                         }
                                         else
                                         {
-                                            Guid toSwap = equipment.Torso;
-                                            equipment.Torso = item.Armor.Id;
+                                            Guid toSwap = datas.Equipment.Torso;
+                                            datas.Equipment.Torso = item.ItemId;
                                             itemSlot.ItemId = toSwap;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.Update(itemSlot);
+                                            datas.Inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
                                 case DataModels.Items.ArmorPart.Belt:
                                     {
-                                        if (Guid.Empty.Equals(equipment.Belt))
+                                        if (Guid.Empty.Equals(datas.Equipment.Belt))
                                         {
-                                            equipment.Belt = item.Armor.Id;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.DeleteById(itemSlot.Id);
+                                            datas.Equipment.Belt = item.ItemId;
                                         }
                                         else
                                         {
-                                            Guid toSwap = equipment.Belt;
-                                            equipment.Belt = item.Armor.Id;
+                                            Guid toSwap = datas.Equipment.Belt;
+                                            datas.Equipment.Belt = item.ItemId;
                                             itemSlot.ItemId = toSwap;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.Update(itemSlot);
+                                            datas.Inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
                                 case DataModels.Items.ArmorPart.Hand:
                                     {
-                                        if (Guid.Empty.Equals(equipment.Hand))
+                                        if (Guid.Empty.Equals(datas.Equipment.Hand))
                                         {
-                                            equipment.Hand = item.Armor.Id;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.DeleteById(itemSlot.Id);
+                                            datas.Equipment.Hand = item.ItemId;
                                         }
                                         else
                                         {
-                                            Guid toSwap = equipment.Hand;
-                                            equipment.Hand = item.Armor.Id;
+                                            Guid toSwap = datas.Equipment.Hand;
+                                            datas.Equipment.Hand = item.ItemId;
                                             itemSlot.ItemId = toSwap;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.Update(itemSlot);
+                                            datas.Inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
                                 case DataModels.Items.ArmorPart.Pants:
                                     {
-                                        if (Guid.Empty.Equals(equipment.Pants))
+                                        if (Guid.Empty.Equals(datas.Equipment.Pants))
                                         {
-                                            equipment.Pants = item.Armor.Id;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.DeleteById(itemSlot.Id);
+                                            datas.Equipment.Pants = item.ItemId;
                                         }
                                         else
                                         {
-                                            Guid toSwap = equipment.Pants;
-                                            equipment.Pants = item.Armor.Id;
+                                            Guid toSwap = datas.Equipment.Pants;
+                                            datas.Equipment.Pants = item.ItemId;
                                             itemSlot.ItemId = toSwap;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.Update(itemSlot);
+                                            datas.Inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
                                 case DataModels.Items.ArmorPart.Leg:
                                     {
-                                        if (Guid.Empty.Equals(equipment.Leg))
+                                        if (Guid.Empty.Equals(datas.Equipment.Leg))
                                         {
-                                            equipment.Leg = item.Armor.Id;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.DeleteById(itemSlot.Id);
+                                            datas.Equipment.Leg = item.ItemId;
                                         }
                                         else
                                         {
-                                            Guid toSwap = equipment.Leg;
-                                            equipment.Leg = item.Armor.Id;
+                                            Guid toSwap = datas.Equipment.Leg;
+                                            datas.Equipment.Leg = item.ItemId;
                                             itemSlot.ItemId = toSwap;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.Update(itemSlot);
+                                            datas.Inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
                                 case DataModels.Items.ArmorPart.Feet:
                                     {
-                                        if (Guid.Empty.Equals(equipment.Feet))
+                                        if (Guid.Empty.Equals(datas.Equipment.Feet))
                                         {
-                                            equipment.Feet = item.Armor.Id;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.DeleteById(itemSlot.Id);
+                                            datas.Equipment.Feet = item.ItemId;
                                         }
                                         else
                                         {
-                                            Guid toSwap = equipment.Feet;
-                                            equipment.Feet = item.Armor.Id;
+                                            Guid toSwap = datas.Equipment.Feet;
+                                            datas.Equipment.Feet = item.ItemId;
                                             itemSlot.ItemId = toSwap;
-                                            DataRepositories.RealPGRepository.Instance.Inventories.Update(itemSlot);
+                                            datas.Inventory.Add(itemSlot);
                                         }
                                     }
-                                    break;*/
+                                    break;
                             }
                         }
                         break;

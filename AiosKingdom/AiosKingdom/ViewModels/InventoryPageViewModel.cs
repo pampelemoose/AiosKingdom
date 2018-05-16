@@ -16,7 +16,10 @@ namespace AiosKingdom.ViewModels
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulUpdated, (sender) =>
             {
-                SetInventories();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    SetInventories();
+                });
             });
 
             SetInventories();
@@ -49,7 +52,7 @@ namespace AiosKingdom.ViewModels
             _armorSlotEquipAction ?? (_armorSlotEquipAction = new Command(() =>
             {
                 NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
-            }, () => { return _armorSlotIsSelected && _selectedArmor.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
+            }, () => { return _armorSlotIsSelected && _selectedArmor?.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
 
         private List<Models.InventoryItemModel<DataModels.Items.Bag>> _bags;
         public List<Models.InventoryItemModel<DataModels.Items.Bag>> Bags => _bags;
@@ -78,7 +81,7 @@ namespace AiosKingdom.ViewModels
             _bagSlotEquipAction ?? (_bagSlotEquipAction = new Command(() =>
             {
                 //NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
-            }, () => { return _bagSlotIsSelected && _selectedBag.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
+            }, () => { return _bagSlotIsSelected && _selectedBag?.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
 
         private List<Models.InventoryItemModel<DataModels.Items.Consumable>> _consumables;
         public List<Models.InventoryItemModel<DataModels.Items.Consumable>> Consumables => _consumables;

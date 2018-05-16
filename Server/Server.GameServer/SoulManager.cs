@@ -73,10 +73,11 @@ namespace Server.GameServer
             {
                 var datas = _soulDatas[token];
 
+                SetStats(datas, token);
+
                 datas.RequiredExperience = GetRequiredExperienceToLevelUp(token, config);
                 datas.MaxHealth = GetMaxHealth(token, config);
                 datas.MaxMana = GetMaxMana(token, config);
-                SetStats(datas, token);
 
                 _soulDatas[token] = datas;
             }
@@ -232,7 +233,7 @@ namespace Server.GameServer
             int health = config.BaseHealth;
 
             health += (int)((soul.Level - 1) * config.HealthPerLevelRatio);
-            health += (int)(soul.Stamina * config.HealthPerStaminaRatio);
+            health += (int)(datas.TotalStamina * config.HealthPerStaminaRatio);
             return health;
         }
 
@@ -243,7 +244,7 @@ namespace Server.GameServer
             int mana = config.BaseMana;
 
             mana += (int)((soul.Level - 1) * config.ManaPerLevelRatio);
-            mana += (int)(soul.Energy * config.ManaPerEnergyRatio);
+            mana += (int)(datas.TotalEnergy * config.ManaPerEnergyRatio);
             return mana;
         }
 
