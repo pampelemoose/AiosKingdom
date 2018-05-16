@@ -12,7 +12,7 @@ namespace AiosKingdom.ViewModels
         public MarketPageViewModel() 
             : base(null)
         {
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulUpdated, (sender) =>
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.MarketUpdated, (sender) =>
             {
                 SetItems();
             });
@@ -82,9 +82,12 @@ namespace AiosKingdom.ViewModels
                     case DataModels.Items.ItemType.Armor:
                         itm = DatasManager.Instance.Armors.FirstOrDefault(i => i.ItemId.Equals(slot.ItemId));
                         break;
-                    /*case DataModels.Items.ItemType.Consumable:
-                        itm = DatasManager.Instance.Consumables.FirstOrDefault(i => i.Consumable.Id.Equals(slot.ItemId)).Consumable;
-                        break;*/
+                    case DataModels.Items.ItemType.Consumable:
+                        itm = DatasManager.Instance.Consumables.FirstOrDefault(i => i.ItemId.Equals(slot.ItemId));
+                        break;
+                    case DataModels.Items.ItemType.Bag:
+                        itm = DatasManager.Instance.Bags.FirstOrDefault(i => i.ItemId.Equals(slot.ItemId));
+                        break;
                 }
 
                 _items.Add(new Models.MarketItemModel

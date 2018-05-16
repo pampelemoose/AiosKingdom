@@ -43,7 +43,7 @@ namespace AiosKingdom
 
             Master = new Views.MasterPage(_masterViewModel)
             {
-                Title = "Menu"
+                Title = "Aios Kingdom"
             };
             Detail = new NavigationPage(new Views.DashboardPage());
         }

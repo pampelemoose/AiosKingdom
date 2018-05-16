@@ -64,6 +64,62 @@
                         </ContentView>
                     </Grid>
                 </Grid>
+                <ListView
+                        Grid.Row="1"
+                        BackgroundColor="Transparent"
+                        ItemsSource="{Binding SelectedItem.Item.Stats}"
+                        HeightRequest="{Binding SelectedItem.Item.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
+                        RowHeight="20"
+                        SeparatorVisibility="None"
+                        IsEnabled="false">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="10*" />
+                                        <ColumnDefinition Width="2*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label 
+                                            Grid.Column="0"
+                                            Text="{Binding Type}" />
+                                    <Label
+                                            Grid.Column="1"
+                                            Text="{Binding StatValue}" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <ListView
+                        Grid.Row="1"
+                        BackgroundColor="Transparent"
+                        IsEnabled="false"
+                        ItemsSource="{Binding SelectedItem.Item.Effects}"
+                        HeightRequest="{Binding SelectedItem.Item.Effects, Converter={StaticResource listToHeight}, ConverterParameter=20}"
+                        RowHeight="20"
+                        SeparatorVisibility="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="10*" />
+                                        <ColumnDefinition Width="2*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label 
+                                            Grid.Column="0"
+                                            Text="{Binding Type}" />
+                                    <Label
+                                            Grid.Column="1"
+                                            Text="{Binding AffectValue}" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 <Grid
                     Grid.Row="2">
                     <Grid.ColumnDefinitions>

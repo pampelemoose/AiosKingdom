@@ -12,6 +12,8 @@ namespace AiosKingdom.ViewModels
         public SoulListPageViewModel(Network.GameServerConnection connection)
             : base(null)
         {
+            Title = "Soul List";
+
             Message = "Waiting Soul List..";
 
             MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, souls) =>
