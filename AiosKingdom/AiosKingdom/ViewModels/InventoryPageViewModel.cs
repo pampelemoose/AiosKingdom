@@ -51,6 +51,35 @@ namespace AiosKingdom.ViewModels
                 NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
             }, () => { return _armorSlotIsSelected && _selectedArmor.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
 
+        private List<Models.InventoryItemModel<DataModels.Items.Bag>> _bags;
+        public List<Models.InventoryItemModel<DataModels.Items.Bag>> Bags => _bags;
+
+        private Models.InventoryItemModel<DataModels.Items.Bag> _selectedBag;
+        public Models.InventoryItemModel<DataModels.Items.Bag> SelectedBag
+        {
+            get { return _selectedBag; }
+            set
+            {
+                _selectedBag = value;
+                _bagSlotIsSelected = _selectedBag != null;
+                _bagSlotEquipAction?.ChangeCanExecute();
+
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(BagSlotIsSelected));
+                NotifyPropertyChanged(nameof(BagSlotEquipAction));
+            }
+        }
+
+        private bool _bagSlotIsSelected;
+        public bool BagSlotIsSelected => _bagSlotIsSelected;
+
+        private Command _bagSlotEquipAction;
+        public ICommand BagSlotEquipAction =>
+            _bagSlotEquipAction ?? (_bagSlotEquipAction = new Command(() =>
+            {
+                //NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
+            }, () => { return _bagSlotIsSelected && _selectedBag.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
+
         private List<Models.InventoryItemModel<DataModels.Items.Consumable>> _consumables;
         public List<Models.InventoryItemModel<DataModels.Items.Consumable>> Consumables => _consumables;
 
@@ -73,8 +102,10 @@ namespace AiosKingdom.ViewModels
         private void SetInventories()
         {
             _armors = new List<Models.InventoryItemModel<DataModels.Items.Armor>>();
-            _selectedArmor = null;
-            _armorSlotIsSelected = false;
+            SelectedArmor = null;
+
+            _bags = new List<Models.InventoryItemModel<DataModels.Items.Bag>>();
+            SelectedBag = null;
 
             _consumables = new List<Models.InventoryItemModel<DataModels.Items.Consumable>>();
             SelectedConsumable = null;
@@ -92,6 +123,15 @@ namespace AiosKingdom.ViewModels
                             });
                         }
                         break;
+                    case DataModels.Items.ItemType.Bag:
+                        {
+                            _bags.Add(new Models.InventoryItemModel<DataModels.Items.Bag>
+                            {
+                                Slot = slot,
+                                Item = DatasManager.Instance.Bags.FirstOrDefault(a => a.ItemId.Equals(slot.ItemId))
+                            });
+                        }
+                        break;
                     case DataModels.Items.ItemType.Consumable:
                         {
                             _consumables.Add(new Models.InventoryItemModel<DataModels.Items.Consumable>
@@ -106,10 +146,12 @@ namespace AiosKingdom.ViewModels
 
             NotifyPropertyChanged(nameof(Armors));
             NotifyPropertyChanged(nameof(SelectedArmor));
-            NotifyPropertyChanged(nameof(ArmorSlotIsSelected));
-            NotifyPropertyChanged(nameof(ArmorSlotEquipAction));
+
+            NotifyPropertyChanged(nameof(Bags));
+            NotifyPropertyChanged(nameof(SelectedBag));
 
             NotifyPropertyChanged(nameof(Consumables));
+            NotifyPropertyChanged(nameof(SelectedConsumable));
         }
     }
 }
