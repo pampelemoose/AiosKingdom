@@ -32,5 +32,7 @@ namespace AiosKingdom
         public List<DataModels.Items.Bag> Bags { get; set; }
 
         public List<DataModels.MarketSlot> MarketItems { get; set; }
+
+        public List<DataModels.Skills.Book> Books { get; set; }
     }
 }

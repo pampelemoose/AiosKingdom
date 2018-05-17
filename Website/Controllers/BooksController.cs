@@ -117,7 +117,7 @@ namespace Website.Controllers
                         Description = pageModel.Description,
                         Image = pageModel.Image,
                         Rank = pageModel.Rank,
-                        StatCost = pageModel.StatCost,
+                        EmberCost = pageModel.StatCost,
                         ManaCost = pageModel.ManaCost,
                         Inscriptions = new List<DataModels.Skills.Inscription>()
                     };

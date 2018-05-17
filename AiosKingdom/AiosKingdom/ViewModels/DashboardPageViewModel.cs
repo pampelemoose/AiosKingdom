@@ -82,6 +82,10 @@ namespace AiosKingdom.ViewModels
                     _selectedItem = armor;
                     NotifyPropertyChanged(nameof(SelectedItem));
                 }
+                else
+                {
+                    _selectedItem = null;
+                }
             }));
     }
 }

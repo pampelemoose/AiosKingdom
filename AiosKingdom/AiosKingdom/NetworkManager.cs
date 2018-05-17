@@ -442,6 +442,7 @@ namespace AiosKingdom
                             AskArmorList();
                             AskConsumableList();
                             AskBagList();
+                            AskBookList();
                         }
                         else
                         {
@@ -519,6 +520,12 @@ namespace AiosKingdom
                         DatasManager.Instance.Bags = bags;
                     }
                     break;
+                case Network.CommandCodes.BookList:
+                    {
+                        var books = JsonConvert.DeserializeObject<List<DataModels.Skills.Book>>(message.Json);
+                        DatasManager.Instance.Books = books;
+                    }
+                    break;
 
                 default:
                     return false;
@@ -559,6 +566,18 @@ namespace AiosKingdom
             var retMess = new Network.Message
             {
                 Code = Network.CommandCodes.BagList,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void AskBookList()
+        {
+            var args = new string[0];
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.BookList,
                 Json = JsonConvert.SerializeObject(args),
                 Token = _gameAuthToken
             };

@@ -12,8 +12,6 @@ namespace DataModels.Skills
         public Guid Id { get; set; }
 
         public Guid BookId { get; set; }
-        [ForeignKey("BookId")]
-        public Book Book { get; set; }
 
         [Required, MaxLength(50)]
         public string Description { get; set; }
@@ -26,7 +24,7 @@ namespace DataModels.Skills
         }
 
         [Required]
-        public int StatCost { get; set; }
+        public int EmberCost { get; set; }
 
         [Required]
         public int Rank { get; set; }

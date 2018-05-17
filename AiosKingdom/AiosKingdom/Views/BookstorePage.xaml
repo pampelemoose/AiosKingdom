@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AiosKingdom.Views.BookstorePage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="230" />
+            </Grid.ColumnDefinitions>
+
+            <Grid
+                Grid.Column="0"
+                BackgroundColor="{Binding SelectedBook.Quality, Converter={StaticResource bookQualityToColor}}"
+                IsVisible="{Binding BookIsSelected}">
+
+                <ListView
+                    BackgroundColor="Transparent"
+                    ItemsSource="{Binding SelectedBook.Pages}"
+                    SelectedItem="{Binding SelectedPage}"
+                    RowHeight="50"
+                    SeparatorVisibility="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid 
+                                Margin="0, 5, 0, 0"
+                                ColumnSpacing="0">
+                                    <ContentView
+                                        BackgroundColor="{StaticResource BackgroundColor}"
+                                        Padding="5, 0, 0, 0">
+                                        <Label
+                                            TextColor="Aqua"
+                                            FontAttributes="Bold"
+                                            FontSize="18"
+                                            VerticalTextAlignment="Center"
+                                            Text="{Binding Rank, StringFormat='Rank {0}'}"/>
+                                    </ContentView>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <Grid
+                Grid.Column="1"
+                IsVisible="{Binding PageIsSelected}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label
+                    Grid.Row="0"
+                    FontAttributes="Italic"
+                    FontSize="20"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding SelectedPage.Description}"/>
+
+                <Grid
+                    Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        FontSize="20"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding SelectedPage.EmberCost}"/>
+                    <Label
+                        Grid.Column="1"
+                        FontSize="20"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding SelectedPage.Rank}"/>
+                    <Label
+                        Grid.Column="2"
+                        FontSize="20"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding SelectedPage.ManaCost}"/>
+                </Grid>
+
+                <ListView
+                    Grid.Row="2"
+                    BackgroundColor="Transparent"
+                    ItemsSource="{Binding SelectedPage.Inscriptions}"
+                    HasUnevenRows="True"
+                    SeparatorVisibility="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ContentView
+                                    InputTransparent="True"
+                                    BackgroundColor="{StaticResource BackgroundColor}"
+                                    Padding="5"
+                                    Margin="0, 5, 0, 0">
+                                    <Grid
+                                        BackgroundColor="White"
+                                        ColumnSpacing="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="50"/>
+                                        </Grid.RowDefinitions>
+                                        <Label
+                                            Grid.Row="0"
+                                            TextColor="Green"
+                                            FontAttributes="Bold"
+                                            FontSize="18"
+                                            VerticalTextAlignment="Center"
+                                            Text="{Binding Description}"/>
+                                            <Grid
+                                                Grid.Row="1">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="5*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="4*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Label
+                                                    Grid.Column="0"
+                                                    TextColor="Aqua"
+                                                    FontAttributes="Bold"
+                                                    FontSize="18"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding Type}"/>
+                                                <Label
+                                                    Grid.Column="1"
+                                                    TextColor="Aqua"
+                                                    FontAttributes="Bold"
+                                                    FontSize="18"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding BaseValue}"/>
+                                                <Label
+                                                    Grid.Column="2"
+                                                    TextColor="Aqua"
+                                                    FontAttributes="Bold"
+                                                    FontSize="18"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding StatType}"/>
+                                                <Label
+                                                    Grid.Column="3"
+                                                    TextColor="Aqua"
+                                                    FontAttributes="Bold"
+                                                    FontSize="18"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding Ratio}"/>
+                                                <Label
+                                                    Grid.Column="4"
+                                                    TextColor="Aqua"
+                                                    FontAttributes="Bold"
+                                                    FontSize="18"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding Duration}"/>
+                                        </Grid>
+                                    </Grid>
+                                </ContentView>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <ListView
+                Grid.Column="2"
+                BackgroundColor="Transparent"
+                ItemsSource="{Binding Books}"
+                SelectedItem="{Binding SelectedBook}"
+                RowHeight="50"
+                SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid 
+                                Margin="0, 5, 0, 0"
+                                ColumnSpacing="0">
+                                <ContentView
+                                        BackgroundColor="{Binding Quality, Converter={StaticResource bookQualityToColor}}"
+                                        Padding="5, 0, 0, 0">
+                                    <Label
+                                            TextColor="Aqua"
+                                            FontAttributes="Bold"
+                                            FontSize="25"
+                                            VerticalTextAlignment="Center"
+                                            Text="{Binding Name}"/>
+                                </ContentView>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
