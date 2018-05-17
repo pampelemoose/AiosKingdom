@@ -12,45 +12,26 @@ namespace AiosKingdom.ViewModels
         public LoginPageViewModel()
             : base(null)
         {
-            _tryToConnectAction = new Command(() =>
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful, (sender) =>
             {
-                Message = "Connecting to the server. Please wait...";
-                IsLoading = true;
-                ShowButton = false;
-
-                NetworkManager.Instance.ConnectToServer();
-            });
-
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.ConnectionSuccessful, (sender) =>
-            {
-                IsLoading = false;
+                LoadingScreenManager.Instance.UpdateLoadingScreen("Logged In ! Receiving Server list..");
+                NetworkManager.Instance.AskServerInfos();
             });
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ConnectionFailed, (sender, arg) =>
             {
-                IsLoading = true;
-                ShowButton = true;
-                Message = arg;
-                CloseMessage = _tryToConnectAction;
-            });
-
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful, (sender) =>
-            {
-                Message = "Logged In ! Receiving Server list..";
-                NetworkManager.Instance.AskServerInfos();
+                LoadingScreenManager.Instance.AlertLoadingScreen(MessengerCodes.ConnectionFailed, arg);
             });
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed, (sender, arg) =>
             {
-                IsLoading = false;
+                LoadingScreenManager.Instance.AlertLoadingScreen("Login Failed", arg);
             });
 
-            NetworkManager.Instance.ConnectToServer();
         }
 
         ~LoginPageViewModel()
         {
-            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.ConnectionSuccessful);
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.ConnectionFailed);
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful);
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed);
@@ -80,52 +61,6 @@ namespace AiosKingdom.ViewModels
             }
         }
 
-        private bool _isLoading = true;
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            set
-            {
-                _isLoading = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private string _message = "Connecting to the server. Please wait...";
-        public string Message
-        {
-            get { return _message; }
-            set
-            {
-                _message = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private bool _showButton;
-        public bool ShowButton
-        {
-            get { return _showButton; }
-            set
-            {
-                _showButton = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private ICommand _tryToConnectAction;
-
-        private ICommand _closeMessage;
-        public ICommand CloseMessage
-        {
-            get { return _closeMessage; }
-            set
-            {
-                _closeMessage = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         private Command _logInAction;
         public ICommand LogInAction =>
         _logInAction ?? (_logInAction = new Command(() =>
@@ -138,10 +73,8 @@ namespace AiosKingdom.ViewModels
 
         private void LogIn()
         {
-            Message = "Logging In. Please wait..";
-            IsLoading = true;
-
-            NetworkManager.Instance.AskLogin(_username, _password);
+            LoadingScreenManager.Instance.OpenLoadingScreen("Connecting to the server. Please wait...");
+            NetworkManager.Instance.ConnectToServer(_username, _password);
         }
     }
 }

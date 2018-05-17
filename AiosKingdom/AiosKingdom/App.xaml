@@ -17,6 +17,7 @@
             <converters:ListToHeightConverter x:Key="listToHeight" />
             <converters:InverseBooleanConverter x:Key="inverseBoolean" />
             <converters:ObjectToImageConverter x:Key="objectToImage" />
+            <converters:BookToPriceConverter x:Key="bookToPrice" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

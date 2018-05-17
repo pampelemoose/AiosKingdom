@@ -15,8 +15,14 @@
                 Grid.Column="0"
                 BackgroundColor="{Binding SelectedBook.Quality, Converter={StaticResource bookQualityToColor}}"
                 IsVisible="{Binding BookIsSelected}">
-
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                
                 <ListView
+                    Grid.Row="0"
                     BackgroundColor="Transparent"
                     ItemsSource="{Binding SelectedBook.Pages}"
                     SelectedItem="{Binding SelectedPage}"
@@ -43,6 +49,20 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+                
+                <Label
+                    Grid.Row="1"
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding SelectedBook, Converter={StaticResource bookToPrice}}"/>
+
+                <Button
+                    Grid.Row="2"
+                    Margin="5"
+                    Style="{StaticResource MenuButton}"
+                    Text="Buy"
+                    Command="{Binding BuyBookAction}"/>
             </Grid>
 
             <Grid

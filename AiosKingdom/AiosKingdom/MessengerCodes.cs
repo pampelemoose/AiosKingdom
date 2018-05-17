@@ -6,7 +6,6 @@ namespace AiosKingdom
 {
     public static class MessengerCodes
     {
-        public static string ConnectionSuccessful = "connectionSuccessful";
         public static string ConnectionFailed = "connectionFailed";
         public static string Disconnected = "disconnected";
 
@@ -27,5 +26,10 @@ namespace AiosKingdom
         public static string SoulDatasUpdated = "soulDatasUpdated";
 
         public static string MarketUpdated = "marketUpdated";
+
+        public static string OpenLoadingScreen = "openLoadingScreen";
+        public static string UpdateLoadingScreen = "updateLoadingScreen";
+        public static string AlertLoadingScreen = "alertLoadingScreen";
+        public static string CloseLoadingScreen = "closeLoadingScreen";
     }
 }

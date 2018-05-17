@@ -47,6 +47,32 @@ namespace AiosKingdom
             });
 
             MainPage = new Views.LoginPage();
+
+            LoadingScreenCallbacks();
+        }
+
+        private Views.LoadingPage _loadingPage = new Views.LoadingPage();
+        // ALL callbacks that calls the loadingScreen and closes it. TODO : LoadingScreenManager or something ??
+        private void LoadingScreenCallbacks()
+        {
+            MessagingCenter.Subscribe<LoadingScreenManager, string>(this, MessengerCodes.OpenLoadingScreen, (sender, message) =>
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    _loadingPage.SetMessage(message);
+
+                    await MainPage.Navigation.PushModalAsync(_loadingPage);
+                });
+            });
+
+
+            MessagingCenter.Subscribe<LoadingScreenManager>(this, MessengerCodes.CloseLoadingScreen, (sender) =>
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    await MainPage.Navigation.PopModalAsync();
+                });
+            });
         }
 
         protected override void OnStart()

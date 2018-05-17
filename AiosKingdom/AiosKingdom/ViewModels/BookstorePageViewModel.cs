@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace AiosKingdom.ViewModels
@@ -25,11 +26,13 @@ namespace AiosKingdom.ViewModels
             set
             {
                 _selectedBook = value;
+                SelectedPage = null;
                 if (_selectedBook != null && _selectedBook.Pages != null)
                 {
                     _selectedBook.Pages = _selectedBook.Pages.OrderBy(p => p.Rank).ToList();
+                    SelectedPage = _selectedBook.Pages[0];
                 }
-                SelectedPage = null;
+                _buyBookAction?.ChangeCanExecute();
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(BookIsSelected));
             }
@@ -48,5 +51,15 @@ namespace AiosKingdom.ViewModels
                 NotifyPropertyChanged(nameof(PageIsSelected));
             }
         }
+
+        private Command _buyBookAction;
+        public ICommand BuyBookAction =>
+        _buyBookAction ?? (_buyBookAction = new Command(() =>
+        {
+            //NetworkManager.Instance.BuyMarketItem(_selectedBook.Slot.Id);
+        }, () =>
+        {
+            return DatasManager.Instance.Soul?.Embers >= _selectedBook?.Pages[0].EmberCost;
+        }));
     }
 }

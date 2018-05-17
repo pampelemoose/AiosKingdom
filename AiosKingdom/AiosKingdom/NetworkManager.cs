@@ -90,6 +90,10 @@ namespace AiosKingdom
                     _isDispatchRunning = false;
                 }
             }
+
+            _dispatch.GetStream().Flush();
+            _dispatch.Client.Close();
+            _dispatch.Close();
         }
 
         private bool ProcessDispatchMessage(Network.Message message)
@@ -118,6 +122,7 @@ namespace AiosKingdom
                         }
                         else
                         {
+                            Disconnect();
                             MessagingCenter.Send(this, MessengerCodes.LoginFailed, "Credentials not matching any existing account.");
                         }
                     }
@@ -144,7 +149,7 @@ namespace AiosKingdom
             return true;
         }
 
-        public void ConnectToServer()
+        public void ConnectToServer(string username, string password)
         {
             try
             {
@@ -154,7 +159,7 @@ namespace AiosKingdom
                     try
                     {
                         Task.Factory.StartNew(RunDispatch, TaskCreationOptions.LongRunning);
-                        MessagingCenter.Send(this, MessengerCodes.ConnectionSuccessful);
+                        AskLogin(username, password);
                         _dispatch.EndConnect(asyncResult);
                     }
                     catch (SocketException sockE)
@@ -180,12 +185,11 @@ namespace AiosKingdom
         {
             if (_dispatch.Connected)
             {
-                _dispatch.Client.Close();
-                _dispatch.Close();
+                _isDispatchRunning = false;
             }
         }
 
-        public void AskLogin(string username, string password)
+        private void AskLogin(string username, string password)
         {
             var args = new string[2];
             args[0] = username;

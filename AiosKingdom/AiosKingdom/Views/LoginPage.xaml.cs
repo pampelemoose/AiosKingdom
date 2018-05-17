@@ -15,14 +15,6 @@ namespace AiosKingdom.Views
 		public LoginPage()
 		{
 			InitializeComponent();
-
-            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed, (sender, arg) =>
-            {
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    await DisplayAlert("Login Failed", arg, "OK");
-                });
-            });
         }
 	}
 }

@@ -54,14 +54,6 @@
     <Compile Include="AiosKingdomContext.cs" />
     <Compile Include="GameServerRepository.cs" />
     <Compile Include="MarketRepository.cs" />
-    <Compile Include="Migrations\201805150945045_InitialMigration.cs" />
-    <Compile Include="Migrations\201805150945045_InitialMigration.Designer.cs">
-      <DependentUpon>201805150945045_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805170645425_RenamedStatpointToEmberPoints.cs" />
-    <Compile Include="Migrations\201805170645425_RenamedStatpointToEmberPoints.Designer.cs">
-      <DependentUpon>201805170645425_RenamedStatpointToEmberPoints.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SoulRepository.cs" />
@@ -78,14 +70,6 @@
       <Project>{5617d24d-807a-445f-ac2f-6774b442761e}</Project>
       <Name>DataModels</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805150945045_InitialMigration.resx">
-      <DependentUpon>201805150945045_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805170645425_RenamedStatpointToEmberPoints.resx">
-      <DependentUpon>201805170645425_RenamedStatpointToEmberPoints.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

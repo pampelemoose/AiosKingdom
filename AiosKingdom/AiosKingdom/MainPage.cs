@@ -26,6 +26,8 @@ namespace AiosKingdom
                 Title = "Aios Kingdom"
             };
             Detail = new NavigationPage(new Views.DashboardPage());
+
+            
         }
     }
 }

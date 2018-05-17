@@ -44,6 +44,8 @@ namespace Server.DispatchServer.Commands
                     Json = JsonConvert.SerializeObject(Guid.Empty)
                 };
                 ret.Succeeded = true;
+
+                ClientsManager.Instance.Timeout(ret.ClientId);
             }
 
             return ret;

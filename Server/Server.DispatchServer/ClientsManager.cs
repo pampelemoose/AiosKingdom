@@ -135,6 +135,18 @@ namespace Server.DispatchServer
             }
         }
 
+        public void Timeout(Guid clientId)
+        {
+            if (_pings.ContainsKey(clientId))
+            {
+                _pings[clientId] = DateTime.Now + TimeSpan.FromHours(1);
+            }
+            else
+            {
+                _pings.Add(clientId, DateTime.Now + TimeSpan.FromHours(1));
+            }
+        }
+
         public double GetPing(Guid clientId)
         {
             if (_pings.ContainsKey(clientId))
