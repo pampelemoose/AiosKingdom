@@ -19,6 +19,7 @@ namespace AiosKingdom.ViewModels
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     SetInventories();
+                    LoadingScreenManager.Instance.CloseLoadingScreen();
                 });
             });
 
@@ -52,6 +53,7 @@ namespace AiosKingdom.ViewModels
             _armorSlotEquipAction ?? (_armorSlotEquipAction = new Command(() =>
             {
                 NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
+                LoadingScreenManager.Instance.OpenLoadingScreen($"Equiping {_selectedArmor.Item.Name}...");
             }, () => { return _armorSlotIsSelected && _selectedArmor?.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
 
         private List<Models.InventoryItemModel<DataModels.Items.Bag>> _bags;

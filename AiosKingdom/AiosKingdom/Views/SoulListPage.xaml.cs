@@ -16,22 +16,6 @@ namespace AiosKingdom.Views
 		{
 			InitializeComponent();
 
-            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SoulCreationFailed, (sender, message) =>
-            {
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    await DisplayAlert("Soul Creation Failed", message, "OK");
-                });
-            });
-
-            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SoulConnectionFailed, (sender, message) =>
-            {
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    await DisplayAlert("Soul Connection Failed", message, "OK");
-                });
-            });
-
             BindingContext = viewModel;
 		}
 	}

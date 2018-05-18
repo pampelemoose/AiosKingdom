@@ -28,8 +28,10 @@ namespace AiosKingdom
         public static string MarketUpdated = "marketUpdated";
 
         public static string OpenLoadingScreen = "openLoadingScreen";
+        public static string LoadingScreenOpenned = "loadingScreenOpenned";
         public static string UpdateLoadingScreen = "updateLoadingScreen";
         public static string AlertLoadingScreen = "alertLoadingScreen";
         public static string CloseLoadingScreen = "closeLoadingScreen";
+        public static string LoadingScreenClosed = "loadingScreenClosed";
     }
 }

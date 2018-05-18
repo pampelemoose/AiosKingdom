@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace AiosKingdom
@@ -23,18 +24,32 @@ namespace AiosKingdom
 
         private LoadingScreenManager()
         {
+            MessagingCenter.Subscribe<App>(this, MessengerCodes.LoadingScreenOpenned, (sender) =>
+            {
+                lock (_screenLock)
+                {
+                    _isOpen = true;
+                }
+            });
+
+            MessagingCenter.Subscribe<App>(this, MessengerCodes.LoadingScreenClosed, (sender) =>
+            {
+                lock (_screenLock)
+                {
+                    _isOpen = false;
+                }
+            });
         }
 
-        private object _screeLock = new object();
+        private object _screenLock = new object();
         private bool _isOpen;
 
         public void OpenLoadingScreen(string message)
         {
-            lock (_screeLock)
+            lock (_screenLock)
             {
                 if (!_isOpen)
                 {
-                    _isOpen = true;
                     MessagingCenter.Send(this, MessengerCodes.OpenLoadingScreen, message);
                 }
             }
@@ -42,9 +57,8 @@ namespace AiosKingdom
 
         public void UpdateLoadingScreen(string message)
         {
-            lock (_screeLock)
+            lock (_screenLock)
             {
-
                 if (_isOpen)
                 {
                     MessagingCenter.Send(this, MessengerCodes.UpdateLoadingScreen, message);
@@ -54,7 +68,7 @@ namespace AiosKingdom
 
         public void AlertLoadingScreen(string title, string message)
         {
-            lock (_screeLock)
+            lock (_screenLock)
             {
                 if (_isOpen)
                 {
@@ -63,14 +77,26 @@ namespace AiosKingdom
             }
         }
 
-        public void CloseLoadingScreen()
+        public async Task CloseLoadingScreen(bool shouldWait = false)
         {
-            lock (_screeLock)
+            if (_isOpen)
             {
-                if (_isOpen)
+                MessagingCenter.Send(this, MessengerCodes.CloseLoadingScreen);
+
+                if (shouldWait)
                 {
-                    _isOpen = false;
-                    MessagingCenter.Send(this, MessengerCodes.CloseLoadingScreen);
+                    await Task.Run(() =>
+                    {
+                        var waitingClose = true;
+                        while (waitingClose)
+                        {
+                            lock (_screenLock)
+                            {
+                                if (!_isOpen)
+                                    waitingClose = false;
+                            }
+                        }
+                    });
                 }
             }
         }

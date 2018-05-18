@@ -14,47 +14,25 @@ namespace AiosKingdom.ViewModels
         {
             Title = "Soul List";
 
-            Message = "Waiting Soul List..";
+            LoadingScreenManager.Instance.OpenLoadingScreen("Waiting Soul List..");
 
             MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, souls) =>
             {
                 Souls = souls;
-                IsLoading = false;
+                LoadingScreenManager.Instance.CloseLoadingScreen();
             });
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SoulCreationFailed, (sender, message) =>
             {
-                IsLoading = false;
+                LoadingScreenManager.Instance.AlertLoadingScreen("Soul Creation Failed", message);
             });
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SoulConnectionFailed, (sender, message) =>
             {
-                IsLoading = false;
+                LoadingScreenManager.Instance.AlertLoadingScreen("Soul Connection Failed", message);
             });
 
             NetworkManager.Instance.ConnectToGameServer(connection);
-        }
-
-        private bool _isLoading = true;
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            set
-            {
-                _isLoading = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private string _message;
-        public string Message
-        {
-            get { return _message; }
-            set
-            {
-                _message = value;
-                NotifyPropertyChanged();
-            }
         }
 
         private List<DataModels.Soul> _souls;
@@ -76,9 +54,8 @@ namespace AiosKingdom.ViewModels
             {
                 if (value != null)
                 {
+                    LoadingScreenManager.Instance.OpenLoadingScreen($"Connecting {value.Name}, please wait...");
                     NetworkManager.Instance.ConnectSoul(value.Id);
-                    IsLoading = true;
-                    Message = $"Connecting {value.Name}, please wait...";
                 }
 
                 NotifyPropertyChanged();
@@ -89,9 +66,8 @@ namespace AiosKingdom.ViewModels
         public ICommand CreateSoulAction =>
             _createSoulAction ?? (_createSoulAction = new Command(() =>
             {
+                LoadingScreenManager.Instance.OpenLoadingScreen("Creating new soul...");
                 NetworkManager.Instance.CreateSoul("test");
-                IsLoading = true;
-                Message = "Creating new soul...";
             }));
     }
 }

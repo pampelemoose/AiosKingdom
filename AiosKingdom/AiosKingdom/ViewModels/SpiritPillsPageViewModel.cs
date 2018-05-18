@@ -14,6 +14,7 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulUpdated, (sender) =>
             {
                 SetDatas();
+                LoadingScreenManager.Instance.CloseLoadingScreen();
             });
 
             SetDatas();
@@ -65,6 +66,7 @@ namespace AiosKingdom.ViewModels
         public ICommand UsePillAction =>
         _usePillsAction ?? (_usePillsAction = new Command(() =>
         {
+            LoadingScreenManager.Instance.OpenLoadingScreen("Using pills, please wait for the effect to apply..");
             NetworkManager.Instance.UseSpiritPills(_statType, _pillsAmount);
 
             _decreasePillsAmountAction?.ChangeCanExecute();

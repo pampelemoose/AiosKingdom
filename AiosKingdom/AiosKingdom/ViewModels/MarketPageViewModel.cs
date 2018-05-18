@@ -15,6 +15,7 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.MarketUpdated, (sender) =>
             {
                 SetItems();
+                LoadingScreenManager.Instance.CloseLoadingScreen();
             });
 
             NetworkManager.Instance.AskMarketItems();
@@ -58,6 +59,7 @@ namespace AiosKingdom.ViewModels
         public ICommand BuyItemAction =>
         _buyItemAction ?? (_buyItemAction = new Command(() =>
         {
+            LoadingScreenManager.Instance.OpenLoadingScreen($"Buying {_selectedItem.Item.Name}, please wait...");
             NetworkManager.Instance.BuyMarketItem(_selectedItem.Slot.Id);
         }, () =>
         {

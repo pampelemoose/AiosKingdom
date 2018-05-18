@@ -59,33 +59,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Grid
-                BackgroundColor="Black"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="FillAndExpand"
-                IsVisible="{Binding IsLoading, Mode=TwoWay}">
-                <Grid
-                    VerticalOptions="Center">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="100"/>
-                    </Grid.RowDefinitions>
-
-                    <Label
-                        Grid.Row="0"
-                        VerticalOptions="Center"
-                        HorizontalOptions="Center"
-                        TextColor="Aqua"
-                        Text="{Binding Message}"/>
-                    <ActivityIndicator
-                        Grid.Row="1"
-                        VerticalOptions="CenterAndExpand"
-                        HorizontalOptions="CenterAndExpand"
-                        Color="Aqua"
-                        Scale="2"
-                        IsRunning="true"/>
-                </Grid>
-            </Grid>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

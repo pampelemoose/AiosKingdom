@@ -14,34 +14,39 @@ namespace AiosKingdom
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.Disconnected, (sender, message) =>
             {
-                Device.BeginInvokeOnMainThread(() =>
+                Device.BeginInvokeOnMainThread(async () =>
                 {
                     NetworkManager.Instance.Disconnect();
+                    await LoadingScreenManager.Instance.CloseLoadingScreen(true);
                     MainPage = new Views.LoginPage();
                 });
             });
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.GameServerDisconnected, (sender, message) =>
             {
-                Device.BeginInvokeOnMainThread(() =>
+                Device.BeginInvokeOnMainThread(async () =>
                 {
                     NetworkManager.Instance.DisconnectGame();
+                    await LoadingScreenManager.Instance.CloseLoadingScreen(true);
                     MainPage = new NavigationPage(new Views.ServerListPage(new List<Network.GameServerInfos>()));
                 });
             });
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived, (sender, servers) =>
             {
-                Device.BeginInvokeOnMainThread(() =>
+                Device.BeginInvokeOnMainThread(async () =>
                 {
+                    await LoadingScreenManager.Instance.CloseLoadingScreen(true);
                     MainPage = new NavigationPage(new Views.ServerListPage(servers));
                 });
+
             });
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulConnected, (sender) =>
             {
-                Device.BeginInvokeOnMainThread(() =>
+                Device.BeginInvokeOnMainThread(async () =>
                 {
+                    await LoadingScreenManager.Instance.CloseLoadingScreen(true);
                     MainPage = new MainPage();
                 });
             });
@@ -60,8 +65,8 @@ namespace AiosKingdom
                 Device.BeginInvokeOnMainThread(async () =>
                 {
                     _loadingPage.SetMessage(message);
-
                     await MainPage.Navigation.PushModalAsync(_loadingPage);
+                    MessagingCenter.Send(this, MessengerCodes.LoadingScreenOpenned);
                 });
             });
 
@@ -71,6 +76,7 @@ namespace AiosKingdom
                 Device.BeginInvokeOnMainThread(async () =>
                 {
                     await MainPage.Navigation.PopModalAsync();
+                    MessagingCenter.Send(this, MessengerCodes.LoadingScreenClosed);
                 });
             });
         }
