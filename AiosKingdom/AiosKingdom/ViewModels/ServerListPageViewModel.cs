@@ -16,10 +16,9 @@ namespace AiosKingdom.ViewModels
 
             MessagingCenter.Subscribe<NetworkManager, Network.GameServerConnection>(this, MessengerCodes.GameServerDatasReceived, (sender, connection) =>
             {
-                Device.BeginInvokeOnMainThread(async () =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    await LoadingScreenManager.Instance.CloseLoadingScreen();
-                    await _navigation.PushAsync(new Views.SoulListPage(new ViewModels.SoulListPageViewModel(connection)));
+                    LoadingScreenManager.Instance.PushPage(new Views.SoulListPage(new ViewModels.SoulListPageViewModel(connection)));
                 });
             });
         }

@@ -33,5 +33,7 @@ namespace AiosKingdom
         public static string AlertLoadingScreen = "alertLoadingScreen";
         public static string CloseLoadingScreen = "closeLoadingScreen";
         public static string LoadingScreenClosed = "loadingScreenClosed";
+        public static string LoadingScreenChangePage = "loadingScreenChangePage";
+        public static string LoadingScreenPushPage = "loadingScreenPushPage";
     }
 }

@@ -77,27 +77,27 @@ namespace AiosKingdom
             }
         }
 
-        public async Task CloseLoadingScreen(bool shouldWait = false)
+        public void ChangePage(Page page)
+        {
+            if (_isOpen)
+            {
+                MessagingCenter.Send(this, MessengerCodes.LoadingScreenChangePage, page);
+            }
+        }
+
+        public void PushPage(Page page)
+        {
+            if (_isOpen)
+            {
+                MessagingCenter.Send(this, MessengerCodes.LoadingScreenPushPage, page);
+            }
+        }
+
+        public void CloseLoadingScreen()
         {
             if (_isOpen)
             {
                 MessagingCenter.Send(this, MessengerCodes.CloseLoadingScreen);
-
-                if (shouldWait)
-                {
-                    await Task.Run(() =>
-                    {
-                        var waitingClose = true;
-                        while (waitingClose)
-                        {
-                            lock (_screenLock)
-                            {
-                                if (!_isOpen)
-                                    waitingClose = false;
-                            }
-                        }
-                    });
-                }
             }
         }
     }

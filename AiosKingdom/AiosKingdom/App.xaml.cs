@@ -14,40 +14,36 @@ namespace AiosKingdom
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.Disconnected, (sender, message) =>
             {
-                Device.BeginInvokeOnMainThread(async () =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
                     NetworkManager.Instance.Disconnect();
-                    await LoadingScreenManager.Instance.CloseLoadingScreen(true);
-                    MainPage = new Views.LoginPage();
+                    LoadingScreenManager.Instance.ChangePage(new Views.LoginPage());
                 });
             });
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.GameServerDisconnected, (sender, message) =>
             {
-                Device.BeginInvokeOnMainThread(async () =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
                     NetworkManager.Instance.DisconnectGame();
-                    await LoadingScreenManager.Instance.CloseLoadingScreen(true);
-                    MainPage = new NavigationPage(new Views.ServerListPage(new List<Network.GameServerInfos>()));
+                    LoadingScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(new List<Network.GameServerInfos>())));
                 });
             });
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived, (sender, servers) =>
             {
-                Device.BeginInvokeOnMainThread(async () =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    await LoadingScreenManager.Instance.CloseLoadingScreen(true);
-                    MainPage = new NavigationPage(new Views.ServerListPage(servers));
+                    LoadingScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(servers)));
                 });
 
             });
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulConnected, (sender) =>
             {
-                Device.BeginInvokeOnMainThread(async () =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    await LoadingScreenManager.Instance.CloseLoadingScreen(true);
-                    MainPage = new MainPage();
+                    LoadingScreenManager.Instance.ChangePage(new MainPage());
                 });
             });
 
@@ -75,8 +71,37 @@ namespace AiosKingdom
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    await MainPage.Navigation.PopModalAsync();
-                    MessagingCenter.Send(this, MessengerCodes.LoadingScreenClosed);
+                    if (MainPage.Navigation.ModalStack.Count > 0)
+                    {
+                        await MainPage.Navigation.PopModalAsync();
+                        MessagingCenter.Send(this, MessengerCodes.LoadingScreenClosed);
+                    }
+                });
+            });
+
+            MessagingCenter.Subscribe<LoadingScreenManager, Page>(this, MessengerCodes.LoadingScreenChangePage, (sender, page) =>
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    if (MainPage.Navigation.ModalStack.Count > 0)
+                    {
+                        await MainPage.Navigation.PopModalAsync();
+                        MessagingCenter.Send(this, MessengerCodes.LoadingScreenClosed);
+                    }
+                    MainPage = page;
+                });
+            });
+
+            MessagingCenter.Subscribe<LoadingScreenManager, Page>(this, MessengerCodes.LoadingScreenPushPage, (sender, page) =>
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    if (MainPage.Navigation.ModalStack.Count > 0)
+                    {
+                        await MainPage.Navigation.PopModalAsync();
+                        MessagingCenter.Send(this, MessengerCodes.LoadingScreenClosed);
+                    }
+                    await MainPage.Navigation.PushAsync(page);
                 });
             });
         }
