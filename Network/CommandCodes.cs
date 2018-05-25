@@ -21,6 +21,7 @@ namespace Network
         public const int Client_BuyMarketItem = 21;
         public const int Client_EquipItem = 22;
         public const int Client_UseSpiritPills = 23;
+        public const int Client_LearnSkill = 24;
 
         public const int ArmorList = 30;
         public const int ConsumableList = 31;

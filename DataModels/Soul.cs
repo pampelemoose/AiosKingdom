@@ -65,6 +65,6 @@ namespace DataModels
         public Equipment Equipment { get; set; }
 
         public List<InventorySlot> Inventory { get; set; }
-        //public List<Datas.Models.Skills.Book> Knowledge { get; set; }
+        public List<Knowledge> Knowledge { get; set; }
     }
 }

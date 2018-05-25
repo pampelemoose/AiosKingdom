@@ -26,6 +26,7 @@ namespace DataRepositories
                 return context.Souls
                     .Include(s => s.Equipment)
                     .Include(s => s.Inventory)
+                    .Include(s => s.Knowledge)
                     .FirstOrDefault(s => s.Id.Equals(id));
             }
         }
@@ -72,6 +73,7 @@ namespace DataRepositories
                 var online = context.Souls
                     .Include(s => s.Equipment)
                     .Include(s => s.Inventory)
+                    .Include(s => s.Knowledge)
                     .FirstOrDefault(s => s.Id.Equals(soul.Id));
 
                 if (online == null) return false;
@@ -89,7 +91,7 @@ namespace DataRepositories
                 online.Equipment.Feet = soul.Equipment.Feet;
 
                 // INVENTORY
-                var old = online.Inventory;
+                var oldInv = online.Inventory;
                 online.Inventory = new List<DataModels.InventorySlot>();
                 foreach (var item in soul.Inventory)
                 {
@@ -104,13 +106,37 @@ namespace DataRepositories
                         inv.Quantity = item.Quantity;
                         inv.ItemId = item.ItemId;
                         online.Inventory.Add(inv);
-                        old.Remove(old.FirstOrDefault(o => o.Id.Equals(item.Id)));
+                        oldInv.Remove(oldInv.FirstOrDefault(o => o.Id.Equals(item.Id)));
                     }
                 }
 
-                foreach (var toDel in old)
+                foreach (var toDel in oldInv)
                 {
                     context.Inventories.Remove(toDel);
+                }
+
+                // KNOWLEDGE
+                var oldKno = online.Knowledge;
+                online.Knowledge = new List<DataModels.Knowledge>();
+                foreach (var kno in soul.Knowledge)
+                {
+                    if (Guid.Empty.Equals(kno.Id))
+                    {
+                        kno.Id = Guid.NewGuid();
+                        online.Knowledge.Add(kno);
+                    }
+                    else
+                    {
+                        var know = context.Knowledges.FirstOrDefault(i => i.Id.Equals(kno.Id));
+                        know.Rank = kno.Rank;
+                        online.Knowledge.Add(know);
+                        oldKno.Remove(oldKno.FirstOrDefault(o => o.Id.Equals(kno.Id)));
+                    }
+                }
+
+                foreach (var toDel in oldKno)
+                {
+                    context.Knowledges.Remove(toDel);
                 }
 
                 // STATS

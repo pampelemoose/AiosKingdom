@@ -41,7 +41,6 @@ namespace AiosKingdom.ViewModels
 
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(ArmorSlotIsSelected));
-                NotifyPropertyChanged(nameof(ArmorSlotEquipAction));
             }
         }
 
@@ -71,7 +70,6 @@ namespace AiosKingdom.ViewModels
 
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(BagSlotIsSelected));
-                NotifyPropertyChanged(nameof(BagSlotEquipAction));
             }
         }
 

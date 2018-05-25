@@ -56,7 +56,7 @@ namespace AiosKingdom.ViewModels
         public ICommand BuyBookAction =>
         _buyBookAction ?? (_buyBookAction = new Command(() =>
         {
-            //NetworkManager.Instance.BuyMarketItem(_selectedBook.Slot.Id);
+            NetworkManager.Instance.LearnSkill(_selectedBook.BookId, 1);
         }, () =>
         {
             return DatasManager.Instance.Soul?.Embers >= _selectedBook?.Pages[0].EmberCost;

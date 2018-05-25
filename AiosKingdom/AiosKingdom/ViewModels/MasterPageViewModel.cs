@@ -19,6 +19,11 @@ namespace AiosKingdom.ViewModels
             });
             _menus.Add(new MasterPageItem
             {
+                TargetType = typeof(Views.KnowledgePage),
+                Title = "Knowledge"
+            });
+            _menus.Add(new MasterPageItem
+            {
                 TargetType = typeof(Views.InventoryPage),
                 Title = "Inventory"
             });

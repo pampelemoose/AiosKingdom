@@ -505,6 +505,15 @@ namespace AiosKingdom
                         }
                     }
                     break;
+                case Network.CommandCodes.Client_LearnSkill:
+                    {
+                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
+                        if (result.Success)
+                        {
+                            AskSoulDatas();
+                        }
+                    }
+                    break;
 
                 case Network.CommandCodes.ArmorList:
                     {
@@ -684,6 +693,20 @@ namespace AiosKingdom
             var retMess = new Network.Message
             {
                 Code = Network.CommandCodes.Client_UseSpiritPills,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void LearnSkill(Guid bookId, int rank)
+        {
+            var args = new string[2];
+            args[0] = bookId.ToString();
+            args[1] = rank.ToString();
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_LearnSkill,
                 Json = JsonConvert.SerializeObject(args),
                 Token = _gameAuthToken
             };

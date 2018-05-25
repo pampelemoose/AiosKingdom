@@ -26,6 +26,14 @@ namespace AiosKingdom.Converters
                     return dto.Image;
             }
 
+            if (value is DataModels.Skills.Page)
+            {
+                var dto = value as DataModels.Skills.Page;
+
+                if (!string.IsNullOrEmpty(dto.Image))
+                    return dto.Image;
+            }
+
             return "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";
 
         }

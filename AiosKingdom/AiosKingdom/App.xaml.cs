@@ -53,7 +53,6 @@ namespace AiosKingdom
         }
 
         private Views.LoadingPage _loadingPage = new Views.LoadingPage();
-        // ALL callbacks that calls the loadingScreen and closes it. TODO : LoadingScreenManager or something ??
         private void LoadingScreenCallbacks()
         {
             MessagingCenter.Subscribe<LoadingScreenManager, string>(this, MessengerCodes.OpenLoadingScreen, (sender, message) =>
