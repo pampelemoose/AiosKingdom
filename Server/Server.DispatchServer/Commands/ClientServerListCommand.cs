@@ -17,7 +17,7 @@ namespace Server.DispatchServer.Commands
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var id = ClientsManager.Instance.GetUserId(ret.ClientId);
-            var servers = DataRepositories.GameServerRepository.GetAll();
+            var servers = DataRepositories.ConfigRepository.GetAll();
             var slots = DataRepositories.UserRepository.GetById(id).Souls;
             var infos = new List<Network.GameServerInfos>();
 

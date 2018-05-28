@@ -19,10 +19,10 @@ namespace Server.GameServer.Commands
             Guid token = Guid.Parse(_args.Args[0]);
             var now = DateTime.Now;
 
-            var tokenExists = DataRepositories.TokenRepository.Get(token);
+            var tokenExists = DataRepositories.AuthTokenRepository.Get(token);
             if (tokenExists != null)
             {
-                DataRepositories.TokenRepository.Remove(tokenExists);
+                DataRepositories.AuthTokenRepository.Remove(tokenExists);
 
                 if ((now - tokenExists.CreatedAt).Seconds < 5)
                 {

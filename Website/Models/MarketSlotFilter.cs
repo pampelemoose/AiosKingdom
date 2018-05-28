@@ -10,7 +10,7 @@ namespace Website.Models
     {
         public Guid SelectedServer { get; set; }
         [Display(Name = "Server")]
-        public List<DataModels.GameServer> Servers { get; set; }
+        public List<DataModels.Config> Servers { get; set; }
 
         [Display(Name = "Type")]
         public DataModels.Items.ItemType? Type { get; set; }

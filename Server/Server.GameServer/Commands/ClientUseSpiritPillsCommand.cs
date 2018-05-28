@@ -9,9 +9,9 @@ namespace Server.GameServer.Commands
 {
     public class ClientUseSpiritPillsCommand : ACommand
     {
-        private DataModels.GameServer _config;
+        private DataModels.Config _config;
 
-        public ClientUseSpiritPillsCommand(CommandArgs args, DataModels.GameServer config)
+        public ClientUseSpiritPillsCommand(CommandArgs args, DataModels.Config config)
             : base(args)
         {
             _config = config;

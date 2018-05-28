@@ -9,9 +9,9 @@ namespace Server.GameServer.Commands
 {
     public class ClientEquipItemCommand : ACommand
     {
-        private DataModels.GameServer _config;
+        private DataModels.Config _config;
 
-        public ClientEquipItemCommand(CommandArgs args, DataModels.GameServer config) 
+        public ClientEquipItemCommand(CommandArgs args, DataModels.Config config) 
             : base(args)
         {
             _config = config;

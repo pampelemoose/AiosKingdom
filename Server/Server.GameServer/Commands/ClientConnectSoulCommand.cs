@@ -9,9 +9,9 @@ namespace Server.GameServer.Commands
 {
     public class ClientConnectSoulCommand : ACommand
     {
-        private DataModels.GameServer _config;
+        private DataModels.Config _config;
 
-        public ClientConnectSoulCommand(CommandArgs args, DataModels.GameServer config) 
+        public ClientConnectSoulCommand(CommandArgs args, DataModels.Config config) 
             : base(args)
         {
             _config = config;

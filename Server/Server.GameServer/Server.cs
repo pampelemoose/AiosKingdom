@@ -22,7 +22,7 @@ namespace Server.GameServer
         private Dictionary<int, int> _commandArgCount;
         private List<Commands.CommandResult> _responses;
 
-        private DataModels.GameServer _config;
+        private DataModels.Config _config;
 
         public Server()
         {
@@ -49,7 +49,7 @@ namespace Server.GameServer
         public void Start()
         {
             var configId = Guid.Parse(ConfigurationManager.AppSettings.Get("ConfigId"));
-            _config = DataRepositories.GameServerRepository.GetById(configId);
+            _config = DataRepositories.ConfigRepository.GetById(configId);
 
             if (_config == null || (_config != null && _config.Online))
             {
@@ -58,7 +58,7 @@ namespace Server.GameServer
             }
 
             _config.Online = true;
-            DataRepositories.GameServerRepository.Update(_config);
+            DataRepositories.ConfigRepository.Update(_config);
 
             Console.WriteLine($"Starting TCPListener at address : {_config.Host}:{_config.Port} ...");
 
@@ -74,7 +74,7 @@ namespace Server.GameServer
             _isRunning = false;
 
             _config.Online = false;
-            DataRepositories.GameServerRepository.Update(_config);
+            DataRepositories.ConfigRepository.Update(_config);
         }
 
         private void SetupClientDelegates()

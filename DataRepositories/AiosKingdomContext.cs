@@ -15,8 +15,9 @@ namespace DataRepositories
 
         public DbSet<DataModels.Version> Versions { get; set; }
 
-        public DbSet<DataModels.GameServer> Servers { get; set; }
-        public DbSet<DataModels.GameServerToken> Tokens { get; set; }
+        public DbSet<DataModels.Kingdom> Kingdoms { get; set; }
+        public DbSet<DataModels.Config> Configs { get; set; }
+        public DbSet<DataModels.AuthToken> Tokens { get; set; }
 
         public DbSet<DataModels.User> Users { get; set; }
         public DbSet<DataModels.Role> Roles { get; set; }
@@ -37,5 +38,9 @@ namespace DataRepositories
         public DbSet<DataModels.Knowledge> Knowledges { get; set; }
 
         public DbSet<DataModels.MarketSlot> Market { get; set; }
+
+        public DbSet<DataModels.Monsters.Monster> Monsters { get; set; }
+        public DbSet<DataModels.Dungeons.Dungeon> Dungeons { get; set; }
+
     }
 }

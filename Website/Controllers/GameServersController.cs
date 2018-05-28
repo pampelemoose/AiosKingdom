@@ -11,7 +11,7 @@ namespace Website.Controllers
     {
         public ActionResult Index()
         {
-            var servers = DataRepositories.GameServerRepository.GetAll();
+            var servers = DataRepositories.ConfigRepository.GetAll();
 
             return View(servers);
         }
@@ -26,13 +26,13 @@ namespace Website.Controllers
         [CustomAuthorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(DataModels.GameServer server)
+        public ActionResult Create(DataModels.Config server)
         {
             if (ModelState.IsValid)
             {
                 server.Id = Guid.NewGuid();
 
-                if (DataRepositories.GameServerRepository.Create(server))
+                if (DataRepositories.ConfigRepository.Create(server))
                 {
                     return RedirectToAction("Index");
                 }

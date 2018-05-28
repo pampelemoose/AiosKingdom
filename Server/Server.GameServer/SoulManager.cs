@@ -67,7 +67,7 @@ namespace Server.GameServer
             return false;
         }
 
-        public void UpdateCurrentDatas(Guid token, DataModels.GameServer config)
+        public void UpdateCurrentDatas(Guid token, DataModels.Config config)
         {
             if (_souls.ContainsKey(token))
             {
@@ -208,7 +208,7 @@ namespace Server.GameServer
             }
         }
 
-        private int GetRequiredExperienceToLevelUp(Guid token, DataModels.GameServer config)
+        private int GetRequiredExperienceToLevelUp(Guid token, DataModels.Config config)
         {
             var soul = _souls[token];
             var datas = _soulDatas[token];
@@ -226,7 +226,7 @@ namespace Server.GameServer
             return 0;
         }
 
-        private int GetMaxHealth(Guid token, DataModels.GameServer config)
+        private int GetMaxHealth(Guid token, DataModels.Config config)
         {
             var soul = _souls[token];
             var datas = _soulDatas[token];
@@ -237,7 +237,7 @@ namespace Server.GameServer
             return health;
         }
 
-        private int GetMaxMana(Guid token, DataModels.GameServer config)
+        private int GetMaxMana(Guid token, DataModels.Config config)
         {
             var soul = _souls[token];
             var datas = _soulDatas[token];

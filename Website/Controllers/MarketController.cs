@@ -14,7 +14,7 @@ namespace Website.Controllers
         {
             var slots = DataRepositories.MarketRepository.GetAll();
 
-            filter.Servers = DataRepositories.GameServerRepository.GetAll();
+            filter.Servers = DataRepositories.ConfigRepository.GetAll();
             filter.Slots = filter.FilterList(slots); 
 
             return View(filter);
@@ -25,7 +25,7 @@ namespace Website.Controllers
         public ActionResult Create()
         {
             var slot = new Models.MarketSlotModel();
-            slot.Servers = DataRepositories.GameServerRepository.GetAll();
+            slot.Servers = DataRepositories.ConfigRepository.GetAll();
             slot.Items = new List<DataModels.Items.AItem>();
 
             foreach (var armor in DataRepositories.ArmorRepository.GetAll())
@@ -67,7 +67,7 @@ namespace Website.Controllers
                 }
             }
 
-            slot.Servers = DataRepositories.GameServerRepository.GetAll();
+            slot.Servers = DataRepositories.ConfigRepository.GetAll();
             return View(slot);
         }
     }

@@ -18,11 +18,11 @@ namespace Server.DispatchServer.Commands
         {
             var id = Guid.Parse(_args.Args[0]);
             var userId = ClientsManager.Instance.GetUserId(ret.ClientId);
-            var server = DataRepositories.GameServerRepository.GetById(id);
+            var server = DataRepositories.ConfigRepository.GetById(id);
 
             if (server != null && server.SlotAvailable < server.SlotLimit)
             {
-                var token = DataRepositories.TokenRepository.Create(userId);
+                var token = DataRepositories.AuthTokenRepository.Create(userId);
                 var connect = new Network.GameServerConnection
                 {
                     Host = server.Host,

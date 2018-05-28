@@ -12,6 +12,27 @@ namespace DataModels.Skills
         Heal = 1
     }
 
+    public enum ElementType
+    {
+        Neutral = 0,
+
+        Fire = 1,
+        Water = 2,
+        Wind = 3,
+        Earth = 4,
+        Lightning = 5,
+        
+        // ADVANCED IDEAS
+        Light = 6,
+        Shadow = 7,
+
+        Ice = 8,
+        Magma = 9,
+
+        Life = 10,
+        Death = 11
+    }
+
     public class Inscription
     {
         [Key]

@@ -23,7 +23,7 @@ namespace Server.Watcher
 
         public void PrintStatus()
         {
-            foreach (var config in DataRepositories.GameServerRepository.GetAll())
+            foreach (var config in DataRepositories.ConfigRepository.GetAll())
             {
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write("Checking [");
@@ -48,7 +48,7 @@ namespace Server.Watcher
                     //Console.WriteLine($"Server is not online(1)... [{sockEx.Message}]");
                 }
 
-                DataRepositories.GameServerRepository.Update(config);
+                DataRepositories.ConfigRepository.Update(config);
 
                 if (config.Online)
                 {

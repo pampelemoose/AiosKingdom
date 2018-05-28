@@ -23,7 +23,7 @@ namespace DataModels
 
         public Guid ServerId { get; set; }
         [ForeignKey("ServerId")]
-        public GameServer Server { get; set; }
+        public Config Server { get; set; }
 
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]

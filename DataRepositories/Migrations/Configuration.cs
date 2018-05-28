@@ -28,8 +28,8 @@ namespace DataRepositories.Migrations
             foreach (var entity in context.Users)
                 context.Users.Remove(entity);
 
-            foreach (var entity in context.Servers)
-                context.Servers.Remove(entity);
+            foreach (var entity in context.Configs)
+                context.Configs.Remove(entity);
 
             foreach (var entity in context.Market)
                 context.Market.Remove(entity);
@@ -49,6 +49,16 @@ namespace DataRepositories.Migrations
             context.Roles.Add(new DataModels.Role { Name = "Parent" });
             context.Roles.Add(new DataModels.Role { Name = "Child" });
 
+            context.Kingdoms.Add(new DataModels.Kingdom
+            {
+                Id = Guid.NewGuid(),
+
+                Name = "Aios",
+
+                LevelGap = 5,
+                MaxLevelCountForGap = 100
+            });
+
             context.SaveChanges();
 
             context.Users.Add(new DataModels.User
@@ -63,25 +73,34 @@ namespace DataRepositories.Migrations
                 SoulSlots = 1
             });
 
-            context.Servers.Add(new DataModels.GameServer
+
+            context.Configs.Add(new DataModels.Config
             {
                 Id = Guid.NewGuid(),
                 VersionId = context.Versions.First().Id,
+
                 Host = "127.0.0.1",
                 Port = 4242,
+
+                KingdomId = context.Kingdoms.First().Id,
                 Name = "Server 1",
                 Difficulty = DataModels.ServerDifficulty.Easy,
                 Online = false,
+
                 SlotAvailable = 0,
                 SlotLimit = 100,
+
                 BaseExperience = 400,
                 ExperiencePerLevelRatio = 1.2f,
+
                 BaseHealth = 100,
                 HealthPerLevelRatio = 10f,
                 HealthPerStaminaRatio = 10f,
+
                 BaseMana = 50,
                 ManaPerLevelRatio = 5f,
                 ManaPerEnergyRatio = 5f,
+
                 SpiritsPerLevelUp = 10,
                 EmbersPerLevelUp = 1
             });
