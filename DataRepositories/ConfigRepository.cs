@@ -7,35 +7,35 @@ using System.Threading.Tasks;
 
 namespace DataRepositories
 {
-    public static class GameServerRepository
+    public static class ConfigRepository
     {
-        public static List<DataModels.GameServer> GetAll()
+        public static List<DataModels.Config> GetAll()
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Servers.ToList();
+                return context.Configs.ToList();
             }
         }
 
-        public static DataModels.GameServer GetById(Guid id)
+        public static DataModels.Config GetById(Guid id)
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Servers.FirstOrDefault(u => u.Id.Equals(id));
+                return context.Configs.FirstOrDefault(u => u.Id.Equals(id));
             }
         }
 
-        public static bool Create(DataModels.GameServer server)
+        public static bool Create(DataModels.Config server)
         {
             using (var context = new AiosKingdomContext())
             {
-                if (context.Servers.FirstOrDefault(u => u.Name.Equals(server.Name)) != null)
+                if (context.Configs.FirstOrDefault(u => u.Name.Equals(server.Name)) != null)
                     return false;
 
                 if (server.Id.Equals(Guid.Empty))
                     return false;
 
-                context.Servers.Add(server);
+                context.Configs.Add(server);
                 try
                 {
                     context.SaveChanges();
@@ -55,11 +55,11 @@ namespace DataRepositories
             }
         }
 
-        public static bool Update(DataModels.GameServer server)
+        public static bool Update(DataModels.Config server)
         {
             using (var context = new AiosKingdomContext())
             {
-                var online = context.Servers.FirstOrDefault(s => s.Id.Equals(server.Id));
+                var online = context.Configs.FirstOrDefault(s => s.Id.Equals(server.Id));
                 if (online == null) return false;
 
                 online.Online = server.Online;

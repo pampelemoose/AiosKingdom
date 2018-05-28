@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataRepositories
 {
-    public static class TokenRepository
+    public static class AuthTokenRepository
     {
-        public static DataModels.GameServerToken Get(Guid token)
+        public static DataModels.AuthToken Get(Guid token)
         {
             using (var context = new AiosKingdomContext())
             {
@@ -17,11 +17,11 @@ namespace DataRepositories
             }
         }
 
-        public static DataModels.GameServerToken Create(Guid userId)
+        public static DataModels.AuthToken Create(Guid userId)
         {
             using (var context = new AiosKingdomContext())
             {
-                var token = new DataModels.GameServerToken
+                var token = new DataModels.AuthToken
                 {
                     Id = Guid.NewGuid(),
                     Token = Guid.NewGuid(),
@@ -49,7 +49,7 @@ namespace DataRepositories
             }
         }
 
-        public static bool Remove(DataModels.GameServerToken token)
+        public static bool Remove(DataModels.AuthToken token)
         {
             using (var context = new AiosKingdomContext())
             {

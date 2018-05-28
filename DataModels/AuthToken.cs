@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DataModels
 {
-    public class GameServerToken
+    public class AuthToken
     {
         [Key]
         public Guid Id { get; set; }

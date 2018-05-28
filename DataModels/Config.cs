@@ -13,7 +13,7 @@ namespace DataModels
         Legendary = 3
     }
 
-    public class GameServer
+    public class Config
     {
         [Key]
         public Guid Id { get; set; }
@@ -26,6 +26,9 @@ namespace DataModels
         public int Port { get; set; }
         [Required]
         public bool Online { get; set; }
+
+        [Required]
+        public Guid KingdomId { get; set; }
 
         [Required]
         public string Name { get; set; }
