@@ -129,6 +129,7 @@ namespace AiosKingdom.ViewModels
 
         private void SetDatas()
         {
+            PillsAmount = 0;
             Spirits = DatasManager.Instance.Soul.Spirits;
         }
     }
