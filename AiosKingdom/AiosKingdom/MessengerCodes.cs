@@ -27,6 +27,8 @@ namespace AiosKingdom
 
         public static string MarketUpdated = "marketUpdated";
 
+        public static string SkillLearned = "skillLearned";
+
         public static string OpenLoadingScreen = "openLoadingScreen";
         public static string LoadingScreenOpenned = "loadingScreenOpenned";
         public static string UpdateLoadingScreen = "updateLoadingScreen";

@@ -512,6 +512,7 @@ namespace AiosKingdom
                         {
                             AskSoulDatas();
                         }
+                        MessagingCenter.Send(this, MessengerCodes.SkillLearned, result.Message);
                     }
                     break;
 

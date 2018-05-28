@@ -13,6 +13,11 @@ namespace AiosKingdom.ViewModels
             : base(nav)
         {
             Title = "Bookstore";
+
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SkillLearned, (sender, message) =>
+            {
+                LoadingScreenManager.Instance.AlertLoadingScreen("Learn Skill", message);
+            });
         }
 
         public List<DataModels.Skills.Book> Books => DatasManager.Instance.Books;
@@ -56,6 +61,7 @@ namespace AiosKingdom.ViewModels
         public ICommand BuyBookAction =>
         _buyBookAction ?? (_buyBookAction = new Command(() =>
         {
+            LoadingScreenManager.Instance.OpenLoadingScreen($"Learning {_selectedBook.Name}, please wait...");
             NetworkManager.Instance.LearnSkill(_selectedBook.BookId, 1);
         }, () =>
         {
