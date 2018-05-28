@@ -104,7 +104,8 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="5*"/>
                                                 <ColumnDefinition Width="1*"/>
-                                                <ColumnDefinition Width="4*"/>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="1*"/>
                                                 <ColumnDefinition Width="1*"/>
                                                 <ColumnDefinition Width="1*"/>
                                             </Grid.ColumnDefinitions>
@@ -143,6 +144,13 @@
                                                     FontSize="18"
                                                     VerticalTextAlignment="Center"
                                                     Text="{Binding Duration}"/>
+                                            <Label
+                                                    Grid.Column="5"
+                                                    TextColor="Aqua"
+                                                    FontAttributes="Bold"
+                                                    FontSize="18"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding ., Converter={StaticResource inscToCalcVal}}"/>
                                         </Grid>
                                     </Grid>
                                 </ContentView>
