@@ -2,19 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace DataModels.Monsters
+namespace Website.Models
 {
-    public class Phase
+    public class PhaseModel
     {
-        [Key]
-        public Guid Id { get; set; }
-
-        [Required]
-        public Guid MonsterId { get; set; }
-
         [Required]
         [Range(0, 10000)]
         public double StaminaPerLevel { get; set; }
@@ -40,6 +33,21 @@ namespace DataModels.Monsters
         public double WisdomPerLevel { get; set; }
 
         [Required]
-        public Guid SkillId { get; set; }
+        public Guid SelectedSkill { get; set; }
+        [Display(Name = "Item")]
+        public List<DataModels.Skills.Page> Skills
+        {
+            get
+            {
+                var pages = new List<DataModels.Skills.Page>();
+
+                foreach (var book in DataRepositories.BookRepository.GetAll())
+                {
+                    pages.AddRange(book.Pages);
+                }
+
+                return pages;
+            }
+        }
     }
 }

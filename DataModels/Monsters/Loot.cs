@@ -19,6 +19,8 @@ namespace DataModels.Monsters
         [Range(0, 100)]
         public double DropRate { get; set; }
 
+        public Items.ItemType Type { get; set; }
+
         [Required]
         public Guid ItemId { get; set; }
 

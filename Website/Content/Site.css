@@ -101,5 +101,10 @@ body > .container {
 }
 
 .admin-bar {
-    margin-bottom: 60px;
+    margin-top: 60px;
+    opacity: 0.2;
+}
+
+.admin-bar:hover {
+    opacity: 1;
 }

@@ -1,0 +1,62 @@
+﻿@model Website.Models.PhaseModel
+
+<div class="card col-3 m-3">
+    @using (Html.BeginCollectionItem("Phases"))
+    {
+    <div class="card-body">
+        <div class="form-group">
+            @Html.LabelFor(model => model.StaminaPerLevel, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.StaminaPerLevel, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StaminaPerLevel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.EnergyPerLevel, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.EnergyPerLevel, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EnergyPerLevel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.StrengthPerLevel, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.StrengthPerLevel, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StrengthPerLevel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.AgilityPerLevel, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.AgilityPerLevel, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AgilityPerLevel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IntelligencePerLevel, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.IntelligencePerLevel, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IntelligencePerLevel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.WisdomPerLevel, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.WisdomPerLevel, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.WisdomPerLevel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Skills, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.DropDownListFor(model => model.SelectedSkill, new SelectList(Model.Skills, "Id", "Description"), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Skills, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+        <div class="card-footer">
+            <input type="button" value="Delete" class="btn btn-danger" onclick="$(this).parent().parent().remove();" />
+        </div>
+    }
+</div>

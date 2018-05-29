@@ -26,22 +26,6 @@ namespace Website.Controllers
         {
             var slot = new Models.MarketSlotModel();
             slot.Servers = DataRepositories.ConfigRepository.GetAll();
-            slot.Items = new List<DataModels.Items.AItem>();
-
-            foreach (var armor in DataRepositories.ArmorRepository.GetAll())
-            {
-                slot.Items.Add(armor);
-            }
-
-            foreach (var bag in DataRepositories.BagRepository.GetAll())
-            {
-                slot.Items.Add(bag);
-            }
-
-            foreach (var consumable in DataRepositories.ConsumableRepository.GetAll())
-            {
-                slot.Items.Add(consumable);
-            }
 
             return View(slot);
         }

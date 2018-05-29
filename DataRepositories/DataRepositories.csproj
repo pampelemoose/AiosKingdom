@@ -54,7 +54,12 @@
     <Compile Include="AiosKingdomContext.cs" />
     <Compile Include="ConfigRepository.cs" />
     <Compile Include="MarketRepository.cs" />
+    <Compile Include="Migrations\201805290811003_InitialMigration.cs" />
+    <Compile Include="Migrations\201805290811003_InitialMigration.Designer.cs">
+      <DependentUpon>201805290811003_InitialMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="MonsterRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SoulRepository.cs" />
     <Compile Include="AuthTokenRepository.cs" />
@@ -70,6 +75,11 @@
       <Project>{5617d24d-807a-445f-ac2f-6774b442761e}</Project>
       <Name>DataModels</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201805290811003_InitialMigration.resx">
+      <DependentUpon>201805290811003_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

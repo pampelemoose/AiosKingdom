@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DataModels.Items
@@ -36,6 +37,12 @@ namespace DataModels.Items
         [Required(ErrorMessage = "Name required"), MinLength(4), MaxLength(50)]
         [Display(Name = "Name")]
         public string Name { get; set; }
+
+        [NotMapped]
+        public string ItemName
+        {
+            get { return $"[{Type}] {Name}"; }
+        }
 
         [Required(ErrorMessage = "Description required"), MinLength(4), MaxLength(200)]
         [Display(Name = "Description")]

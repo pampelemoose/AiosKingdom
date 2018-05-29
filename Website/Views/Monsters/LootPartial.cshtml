@@ -1,0 +1,43 @@
+﻿@model Website.Models.LootModel
+
+<div class="card col-3 m-3">
+    @using (Html.BeginCollectionItem("Loots"))
+    {
+    <div class="card-body">
+        <div class="form-group">
+            @Html.LabelFor(model => model.DropRate, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.DropRate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DropRate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control item-list-changer", @onchange = "ItemTypeChangeHook($(this))" })
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.DropDownListFor(model => model.SelectedItem, new SelectList(Model.Items, "ItemId", "ItemName"), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+        <div class="card-footer">
+            <input type="button" value="Delete" class="btn btn-danger" onclick="$(this).parent().parent().remove();" />
+        </div>
+    }
+</div>

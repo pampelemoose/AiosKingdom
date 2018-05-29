@@ -6,11 +6,11 @@ using System.Web;
 
 namespace Website.Models
 {
-    public class MarketSlotModel
+    public class LootModel
     {
-        public Guid SelectedServer { get; set; }
-        [Display(Name = "Server")]
-        public List<DataModels.Config> Servers { get; set; }
+        [Required]
+        [Range(0, 100)]
+        public double DropRate { get; set; }
 
         [Display(Name = "Type")]
         public DataModels.Items.ItemType Type { get; set; }
@@ -45,13 +45,8 @@ namespace Website.Models
             }
         }
 
-        [Display(Name = "Quantity")]
+        [Required]
+        [Range(1, 10000)]
         public int Quantity { get; set; }
-
-        [Display(Name = "ShardPrice")]
-        public int ShardPrice { get; set; }
-
-        [Display(Name = "BitPrice")]
-        public int BitPrice { get; set; }
     }
 }

@@ -48,6 +48,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BeginCollectionItem, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BeginCollectionItem.1.2.1.0\lib\net35\BeginCollectionItem.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -165,6 +168,7 @@
     <Compile Include="Controllers\GameServersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MarketController.cs" />
+    <Compile Include="Controllers\MonstersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -180,9 +184,13 @@
     <Compile Include="Models\BookModel.cs" />
     <Compile Include="Models\ConsumableFilter.cs" />
     <Compile Include="Models\ConsumableModel.cs" />
+    <Compile Include="Models\LootModel.cs" />
     <Compile Include="Models\MarketSlotFilter.cs" />
     <Compile Include="Models\MarketSlotModel.cs" />
+    <Compile Include="Models\MonsterFilter.cs" />
+    <Compile Include="Models\MonsterModel.cs" />
     <Compile Include="Models\PageModel.cs" />
+    <Compile Include="Models\PhaseModel.cs" />
     <Compile Include="Models\UserFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -284,6 +292,11 @@
     <Content Include="Views\Market\Create.cshtml" />
     <Content Include="Views\Books\Index.cshtml" />
     <Content Include="Views\Books\Create.cshtml" />
+    <Content Include="Views\Monsters\Create.cshtml" />
+    <Content Include="Views\Monsters\Index.cshtml" />
+    <Content Include="Views\Monsters\LootPartial.cshtml" />
+    <Content Include="Views\Monsters\PhasePartial.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
