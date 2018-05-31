@@ -47,6 +47,12 @@ namespace Website.Controllers
             {
                 bag.Stats.RemoveAll(s => s.StatValue == 0);
 
+                if (bag.Stats.Count == 0)
+                {
+                    bag.VersionList = DataRepositories.VersionRepository.GetAll();
+                    return View(bag);
+                }
+
                 if (DataRepositories.BagRepository.Create(new DataModels.Items.Bag
                 {
                     Id = Guid.NewGuid(),

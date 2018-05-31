@@ -54,9 +54,9 @@
     <Compile Include="AiosKingdomContext.cs" />
     <Compile Include="ConfigRepository.cs" />
     <Compile Include="MarketRepository.cs" />
-    <Compile Include="Migrations\201805290811003_InitialMigration.cs" />
-    <Compile Include="Migrations\201805290811003_InitialMigration.Designer.cs">
-      <DependentUpon>201805290811003_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201805290947143_InitialMigration.cs" />
+    <Compile Include="Migrations\201805290947143_InitialMigration.Designer.cs">
+      <DependentUpon>201805290947143_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
@@ -77,8 +77,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805290811003_InitialMigration.resx">
-      <DependentUpon>201805290811003_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805290947143_InitialMigration.resx">
+      <DependentUpon>201805290947143_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

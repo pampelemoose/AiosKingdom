@@ -1,0 +1,18 @@
+﻿@model DataModels.Monsters.MonsterType?
+
+<tr class="row">
+    @using (Html.BeginCollectionItem("Types"))
+    {
+        <td class="col-md-11">
+            <div>
+                @Html.EnumDropDownListFor(model => model, new { @class = "form-control item-list-changer" })
+                @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+            </div>
+        </td>
+        <td class="col-md-1">
+            <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().remove();">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </td>
+    }
+</tr>

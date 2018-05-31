@@ -4,102 +4,160 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create Monster</h2>
+<section>
+    <div class="container">
+        <h2>Create Monster</h2>
+    </div>
+</section>
 
 @using (Html.BeginForm("Monster"))
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <section>
+            <div class="container">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.VersionList, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Story, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Story, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Story, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="row p-3">
-        <div class="col-md-10">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control image-url-setter" } })
-                    @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.VersionList, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Story, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Story, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Story, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row p-3">
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label" })
+                            <div>
+                                @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control image-url-setter" } })
+                                @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <input type="button" value="Update" class="col-md-2 btn btn-info update-image-viewer" />
+                    </div>
+                    <div class="col-md-2">
+                        <img class="img-fluid img-thumbnail image-viewer" src="@Model.Image" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.HealthPerLevel, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.HealthPerLevel, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.HealthPerLevel, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-            <input type="button" value="Update" class="col-md-2 btn btn-info update-image-viewer" />
-        </div>
-        <div class="col-md-2">
-            <img class="img-fluid img-thumbnail image-viewer" src="@Model.Image"/>
-        </div>
+        </section>
+        <section class="bg-info">
+            <div class="container">
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="row">
+                            <th scope="col" class="col-md-10">@Html.LabelFor(model => model.Types, htmlAttributes: new { @class = "control-label" })</th>
+                            <th scope="col" class="col-md-2">
+                                <input class="btn btn-primary btn-block" type="button" id="addTypeToMonster" value="Add Type" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="typeList">
+                        @if (Model != null && Model.Types != null)
+                        {
+                            for (var i = 0; i < Model.Types.Count; i++)
+                            {
+                                Html.RenderPartial("TypePartial", Model.Types[i]);
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                @Html.LabelFor(model => model.Loots, htmlAttributes: new { @class = "control-label" })
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="row">
+                            <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Loots.FirstOrDefault().DropRate)</th>
+                            <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Loots.FirstOrDefault().Type)</th>
+                            <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Loots.FirstOrDefault().Items)</th>
+                            <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Loots.FirstOrDefault().Quantity)</th>
+                            <th scope="col" class="col-md-2">
+                                <input class="btn btn-primary btn-block" type="button" id="addLootToMonster" value="Add Loot" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="lootList">
+                        @if (Model != null && Model.Loots != null)
+                        {
+                            for (var i = 0; i < Model.Loots.Count; i++)
+                            {
+                                Html.RenderPartial("LootPartial", Model.Loots[i]);
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section class="bg-info">
+            <div class="container">
+                @Html.LabelFor(model => model.Phases, htmlAttributes: new { @class = "control-label" })
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="row">
+                            <th scope="col" class="col-md-1">@Html.LabelFor(model => model.Phases.FirstOrDefault().StaminaPerLevel)</th>
+                            <th scope="col" class="col-md-1">@Html.LabelFor(model => model.Phases.FirstOrDefault().EnergyPerLevel)</th>
+                            <th scope="col" class="col-md-1">@Html.LabelFor(model => model.Phases.FirstOrDefault().StrengthPerLevel)</th>
+                            <th scope="col" class="col-md-1">@Html.LabelFor(model => model.Phases.FirstOrDefault().AgilityPerLevel)</th>
+                            <th scope="col" class="col-md-1">@Html.LabelFor(model => model.Phases.FirstOrDefault().IntelligencePerLevel)</th>
+                            <th scope="col" class="col-md-1">@Html.LabelFor(model => model.Phases.FirstOrDefault().WisdomPerLevel)</th>
+                            <th scope="col" class="col-md-4">@Html.LabelFor(model => model.Phases.FirstOrDefault().Skills)</th>
+                            <th scope="col" class="col-md-2">
+                                <input class="btn btn-primary btn-block" type="button" id="addPhaseToMonster" value="Add Phase" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="phaseList">
+                        @if (Model != null && Model.Phases != null)
+                        {
+                            for (var i = 0; i < Model.Phases.Count; i++)
+                            {
+                                Html.RenderPartial("PhasePartial", Model.Phases[i]);
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <input type="submit" value="Create" class="btn btn-success btn-block" />
+            </div>
+        </section>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.HealthPerLevel, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.HealthPerLevel, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.HealthPerLevel, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="row">
-        @Html.LabelFor(model => model.Loots, htmlAttributes: new { @class = "control-label col-md-10" })
-        <input class="col-md-2 btn btn-primary" type="button" id="addLootToMonster" value="Add Loot" />
-    </div>
-    <div class="row" id="lootList">
-        @if (Model != null && Model.Loots != null)
-        {
-            for (var i = 0; i < Model.Loots.Count; i++)
-            {
-                Html.RenderPartial("LootPartial", Model.Loots[i]);
-            }
-        }
-    </div>
-
-    <div class="row mt-3">
-        @Html.LabelFor(model => model.Phases, htmlAttributes: new { @class = "control-label col-md-10" })
-        <input class="col-md-2 btn btn-primary" type="button" id="addPhaseToMonster" value="Add Phase" />
-    </div>
-    <div class="row" id="phaseList">
-        @if (Model != null && Model.Phases != null)
-        {
-            for (var i = 0; i < Model.Phases.Count; i++)
-            {
-                Html.RenderPartial("PhasePartial", Model.Phases[i]);
-            }
-        }
-    </div>
-
-    <div class="form-group mt-3">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 
     if (ViewBag.Message != null)
     {
@@ -112,6 +170,18 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            $("#addTypeToMonster").click(function () {
+                $.ajax({
+                    url: "/Monsters/AddTypePartial",
+                    cache: false,
+                    type: "GET",
+                    success: function (data) {
+                        $('#typeList').append(data);
+                        $('#typeList').fadeIn('fast');
+                    }
+                });
+            });
+
             $("#addLootToMonster").click(function () {
                 $.ajax({
                     url: "/Monsters/AddLootPartial",
@@ -134,22 +204,7 @@
                         $('#phaseList').fadeIn('fast');
                     }
                 });
-            });          
-        });
-
-        function ItemTypeChangeHook(that) {
-            $.ajax({
-                url: "/Items/GetItems/",
-                cache: false,
-                type: "GET",
-                success: function (data) {
-                    console.log(data);
-                }
             });
-        }
-
-        $(document).change(function () {
-            
         });
     </script>
 }

@@ -35,9 +35,6 @@ namespace Website.Models
         [Range(0, 400)]
         public int ManaCost { get; set; }
 
-        [Display(Name = "InscriptionCount")]
-        public int InscriptionCount { get; set; }
-
         public List<DataModels.Skills.Inscription> Inscriptions { get; set; }
     }
 }

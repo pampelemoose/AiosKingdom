@@ -4,111 +4,119 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Consumables</h2>
+<section>
+    <div class="container">
+        <h2>Consumables</h2>
+    </div>
+</section>
 
-<div class="row">
-    <div class="card col-12">
-        <div class="card-header" data-toggle="collapse" href="#filter-body" aria-expanded="false" aria-controls="filter-body">
-            Filters
+@using (Html.BeginForm())
+{
+    <section class="bg-info">
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr class="row" data-toggle="collapse" href="#filter-body" aria-expanded="false" aria-controls="filter-body">
+                        <th scope="col" class="col-md-11">
+                            Filters
+                        </th>
+                        <th scope="col" class="col-md-1"></th>
+                    </tr>
+                </thead>
+                <tbody id="filter-body" class="collapse">
+                    <tr class="row">
+                        <td class="col-md-2">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td class="col-md-10">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td class="col-md-2">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "control-label" })
+                                @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td class="col-md-2">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ItemLevel, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.ItemLevel, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td class="col-md-2">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.UseLevelRequired, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.UseLevelRequired, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td class="offset-md-4 col-md-2">
+                            <input type="submit" value="Filter" class="btn btn-default btn-block" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="card-body collapse" id="filter-body">
-            @using (Html.BeginForm())
+    </section>
+}
+
+<section>
+    <div class="container">
+        <div class="row">
+            @foreach (var armor in Model.Items)
             {
-                <div class="form-row">
-                    <hr />
-                    <div class="form-group col-6">
-                        @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label" })
-                        <div>
-                            @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                    <div class="card text-center mt-3 @armor.Quality.ToString().ToLower()">
+                        <img class="card-img-top" src="@armor.Image">
+                        <div class="card-header">
+                            @armor.Name
                         </div>
-                    </div>
-                    <div class="form-group col-6">
-                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
-                        <div>
-                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item ">
+                                <div class="row">
+                                    <div class="col-12 @armor.Quality.ToString().ToLower()-text">
+                                        <strong>@armor.Quality</strong>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-8">Level Required</div>
+                                    <div class="col-4">@armor.UseLevelRequired</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-8">Item Level</div>
+                                    <div class="col-4">@armor.ItemLevel</div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="card-body font-weight-light font-italic">
+                            @armor.Description
                         </div>
-                    </div>
-
-                    <div class="form-group col-6">
-                        @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "control-label" })
-                        <div>
-                            @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
-                        </div>
-                    </div>
-
-                    <div class="form-group col-6">
-                        @Html.LabelFor(model => model.ItemLevel, htmlAttributes: new { @class = "control-label" })
-                        <div>
-                            @Html.EditorFor(model => model.ItemLevel, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
-                    </div>
-
-                    <div class="form-group col-6">
-                        @Html.LabelFor(model => model.UseLevelRequired, htmlAttributes: new { @class = "control-label" })
-                        <div>
-                            @Html.EditorFor(model => model.UseLevelRequired, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
-                    </div>
-
-                    <div class="form-group col-6">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Filter" class="btn btn-default" />
-                        </div>
+                        <ul class="list-group list-group-flush">
+                            @if (armor.Effects != null)
+                            {
+                                foreach (var effect in armor.Effects)
+                                {
+                                    <li tabindex="0" class="list-group-item" data-toggle="popover" data-trigger="focus" title="@effect.Type - @effect.AffectValue" data-content="@effect.Description">
+                                        <div class="row">
+                                            <div class="col-8">@effect.Name</div>
+                                            <div class="col-4"><strong>@effect.AffectTime</strong></div>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                        </ul>
                     </div>
                 </div>
             }
         </div>
     </div>
-</div>
-
-<div class="row">
-    @foreach (var armor in Model.Items)
-    {
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-            <div class="card text-center mt-3 @armor.Quality.ToString().ToLower()">
-                <img class="card-img-top" src="@armor.Image">
-                <div class="card-header">
-                    @armor.Name
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item ">
-                        <div class="row">
-                            <div class="col-12 @armor.Quality.ToString().ToLower()-text">
-                                <strong>@armor.Quality</strong>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-8">Level Required</div>
-                            <div class="col-4">@armor.UseLevelRequired</div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-8">Item Level</div>
-                            <div class="col-4">@armor.ItemLevel</div>
-                        </div>
-                    </li>
-                </ul>
-                <div class="card-body font-weight-light font-italic">
-                    @armor.Description
-                </div>
-                <ul class="list-group list-group-flush">
-                    @if (armor.Effects != null)
-                    {
-                        foreach (var effect in armor.Effects)
-                        {
-                            <li tabindex="0" class="list-group-item" data-toggle="popover" data-trigger="focus" title="@effect.Type - @effect.AffectValue" data-content="@effect.Description">
-                                <div class="row">
-                                    <div class="col-8">@effect.Name</div>
-                                    <div class="col-4"><strong>@effect.AffectTime</strong></div>
-                                </div>
-                            </li>
-                        }
-                    }
-                </ul>
-            </div>
-        </div>
-    }
-</div>
+</section>

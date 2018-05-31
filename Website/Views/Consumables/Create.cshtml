@@ -4,127 +4,119 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+<section>
+    <div class="container">
+        <h2>Create</h2>
+    </div>
+</section>
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
+    <section>
+        <div class="container">
+            @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.VersionList, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="row p-3">
-            <div class="col-md-10">
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label" })
-                    <div>
-                        @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control image-url-setter" } })
-                        @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.VersionList, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <input type="button" value="Update" class="col-md-2 btn btn-info update-image-viewer"/>
-            </div>
-            <div class="col-md-2">
-                <img class="img-fluid img-thumbnail image-viewer" src="@Model.Image" />
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Quality, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ItemLevel, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ItemLevel, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ItemLevel, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.UseLevelRequired, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.UseLevelRequired, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.UseLevelRequired, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <hr />
-        @if (Model != null && Model.Effects != null)
-        {
-            <div class="row">
-                @for (var i = 0; i < Model.Effects.Count; i++)
-                {
-                <div class="card col-6 mb-3">
-                    <div class="card-header" data-toggle="collapse" href="#effect_@Model.Effects[i].Type.ToString().ToLower()" aria-expanded="false" aria-controls="filter-body">
-                        @Html.Label(Model.Effects[i].Type.ToString(), htmlAttributes: new { @class = "control-label" })
-                    </div>
-                    <div class="card-body collapse" id="effect_@Model.Effects[i].Type.ToString().ToLower()">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Effects[i].Name, htmlAttributes: new { @class = "control-label" })
-                            <div>
-                                @Html.EditorFor(model => model.Effects[i].Name, new { htmlAttributes = new { @class = "form-control" } })
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Effects[i].Description, htmlAttributes: new { @class = "control-label" })
-                            <div>
-                                @Html.EditorFor(model => model.Effects[i].Description, new { htmlAttributes = new { @class = "form-control" } })
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Effects[i].AffectTime, htmlAttributes: new { @class = "control-label" })
-                            <div>
-                                @Html.EditorFor(model => model.Effects[i].AffectTime, new { htmlAttributes = new { @class = "form-control" } })
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Effects[i].AffectValue, htmlAttributes: new { @class = "control-label" })
-                            <div>
-                                @Html.EditorFor(model => model.Effects[i].AffectValue, new { htmlAttributes = new { @class = "form-control" } })
-                            </div>
-                        </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                @Html.HiddenFor(model => model.Effects[i].Type)
-                }
-            </div>
-        }
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row p-3">
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label" })
+                            <div>
+                                @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control image-url-setter" } })
+                                @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <input type="button" value="Update" class="col-md-2 btn btn-info update-image-viewer" />
+                    </div>
+                    <div class="col-md-2">
+                        <img class="img-fluid img-thumbnail image-viewer" src="@Model.Image" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Quality, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ItemLevel, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ItemLevel, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ItemLevel, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UseLevelRequired, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.UseLevelRequired, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UseLevelRequired, "", new { @class = "text-danger" })
+                    </div>
+                </div>
             </div>
+    </section>
+    <section class="bg-info">
+        <div class="container">
+            @Html.LabelFor(model => model.Effects, htmlAttributes: new { @class = "control-label" })
+            <table class="table table-striped">
+                <thead>
+                    <tr class="row">
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Effects.FirstOrDefault().Type, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Effects.FirstOrDefault().Name, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Effects.FirstOrDefault().Description, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-1">@Html.LabelFor(model => model.Effects.FirstOrDefault().AffectTime, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-1">@Html.LabelFor(model => model.Effects.FirstOrDefault().AffectValue, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">
+                            <input class="btn btn-primary btn-block" type="button" id="addEffectToCons" value="Add Effect" />
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="effectList">
+                    @if (Model != null && Model.Effects != null)
+                    {
+                        for (var i = 0; i < Model.Effects.Count; i++)
+                        {
+                            Html.RenderPartial("EffectPartial", Model.Effects[i]);
+                        }
+                    }
+                </tbody>
+            </table>
         </div>
-    </div>
+    </section>
+    <section class="mt-3">
+        <div class="container">
+            <input type="submit" value="Create" class="btn btn-success btn-block" />
+        </div>
+    </section>
 
     if (ViewBag.Message != null)
     {
@@ -132,4 +124,27 @@
             <strong>Error!</strong> @ViewBag.Message
         </div>
     }
+
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#addEffectToCons").click(function () {
+                $.ajax({
+                    url: "/Consumables/AddEffectPartial",
+                    cache: false,
+                    type: "GET",
+                    success: function (data) {
+                        $('#effectList').append(data);
+                        $('#effectList').fadeIn('fast');
+                    }
+                });
+            });
+
+            $("#addInscToPage").click(function () {
+
+            });
+        });
+    </script>
 }

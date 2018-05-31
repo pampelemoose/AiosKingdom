@@ -13,7 +13,8 @@ namespace Website.Models
         [Display(Name = "Version")]
         public List<DataModels.Version> VersionList { get; set; }
 
-        // Types
+        [Display(Name = "Types")]
+        public List<DataModels.Monsters.MonsterType> Types { get; set; }
 
         [Required(ErrorMessage = "Name required"), MinLength(4), MaxLength(50)]
         [Display(Name = "Name")]

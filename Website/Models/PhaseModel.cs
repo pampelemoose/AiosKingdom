@@ -10,26 +10,32 @@ namespace Website.Models
     {
         [Required]
         [Range(0, 10000)]
+        [Display(Name = "Stamina Per Level")]
         public double StaminaPerLevel { get; set; }
 
         [Required]
         [Range(0, 10000)]
+        [Display(Name = "Energy Per Level")]
         public double EnergyPerLevel { get; set; }
 
         [Required]
         [Range(0, 10000)]
+        [Display(Name = "Strength Per Level")]
         public double StrengthPerLevel { get; set; }
 
         [Required]
         [Range(0, 10000)]
+        [Display(Name = "Agility Per Level")]
         public double AgilityPerLevel { get; set; }
 
         [Required]
         [Range(0, 10000)]
+        [Display(Name = "Intelligence Per Level")]
         public double IntelligencePerLevel { get; set; }
 
         [Required]
         [Range(0, 10000)]
+        [Display(Name = "Wisdom Per Level")]
         public double WisdomPerLevel { get; set; }
 
         [Required]

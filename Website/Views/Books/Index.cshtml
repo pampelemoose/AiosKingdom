@@ -4,120 +4,130 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Books</h2>
+<section>
+    <div class="container">
+        <h2>Books</h2>
+    </div>
+</section>
 
-<div class="row">
-    <div class="card col-12">
-        <div class="card-header" data-toggle="collapse" href="#filter-body" aria-expanded="false" aria-controls="filter-body">
-            Filters
+@using (Html.BeginForm())
+{
+    <section class="bg-info">
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr class="row" data-toggle="collapse" href="#filter-body" aria-expanded="false" aria-controls="filter-body">
+                        <th scope="col" class="col-md-11">
+                            Filters
+                        </th>
+                        <th scope="col" class="col-md-1"></th>
+                    </tr>
+                </thead>
+                <tbody id="filter-body" class="collapse">
+                    <tr class="row">
+                        <td class="col-md-2">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SelectedVersion, htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td class="col-md-2">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "control-label" })
+                                @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td class="offset-md-6 col-md-2">
+                            <input type="submit" value="Filter" class="btn btn-default btn-block" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="card-body collapse" id="filter-body">
-            @using (Html.BeginForm())
+    </section>
+}
+
+<section>
+    <div class="container">
+        <div class="row">
+            @foreach (var book in Model.Books)
             {
-                <div class="form-row">
-                    <hr />
-                    <div class="form-group col-6">
-                        @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label" })
-                        <div>
-                            @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
+                <div class="card col-12 mt-2">
+                    <div class="card-header" data-toggle="collapse" href="#@book.Id" aria-expanded="false" aria-controls="@book.Id">
+                        <div class="row">
+                            <div class="col-10">@book.Name</div>
+                            <div class="col-2"><strong>@book.Quality</strong></div>
                         </div>
                     </div>
+                    <div class="card-body collapse" id="@book.Id">
+                        <div class="row">
+                            <ul class="list-unstyled col-md-12">
+                                @if (book.Pages != null)
+                                {
+                                    foreach (var page in book.Pages)
+                                    {
+                                        <li class="media mt-2 border border-primary">
+                                            <img class="mr-3" src="@page.Image">
+                                            <div class="media-body">
+                                                <div class="row">
+                                                    <div class="col-md-12 text-center font-weight-bold p-2">
+                                                        @page.Description
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="row">
+                                                            <div class="col-8">Rank</div>
+                                                            <div class="col-4"><strong>@page.Rank</strong></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="row">
+                                                            <div class="col-8">StatCost</div>
+                                                            <div class="col-4"><strong>@page.EmberCost</strong></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="row">
+                                                            <div class="col-8">ManaCost</div>
+                                                            <div class="col-4"><strong>@page.ManaCost</strong></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <ul class="list-unstyled">
+                                                    @if (page.Inscriptions != null)
+                                                    {
+                                                        foreach (var insc in page.Inscriptions)
+                                                        {
+                                                            <li class="media border border-success">
+                                                                <div class="media-body">
+                                                                    <div class="row">
+                                                                        <div class="col-12 text-center font-weight-bold p-2">
+                                                                            @insc.Description
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-5">@insc.Type</div>
+                                                                        <div class="col-1">@insc.BaseValue</div>
+                                                                        <div class="col-4">@insc.StatType</div>
+                                                                        <div class="col-1">@insc.Ratio</div>
+                                                                        <div class="col-1">@insc.Duration</div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                    }
 
-                    <div class="form-group col-6">
-                        @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "control-label" })
-                        <div>
-                            @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
-                        </div>
-                    </div>
-
-                    <div class="form-group col-6">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Filter" class="btn btn-default" />
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            </ul>
                         </div>
                     </div>
                 </div>
             }
         </div>
     </div>
-</div>
-
-<div class="row mt-4">
-    @foreach (var book in Model.Books)
-    {
-        <div class="card col-12 mt-2">
-            <div class="card-header" data-toggle="collapse" href="#@book.Id" aria-expanded="false" aria-controls="@book.Id">
-                <div class="row">
-                    <div class="col-10">@book.Name</div>
-                    <div class="col-2"><strong>@book.Quality</strong></div>
-                </div>
-            </div>
-            <div class="card-body collapse" id="@book.Id">
-                <div class="row">
-                    <ul class="list-unstyled col-md-12">
-                        @if (book.Pages != null)
-                        {
-                            foreach (var page in book.Pages)
-                            {
-                                <li class="media mt-2 border border-primary">
-                                    <img class="mr-3" src="@page.Image">
-                                    <div class="media-body">
-                                        <div class="row">
-                                            <div class="col-md-12 text-center font-weight-bold p-2">
-                                                @page.Description
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="row">
-                                                    <div class="col-8">Rank</div>
-                                                    <div class="col-4"><strong>@page.Rank</strong></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="row">
-                                                    <div class="col-8">StatCost</div>
-                                                    <div class="col-4"><strong>@page.EmberCost</strong></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="row">
-                                                    <div class="col-8">ManaCost</div>
-                                                    <div class="col-4"><strong>@page.ManaCost</strong></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <ul class="list-unstyled">
-                                            @if (page.Inscriptions != null)
-                                            {
-                                                foreach (var insc in page.Inscriptions)
-                                                {
-                                                    <li class="media border border-success">
-                                                        <div class="media-body">
-                                                            <div class="row">
-                                                                <div class="col-12 text-center font-weight-bold p-2">
-                                                                    @insc.Description
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-5">@insc.Type</div>
-                                                                <div class="col-1">@insc.BaseValue</div>
-                                                                <div class="col-4">@insc.StatType</div>
-                                                                <div class="col-1">@insc.Ratio</div>
-                                                                <div class="col-1">@insc.Duration</div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                }
-                                            }
-
-                                        </ul>
-                                    </div>
-                                </li>
-                            }
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
-    }
-</div>
+</section>

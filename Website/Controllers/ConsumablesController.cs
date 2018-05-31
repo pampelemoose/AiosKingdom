@@ -28,14 +28,6 @@ namespace Website.Controllers
             consumable.VersionList = DataRepositories.VersionRepository.GetAll();
             consumable.Effects = new List<DataModels.Items.ConsumableEffect>();
 
-            foreach (DataModels.Items.EffectType en in Enum.GetValues(typeof(DataModels.Items.EffectType)))
-            {
-                consumable.Effects.Add(new DataModels.Items.ConsumableEffect
-                {
-                    Type = en
-                });
-            }
-
             return View(consumable);
         }
 
@@ -50,6 +42,12 @@ namespace Website.Controllers
                 consumable.Effects.RemoveAll(s => string.IsNullOrEmpty(s.Description));
                 consumable.Effects.RemoveAll(s => s.AffectValue <= 0);
                 consumable.Effects.RemoveAll(s => s.AffectTime < 0);
+
+                if (consumable.Effects.Count == 0)
+                {
+                    consumable.VersionList = DataRepositories.VersionRepository.GetAll();
+                    return View(consumable);
+                }
 
                 if (DataRepositories.ConsumableRepository.Create(new DataModels.Items.Consumable
                 {
@@ -70,7 +68,20 @@ namespace Website.Controllers
             }
 
             consumable.VersionList = DataRepositories.VersionRepository.GetAll();
+            if (consumable.Effects == null)
+            {
+                consumable.Effects = new List<DataModels.Items.ConsumableEffect>();
+            }
             return View(consumable);
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpGet]
+        public ActionResult AddEffectPartial()
+        {
+            var effect = new DataModels.Items.ConsumableEffect();
+
+            return PartialView("EffectPartial", effect);
         }
     }
 }

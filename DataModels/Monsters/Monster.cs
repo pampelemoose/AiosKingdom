@@ -23,7 +23,23 @@ namespace DataModels.Monsters
         public Guid MonsterId { get; set; }
 
         [Required]
-        public List<MonsterType> Types { get; set; }
+        public string InternalTypes { get; set; }
+        public List<MonsterType> Types
+        {
+            get
+            {
+                var result = new List<MonsterType>();
+                foreach (var str in InternalTypes.Split(';'))
+                {
+                    result.Add((MonsterType)Enum.Parse(typeof(MonsterType), str));
+                }
+                return result;
+            }
+            set
+            {
+                InternalTypes = String.Join(";", value);
+            }
+        }
 
         [Required]
         public string Name { get; set; }

@@ -47,15 +47,18 @@ namespace DataModels.Skills
         public InscriptionType Type { get; set; }
 
         [Required]
+        [Range(0, 10000, ErrorMessage = "BaseValue should be >= 0.")]
         public int BaseValue { get; set; }
 
         [Required]
         public Soul.Stats StatType { get; set; }
 
         [Required]
+        [Range(0.0001, 10000, ErrorMessage = "Ratio should be at least > 0")]
         public float Ratio { get; set; }
 
         [Required]
+        [Range(0, 10000, ErrorMessage = "Duration should be >= 0")]
         public int Duration { get; set; }
     }
 }

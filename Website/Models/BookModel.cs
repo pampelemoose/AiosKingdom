@@ -21,9 +21,6 @@ namespace Website.Models
         [Display(Name = "Quality")]
         public DataModels.Skills.BookQuality Quality { get; set; }
 
-        [Display(Name = "PageCount")]
-        public int PageCount { get; set; }
-
         [Display(Name = "Pages")]
         public List<PageModel> Pages { get; set; }
     }

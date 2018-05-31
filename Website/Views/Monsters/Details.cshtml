@@ -1,0 +1,119 @@
+﻿@model DataModels.Monsters.Monster
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<section>
+    <div class="container">
+
+        <div class="row">
+            <div class="media">
+                <img class="mr-3" src="@Model.Image" height="128" width="128" />
+                <div class="media-body">
+                    <h5 class="mt-0">@Model.Name</h5>
+                    <p class="lead">@Model.Description</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<section class="bg-dark mt-5 text-muted">
+    <div class="container">
+        <p class="mb-0">@Model.Story</p>
+    </div>
+</section>
+
+<section class="mt-5">
+    <div class="container">
+        <div class="row">
+            <table class="table col-md-9">
+                <thead>
+                    <tr>
+                        <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().DropRate)</th>
+                        <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().ItemId)</th>
+                        <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().Quantity)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var loot in Model.Loots)
+                    {
+                        <tr>
+                            <td>@loot.DropRate</td>
+                            <td>@loot.ItemId</td>
+                            <td>@loot.Quantity</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-10">
+                        @Html.LabelFor(model => model.HealthPerLevel)
+                    </div>
+                    <div class="col-md-2">
+                        @Model.HealthPerLevel
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="table col-md-12">
+                        <thead>
+                            <tr>
+                                <th>@Html.LabelFor(model => model.Types)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var type in Model.Types)
+                            {
+                                <tr>
+                                    <td>@type</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</section>
+<section class="mt-5 bg-dark">
+    <div class="container">
+        <table class="table col-md-12">
+            <thead>
+                <tr>
+                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().StaminaPerLevel)</th>
+                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().EnergyPerLevel)</th>
+                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().StrengthPerLevel)</th>
+                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().AgilityPerLevel)</th>
+                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().IntelligencePerLevel)</th>
+                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().WisdomPerLevel)</th>
+                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().SkillId)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var phase in Model.Phases)
+                {
+                    <tr>
+                        <td>@phase.StaminaPerLevel</td>
+                        <td>@phase.EnergyPerLevel</td>
+                        <td>@phase.StrengthPerLevel</td>
+                        <td>@phase.AgilityPerLevel</td>
+                        <td>@phase.IntelligencePerLevel</td>
+                        <td>@phase.WisdomPerLevel</td>
+                        <td>@phase.SkillId</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    </div>
+</section>
+
+<div class="row">
+    <div class="col-md-12">
+
+    </div>
+</div>
+
+

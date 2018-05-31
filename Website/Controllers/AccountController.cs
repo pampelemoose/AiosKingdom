@@ -18,27 +18,15 @@ namespace Website.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult Login(string returnUrl = "")
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                return LogOut();
-            }
-
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(Models.LoginView loginView, string returnUrl = "")
+        public ActionResult Login(Models.LoginView loginView)
         {
             if (ModelState.IsValid)
             {
-                if (Membership.ValidateUser(loginView.Username, loginView.Password))
+                if (Membership.ValidateUser(loginView.LogUsername, loginView.LogPassword))
                 {
-                    var user = (Authentication.CustomMembershipUser)Membership.GetUser(loginView.Username, false);
+                    var user = (Authentication.CustomMembershipUser)Membership.GetUser(loginView.LogUsername, false);
                     if (user != null)
                     {
                         Authentication.CustomSerializeModel userModel = new Authentication.CustomSerializeModel
@@ -51,20 +39,20 @@ namespace Website.Controllers
 
                         string userData = JsonConvert.SerializeObject(userModel);
                         FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
-                            1, loginView.Username, DateTime.Now, DateTime.Now.AddMinutes(15), false, userData);
+                            1, loginView.LogUsername, DateTime.Now, DateTime.Now.AddMinutes(15), false, userData);
 
                         string enTicket = FormsAuthentication.Encrypt(authTicket);
                         HttpCookie faCookie = new HttpCookie("AiosKingdom_Auth", enTicket);
                         Response.Cookies.Add(faCookie);
                     }
 
-                    if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
-
-                    return RedirectToAction("Index", "Home");
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    return Json(Url.Action("Index", "Home"));
                 }
             }
 
-            return View(loginView);
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return PartialView("LoginPartial", loginView);
         }
 
         [HttpGet]
@@ -77,16 +65,21 @@ namespace Website.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Registration(Models.RegistrationView registrationView)
         {
-            bool statusRegistration = false;
-            string messageRegistration = string.Empty;
-
             if (ModelState.IsValid)
             {
                 string username = Membership.GetUserNameByEmail(registrationView.Email);
                 if (!string.IsNullOrEmpty(username))
                 {
-                    ModelState.AddModelError("Warning Email", "Sorry, this email is already used.");
-                    return View(registrationView);
+                    ModelState.AddModelError("Email", "Sorry, this email is already used.");
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return PartialView("RegistrationPartial", registrationView);
+                }
+                var usernameExists = DataRepositories.UserRepository.GetAll().FirstOrDefault(u => u.Username.Equals(registrationView.Username));
+                if (usernameExists != null)
+                {
+                    ModelState.AddModelError("Username", "Sorry, this username is already used.");
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return PartialView("RegistrationPartial", registrationView);
                 }
 
                 var role = DataRepositories.UserRepository.Roles.FirstOrDefault(r => r.Name.Equals("User"));
@@ -101,18 +94,22 @@ namespace Website.Controllers
                     Roles = new List<DataModels.Role> { role }
                 };
 
+                if (!VerificationEmail(registrationView.Email, registrationView.ActivationCode.ToString()))
+                {
+                    ModelState.AddModelError("Email", "Email is not valid, please input a valid email.");
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return PartialView("RegistrationPartial", registrationView);
+                }
+
                 if (DataRepositories.UserRepository.Create(user))
                 {
-                    VerificationEmail(registrationView.Email, registrationView.ActivationCode.ToString());
-                    messageRegistration = "Your account has been created.";
-                    statusRegistration = true;
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    return PartialView("RegistrationSuccessfulPartial");
                 }
             }
 
-            ViewBag.Message = messageRegistration;
-            ViewBag.Status = statusRegistration;
-
-            return View(registrationView);
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return PartialView("RegistrationPartial", registrationView);
         }
 
         [HttpGet]
@@ -152,11 +149,11 @@ namespace Website.Controllers
             Response.Cookies.Add(cookie);
 
             FormsAuthentication.SignOut();
-            return RedirectToAction("Login", "Account", null);
+            return RedirectToAction("Index", "Home", null);
         }
 
         [NonAction]
-        public void VerificationEmail(string email, string activationCode)
+        public bool VerificationEmail(string email, string activationCode)
         {
             var url = string.Format("/Account/ActivationAccount/{0}", activationCode);
             var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, url);
@@ -186,8 +183,17 @@ namespace Website.Controllers
                 IsBodyHtml = true
 
             })
-
-            smtp.Send(message);
+            {
+                try
+                {
+                    smtp.Send(message);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
         }
     }
 }

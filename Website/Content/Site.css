@@ -1,7 +1,6 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 60px;
     padding-bottom: 20px;
-
     background-color: #2E4172;
     color: #061539;
 }
@@ -16,10 +15,10 @@
     border-color: #ffeb10;
 }
 
-.legendary > .card-header {
-    background-color: #ffeb10;
-    color: #061539;
-}
+    .legendary > .card-header {
+        background-color: #ffeb10;
+        color: #061539;
+    }
 
 .legendary-text {
     color: #ffeb10;
@@ -29,10 +28,10 @@
     border-color: #b915ff;
 }
 
-.epic > .card-header {
-    background-color: #b915ff;
-    color: #061539;
-}
+    .epic > .card-header {
+        background-color: #b915ff;
+        color: #061539;
+    }
 
 .epic-text {
     color: #b915ff;
@@ -42,10 +41,10 @@
     border-color: #4551ff;
 }
 
-.rare > .card-header {
-    background-color: #4551ff;
-    color: #061539;
-}
+    .rare > .card-header {
+        background-color: #4551ff;
+        color: #061539;
+    }
 
 .rare-text {
     color: #4551ff;
@@ -55,10 +54,10 @@
     border-color: #42ff0e;
 }
 
-.uncommon > .card-header {
-    background-color: #42ff0e;
-    color: #061539;
-}
+    .uncommon > .card-header {
+        background-color: #42ff0e;
+        color: #061539;
+    }
 
 .uncommon-text {
     color: #42ff0e;
@@ -68,10 +67,10 @@
     border-color: #232323;
 }
 
-.common > .card-header {
-    background-color: #232323;
-    color: #7887AB;
-}
+    .common > .card-header {
+        background-color: #232323;
+        color: #7887AB;
+    }
 
 .common-text {
     color: #7887AB;
@@ -82,9 +81,9 @@ body {
     margin-bottom: 60px;
 }
 
-body > .container {
-    padding: 60px 15px 0;
-}
+    body > .container {
+        padding: 60px 15px 0;
+    }
 
 .footer {
     position: fixed;
@@ -92,19 +91,57 @@ body > .container {
     width: 100%;
     height: 60px;
     line-height: 60px;
-    background-color: #f5f5f5;
+    background-color: #002e5f;
+    color: #8e8e8e;
 }
 
-.footer > .container {
-    padding-right: 15px;
-    padding-left: 15px;
+    .footer > .container {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
+/* Menu */
+.admin-section {
+    margin-top: 80px !important;
 }
 
-.admin-bar {
-    margin-top: 60px;
-    opacity: 0.2;
+/* Loading page */
+#loading_screen {
+    background-color: rgba(0, 0, 26, 0.86);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
 }
 
-.admin-bar:hover {
-    opacity: 1;
+#loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -64px;
+    margin-left: -64px;
+    border: 16px solid #447fa1;
+    border-top: 16px solid #00085f;
+    border-radius: 50%;
+    width: 128px;
+    height: 128px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Register / Login dropdown fixed width */
+.account-dropdown-menu {
+    background-color: #061539;
+    width: 300px !important;
 }

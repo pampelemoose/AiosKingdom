@@ -19,6 +19,13 @@ namespace Website.Controllers
             return View(filter);
         }
 
+        public ActionResult Details(Guid id)
+        {
+            var monster = DataRepositories.MonsterRepository.GetById(id);
+
+            return View(monster);
+        }
+
         [CustomAuthorize(Roles = "SuperAdmin")]
         [HttpGet]
         public ActionResult Create()
@@ -36,24 +43,25 @@ namespace Website.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.MonsterModel monsterModel)
         {
+            if (monsterModel.Loots == null)
+            {
+                monsterModel.Loots = new List<Models.LootModel>();
+            }
+            if (monsterModel.Phases == null)
+            {
+                monsterModel.Phases = new List<Models.PhaseModel>();
+            }
+
             if (ModelState.IsValid)
             {
-                if (monsterModel.Loots == null)
-                {
-                    monsterModel.Loots = new List<Models.LootModel>();
-                }
-                if (monsterModel.Phases == null)
-                {
-                    monsterModel.Phases = new List<Models.PhaseModel>();
-                }
-
+                monsterModel.Types = monsterModel.Types.Distinct().ToList();
                 monsterModel.Loots.RemoveAll(l => l.DropRate == 0 || l.Quantity == 0 || Guid.Empty.Equals(l.SelectedItem));
                 monsterModel.Phases.RemoveAll(p => Guid.Empty.Equals(p.SelectedSkill) 
                 || (p.StaminaPerLevel == 0 && p.EnergyPerLevel == 0
                 && p.StrengthPerLevel == 0 && p.AgilityPerLevel == 0
                 && p.IntelligencePerLevel == 0 && p.WisdomPerLevel == 0));
 
-                if (monsterModel.Loots.Count > 0 && monsterModel.Phases.Count > 0)
+                if (monsterModel.Types.Count > 0 && monsterModel.Loots.Count > 0 && monsterModel.Phases.Count > 0)
                 {
                     var monsterId = Guid.NewGuid();
                     var monster = new DataModels.Monsters.Monster
@@ -65,7 +73,7 @@ namespace Website.Controllers
                         Description = monsterModel.Description,
                         Story = monsterModel.Story,
                         Image = monsterModel.Image,
-                        Types = new List<DataModels.Monsters.MonsterType>(),
+                        Types = monsterModel.Types,
                         HealthPerLevel = monsterModel.HealthPerLevel,
                         Loots = new List<DataModels.Monsters.Loot>(),
                         Phases = new List<DataModels.Monsters.Phase>()
@@ -111,6 +119,13 @@ namespace Website.Controllers
 
             monsterModel.VersionList = DataRepositories.VersionRepository.GetAll();
             return View(monsterModel);
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpGet]
+        public ActionResult AddTypePartial()
+        {
+            return PartialView("TypePartial");
         }
 
         [CustomAuthorize(Roles = "SuperAdmin")]

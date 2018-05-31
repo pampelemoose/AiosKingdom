@@ -36,63 +36,24 @@ namespace Website.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.BookModel bookModel)
         {
+            if (bookModel.Pages == null)
+            {
+                bookModel.Pages = new List<Models.PageModel>();
+            }
+            foreach (var page in bookModel.Pages)
+            {
+                if (page.Inscriptions == null)
+                {
+                    page.Inscriptions = new List<DataModels.Skills.Inscription>();
+                }
+            }
+
             if (ModelState.IsValid)
             {
-                bool reloadPage = false;
-                if (bookModel.Pages == null)
+                bookModel.Pages.RemoveAll(p => p.Inscriptions.Count == 0);
+
+                if (bookModel.Pages.Count == 0 || bookModel.Pages?.Select(p => p.Inscriptions.Count).Sum() == 0)
                 {
-                    bookModel.Pages = new List<Models.PageModel>();
-                }
-                else
-                {
-                    foreach (var page in bookModel.Pages)
-                    {
-                        if (page.Inscriptions == null)
-                        {
-                            page.Inscriptions = new List<DataModels.Skills.Inscription>();
-                        }
-
-                        if (page.InscriptionCount != page.Inscriptions.Count)
-                        {
-                            if (page.InscriptionCount > page.Inscriptions.Count)
-                            {
-                                for (int i = page.InscriptionCount - page.Inscriptions.Count; i > 0; --i)
-                                {
-                                    page.Inscriptions.Add(new DataModels.Skills.Inscription());
-                                }
-                            }
-                            else
-                            {
-                                int count = page.Inscriptions.Count;
-                                for (int i = count - page.InscriptionCount; i > 0; --i)
-                                {
-                                    page.Inscriptions.RemoveAt(page.Inscriptions.Count - 1);
-                                }
-                            }
-
-                            reloadPage = true;
-                        }
-                    }
-                }
-
-                if (reloadPage || bookModel.PageCount != bookModel.Pages.Count)
-                {
-                    if (bookModel.PageCount >= bookModel.Pages.Count)
-                    {
-                        for (int i = bookModel.PageCount - bookModel.Pages.Count; i > 0; --i)
-                        {
-                            bookModel.Pages.Add(new Models.PageModel());
-                        }
-                    }
-                    else
-                    {
-                        int count = bookModel.Pages.Count;
-                        for (int i = count - bookModel.PageCount; i > 0; --i)
-                        {
-                            bookModel.Pages.RemoveAt(bookModel.Pages.Count - 1);
-                        }
-                    }
-
                     bookModel.VersionList = DataRepositories.VersionRepository.GetAll();
                     return View(bookModel);
                 }
@@ -137,6 +98,23 @@ namespace Website.Controllers
 
             bookModel.VersionList = DataRepositories.VersionRepository.GetAll();
             return View(bookModel);
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpGet]
+        public ActionResult AddPagePartial()
+        {
+            var page = new Models.PageModel();
+            page.Inscriptions = new List<DataModels.Skills.Inscription>();
+
+            return PartialView("PagePartial", page);
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpGet]
+        public ActionResult AddInscPartial()
+        {
+            return PartialView("InscPartial");
         }
     }
 }

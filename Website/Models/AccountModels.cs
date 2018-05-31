@@ -9,11 +9,11 @@ namespace Website.Models
     public class LoginView
     {
         [Required]
-        [Display(Name = "User Name")]
-        public string Username { get; set; }
+        [Display(Name = "Username")]
+        public string LogUsername { get; set; }
         [Required]
         [Display(Name = "Password")]
-        public string Password { get; set; }
+        public string LogPassword { get; set; }
         [Display(Name = "Remember Me")]
         public bool RememberMe { get; set; }
     }
