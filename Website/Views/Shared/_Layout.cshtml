@@ -88,6 +88,14 @@
                                     @Html.ActionLink("Create", "Create", "Monsters", null, new { @class = "dropdown-item" })
                                 </div>
                             </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dungeons</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @Html.ActionLink("Create", "Create", "Dungeons", null, new { @class = "dropdown-item" })
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -123,6 +131,9 @@
                         </li>
                         <li class="nav-item @(action == "Index" && controller == "Monsters" ? "active" : "")">
                             @Html.ActionLink("Monsters", "Index", "Monsters", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item @(action == "Index" && controller == "Dungeons" ? "active" : "")">
+                            @Html.ActionLink("Dungeons", "Index", "Dungeons", null, new { @class = "nav-link" })
                         </li>
                     </ul>
                     @if (User.Identity != null && User.Identity.IsAuthenticated)

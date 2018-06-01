@@ -10,7 +10,7 @@ namespace Website.Controllers
     public class MarketController : Controller
     {
         // GET: Market
-        public ActionResult Index(Models.MarketSlotFilter filter)
+        public ActionResult Index(Models.Filters.MarketSlotFilter filter)
         {
             var slots = DataRepositories.MarketRepository.GetAll();
 

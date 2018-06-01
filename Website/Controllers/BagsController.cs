@@ -9,7 +9,7 @@ namespace Website.Controllers
 {
     public class BagsController : Controller
     {
-        public ActionResult Index(Models.BagFilter filter)
+        public ActionResult Index(Models.Filters.BagFilter filter)
         {
             var bags = DataRepositories.BagRepository.GetAll();
 

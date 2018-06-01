@@ -9,7 +9,7 @@ namespace Website.Controllers
 {
     public class MonstersController : Controller
     {
-        public ActionResult Index(Models.MonsterFilter filter)
+        public ActionResult Index(Models.Filters.MonsterFilter filter)
         {
             var monsters = DataRepositories.MonsterRepository.GetAll();
 

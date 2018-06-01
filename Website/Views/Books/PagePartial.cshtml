@@ -1,5 +1,9 @@
 ﻿@model Website.Models.PageModel
 
+@{ 
+    var pageId = Guid.NewGuid();
+}
+
 <tr class="row">
     @using (Html.BeginCollectionItem("Pages"))
     {
@@ -50,22 +54,22 @@
                 <thead>
                     <tr class="row">
                         <th hidden></th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Type, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().BaseValue, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().StatType, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Ratio, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Duration, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Inscription.Type, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Inscription.BaseValue, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Inscription.StatType, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Inscription.Ratio, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Inscription.Duration, htmlAttributes: new { @class = "control-label" })</th>
                         <th scope="col" class="col-md-2">
-                            <input class="btn btn-primary btn-block" type="button" onclick="addInscToPage(this)" value="Add Insc" id="@Model.Inscriptions.Count" />
+                            <input class="btn btn-primary btn-block" type="button" onclick="addInscToPage(this)" value="Add Insc" id="@pageId" />
                         </th>
                     </tr>
                 </thead>
-                <tbody id="inscList_@Model.Inscriptions.Count">
+                <tbody id="inscList_@pageId">
                     @if (Model != null && Model.Inscriptions != null)
                     {
                         for (var i = 0; i < Model.Inscriptions.Count; i++)
                         {
-                            /*Html.RenderPartial("InscPartial", Model.Inscriptions[i]);*/
+                            Html.RenderPartial("InscPartial", Model.Inscriptions[i]);
                         }
                     }
                 </tbody>

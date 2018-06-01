@@ -4,14 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace Website.Models
+namespace Website.Models.Filters
 {
-    public class BagFilter : AItemFilterModel<DataModels.Items.Bag>
+    public class ConsumableFilter : AItemFilterModel<DataModels.Items.Consumable>
     {
-        [Display(Name = "SlotCount")]
-        public int SlotCount { get; set; }
-
-        public override List<DataModels.Items.Bag> FilterList(List<DataModels.Items.Bag> list)
+        public override List<DataModels.Items.Consumable> FilterList(List<DataModels.Items.Consumable> list)
         {
             if (!Guid.Empty.Equals(SelectedVersion))
             {
@@ -36,11 +33,6 @@ namespace Website.Models
             if (UseLevelRequired > 0)
             {
                 list = list.Where(a => a.UseLevelRequired.Equals(UseLevelRequired)).ToList();
-            }
-
-            if (SlotCount > 0)
-            {
-                list = list.Where(a => a.SlotCount.Equals(SlotCount)).ToList();
             }
 
             return list;

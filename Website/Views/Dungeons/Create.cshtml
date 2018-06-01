@@ -1,0 +1,165 @@
+﻿@model Website.Models.DungeonModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<section>
+    <div class="container">
+        <h2>Create</h2>
+    </div>
+</section>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <section>
+            <div class="container">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.VersionList, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RequiredLevel, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.RequiredLevel, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RequiredLevel, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MaxLevelAuthorized, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.MaxLevelAuthorized, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MaxLevelAuthorized, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="bg-info">
+            <div class="container">
+                @Html.LabelFor(model => model.Rooms, htmlAttributes: new { @class = "control-label" })
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="row">
+                            <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Rooms.FirstOrDefault().Type, htmlAttributes: new { @class = "control-label" })</th>
+                            <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Rooms.FirstOrDefault().RoomNumber, htmlAttributes: new { @class = "control-label" })</th>
+                            <th scope="col" class="col-md-12">@Html.LabelFor(model => model.Rooms.FirstOrDefault().ShopItems, htmlAttributes: new { @class = "control-label" })</th>
+                            <th scope="col" class="col-md-12">@Html.LabelFor(model => model.Rooms.FirstOrDefault().Enemies, htmlAttributes: new { @class = "control-label" })</th>
+                            <th scope="col" class="col-md-2">
+                                <input class="btn btn-primary btn-block" type="button" id="addRoomToDungeon" value="Add Room" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="roomList">
+                        @if (Model != null && Model.Rooms != null)
+                        {
+                            for (var i = 0; i < Model.Rooms.Count; i++)
+                            {
+                                Html.RenderPartial("RoomPartial", Model.Rooms[i]);
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <input type="submit" value="Create" class="btn btn-success btn-block" />
+            </div>
+        </section>
+    </div>
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger">
+            <strong>Error!</strong> @ViewBag.Message
+        </div>
+    }
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#addRoomToDungeon").click(function () {
+                $.ajax({
+                    url: "/Dungeons/AddRoomPartial",
+                    cache: false,
+                    type: "GET",
+                    success: function (data) {
+                        $('#roomList').append(data);
+                        $('#roomList').fadeIn('fast');
+                    }
+                });
+            });
+        });
+
+        function addShopItemToRoom(room) {
+            var elem = room;
+            var isSecond = false;
+            while (elem && elem !== document) {
+                if (elem.tagName == "TR") {
+                    if (isSecond) {
+
+                        $.ajax({
+                            url: "/Dungeons/AddShopItemPartial",
+                            cache: false,
+                            type: "GET",
+                            data: {
+                                "id": $(elem).children("input[name='Rooms.index']").val()
+                            },
+                            success: function (data) {
+                                $('#shop_item_list_' + room.id).append(data);
+                                $('#shop_item_list_' + room.id).fadeIn('fast');
+                            }
+                        });
+                        break;
+                    }
+                    isSecond = true;
+                }
+                elem = elem.parentNode;
+            }
+        }
+
+        function addEnnemyToRoom(ennemy) {
+            var elem = ennemy;
+            var isSecond = false;
+            while (elem && elem !== document) {
+                if (elem.tagName == "TR") {
+                    if (isSecond) {
+
+                        $.ajax({
+                            url: "/Dungeons/AddEnemyPartial",
+                            cache: false,
+                            type: "GET",
+                            data: {
+                                "id": $(elem).children("input[name='Rooms.index']").val()
+                            },
+                            success: function (data) {
+                                $('#enemy_list_' + ennemy.id).append(data);
+                                $('#enemy_list_' + ennemy.id).fadeIn('fast');
+                            }
+                        });
+                        break;
+                    }
+                    isSecond = true;
+                }
+                elem = elem.parentNode;
+            }
+        }
+    </script>
+}

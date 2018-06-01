@@ -11,7 +11,7 @@ namespace Website.Controllers
     public class UserController : Controller
     {
         // GET: User
-        public ActionResult Index(Models.UserFilter filter)
+        public ActionResult Index(Models.Filters.UserFilter filter)
         {
             var users = DataRepositories.UserRepository.GetAll();
 

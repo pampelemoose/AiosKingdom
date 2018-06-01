@@ -1,12 +1,12 @@
-﻿@model Website.Models.Filters.MonsterFilter
+﻿@model Website.Models.Filters.DungeonFilter
 
 @{
-    ViewBag.Title = "Monsters";
+    ViewBag.Title = "Dungeons";
 }
 
 <section>
     <div class="container">
-        <h2>Monsters</h2>
+        <h2>Dungeons</h2>
     </div>
 </section>
 
@@ -45,16 +45,16 @@
 <section>
     <div class="container">
         <ul class="list-unstyled">
-            @foreach (var monster in Model.Monsters)
+            @foreach (var dungeon in Model.Dungeons)
             {
                 <li class="media align-items-center">
-                    <img class="mr-3" src="@monster.Image" height="64" width="64" />
+                    @*<img class="mr-3" src="@monster.Image" height="64" width="64" />*@
                     <div class="media-body row">
                         <div class="col-md-10">
-                            <h3 class="mt-0">@monster.Name</h3>
+                            <h3 class="mt-0">@dungeon.Name</h3>
                         </div>
                         <div class="col-md-2">
-                            @Html.ActionLink("Details", "Details", new { id = monster.MonsterId }, new { @class = "btn btn-info btn-block" })
+                            @Html.ActionLink("Details", "Details", new { id = dungeon.DungeonId }, new { @class = "btn btn-info btn-block" })
                         </div>
                     </div>
                 </li>

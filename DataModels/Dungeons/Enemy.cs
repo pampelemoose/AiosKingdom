@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataModels.Dungeons
 {
-    public class ShopItem
+    public class Enemy
     {
         [Key]
         public Guid Id { get; set; }
@@ -16,13 +16,9 @@ namespace DataModels.Dungeons
         public Guid RoomId { get; set; }
 
         [Required]
-        public Guid ItemId { get; set; }
+        public Guid MonsterId { get; set; }
 
         [Required]
-        public int Quantity { get; set; }
-
-        [Required]
-        [Range(1, 100000)]
-        public int ShardPrice { get; set; }
+        public int Level { get; set; }
     }
 }

@@ -28,10 +28,10 @@ namespace DataModels.Dungeons
         public RoomType Type { get; set; }
 
         [Required]
-        [Range(0, 50)]
+        [Range(0, 1000)]
         public int RoomNumber { get; set; }
 
         public List<ShopItem> ShopItems { get; set; }
-        public List<Monsters.Monster> Monsters { get; set; }
+        public List<Enemy> Ennemies { get; set; }
     }
 }

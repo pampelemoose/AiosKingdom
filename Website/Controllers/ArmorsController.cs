@@ -10,7 +10,7 @@ namespace Website.Controllers
 {
     public class ArmorsController : Controller
     {
-        public ActionResult Index(Models.ArmorFilter filter)
+        public ActionResult Index(Models.Filters.ArmorFilter filter)
         {
             var armors = DataRepositories.ArmorRepository.GetAll();
 

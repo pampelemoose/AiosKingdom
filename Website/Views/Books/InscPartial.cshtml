@@ -1,43 +1,44 @@
-﻿@model DataModels.Skills.Inscription
+﻿@model Website.Models.InscriptionModel
 
 <tr class="row">
-    @using (Html.BeginCollectionItem("Page.Inscriptions"))
+    @using (Html.BeginCollectionItem($"Pages[{Model.PageId}].Inscriptions"))
     {
+        @Html.HiddenFor(model => model.PageId);
         <td class="col-md-12">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+            @Html.LabelFor(model => model.Inscription.Description, htmlAttributes: new { @class = "control-label" })
             <div class="form-group">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Inscription.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Inscription.Description, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">
             <div class="form-group">
-                @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control item-list-changer" })
-                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                @Html.EnumDropDownListFor(model => model.Inscription.Type, new { @class = "form-control item-list-changer" })
+                @Html.ValidationMessageFor(model => model.Inscription.Type, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">
             <div class="form-group">
-                @Html.EditorFor(model => model.BaseValue, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.BaseValue, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Inscription.BaseValue, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Inscription.BaseValue, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">
             <div class="form-group">
-                @Html.EnumDropDownListFor(model => model.StatType, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.StatType, "", new { @class = "text-danger" })
+                @Html.EnumDropDownListFor(model => model.Inscription.StatType, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Inscription.StatType, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">
             <div class="form-group">
-                @Html.EditorFor(model => model.Ratio, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Ratio, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Inscription.Ratio, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Inscription.Ratio, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">
             <div class="form-group">
-                @Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Inscription.Duration, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Inscription.Duration, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">

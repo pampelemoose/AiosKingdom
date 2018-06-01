@@ -35,6 +35,6 @@ namespace Website.Models
         [Range(0, 400)]
         public int ManaCost { get; set; }
 
-        public List<DataModels.Skills.Inscription> Inscriptions { get; set; }
+        public List<InscriptionModel> Inscriptions { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace Website.Models
+namespace Website.Models.Filters
 {
     public class MarketSlotFilter
     {

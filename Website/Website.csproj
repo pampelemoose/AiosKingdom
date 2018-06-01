@@ -165,6 +165,7 @@
     <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\ConsumablesController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
+    <Compile Include="Controllers\DungeonsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\GameServersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -176,23 +177,29 @@
     </Compile>
     <Compile Include="Helpers\ItemHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\AItemFilterModel.cs" />
-    <Compile Include="Models\ArmorFilter.cs" />
+    <Compile Include="Models\DungeonModel.cs" />
+    <Compile Include="Models\EnemyModel.cs" />
+    <Compile Include="Models\Filters\AItemFilterModel.cs" />
+    <Compile Include="Models\Filters\ArmorFilter.cs" />
     <Compile Include="Models\ArmorModel.cs" />
-    <Compile Include="Models\BagFilter.cs" />
+    <Compile Include="Models\Filters\BagFilter.cs" />
     <Compile Include="Models\BagModel.cs" />
-    <Compile Include="Models\BookFilter.cs" />
+    <Compile Include="Models\Filters\BookFilter.cs" />
     <Compile Include="Models\BookModel.cs" />
-    <Compile Include="Models\ConsumableFilter.cs" />
+    <Compile Include="Models\Filters\ConsumableFilter.cs" />
     <Compile Include="Models\ConsumableModel.cs" />
+    <Compile Include="Models\Filters\DungeonFilter.cs" />
+    <Compile Include="Models\InscriptionModel.cs" />
     <Compile Include="Models\LootModel.cs" />
-    <Compile Include="Models\MarketSlotFilter.cs" />
+    <Compile Include="Models\Filters\MarketSlotFilter.cs" />
     <Compile Include="Models\MarketSlotModel.cs" />
-    <Compile Include="Models\MonsterFilter.cs" />
+    <Compile Include="Models\Filters\MonsterFilter.cs" />
     <Compile Include="Models\MonsterModel.cs" />
     <Compile Include="Models\PageModel.cs" />
     <Compile Include="Models\PhaseModel.cs" />
-    <Compile Include="Models\UserFilter.cs" />
+    <Compile Include="Models\Filters\UserFilter.cs" />
+    <Compile Include="Models\RoomModel.cs" />
+    <Compile Include="Models\ShopItemModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -306,6 +313,11 @@
     <Content Include="Views\Shared\LoginPartial.cshtml" />
     <Content Include="Views\Shared\MyAccountPartial.cshtml" />
     <Content Include="Views\Content\SectionPartial.cshtml" />
+    <Content Include="Views\Dungeons\Index.cshtml" />
+    <Content Include="Views\Dungeons\Create.cshtml" />
+    <Content Include="Views\Dungeons\RoomPartial.cshtml" />
+    <Content Include="Views\Dungeons\ShopItemPartial.cshtml" />
+    <Content Include="Views\Dungeons\EnemyPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

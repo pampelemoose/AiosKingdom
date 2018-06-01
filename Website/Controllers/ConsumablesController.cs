@@ -9,7 +9,7 @@ namespace Website.Controllers
 {
     public class ConsumablesController : Controller
     {
-        public ActionResult Index(Models.ConsumableFilter filter)
+        public ActionResult Index(Models.Filters.ConsumableFilter filter)
         {
             var consumables = DataRepositories.ConsumableRepository.GetAll();
 

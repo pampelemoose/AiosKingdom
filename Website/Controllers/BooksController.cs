@@ -10,7 +10,7 @@ namespace Website.Controllers
     public class BooksController : Controller
     {
         // GET: Books
-        public ActionResult Index(Models.BookFilter filter)
+        public ActionResult Index(Models.Filters.BookFilter filter)
         {
             var books = DataRepositories.BookRepository.GetAll();
 
@@ -44,7 +44,7 @@ namespace Website.Controllers
             {
                 if (page.Inscriptions == null)
                 {
-                    page.Inscriptions = new List<DataModels.Skills.Inscription>();
+                    page.Inscriptions = new List<Models.InscriptionModel>();
                 }
             }
 
@@ -82,10 +82,19 @@ namespace Website.Controllers
                         ManaCost = pageModel.ManaCost,
                         Inscriptions = new List<DataModels.Skills.Inscription>()
                     };
-                    foreach (var insc in pageModel.Inscriptions)
+                    foreach (var inscModel in pageModel.Inscriptions)
                     {
-                        insc.Id = Guid.NewGuid();
-                        insc.PageId = pageId;
+                        var insc = new DataModels.Skills.Inscription
+                        {
+                            Id = Guid.NewGuid(),
+                            PageId = pageId,
+                            Description = inscModel.Inscription.Description,
+                            Type = inscModel.Inscription.Type,
+                            BaseValue = inscModel.Inscription.BaseValue,
+                            StatType = inscModel.Inscription.StatType,
+                            Ratio = inscModel.Inscription.Ratio,
+                            Duration = inscModel.Inscription.Duration
+                        };
                         page.Inscriptions.Add(insc);
                     }
                     book.Pages.Add(page);
@@ -105,16 +114,22 @@ namespace Website.Controllers
         public ActionResult AddPagePartial()
         {
             var page = new Models.PageModel();
-            page.Inscriptions = new List<DataModels.Skills.Inscription>();
+            page.Inscriptions = new List<Models.InscriptionModel>();
 
             return PartialView("PagePartial", page);
         }
 
         [CustomAuthorize(Roles = "SuperAdmin")]
         [HttpGet]
-        public ActionResult AddInscPartial()
+        public ActionResult AddInscPartial(string id)
         {
-            return PartialView("InscPartial");
+            var insc = new Models.InscriptionModel
+            {
+                PageId = id,
+                Inscription = new DataModels.Skills.Inscription()
+            };
+
+            return PartialView("InscPartial", insc);
         }
     }
 }

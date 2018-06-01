@@ -4,30 +4,22 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace Website.Models
+namespace Website.Models.Filters
 {
-    public class BookFilter
+    public class DungeonFilter
     {
         [Required]
         public Guid SelectedVersion { get; set; }
         [Display(Name = "Version")]
         public List<DataModels.Version> VersionList { get; set; }
 
-        [Display(Name = "Quality")]
-        public DataModels.Skills.BookQuality? Quality { get; set; }
+        public List<DataModels.Dungeons.Dungeon> Dungeons { get; set; }
 
-        public List<DataModels.Skills.Book> Books { get; set; }
-
-        public List<DataModels.Skills.Book> FilterList(List<DataModels.Skills.Book> list)
+        public List<DataModels.Dungeons.Dungeon> FilterList(List<DataModels.Dungeons.Dungeon> list)
         {
             if (!Guid.Empty.Equals(SelectedVersion))
             {
                 list = list.Where(a => a.VersionId.Equals(SelectedVersion)).ToList();
-            }
-
-            if (Quality != null)
-            {
-                list = list.Where(a => a.Quality.Equals(Quality)).ToList();
             }
 
             return list;

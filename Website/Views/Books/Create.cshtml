@@ -54,7 +54,7 @@
                             <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Pages.FirstOrDefault().Rank, htmlAttributes: new { @class = "control-label" })</th>
                             <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Pages.FirstOrDefault().ManaCost, htmlAttributes: new { @class = "control-label" })</th>
                             <th scope="col" class="col-md-2">
-                                <input class="btn btn-primary btn-block" type="button" id="addPageToBook" value="Add Type" />
+                                <input class="btn btn-primary btn-block" type="button" id="addPageToBook" value="Add Page" />
                             </th>
                         </tr>
                     </thead>
@@ -107,15 +107,30 @@
         });
 
         function addInscToPage(page) {
-            $.ajax({
-                url: "/Books/AddInscPartial",
-                cache: false,
-                type: "GET",
-                success: function (data) {
-                    $('#inscList_' + page.id).append(data);
-                    $('#inscList_' + page.id).fadeIn('fast');
+            var elem = page;
+            var isSecond = false;
+            while (elem && elem !== document) {
+                if (elem.tagName == "TR") {
+                    if (isSecond) {
+
+                        $.ajax({
+                            url: "/Books/AddInscPartial",
+                            cache: false,
+                            type: "GET",
+                            data: {
+                                "id": $(elem).children("input[name='Pages.index']").val()
+                            },
+                            success: function (data) {
+                                $('#inscList_' + page.id).append(data);
+                                $('#inscList_' + page.id).fadeIn('fast');
+                            }
+                        });
+                        break;
+                    }
+                    isSecond = true;
                 }
-            });
+                elem = elem.parentNode;
+            }
         }
     </script>
 }
