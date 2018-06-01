@@ -164,6 +164,7 @@
     <Compile Include="Controllers\BagsController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\ConsumablesController.cs" />
+    <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\GameServersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -266,7 +267,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Account\ActivationAccount.cshtml" />
     <Content Include="Views\Armors\Index.cshtml" />
@@ -305,6 +305,7 @@
     <Content Include="Views\Shared\RegistrationSuccessfulPartial.cshtml" />
     <Content Include="Views\Shared\LoginPartial.cshtml" />
     <Content Include="Views\Shared\MyAccountPartial.cshtml" />
+    <Content Include="Views\Content\SectionPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

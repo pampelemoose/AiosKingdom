@@ -54,13 +54,14 @@
     <Compile Include="AiosKingdomContext.cs" />
     <Compile Include="ConfigRepository.cs" />
     <Compile Include="MarketRepository.cs" />
-    <Compile Include="Migrations\201805290947143_InitialMigration.cs" />
-    <Compile Include="Migrations\201805290947143_InitialMigration.Designer.cs">
-      <DependentUpon>201805290947143_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201806010311193_InitialMigration.cs" />
+    <Compile Include="Migrations\201806010311193_InitialMigration.Designer.cs">
+      <DependentUpon>201806010311193_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SectionRepository.cs" />
     <Compile Include="SoulRepository.cs" />
     <Compile Include="AuthTokenRepository.cs" />
     <Compile Include="UserRepository.cs" />
@@ -77,8 +78,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805290947143_InitialMigration.resx">
-      <DependentUpon>201805290947143_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806010311193_InitialMigration.resx">
+      <DependentUpon>201806010311193_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
