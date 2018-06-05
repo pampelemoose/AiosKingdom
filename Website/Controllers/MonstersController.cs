@@ -75,6 +75,8 @@ namespace Website.Controllers
                         Image = monsterModel.Image,
                         Types = monsterModel.Types,
                         HealthPerLevel = monsterModel.HealthPerLevel,
+                        BaseExperience = monsterModel.BaseExperience,
+                        ExperiencePerLevelRatio = monsterModel.ExperiencePerLevelRatio,
                         Loots = new List<DataModels.Monsters.Loot>(),
                         Phases = new List<DataModels.Monsters.Phase>()
                     };

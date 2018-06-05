@@ -27,5 +27,8 @@ namespace DataModels.Dungeons
 
         [Required]
         public List<Room> Rooms { get; set; }
+
+        [Required]
+        public int ExperienceReward { get; set; }
     }
 }

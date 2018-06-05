@@ -27,6 +27,10 @@ namespace Network
         public const int ConsumableList = 31;
         public const int BagList = 32;
         public const int BookList = 33;
+        public const int MonsterList = 34;
+        public const int DungeonList = 35;
+
+        public const int Dungeon_Enter = 50;
 
         public const int Ping = -1;
     }

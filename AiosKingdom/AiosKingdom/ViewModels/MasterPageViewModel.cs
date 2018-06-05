@@ -42,6 +42,11 @@ namespace AiosKingdom.ViewModels
                 TargetType = typeof(Views.BookstorePage),
                 Title = "Bookstore"
             });
+            _menus.Add(new MasterPageItem
+            {
+                TargetType = typeof(Views.DungeonListPage),
+                Title = "Dungeons"
+            });
         }
 
         public event Action<Type> PageChangeTriggered;

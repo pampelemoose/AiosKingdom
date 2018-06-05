@@ -64,9 +64,9 @@ namespace Website.Controllers
                     var dungeonId = Guid.NewGuid();
                     var dungeon = new DataModels.Dungeons.Dungeon
                     {
-                        Id = Guid.NewGuid(),
+                        Id = dungeonId,
                         VersionId = dungeonModel.SelectedVersion,
-                        DungeonId = dungeonId,
+                        DungeonId = Guid.NewGuid(),
                         Name = dungeonModel.Name,
                         RequiredLevel = dungeonModel.RequiredLevel,
                         MaxLevelAuthorized = dungeonModel.RequiredLevel,
@@ -75,9 +75,10 @@ namespace Website.Controllers
 
                     foreach (var roomModel in dungeonModel.Rooms)
                     {
+                        var roomId = Guid.NewGuid();
                         var room = new DataModels.Dungeons.Room
                         {
-                            Id = Guid.NewGuid(),
+                            Id = roomId,
                             DungeonId = dungeonId,
                             Type = roomModel.Type,
                             RoomNumber = roomModel.RoomNumber,
@@ -87,16 +88,36 @@ namespace Website.Controllers
 
                         foreach (var shopItemModel in roomModel.ShopItems)
                         {
+                            var shopItem = new DataModels.Dungeons.ShopItem
+                            {
+                                Id = Guid.NewGuid(),
+                                RoomId = roomId,
+                                ItemId = shopItemModel.SelectedItem,
+                                Quantity = shopItemModel.Quantity,
+                                ShardPrice = shopItemModel.ShardPrice
+                            };
+                            room.ShopItems.Add(shopItem);
+                        }
 
+                        foreach (var enemyModel in roomModel.Enemies)
+                        {
+                            var enemy = new DataModels.Dungeons.Enemy
+                            {
+                                Id = Guid.NewGuid(),
+                                RoomId = roomId,
+                                MonsterId = enemyModel.MonsterId,
+                                Level = enemyModel.Level
+                            };
+                            room.Ennemies.Add(enemy);
                         }
 
                         dungeon.Rooms.Add(room);
                     }
 
-                    /*if (DataRepositories.MonsterRepository.Create(dungeon))
+                    if (DataRepositories.DungeonRepository.Create(dungeon))
                     {
                         return RedirectToAction("Index");
-                    }*/
+                    }
                 }
             }
 

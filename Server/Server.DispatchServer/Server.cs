@@ -236,24 +236,42 @@ namespace Server.DispatchServer
                             var encoder = new ASCIIEncoding();
                             var mess = encoder.GetBytes(jsonObj + "|");
 
-                            var result = socket.BeginSend(mess, 0, mess.Length, SocketFlags.None, (asyncResult) =>
+                            object tmpLock = new object();
+                            int offset = 0;
+                            int sent = 0;
+
+                            do
                             {
                                 try
                                 {
-                                    socket.EndSend(asyncResult);
+                                    sent = socket.Send(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None);
+                                    offset += sent;
                                 }
                                 catch (SocketException sockE)
                                 {
                                     Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
                                 }
-                            }, null);
 
-                            if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
-                            {
-                                Console.WriteLine($"Socket is not connected..");
-                            }
+                                /*var result = socket.BeginSend(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None, (asyncResult) =>
+                                {
+                                    try
+                                    {
+                                        sent = socket.EndSend(asyncResult);
+                                        offset += sent;
+                                        Console.WriteLine($"(0)sent[{sent}]");
+                                    }
+                                    catch (SocketException sockE)
+                                    {
+                                        Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
+                                    }
+                                }, null);
 
-                            //var sentSize = socket.Send(mess); // TODO : Check sent size for missed datas
+                                if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
+                                {
+                                    Console.WriteLine($"Socket is not connected..");
+                                }*/
+
+                            } while (sent == 256);
                         }
                         catch (SocketException sockEx)
                         {

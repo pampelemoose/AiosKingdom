@@ -63,6 +63,13 @@ namespace DataModels.Monsters
         public double HealthPerLevel { get; set; }
 
         [Required]
+        public int BaseExperience { get; set; }
+
+        [Required]
+        [Range(0.001, 100)]
+        public double ExperiencePerLevelRatio { get; set; }
+
+        [Required]
         public List<Loot> Loots { get; set; }
 
         [Required]

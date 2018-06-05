@@ -29,6 +29,7 @@ namespace AiosKingdom
         private TcpClient _dispatch;
         private bool _isDispatchRunning;
         private Guid _dispatchAuthToken;
+        private string _dispatchBuffer;
 
         private TcpClient _game;
         private bool _isGameRunning;
@@ -55,7 +56,8 @@ namespace AiosKingdom
                 if (bufferSize > 0)
                 {
                     var client = _dispatch.Client;
-                    string bufferStr = string.Empty;
+                    string bufferStr = _dispatchBuffer;
+                    _dispatchBuffer = string.Empty;
                     int received = 0;
 
                     do
@@ -67,18 +69,25 @@ namespace AiosKingdom
                         bufferSize -= received;
                     } while (received == 256);
 
-                    var messages = bufferStr.Split('|');
+                    var messages = bufferStr.Trim().Split('|');
                     foreach (var message in messages)
                     {
                         if (string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(message))
                             continue;
 
-                        var fromJson = JsonConvert.DeserializeObject<Network.Message>(message);
-
-                        if (!ProcessDispatchMessage(fromJson))
+                        try
                         {
-                            /*_message = buffer;
-                            NotifyPropertyChanged(nameof(Message));*/
+                            var fromJson = JsonConvert.DeserializeObject<Network.Message>(message);
+
+                            if (!ProcessDispatchMessage(fromJson))
+                            {
+                                /*_message = buffer;
+                                NotifyPropertyChanged(nameof(Message));*/
+                            }
+                        }
+                        catch
+                        {
+                            _dispatchBuffer += message;
                         }
                     }
                 }
@@ -447,6 +456,8 @@ namespace AiosKingdom
                             AskConsumableList();
                             AskBagList();
                             AskBookList();
+                            AskMonsterList();
+                            AskDungeonList();
                         }
                         else
                         {
@@ -540,6 +551,18 @@ namespace AiosKingdom
                         DatasManager.Instance.Books = books;
                     }
                     break;
+                case Network.CommandCodes.MonsterList:
+                    {
+                        var monsters = JsonConvert.DeserializeObject<List<DataModels.Monsters.Monster>>(message.Json);
+                        DatasManager.Instance.Monsters = monsters;
+                    }
+                    break;
+                case Network.CommandCodes.DungeonList:
+                    {
+                        var dungeons = JsonConvert.DeserializeObject<List<DataModels.Dungeons.Dungeon>>(message.Json);
+                        DatasManager.Instance.Dungeons = dungeons;
+                    }
+                    break;
 
                 default:
                     return false;
@@ -592,6 +615,30 @@ namespace AiosKingdom
             var retMess = new Network.Message
             {
                 Code = Network.CommandCodes.BookList,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void AskMonsterList()
+        {
+            var args = new string[0];
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.MonsterList,
+                Json = JsonConvert.SerializeObject(args),
+                Token = _gameAuthToken
+            };
+            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void AskDungeonList()
+        {
+            var args = new string[0];
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.DungeonList,
                 Json = JsonConvert.SerializeObject(args),
                 Token = _gameAuthToken
             };

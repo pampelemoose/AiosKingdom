@@ -3,17 +3,25 @@
     ViewBag.Title = "ActivationAccount";
 }
 
-<h2>ActivationAccount</h2>
+<section>
+    <div class="container">
+        <h2>ActivationAccount</h2>
+    </div>
+</section>
 
-@if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
-{
-    <div class="alert alert-success">
-        <strong>Success!</strong>  Your account has been activated successfully.
+<section>
+    <div class="container">
+        @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+        {
+            <div class="alert alert-success">
+                <strong>Success!</strong>  Your account has been activated successfully.
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger">
+                <strong>Error!</strong>@ViewBag.Message
+            </div>
+        }
     </div>
-}
-else
-{
-    <div class="alert alert-danger">
-        <strong>Error!</strong>@ViewBag.Message
-    </div>
-}  
+</section>

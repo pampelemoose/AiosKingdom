@@ -99,6 +99,8 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.ConsumableList, 0);
             _commandArgCount.Add(Network.CommandCodes.BagList, 0);
             _commandArgCount.Add(Network.CommandCodes.BookList, 0);
+            _commandArgCount.Add(Network.CommandCodes.MonsterList, 0);
+            _commandArgCount.Add(Network.CommandCodes.DungeonList, 0);
 
             _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
@@ -120,6 +122,8 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.ConsumableList, (args) => { return new Commands.ConsumableListCommand(args); });
             _delegates.Add(Network.CommandCodes.BagList, (args) => { return new Commands.BagListCommand(args); });
             _delegates.Add(Network.CommandCodes.BookList, (args) => { return new Commands.BookListCommand(args); });
+            _delegates.Add(Network.CommandCodes.MonsterList, (args) => { return new Commands.MonsterListCommand(args); });
+            _delegates.Add(Network.CommandCodes.DungeonList, (args) => { return new Commands.DungeonListCommand(args); });
         }
 
         private void Run()
@@ -505,6 +509,10 @@ namespace Server.GameServer
                 case Network.CommandCodes.BagList:
                     break;
                 case Network.CommandCodes.BookList:
+                    break;
+                case Network.CommandCodes.MonsterList:
+                    break;
+                case Network.CommandCodes.DungeonList:
                     break;
                 default:
                     retVal.IsValid = false;

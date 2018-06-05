@@ -34,5 +34,8 @@ namespace AiosKingdom
         public List<DataModels.MarketSlot> MarketItems { get; set; }
 
         public List<DataModels.Skills.Book> Books { get; set; }
+
+        public List<DataModels.Monsters.Monster> Monsters { get; set; }
+        public List<DataModels.Dungeons.Dungeon> Dungeons { get; set; }
     }
 }

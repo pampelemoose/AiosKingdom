@@ -41,6 +41,15 @@ namespace Website.Models
         [Range(1, 10000, ErrorMessage = "HealthPerLevel should be higher than 0")]
         public double HealthPerLevel { get; set; }
 
+        [Required(ErrorMessage = "BaseExperience required")]
+        [Display(Name = "BaseExperience")]
+        public int BaseExperience { get; set; }
+
+        [Required(ErrorMessage = "ExperiencePerLevelRatio required")]
+        [Display(Name = "ExperiencePerLevelRatio")]
+        [Range(0.001, 100, ErrorMessage = "ExperiencePerLevelRatio should be higher than 0")]
+        public double ExperiencePerLevelRatio { get; set; }
+
         [Display(Name = "Loots")]
         public List<LootModel> Loots { get; set; }
 
