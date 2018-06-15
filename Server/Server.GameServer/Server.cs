@@ -109,7 +109,7 @@ namespace Server.GameServer
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_SoulList, (args) => { return new Commands.ClientSoulListCommand(args); });
-            _delegates.Add(Network.CommandCodes.Client_CreateSoul, (args) => { return new Commands.ClientCreateSoulCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_CreateSoul, (args) => { return new Commands.ClientCreateSoulCommand(args, _config); });
             _delegates.Add(Network.CommandCodes.Client_ConnectSoul, (args) => { return new Commands.ClientConnectSoulCommand(args, _config); });
 
             _delegates.Add(Network.CommandCodes.Client_SoulDatas, (args) => { return new Commands.ClientSoulDatasCommand(args); });
@@ -151,75 +151,6 @@ namespace Server.GameServer
                     AddPingerToClient(clientId);
                 }
 
-                /*Dictionary<Guid, TimeSpan> updatedPings = new Dictionary<Guid, TimeSpan>();
-                foreach (var ping in _pings)
-                {
-                    var socket = ClientsManager.Instance.Clients[ping.Key];
-
-                    updatedPings.Add(ping.Key, ping.Value);
-                    /*if (DateTime.Now.TimeOfDay - ping.Value > TimeSpan.FromSeconds(5))
-                    {
-                        var pingMess = new Network.Message
-                        {
-                            Code = Network.ServerCodes.Ping,
-                            Json = JsonConvert.SerializeObject((int)(DateTime.Now.TimeOfDay - ping.Value).TotalMilliseconds)
-                        };
-                        var pingStr = DependencyService.Get<IRMessageEncoder>().GetBytes(JsonConvert.SerializeObject(pingMess));
-                        socket.Send(pingStr);
-                    }*//*
-                    if (DateTime.Now.TimeOfDay - ping.Value > TimeSpan.FromSeconds(10))
-                    {
-                        disconnectedClients.Add(ping.Key);
-                        continue;
-                    }
-
-
-                    int bufferSize = socket.Available;
-                    if (bufferSize > 0)
-                    {
-                        byte[] a = new byte[bufferSize];
-                        int receivedSize = socket.Receive(a);
-                        var buffer = DependencyService.Get<IRMessageEncoder>().GetString(a);
-                        var messages = buffer.Split('|');
-                        foreach (var message in messages)
-                        {
-                            if (string.IsNullOrEmpty(message))
-                                continue;
-
-                            var json = JsonConvert.DeserializeObject<Network.Message>(message);
-                            var commandArgs = Server.DispatchServer.ToCommandArgs(ping.Key, json);
-
-                            if (commandArgs.IsValid)
-                            {
-                                _server.AddCommand(ping.Key, commandArgs.CommandCode, commandArgs.Args);
-                            }
-                            else if (commandArgs.CommandCode == Network.ServerCodes.Pong)
-                            {
-                                var currentTime = DateTime.Now.TimeOfDay;
-                                var diff = currentTime - _pings[ping.Key];
-                                updatedPings[ping.Key] = currentTime;
-                                if (diff > TimeSpan.FromSeconds(10))
-                                {
-                                    disconnectedClients.Add(ping.Key);
-                                    continue;
-                                }
-
-                                var pingMess = new Network.Message
-                                {
-                                    Code = Network.ClientCodes.Ping,
-                                    Json = JsonConvert.SerializeObject((int)diff.TotalMilliseconds)
-                                };
-                                var pingStr = DependencyService.Get<IRMessageEncoder>().GetBytes(JsonConvert.SerializeObject(pingMess));
-                                var sentSize = socket.Send(pingStr); // TODO : Check sent size for missed datas
-                            }
-                        }
-                    }
-                }
-
-                _pings = updatedPings;
-
-                _server?.TimeoutPlayers(disconnectedClients);*/
-
                 List<Guid> disconnectedClients = new List<Guid>();
                 foreach (var client in ClientsManager.Instance.Clients)
                 {
@@ -228,11 +159,6 @@ namespace Server.GameServer
                         disconnectedClients.Add(client.Key);
                         continue;
                     }
-
-                    /*if (ClientsManager.Instance.GetPing(client.Key) > 8)
-                    {
-                        AddPingerToClient(client.Key);
-                    }*/
 
                     var socket = client.Value;
                     int bufferSize = socket.Available;
@@ -465,12 +391,6 @@ namespace Server.GameServer
 
             switch (message.Code)
             {
-                /*case Network.ServerCodes.Item_Armor_List_Command:
-                    {
-                        retVal.CommandCode = Network.ServerCodes.Item_Armor_List_Command;
-                        retVal.Args = new string[1] { args[0] };
-                    }
-                    break;*/
                 case Network.CommandCodes.Ping:
                     retVal.IsValid = true;
                     break;

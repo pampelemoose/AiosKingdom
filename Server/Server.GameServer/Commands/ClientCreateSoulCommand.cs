@@ -10,9 +10,12 @@ namespace Server.GameServer.Commands
 {
     public class ClientCreateSoulCommand : ACommand
     {
-        public ClientCreateSoulCommand(CommandArgs args)
+        private DataModels.Config _config;
+
+        public ClientCreateSoulCommand(CommandArgs args, DataModels.Config config)
             : base(args)
         {
+            _config = config;
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
@@ -35,8 +38,8 @@ namespace Server.GameServer.Commands
                 Agility = 0,
                 Intelligence = 0,
                 Wisdom = 0,
-                Spirits = 0, // TODO : get value from config
-                Embers = 0, // TODO : get value from config
+                Spirits = _config.SpiritsPerLevelUp, // TODO : get value from config
+                Embers = _config.EmbersPerLevelUp, // TODO : get value from config
                 Shards = 0,
                 Bits = 0,
                 Equipment = new DataModels.Equipment
