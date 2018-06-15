@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AiosKingdom.Views.Dungeon.SkillSelectionPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <Grid
+            BackgroundColor="{StaticResource BackgroundColor}"
+            Padding="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Label 
+                Grid.Row="0"
+                Text="Skills"
+                FontSize="40"
+                FontAttributes="Bold"
+                HorizontalOptions="CenterAndExpand"/>
+
+            <ListView
+                Grid.Row="1"
+                BackgroundColor="{StaticResource DarkBackgroundColor}"
+                ItemsSource="{Binding Skills}"
+                SelectedItem="{Binding SelectedSkill}"
+                RowHeight="50"
+                SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid 
+                                Margin="5"
+                                ColumnSpacing="0">
+                                <Grid
+                                    BackgroundColor="{StaticResource BackgroundColor}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="4*"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <Label
+                                        Grid.Column="0"
+                                        TextColor="Aqua"
+                                        FontSize="22"
+                                        VerticalTextAlignment="Center"
+                                        Text="{Binding BookName}"/>
+                                    <Label
+                                        Grid.Column="1"
+                                        TextColor="Aqua"
+                                        FontAttributes="Bold"
+                                        FontSize="18"
+                                        VerticalTextAlignment="Center"
+                                        Text="{Binding Skill.Rank, StringFormat='(Rank {0})'}"/>
+                                    <Label
+                                        Grid.Column="2"
+                                        VerticalTextAlignment="Center"
+                                        Text="{Binding Skill.ManaCost}"/>
+                                </Grid>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Grid
+                Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Text="Close"
+                    BackgroundColor="{StaticResource DarkMainColor}"
+                    Command="{Binding CloseAction}"/>
+                <Button
+                    Grid.Column="2"
+                    Text="Validate"
+                    BackgroundColor="{StaticResource LightMainColor}"
+                    Command="{Binding ValidateAction}"/>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

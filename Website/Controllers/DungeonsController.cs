@@ -64,9 +64,9 @@ namespace Website.Controllers
                     var dungeonId = Guid.NewGuid();
                     var dungeon = new DataModels.Dungeons.Dungeon
                     {
-                        Id = dungeonId,
+                        Id = Guid.NewGuid(),
                         VersionId = dungeonModel.SelectedVersion,
-                        DungeonId = Guid.NewGuid(),
+                        DungeonId = dungeonId,
                         Name = dungeonModel.Name,
                         RequiredLevel = dungeonModel.RequiredLevel,
                         MaxLevelAuthorized = dungeonModel.RequiredLevel,

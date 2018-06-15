@@ -55,13 +55,9 @@
     <Compile Include="ConfigRepository.cs" />
     <Compile Include="DungeonRepository.cs" />
     <Compile Include="MarketRepository.cs" />
-    <Compile Include="Migrations\201806120923052_InitialMigration.cs" />
-    <Compile Include="Migrations\201806120923052_InitialMigration.Designer.cs">
-      <DependentUpon>201806120923052_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806150300323_PageCooldown.cs" />
-    <Compile Include="Migrations\201806150300323_PageCooldown.Designer.cs">
-      <DependentUpon>201806150300323_PageCooldown.cs</DependentUpon>
+    <Compile Include="Migrations\201806150818304_InitialMigration.cs" />
+    <Compile Include="Migrations\201806150818304_InitialMigration.Designer.cs">
+      <DependentUpon>201806150818304_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
@@ -83,11 +79,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201806120923052_InitialMigration.resx">
-      <DependentUpon>201806120923052_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806150300323_PageCooldown.resx">
-      <DependentUpon>201806150300323_PageCooldown.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806150818304_InitialMigration.resx">
+      <DependentUpon>201806150818304_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -61,9 +61,9 @@ namespace Website.Controllers
                 var bookId = Guid.NewGuid();
                 var book = new DataModels.Skills.Book
                 {
-                    Id = bookId,
+                    Id = Guid.NewGuid(),
                     VersionId = bookModel.SelectedVersion,
-                    BookId = Guid.NewGuid(),
+                    BookId = bookId,
                     Quality = bookModel.Quality,
                     Name = bookModel.Name,
                     Pages = new List<DataModels.Skills.Page>()

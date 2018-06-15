@@ -17,13 +17,16 @@ namespace AiosKingdom.ViewModels
 
         public List<DataModels.Dungeons.Dungeon> Dungeons => DatasManager.Instance.Dungeons;
 
-        private ICommand _enterDungeonAction;
-        public ICommand EnterDungeonAction =>
-            _enterDungeonAction ?? (_enterDungeonAction = new Command((row) =>
+        public DataModels.Dungeons.Dungeon SelectedDungeon
+        {
+            get { return null; }
+            set
             {
-                var dungeon = (DataModels.Dungeons.Dungeon)row;
-
-                _navigation.PushModalAsync(new Views.Dungeon.EnterDungeonPage(dungeon));
-            }));
+                if (value != null)
+                {
+                    _navigation.PushModalAsync(new Views.Dungeon.EnterDungeonPage(value));
+                }
+            }
+        }
     }
 }

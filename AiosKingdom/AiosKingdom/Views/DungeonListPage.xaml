@@ -8,6 +8,7 @@
         <Grid>
             <ListView
                 ItemsSource="{Binding Dungeons}"
+                SelectedItem="{Binding SelectedDungeon}"
                 RowHeight="80">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -41,12 +42,6 @@
                                     HorizontalTextAlignment="End"
                                     Text="{Binding MaxLevelAuthorized}"/>
                             </Grid>
-                            <ViewCell.ContextActions>
-                                <MenuItem
-                                    Command="{Binding BindingContext.EnterDungeonAction, Source={x:Reference DungeonListPage}}"
-                                    CommandParameter="{Binding .}"
-                                    Text="Enter" />
-                            </ViewCell.ContextActions>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
