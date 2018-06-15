@@ -56,12 +56,9 @@ namespace Website.Controllers
             {
                 monsterModel.Types = monsterModel.Types.Distinct().ToList();
                 monsterModel.Loots.RemoveAll(l => l.DropRate == 0 || l.Quantity == 0 || Guid.Empty.Equals(l.SelectedItem));
-                monsterModel.Phases.RemoveAll(p => Guid.Empty.Equals(p.SelectedSkill) 
-                || (p.StaminaPerLevel == 0 && p.EnergyPerLevel == 0
-                && p.StrengthPerLevel == 0 && p.AgilityPerLevel == 0
-                && p.IntelligencePerLevel == 0 && p.WisdomPerLevel == 0));
+                monsterModel.Phases.RemoveAll(p => Guid.Empty.Equals(p.SelectedSkill));
 
-                if (monsterModel.Types.Count > 0 && monsterModel.Loots.Count > 0 && monsterModel.Phases.Count > 0)
+                if (monsterModel.Types.Count > 0 && monsterModel.Phases.Count > 0)
                 {
                     var monsterId = Guid.NewGuid();
                     var monster = new DataModels.Monsters.Monster
@@ -77,6 +74,12 @@ namespace Website.Controllers
                         HealthPerLevel = monsterModel.HealthPerLevel,
                         BaseExperience = monsterModel.BaseExperience,
                         ExperiencePerLevelRatio = monsterModel.ExperiencePerLevelRatio,
+                        StaminaPerLevel = monsterModel.StaminaPerLevel,
+                        EnergyPerLevel = monsterModel.EnergyPerLevel,
+                        StrengthPerLevel = monsterModel.StrengthPerLevel,
+                        AgilityPerLevel = monsterModel.AgilityPerLevel,
+                        IntelligencePerLevel = monsterModel.IntelligencePerLevel,
+                        WisdomPerLevel = monsterModel.WisdomPerLevel,
                         Loots = new List<DataModels.Monsters.Loot>(),
                         Phases = new List<DataModels.Monsters.Phase>()
                     };
@@ -101,12 +104,6 @@ namespace Website.Controllers
                         {
                             Id = Guid.NewGuid(),
                             MonsterId = monsterId,
-                            StaminaPerLevel = phaseModel.StaminaPerLevel,
-                            EnergyPerLevel = phaseModel.EnergyPerLevel,
-                            StrengthPerLevel = phaseModel.StrengthPerLevel,
-                            AgilityPerLevel = phaseModel.AgilityPerLevel,
-                            IntelligencePerLevel = phaseModel.IntelligencePerLevel,
-                            WisdomPerLevel = phaseModel.WisdomPerLevel,
                             SkillId = phaseModel.SelectedSkill
                         };
                         monster.Phases.Add(phase);

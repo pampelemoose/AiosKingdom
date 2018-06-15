@@ -47,6 +47,14 @@ namespace AiosKingdom
                 });
             });
 
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.EnterDungeon, (sender) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    LoadingScreenManager.Instance.ChangePage(new Views.Dungeon.DungeonPage());
+                });
+            });
+
             MainPage = new Views.LoginPage();
 
             LoadingScreenCallbacks();

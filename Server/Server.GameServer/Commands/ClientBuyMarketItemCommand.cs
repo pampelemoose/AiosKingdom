@@ -26,7 +26,8 @@ namespace Server.GameServer.Commands
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Client_BuyMarketItem,
-                    Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = false, Message = "Item sold or not available anymore." })
+                    Success = false,
+                    Json = "Item sold or not available anymore."
                 };
                 ret.Succeeded = true;
                 return ret;
@@ -96,7 +97,8 @@ namespace Server.GameServer.Commands
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Client_BuyMarketItem,
-                Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = true, Message = "Item added to inventory." })
+                Success = true,
+                Json = "Item added to inventory."
             };
             ret.Succeeded = true;
             return ret;

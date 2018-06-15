@@ -36,6 +36,7 @@ namespace DataRepositories
         public DbSet<DataModels.Equipment> Equipments { get; set; }
         public DbSet<DataModels.InventorySlot> Inventories { get; set; }
         public DbSet<DataModels.Knowledge> Knowledges { get; set; }
+        public DbSet<DataModels.DungeonProgress> DungeonProgresses { get; set; }
 
         public DbSet<DataModels.MarketSlot> Market { get; set; }
 

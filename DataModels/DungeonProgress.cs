@@ -13,9 +13,12 @@ namespace DataModels
         public Guid Id { get; set; }
 
         [Required]
+        public Guid SoulId { get; set; }
+
+        [Required]
         public Guid DungeonId { get; set; }
 
         [Required]
         public int CurrentRoom { get; set; }
-    }
+    } 
 }

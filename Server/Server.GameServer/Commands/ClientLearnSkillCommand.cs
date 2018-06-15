@@ -29,7 +29,8 @@ namespace Server.GameServer.Commands
                     ret.ClientResponse = new Network.Message
                     {
                         Code = Network.CommandCodes.Client_LearnSkill,
-                        Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = false, Message = "Skill already known." })
+                        Success = false,
+                        Json = "Skill already known."
                     };
                     ret.Succeeded = true;
                     return ret;
@@ -41,7 +42,8 @@ namespace Server.GameServer.Commands
                     ret.ClientResponse = new Network.Message
                     {
                         Code = Network.CommandCodes.Client_LearnSkill,
-                        Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = false, Message = "Skill rank doesn't exists." })
+                        Success = false,
+                        Json = "Skill rank doesn't exists."
                     };
                     ret.Succeeded = true;
                     return ret;
@@ -52,7 +54,8 @@ namespace Server.GameServer.Commands
                     ret.ClientResponse = new Network.Message
                     {
                         Code = Network.CommandCodes.Client_LearnSkill,
-                        Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = false, Message = "Not enough embers." })
+                        Success = false,
+                        Json = "Not enough embers."
                     };
                     ret.Succeeded = true;
                     return ret;
@@ -77,7 +80,8 @@ namespace Server.GameServer.Commands
                     ret.ClientResponse = new Network.Message
                     {
                         Code = Network.CommandCodes.Client_LearnSkill,
-                        Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = false, Message = "Don't have previous rank, can't upgrade." })
+                        Success = false,
+                        Json = "Don't have previous rank, can't upgrade."
                     };
                     ret.Succeeded = true;
                     return ret;
@@ -89,7 +93,8 @@ namespace Server.GameServer.Commands
                     ret.ClientResponse = new Network.Message
                     {
                         Code = Network.CommandCodes.Client_LearnSkill,
-                        Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = false, Message = "Skill rank doesn't exists." })
+                        Success = false,
+                        Json = "Skill rank doesn't exists."
                     };
                     ret.Succeeded = true;
                     return ret;
@@ -100,7 +105,8 @@ namespace Server.GameServer.Commands
                     ret.ClientResponse = new Network.Message
                     {
                         Code = Network.CommandCodes.Client_LearnSkill,
-                        Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = false, Message = "Not enough embers." })
+                        Success = false,
+                        Json = "Not enough embers."
                     };
                     ret.Succeeded = true;
                     return ret;
@@ -118,7 +124,8 @@ namespace Server.GameServer.Commands
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Client_LearnSkill,
-                Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = true, Message = "Skill learned." })
+                Success = true,
+                Json = "Skill learned."
             };
             ret.Succeeded = true;
             return ret;

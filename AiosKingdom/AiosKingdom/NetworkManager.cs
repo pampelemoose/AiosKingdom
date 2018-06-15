@@ -422,8 +422,7 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_CreateSoul:
                     {
-                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
-                        if (result.Success)
+                        if (message.Success)
                         {
                             var args = new string[0];
                             var retMess = new Network.Message
@@ -436,7 +435,7 @@ namespace AiosKingdom
                         }
                         else
                         {
-                            MessagingCenter.Send(this, MessengerCodes.SoulCreationFailed, result.Message);
+                            MessagingCenter.Send(this, MessengerCodes.SoulCreationFailed, message.Json);
                         }
                     }
                     break;
@@ -448,8 +447,7 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_ConnectSoul:
                     {
-                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
-                        if (result.Success)
+                        if (message.Success)
                         {
                             MessagingCenter.Send(this, MessengerCodes.SoulConnected);
                             AskArmorList();
@@ -461,7 +459,7 @@ namespace AiosKingdom
                         }
                         else
                         {
-                            MessagingCenter.Send(this, MessengerCodes.SoulConnectionFailed, result.Message);
+                            MessagingCenter.Send(this, MessengerCodes.SoulConnectionFailed, message.Json);
                         }
                     }
                     break;
@@ -488,8 +486,7 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_BuyMarketItem:
                     {
-                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
-                        if (result.Success)
+                        if (message.Success)
                         {
                             AskSoulDatas();
                             AskMarketItems();
@@ -498,8 +495,7 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_EquipItem:
                     {
-                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
-                        if (result.Success)
+                        if (message.Success)
                         {
                             AskSoulDatas();
                             AskSoulCurrentDatas();
@@ -508,8 +504,7 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_UseSpiritPills:
                     {
-                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
-                        if (result.Success)
+                        if (message.Success)
                         {
                             AskSoulDatas();
                             AskSoulCurrentDatas();
@@ -518,12 +513,11 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_LearnSkill:
                     {
-                        var result = JsonConvert.DeserializeObject<Network.MessageResult>(message.Json);
-                        if (result.Success)
+                        if (message.Success)
                         {
                             AskSoulDatas();
                         }
-                        MessagingCenter.Send(this, MessengerCodes.SkillLearned, result.Message);
+                        MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
                     }
                     break;
 
@@ -564,6 +558,29 @@ namespace AiosKingdom
                     }
                     break;
 
+                case Network.CommandCodes.Dungeon_EnterRoom:
+                    {
+                        if (message.Success)
+                        {
+                            var adventure = JsonConvert.DeserializeObject<Network.AdventureState>(message.Json);
+                            DatasManager.Instance.Adventure = adventure;
+                            MessagingCenter.Send(this, MessengerCodes.EnterDungeon);
+                        }
+                        else
+                        {
+                            MessagingCenter.Send(this, MessengerCodes.EnterDungeonFailed, message.Json);
+                        }
+                    }
+                    break;
+                case Network.CommandCodes.Dungeon_Exit:
+                    {
+                        if (message.Success)
+                        {
+                            MessagingCenter.Send(this, MessengerCodes.SoulConnected);
+                        }
+                    }
+                    break;
+
                 default:
                     return false;
             }
@@ -575,187 +592,95 @@ namespace AiosKingdom
 
         public void AskArmorList()
         {
-            var args = new string[0];
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.ArmorList,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.ArmorList);
         }
 
         public void AskConsumableList()
         {
-            var args = new string[0];
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.ConsumableList,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.ConsumableList);
         }
 
         public void AskBagList()
         {
-            var args = new string[0];
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.BagList,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.BagList);
         }
 
         public void AskBookList()
         {
-            var args = new string[0];
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.BookList,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.BookList);
         }
 
         public void AskMonsterList()
         {
-            var args = new string[0];
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.MonsterList,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.MonsterList);
         }
 
         public void AskDungeonList()
         {
-            var args = new string[0];
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.DungeonList,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.DungeonList);
         }
 
         public void CreateSoul(string soulname)
         {
-            var args = new string[1];
-            args[0] = soulname;
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.Client_CreateSoul,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.Client_CreateSoul, new string[1] { soulname });
         }
 
         public void ConnectSoul(Guid id)
         {
-            var args = new string[1];
-            args[0] = id.ToString();
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.Client_ConnectSoul,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.Client_ConnectSoul, new string[1] { id.ToString() });
         }
 
         public void AskSoulDatas()
         {
-            var args = new string[0];
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.Client_SoulDatas,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.Client_SoulDatas);
         }
 
         public void AskSoulCurrentDatas()
         {
-            var args = new string[0];
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.Client_CurrentSoulDatas,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.Client_CurrentSoulDatas);
         }
 
         public void AskMarketItems()
         {
-            var args = new string[0];
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.Client_MarketList,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.Client_MarketList);
         }
 
         public void BuyMarketItem(Guid slotId)
         {
-            var args = new string[1];
-            args[0] = slotId.ToString();
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.Client_BuyMarketItem,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.Client_BuyMarketItem, new string[1] { slotId.ToString() });
         }
 
         public void EquipItem(Guid slotId)
         {
-            var args = new string[1];
-            args[0] = slotId.ToString();
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.Client_EquipItem,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.Client_EquipItem, new string[1] { slotId.ToString() });
         }
 
         public void UseSpiritPills(DataModels.Soul.Stats statType, int quantity)
         {
-            var args = new string[2];
-            args[0] = statType.ToString();
-            args[1] = quantity.ToString();
-            var retMess = new Network.Message
-            {
-                Code = Network.CommandCodes.Client_UseSpiritPills,
-                Json = JsonConvert.SerializeObject(args),
-                Token = _gameAuthToken
-            };
-            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+            SendRequest(Network.CommandCodes.Client_UseSpiritPills, new string[2] { statType.ToString(), quantity.ToString() });
         }
 
         public void LearnSkill(Guid bookId, int rank)
         {
-            var args = new string[2];
-            args[0] = bookId.ToString();
-            args[1] = rank.ToString();
+            SendRequest(Network.CommandCodes.Client_LearnSkill, new string[2] { bookId.ToString(), rank.ToString() });
+        }
+
+        public void OpenDungeonRoom(Guid dungeonId)
+        {
+            SendRequest(Network.CommandCodes.Dungeon_EnterRoom, new string[1] { dungeonId.ToString() });
+        }
+
+        public void ExitDungeon()
+        {
+            SendRequest(Network.CommandCodes.Dungeon_Exit);
+        }
+
+        private void SendRequest(int code, string[] args = null)
+        {
             var retMess = new Network.Message
             {
-                Code = Network.CommandCodes.Client_LearnSkill,
-                Json = JsonConvert.SerializeObject(args),
+                Code = code,
+                Json = JsonConvert.SerializeObject(args != null ? args : new string[0]),
                 Token = _gameAuthToken
             };
             SendJsonToGame(JsonConvert.SerializeObject(retMess));

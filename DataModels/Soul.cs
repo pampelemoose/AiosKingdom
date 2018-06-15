@@ -66,5 +66,7 @@ namespace DataModels
 
         public List<InventorySlot> Inventory { get; set; }
         public List<Knowledge> Knowledge { get; set; }
+
+        public List<DungeonProgress> Progress { get; set; }
     }
 }

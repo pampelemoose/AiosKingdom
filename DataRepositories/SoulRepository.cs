@@ -27,6 +27,7 @@ namespace DataRepositories
                     .Include(s => s.Equipment)
                     .Include(s => s.Inventory)
                     .Include(s => s.Knowledge)
+                    .Include(s => s.Progress)
                     .FirstOrDefault(s => s.Id.Equals(id));
             }
         }
@@ -74,6 +75,7 @@ namespace DataRepositories
                     .Include(s => s.Equipment)
                     .Include(s => s.Inventory)
                     .Include(s => s.Knowledge)
+                    .Include(s => s.Progress)
                     .FirstOrDefault(s => s.Id.Equals(soul.Id));
 
                 if (online == null) return false;
@@ -137,6 +139,30 @@ namespace DataRepositories
                 foreach (var toDel in oldKno)
                 {
                     context.Knowledges.Remove(toDel);
+                }
+
+                // PROGRESS
+                var oldPro = online.Progress;
+                online.Progress = new List<DataModels.DungeonProgress>();
+                foreach (var pro in soul.Progress)
+                {
+                    if (Guid.Empty.Equals(pro.Id))
+                    {
+                        pro.Id = Guid.NewGuid();
+                        online.Progress.Add(pro);
+                    }
+                    else
+                    {
+                        var progress = context.DungeonProgresses.FirstOrDefault(i => i.Id.Equals(pro.Id));
+                        progress.CurrentRoom = pro.CurrentRoom;
+                        online.Progress.Add(progress);
+                        oldPro.Remove(oldPro.FirstOrDefault(o => o.Id.Equals(pro.Id)));
+                    }
+                }
+
+                foreach (var toDel in oldPro)
+                {
+                    context.DungeonProgresses.Remove(toDel);
                 }
 
                 // STATS

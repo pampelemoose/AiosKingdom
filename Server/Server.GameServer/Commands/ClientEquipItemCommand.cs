@@ -175,11 +175,8 @@ namespace Server.GameServer.Commands
                     ret.ClientResponse = new Network.Message
                     {
                         Code = Network.CommandCodes.Client_EquipItem,
-                        Json = JsonConvert.SerializeObject(new Network.MessageResult
-                        {
-                            Success = true,
-                            Message = "Item equiped."
-                        })
+                        Success = true,
+                        Json = "Item equiped."
                     };
                     ret.Succeeded = true;
 
@@ -190,11 +187,8 @@ namespace Server.GameServer.Commands
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Client_EquipItem,
-                Json = JsonConvert.SerializeObject(new Network.MessageResult
-                {
-                    Success = false,
-                    Message = "Couldn't equip item."
-                })
+                Success = false,
+                Json = "Couldn't equip item."
             };
             ret.Succeeded = true;
 

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AiosKingdom.Views.Dungeon.EnterDungeonPage"
+             x:Class="AiosKingdom.Views.Dungeon.ExitDungeonPage"
              Title="{Binding Title}">
     <ContentPage.Content>
         <Grid
@@ -48,11 +48,10 @@
                     Command="{Binding CloseAction}"/>
                 <Button
                     Grid.Column="2"
-                    Text="Enter"
+                    Text="Exit"
                     BackgroundColor="{StaticResource LightMainColor}"
-                    Command="{Binding EnterAction}"/>
+                    Command="{Binding ExitAction}"/>
             </Grid>
         </Grid>
-
     </ContentPage.Content>
 </ContentPage>

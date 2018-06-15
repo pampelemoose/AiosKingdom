@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AiosKingdom.Views.Dungeon.DungeonPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="8*"/>
+                <RowDefinition Height="4*"/>
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0"
+                BackgroundColor="Aqua">
+                <ListView
+                    ItemsSource="{Binding Room.Enemies}"
+                    SelectedItem="{Binding SelectedEnemy}"
+                    RowHeight="80">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid
+                                Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="6*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Grid.Column="0"
+                                        FontSize="40"
+                                        FontAttributes="Bold"
+                                        Margin="5, 0"
+                                        VerticalTextAlignment="Center"
+                                        Text="Health :"/>
+
+                                    <Label 
+                                        Grid.Column="1"
+                                        FontSize="50"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="Center"
+                                        Text="{Binding Value.CurrentHealth}"/>
+                                    <Label 
+                                        Grid.Column="2"
+                                        FontSize="30"
+                                        FontAttributes="Bold"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="End"
+                                        Text="{Binding Value.MaxHealth}"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <Grid
+                Grid.Row="1"
+                BackgroundColor="Green">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="50" />
+                </Grid.RowDefinitions>
+
+                <Grid
+                    Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid
+                        Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="6*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="Health :" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="{Binding Room.CurrentHealth}" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Text="{Binding Datas.MaxHealth}" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Text="Mana :" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="{Binding Room.CurrentMana}" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Text="{Binding Datas.MaxMana}" />
+                    </Grid>
+
+                    <Grid
+                        Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="Stacked Experience :" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="{Binding Room.StackedExperience}" />
+                    </Grid>
+                </Grid>
+
+                <Grid
+                    Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="0"
+                        Text="Skills"
+                        Command="{Binding SkillsAction}"/>
+                    <Button
+                        Grid.Column="1"
+                        Text="Consumables"
+                        Command="{Binding ConsumablesAction}"/>
+                    
+                    <Button
+                        Grid.Column="2"
+                        Text="Exit"
+                        Command="{Binding ExitDungeonAction}"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

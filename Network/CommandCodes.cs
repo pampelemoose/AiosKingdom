@@ -30,7 +30,8 @@ namespace Network
         public const int MonsterList = 34;
         public const int DungeonList = 35;
 
-        public const int Dungeon_Enter = 50;
+        public const int Dungeon_EnterRoom = 50;
+        public const int Dungeon_Exit = 51;
 
         public const int Ping = -1;
     }

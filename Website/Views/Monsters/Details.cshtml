@@ -98,12 +98,6 @@
         <table class="table col-md-12">
             <thead>
                 <tr>
-                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().StaminaPerLevel)</th>
-                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().EnergyPerLevel)</th>
-                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().StrengthPerLevel)</th>
-                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().AgilityPerLevel)</th>
-                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().IntelligencePerLevel)</th>
-                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().WisdomPerLevel)</th>
                     <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().SkillId)</th>
                 </tr>
             </thead>
@@ -111,12 +105,6 @@
                 @foreach (var phase in Model.Phases)
                 {
                     <tr>
-                        <td>@phase.StaminaPerLevel</td>
-                        <td>@phase.EnergyPerLevel</td>
-                        <td>@phase.StrengthPerLevel</td>
-                        <td>@phase.AgilityPerLevel</td>
-                        <td>@phase.IntelligencePerLevel</td>
-                        <td>@phase.WisdomPerLevel</td>
                         <td>@phase.SkillId</td>
                     </tr>
                 }

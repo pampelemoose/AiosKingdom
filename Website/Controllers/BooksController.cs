@@ -80,6 +80,7 @@ namespace Website.Controllers
                         Rank = pageModel.Rank,
                         EmberCost = pageModel.StatCost,
                         ManaCost = pageModel.ManaCost,
+                        Cooldown = pageModel.Cooldown,
                         Inscriptions = new List<DataModels.Skills.Inscription>()
                     };
                     foreach (var inscModel in pageModel.Inscriptions)

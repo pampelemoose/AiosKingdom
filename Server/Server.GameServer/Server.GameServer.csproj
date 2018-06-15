@@ -53,6 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adventure.cs" />
+    <Compile Include="AdventureManager.cs" />
     <Compile Include="ClientsManager.cs" />
     <Compile Include="CommandManager.cs" />
     <Compile Include="Commands\ACommand.cs" />
@@ -71,6 +73,8 @@
     <Compile Include="Commands\ClientSoulListCommand.cs" />
     <Compile Include="Commands\ClientUseSpiritPillsCommand.cs" />
     <Compile Include="Commands\ConsumableListCommand.cs" />
+    <Compile Include="Commands\DungeonEnterRoomCommand.cs" />
+    <Compile Include="Commands\DungeonExitCommand.cs" />
     <Compile Include="Commands\DungeonListCommand.cs" />
     <Compile Include="Commands\MonsterListCommand.cs" />
     <Compile Include="Commands\PingCommand.cs" />

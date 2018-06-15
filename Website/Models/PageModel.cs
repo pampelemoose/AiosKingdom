@@ -35,6 +35,11 @@ namespace Website.Models
         [Range(0, 400)]
         public int ManaCost { get; set; }
 
+        [Required(ErrorMessage = "Cooldown required")]
+        [Display(Name = "Cooldown")]
+        [Range(0, 400)]
+        public int Cooldown { get; set; }
+
         public List<InscriptionModel> Inscriptions { get; set; }
     }
 }

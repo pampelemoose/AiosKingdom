@@ -46,21 +46,12 @@ namespace Server.GameServer.Commands
             };
 
             var result = DataRepositories.SoulRepository.CreateSoul(soul);
-            var objectResult = new Network.MessageResult
-            {
-                Success = result,
-                Message = "Soul created !"
-            };
-
-            if (!result)
-            {
-                objectResult.Message = "Soulname already in use. Please enter another one.";
-            }
 
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Client_CreateSoul,
-                Json = JsonConvert.SerializeObject(objectResult)
+                Success = result,
+                Json = result ? "Soul created !" : "Soulname already in use. Please enter another one."
             };
             ret.Succeeded = true;
 

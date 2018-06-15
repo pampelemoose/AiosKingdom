@@ -19,6 +19,7 @@ namespace DataRepositories.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
 
+            /*
             foreach (var entity in context.Versions)
                 context.Versions.Remove(entity);
 
@@ -106,6 +107,7 @@ namespace DataRepositories.Migrations
             });
 
             context.SaveChanges();
+            */
         }
     }
 }

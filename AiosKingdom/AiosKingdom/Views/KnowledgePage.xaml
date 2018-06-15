@@ -52,6 +52,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <Label
@@ -69,6 +70,11 @@
                         FontSize="20"
                         VerticalTextAlignment="Center"
                         Text="{Binding SelectedKnowledge.Page.ManaCost}"/>
+                    <Label
+                        Grid.Column="3"
+                        FontSize="20"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding SelectedKnowledge.Page.Cooldown}"/>
                 </Grid>
 
                 <ListView

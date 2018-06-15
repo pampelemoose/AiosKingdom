@@ -30,7 +30,8 @@ namespace Server.GameServer.Commands
                     ret.ClientResponse = new Network.Message
                     {
                         Code = Network.CommandCodes.Client_ConnectSoul,
-                        Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = true, Message = "Soul Connected" })
+                        Success = true,
+                        Json = "Soul Connected"
                     };
                     ret.Succeeded = true;
                     return ret;
@@ -40,7 +41,8 @@ namespace Server.GameServer.Commands
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Client_ConnectSoul,
-                Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = false, Message = "Could not connect soul" })
+                Success = false,
+                Json = "Could not connect soul"
             };
             ret.Succeeded = true;
 

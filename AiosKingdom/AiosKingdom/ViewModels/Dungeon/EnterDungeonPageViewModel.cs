@@ -14,6 +14,11 @@ namespace AiosKingdom.ViewModels.Dungeon
             : base(nav)
         {
             _dungeon = dungeon;
+
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.EnterDungeonFailed, (sender, message) =>
+            {
+                LoadingScreenManager.Instance.AlertLoadingScreen("Enter Dungeon", message);
+            });
         }
 
         public DataModels.Dungeons.Dungeon Dungeon => _dungeon;
@@ -26,6 +31,14 @@ namespace AiosKingdom.ViewModels.Dungeon
             _closeAction ?? (_closeAction = new Command(() =>
             {
                 _navigation.PopModalAsync();
+            }));
+
+        private ICommand _enterAction;
+        public ICommand EnterAction =>
+            _enterAction ?? (_enterAction = new Command(() =>
+            {
+                LoadingScreenManager.Instance.OpenLoadingScreen($"Entering {_dungeon.Name}, please wait...");
+                NetworkManager.Instance.OpenDungeonRoom(_dungeon.DungeonId);
             }));
     }
 }

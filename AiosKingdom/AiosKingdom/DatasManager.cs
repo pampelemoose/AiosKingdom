@@ -37,5 +37,7 @@ namespace AiosKingdom
 
         public List<DataModels.Monsters.Monster> Monsters { get; set; }
         public List<DataModels.Dungeons.Dungeon> Dungeons { get; set; }
+
+        public Network.AdventureState Adventure { get; set; }
     }
 }

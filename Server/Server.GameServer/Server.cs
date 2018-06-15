@@ -102,6 +102,9 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.MonsterList, 0);
             _commandArgCount.Add(Network.CommandCodes.DungeonList, 0);
 
+            _commandArgCount.Add(Network.CommandCodes.Dungeon_EnterRoom, 1);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon_Exit, 0);
+
             _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
@@ -124,6 +127,9 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.BookList, (args) => { return new Commands.BookListCommand(args); });
             _delegates.Add(Network.CommandCodes.MonsterList, (args) => { return new Commands.MonsterListCommand(args); });
             _delegates.Add(Network.CommandCodes.DungeonList, (args) => { return new Commands.DungeonListCommand(args); });
+
+            _delegates.Add(Network.CommandCodes.Dungeon_EnterRoom, (args) => { return new Commands.DungeonEnterRoomCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon_Exit, (args) => { return new Commands.DungeonExitCommand(args); });
         }
 
         private void Run()
@@ -513,6 +519,12 @@ namespace Server.GameServer
                 case Network.CommandCodes.MonsterList:
                     break;
                 case Network.CommandCodes.DungeonList:
+                    break;
+
+                case Network.CommandCodes.Dungeon_EnterRoom:
+                    retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Dungeon_Exit:
                     break;
                 default:
                     retVal.IsValid = false;

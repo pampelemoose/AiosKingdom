@@ -12,8 +12,9 @@ namespace DataModels.Dungeons
         Fight = 0,
         Rest = 1,
         Shop = 2,
-        Boss = 3,
-        Exit = 4
+        Elite = 3,
+        Boss = 4,
+        Exit = 5
     }
 
     public class Room

@@ -59,7 +59,8 @@ namespace Server.GameServer.Commands
                     ret.ClientResponse = new Network.Message
                     {
                         Code = Network.CommandCodes.Client_UseSpiritPills,
-                        Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = true, Message = "Used pills" })
+                        Success = true,
+                        Json = "Used pills"
                     };
                     ret.Succeeded = true;
 
@@ -70,7 +71,8 @@ namespace Server.GameServer.Commands
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Client_UseSpiritPills,
-                Json = JsonConvert.SerializeObject(new Network.MessageResult { Success = false, Message = "Couldn't use pills" })
+                Success = false,
+                Json = "Couldn't use pills"
             };
             ret.Succeeded = true;
 
