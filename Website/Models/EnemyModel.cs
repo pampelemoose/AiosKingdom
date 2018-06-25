@@ -22,7 +22,7 @@ namespace Website.Models
         }
 
         [Required]
-        [Range(0, 10000)]
+        [Range(1, 10000)]
         public int Level { get; set; }
     }
 }

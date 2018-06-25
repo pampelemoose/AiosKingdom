@@ -43,11 +43,12 @@ namespace Website.Models
 
         [Required(ErrorMessage = "BaseExperience required")]
         [Display(Name = "BaseExperience")]
+        [Range(1, 1000000, ErrorMessage = "BaseExperience should be higher than 0")]
         public int BaseExperience { get; set; }
 
         [Required(ErrorMessage = "ExperiencePerLevelRatio required")]
         [Display(Name = "ExperiencePerLevelRatio")]
-        [Range(0, 10000, ErrorMessage = "ExperiencePerLevelRatio should be higher than 0")]
+        [Range(1, 10000, ErrorMessage = "ExperiencePerLevelRatio should be higher than 0")]
         public double ExperiencePerLevelRatio { get; set; }
 
         [Required(ErrorMessage = "StaminaPerLevel required")]
