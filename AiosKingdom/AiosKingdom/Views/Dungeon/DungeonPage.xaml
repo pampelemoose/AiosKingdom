@@ -15,7 +15,7 @@
                 Grid.Row="0"
                 BackgroundColor="Aqua">
                 <ListView
-                    ItemsSource="{Binding Room.Enemies}"
+                    ItemsSource="{Binding Room.Enemies, Mode=TwoWay}"
                     SelectedItem="{Binding SelectedEnemy}"
                     RowHeight="80">
                     <ListView.ItemTemplate>
@@ -190,6 +190,13 @@
                         Grid.Column="2"
                         Text="Exit"
                         Command="{Binding ExitDungeonAction}"/>
+
+                    <Button
+                        Grid.Column="2"
+                        BackgroundColor="{StaticResource BackgroundColor}"
+                        Text="End Turn"
+                        Command="{Binding ExecuteAction}"
+                        IsVisible="{Binding IsSkillSelected}"/>
                 </Grid>
             </Grid>
         </Grid>

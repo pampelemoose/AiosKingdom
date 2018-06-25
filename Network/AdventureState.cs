@@ -24,14 +24,16 @@ namespace Network
         public Dictionary<Guid, EnemyState> Enemies { get; set; }
         public Dictionary<Guid, ShopState> Shops { get; set; }
 
+        public Dictionary<Guid, Guid> Loots { get; set; }
+
         public bool IsRestingArea { get; set; }
         public bool IsFightArea { get; set; }
         public bool IsShopArea { get; set; }
         public bool IsEliteArea { get; set; }
         public bool IsBossFight { get; set; }
 
-        public int CurrentHealth { get; set; }
-        public int CurrentMana { get; set; }
+        public double CurrentHealth { get; set; }
+        public double CurrentMana { get; set; }
 
         public int StackedExperience { get; set; }
     }

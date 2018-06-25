@@ -35,6 +35,7 @@ namespace AiosKingdom.ViewModels.Dungeon
                         {
                             skills.Add(new Models.Dungeon.SkillSelectionItemModel
                             {
+                                KnowledgeId = knowledge.Id,
                                 BookName = book.Name,
                                 Skill = page,
                                 CanSelect = page.ManaCost <= _state.CurrentMana

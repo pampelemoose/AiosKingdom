@@ -10,6 +10,7 @@ namespace Server.GameServer
     {
         private struct EnemyStats
         {
+            public int Level { get; set; }
             public int Stamina { get; set; }
             public int Energy { get; set; }
             public int Strength { get; set; }
@@ -45,11 +46,81 @@ namespace Server.GameServer
             }
         }
 
+        public bool UseSkillOnEnemy(Guid enemyId, DataModels.Skills.Page skill, Network.SoulDatas datas)
+        {
+            if (_enemiesStats.ContainsKey(enemyId))
+            {
+                var enemy = _state.Enemies[enemyId];
+                var enemyStats = _enemiesStats[enemyId];
+
+                foreach (var inscription in skill.Inscriptions)
+                {
+                    switch (inscription.Type)
+                    {
+                        case DataModels.Skills.InscriptionType.Damages:
+                            {
+                                enemy.CurrentHealth -= inscription.BaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, datas));
+                                Console.WriteLine($"Using {skill.BookId}.{skill.Rank} skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, datas)})*{inscription.Ratio}) on {enemy.MonsterId}.({enemy.CurrentHealth}/{enemy.MaxHealth}) .");
+                            }
+                            break;
+                        case DataModels.Skills.InscriptionType.Heal:
+                            {
+                                _state.CurrentHealth += inscription.BaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, datas));
+                                Console.WriteLine($"Using {skill.BookId}.{skill.Rank} skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, datas)})*{inscription.Ratio}) on yourself .");
+                            }
+                            break;
+                    }
+                }
+
+                _state.CurrentMana -= skill.ManaCost;
+                Console.WriteLine($"Consumed {skill.ManaCost} mana.");
+
+                if (enemy.CurrentHealth <= 0)
+                {
+                    var monster = DataRepositories.MonsterRepository.GetById(enemy.MonsterId);
+
+                    _state.StackedExperience += monster.BaseExperience + (int)(enemyStats.Level * monster.ExperiencePerLevelRatio);
+                    _state.Loots.Add(Guid.NewGuid(), enemy.MonsterId);
+
+                    _enemiesStats.Remove(enemyId);
+                    _state.Enemies.Remove(enemyId);
+                    return true;
+                }
+
+                _enemiesStats[enemyId] = enemyStats;
+                _state.Enemies[enemyId] = enemy;
+                return true;
+            }
+
+            return false;
+        }
+
+        private int GetStatValue(DataModels.Soul.Stats stat, Network.SoulDatas datas)
+        {
+            switch (stat)
+            {
+                case DataModels.Soul.Stats.Stamina:
+                    return datas.TotalStamina;
+                case DataModels.Soul.Stats.Energy:
+                    return datas.TotalEnergy;
+                case DataModels.Soul.Stats.Strength:
+                    return datas.TotalStrength;
+                case DataModels.Soul.Stats.Agility:
+                    return datas.TotalAgility;
+                case DataModels.Soul.Stats.Intelligence:
+                    return datas.TotalIntelligence;
+                case DataModels.Soul.Stats.Wisdom:
+                    return datas.TotalWisdom;
+                default:
+                    return 0;
+            }
+        }
+
         public Network.AdventureState GetActualState()
         {
             // TODO : Return networkInfos object containing the actual room datas (enemies hp and so on)
             var rand = new Random();
-            
+
             foreach (var key in _state.Enemies.Keys.ToList())
             {
                 var enemy = _state.Enemies[key];
@@ -77,6 +148,7 @@ namespace Server.GameServer
 
             _state.Enemies = new Dictionary<Guid, Network.AdventureState.EnemyState>();
             _state.Shops = new Dictionary<Guid, Network.AdventureState.ShopState>();
+            _state.Loots = new Dictionary<Guid, Guid>();
 
             _state.IsRestingArea = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Rest;
             _state.IsFightArea = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Fight;
@@ -98,6 +170,7 @@ namespace Server.GameServer
 
                 _enemiesStats.Add(tempId, new EnemyStats
                 {
+                    Level = enemy.Level,
                     Stamina = (int)(enemy.Level * monster.StaminaPerLevel),
                     Energy = (int)(enemy.Level * monster.EnergyPerLevel),
                     Strength = (int)(enemy.Level * monster.StrengthPerLevel),

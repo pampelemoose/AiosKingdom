@@ -103,7 +103,9 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.DungeonList, 0);
 
             _commandArgCount.Add(Network.CommandCodes.Dungeon_EnterRoom, 1);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon_UpdateRoom, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon_Exit, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon_UseSkill, 2);
 
             _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
@@ -129,7 +131,9 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.DungeonList, (args) => { return new Commands.DungeonListCommand(args); });
 
             _delegates.Add(Network.CommandCodes.Dungeon_EnterRoom, (args) => { return new Commands.DungeonEnterRoomCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon_UpdateRoom, (args) => { return new Commands.DungeonUpdateRoomCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon_Exit, (args) => { return new Commands.DungeonExitCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon_UseSkill, (args) => { return new Commands.DungeonUseSkillCommand(args); });
         }
 
         private void Run()
@@ -444,8 +448,14 @@ namespace Server.GameServer
                 case Network.CommandCodes.Dungeon_EnterRoom:
                     retVal.Args = new string[1] { args[0] };
                     break;
+                case Network.CommandCodes.Dungeon_UpdateRoom:
+                    break;
                 case Network.CommandCodes.Dungeon_Exit:
                     break;
+                case Network.CommandCodes.Dungeon_UseSkill:
+                    retVal.Args = new string[2] { args[0], args[1] };
+                    break;
+
                 default:
                     retVal.IsValid = false;
                     break;

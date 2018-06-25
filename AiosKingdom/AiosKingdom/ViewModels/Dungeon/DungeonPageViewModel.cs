@@ -11,6 +11,16 @@ namespace AiosKingdom.ViewModels.Dungeon
         public DungeonPageViewModel(INavigation nav)
             : base(nav)
         {
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.DungeonUpdated, (sender) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    NotifyPropertyChanged(nameof(Room));
+                    SelectedEnemy = null;
+                });
+            });
+
+            NetworkManager.Instance.UpdateDungeonRoom();
         }
 
         public Network.AdventureState Room => DatasManager.Instance.Adventure;
@@ -96,6 +106,16 @@ namespace AiosKingdom.ViewModels.Dungeon
             _exitDungeonAction ?? (_exitDungeonAction = new Command(() =>
             {
                 _navigation.PushModalAsync(new Views.Dungeon.ExitDungeonPage());
+            }));
+
+        private ICommand _executeAction;
+        public ICommand ExecuteAction =>
+            _executeAction ?? (_executeAction = new Command(() =>
+            {
+                if (IsSkillSelected)
+                {
+                    NetworkManager.Instance.DungeonUseSkill(_selectedSkill.KnowledgeId, _selectedEnemy.Value.Key);
+                }
             }));
     }
 }

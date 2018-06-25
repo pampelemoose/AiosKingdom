@@ -29,6 +29,18 @@ namespace Server.GameServer
 
         private Dictionary<Guid, Adventure> _adventures;
 
+        public Adventure GetAdventure(DataModels.Soul soul)
+        {
+            if (_adventures.ContainsKey(soul.Id))
+            {
+                var adventure = _adventures[soul.Id];
+
+                return adventure;
+            }
+
+            return null;
+        }
+
         public Adventure OpenRoom(DataModels.Soul soul, Guid dungeonId)
         {
             var dungeon = DataRepositories.DungeonRepository.GetById(dungeonId);

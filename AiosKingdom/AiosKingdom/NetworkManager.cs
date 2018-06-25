@@ -562,8 +562,6 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            var adventure = JsonConvert.DeserializeObject<Network.AdventureState>(message.Json);
-                            DatasManager.Instance.Adventure = adventure;
                             MessagingCenter.Send(this, MessengerCodes.EnterDungeon);
                         }
                         else
@@ -577,6 +575,24 @@ namespace AiosKingdom
                         if (message.Success)
                         {
                             MessagingCenter.Send(this, MessengerCodes.SoulConnected);
+                        }
+                    }
+                    break;
+                case Network.CommandCodes.Dungeon_UpdateRoom:
+                    {
+                        if (message.Success)
+                        {
+                            var adventure = JsonConvert.DeserializeObject<Network.AdventureState>(message.Json);
+                            DatasManager.Instance.Adventure = adventure;
+                            MessagingCenter.Send(this, MessengerCodes.DungeonUpdated);
+                        }
+                    }
+                    break;
+                case Network.CommandCodes.Dungeon_UseSkill:
+                    {
+                        if (message.Success)
+                        {
+                            UpdateDungeonRoom();
                         }
                     }
                     break;
@@ -668,6 +684,16 @@ namespace AiosKingdom
         public void OpenDungeonRoom(Guid dungeonId)
         {
             SendRequest(Network.CommandCodes.Dungeon_EnterRoom, new string[1] { dungeonId.ToString() });
+        }
+
+        public void UpdateDungeonRoom()
+        {
+            SendRequest(Network.CommandCodes.Dungeon_UpdateRoom);
+        }
+
+        public void DungeonUseSkill(Guid knowledgeId, Guid enemyId)
+        {
+            SendRequest(Network.CommandCodes.Dungeon_UseSkill, new string[2] { knowledgeId.ToString(), enemyId.ToString() });
         }
 
         public void ExitDungeon()
