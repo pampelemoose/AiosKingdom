@@ -33,6 +33,13 @@ namespace AiosKingdom.ViewModels
             });
         }
 
+        ~SoulListPageViewModel()
+        {
+            MessagingCenter.Unsubscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived);
+            MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.SoulCreationFailed);
+            MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.SoulConnectionFailed);
+        }
+
         private List<DataModels.Soul> _souls;
         public List<DataModels.Soul> Souls
         {

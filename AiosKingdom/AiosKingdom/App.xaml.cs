@@ -30,15 +30,6 @@ namespace AiosKingdom
                 });
             });
 
-            MessagingCenter.Subscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived, (sender, servers) =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    LoadingScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(servers)));
-                });
-
-            });
-
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulConnected, (sender) =>
             {
                 Device.BeginInvokeOnMainThread(() =>
@@ -60,15 +51,15 @@ namespace AiosKingdom
             LoadingScreenCallbacks();
         }
 
+        private Views.LoadingPage _loadingPage = new Views.LoadingPage();
         private void LoadingScreenCallbacks()
         {
             MessagingCenter.Subscribe<LoadingScreenManager, string>(this, MessengerCodes.OpenLoadingScreen, (sender, message) =>
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    var loadingPage = new Views.LoadingPage();
-                    loadingPage.SetMessage(message);
-                    await MainPage.Navigation.PushModalAsync(loadingPage);
+                    _loadingPage.SetMessage(message);
+                    await MainPage.Navigation.PushModalAsync(_loadingPage);
                     MessagingCenter.Send(this, MessengerCodes.LoadingScreenOpenned);
                 });
             });

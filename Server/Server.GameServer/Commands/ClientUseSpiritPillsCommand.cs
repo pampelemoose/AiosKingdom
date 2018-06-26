@@ -60,7 +60,7 @@ namespace Server.GameServer.Commands
                     {
                         Code = Network.CommandCodes.Client_UseSpiritPills,
                         Success = true,
-                        Json = "Used pills"
+                        Json = $"Used {amount} pill{(amount > 0 ? "s" : "")} in {statId}."
                     };
                     ret.Succeeded = true;
 

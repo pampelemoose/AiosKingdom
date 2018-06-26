@@ -27,6 +27,7 @@ namespace AiosKingdom
 
         public static string MarketUpdated = "marketUpdated";
 
+        public static string SpiritPillUsed = "spiritPillUsed";
         public static string SkillLearned = "skillLearned";
 
         public static string EnterDungeon = "enterDungeon";

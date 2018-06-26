@@ -16,20 +16,27 @@ namespace AiosKingdom.ViewModels
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.ConnectedToServer, (sender) =>
             {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    LoadingScreenManager.Instance.UpdateLoadingScreen("Loading Soul list, please wait.");
-                    NetworkManager.Instance.AskSoulList();
-                });
+                LoadingScreenManager.Instance.UpdateLoadingScreen("Loading Soul list, please wait.");
+                NetworkManager.Instance.AskSoulList();
+            });
+
+            MessagingCenter.Subscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived, (sender, servers) =>
+            {
+                ServerInfos = servers;
+                LoadingScreenManager.Instance.CloseLoadingScreen();
             });
 
             MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, souls) =>
             {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    LoadingScreenManager.Instance.PushPage(new Views.SoulListPage(new SoulListPageViewModel(souls)));
-                });
+                LoadingScreenManager.Instance.PushPage(new Views.SoulListPage(new SoulListPageViewModel(souls)));
             });
+        }
+
+        ~ServerListPageViewModel()
+        {
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.ConnectedToServer);
+            MessagingCenter.Unsubscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived);
+            MessagingCenter.Unsubscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived);
         }
 
         private List<Network.GameServerInfos> _serverInfos;

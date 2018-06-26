@@ -27,6 +27,8 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand ExitAction =>
             _exitAction ?? (_exitAction = new Command(() =>
             {
+                _navigation.PopModalAsync();
+
                 LoadingScreenManager.Instance.OpenLoadingScreen("Exiting Dungeon. Please wait...");
                 NetworkManager.Instance.ExitDungeon();
             }));

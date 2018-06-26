@@ -37,6 +37,12 @@ namespace AiosKingdom.ViewModels
             NetworkManager.Instance.AskSoulCurrentDatas();
         }
 
+        ~DashboardPageViewModel()
+        {
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.SoulUpdated);
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.SoulDatasUpdated);
+        }
+
         public DataModels.Soul Soul => DatasManager.Instance.Soul;
         public Network.SoulDatas Datas => DatasManager.Instance.Datas;
 

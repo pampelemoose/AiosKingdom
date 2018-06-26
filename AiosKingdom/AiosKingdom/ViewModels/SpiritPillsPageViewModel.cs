@@ -14,10 +14,20 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulUpdated, (sender) =>
             {
                 SetDatas();
-                LoadingScreenManager.Instance.CloseLoadingScreen();
+            });
+
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SpiritPillUsed, (sender, message) =>
+            {
+                LoadingScreenManager.Instance.AlertLoadingScreen("Spirit Pills", message);
             });
 
             SetDatas();
+        }
+
+        ~SpiritPillsPageViewModel()
+        {
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.SoulUpdated);
+            MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.SpiritPillUsed);
         }
 
         private int _spirits;

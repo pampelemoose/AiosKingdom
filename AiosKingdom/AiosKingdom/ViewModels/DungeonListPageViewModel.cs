@@ -26,6 +26,8 @@ namespace AiosKingdom.ViewModels
                 {
                     _navigation.PushModalAsync(new Views.Dungeon.EnterDungeonPage(value));
                 }
+
+                value = null;
             }
         }
     }

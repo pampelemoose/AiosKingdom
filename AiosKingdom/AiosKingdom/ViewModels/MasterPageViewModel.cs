@@ -47,8 +47,6 @@ namespace AiosKingdom.ViewModels
                 TargetType = typeof(Views.DungeonListPage),
                 Title = "Dungeons"
             });
-
-
         }
 
         public event Action<Type> PageChangeTriggered;

@@ -485,6 +485,7 @@ namespace AiosKingdom
                             AskSoulDatas();
                             AskSoulCurrentDatas();
                         }
+                        MessagingCenter.Send(this, MessengerCodes.SpiritPillUsed, message.Json);
                     }
                     break;
                 case Network.CommandCodes.Client_LearnSkill:

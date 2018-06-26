@@ -28,6 +28,10 @@ namespace AiosKingdom.ViewModels
                 LoadingScreenManager.Instance.AlertLoadingScreen("Login Failed", arg);
             });
 
+            MessagingCenter.Subscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived, (sender, servers) =>
+            {
+                LoadingScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(servers)));
+            });
         }
 
         ~LoginPageViewModel()
@@ -35,6 +39,7 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.ConnectionFailed);
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful);
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed);
+            MessagingCenter.Unsubscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived);
         }
 
         private string _username;
