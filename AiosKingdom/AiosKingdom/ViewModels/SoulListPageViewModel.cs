@@ -9,16 +9,16 @@ namespace AiosKingdom.ViewModels
 {
     public class SoulListPageViewModel : BaseViewModel
     {
-        public SoulListPageViewModel(Network.GameServerConnection connection)
+        public SoulListPageViewModel(List<DataModels.Soul> souls)
             : base(null)
         {
             Title = "Soul List";
 
-            LoadingScreenManager.Instance.OpenLoadingScreen("Waiting Soul List..");
+            Souls = souls;
 
-            MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, souls) =>
+            MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, soulsUpdated) =>
             {
-                Souls = souls;
+                Souls = soulsUpdated;
                 LoadingScreenManager.Instance.CloseLoadingScreen();
             });
 
@@ -31,8 +31,6 @@ namespace AiosKingdom.ViewModels
             {
                 LoadingScreenManager.Instance.AlertLoadingScreen("Soul Connection Failed", message);
             });
-
-            NetworkManager.Instance.ConnectToGameServer(connection);
         }
 
         private List<DataModels.Soul> _souls;

@@ -20,5 +20,8 @@ namespace DataModels.Dungeons
 
         [Required]
         public int Level { get; set; }
+
+        [Required]
+        public int ShardReward { get; set; }
     }
 }

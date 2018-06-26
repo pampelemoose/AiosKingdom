@@ -106,6 +106,8 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Dungeon_UpdateRoom, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon_Exit, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon_UseSkill, 2);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon_LootRoom, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon_LeaveFinishedRoom, 0);
 
             _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
@@ -134,6 +136,8 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Dungeon_UpdateRoom, (args) => { return new Commands.DungeonUpdateRoomCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon_Exit, (args) => { return new Commands.DungeonExitCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon_UseSkill, (args) => { return new Commands.DungeonUseSkillCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon_LootRoom, (args) => { return new Commands.DungeonLootRoomCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon_LeaveFinishedRoom, (args) => { return new Commands.DungeonLeaveFinishedRoomCommand(args, _config); });
         }
 
         private void Run()
@@ -454,6 +458,10 @@ namespace Server.GameServer
                     break;
                 case Network.CommandCodes.Dungeon_UseSkill:
                     retVal.Args = new string[2] { args[0], args[1] };
+                    break;
+                case Network.CommandCodes.Dungeon_LootRoom:
+                    break;
+                case Network.CommandCodes.Dungeon_LeaveFinishedRoom:
                     break;
 
                 default:

@@ -34,6 +34,9 @@ namespace Network
         public const int Dungeon_Exit = 51;
         public const int Dungeon_UpdateRoom = 52;
         public const int Dungeon_UseSkill = 53;
+        public const int Dungeon_LootRoom = 54;
+        public const int Dungeon_LootItem = 55;
+        public const int Dungeon_LeaveFinishedRoom = 56;
 
         public const int Ping = -1;
     }

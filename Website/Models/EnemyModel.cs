@@ -22,7 +22,11 @@ namespace Website.Models
         }
 
         [Required]
-        [Range(1, 10000)]
+        [Range(1, 10000000)]
         public int Level { get; set; }
+
+        [Required]
+        [Range(0, 10000000)]
+        public int ShardReward { get; set; }
     }
 }

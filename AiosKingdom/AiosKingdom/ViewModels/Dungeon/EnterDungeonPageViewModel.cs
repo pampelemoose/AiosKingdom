@@ -37,6 +37,8 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand EnterAction =>
             _enterAction ?? (_enterAction = new Command(() =>
             {
+                _navigation.PopModalAsync();
+
                 LoadingScreenManager.Instance.OpenLoadingScreen($"Entering {_dungeon.Name}, please wait...");
                 NetworkManager.Instance.OpenDungeonRoom(_dungeon.DungeonId);
             }));

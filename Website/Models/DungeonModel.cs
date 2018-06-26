@@ -37,5 +37,13 @@ namespace Website.Models
 
         [Display(Name = "Rooms")]
         public List<RoomModel> Rooms { get; set; }
+
+        [Required]
+        [Range(0, 10000000)]
+        public int ExperienceReward { get; set; }
+
+        [Required]
+        [Range(0, 10000000)]
+        public int ShardReward { get; set; }
     }
 }

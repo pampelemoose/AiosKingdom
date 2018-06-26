@@ -15,8 +15,28 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
+                    LoadingScreenManager.Instance.CloseLoadingScreen();
+
                     NotifyPropertyChanged(nameof(Room));
+                    NotifyPropertyChanged(nameof(IsCleared));
                     SelectedEnemy = null;
+
+                    if (IsCleared)
+                    {
+                        ShowLootsPanel = true;
+                        LoadingScreenManager.Instance.AlertLoadingScreen("Room Cleaned", "You cleaned the room.");
+                        //LoadingScreenManager.Instance.OpenLoadingScreen("Retrieving Loots, pelase wait...");
+                        NetworkManager.Instance.LootDungeonRoom();
+                    }
+                });
+            });
+
+            MessagingCenter.Subscribe<NetworkManager, List<Network.LootItem>>(this, MessengerCodes.DungeonLootsReceived, (sender, loots) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Loots = loots;
+                    LoadingScreenManager.Instance.CloseLoadingScreen();
                 });
             });
 
@@ -25,6 +45,17 @@ namespace AiosKingdom.ViewModels.Dungeon
 
         public Network.AdventureState Room => DatasManager.Instance.Adventure;
         public Network.SoulDatas Datas => DatasManager.Instance.Datas;
+
+        private List<Network.LootItem> _loots;
+        private List<Network.LootItem> Loots
+        {
+            get { return _loots; }
+            set
+            {
+                _loots = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         private KeyValuePair<Guid, Network.AdventureState.EnemyState>? _selectedEnemy;
         public KeyValuePair<Guid, Network.AdventureState.EnemyState>? SelectedEnemy
@@ -51,6 +82,17 @@ namespace AiosKingdom.ViewModels.Dungeon
             }
         }
 
+        private bool _showLootsPanel;
+        public bool ShowLootsPanel
+        {
+            get { return _showLootsPanel; }
+            set
+            {
+                _showLootsPanel = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private Models.Dungeon.SkillSelectionItemModel _selectedSkill;
         public Models.Dungeon.SkillSelectionItemModel SelectedSkill
         {
@@ -62,6 +104,13 @@ namespace AiosKingdom.ViewModels.Dungeon
             }
         }
 
+        public bool IsCleared
+        {
+            get
+            {
+                return Room.IsFightArea && Room.Enemies.Count == 0;
+            }
+        }
 
         private ICommand _removeNextMoveAction;
         public ICommand RemoveNextMoveAction =>
@@ -69,7 +118,7 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 ResetNextMove();
             }));
-        
+
         private void ResetNextMove()
         {
             if (IsSkillSelected)
@@ -114,8 +163,18 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 if (IsSkillSelected)
                 {
+                    LoadingScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
                     NetworkManager.Instance.DungeonUseSkill(_selectedSkill.KnowledgeId, _selectedEnemy.Value.Key);
                 }
             }));
+
+        private ICommand _leaveFinishedAction;
+        public ICommand LeaveFinishedAction =>
+            _leaveFinishedAction ?? (_leaveFinishedAction = new Command(() =>
+            {
+                LoadingScreenManager.Instance.OpenLoadingScreen($"Leaving room, you will receive {Room.StackedExperience} experience. Please wait.");
+                NetworkManager.Instance.LeaveFinishedRoom();
+            }));
+        
     }
 }

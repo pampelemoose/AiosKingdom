@@ -24,8 +24,6 @@ namespace Network
         public Dictionary<Guid, EnemyState> Enemies { get; set; }
         public Dictionary<Guid, ShopState> Shops { get; set; }
 
-        public Dictionary<Guid, Guid> Loots { get; set; }
-
         public bool IsRestingArea { get; set; }
         public bool IsFightArea { get; set; }
         public bool IsShopArea { get; set; }
@@ -35,6 +33,10 @@ namespace Network
         public double CurrentHealth { get; set; }
         public double CurrentMana { get; set; }
 
+        public int ExperienceReward { get; set; }
+        public int ShardReward { get; set; }
+
         public int StackedExperience { get; set; }
+        public int StackedShards { get; set; }
     }
 }

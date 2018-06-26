@@ -146,7 +146,8 @@ namespace AiosKingdom
                 case Network.CommandCodes.Client_AnnounceGameConnection:
                     {
                         var connection = JsonConvert.DeserializeObject<Network.GameServerConnection>(message.Json);
-                        MessagingCenter.Send(this, MessengerCodes.GameServerDatasReceived, connection);
+                        MessagingCenter.Send(this, MessengerCodes.GameServerDatasReceived);
+                        ConnectToGameServer(connection);
                     }
                     break;
                 default:
@@ -388,13 +389,7 @@ namespace AiosKingdom
             {
                 case Network.CommandCodes.Ping:
                     {
-                        var args = new string[0];
-                        var retMess = new Network.Message
-                        {
-                            Code = Network.CommandCodes.Ping,
-                            Json = JsonConvert.SerializeObject(args)
-                        };
-                        SendJsonToGame(JsonConvert.SerializeObject(retMess));
+                        SendRequest(Network.CommandCodes.Ping);
                     }
                     break;
                 case Network.CommandCodes.Client_Authenticate:
@@ -404,19 +399,7 @@ namespace AiosKingdom
                         if (!Guid.Empty.Equals(authToken))
                         {
                             _gameAuthToken = authToken;
-                            var args = new string[0];
-                            var retMess = new Network.Message
-                            {
-                                Code = Network.CommandCodes.Client_SoulList,
-                                Json = JsonConvert.SerializeObject(args),
-                                Token = _gameAuthToken
-                            };
-                            SendJsonToGame(JsonConvert.SerializeObject(retMess));
-                            //MessagingCenter.Send(this, MessengerCodes.LoginSuccessful);
-                        }
-                        else
-                        {
-                            //MessagingCenter.Send(this, MessengerCodes.LoginFailed, "Credentials not matching any existing account.");
+                            MessagingCenter.Send(this, MessengerCodes.ConnectedToServer);
                         }
                     }
                     break;
@@ -424,14 +407,7 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            var args = new string[0];
-                            var retMess = new Network.Message
-                            {
-                                Code = Network.CommandCodes.Client_SoulList,
-                                Json = JsonConvert.SerializeObject(args),
-                                Token = _gameAuthToken
-                            };
-                            SendJsonToGame(JsonConvert.SerializeObject(retMess));
+                            AskSoulList();
                         }
                         else
                         {
@@ -596,6 +572,25 @@ namespace AiosKingdom
                         }
                     }
                     break;
+                case Network.CommandCodes.Dungeon_LootRoom:
+                    {
+                        if (message.Success)
+                        {
+                            var loots = JsonConvert.DeserializeObject<List<Network.LootItem>>(message.Json);
+                            MessagingCenter.Send(this, MessengerCodes.DungeonLootsReceived, loots);
+                        }
+                    }
+                    break;
+                case Network.CommandCodes.Dungeon_LeaveFinishedRoom:
+                    {
+                        if (message.Success)
+                        {
+                            MessagingCenter.Send(this, MessengerCodes.SoulConnected);
+                            AskSoulDatas();
+                            AskSoulCurrentDatas();
+                        }
+                    }
+                    break;
 
                 default:
                     return false;
@@ -604,6 +599,11 @@ namespace AiosKingdom
             _gameTimedOut = DateTime.Now;
 
             return true;
+        }
+
+        public void AskSoulList()
+        {
+            SendRequest(Network.CommandCodes.Client_SoulList);
         }
 
         public void AskArmorList()
@@ -696,9 +696,19 @@ namespace AiosKingdom
             SendRequest(Network.CommandCodes.Dungeon_UseSkill, new string[2] { knowledgeId.ToString(), enemyId.ToString() });
         }
 
+        public void LootDungeonRoom()
+        {
+            SendRequest(Network.CommandCodes.Dungeon_LootRoom);
+        }
+
         public void ExitDungeon()
         {
             SendRequest(Network.CommandCodes.Dungeon_Exit);
+        }
+
+        public void LeaveFinishedRoom()
+        {
+            SendRequest(Network.CommandCodes.Dungeon_LeaveFinishedRoom);
         }
 
         private void SendRequest(int code, string[] args = null)

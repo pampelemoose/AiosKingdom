@@ -213,17 +213,14 @@ namespace Server.GameServer
             var soul = _souls[token];
             var datas = _soulDatas[token];
 
-            int calculated = (int)Math.Round((config.BaseExperience * (soul.Level - 1) * config.ExperiencePerLevelRatio));
+            int calculated = config.BaseExperience;
 
-            if (calculated == 0)
-                calculated = config.BaseExperience;
+            for (int i = 0; i < soul.Level - 1; ++i)
+            {
+                calculated += (int)Math.Round(calculated / config.ExperiencePerLevelRatio);
+            }
 
-            calculated -= soul.CurrentExperience;
-
-            if (calculated > 0)
-                return calculated;
-
-            return 0;
+            return calculated;
         }
 
         private int GetMaxHealth(Guid token, DataModels.Config config)

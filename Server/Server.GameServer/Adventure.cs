@@ -11,6 +11,7 @@ namespace Server.GameServer
         private struct EnemyStats
         {
             public int Level { get; set; }
+            public int ShardReward { get; set; }
             public int Stamina { get; set; }
             public int Energy { get; set; }
             public int Strength { get; set; }
@@ -24,6 +25,7 @@ namespace Server.GameServer
 
         private Network.AdventureState _state;
         private Dictionary<Guid, EnemyStats> _enemiesStats;
+        private Dictionary<Guid, Network.LootItem> _loots;
 
         public Adventure(DataModels.Dungeons.Dungeon dungeon, int roomNumber = 0)
         {
@@ -36,7 +38,8 @@ namespace Server.GameServer
         public Guid DungeonId => _dungeon.DungeonId;
         public int RoomNumber => _roomNumber;
 
-        public bool IsCleared => false;
+        private bool _isCleared;
+        public bool IsCleared => _isCleared;
 
         public void OpenNextRoom()
         {
@@ -80,10 +83,28 @@ namespace Server.GameServer
                     var monster = DataRepositories.MonsterRepository.GetById(enemy.MonsterId);
 
                     _state.StackedExperience += monster.BaseExperience + (int)(enemyStats.Level * monster.ExperiencePerLevelRatio);
-                    _state.Loots.Add(Guid.NewGuid(), enemy.MonsterId);
+                    _state.StackedShards += enemyStats.ShardReward;
+
+                    foreach (var loot in monster.Loots)
+                    {
+                        var id = Guid.NewGuid();
+                        _loots.Add(id, new Network.LootItem
+                        {
+                            LootId = id,
+                            Type = loot.Type.ToString(),
+                            ItemId = loot.ItemId,
+                            Quantity = loot.Quantity
+                        });
+                    }
 
                     _enemiesStats.Remove(enemyId);
                     _state.Enemies.Remove(enemyId);
+
+                    if (_enemiesStats.Count == 0)
+                    {
+                        _isCleared = true;
+                    }
+
                     return true;
                 }
 
@@ -93,6 +114,11 @@ namespace Server.GameServer
             }
 
             return false;
+        }
+
+        public List<Network.LootItem> LootRoom()
+        {
+            return _loots.Values.ToList();
         }
 
         private int GetStatValue(DataModels.Soul.Stats stat, Network.SoulDatas datas)
@@ -148,10 +174,12 @@ namespace Server.GameServer
 
             _state.Enemies = new Dictionary<Guid, Network.AdventureState.EnemyState>();
             _state.Shops = new Dictionary<Guid, Network.AdventureState.ShopState>();
-            _state.Loots = new Dictionary<Guid, Guid>();
+            _loots = new Dictionary<Guid, Network.LootItem>();
 
             _state.IsRestingArea = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Rest;
-            _state.IsFightArea = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Fight;
+            _state.IsFightArea = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Fight
+                || _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Elite
+                || _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Boss;
             _state.IsShopArea = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Shop;
             _state.IsEliteArea = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Elite;
             _state.IsBossFight = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Boss;
@@ -171,6 +199,7 @@ namespace Server.GameServer
                 _enemiesStats.Add(tempId, new EnemyStats
                 {
                     Level = enemy.Level,
+                    ShardReward = enemy.ShardReward,
                     Stamina = (int)(enemy.Level * monster.StaminaPerLevel),
                     Energy = (int)(enemy.Level * monster.EnergyPerLevel),
                     Strength = (int)(enemy.Level * monster.StrengthPerLevel),
@@ -179,6 +208,9 @@ namespace Server.GameServer
                     Wisdom = (int)(enemy.Level * monster.WisdomPerLevel)
                 });
             }
+
+            _state.ExperienceReward = _dungeon.ExperienceReward;
+            _state.ShardReward = _dungeon.ShardReward;
         }
     }
 }

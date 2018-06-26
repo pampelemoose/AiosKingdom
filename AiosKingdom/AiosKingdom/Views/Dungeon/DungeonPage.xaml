@@ -118,6 +118,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
                         <Label
@@ -128,6 +129,15 @@
                             Grid.Row="0"
                             Grid.Column="1"
                             Text="{Binding Room.StackedExperience}" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Text="Stacked Shards :" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="{Binding Room.StackedShards}" />
                     </Grid>
                 </Grid>
 
@@ -197,6 +207,102 @@
                         Text="End Turn"
                         Command="{Binding ExecuteAction}"
                         IsVisible="{Binding IsSkillSelected}"/>
+                </Grid>
+            </Grid>
+
+            <Grid
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                BackgroundColor="{StaticResource BackgroundColor}"
+                IsVisible="{Binding ShowLootsPanel}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="9*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                
+                <ListView
+                    Grid.Row="0"
+                    ItemsSource="{Binding Loots, Mode=TwoWay}"
+                    RowHeight="80">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid
+                                Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="6*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Grid.Column="0"
+                                        FontSize="40"
+                                        FontAttributes="Bold"
+                                        Margin="5, 0"
+                                        VerticalTextAlignment="Center"
+                                        Text="Health :"/>
+
+                                    <Label 
+                                        Grid.Column="1"
+                                        FontSize="50"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="Center"
+                                        Text="{Binding Value.CurrentHealth}"/>
+                                    <Label 
+                                        Grid.Column="2"
+                                        FontSize="30"
+                                        FontAttributes="Bold"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="End"
+                                        Text="{Binding Quantity}"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Grid
+                    Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        Text="{Binding Room.StackedExperience, StringFormat='{0:N} Experience stacked'}" />
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding Room.StackedShards, StringFormat='{0:N} Shards stacked'}" />
+                    <Label
+                        Grid.Column="2"
+                        IsVisible="{Binding IsCleared}"
+                        Text="{Binding Room.ExperienceReward, StringFormat='{0:N} Experience Rewarded'}" />
+                    <Label
+                        Grid.Column="3"
+                        IsVisible="{Binding IsCleared}"
+                        Text="{Binding Room.ShardReward, StringFormat='{0:N} Shards Rewarded'}" />
+                </Grid>
+                
+                <Grid
+                    Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="0"
+                        Text="Next Room"
+                        IsVisible="{Binding IsCleared}"/>
+                    
+                    <Button
+                        Grid.Column="1"
+                        Text="Leave with Loots." 
+                        Command="{Binding LeaveFinishedAction}"/>
                 </Grid>
             </Grid>
         </Grid>

@@ -16,7 +16,7 @@ namespace AiosKingdom
         public static string GameServerDatasReceived = "gameServerDatasReceived";
         public static string GameServerDisconnected = "gameServerDisconnected";
 
-        public static string ShowSoulList = "showSoulList";
+        public static string ConnectedToServer = "connectedToServer";
         public static string SoulListReceived = "soulListReceived";
         public static string SoulCreationFailed = "soulCreationFailed";
 
@@ -34,6 +34,7 @@ namespace AiosKingdom
         public static string DungeonSelectSkillEnded = "dungeonSelectSkillEnded";
         public static string ExitDungeon = "exitDungeon";
         public static string DungeonUpdated = "dungeonUpdated";
+        public static string DungeonLootsReceived = "dungeonLootsReceived";
 
         public static string OpenLoadingScreen = "openLoadingScreen";
         public static string LoadingScreenOpenned = "loadingScreenOpenned";

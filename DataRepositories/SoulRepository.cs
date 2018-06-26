@@ -81,6 +81,7 @@ namespace DataRepositories
                 if (online == null) return false;
 
                 online.TimePlayed = soul.TimePlayed;
+                online.Level = soul.Level;
 
                 // EQUIPMENT
                 online.Equipment.Head = soul.Equipment.Head;
@@ -164,6 +165,8 @@ namespace DataRepositories
                 {
                     context.DungeonProgresses.Remove(toDel);
                 }
+
+                online.CurrentExperience = soul.CurrentExperience;
 
                 // STATS
                 online.Stamina = soul.Stamina;

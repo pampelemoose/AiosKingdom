@@ -60,15 +60,15 @@ namespace AiosKingdom
             LoadingScreenCallbacks();
         }
 
-        private Views.LoadingPage _loadingPage = new Views.LoadingPage();
         private void LoadingScreenCallbacks()
         {
             MessagingCenter.Subscribe<LoadingScreenManager, string>(this, MessengerCodes.OpenLoadingScreen, (sender, message) =>
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    _loadingPage.SetMessage(message);
-                    await MainPage.Navigation.PushModalAsync(_loadingPage);
+                    var loadingPage = new Views.LoadingPage();
+                    loadingPage.SetMessage(message);
+                    await MainPage.Navigation.PushModalAsync(loadingPage);
                     MessagingCenter.Send(this, MessengerCodes.LoadingScreenOpenned);
                 });
             });

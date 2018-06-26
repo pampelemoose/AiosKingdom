@@ -70,7 +70,9 @@ namespace Website.Controllers
                         Name = dungeonModel.Name,
                         RequiredLevel = dungeonModel.RequiredLevel,
                         MaxLevelAuthorized = dungeonModel.RequiredLevel,
-                        Rooms = new List<DataModels.Dungeons.Room>()
+                        Rooms = new List<DataModels.Dungeons.Room>(),
+                        ExperienceReward = dungeonModel.ExperienceReward,
+                        ShardReward = dungeonModel.ShardReward
                     };
 
                     foreach (var roomModel in dungeonModel.Rooms)
@@ -106,7 +108,8 @@ namespace Website.Controllers
                                 Id = Guid.NewGuid(),
                                 RoomId = roomId,
                                 MonsterId = enemyModel.MonsterId,
-                                Level = enemyModel.Level
+                                Level = enemyModel.Level,
+                                ShardReward = enemyModel.ShardReward
                             };
                             room.Ennemies.Add(enemy);
                         }

@@ -59,6 +59,10 @@
     <Compile Include="Migrations\201806150818304_InitialMigration.Designer.cs">
       <DependentUpon>201806150818304_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806260633177_ShardReward.cs" />
+    <Compile Include="Migrations\201806260633177_ShardReward.Designer.cs">
+      <DependentUpon>201806260633177_ShardReward.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +85,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201806150818304_InitialMigration.resx">
       <DependentUpon>201806150818304_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806260633177_ShardReward.resx">
+      <DependentUpon>201806260633177_ShardReward.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
