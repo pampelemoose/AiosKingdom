@@ -39,11 +39,9 @@ namespace Server.GameServer
 
             _commandManager = new CommandManager();
 
-            _commandArgCount = new Dictionary<int, int>();
-            _delegates = new Dictionary<int, Func<Commands.CommandArgs, Commands.ACommand>>();
             _responses = new List<Commands.CommandResult>();
 
-            SetupClientDelegates();
+            SetupDelegates();
         }
 
         public void Start()
@@ -77,73 +75,90 @@ namespace Server.GameServer
             DataRepositories.ConfigRepository.Update(_config);
         }
 
-        private void SetupClientDelegates()
+        private void SetupDelegates()
         {
+            _commandArgCount = new Dictionary<int, int>();
+            _delegates = new Dictionary<int, Func<Commands.CommandArgs, Commands.ACommand>>();
+
             _commandArgCount.Add(Network.CommandCodes.Ping, 0);
-
-            _commandArgCount.Add(Network.CommandCodes.Client_Authenticate, 1);
-            _commandArgCount.Add(Network.CommandCodes.Client_SoulList, 0);
-            _commandArgCount.Add(Network.CommandCodes.Client_CreateSoul, 1);
-            _commandArgCount.Add(Network.CommandCodes.Client_ConnectSoul, 1);
-
-            _commandArgCount.Add(Network.CommandCodes.Client_SoulDatas, 0);
-            _commandArgCount.Add(Network.CommandCodes.Client_CurrentSoulDatas, 0);
-
-            _commandArgCount.Add(Network.CommandCodes.Client_MarketList, 0);
-            _commandArgCount.Add(Network.CommandCodes.Client_BuyMarketItem, 1);
-            _commandArgCount.Add(Network.CommandCodes.Client_EquipItem, 1);
-            _commandArgCount.Add(Network.CommandCodes.Client_UseSpiritPills, 2);
-            _commandArgCount.Add(Network.CommandCodes.Client_LearnSkill, 2);
-
-            _commandArgCount.Add(Network.CommandCodes.ArmorList, 0);
-            _commandArgCount.Add(Network.CommandCodes.ConsumableList, 0);
-            _commandArgCount.Add(Network.CommandCodes.BagList, 0);
-            _commandArgCount.Add(Network.CommandCodes.BookList, 0);
-            _commandArgCount.Add(Network.CommandCodes.MonsterList, 0);
-            _commandArgCount.Add(Network.CommandCodes.DungeonList, 0);
-
-            _commandArgCount.Add(Network.CommandCodes.Dungeon_EnterRoom, 1);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon_UpdateRoom, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon_Exit, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon_EnemyTurn, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon_UseSkill, 2);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon_UseConsumable, 2);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon_LootRoom, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon_LeaveFinishedRoom, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon_DoNothingTurn, 0);
-
             _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
-            _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
-            _delegates.Add(Network.CommandCodes.Client_SoulList, (args) => { return new Commands.ClientSoulListCommand(args); });
-            _delegates.Add(Network.CommandCodes.Client_CreateSoul, (args) => { return new Commands.ClientCreateSoulCommand(args, _config); });
-            _delegates.Add(Network.CommandCodes.Client_ConnectSoul, (args) => { return new Commands.ClientConnectSoulCommand(args, _config); });
+            SetupServerDelegates();
+            SetupListingDelegates();
+            SetupPlayerDelegates();
+            SetupDungeonDelegates();
+        }
 
-            _delegates.Add(Network.CommandCodes.Client_SoulDatas, (args) => { return new Commands.ClientSoulDatasCommand(args); });
-            _delegates.Add(Network.CommandCodes.Client_CurrentSoulDatas, (args) => { return new Commands.ClientCurrentSoulDatasCommand(args); });
+        private void SetupServerDelegates()
+        {
+            _commandArgCount.Add(Network.CommandCodes.Client_Authenticate, 1);
+            _commandArgCount.Add(Network.CommandCodes.Server.SoulList, 0);
+            _commandArgCount.Add(Network.CommandCodes.Server.CreateSoul, 1);
+            _commandArgCount.Add(Network.CommandCodes.Server.ConnectSoul, 1);
 
-            _delegates.Add(Network.CommandCodes.Client_MarketList, (args) => { return new Commands.ClientMarketListCommand(args); });
-            _delegates.Add(Network.CommandCodes.Client_BuyMarketItem, (args) => { return new Commands.ClientBuyMarketItemCommand(args); });
-            _delegates.Add(Network.CommandCodes.Client_EquipItem, (args) => { return new Commands.ClientEquipItemCommand(args, _config); });
-            _delegates.Add(Network.CommandCodes.Client_UseSpiritPills, (args) => { return new Commands.ClientUseSpiritPillsCommand(args, _config); });
-            _delegates.Add(Network.CommandCodes.Client_LearnSkill, (args) => { return new Commands.ClientLearnSkillCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.Server.AuthenticateCommand(args); });
+            _delegates.Add(Network.CommandCodes.Server.SoulList, (args) => { return new Commands.Server.SoulListCommand(args); });
+            _delegates.Add(Network.CommandCodes.Server.CreateSoul, (args) => { return new Commands.Server.CreateSoulCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Server.ConnectSoul, (args) => { return new Commands.Server.ConnectSoulCommand(args, _config); });
+        }
 
-            _delegates.Add(Network.CommandCodes.ArmorList, (args) => { return new Commands.ArmorListCommand(args); });
-            _delegates.Add(Network.CommandCodes.ConsumableList, (args) => { return new Commands.ConsumableListCommand(args); });
-            _delegates.Add(Network.CommandCodes.BagList, (args) => { return new Commands.BagListCommand(args); });
-            _delegates.Add(Network.CommandCodes.BookList, (args) => { return new Commands.BookListCommand(args); });
-            _delegates.Add(Network.CommandCodes.MonsterList, (args) => { return new Commands.MonsterListCommand(args); });
-            _delegates.Add(Network.CommandCodes.DungeonList, (args) => { return new Commands.DungeonListCommand(args); });
+        private void SetupListingDelegates()
+        {
+            _commandArgCount.Add(Network.CommandCodes.Listing.Armor, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Consumable, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Bag, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Book, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Monster, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Dungeon, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Market, 0);
 
-            _delegates.Add(Network.CommandCodes.Dungeon_EnterRoom, (args) => { return new Commands.DungeonEnterRoomCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon_UpdateRoom, (args) => { return new Commands.DungeonUpdateRoomCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon_Exit, (args) => { return new Commands.DungeonExitCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon_EnemyTurn, (args) => { return new Commands.Dungeon.EnemyTurnCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon_UseSkill, (args) => { return new Commands.DungeonUseSkillCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon_UseConsumable, (args) => { return new Commands.Dungeon.UseConsumableCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon_LootRoom, (args) => { return new Commands.DungeonLootRoomCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon_LeaveFinishedRoom, (args) => { return new Commands.DungeonLeaveFinishedRoomCommand(args, _config); });
-            _delegates.Add(Network.CommandCodes.Dungeon_DoNothingTurn, (args) => { return new Commands.Dungeon.DoNothingTurnCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Armor, (args) => { return new Commands.Listing.ArmorCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Consumable, (args) => { return new Commands.Listing.ConsumableCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Bag, (args) => { return new Commands.Listing.BagCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Book, (args) => { return new Commands.Listing.BookCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Monster, (args) => { return new Commands.Listing.MonsterCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Dungeon, (args) => { return new Commands.Listing.DungeonCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Market, (args) => { return new Commands.Listing.MarketCommand(args); });
+        }
+
+        private void SetupPlayerDelegates()
+        {
+            _commandArgCount.Add(Network.CommandCodes.Player.SoulDatas, 0);
+            _commandArgCount.Add(Network.CommandCodes.Player.CurrentSoulDatas, 0);
+            _commandArgCount.Add(Network.CommandCodes.Player.BuyMarketItem, 1);
+            _commandArgCount.Add(Network.CommandCodes.Player.EquipItem, 1);
+            _commandArgCount.Add(Network.CommandCodes.Player.UseSpiritPills, 2);
+            _commandArgCount.Add(Network.CommandCodes.Player.LearnSkill, 2);
+
+            _delegates.Add(Network.CommandCodes.Player.SoulDatas, (args) => { return new Commands.Player.SoulDatasCommand(args); });
+            _delegates.Add(Network.CommandCodes.Player.CurrentSoulDatas, (args) => { return new Commands.Player.CurrentSoulDatasCommand(args); });
+            _delegates.Add(Network.CommandCodes.Player.BuyMarketItem, (args) => { return new Commands.Player.BuyMarketItemCommand(args); });
+            _delegates.Add(Network.CommandCodes.Player.EquipItem, (args) => { return new Commands.Player.EquipItemCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Player.UseSpiritPills, (args) => { return new Commands.Player.UseSpiritPillsCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Player.LearnSkill, (args) => { return new Commands.Player.LearnSkillCommand(args); });
+        }
+
+        private void SetupDungeonDelegates()
+        {
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.EnterRoom, 1);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.UpdateRoom, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.Exit, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.EnemyTurn, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.UseSkill, 2);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.UseConsumable, 2);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.LootRoom, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.DoNothingTurn, 0);
+
+            _delegates.Add(Network.CommandCodes.Dungeon.EnterRoom, (args) => { return new Commands.Dungeon.EnterRoomCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon.UpdateRoom, (args) => { return new Commands.Dungeon.UpdateRoomCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon.Exit, (args) => { return new Commands.Dungeon.ExitCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon.EnemyTurn, (args) => { return new Commands.Dungeon.EnemyTurnCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon.UseSkill, (args) => { return new Commands.Dungeon.UseSkillCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon.UseConsumable, (args) => { return new Commands.Dungeon.UseConsumableCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon.LootRoom, (args) => { return new Commands.Dungeon.LootRoomCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, (args) => { return new Commands.Dungeon.LeaveFinishedRoomCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Dungeon.DoNothingTurn, (args) => { return new Commands.Dungeon.DoNothingTurnCommand(args); });
         }
 
         private void Run()
@@ -413,68 +428,71 @@ namespace Server.GameServer
                     retVal.Args = new string[1] { args[0] };
                     break;
 
-                case Network.CommandCodes.Client_CreateSoul:
+                // SERVER
+                case Network.CommandCodes.Server.CreateSoul:
                     retVal.Args = new string[1] { args[0] };
                     break;
-                case Network.CommandCodes.Client_SoulList:
+                case Network.CommandCodes.Server.SoulList:
                     break;
-                case Network.CommandCodes.Client_ConnectSoul:
+                case Network.CommandCodes.Server.ConnectSoul:
                     retVal.Args = new string[1] { args[0] };
                     break;
 
-                case Network.CommandCodes.Client_SoulDatas:
+                // PLAYER
+                case Network.CommandCodes.Player.SoulDatas:
                     break;
-                case Network.CommandCodes.Client_CurrentSoulDatas:
+                case Network.CommandCodes.Player.CurrentSoulDatas:
                     break;
-
-                case Network.CommandCodes.Client_MarketList:
-                    break;
-                case Network.CommandCodes.Client_BuyMarketItem:
+                case Network.CommandCodes.Player.BuyMarketItem:
                     retVal.Args = new string[1] { args[0] };
                     break;
-                case Network.CommandCodes.Client_EquipItem:
+                case Network.CommandCodes.Player.EquipItem:
                     retVal.Args = new string[1] { args[0] };
                     break;
-                case Network.CommandCodes.Client_UseSpiritPills:
+                case Network.CommandCodes.Player.UseSpiritPills:
                     retVal.Args = new string[2] { args[0], args[1] };
                     break;
-                case Network.CommandCodes.Client_LearnSkill:
+                case Network.CommandCodes.Player.LearnSkill:
                     retVal.Args = new string[2] { args[0], args[1] };
                     break;
 
-                case Network.CommandCodes.ArmorList:
+                // LISTING
+                case Network.CommandCodes.Listing.Armor:
                     break;
-                case Network.CommandCodes.ConsumableList:
+                case Network.CommandCodes.Listing.Consumable:
                     break;
-                case Network.CommandCodes.BagList:
+                case Network.CommandCodes.Listing.Bag:
                     break;
-                case Network.CommandCodes.BookList:
+                case Network.CommandCodes.Listing.Book:
                     break;
-                case Network.CommandCodes.MonsterList:
+                case Network.CommandCodes.Listing.Monster:
                     break;
-                case Network.CommandCodes.DungeonList:
+                case Network.CommandCodes.Listing.Dungeon:
+                    break;
+                case Network.CommandCodes.Listing.Market:
                     break;
 
-                case Network.CommandCodes.Dungeon_EnterRoom:
+                // DUNGEON
+                case Network.CommandCodes.Dungeon.EnterRoom:
                     retVal.Args = new string[1] { args[0] };
                     break;
-                case Network.CommandCodes.Dungeon_UpdateRoom:
+                case Network.CommandCodes.Dungeon.UpdateRoom:
                     break;
-                case Network.CommandCodes.Dungeon_Exit:
+                case Network.CommandCodes.Dungeon.Exit:
                     break;
-                case Network.CommandCodes.Dungeon_EnemyTurn:
+                case Network.CommandCodes.Dungeon.EnemyTurn:
                     break;
-                case Network.CommandCodes.Dungeon_UseSkill:
+                case Network.CommandCodes.Dungeon.UseSkill:
                     retVal.Args = new string[2] { args[0], args[1] };
                     break;
-                case Network.CommandCodes.Dungeon_UseConsumable:
+                case Network.CommandCodes.Dungeon.UseConsumable:
                     retVal.Args = new string[2] { args[0], args[1] };
                     break;
-                case Network.CommandCodes.Dungeon_LootRoom:
+                case Network.CommandCodes.Dungeon.LootRoom:
                     break;
-                case Network.CommandCodes.Dungeon_LeaveFinishedRoom:
+                case Network.CommandCodes.Dungeon.LeaveFinishedRoom:
                     break;
-                case Network.CommandCodes.Dungeon_DoNothingTurn:
+                case Network.CommandCodes.Dungeon.DoNothingTurn:
                     break;
 
                 default:

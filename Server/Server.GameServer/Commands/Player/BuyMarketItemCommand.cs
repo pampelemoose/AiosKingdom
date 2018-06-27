@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Player
 {
-    public class ClientBuyMarketItemCommand : ACommand
+    public class BuyMarketItemCommand : ACommand
     {
-        public ClientBuyMarketItemCommand(CommandArgs args)
+        public BuyMarketItemCommand(CommandArgs args)
             : base(args)
         {
         }
@@ -25,7 +25,7 @@ namespace Server.GameServer.Commands
             {
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Client_BuyMarketItem,
+                    Code = Network.CommandCodes.Player.BuyMarketItem,
                     Success = false,
                     Json = "Item sold or not available anymore."
                 };
@@ -96,7 +96,7 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Client_BuyMarketItem,
+                Code = Network.CommandCodes.Player.BuyMarketItem,
                 Success = true,
                 Json = "Item added to inventory."
             };

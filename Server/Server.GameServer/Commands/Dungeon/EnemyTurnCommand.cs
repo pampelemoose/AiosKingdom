@@ -24,7 +24,7 @@ namespace Server.GameServer.Commands.Dungeon
                 {
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Dungeon_EnemyTurn,
+                        Code = Network.CommandCodes.Dungeon.EnemyTurn,
                         Success = true,
                         Json = "Enemy turn successful."
                     };
@@ -36,7 +36,7 @@ namespace Server.GameServer.Commands.Dungeon
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon_EnemyTurn,
+                Code = Network.CommandCodes.Dungeon.EnemyTurn,
                 Success = false,
                 Json = "An error occured when trying to execute enemy turn."
             };

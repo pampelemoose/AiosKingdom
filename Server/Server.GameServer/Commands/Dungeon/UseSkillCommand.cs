@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Dungeon
 {
-    public class DungeonUseSkillCommand : ACommand
+    public class UseSkillCommand : ACommand
     {
-        public DungeonUseSkillCommand(CommandArgs args) 
+        public UseSkillCommand(CommandArgs args) 
             : base(args)
         {
         }
@@ -35,7 +35,7 @@ namespace Server.GameServer.Commands
                         {
                             ret.ClientResponse = new Network.Message
                             {
-                                Code = Network.CommandCodes.Dungeon_UseSkill,
+                                Code = Network.CommandCodes.Dungeon.UseSkill,
                                 Success = true,
                                 Json = "Skill successfully used."
                             };
@@ -49,7 +49,7 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon_UseSkill,
+                Code = Network.CommandCodes.Dungeon.UseSkill,
                 Success = false,
                 Json = "Failed to use skill."
             };

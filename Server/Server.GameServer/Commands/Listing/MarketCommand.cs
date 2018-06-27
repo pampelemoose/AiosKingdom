@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Listing
 {
-    public class ClientMarketListCommand : ACommand
+    public class MarketCommand : ACommand
     {
-        public ClientMarketListCommand(CommandArgs args) 
+        public MarketCommand(CommandArgs args) 
             : base(args)
         {
         }
@@ -22,7 +22,7 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Client_MarketList,
+                Code = Network.CommandCodes.Listing.Market,
                 Json = JsonConvert.SerializeObject(items, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })
             };
             ret.Succeeded = true;

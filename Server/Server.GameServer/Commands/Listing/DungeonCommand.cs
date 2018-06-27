@@ -5,23 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Listing
 {
-    public class BagListCommand : ACommand
+    public class DungeonCommand : ACommand
     {
-        public BagListCommand(CommandArgs args) 
+        public DungeonCommand(CommandArgs args)
             : base(args)
         {
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var bags = DataRepositories.BagRepository.GetAll();
+            var dungeons = DataRepositories.DungeonRepository.GetAll();
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.BagList,
-                Json = JsonConvert.SerializeObject(bags)
+                Code = Network.CommandCodes.Listing.Dungeon,
+                Json = JsonConvert.SerializeObject(dungeons)
             };
             ret.Succeeded = true;
 

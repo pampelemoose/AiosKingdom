@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Server
 {
-    public class ClientAuthenticateCommand : ACommand
+    public class AuthenticateCommand : ACommand
     {
-        public ClientAuthenticateCommand(CommandArgs args) 
+        public AuthenticateCommand(CommandArgs args) 
             : base(args)
         {
         }

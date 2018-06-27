@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Dungeon
 {
-    public class DungeonLootRoomCommand : ACommand
+    public class LootRoomCommand : ACommand
     {
-        public DungeonLootRoomCommand(CommandArgs args) 
+        public LootRoomCommand(CommandArgs args) 
             : base(args)
         {
         }
@@ -21,7 +21,7 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon_LootRoom,
+                Code = Network.CommandCodes.Dungeon.LootRoom,
                 Success = true,
                 Json = JsonConvert.SerializeObject(adventure.LootRoom())
             };

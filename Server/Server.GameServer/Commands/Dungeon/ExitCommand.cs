@@ -5,23 +5,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Dungeon
 {
-    public class DungeonListCommand : ACommand
+    public class ExitCommand : ACommand
     {
-        public DungeonListCommand(CommandArgs args)
+        public ExitCommand(CommandArgs args) 
             : base(args)
         {
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var dungeons = DataRepositories.DungeonRepository.GetAll();
+            var soul = SoulManager.Instance.GetSoul(_args.ClientId);
+
+            AdventureManager.Instance.ExitRoom(soul.Id);
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.DungeonList,
-                Json = JsonConvert.SerializeObject(dungeons)
+                Code = Network.CommandCodes.Dungeon.Exit,
+                Success = true,
+                Json = "Exited the dungeon."
             };
             ret.Succeeded = true;
 

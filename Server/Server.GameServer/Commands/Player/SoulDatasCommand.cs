@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Player
 {
-    public class ClientSoulDatasCommand : ACommand
+    public class SoulDatasCommand : ACommand
     {
-        public ClientSoulDatasCommand(CommandArgs args) 
+        public SoulDatasCommand(CommandArgs args) 
             : base(args)
         {
         }
@@ -22,7 +22,7 @@ namespace Server.GameServer.Commands
             {
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Client_SoulDatas,
+                    Code = Network.CommandCodes.Player.SoulDatas,
                     Json = JsonConvert.SerializeObject(datas, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })
                 };
                 ret.Succeeded = true;

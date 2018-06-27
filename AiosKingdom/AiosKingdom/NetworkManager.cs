@@ -392,6 +392,8 @@ namespace AiosKingdom
                         SendRequest(Network.CommandCodes.Ping);
                     }
                     break;
+
+                // SERVER
                 case Network.CommandCodes.Client_Authenticate:
                     {
                         var authToken = JsonConvert.DeserializeObject<Guid>(message.Json);
@@ -403,7 +405,7 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Client_CreateSoul:
+                case Network.CommandCodes.Server.CreateSoul:
                     {
                         if (message.Success)
                         {
@@ -415,13 +417,13 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Client_SoulList:
+                case Network.CommandCodes.Server.SoulList:
                     {
                         var souls = JsonConvert.DeserializeObject<List<DataModels.Soul>>(message.Json);
                         MessagingCenter.Send(this, MessengerCodes.SoulListReceived, souls);
                     }
                     break;
-                case Network.CommandCodes.Client_ConnectSoul:
+                case Network.CommandCodes.Server.ConnectSoul:
                     {
                         if (message.Success)
                         {
@@ -439,28 +441,23 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Client_SoulDatas:
+
+                // PLAYER
+                case Network.CommandCodes.Player.SoulDatas:
                     {
                         var soul = JsonConvert.DeserializeObject<DataModels.Soul>(message.Json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                         DatasManager.Instance.Soul = soul;
                         MessagingCenter.Send(this, MessengerCodes.SoulUpdated);
                     }
                     break;
-                case Network.CommandCodes.Client_CurrentSoulDatas:
+                case Network.CommandCodes.Player.CurrentSoulDatas:
                     {
                         var soulDatas = JsonConvert.DeserializeObject<Network.SoulDatas>(message.Json);
                         DatasManager.Instance.Datas = soulDatas;
                         MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
                     }
                     break;
-                case Network.CommandCodes.Client_MarketList:
-                    {
-                        var items = JsonConvert.DeserializeObject<List<DataModels.MarketSlot>>(message.Json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                        DatasManager.Instance.MarketItems = items;
-                        MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
-                    }
-                    break;
-                case Network.CommandCodes.Client_BuyMarketItem:
+                case Network.CommandCodes.Player.BuyMarketItem:
                     {
                         if (message.Success)
                         {
@@ -469,7 +466,7 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Client_EquipItem:
+                case Network.CommandCodes.Player.EquipItem:
                     {
                         if (message.Success)
                         {
@@ -478,7 +475,7 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Client_UseSpiritPills:
+                case Network.CommandCodes.Player.UseSpiritPills:
                     {
                         if (message.Success)
                         {
@@ -488,7 +485,7 @@ namespace AiosKingdom
                         MessagingCenter.Send(this, MessengerCodes.SpiritPillUsed, message.Json);
                     }
                     break;
-                case Network.CommandCodes.Client_LearnSkill:
+                case Network.CommandCodes.Player.LearnSkill:
                     {
                         if (message.Success)
                         {
@@ -498,44 +495,53 @@ namespace AiosKingdom
                     }
                     break;
 
-                case Network.CommandCodes.ArmorList:
+                // LISTING
+                case Network.CommandCodes.Listing.Armor:
                     {
                         var armors = JsonConvert.DeserializeObject<List<DataModels.Items.Armor>>(message.Json);
                         DatasManager.Instance.Armors = armors;
                     }
                     break;
-                case Network.CommandCodes.ConsumableList:
+                case Network.CommandCodes.Listing.Consumable:
                     {
                         var consumable = JsonConvert.DeserializeObject<List<DataModels.Items.Consumable>>(message.Json);
                         DatasManager.Instance.Consumables = consumable;
                     }
                     break;
-                case Network.CommandCodes.BagList:
+                case Network.CommandCodes.Listing.Bag:
                     {
                         var bags = JsonConvert.DeserializeObject<List<DataModels.Items.Bag>>(message.Json);
                         DatasManager.Instance.Bags = bags;
                     }
                     break;
-                case Network.CommandCodes.BookList:
+                case Network.CommandCodes.Listing.Book:
                     {
                         var books = JsonConvert.DeserializeObject<List<DataModels.Skills.Book>>(message.Json);
                         DatasManager.Instance.Books = books;
                     }
                     break;
-                case Network.CommandCodes.MonsterList:
+                case Network.CommandCodes.Listing.Monster:
                     {
                         var monsters = JsonConvert.DeserializeObject<List<DataModels.Monsters.Monster>>(message.Json);
                         DatasManager.Instance.Monsters = monsters;
                     }
                     break;
-                case Network.CommandCodes.DungeonList:
+                case Network.CommandCodes.Listing.Dungeon:
                     {
                         var dungeons = JsonConvert.DeserializeObject<List<DataModels.Dungeons.Dungeon>>(message.Json);
                         DatasManager.Instance.Dungeons = dungeons;
                     }
                     break;
+                case Network.CommandCodes.Listing.Market:
+                    {
+                        var items = JsonConvert.DeserializeObject<List<DataModels.MarketSlot>>(message.Json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                        DatasManager.Instance.MarketItems = items;
+                        MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
+                    }
+                    break;
 
-                case Network.CommandCodes.Dungeon_EnterRoom:
+                // DUNGEON
+                case Network.CommandCodes.Dungeon.EnterRoom:
                     {
                         if (message.Success)
                         {
@@ -547,7 +553,7 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Dungeon_Exit:
+                case Network.CommandCodes.Dungeon.Exit:
                     {
                         if (message.Success)
                         {
@@ -555,7 +561,7 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Dungeon_UpdateRoom:
+                case Network.CommandCodes.Dungeon.UpdateRoom:
                     {
                         if (message.Success)
                         {
@@ -565,7 +571,7 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Dungeon_UseSkill:
+                case Network.CommandCodes.Dungeon.UseSkill:
                     {
                         if (message.Success)
                         {
@@ -573,7 +579,7 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Dungeon_UseConsumable:
+                case Network.CommandCodes.Dungeon.UseConsumable:
                     {
                         if (message.Success)
                         {
@@ -582,7 +588,7 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Dungeon_EnemyTurn:
+                case Network.CommandCodes.Dungeon.EnemyTurn:
                     {
                         if (message.Success)
                         {
@@ -592,7 +598,7 @@ namespace AiosKingdom
                         MessagingCenter.Send(this, MessengerCodes.EnemyTurnEnded);
                     }
                     break;
-                case Network.CommandCodes.Dungeon_DoNothingTurn:
+                case Network.CommandCodes.Dungeon.DoNothingTurn:
                     {
                         if (message.Success)
                         {
@@ -600,7 +606,7 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Dungeon_LootRoom:
+                case Network.CommandCodes.Dungeon.LootRoom:
                     {
                         if (message.Success)
                         {
@@ -609,7 +615,7 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Dungeon_LeaveFinishedRoom:
+                case Network.CommandCodes.Dungeon.LeaveFinishedRoom:
                     {
                         if (message.Success)
                         {
@@ -629,130 +635,146 @@ namespace AiosKingdom
             return true;
         }
 
+        #region Server Commands
+
         public void AskSoulList()
         {
-            SendRequest(Network.CommandCodes.Client_SoulList);
-        }
-
-        public void AskArmorList()
-        {
-            SendRequest(Network.CommandCodes.ArmorList);
-        }
-
-        public void AskConsumableList()
-        {
-            SendRequest(Network.CommandCodes.ConsumableList);
-        }
-
-        public void AskBagList()
-        {
-            SendRequest(Network.CommandCodes.BagList);
-        }
-
-        public void AskBookList()
-        {
-            SendRequest(Network.CommandCodes.BookList);
-        }
-
-        public void AskMonsterList()
-        {
-            SendRequest(Network.CommandCodes.MonsterList);
-        }
-
-        public void AskDungeonList()
-        {
-            SendRequest(Network.CommandCodes.DungeonList);
+            SendRequest(Network.CommandCodes.Server.SoulList);
         }
 
         public void CreateSoul(string soulname)
         {
-            SendRequest(Network.CommandCodes.Client_CreateSoul, new string[1] { soulname });
+            SendRequest(Network.CommandCodes.Server.CreateSoul, new string[1] { soulname });
         }
 
         public void ConnectSoul(Guid id)
         {
-            SendRequest(Network.CommandCodes.Client_ConnectSoul, new string[1] { id.ToString() });
+            SendRequest(Network.CommandCodes.Server.ConnectSoul, new string[1] { id.ToString() });
         }
 
-        public void AskSoulDatas()
+        #endregion
+
+        #region Listing Commands
+
+        public void AskArmorList()
         {
-            SendRequest(Network.CommandCodes.Client_SoulDatas);
+            SendRequest(Network.CommandCodes.Listing.Armor);
         }
 
-        public void AskSoulCurrentDatas()
+        public void AskConsumableList()
         {
-            SendRequest(Network.CommandCodes.Client_CurrentSoulDatas);
+            SendRequest(Network.CommandCodes.Listing.Consumable);
+        }
+
+        public void AskBagList()
+        {
+            SendRequest(Network.CommandCodes.Listing.Bag);
+        }
+
+        public void AskBookList()
+        {
+            SendRequest(Network.CommandCodes.Listing.Book);
+        }
+
+        public void AskMonsterList()
+        {
+            SendRequest(Network.CommandCodes.Listing.Monster);
+        }
+
+        public void AskDungeonList()
+        {
+            SendRequest(Network.CommandCodes.Listing.Dungeon);
         }
 
         public void AskMarketItems()
         {
-            SendRequest(Network.CommandCodes.Client_MarketList);
+            SendRequest(Network.CommandCodes.Listing.Market);
+        }
+
+        #endregion
+
+        #region Player Commands 
+
+        public void AskSoulDatas()
+        {
+            SendRequest(Network.CommandCodes.Player.SoulDatas);
+        }
+
+        public void AskSoulCurrentDatas()
+        {
+            SendRequest(Network.CommandCodes.Player.CurrentSoulDatas);
         }
 
         public void BuyMarketItem(Guid slotId)
         {
-            SendRequest(Network.CommandCodes.Client_BuyMarketItem, new string[1] { slotId.ToString() });
+            SendRequest(Network.CommandCodes.Player.BuyMarketItem, new string[1] { slotId.ToString() });
         }
 
         public void EquipItem(Guid slotId)
         {
-            SendRequest(Network.CommandCodes.Client_EquipItem, new string[1] { slotId.ToString() });
+            SendRequest(Network.CommandCodes.Player.EquipItem, new string[1] { slotId.ToString() });
         }
 
         public void UseSpiritPills(DataModels.Soul.Stats statType, int quantity)
         {
-            SendRequest(Network.CommandCodes.Client_UseSpiritPills, new string[2] { statType.ToString(), quantity.ToString() });
+            SendRequest(Network.CommandCodes.Player.UseSpiritPills, new string[2] { statType.ToString(), quantity.ToString() });
         }
 
         public void LearnSkill(Guid bookId, int rank)
         {
-            SendRequest(Network.CommandCodes.Client_LearnSkill, new string[2] { bookId.ToString(), rank.ToString() });
+            SendRequest(Network.CommandCodes.Player.LearnSkill, new string[2] { bookId.ToString(), rank.ToString() });
         }
+
+        #endregion
+
+        #region Dungeon Commands
 
         public void OpenDungeonRoom(Guid dungeonId)
         {
-            SendRequest(Network.CommandCodes.Dungeon_EnterRoom, new string[1] { dungeonId.ToString() });
+            SendRequest(Network.CommandCodes.Dungeon.EnterRoom, new string[1] { dungeonId.ToString() });
         }
 
         public void UpdateDungeonRoom()
         {
-            SendRequest(Network.CommandCodes.Dungeon_UpdateRoom);
+            SendRequest(Network.CommandCodes.Dungeon.UpdateRoom);
         }
 
         public void EnemyTurn()
         {
-            SendRequest(Network.CommandCodes.Dungeon_EnemyTurn);
+            SendRequest(Network.CommandCodes.Dungeon.EnemyTurn);
         }
 
         public void DoNothingTurn()
         {
-            SendRequest(Network.CommandCodes.Dungeon_DoNothingTurn);
+            SendRequest(Network.CommandCodes.Dungeon.DoNothingTurn);
         }
 
         public void DungeonUseSkill(Guid knowledgeId, Guid enemyId)
         {
-            SendRequest(Network.CommandCodes.Dungeon_UseSkill, new string[2] { knowledgeId.ToString(), enemyId.ToString() });
+            SendRequest(Network.CommandCodes.Dungeon.UseSkill, new string[2] { knowledgeId.ToString(), enemyId.ToString() });
         }
 
         public void DungeonUseConsumable(Guid slotId, Guid enemyId)
         {
-            SendRequest(Network.CommandCodes.Dungeon_UseConsumable, new string[2] { slotId.ToString(), enemyId.ToString() });
+            SendRequest(Network.CommandCodes.Dungeon.UseConsumable, new string[2] { slotId.ToString(), enemyId.ToString() });
         }
 
         public void LootDungeonRoom()
         {
-            SendRequest(Network.CommandCodes.Dungeon_LootRoom);
+            SendRequest(Network.CommandCodes.Dungeon.LootRoom);
         }
 
         public void ExitDungeon()
         {
-            SendRequest(Network.CommandCodes.Dungeon_Exit);
+            SendRequest(Network.CommandCodes.Dungeon.Exit);
         }
 
         public void LeaveFinishedRoom()
         {
-            SendRequest(Network.CommandCodes.Dungeon_LeaveFinishedRoom);
+            SendRequest(Network.CommandCodes.Dungeon.LeaveFinishedRoom);
         }
+
+        #endregion
 
         private void SendRequest(int code, string[] args = null)
         {

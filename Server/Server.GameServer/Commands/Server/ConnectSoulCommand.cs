@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Server
 {
-    public class ClientConnectSoulCommand : ACommand
+    public class ConnectSoulCommand : ACommand
     {
         private DataModels.Config _config;
 
-        public ClientConnectSoulCommand(CommandArgs args, DataModels.Config config) 
+        public ConnectSoulCommand(CommandArgs args, DataModels.Config config) 
             : base(args)
         {
             _config = config;
@@ -29,7 +29,7 @@ namespace Server.GameServer.Commands
 
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Client_ConnectSoul,
+                        Code = Network.CommandCodes.Server.ConnectSoul,
                         Success = true,
                         Json = "Soul Connected"
                     };
@@ -40,7 +40,7 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Client_ConnectSoul,
+                Code = Network.CommandCodes.Server.ConnectSoul,
                 Success = false,
                 Json = "Could not connect soul"
             };

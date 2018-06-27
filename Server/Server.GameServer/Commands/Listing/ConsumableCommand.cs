@@ -5,23 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Listing
 {
-    public class ArmorListCommand : ACommand
+    public class ConsumableCommand : ACommand
     {
-        public ArmorListCommand(CommandArgs args) 
+        public ConsumableCommand(CommandArgs args) 
             : base(args)
         {
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var armors = DataRepositories.ArmorRepository.GetAll();
+            var consumables = DataRepositories.ConsumableRepository.GetAll();
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.ArmorList,
-                Json = JsonConvert.SerializeObject(armors)
+                Code = Network.CommandCodes.Listing.Consumable,
+                Json = JsonConvert.SerializeObject(consumables)
             };
             ret.Succeeded = true;
 

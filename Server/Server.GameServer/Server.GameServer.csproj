@@ -58,32 +58,32 @@
     <Compile Include="ClientsManager.cs" />
     <Compile Include="CommandManager.cs" />
     <Compile Include="Commands\ACommand.cs" />
-    <Compile Include="Commands\ArmorListCommand.cs" />
-    <Compile Include="Commands\BagListCommand.cs" />
-    <Compile Include="Commands\BookListCommand.cs" />
-    <Compile Include="Commands\ClientAuthenticateCommand.cs" />
-    <Compile Include="Commands\ClientBuyMarketItemCommand.cs" />
-    <Compile Include="Commands\ClientConnectSoulCommand.cs" />
-    <Compile Include="Commands\ClientCreateSoulCommand.cs" />
-    <Compile Include="Commands\ClientCurrentSoulDatasCommand.cs" />
-    <Compile Include="Commands\ClientEquipItemCommand.cs" />
-    <Compile Include="Commands\ClientLearnSkillCommand.cs" />
-    <Compile Include="Commands\ClientMarketListCommand.cs" />
-    <Compile Include="Commands\ClientSoulDatasCommand.cs" />
-    <Compile Include="Commands\ClientSoulListCommand.cs" />
-    <Compile Include="Commands\ClientUseSpiritPillsCommand.cs" />
-    <Compile Include="Commands\ConsumableListCommand.cs" />
-    <Compile Include="Commands\DungeonEnterRoomCommand.cs" />
-    <Compile Include="Commands\DungeonExitCommand.cs" />
-    <Compile Include="Commands\DungeonLeaveFinishedRoomCommand.cs" />
-    <Compile Include="Commands\DungeonListCommand.cs" />
-    <Compile Include="Commands\DungeonLootRoomCommand.cs" />
-    <Compile Include="Commands\DungeonUpdateRoomCommand.cs" />
-    <Compile Include="Commands\DungeonUseSkillCommand.cs" />
+    <Compile Include="Commands\Listing\ArmorCommand.cs" />
+    <Compile Include="Commands\Listing\BagCommand.cs" />
+    <Compile Include="Commands\Listing\BookCommand.cs" />
+    <Compile Include="Commands\Server\AuthenticateCommand.cs" />
+    <Compile Include="Commands\Player\BuyMarketItemCommand.cs" />
+    <Compile Include="Commands\Server\ConnectSoulCommand.cs" />
+    <Compile Include="Commands\Server\CreateSoulCommand.cs" />
+    <Compile Include="Commands\Player\CurrentSoulDatasCommand.cs" />
+    <Compile Include="Commands\Player\EquipItemCommand.cs" />
+    <Compile Include="Commands\Player\LearnSkillCommand.cs" />
+    <Compile Include="Commands\Listing\MarketCommand.cs" />
+    <Compile Include="Commands\Player\SoulDatasCommand.cs" />
+    <Compile Include="Commands\Server\SoulListCommand.cs" />
+    <Compile Include="Commands\Player\UseSpiritPillsCommand.cs" />
+    <Compile Include="Commands\Listing\ConsumableCommand.cs" />
+    <Compile Include="Commands\Dungeon\EnterRoomCommand.cs" />
+    <Compile Include="Commands\Dungeon\ExitCommand.cs" />
+    <Compile Include="Commands\Dungeon\LeaveFinishedRoomCommand.cs" />
+    <Compile Include="Commands\Listing\DungeonCommand.cs" />
+    <Compile Include="Commands\Dungeon\LootRoomCommand.cs" />
+    <Compile Include="Commands\Dungeon\UpdateRoomCommand.cs" />
+    <Compile Include="Commands\Dungeon\UseSkillCommand.cs" />
     <Compile Include="Commands\Dungeon\DoNothingTurnCommand.cs" />
     <Compile Include="Commands\Dungeon\EnemyTurnCommand.cs" />
     <Compile Include="Commands\Dungeon\UseConsumableCommand.cs" />
-    <Compile Include="Commands\MonsterListCommand.cs" />
+    <Compile Include="Commands\Listing\MonsterCommand.cs" />
     <Compile Include="Commands\PingCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -108,5 +108,6 @@
       <Name>Network</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

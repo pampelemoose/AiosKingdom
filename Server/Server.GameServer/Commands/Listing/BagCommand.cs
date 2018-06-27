@@ -5,23 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Listing
 {
-    public class ConsumableListCommand : ACommand
+    public class BagCommand : ACommand
     {
-        public ConsumableListCommand(CommandArgs args) 
+        public BagCommand(CommandArgs args) 
             : base(args)
         {
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var consumables = DataRepositories.ConsumableRepository.GetAll();
+            var bags = DataRepositories.BagRepository.GetAll();
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.ConsumableList,
-                Json = JsonConvert.SerializeObject(consumables)
+                Code = Network.CommandCodes.Listing.Bag,
+                Json = JsonConvert.SerializeObject(bags)
             };
             ret.Succeeded = true;
 

@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Dungeon
 {
-    public class DungeonLeaveFinishedRoomCommand : ACommand
+    public class LeaveFinishedRoomCommand : ACommand
     {
         private DataModels.Config _config;
 
-        public DungeonLeaveFinishedRoomCommand(CommandArgs args, DataModels.Config config)
+        public LeaveFinishedRoomCommand(CommandArgs args, DataModels.Config config)
             : base(args)
         {
             _config = config;
@@ -51,7 +51,7 @@ namespace Server.GameServer.Commands
 
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Dungeon_LeaveFinishedRoom,
+                    Code = Network.CommandCodes.Dungeon.LeaveFinishedRoom,
                     Success = true,
                     Json = "Exited the dungeon."
                 };
@@ -62,7 +62,7 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon_LeaveFinishedRoom,
+                Code = Network.CommandCodes.Dungeon.LeaveFinishedRoom,
                 Success = false,
                 Json = "Room not cleared, can't exit."
             };

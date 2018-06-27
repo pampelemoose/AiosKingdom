@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Player
 {
-    public class ClientUseSpiritPillsCommand : ACommand
+    public class UseSpiritPillsCommand : ACommand
     {
         private DataModels.Config _config;
 
-        public ClientUseSpiritPillsCommand(CommandArgs args, DataModels.Config config)
+        public UseSpiritPillsCommand(CommandArgs args, DataModels.Config config)
             : base(args)
         {
             _config = config;
@@ -58,7 +58,7 @@ namespace Server.GameServer.Commands
 
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Client_UseSpiritPills,
+                        Code = Network.CommandCodes.Player.UseSpiritPills,
                         Success = true,
                         Json = $"Used {amount} pill{(amount > 0 ? "s" : "")} in {statId}."
                     };
@@ -70,7 +70,7 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Client_UseSpiritPills,
+                Code = Network.CommandCodes.Player.UseSpiritPills,
                 Success = false,
                 Json = "Couldn't use pills"
             };

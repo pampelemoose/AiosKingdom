@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Server
 {
-    public class ClientCreateSoulCommand : ACommand
+    public class CreateSoulCommand : ACommand
     {
         private DataModels.Config _config;
 
-        public ClientCreateSoulCommand(CommandArgs args, DataModels.Config config)
+        public CreateSoulCommand(CommandArgs args, DataModels.Config config)
             : base(args)
         {
             _config = config;
@@ -38,8 +38,8 @@ namespace Server.GameServer.Commands
                 Agility = 0,
                 Intelligence = 0,
                 Wisdom = 0,
-                Spirits = _config.SpiritsPerLevelUp, // TODO : get value from config
-                Embers = _config.EmbersPerLevelUp, // TODO : get value from config
+                Spirits = _config.SpiritsPerLevelUp,
+                Embers = _config.EmbersPerLevelUp,
                 Shards = 0,
                 Bits = 0,
                 Equipment = new DataModels.Equipment
@@ -52,7 +52,7 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Client_CreateSoul,
+                Code = Network.CommandCodes.Server.CreateSoul,
                 Success = result,
                 Json = result ? "Soul created !" : "Soulname already in use. Please enter another one."
             };

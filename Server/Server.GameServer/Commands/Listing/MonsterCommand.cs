@@ -5,24 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Listing
 {
-    public class ClientSoulListCommand : ACommand
+    public class MonsterCommand : ACommand
     {
-        public ClientSoulListCommand(CommandArgs args) 
+        public MonsterCommand(CommandArgs args) 
             : base(args)
         {
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var userId = ClientsManager.Instance.GetUserId(ret.ClientId);
-            var souls = DataRepositories.SoulRepository.GetSoulsByUserId(userId);
+            var monsters = DataRepositories.MonsterRepository.GetAll();
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Client_SoulList,
-                Json = JsonConvert.SerializeObject(souls)
+                Code = Network.CommandCodes.Listing.Monster,
+                Json = JsonConvert.SerializeObject(monsters)
             };
             ret.Succeeded = true;
 

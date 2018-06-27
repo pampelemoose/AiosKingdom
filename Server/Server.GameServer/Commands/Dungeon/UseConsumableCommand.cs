@@ -46,7 +46,7 @@ namespace Server.GameServer.Commands.Dungeon
 
                             ret.ClientResponse = new Network.Message
                             {
-                                Code = Network.CommandCodes.Dungeon_UseConsumable,
+                                Code = Network.CommandCodes.Dungeon.UseConsumable,
                                 Success = true,
                                 Json = "Consumable successfully used."
                             };
@@ -60,7 +60,7 @@ namespace Server.GameServer.Commands.Dungeon
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon_UseConsumable,
+                Code = Network.CommandCodes.Dungeon.UseConsumable,
                 Success = false,
                 Json = "Failed to use consumable."
             };

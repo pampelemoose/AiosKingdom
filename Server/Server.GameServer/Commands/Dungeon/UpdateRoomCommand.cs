@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Dungeon
 {
-    public class DungeonEnterRoomCommand : ACommand
+    public class UpdateRoomCommand : ACommand
     {
-        public DungeonEnterRoomCommand(CommandArgs args)
+        public UpdateRoomCommand(CommandArgs args) 
             : base(args)
         {
         }
@@ -17,22 +17,15 @@ namespace Server.GameServer.Commands
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var soul = SoulManager.Instance.GetSoul(_args.ClientId);
-            var dungeonId = Guid.Parse(_args.Args[0]);
+            var adventure = AdventureManager.Instance.GetAdventure(soul);
 
-            if (soul.Knowledge.Count > 0)
+            if (adventure != null)
             {
-                var adventure = AdventureManager.Instance.OpenRoom(soul, dungeonId);
-
-                if (adventure.RoomNumber == 0)
-                {
-                    adventure.SetPlayerState(SoulManager.Instance.GetDatas(_args.ClientId));
-                }
-
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Dungeon_EnterRoom,
+                    Code = Network.CommandCodes.Dungeon.UpdateRoom,
                     Success = true,
-                    Json = "Entered the dungeon."
+                    Json = JsonConvert.SerializeObject(adventure.GetActualState())
                 };
                 ret.Succeeded = true;
 
@@ -41,9 +34,9 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon_EnterRoom,
+                Code = Network.CommandCodes.Dungeon.UpdateRoom,
                 Success = false,
-                Json = "You must have learned at least one skill."
+                Json = "Failed to update the room."
             };
             ret.Succeeded = true;
 

@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Player
 {
-    public class ClientEquipItemCommand : ACommand
+    public class EquipItemCommand : ACommand
     {
         private DataModels.Config _config;
 
-        public ClientEquipItemCommand(CommandArgs args, DataModels.Config config) 
+        public EquipItemCommand(CommandArgs args, DataModels.Config config) 
             : base(args)
         {
             _config = config;
@@ -174,7 +174,7 @@ namespace Server.GameServer.Commands
                     SoulManager.Instance.UpdateCurrentDatas(ret.ClientId, _config);
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Client_EquipItem,
+                        Code = Network.CommandCodes.Player.EquipItem,
                         Success = true,
                         Json = "Item equiped."
                     };
@@ -186,7 +186,7 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Client_EquipItem,
+                Code = Network.CommandCodes.Player.EquipItem,
                 Success = false,
                 Json = "Couldn't equip item."
             };

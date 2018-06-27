@@ -24,7 +24,7 @@ namespace Server.GameServer.Commands.Dungeon
                 {
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Dungeon_DoNothingTurn,
+                        Code = Network.CommandCodes.Dungeon.DoNothingTurn,
                         Success = true,
                         Json = "Did nothing."
                     };
@@ -36,7 +36,7 @@ namespace Server.GameServer.Commands.Dungeon
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon_DoNothingTurn,
+                Code = Network.CommandCodes.Dungeon.DoNothingTurn,
                 Success = false,
                 Json = "Failed to do nothing..."
             };

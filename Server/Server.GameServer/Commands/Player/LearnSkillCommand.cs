@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands
+namespace Server.GameServer.Commands.Player
 {
-    public class ClientLearnSkillCommand : ACommand
+    public class LearnSkillCommand : ACommand
     {
-        public ClientLearnSkillCommand(CommandArgs args) 
+        public LearnSkillCommand(CommandArgs args) 
             : base(args)
         {
         }
@@ -28,7 +28,7 @@ namespace Server.GameServer.Commands
                 {
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Client_LearnSkill,
+                        Code = Network.CommandCodes.Player.LearnSkill,
                         Success = false,
                         Json = "Skill already known."
                     };
@@ -41,7 +41,7 @@ namespace Server.GameServer.Commands
                 {
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Client_LearnSkill,
+                        Code = Network.CommandCodes.Player.LearnSkill,
                         Success = false,
                         Json = "Skill rank doesn't exists."
                     };
@@ -53,7 +53,7 @@ namespace Server.GameServer.Commands
                 {
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Client_LearnSkill,
+                        Code = Network.CommandCodes.Player.LearnSkill,
                         Success = false,
                         Json = "Not enough embers."
                     };
@@ -79,7 +79,7 @@ namespace Server.GameServer.Commands
                 {
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Client_LearnSkill,
+                        Code = Network.CommandCodes.Player.LearnSkill,
                         Success = false,
                         Json = "Don't have previous rank, can't upgrade."
                     };
@@ -92,7 +92,7 @@ namespace Server.GameServer.Commands
                 {
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Client_LearnSkill,
+                        Code = Network.CommandCodes.Player.LearnSkill,
                         Success = false,
                         Json = "Skill rank doesn't exists."
                     };
@@ -104,7 +104,7 @@ namespace Server.GameServer.Commands
                 {
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Client_LearnSkill,
+                        Code = Network.CommandCodes.Player.LearnSkill,
                         Success = false,
                         Json = "Not enough embers."
                     };
@@ -123,7 +123,7 @@ namespace Server.GameServer.Commands
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Client_LearnSkill,
+                Code = Network.CommandCodes.Player.LearnSkill,
                 Success = true,
                 Json = "Skill learned."
             };
