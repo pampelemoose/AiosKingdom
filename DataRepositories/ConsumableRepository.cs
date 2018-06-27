@@ -18,6 +18,14 @@ namespace DataRepositories
             }
         }
 
+        public static DataModels.Items.Consumable GetById(Guid id)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Consumables.Include(a => a.Effects).FirstOrDefault(c => c.ItemId.Equals(id));
+            }
+        }
+
         public static bool Create(DataModels.Items.Consumable consumable)
         {
             using (var context = new AiosKingdomContext())

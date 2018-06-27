@@ -69,6 +69,10 @@ namespace Server.GameServer
                         case DataModels.Skills.InscriptionType.Heal:
                             {
                                 _state.CurrentHealth += inscription.BaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, datas));
+                                if (_state.CurrentHealth > datas.MaxHealth)
+                                {
+                                    _state.CurrentHealth = datas.MaxHealth;
+                                }
                                 Console.WriteLine($"Using {skill.BookId}.{skill.Rank} skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, datas)})*{inscription.Ratio}) on yourself .");
                             }
                             break;
@@ -110,6 +114,36 @@ namespace Server.GameServer
 
                 _enemiesStats[enemyId] = enemyStats;
                 _state.Enemies[enemyId] = enemy;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool UseConsumableOnEnemy(Guid enemyId, DataModels.Items.Consumable consumable, Network.SoulDatas datas)
+        {
+            if (_enemiesStats.ContainsKey(enemyId))
+            {
+                var enemy = _state.Enemies[enemyId];
+                var enemyStats = _enemiesStats[enemyId];
+
+                foreach (var effect in consumable.Effects)
+                {
+                    switch (effect.Type)
+                    {
+                        case DataModels.Items.EffectType.RestoreHealth:
+                            {
+                                _state.CurrentHealth += effect.AffectValue;
+                                if (_state.CurrentHealth > datas.MaxHealth)
+                                {
+                                    _state.CurrentHealth = datas.MaxHealth;
+                                }
+                                Console.WriteLine($"Using {consumable.ItemId} consumable doing ({effect.Type}).({effect.AffectValue}) on yourself .");
+                            }
+                            break;
+                    }
+                }
+
                 return true;
             }
 

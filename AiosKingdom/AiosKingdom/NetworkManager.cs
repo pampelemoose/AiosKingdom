@@ -573,6 +573,15 @@ namespace AiosKingdom
                         }
                     }
                     break;
+                case Network.CommandCodes.Dungeon_UseConsumable:
+                    {
+                        if (message.Success)
+                        {
+                            AskSoulDatas();
+                            UpdateDungeonRoom();
+                        }
+                    }
+                    break;
                 case Network.CommandCodes.Dungeon_LootRoom:
                     {
                         if (message.Success)
@@ -695,6 +704,11 @@ namespace AiosKingdom
         public void DungeonUseSkill(Guid knowledgeId, Guid enemyId)
         {
             SendRequest(Network.CommandCodes.Dungeon_UseSkill, new string[2] { knowledgeId.ToString(), enemyId.ToString() });
+        }
+
+        public void DungeonUseConsumable(Guid slotId, Guid enemyId)
+        {
+            SendRequest(Network.CommandCodes.Dungeon_UseConsumable, new string[2] { slotId.ToString(), enemyId.ToString() });
         }
 
         public void LootDungeonRoom()

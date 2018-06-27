@@ -33,6 +33,7 @@ namespace AiosKingdom
         public static string EnterDungeon = "enterDungeon";
         public static string EnterDungeonFailed = "enterDungeonFailed";
         public static string DungeonSelectSkillEnded = "dungeonSelectSkillEnded";
+        public static string DungeonSelectConsumableEnded = "dungeonSelectConsumableEnded";
         public static string ExitDungeon = "exitDungeon";
         public static string DungeonUpdated = "dungeonUpdated";
         public static string DungeonLootsReceived = "dungeonLootsReceived";

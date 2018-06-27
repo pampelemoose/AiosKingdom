@@ -196,6 +196,37 @@
                             Text="{Binding SelectedSkill.Skill.ManaCost}"/>
                     </Grid>
 
+                    <Grid
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="{StaticResource BackgroundColor}"
+                        IsVisible="{Binding IsConsumableSelected}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button
+                            Grid.Column="0"
+                            Text="X"
+                            Command="{Binding BindingContext.RemoveNextMoveAction, Source={x:Reference DungeonPage}}"
+                            CommandParameter="{Binding .}"/>
+
+                        <Label
+                            Grid.Column="1"
+                            TextColor="Aqua"
+                            FontSize="22"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding SelectedConsumable.Consumable.Name}"/>
+                        
+                        <Label
+                            Grid.Column="3"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding SelectedConsumable.Quantity}"/>
+                    </Grid>
+
                     <Button
                         Grid.Column="2"
                         Text="Exit"
@@ -206,7 +237,7 @@
                         BackgroundColor="{StaticResource BackgroundColor}"
                         Text="End Turn"
                         Command="{Binding ExecuteAction}"
-                        IsVisible="{Binding IsSkillSelected}"/>
+                        IsVisible="{Binding CanExecuteAction}"/>
                 </Grid>
             </Grid>
 

@@ -79,8 +79,23 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 _isSkillSelected = value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(CanExecuteAction));
             }
         }
+
+        private bool _isConsumableSelected;
+        public bool IsConsumableSelected
+        {
+            get { return _isConsumableSelected; }
+            set
+            {
+                _isConsumableSelected = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(CanExecuteAction));
+            }
+        }
+
+        public bool CanExecuteAction => _isSkillSelected || _isConsumableSelected;
 
         private bool _showLootsPanel;
         public bool ShowLootsPanel
@@ -100,6 +115,17 @@ namespace AiosKingdom.ViewModels.Dungeon
             set
             {
                 _selectedSkill = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private Models.Dungeon.ConsumableSelectionItemModel _selectedConsumable;
+        public Models.Dungeon.ConsumableSelectionItemModel SelectedConsumable
+        {
+            get { return _selectedConsumable; }
+            set
+            {
+                _selectedConsumable = value;
                 NotifyPropertyChanged();
             }
         }
@@ -126,6 +152,12 @@ namespace AiosKingdom.ViewModels.Dungeon
                 SelectedSkill = null;
                 IsSkillSelected = false;
             }
+
+            if (IsConsumableSelected)
+            {
+                SelectedConsumable = null;
+                IsConsumableSelected = false;
+            }
         }
 
         private Command _skillsAction;
@@ -147,7 +179,15 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand ConsumablesAction =>
             _consumablesAction ?? (_consumablesAction = new Command(() =>
             {
-                //_navigation.PushModalAsync(new Views.Dungeon.ExitDungeonPage());
+                MessagingCenter.Subscribe<ConsumableSelectionPageViewModel, Models.Dungeon.ConsumableSelectionItemModel>(this, MessengerCodes.DungeonSelectConsumableEnded, (sender, consumable) =>
+                {
+                    SelectedConsumable = consumable;
+                    IsConsumableSelected = true;
+                    MessagingCenter.Unsubscribe<ConsumableSelectionPageViewModel, Models.Dungeon.ConsumableSelectionItemModel>(this, MessengerCodes.DungeonSelectConsumableEnded);
+                });
+
+                var page = new Views.Dungeon.ConsumableSelectionPage();
+                _navigation.PushModalAsync(page);
             }, () => { return _selectedEnemy != null; }));
 
         private ICommand _exitDungeonAction;
@@ -165,6 +205,12 @@ namespace AiosKingdom.ViewModels.Dungeon
                 {
                     LoadingScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
                     NetworkManager.Instance.DungeonUseSkill(_selectedSkill.KnowledgeId, _selectedEnemy.Value.Key);
+                }
+
+                if (IsConsumableSelected)
+                {
+                    LoadingScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
+                    NetworkManager.Instance.DungeonUseConsumable(_selectedConsumable.SlotId, _selectedEnemy.Value.Key);
                 }
             }));
 
