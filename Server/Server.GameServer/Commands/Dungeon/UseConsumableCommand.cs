@@ -42,18 +42,17 @@ namespace Server.GameServer.Commands.Dungeon
                                 soul.Inventory.Add(slotKnown);
                             }
 
-                            if (DataRepositories.SoulRepository.Update(soul))
-                            {
-                                ret.ClientResponse = new Network.Message
-                                {
-                                    Code = Network.CommandCodes.Dungeon_UseConsumable,
-                                    Success = true,
-                                    Json = "Consumable successfully used."
-                                };
-                                ret.Succeeded = true;
+                            SoulManager.Instance.UpdateSoul(ret.ClientId, soul);
 
-                                return ret;
-                            }
+                            ret.ClientResponse = new Network.Message
+                            {
+                                Code = Network.CommandCodes.Dungeon_UseConsumable,
+                                Success = true,
+                                Json = "Consumable successfully used."
+                            };
+                            ret.Succeeded = true;
+
+                            return ret;
                         }
                     }
                 }
@@ -61,7 +60,7 @@ namespace Server.GameServer.Commands.Dungeon
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon_UseSkill,
+                Code = Network.CommandCodes.Dungeon_UseConsumable,
                 Success = false,
                 Json = "Failed to use consumable."
             };

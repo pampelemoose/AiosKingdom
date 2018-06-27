@@ -582,6 +582,24 @@ namespace AiosKingdom
                         }
                     }
                     break;
+                case Network.CommandCodes.Dungeon_EnemyTurn:
+                    {
+                        if (message.Success)
+                        {
+                            AskSoulDatas();
+                            UpdateDungeonRoom();
+                        }
+                        MessagingCenter.Send(this, MessengerCodes.EnemyTurnEnded);
+                    }
+                    break;
+                case Network.CommandCodes.Dungeon_DoNothingTurn:
+                    {
+                        if (message.Success)
+                        {
+                            UpdateDungeonRoom();
+                        }
+                    }
+                    break;
                 case Network.CommandCodes.Dungeon_LootRoom:
                     {
                         if (message.Success)
@@ -699,6 +717,16 @@ namespace AiosKingdom
         public void UpdateDungeonRoom()
         {
             SendRequest(Network.CommandCodes.Dungeon_UpdateRoom);
+        }
+
+        public void EnemyTurn()
+        {
+            SendRequest(Network.CommandCodes.Dungeon_EnemyTurn);
+        }
+
+        public void DoNothingTurn()
+        {
+            SendRequest(Network.CommandCodes.Dungeon_DoNothingTurn);
         }
 
         public void DungeonUseSkill(Guid knowledgeId, Guid enemyId)

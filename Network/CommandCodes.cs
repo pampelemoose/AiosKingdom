@@ -35,9 +35,11 @@ namespace Network
         public const int Dungeon_UpdateRoom = 52;
         public const int Dungeon_UseSkill = 53;
         public const int Dungeon_UseConsumable = 54;
-        public const int Dungeon_LootRoom = 55;
-        public const int Dungeon_LootItem = 56;
-        public const int Dungeon_LeaveFinishedRoom = 57;
+        public const int Dungeon_EnemyTurn = 55;
+        public const int Dungeon_LootRoom = 56;
+        public const int Dungeon_LootItem = 57;
+        public const int Dungeon_LeaveFinishedRoom = 58;
+        public const int Dungeon_DoNothingTurn = 59;
 
         public const int Ping = -1;
     }

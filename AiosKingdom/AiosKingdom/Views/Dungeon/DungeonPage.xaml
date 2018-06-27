@@ -143,10 +143,12 @@
 
                 <Grid
                     Grid.Row="1"
-                    Margin="5">
+                    Margin="5"
+                    IsVisible="{Binding IsEnemyTurn, Converter={StaticResource inverseBoolean}}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5*"/>
-                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="4.5*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="4.5*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
 
@@ -156,12 +158,16 @@
                         Command="{Binding SkillsAction}"/>
                     <Button
                         Grid.Column="1"
+                        Text="Nothing"
+                        Command="{Binding EndTurnAction}"/>
+                    <Button
+                        Grid.Column="2"
                         Text="Consumables"
                         Command="{Binding ConsumablesAction}"/>
 
                     <Grid
                         Grid.Column="0"
-                        Grid.ColumnSpan="2"
+                        Grid.ColumnSpan="3"
                         BackgroundColor="{StaticResource BackgroundColor}"
                         IsVisible="{Binding IsSkillSelected}">
                         <Grid.ColumnDefinitions>
@@ -198,7 +204,7 @@
 
                     <Grid
                         Grid.Column="0"
-                        Grid.ColumnSpan="2"
+                        Grid.ColumnSpan="3"
                         BackgroundColor="{StaticResource BackgroundColor}"
                         IsVisible="{Binding IsConsumableSelected}">
                         <Grid.ColumnDefinitions>
@@ -229,17 +235,26 @@
 
                     <Button
                         Margin="2"
-                        Grid.Column="2"
+                        Grid.Column="3"
                         Text="Exit"
                         Command="{Binding ExitDungeonAction}"
                         IsVisible="{Binding CanExecuteAction, Converter={StaticResource inverseBoolean}}"/>
 
                     <Button
-                        Grid.Column="2"
+                        Grid.Column="3"
                         BackgroundColor="{StaticResource BackgroundColor}"
                         Text="End Turn"
                         Command="{Binding ExecuteAction}"
                         IsVisible="{Binding CanExecuteAction}"/>
+                </Grid>
+                
+                <Grid
+                    Grid.Row="1"
+                    IsVisible="{Binding IsEnemyTurn}">
+                    <Button
+                        BackgroundColor="{StaticResource BackgroundColor}"
+                        Text="Enemies Turn"
+                        Command="{Binding EnemyTurnAction}"/>
                 </Grid>
             </Grid>
 

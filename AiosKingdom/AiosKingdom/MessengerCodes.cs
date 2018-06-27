@@ -35,6 +35,7 @@ namespace AiosKingdom
         public static string DungeonSelectSkillEnded = "dungeonSelectSkillEnded";
         public static string DungeonSelectConsumableEnded = "dungeonSelectConsumableEnded";
         public static string ExitDungeon = "exitDungeon";
+        public static string EnemyTurnEnded = "enemyTurnEnded";
         public static string DungeonUpdated = "dungeonUpdated";
         public static string DungeonLootsReceived = "dungeonLootsReceived";
 

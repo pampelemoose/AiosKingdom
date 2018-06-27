@@ -41,7 +41,20 @@ namespace AiosKingdom.ViewModels.Dungeon
                 });
             });
 
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.EnemyTurnEnded, (sender) =>
+            {
+                IsEnemyTurn = false;
+                LoadingScreenManager.Instance.CloseLoadingScreen();
+            });
+
             NetworkManager.Instance.UpdateDungeonRoom();
+        }
+
+        ~DungeonPageViewModel()
+        {
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.DungeonUpdated);
+            MessagingCenter.Unsubscribe<NetworkManager, List<Network.LootItem>>(this, MessengerCodes.DungeonLootsReceived);
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.EnemyTurnEnded);
         }
 
         public Network.AdventureState Room => DatasManager.Instance.Adventure;
@@ -139,6 +152,17 @@ namespace AiosKingdom.ViewModels.Dungeon
             }
         }
 
+        private bool _isEnemyTurn;
+        public bool IsEnemyTurn
+        {
+            get { return _isEnemyTurn; }
+            set
+            {
+                _isEnemyTurn = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private ICommand _removeNextMoveAction;
         public ICommand RemoveNextMoveAction =>
             _removeNextMoveAction ?? (_removeNextMoveAction = new Command(() =>
@@ -161,6 +185,14 @@ namespace AiosKingdom.ViewModels.Dungeon
             }
         }
 
+        private ICommand _enemyTurnAction;
+        public ICommand EnemyTurnAction =>
+            _enemyTurnAction ?? (_enemyTurnAction = new Command(() =>
+            {
+                LoadingScreenManager.Instance.OpenLoadingScreen($"Enemy turn. Please wait...");
+                NetworkManager.Instance.EnemyTurn();
+            }));
+
         private ICommand _skillsAction;
         public ICommand SkillsAction =>
             _skillsAction ?? (_skillsAction = new Command(() =>
@@ -176,6 +208,17 @@ namespace AiosKingdom.ViewModels.Dungeon
 
                 var page = new Views.Dungeon.SkillSelectionPage(Room);
                 _navigation.PushModalAsync(page);
+            }));
+
+        private ICommand _endTurnActionAction;
+        public ICommand EndTurnAction =>
+            _endTurnActionAction ?? (_endTurnActionAction = new Command(() =>
+            {
+                LoadingScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
+                NetworkManager.Instance.DoNothingTurn();
+
+                IsEnemyTurn = true;
+                ResetNextMove();
             }));
 
         private ICommand _consumablesAction;
@@ -209,17 +252,18 @@ namespace AiosKingdom.ViewModels.Dungeon
                 if (IsSkillSelected)
                 {
                     LoadingScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
-                    NetworkManager.Instance.DungeonUseSkill(_selectedSkill.KnowledgeId, 
+                    NetworkManager.Instance.DungeonUseSkill(_selectedSkill.KnowledgeId,
                         (_selectedEnemy != null ? _selectedEnemy.Value.Key : Guid.Empty));
                 }
 
                 if (IsConsumableSelected)
                 {
                     LoadingScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
-                    NetworkManager.Instance.DungeonUseConsumable(_selectedConsumable.SlotId, 
+                    NetworkManager.Instance.DungeonUseConsumable(_selectedConsumable.SlotId,
                         (_selectedEnemy != null ? _selectedEnemy.Value.Key : Guid.Empty));
                 }
 
+                IsEnemyTurn = true;
                 ResetNextMove();
             }, () => { return CanExecutCurrentAction(); }));
 
@@ -253,6 +297,6 @@ namespace AiosKingdom.ViewModels.Dungeon
                 LoadingScreenManager.Instance.OpenLoadingScreen($"Leaving room, you will receive {Room.StackedExperience} experience. Please wait.");
                 NetworkManager.Instance.LeaveFinishedRoom();
             }));
-        
+
     }
 }

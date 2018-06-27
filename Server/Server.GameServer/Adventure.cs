@@ -158,6 +158,58 @@ namespace Server.GameServer
             return true;
         }
 
+        public bool EnemyTurn()
+        {
+            var enemies = _enemiesStats.Keys.ToList();
+            foreach (var enemyKeys in enemies)
+            {
+                var enemy = _state.Enemies[enemyKeys];
+                var enemyStats = _enemiesStats[enemyKeys];
+
+                var phase = DataRepositories.MonsterRepository.GetById(enemy.MonsterId).Phases.ElementAt(enemy.NextPhase);
+
+                if (phase == null) return false;
+
+                var skill = DataRepositories.BookRepository.GetAll().SelectMany(b => b.Pages).FirstOrDefault(p => p.Id.Equals(phase.SkillId));
+
+                if (skill == null) return false;
+
+                foreach (var inscription in skill.Inscriptions)
+                {
+                    switch (inscription.Type)
+                    {
+                        case DataModels.Skills.InscriptionType.Damages:
+                            {
+                                _state.CurrentHealth -= inscription.BaseValue + (inscription.Ratio * GetEnemyStatValue(inscription.StatType, enemyStats));
+                                Console.WriteLine($"Enemy {enemyKeys} using {skill.BookId}.{skill.Rank} skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetEnemyStatValue(inscription.StatType, enemyStats)})*{inscription.Ratio}) on yourself.");
+                            }
+                            break;
+                        case DataModels.Skills.InscriptionType.Heal:
+                            {
+                                enemy.CurrentHealth += inscription.BaseValue + (inscription.Ratio * GetEnemyStatValue(inscription.StatType, enemyStats));
+                                if (enemy.CurrentHealth > enemy.MaxHealth)
+                                {
+                                    enemy.CurrentHealth = enemy.MaxHealth;
+                                }
+                                Console.WriteLine($"Enemy {enemyKeys} using {skill.BookId}.{skill.Rank} skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetEnemyStatValue(inscription.StatType, enemyStats)})*{inscription.Ratio}) on himself .");
+
+                                _enemiesStats[enemyKeys] = enemyStats;
+                                _state.Enemies[enemyKeys] = enemy;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool DoNothingTurn()
+        {
+            // TODO : Turn time.
+            return true;
+        }
+
         public List<Network.LootItem> LootRoom()
         {
             return _loots.Values.ToList();
@@ -179,6 +231,27 @@ namespace Server.GameServer
                     return datas.TotalIntelligence;
                 case DataModels.Soul.Stats.Wisdom:
                     return datas.TotalWisdom;
+                default:
+                    return 0;
+            }
+        }
+
+        private int GetEnemyStatValue(DataModels.Soul.Stats stat, EnemyStats stats)
+        {
+            switch (stat)
+            {
+                case DataModels.Soul.Stats.Stamina:
+                    return stats.Stamina;
+                case DataModels.Soul.Stats.Energy:
+                    return stats.Energy;
+                case DataModels.Soul.Stats.Strength:
+                    return stats.Strength;
+                case DataModels.Soul.Stats.Agility:
+                    return stats.Agility;
+                case DataModels.Soul.Stats.Intelligence:
+                    return stats.Intelligence;
+                case DataModels.Soul.Stats.Wisdom:
+                    return stats.Wisdom;
                 default:
                     return 0;
             }

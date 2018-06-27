@@ -105,10 +105,12 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Dungeon_EnterRoom, 1);
             _commandArgCount.Add(Network.CommandCodes.Dungeon_UpdateRoom, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon_Exit, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon_EnemyTurn, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon_UseSkill, 2);
             _commandArgCount.Add(Network.CommandCodes.Dungeon_UseConsumable, 2);
             _commandArgCount.Add(Network.CommandCodes.Dungeon_LootRoom, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon_LeaveFinishedRoom, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon_DoNothingTurn, 0);
 
             _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
@@ -136,10 +138,12 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Dungeon_EnterRoom, (args) => { return new Commands.DungeonEnterRoomCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon_UpdateRoom, (args) => { return new Commands.DungeonUpdateRoomCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon_Exit, (args) => { return new Commands.DungeonExitCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon_EnemyTurn, (args) => { return new Commands.Dungeon.EnemyTurnCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon_UseSkill, (args) => { return new Commands.DungeonUseSkillCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon_UseConsumable, (args) => { return new Commands.Dungeon.UseConsumableCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon_LootRoom, (args) => { return new Commands.DungeonLootRoomCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon_LeaveFinishedRoom, (args) => { return new Commands.DungeonLeaveFinishedRoomCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Dungeon_DoNothingTurn, (args) => { return new Commands.Dungeon.DoNothingTurnCommand(args); });
         }
 
         private void Run()
@@ -458,6 +462,8 @@ namespace Server.GameServer
                     break;
                 case Network.CommandCodes.Dungeon_Exit:
                     break;
+                case Network.CommandCodes.Dungeon_EnemyTurn:
+                    break;
                 case Network.CommandCodes.Dungeon_UseSkill:
                     retVal.Args = new string[2] { args[0], args[1] };
                     break;
@@ -467,6 +473,8 @@ namespace Server.GameServer
                 case Network.CommandCodes.Dungeon_LootRoom:
                     break;
                 case Network.CommandCodes.Dungeon_LeaveFinishedRoom:
+                    break;
+                case Network.CommandCodes.Dungeon_DoNothingTurn:
                     break;
 
                 default:
