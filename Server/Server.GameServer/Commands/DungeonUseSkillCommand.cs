@@ -31,7 +31,7 @@ namespace Server.GameServer.Commands
                     {
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
 
-                        if (adventure.UseSkillOnEnemy(enemyId, skill, SoulManager.Instance.GetDatas(ret.ClientId)))
+                        if (adventure.UseSkill(skill, SoulManager.Instance.GetDatas(ret.ClientId), enemyId))
                         {
                             ret.ClientResponse = new Network.Message
                             {

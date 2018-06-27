@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -64,9 +65,7 @@ namespace AiosKingdom.ViewModels.Dungeon
             set
             {
                 _selectedEnemy = value;
-                _skillsAction?.ChangeCanExecute();
-                _consumablesAction?.ChangeCanExecute();
-                ResetNextMove();
+                _executeAction?.ChangeCanExecute();
                 NotifyPropertyChanged();
             }
         }
@@ -115,6 +114,7 @@ namespace AiosKingdom.ViewModels.Dungeon
             set
             {
                 _selectedSkill = value;
+                _executeAction?.ChangeCanExecute();
                 NotifyPropertyChanged();
             }
         }
@@ -126,6 +126,7 @@ namespace AiosKingdom.ViewModels.Dungeon
             set
             {
                 _selectedConsumable = value;
+                _executeAction?.ChangeCanExecute();
                 NotifyPropertyChanged();
             }
         }
@@ -149,46 +150,50 @@ namespace AiosKingdom.ViewModels.Dungeon
         {
             if (IsSkillSelected)
             {
-                SelectedSkill = null;
                 IsSkillSelected = false;
+                SelectedSkill = null;
             }
 
             if (IsConsumableSelected)
             {
-                SelectedConsumable = null;
                 IsConsumableSelected = false;
+                SelectedConsumable = null;
             }
         }
 
-        private Command _skillsAction;
+        private ICommand _skillsAction;
         public ICommand SkillsAction =>
             _skillsAction ?? (_skillsAction = new Command(() =>
             {
-                MessagingCenter.Subscribe<SkillSelectionPageViewModel, Models.Dungeon.SkillSelectionItemModel>(this, MessengerCodes.DungeonSelectSkillEnded, (sender, skill) =>
+                MessagingCenter.Subscribe<SkillSelectionPageViewModel, Models.Dungeon.SkillSelectionItemModel>
+                (this, MessengerCodes.DungeonSelectSkillEnded, (sender, skill) =>
                 {
-                    SelectedSkill = skill;
                     IsSkillSelected = true;
-                    MessagingCenter.Unsubscribe<SkillSelectionPageViewModel, Models.Dungeon.SkillSelectionItemModel>(this, MessengerCodes.DungeonSelectSkillEnded);
+                    SelectedSkill = skill;
+                    MessagingCenter.Unsubscribe<SkillSelectionPageViewModel, Models.Dungeon.SkillSelectionItemModel>
+                    (this, MessengerCodes.DungeonSelectSkillEnded);
                 });
 
                 var page = new Views.Dungeon.SkillSelectionPage(Room);
                 _navigation.PushModalAsync(page);
-            }, () => { return _selectedEnemy != null; }));
+            }));
 
-        private Command _consumablesAction;
+        private ICommand _consumablesAction;
         public ICommand ConsumablesAction =>
             _consumablesAction ?? (_consumablesAction = new Command(() =>
             {
-                MessagingCenter.Subscribe<ConsumableSelectionPageViewModel, Models.Dungeon.ConsumableSelectionItemModel>(this, MessengerCodes.DungeonSelectConsumableEnded, (sender, consumable) =>
+                MessagingCenter.Subscribe<ConsumableSelectionPageViewModel, Models.Dungeon.ConsumableSelectionItemModel>
+                (this, MessengerCodes.DungeonSelectConsumableEnded, (sender, consumable) =>
                 {
-                    SelectedConsumable = consumable;
                     IsConsumableSelected = true;
-                    MessagingCenter.Unsubscribe<ConsumableSelectionPageViewModel, Models.Dungeon.ConsumableSelectionItemModel>(this, MessengerCodes.DungeonSelectConsumableEnded);
+                    SelectedConsumable = consumable;
+                    MessagingCenter.Unsubscribe<ConsumableSelectionPageViewModel, Models.Dungeon.ConsumableSelectionItemModel>
+                    (this, MessengerCodes.DungeonSelectConsumableEnded);
                 });
 
                 var page = new Views.Dungeon.ConsumableSelectionPage();
                 _navigation.PushModalAsync(page);
-            }, () => { return _selectedEnemy != null; }));
+            }));
 
         private ICommand _exitDungeonAction;
         public ICommand ExitDungeonAction =>
@@ -197,22 +202,49 @@ namespace AiosKingdom.ViewModels.Dungeon
                 _navigation.PushModalAsync(new Views.Dungeon.ExitDungeonPage());
             }));
 
-        private ICommand _executeAction;
+        private Command _executeAction;
         public ICommand ExecuteAction =>
             _executeAction ?? (_executeAction = new Command(() =>
             {
                 if (IsSkillSelected)
                 {
                     LoadingScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
-                    NetworkManager.Instance.DungeonUseSkill(_selectedSkill.KnowledgeId, _selectedEnemy.Value.Key);
+                    NetworkManager.Instance.DungeonUseSkill(_selectedSkill.KnowledgeId, 
+                        (_selectedEnemy != null ? _selectedEnemy.Value.Key : Guid.Empty));
                 }
 
                 if (IsConsumableSelected)
                 {
                     LoadingScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
-                    NetworkManager.Instance.DungeonUseConsumable(_selectedConsumable.SlotId, _selectedEnemy.Value.Key);
+                    NetworkManager.Instance.DungeonUseConsumable(_selectedConsumable.SlotId, 
+                        (_selectedEnemy != null ? _selectedEnemy.Value.Key : Guid.Empty));
                 }
-            }));
+
+                ResetNextMove();
+            }, () => { return CanExecutCurrentAction(); }));
+
+        private bool CanExecutCurrentAction()
+        {
+            if (IsSkillSelected)
+            {
+                var skillInscTypes = _selectedSkill.Skill.Inscriptions.Select(i => i.Type).ToList();
+
+                if (skillInscTypes.Contains(DataModels.Skills.InscriptionType.Damages))
+                {
+                    return _selectedEnemy != null;
+                }
+            }
+
+            if (IsConsumableSelected)
+            {
+                var consEffectTypes = _selectedConsumable.Consumable.Effects.Select(e => e.Type).ToList();
+
+                // TODO : If there is any consumable type that can be used on enemies, need to add it there.
+                return true;
+            }
+
+            return false;
+        }
 
         private ICommand _leaveFinishedAction;
         public ICommand LeaveFinishedAction =>

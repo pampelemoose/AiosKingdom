@@ -228,9 +228,11 @@
                     </Grid>
 
                     <Button
+                        Margin="2"
                         Grid.Column="2"
                         Text="Exit"
-                        Command="{Binding ExitDungeonAction}"/>
+                        Command="{Binding ExitDungeonAction}"
+                        IsVisible="{Binding CanExecuteAction, Converter={StaticResource inverseBoolean}}"/>
 
                     <Button
                         Grid.Column="2"

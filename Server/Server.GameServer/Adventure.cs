@@ -49,38 +49,50 @@ namespace Server.GameServer
             }
         }
 
-        public bool UseSkillOnEnemy(Guid enemyId, DataModels.Skills.Page skill, Network.SoulDatas datas)
+        public bool UseSkill(DataModels.Skills.Page skill, Network.SoulDatas datas, Guid enemyId = new Guid())
         {
-            if (_enemiesStats.ContainsKey(enemyId))
+            foreach (var inscription in skill.Inscriptions)
             {
-                var enemy = _state.Enemies[enemyId];
-                var enemyStats = _enemiesStats[enemyId];
-
-                foreach (var inscription in skill.Inscriptions)
+                switch (inscription.Type)
                 {
-                    switch (inscription.Type)
-                    {
-                        case DataModels.Skills.InscriptionType.Damages:
+                    case DataModels.Skills.InscriptionType.Damages:
+                        {
+                            if (_enemiesStats.ContainsKey(enemyId))
                             {
+                                var enemy = _state.Enemies[enemyId];
+
                                 enemy.CurrentHealth -= inscription.BaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, datas));
                                 Console.WriteLine($"Using {skill.BookId}.{skill.Rank} skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, datas)})*{inscription.Ratio}) on {enemy.MonsterId}.({enemy.CurrentHealth}/{enemy.MaxHealth}) .");
-                            }
-                            break;
-                        case DataModels.Skills.InscriptionType.Heal:
-                            {
-                                _state.CurrentHealth += inscription.BaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, datas));
-                                if (_state.CurrentHealth > datas.MaxHealth)
-                                {
-                                    _state.CurrentHealth = datas.MaxHealth;
-                                }
-                                Console.WriteLine($"Using {skill.BookId}.{skill.Rank} skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, datas)})*{inscription.Ratio}) on yourself .");
-                            }
-                            break;
-                    }
-                }
 
-                _state.CurrentMana -= skill.ManaCost;
-                Console.WriteLine($"Consumed {skill.ManaCost} mana.");
+                                _state.Enemies[enemyId] = enemy;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        break;
+                    case DataModels.Skills.InscriptionType.Heal:
+                        {
+                            _state.CurrentHealth += inscription.BaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, datas));
+                            if (_state.CurrentHealth > datas.MaxHealth)
+                            {
+                                _state.CurrentHealth = datas.MaxHealth;
+                            }
+                            Console.WriteLine($"Using {skill.BookId}.{skill.Rank} skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, datas)})*{inscription.Ratio}) on yourself .");
+                        }
+                        break;
+                }
+            }
+
+            _state.CurrentMana -= skill.ManaCost;
+            Console.WriteLine($"Consumed {skill.ManaCost} mana.");
+
+            var enemies = _enemiesStats.Keys.ToList();
+            foreach (var enemyKeys in enemies)
+            {
+                var enemy = _state.Enemies[enemyKeys];
+                var enemyStats = _enemiesStats[enemyKeys];
 
                 if (enemy.CurrentHealth <= 0)
                 {
@@ -103,51 +115,47 @@ namespace Server.GameServer
 
                     _enemiesStats.Remove(enemyId);
                     _state.Enemies.Remove(enemyId);
-
-                    if (_enemiesStats.Count == 0)
-                    {
-                        _isCleared = true;
-                    }
-
-                    return true;
                 }
-
-                _enemiesStats[enemyId] = enemyStats;
-                _state.Enemies[enemyId] = enemy;
-                return true;
+                else
+                {
+                    _enemiesStats[enemyId] = enemyStats;
+                    _state.Enemies[enemyId] = enemy;
+                }
             }
 
-            return false;
+            if (_enemiesStats.Count == 0)
+            {
+                _isCleared = true;
+            }
+
+            return true;
         }
 
-        public bool UseConsumableOnEnemy(Guid enemyId, DataModels.Items.Consumable consumable, Network.SoulDatas datas)
+        public bool UseConsumable(DataModels.Items.Consumable consumable, Network.SoulDatas datas, Guid enemyId = new Guid())
         {
-            if (_enemiesStats.ContainsKey(enemyId))
+            /*if (_enemiesStats.ContainsKey(enemyId))
             {
                 var enemy = _state.Enemies[enemyId];
-                var enemyStats = _enemiesStats[enemyId];
+                var enemyStats = _enemiesStats[enemyId];*/
 
-                foreach (var effect in consumable.Effects)
+            foreach (var effect in consumable.Effects)
+            {
+                switch (effect.Type)
                 {
-                    switch (effect.Type)
-                    {
-                        case DataModels.Items.EffectType.RestoreHealth:
+                    case DataModels.Items.EffectType.RestoreHealth:
+                        {
+                            _state.CurrentHealth += effect.AffectValue;
+                            if (_state.CurrentHealth > datas.MaxHealth)
                             {
-                                _state.CurrentHealth += effect.AffectValue;
-                                if (_state.CurrentHealth > datas.MaxHealth)
-                                {
-                                    _state.CurrentHealth = datas.MaxHealth;
-                                }
-                                Console.WriteLine($"Using {consumable.ItemId} consumable doing ({effect.Type}).({effect.AffectValue}) on yourself .");
+                                _state.CurrentHealth = datas.MaxHealth;
                             }
-                            break;
-                    }
+                            Console.WriteLine($"Using {consumable.ItemId} consumable doing ({effect.Type}).({effect.AffectValue}) on yourself .");
+                        }
+                        break;
                 }
-
-                return true;
             }
 
-            return false;
+            return true;
         }
 
         public List<Network.LootItem> LootRoom()

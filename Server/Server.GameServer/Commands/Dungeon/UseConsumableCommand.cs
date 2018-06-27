@@ -33,7 +33,7 @@ namespace Server.GameServer.Commands.Dungeon
 
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
 
-                        if (adventure.UseConsumableOnEnemy(enemyId, item, SoulManager.Instance.GetDatas(ret.ClientId)))
+                        if (adventure.UseConsumable(item, SoulManager.Instance.GetDatas(ret.ClientId), enemyId))
                         {
                             --slotKnown.Quantity;
 
