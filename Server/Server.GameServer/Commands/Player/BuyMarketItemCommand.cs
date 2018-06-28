@@ -16,12 +16,14 @@ namespace Server.GameServer.Commands.Player
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var marketSlotId = Guid.Parse(_args.Args[0]);
             var datas = SoulManager.Instance.GetSoul(ret.ClientId);
+            var marketSlotId = Guid.Parse(_args.Args[0]);
+            var quantity = int.Parse(_args.Args[1]);
+            var isBits = bool.Parse(_args.Args[2]);
 
             var marketItem = DataRepositories.MarketRepository.GetById(marketSlotId);
 
-            if (marketItem == null || (marketItem != null && (datas.Shards < marketItem.ShardPrice || datas.Bits < marketItem.ShardPrice)))
+            if (marketItem == null || (marketItem != null && marketItem.Quantity >= quantity && IsCurrencyAvailable(datas, marketItem, quantity, isBits)))
             {
                 ret.ClientResponse = new Network.Message
                 {
@@ -33,8 +35,10 @@ namespace Server.GameServer.Commands.Player
                 return ret;
             }
 
-            datas.Shards -= marketItem.ShardPrice;
-            datas.Bits -= marketItem.BitPrice;
+            if (isBits)
+                datas.Bits -= (marketItem.BitPrice * quantity);
+            else
+                datas.Shards -= (marketItem.ShardPrice * quantity);
 
             switch (marketItem.Type)
             {
@@ -47,7 +51,7 @@ namespace Server.GameServer.Commands.Player
                         {
                             ItemId = marketItem.ItemId,
                             Type = marketItem.Type,
-                            Quantity = 1,
+                            Quantity = quantity,
                             SoulId = datas.Id,
                             LootedAt = DateTime.Now
                         });
@@ -60,7 +64,7 @@ namespace Server.GameServer.Commands.Player
                         if (exists != null)
                         {
                             datas.Inventory.Remove(exists);
-                            ++exists.Quantity;
+                            exists.Quantity += quantity;
                             datas.Inventory.Add(exists);
                             DataRepositories.SoulRepository.Update(datas);
                         }
@@ -70,7 +74,7 @@ namespace Server.GameServer.Commands.Player
                             {
                                 ItemId = marketItem.ItemId,
                                 Type = marketItem.Type,
-                                Quantity = 1,
+                                Quantity = quantity,
                                 SoulId = datas.Id,
                                 LootedAt = DateTime.Now
                             });
@@ -82,7 +86,7 @@ namespace Server.GameServer.Commands.Player
 
             if (marketItem.Quantity > 0)
             {
-                --marketItem.Quantity;
+                marketItem.Quantity -= quantity;
 
                 if (marketItem.Quantity == 0)
                 {
@@ -102,6 +106,11 @@ namespace Server.GameServer.Commands.Player
             };
             ret.Succeeded = true;
             return ret;
+        }
+
+        private bool IsCurrencyAvailable(DataModels.Soul datas, DataModels.MarketSlot slot, int quantity, bool isBits)
+        {
+            return isBits ? (datas.Bits * quantity) < (slot.BitPrice * quantity) : (datas.Shards * quantity) < (slot.ShardPrice * quantity);
         }
     }
 }

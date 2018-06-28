@@ -9,8 +9,8 @@ namespace AiosKingdom.ViewModels
 {
     public class MarketPageViewModel : BaseViewModel
     {
-        public MarketPageViewModel() 
-            : base(null)
+        public MarketPageViewModel(INavigation nav) 
+            : base(nav)
         {
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.MarketUpdated, (sender) =>
             {
@@ -59,8 +59,7 @@ namespace AiosKingdom.ViewModels
         public ICommand BuyItemAction =>
         _buyItemAction ?? (_buyItemAction = new Command(() =>
         {
-            LoadingScreenManager.Instance.OpenLoadingScreen($"Buying {_selectedItem.Item.Name}, please wait...");
-            NetworkManager.Instance.BuyMarketItem(_selectedItem.Slot.Id);
+            _navigation.PushAsync(new Views.MarketBuyItemPage(_selectedItem));
         }, () =>
         {
             return DatasManager.Instance.Soul?.Shards >= _selectedItem?.Slot.ShardPrice

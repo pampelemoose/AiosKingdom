@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AiosKingdom.Views.MarketBuyItemPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <Grid
+            BackgroundColor="{StaticResource BackgroundColor}"
+            Padding="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Label 
+                Grid.Row="0"
+                Text="{Binding Item.Item.Name}"
+                FontSize="40"
+                FontAttributes="Bold"
+                HorizontalOptions="CenterAndExpand"/>
+
+            <Grid
+                Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="6*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="6*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="1"
+                        IsVisible="{Binding IsConsumable}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="6*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+
+                        <Button
+                            Grid.Row="0"
+                            Text="Min"
+                            Command="{Binding MinAction}"/>
+
+                        <Grid
+                            Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="6*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button
+                                Grid.Column="0"
+                                Text="-"
+                                Command="{Binding SubAction}"/>
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding Quantity}"/>
+                            <Button
+                                Grid.Column="2"
+                                Text="+"
+                                Command="{Binding AddAction}"/>
+                        </Grid>
+
+                        <Button
+                            Grid.Row="2"
+                            Text="Max"
+                            Command="{Binding MaxAction}"/>
+                    </Grid>
+
+                    <Grid
+                        Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <ContentView
+                            Grid.Column="0"
+                            BackgroundColor="Red"
+                            IsVisible="{Binding IsShardSelected}"/>
+                        <ContentView
+                            Grid.Column="0"
+                            BackgroundColor="Gray"
+                            Padding="5"
+                            Margin="5">
+                            <Button
+                                BackgroundColor="Gray"
+                                Text="{Binding Item.Slot.ShardPrice}"
+                                Command="{Binding SelectShardAction}"/>
+                        </ContentView>
+
+                        <ContentView
+                            Grid.Column="1"
+                            BackgroundColor="Red"
+                            IsVisible="{Binding IsBitSelected}"/>
+                        <ContentView
+                            Grid.Column="1"
+                            BackgroundColor="Gray"
+                            Padding="5"
+                            Margin="5">
+                            <Button
+                                BackgroundColor="Gray"
+                                Text="{Binding Item.Slot.BitPrice}"
+                                Command="{Binding SelectBitAction}"/>
+                        </ContentView>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <Grid
+                Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Text="Close"
+                    BackgroundColor="{StaticResource DarkMainColor}"
+                    Command="{Binding CloseAction}"/>
+                <Button
+                    Grid.Column="2"
+                    Text="Buy"
+                    BackgroundColor="{StaticResource LightMainColor}"
+                    Command="{Binding BuyAction}"/>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

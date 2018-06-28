@@ -705,9 +705,9 @@ namespace AiosKingdom
             SendRequest(Network.CommandCodes.Player.CurrentSoulDatas);
         }
 
-        public void BuyMarketItem(Guid slotId)
+        public void BuyMarketItem(Guid slotId, int quantity, bool isBit)
         {
-            SendRequest(Network.CommandCodes.Player.BuyMarketItem, new string[1] { slotId.ToString() });
+            SendRequest(Network.CommandCodes.Player.BuyMarketItem, new string[3] { slotId.ToString(), quantity.ToString(), isBit.ToString() });
         }
 
         public void EquipItem(Guid slotId)

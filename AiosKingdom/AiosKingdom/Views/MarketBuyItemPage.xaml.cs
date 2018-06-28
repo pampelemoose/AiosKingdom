@@ -10,13 +10,13 @@ using Xamarin.Forms.Xaml;
 namespace AiosKingdom.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class MarketPage : ContentPage
+	public partial class MarketBuyItemPage : ContentPage
 	{
-		public MarketPage()
+		public MarketBuyItemPage(Models.MarketItemModel item, int quantity = 1)
 		{
 			InitializeComponent();
 
-            BindingContext = new ViewModels.MarketPageViewModel(Navigation);
+            BindingContext = new ViewModels.MarketBuyItemPageViewModel(Navigation, item, quantity);
 		}
 	}
 }

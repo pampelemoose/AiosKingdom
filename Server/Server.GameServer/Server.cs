@@ -125,7 +125,7 @@ namespace Server.GameServer
         {
             _commandArgCount.Add(Network.CommandCodes.Player.SoulDatas, 0);
             _commandArgCount.Add(Network.CommandCodes.Player.CurrentSoulDatas, 0);
-            _commandArgCount.Add(Network.CommandCodes.Player.BuyMarketItem, 1);
+            _commandArgCount.Add(Network.CommandCodes.Player.BuyMarketItem, 3);
             _commandArgCount.Add(Network.CommandCodes.Player.EquipItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.UseSpiritPills, 2);
             _commandArgCount.Add(Network.CommandCodes.Player.LearnSkill, 2);
@@ -444,7 +444,7 @@ namespace Server.GameServer
                 case Network.CommandCodes.Player.CurrentSoulDatas:
                     break;
                 case Network.CommandCodes.Player.BuyMarketItem:
-                    retVal.Args = new string[1] { args[0] };
+                    retVal.Args = new string[3] { args[0], args[1], args[2] };
                     break;
                 case Network.CommandCodes.Player.EquipItem:
                     retVal.Args = new string[1] { args[0] };

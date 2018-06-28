@@ -4,9 +4,6 @@
              xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
              x:Class="AiosKingdom.Views.MarketPage"
              Title="{Binding Title}">
-    <ContentPage.BindingContext>
-        <vm:MarketPageViewModel />
-    </ContentPage.BindingContext>
     <ContentPage.Content>
         <Grid>
             <Grid.ColumnDefinitions>
