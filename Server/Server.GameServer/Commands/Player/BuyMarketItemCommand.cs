@@ -110,7 +110,7 @@ namespace Server.GameServer.Commands.Player
 
         private bool IsCurrencyAvailable(DataModels.Soul datas, DataModels.MarketSlot slot, int quantity, bool isBits)
         {
-            return isBits ? (datas.Bits * quantity) < (slot.BitPrice * quantity) : (datas.Shards * quantity) < (slot.ShardPrice * quantity);
+            return isBits ? datas.Bits >= (slot.BitPrice * quantity) : datas.Shards >= (slot.ShardPrice * quantity);
         }
     }
 }
