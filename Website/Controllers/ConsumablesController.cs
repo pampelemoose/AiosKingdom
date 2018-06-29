@@ -34,45 +34,45 @@ namespace Website.Controllers
         [CustomAuthorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Models.ConsumableModel consumable)
+        public ActionResult Create(Models.ConsumableModel consumableModel)
         {
             if (ModelState.IsValid)
             {
-                consumable.Effects.RemoveAll(s => string.IsNullOrEmpty(s.Name));
-                consumable.Effects.RemoveAll(s => string.IsNullOrEmpty(s.Description));
-                consumable.Effects.RemoveAll(s => s.AffectValue <= 0);
-                consumable.Effects.RemoveAll(s => s.AffectTime < 0);
+                consumableModel.Effects.RemoveAll(s => string.IsNullOrEmpty(s.Name));
+                consumableModel.Effects.RemoveAll(s => string.IsNullOrEmpty(s.Description));
+                consumableModel.Effects.RemoveAll(s => s.AffectValue <= 0);
+                consumableModel.Effects.RemoveAll(s => s.AffectTime < 0);
 
-                if (consumable.Effects.Count == 0)
+                if (consumableModel.Effects.Count == 0)
                 {
-                    consumable.VersionList = DataRepositories.VersionRepository.GetAll();
-                    return View(consumable);
+                    consumableModel.VersionList = DataRepositories.VersionRepository.GetAll();
+                    return View(consumableModel);
                 }
-
+                
                 if (DataRepositories.ConsumableRepository.Create(new DataModels.Items.Consumable
                 {
                     Id = Guid.NewGuid(),
-                    VersionId = consumable.SelectedVersion,
+                    VersionId = consumableModel.SelectedVersion,
                     ItemId = Guid.NewGuid(),
-                    Name = consumable.Name,
-                    Description = consumable.Description,
-                    Image = consumable.Image,
-                    ItemLevel = consumable.ItemLevel,
-                    Quality = consumable.Quality,
-                    UseLevelRequired = consumable.UseLevelRequired,
-                    Effects = consumable.Effects
+                    Name = consumableModel.Name,
+                    Description = consumableModel.Description,
+                    Image = consumableModel.Image,
+                    ItemLevel = consumableModel.ItemLevel,
+                    Quality = consumableModel.Quality,
+                    UseLevelRequired = consumableModel.UseLevelRequired,
+                    Effects = consumableModel.Effects
                 }))
                 {
                     return RedirectToAction("Index");
                 }
             }
 
-            consumable.VersionList = DataRepositories.VersionRepository.GetAll();
-            if (consumable.Effects == null)
+            consumableModel.VersionList = DataRepositories.VersionRepository.GetAll();
+            if (consumableModel.Effects == null)
             {
-                consumable.Effects = new List<DataModels.Items.ConsumableEffect>();
+                consumableModel.Effects = new List<DataModels.Items.ConsumableEffect>();
             }
-            return View(consumable);
+            return View(consumableModel);
         }
 
         [CustomAuthorize(Roles = "SuperAdmin")]
@@ -80,6 +80,7 @@ namespace Website.Controllers
         public ActionResult AddEffectPartial()
         {
             var effect = new DataModels.Items.ConsumableEffect();
+            effect.Id = Guid.NewGuid();
 
             return PartialView("EffectPartial", effect);
         }

@@ -16,11 +16,12 @@ namespace Server.GameServer.Commands.Dungeon
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var soul = SoulManager.Instance.GetSoul(_args.ClientId);
+            var datas = SoulManager.Instance.GetDatas(_args.ClientId);
             var adventure = AdventureManager.Instance.GetAdventure(soul);
 
             if (adventure != null)
             {
-                if (adventure.DoNothingTurn())
+                if (adventure.DoNothingTurn(datas))
                 {
                     ret.ClientResponse = new Network.Message
                     {

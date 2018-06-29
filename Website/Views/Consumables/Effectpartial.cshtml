@@ -3,6 +3,7 @@
 <tr class="row">
     @using (Html.BeginCollectionItem("Effects"))
     {
+        @Html.HiddenFor(model => model.Id);
         <td class="col-md-2">
             <div class="form-group">
                 @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control item-list-changer" })

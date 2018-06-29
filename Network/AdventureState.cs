@@ -25,8 +25,26 @@ namespace Network
             public int ShardPrice { get; set; }
         }
 
+        public class SkillCooldowns
+        {
+            public Guid SkillId { get; set; }
+            public int Left { get; set; }
+        }
+
+        public struct ModifierApplied
+        {
+            public Guid Id { get; set; }
+            public int Left { get; set; }
+            public Guid EnemyId { get; set; }
+        }
+
         public Dictionary<Guid, EnemyState> Enemies { get; set; }
         public Dictionary<Guid, ShopState> Shops { get; set; }
+
+        public List<SkillCooldowns> Cooldowns { get; set; }
+
+        public List<ModifierApplied> Marks { get; set; }
+        public List<ModifierApplied> Effects { get; set; }
 
         public bool IsRestingArea { get; set; }
         public bool IsFightArea { get; set; }

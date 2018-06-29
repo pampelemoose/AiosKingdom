@@ -33,13 +33,16 @@ namespace AiosKingdom.ViewModels.Dungeon
 
                         if (page != null)
                         {
-                            skills.Add(new Models.Dungeon.SkillSelectionItemModel
+                            if (_state.Cooldowns.FirstOrDefault(c => c.SkillId.Equals(page.Id)) == null)
                             {
-                                KnowledgeId = knowledge.Id,
-                                BookName = book.Name,
-                                Skill = page,
-                                CanSelect = page.ManaCost <= _state.CurrentMana
-                            });
+                                skills.Add(new Models.Dungeon.SkillSelectionItemModel
+                                {
+                                    KnowledgeId = knowledge.Id,
+                                    BookName = book.Name,
+                                    Skill = page,
+                                    CanSelect = page.ManaCost <= _state.CurrentMana
+                                });
+                            }
                         }
                     }
                 }
