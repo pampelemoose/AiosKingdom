@@ -309,6 +309,8 @@ namespace AiosKingdom.ViewModels.Dungeon
                 {
                     return _selectedEnemy != null;
                 }
+
+                return true;
             }
 
             if (IsConsumableSelected)
