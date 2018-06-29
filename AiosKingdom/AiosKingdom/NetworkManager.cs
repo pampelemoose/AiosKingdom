@@ -269,6 +269,10 @@ namespace AiosKingdom
             {
                 MessagingCenter.Send(this, MessengerCodes.Disconnected, sockE.Message);
             }
+            catch (ObjectDisposedException disposedE)
+            {
+                MessagingCenter.Send(this, MessengerCodes.Disconnected, disposedE.Message);
+            }
         }
 
         #endregion
@@ -828,6 +832,10 @@ namespace AiosKingdom
             catch (SocketException sockE)
             {
                 MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, $"{sockE.StackTrace} : {sockE.Message}");
+            }
+            catch (NullReferenceException nullE)
+            {
+                MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, $"{nullE.StackTrace} : {nullE.Message}");
             }
         }
 
