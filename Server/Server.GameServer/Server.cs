@@ -149,6 +149,7 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Dungeon.LootRoom, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.DoNothingTurn, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.BuyShopItem, 2);
 
             _delegates.Add(Network.CommandCodes.Dungeon.EnterRoom, (args) => { return new Commands.Dungeon.EnterRoomCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.UpdateRoom, (args) => { return new Commands.Dungeon.UpdateRoomCommand(args); });
@@ -159,6 +160,7 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Dungeon.LootRoom, (args) => { return new Commands.Dungeon.LootRoomCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, (args) => { return new Commands.Dungeon.LeaveFinishedRoomCommand(args, _config); });
             _delegates.Add(Network.CommandCodes.Dungeon.DoNothingTurn, (args) => { return new Commands.Dungeon.DoNothingTurnCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon.BuyShopItem, (args) => { return new Commands.Dungeon.BuyShopItemCommand(args); });
         }
 
         private void Run()
@@ -493,6 +495,9 @@ namespace Server.GameServer
                 case Network.CommandCodes.Dungeon.LeaveFinishedRoom:
                     break;
                 case Network.CommandCodes.Dungeon.DoNothingTurn:
+                    break;
+                case Network.CommandCodes.Dungeon.BuyShopItem:
+                    retVal.Args = new string[2] { args[0], args[1] };
                     break;
 
                 default:

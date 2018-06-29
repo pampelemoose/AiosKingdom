@@ -625,6 +625,15 @@ namespace AiosKingdom
                         }
                     }
                     break;
+                case Network.CommandCodes.Dungeon.BuyShopItem:
+                    {
+                        if (message.Success)
+                        {
+                            AskSoulDatas();
+                            UpdateDungeonRoom();
+                        }
+                    }
+                    break;
 
                 default:
                     return false;
@@ -747,6 +756,11 @@ namespace AiosKingdom
         public void DoNothingTurn()
         {
             SendRequest(Network.CommandCodes.Dungeon.DoNothingTurn);
+        }
+
+        public void BuyShopItem(Guid tempId, int quantity)
+        {
+            SendRequest(Network.CommandCodes.Dungeon.BuyShopItem, new string[2] { tempId.ToString(), quantity.ToString() });
         }
 
         public void DungeonUseSkill(Guid knowledgeId, Guid enemyId)

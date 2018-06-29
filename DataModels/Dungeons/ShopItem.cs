@@ -19,10 +19,13 @@ namespace DataModels.Dungeons
         public Guid ItemId { get; set; }
 
         [Required]
+        public Items.ItemType Type { get; set; }
+
+        [Required]
         public int Quantity { get; set; }
 
         [Required]
-        [Range(1, 100000)]
+        [Range(1, 10000000)]
         public int ShardPrice { get; set; }
     }
 }

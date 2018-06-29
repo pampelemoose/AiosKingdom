@@ -13,7 +13,8 @@
 
             <Grid
                 Grid.Row="0"
-                BackgroundColor="Aqua">
+                BackgroundColor="Aqua"
+                IsVisible="{Binding Room.IsFightArea}">
                 <ListView
                     ItemsSource="{Binding Room.Enemies, Mode=TwoWay}"
                     SelectedItem="{Binding SelectedEnemy}"
@@ -57,8 +58,55 @@
             </Grid>
 
             <Grid
+                Grid.Row="0"
+                BackgroundColor="Red"
+                IsVisible="{Binding Room.IsShopArea}">
+                <ListView
+                    ItemsSource="{Binding Room.Shops, Mode=TwoWay}"
+                    SelectedItem="{Binding SelectedShopItem}"
+                    RowHeight="80">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid
+                                Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="6*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Grid.Column="0"
+                                        FontSize="40"
+                                        FontAttributes="Bold"
+                                        Margin="5, 0"
+                                        VerticalTextAlignment="Center"
+                                        Text="Item :"/>
+
+                                    <Label 
+                                        Grid.Column="1"
+                                        FontSize="50"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="Center"
+                                        Text="{Binding Value.Quantity}"/>
+                                    <Label 
+                                        Grid.Column="2"
+                                        FontSize="30"
+                                        FontAttributes="Bold"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="End"
+                                        Text="{Binding Value.ShardPrice}"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <Grid
                 Grid.Row="1"
-                BackgroundColor="Green">
+                BackgroundColor="Green"
+                IsVisible="{Binding Room.IsFightArea}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="50" />
@@ -255,6 +303,75 @@
                         BackgroundColor="{StaticResource BackgroundColor}"
                         Text="Enemies Turn"
                         Command="{Binding EnemyTurnAction}"/>
+                </Grid>
+            </Grid>
+
+            <Grid
+                Grid.Row="1"
+                BackgroundColor="Yellow"
+                IsVisible="{Binding Room.IsShopArea}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="50" />
+                </Grid.RowDefinitions>
+
+                <Grid
+                    Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid
+                        Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="Shards :" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="{Binding Soul.Shards}" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Text="Bits :" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="{Binding Soul.Bits}" />
+                    </Grid>
+                </Grid>
+
+                <Grid
+                    Grid.Row="1"
+                    Margin="5"
+                    IsVisible="{Binding IsEnemyTurn, Converter={StaticResource inverseBoolean}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="0"
+                        Text="Buy"
+                        Command="{Binding BuyShopItemAction}"/>
+                    
+                    <Button
+                        Margin="2"
+                        Grid.Column="1"
+                        Text="Exit"
+                        Command="{Binding ExitDungeonAction}"/>
                 </Grid>
             </Grid>
 

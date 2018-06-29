@@ -61,6 +61,7 @@ namespace Network
             public const int LootItem = _default + 8;
             public const int LeaveFinishedRoom = _default + 9;
             public const int DoNothingTurn = _default + 10;
+            public const int BuyShopItem = _default + 11;
         }
     }
 }

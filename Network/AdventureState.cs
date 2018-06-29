@@ -18,7 +18,11 @@ namespace Network
 
         public struct ShopState
         {
+            public string Type { get; set; }
+            public Guid ItemId { get; set; }
 
+            public int Quantity { get; set; }
+            public int ShardPrice { get; set; }
         }
 
         public Dictionary<Guid, EnemyState> Enemies { get; set; }

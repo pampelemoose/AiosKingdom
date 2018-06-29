@@ -45,6 +45,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\BuyItemPage.xaml.cs">
+      <DependentUpon>BuyItemPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Style.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -87,7 +93,7 @@
     <EmbeddedResource Update="Views\LoginPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\MarketBuyItemPage.xaml">
+    <EmbeddedResource Update="Views\BuyItemPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\MarketPage.xaml">

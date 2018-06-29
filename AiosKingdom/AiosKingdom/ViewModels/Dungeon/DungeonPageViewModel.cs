@@ -20,7 +20,8 @@ namespace AiosKingdom.ViewModels.Dungeon
 
                     NotifyPropertyChanged(nameof(Room));
                     NotifyPropertyChanged(nameof(IsCleared));
-                    SelectedEnemy = null;
+
+                    ResetNextMove();
 
                     if (IsCleared)
                     {
@@ -29,6 +30,14 @@ namespace AiosKingdom.ViewModels.Dungeon
                         //LoadingScreenManager.Instance.OpenLoadingScreen("Retrieving Loots, pelase wait...");
                         NetworkManager.Instance.LootDungeonRoom();
                     }
+                });
+            });
+
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulUpdated, (sender) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    NotifyPropertyChanged(nameof(Soul));
                 });
             });
 
@@ -53,12 +62,14 @@ namespace AiosKingdom.ViewModels.Dungeon
         ~DungeonPageViewModel()
         {
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.DungeonUpdated);
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.SoulUpdated);
             MessagingCenter.Unsubscribe<NetworkManager, List<Network.LootItem>>(this, MessengerCodes.DungeonLootsReceived);
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.EnemyTurnEnded);
         }
 
         public Network.AdventureState Room => DatasManager.Instance.Adventure;
         public Network.SoulDatas Datas => DatasManager.Instance.Datas;
+        public DataModels.Soul Soul => DatasManager.Instance.Soul;
 
         private List<Network.LootItem> _loots;
         private List<Network.LootItem> Loots
@@ -79,6 +90,18 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 _selectedEnemy = value;
                 _executeAction?.ChangeCanExecute();
+                NotifyPropertyChanged();
+            }
+        }
+
+        private KeyValuePair<Guid, Network.AdventureState.ShopState>? _selectedShopItem;
+        public KeyValuePair<Guid, Network.AdventureState.ShopState>? SelectedShopItem
+        {
+            get { return _selectedShopItem; }
+            set
+            {
+                _selectedShopItem = value;
+                _buyShopItemAction?.ChangeCanExecute();
                 NotifyPropertyChanged();
             }
         }
@@ -192,6 +215,15 @@ namespace AiosKingdom.ViewModels.Dungeon
                 LoadingScreenManager.Instance.OpenLoadingScreen($"Enemy turn. Please wait...");
                 NetworkManager.Instance.EnemyTurn();
             }));
+
+        private Command _buyShopItemAction;
+        public ICommand BuyShopItemAction =>
+            _buyShopItemAction ?? (_buyShopItemAction = new Command(() =>
+            {
+                var page = new Views.BuyItemPage(new ShopBuyItemPageViewModel(_navigation, 
+                    (KeyValuePair<Guid, Network.AdventureState.ShopState>)_selectedShopItem));
+                _navigation.PushModalAsync(page);
+            }, () => { return _selectedShopItem != null; }));
 
         private ICommand _skillsAction;
         public ICommand SkillsAction =>

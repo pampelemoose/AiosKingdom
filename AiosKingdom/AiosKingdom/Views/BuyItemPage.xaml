@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AiosKingdom.Views.MarketBuyItemPage"
+             x:Class="AiosKingdom.Views.BuyItemPage"
              Title="{Binding Title}">
     <ContentPage.Content>
         <Grid
@@ -93,7 +93,7 @@
                             Margin="5">
                             <Button
                                 BackgroundColor="Gray"
-                                Text="{Binding Item.Slot.ShardPrice}"
+                                Text="{Binding Shards}"
                                 Command="{Binding SelectShardAction}"/>
                         </ContentView>
 
@@ -105,10 +105,11 @@
                             Grid.Column="1"
                             BackgroundColor="Gray"
                             Padding="5"
-                            Margin="5">
+                            Margin="5"
+                            IsVisible="{Binding ShowBits}">
                             <Button
                                 BackgroundColor="Gray"
-                                Text="{Binding Item.Slot.BitPrice}"
+                                Text="{Binding Bits}"
                                 Command="{Binding SelectBitAction}"/>
                         </ContentView>
                     </Grid>

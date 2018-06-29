@@ -210,6 +210,83 @@ namespace Server.GameServer
             return true;
         }
 
+        public bool BuyShopItem(Guid tempId, int quantity, DataModels.Soul soul)
+        {
+            if (_state.Shops.ContainsKey(tempId))
+            {
+                var shopItem = _state.Shops[tempId];
+
+                if (shopItem.Quantity >= quantity && (soul.Shards >= (shopItem.ShardPrice * quantity)))
+                {
+                    soul.Shards -= (shopItem.ShardPrice * quantity);
+
+                    var type = (DataModels.Items.ItemType)Enum.Parse(typeof(DataModels.Items.ItemType), shopItem.Type);
+
+                    switch (type)
+                    {
+                        case DataModels.Items.ItemType.Armor:
+                        case DataModels.Items.ItemType.Bag:
+                        case DataModels.Items.ItemType.Weapon:
+                        case DataModels.Items.ItemType.Jewelry:
+                            {
+                                soul.Inventory.Add(new DataModels.InventorySlot
+                                {
+                                    ItemId = shopItem.ItemId,
+                                    Type = type,
+                                    Quantity = quantity,
+                                    SoulId = soul.Id,
+                                    LootedAt = DateTime.Now
+                                });
+                                DataRepositories.SoulRepository.Update(soul);
+                            }
+                            break;
+                        case DataModels.Items.ItemType.Consumable:
+                            {
+                                var exists = soul.Inventory.FirstOrDefault(i => i.ItemId.Equals(shopItem.ItemId));
+                                if (exists != null)
+                                {
+                                    soul.Inventory.Remove(exists);
+                                    exists.Quantity += quantity;
+                                    soul.Inventory.Add(exists);
+                                    DataRepositories.SoulRepository.Update(soul);
+                                }
+                                else
+                                {
+                                    soul.Inventory.Add(new DataModels.InventorySlot
+                                    {
+                                        ItemId = shopItem.ItemId,
+                                        Type = type,
+                                        Quantity = quantity,
+                                        SoulId = soul.Id,
+                                        LootedAt = DateTime.Now
+                                    });
+                                    DataRepositories.SoulRepository.Update(soul);
+                                }
+                            }
+                            break;
+                    }
+
+                    if (shopItem.Quantity > 0)
+                    {
+                        shopItem.Quantity -= quantity;
+
+                        if (shopItem.Quantity == 0)
+                        {
+                            _state.Shops.Remove(tempId);
+                        }
+                        else
+                        {
+                            _state.Shops[tempId] = shopItem;
+                        }
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public List<Network.LootItem> LootRoom()
         {
             return _loots.Values.ToList();
@@ -321,6 +398,19 @@ namespace Server.GameServer
                     Agility = (int)(enemy.Level * monster.AgilityPerLevel),
                     Intelligence = (int)(enemy.Level * monster.IntelligencePerLevel),
                     Wisdom = (int)(enemy.Level * monster.WisdomPerLevel)
+                });
+            }
+
+            foreach (var item in _dungeon.Rooms[_roomNumber].ShopItems)
+            {
+                var tempId = Guid.NewGuid();
+
+                _state.Shops.Add(tempId, new Network.AdventureState.ShopState
+                {
+                    Type = item.Type.ToString(),
+                    ItemId = item.ItemId,
+                    Quantity = item.Quantity,
+                    ShardPrice = item.ShardPrice
                 });
             }
 

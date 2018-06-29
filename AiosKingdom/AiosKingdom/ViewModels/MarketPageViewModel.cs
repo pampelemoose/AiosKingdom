@@ -59,7 +59,7 @@ namespace AiosKingdom.ViewModels
         public ICommand BuyItemAction =>
         _buyItemAction ?? (_buyItemAction = new Command(() =>
         {
-            _navigation.PushAsync(new Views.MarketBuyItemPage(_selectedItem));
+            _navigation.PushModalAsync(new Views.BuyItemPage(new MarketBuyItemPageViewModel(_navigation, _selectedItem)));
         }, () =>
         {
             return DatasManager.Instance.Soul?.Shards >= _selectedItem?.Slot.ShardPrice

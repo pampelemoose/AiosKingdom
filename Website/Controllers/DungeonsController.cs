@@ -95,6 +95,7 @@ namespace Website.Controllers
                                 Id = Guid.NewGuid(),
                                 RoomId = roomId,
                                 ItemId = shopItemModel.SelectedItem,
+                                Type = shopItemModel.Items.FirstOrDefault(i => i.ItemId.Equals(shopItemModel.SelectedItem)).Type,
                                 Quantity = shopItemModel.Quantity,
                                 ShardPrice = shopItemModel.ShardPrice
                             };
