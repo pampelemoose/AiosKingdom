@@ -545,7 +545,7 @@ namespace AiosKingdom
                     break;
 
                 // DUNGEON
-                case Network.CommandCodes.Dungeon.EnterRoom:
+                case Network.CommandCodes.Dungeon.Enter:
                     {
                         if (message.Success)
                         {
@@ -554,6 +554,14 @@ namespace AiosKingdom
                         else
                         {
                             MessagingCenter.Send(this, MessengerCodes.EnterDungeonFailed, message.Json);
+                        }
+                    }
+                    break;
+                case Network.CommandCodes.Dungeon.EnterRoom:
+                    {
+                        if (message.Success)
+                        {
+                            UpdateDungeonRoom();
                         }
                     }
                     break;
@@ -742,9 +750,14 @@ namespace AiosKingdom
 
         #region Dungeon Commands
 
-        public void OpenDungeonRoom(Guid dungeonId)
+        public void EnterDungeon(Guid dungeonId)
         {
-            SendRequest(Network.CommandCodes.Dungeon.EnterRoom, new string[1] { dungeonId.ToString() });
+            SendRequest(Network.CommandCodes.Dungeon.Enter, new string[1] { dungeonId.ToString() });
+        }
+
+        public void OpenDungeonRoom()
+        {
+            SendRequest(Network.CommandCodes.Dungeon.EnterRoom);
         }
 
         public void UpdateDungeonRoom()

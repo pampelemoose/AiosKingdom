@@ -27,11 +27,13 @@ namespace Server.GameServer.Commands.Dungeon
                 var adventureState = adventure.GetActualState();
                 var dungeon = DataRepositories.DungeonRepository.GetById(adventure.DungeonId);
 
-                soul.CurrentExperience += adventureState.StackedExperience;
-                soul.CurrentExperience += dungeon.ExperienceReward;
-
-                soul.Shards += adventureState.StackedShards;
-                soul.Shards += dungeon.ShardReward;
+                if (adventureState.IsExit)
+                {
+                    soul.CurrentExperience += adventureState.StackedExperience;
+                    soul.Shards += adventureState.StackedShards;
+                    soul.CurrentExperience += dungeon.ExperienceReward;
+                    soul.Shards += dungeon.ShardReward;
+                }
 
                 while (soul.CurrentExperience >= soulDatas.RequiredExperience)
                 {

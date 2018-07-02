@@ -140,7 +140,8 @@ namespace Server.GameServer
 
         private void SetupDungeonDelegates()
         {
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.EnterRoom, 1);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.Enter, 1);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.EnterRoom, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.UpdateRoom, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.Exit, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.EnemyTurn, 0);
@@ -151,6 +152,7 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Dungeon.DoNothingTurn, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.BuyShopItem, 2);
 
+            _delegates.Add(Network.CommandCodes.Dungeon.Enter, (args) => { return new Commands.Dungeon.EnterCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.EnterRoom, (args) => { return new Commands.Dungeon.EnterRoomCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.UpdateRoom, (args) => { return new Commands.Dungeon.UpdateRoomCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.Exit, (args) => { return new Commands.Dungeon.ExitCommand(args); });
@@ -475,8 +477,10 @@ namespace Server.GameServer
                     break;
 
                 // DUNGEON
-                case Network.CommandCodes.Dungeon.EnterRoom:
+                case Network.CommandCodes.Dungeon.Enter:
                     retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Dungeon.EnterRoom:
                     break;
                 case Network.CommandCodes.Dungeon.UpdateRoom:
                     break;

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Server.GameServer.Commands.Dungeon
 {
-    public class EnterRoomCommand : ACommand
+    public class EnterCommand : ACommand
     {
-        public EnterRoomCommand(CommandArgs args) 
+        public EnterCommand(CommandArgs args)
             : base(args)
         {
         }
@@ -17,20 +17,22 @@ namespace Server.GameServer.Commands.Dungeon
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var soul = SoulManager.Instance.GetSoul(_args.ClientId);
-            var datas = SoulManager.Instance.GetDatas(_args.ClientId);
-            var adventure = AdventureManager.Instance.GetAdventure(soul);
+            var dungeonId = Guid.Parse(_args.Args[0]);
 
-            if (adventure != null)
+            if (soul.Knowledge.Count > 0)
             {
-                var dungeonId = adventure.DungeonId;
+                var adventure = AdventureManager.Instance.OpenRoom(soul, dungeonId);
 
-                AdventureManager.Instance.OpenRoom(soul, dungeonId);
+                if (adventure.RoomNumber == 0)
+                {
+                    adventure.SetPlayerState(SoulManager.Instance.GetDatas(_args.ClientId));
+                }
 
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Dungeon.EnterRoom,
+                    Code = Network.CommandCodes.Dungeon.Enter,
                     Success = true,
-                    Json = "Entered next room."
+                    Json = "Entered the dungeon."
                 };
                 ret.Succeeded = true;
 
@@ -39,9 +41,9 @@ namespace Server.GameServer.Commands.Dungeon
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon.EnterRoom,
+                Code = Network.CommandCodes.Dungeon.Enter,
                 Success = false,
-                Json = "Failed to enter the room."
+                Json = "You must have learned at least one skill."
             };
             ret.Succeeded = true;
 

@@ -59,5 +59,45 @@ namespace DataRepositories
                 return true;
             }
         }
+
+        public static bool SaveProgress(Guid soulId, Guid dungeonId, int currentRoom)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                var progressExists = context.DungeonProgresses.FirstOrDefault(p => p.SoulId.Equals(soulId) && p.DungeonId.Equals(dungeonId));
+                if (progressExists != null)
+                {
+                    progressExists.CurrentRoom = currentRoom;
+                }
+                else
+                {
+                    var progress = new DataModels.DungeonProgress
+                    {
+                        Id = Guid.NewGuid(),
+                        SoulId = soulId,
+                        DungeonId = dungeonId,
+                        CurrentRoom = currentRoom
+                    };
+                    context.DungeonProgresses.Add(progress);
+                }
+
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var error in e.EntityValidationErrors)
+                    {
+                        foreach (var mess in error.ValidationErrors)
+                        {
+                            Console.WriteLine(mess.ErrorMessage);
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            }
+        }
     }
 }

@@ -372,6 +372,12 @@
                         Grid.Column="1"
                         Text="Exit"
                         Command="{Binding ExitDungeonAction}"/>
+
+                    <Button
+                        Grid.Column="1"
+                        Text="Next Room"
+                        Command="{Binding NextRoomAction}"
+                        IsVisible="{Binding Room.IsExit, Converter={StaticResource inverseBoolean}}"/>
                 </Grid>
             </Grid>
 
@@ -444,11 +450,11 @@
                         Text="{Binding Room.StackedShards, StringFormat='{0:N} Shards stacked'}" />
                     <Label
                         Grid.Column="2"
-                        IsVisible="{Binding IsCleared}"
+                        IsVisible="{Binding Room.IsExit}"
                         Text="{Binding Room.ExperienceReward, StringFormat='{0:N} Experience Rewarded'}" />
                     <Label
                         Grid.Column="3"
-                        IsVisible="{Binding IsCleared}"
+                        IsVisible="{Binding Room.IsExit}"
                         Text="{Binding Room.ShardReward, StringFormat='{0:N} Shards Rewarded'}" />
                 </Grid>
                 
@@ -462,12 +468,20 @@
                     <Button
                         Grid.Column="0"
                         Text="Next Room"
+                        Command="{Binding NextRoomAction}"
                         IsVisible="{Binding IsCleared}"/>
                     
                     <Button
                         Grid.Column="1"
                         Text="Leave with Loots." 
-                        Command="{Binding LeaveFinishedAction}"/>
+                        Command="{Binding LeaveFinishedAction}"
+                        IsVisible="{Binding Room.IsExit}"/>
+
+                    <Button
+                        Grid.Column="1"
+                        Text="Exit dungeon." 
+                        Command="{Binding LeaveFinishedAction}"
+                        IsVisible="{Binding Room.IsExit, Converter={StaticResource inverseBoolean}}"/>
                 </Grid>
             </Grid>
         </Grid>

@@ -173,6 +173,20 @@
     </section>
 
     <main role="main" class="@(User.IsInRole("SuperAdmin") ? "admin-section" : "")">
+        <section class="section">
+            <div class="container">
+                @if (ViewBag.Errors != null)
+                {
+                    foreach (var error in ViewBag.Errors)
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Error!</strong>@error
+                        </div>
+                    }
+                }
+            </div>
+        </section>
+
         @Html.Action("GetSection", "Content", new { action = action, controller = controller, before = true })
         @RenderBody()
         @Html.Action("GetSection", "Content", new { action = action, controller = controller })

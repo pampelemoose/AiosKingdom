@@ -51,17 +51,18 @@ namespace Network
         {
             private const int _default = 50;
 
-            public const int EnterRoom = _default + 1;
-            public const int Exit = _default + 2;
-            public const int UpdateRoom = _default + 3;
-            public const int UseSkill = _default + 4;
-            public const int UseConsumable = _default + 5;
-            public const int EnemyTurn = _default + 6;
-            public const int LootRoom = _default + 7;
-            public const int LootItem = _default + 8;
-            public const int LeaveFinishedRoom = _default + 9;
-            public const int DoNothingTurn = _default + 10;
-            public const int BuyShopItem = _default + 11;
+            public const int Enter = _default + 1;
+            public const int EnterRoom = _default + 2;
+            public const int Exit = _default + 3;
+            public const int UpdateRoom = _default + 4;
+            public const int UseSkill = _default + 5;
+            public const int UseConsumable = _default + 6;
+            public const int EnemyTurn = _default + 7;
+            public const int LootRoom = _default + 8;
+            public const int LootItem = _default + 9;
+            public const int LeaveFinishedRoom = _default + 10;
+            public const int DoNothingTurn = _default + 11;
+            public const int BuyShopItem = _default + 12;
         }
     }
 }

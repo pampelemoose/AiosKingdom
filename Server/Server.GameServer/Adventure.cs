@@ -35,6 +35,7 @@ namespace Server.GameServer
             _dungeon = dungeon;
             _roomNumber = roomNumber;
 
+            _state = new Network.AdventureState();
             SetState();
         }
 
@@ -49,6 +50,7 @@ namespace Server.GameServer
             if (IsCleared)
             {
                 ++_roomNumber;
+                SetState();
             }
         }
 
@@ -506,7 +508,6 @@ namespace Server.GameServer
 
         private void SetState()
         {
-            _state = new Network.AdventureState();
             _enemiesStats = new Dictionary<Guid, EnemyStats>();
 
             _state.Enemies = new Dictionary<Guid, Network.AdventureState.EnemyState>();
@@ -522,15 +523,18 @@ namespace Server.GameServer
             _effects = new List<DataModels.Items.ConsumableEffect>();
             _enemyMarks = new Dictionary<Guid, List<DataModels.Skills.Inscription>>();
 
-            _state.IsRestingArea = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Rest;
-            _state.IsFightArea = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Fight
-                || _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Elite
-                || _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Boss;
-            _state.IsShopArea = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Shop;
-            _state.IsEliteArea = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Elite;
-            _state.IsBossFight = _dungeon.Rooms[_roomNumber].Type == DataModels.Dungeons.RoomType.Boss;
+            var room = _dungeon.Rooms.FirstOrDefault(r => r.RoomNumber == _roomNumber);
 
-            foreach (var enemy in _dungeon.Rooms[_roomNumber].Ennemies)
+            _state.IsRestingArea = room.Type == DataModels.Dungeons.RoomType.Rest;
+            _state.IsFightArea = room.Type == DataModels.Dungeons.RoomType.Fight
+                || room.Type == DataModels.Dungeons.RoomType.Elite
+                || room.Type == DataModels.Dungeons.RoomType.Boss;
+            _state.IsShopArea = room.Type == DataModels.Dungeons.RoomType.Shop;
+            _state.IsEliteArea = room.Type == DataModels.Dungeons.RoomType.Elite;
+            _state.IsBossFight = room.Type == DataModels.Dungeons.RoomType.Boss;
+            _state.IsExit = room.Type == DataModels.Dungeons.RoomType.Exit;
+
+            foreach (var enemy in room.Ennemies)
             {
                 var tempId = Guid.NewGuid();
                 var monster = DataRepositories.MonsterRepository.GetById(enemy.MonsterId);
@@ -555,7 +559,7 @@ namespace Server.GameServer
                 });
             }
 
-            foreach (var item in _dungeon.Rooms[_roomNumber].ShopItems)
+            foreach (var item in room.ShopItems)
             {
                 var tempId = Guid.NewGuid();
 

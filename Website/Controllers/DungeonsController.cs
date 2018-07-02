@@ -57,7 +57,14 @@ namespace Website.Controllers
 
             if (ModelState.IsValid)
             {
-                dungeonModel.Rooms?.RemoveAll(r => r.Enemies.Count == 0 && r.ShopItems.Count == 0);
+                dungeonModel.Rooms?.RemoveAll(r => r.Enemies.Count == 0 && r.ShopItems.Count == 0 && r.Type != (DataModels.Dungeons.RoomType.Exit | DataModels.Dungeons.RoomType.Rest));
+
+                if (dungeonModel.Rooms?.FirstOrDefault(r => r.Type == DataModels.Dungeons.RoomType.Exit) == null)
+                {
+                    ViewBag.Errors = new List<string> { "No exit room in the dungeon. You must add an exit as the last room you want the player to leave." };
+                    dungeonModel.VersionList = DataRepositories.VersionRepository.GetAll();
+                    return View(dungeonModel);
+                }
 
                 if (dungeonModel.Rooms.Count > 0)
                 {

@@ -51,6 +51,7 @@ namespace Network
         public bool IsShopArea { get; set; }
         public bool IsEliteArea { get; set; }
         public bool IsBossFight { get; set; }
+        public bool IsExit { get; set; }
 
         public double CurrentHealth { get; set; }
         public double CurrentMana { get; set; }

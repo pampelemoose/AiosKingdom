@@ -18,13 +18,15 @@ namespace AiosKingdom.ViewModels.Dungeon
                 {
                     LoadingScreenManager.Instance.CloseLoadingScreen();
 
+                    ShowLootsPanel = false;
                     NotifyPropertyChanged(nameof(Room));
                     NotifyPropertyChanged(nameof(IsCleared));
 
                     ResetNextMove();
 
-                    if (IsCleared)
+                    if (IsCleared || Room.IsExit)
                     {
+                        IsEnemyTurn = false;
                         ShowLootsPanel = true;
                         LoadingScreenManager.Instance.AlertLoadingScreen("Room Cleaned", "You cleaned the room.");
                         //LoadingScreenManager.Instance.OpenLoadingScreen("Retrieving Loots, pelase wait...");
@@ -171,7 +173,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         {
             get
             {
-                return Room.IsFightArea && Room.Enemies.Count == 0;
+                return Room.IsFightArea && Room.Enemies.Count == 0 && !Room.IsExit;
             }
         }
 
@@ -323,6 +325,14 @@ namespace AiosKingdom.ViewModels.Dungeon
 
             return false;
         }
+
+        private ICommand _nextRoomAction;
+        public ICommand NextRoomAction =>
+            _nextRoomAction ?? (_nextRoomAction = new Command(() =>
+            {
+                LoadingScreenManager.Instance.OpenLoadingScreen($"Going to next room. Please wait.");
+                NetworkManager.Instance.OpenDungeonRoom();
+            }));
 
         private ICommand _leaveFinishedAction;
         public ICommand LeaveFinishedAction =>
