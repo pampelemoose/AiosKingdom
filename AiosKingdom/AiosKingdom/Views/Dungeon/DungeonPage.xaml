@@ -414,7 +414,14 @@
                                         FontAttributes="Bold"
                                         Margin="5, 0"
                                         VerticalTextAlignment="Center"
-                                        Text="Item"/>
+                                        Text="{Binding ., Converter={StaticResource lootItemToName}}"/>
+
+                                    <Label
+                                        Grid.Column="2"
+                                        FontSize="30"
+                                        Margin="5, 0"
+                                        VerticalTextAlignment="Center"
+                                        Text="{Binding Type}"/>
 
                                     <Label 
                                         Grid.Column="2"
