@@ -58,7 +58,7 @@ namespace Network
             public const int UseSkill = _default + 5;
             public const int UseConsumable = _default + 6;
             public const int EnemyTurn = _default + 7;
-            public const int LootRoom = _default + 8;
+            public const int GetLoots = _default + 8;
             public const int LootItem = _default + 9;
             public const int LeaveFinishedRoom = _default + 10;
             public const int DoNothingTurn = _default + 11;

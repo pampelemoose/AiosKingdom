@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Server.GameServer.Commands.Dungeon
 {
-    public class LootRoomCommand : ACommand
+    public class GetLootsCommand : ACommand
     {
-        public LootRoomCommand(CommandArgs args) 
+        public GetLootsCommand(CommandArgs args) 
             : base(args)
         {
         }
@@ -21,9 +21,9 @@ namespace Server.GameServer.Commands.Dungeon
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon.LootRoom,
+                Code = Network.CommandCodes.Dungeon.GetLoots,
                 Success = true,
-                Json = JsonConvert.SerializeObject(adventure.LootRoom())
+                Json = JsonConvert.SerializeObject(adventure.GetLoots())
             };
             ret.Succeeded = true;
 

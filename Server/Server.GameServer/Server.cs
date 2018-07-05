@@ -147,7 +147,8 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Dungeon.EnemyTurn, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.UseSkill, 2);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.UseConsumable, 2);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.LootRoom, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.GetLoots, 0);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.LootItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.DoNothingTurn, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.BuyShopItem, 2);
@@ -159,7 +160,8 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Dungeon.EnemyTurn, (args) => { return new Commands.Dungeon.EnemyTurnCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.UseSkill, (args) => { return new Commands.Dungeon.UseSkillCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.UseConsumable, (args) => { return new Commands.Dungeon.UseConsumableCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.LootRoom, (args) => { return new Commands.Dungeon.LootRoomCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon.GetLoots, (args) => { return new Commands.Dungeon.GetLootsCommand(args); });
+            _delegates.Add(Network.CommandCodes.Dungeon.LootItem, (args) => { return new Commands.Dungeon.LootDungeonItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, (args) => { return new Commands.Dungeon.LeaveFinishedRoomCommand(args, _config); });
             _delegates.Add(Network.CommandCodes.Dungeon.DoNothingTurn, (args) => { return new Commands.Dungeon.DoNothingTurnCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.BuyShopItem, (args) => { return new Commands.Dungeon.BuyShopItemCommand(args); });
@@ -494,7 +496,10 @@ namespace Server.GameServer
                 case Network.CommandCodes.Dungeon.UseConsumable:
                     retVal.Args = new string[2] { args[0], args[1] };
                     break;
-                case Network.CommandCodes.Dungeon.LootRoom:
+                case Network.CommandCodes.Dungeon.GetLoots:
+                    break;
+                case Network.CommandCodes.Dungeon.LootItem:
+                    retVal.Args = new string[1] { args[0] };
                     break;
                 case Network.CommandCodes.Dungeon.LeaveFinishedRoom:
                     break;

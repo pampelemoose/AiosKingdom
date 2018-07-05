@@ -569,6 +569,7 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
+                            AskSoulDatas();
                             MessagingCenter.Send(this, MessengerCodes.SoulConnected);
                         }
                     }
@@ -618,12 +619,20 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Dungeon.LootRoom:
+                case Network.CommandCodes.Dungeon.GetLoots:
                     {
                         if (message.Success)
                         {
                             var loots = JsonConvert.DeserializeObject<List<Network.LootItem>>(message.Json);
                             MessagingCenter.Send(this, MessengerCodes.DungeonLootsReceived, loots);
+                        }
+                    }
+                    break;
+                case Network.CommandCodes.Dungeon.LootItem:
+                    {
+                        if (message.Success)
+                        {
+                            GetDungeonRoomLoots();
                         }
                     }
                     break;
@@ -790,9 +799,14 @@ namespace AiosKingdom
             SendRequest(Network.CommandCodes.Dungeon.UseConsumable, new string[2] { slotId.ToString(), enemyId.ToString() });
         }
 
-        public void LootDungeonRoom()
+        public void GetDungeonRoomLoots()
         {
-            SendRequest(Network.CommandCodes.Dungeon.LootRoom);
+            SendRequest(Network.CommandCodes.Dungeon.GetLoots);
+        }
+
+        public void LootDungeonItem(Guid lootId)
+        {
+            SendRequest(Network.CommandCodes.Dungeon.LootItem, new string[1] { lootId.ToString() });
         }
 
         public void ExitDungeon()

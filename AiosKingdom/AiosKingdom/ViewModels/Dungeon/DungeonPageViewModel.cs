@@ -14,42 +14,34 @@ namespace AiosKingdom.ViewModels.Dungeon
         {
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.DungeonUpdated, (sender) =>
             {
-                Device.BeginInvokeOnMainThread(() =>
+                ShowLootsPanel = false;
+                NotifyPropertyChanged(nameof(Room));
+                NotifyPropertyChanged(nameof(IsCleared));
+
+                ResetNextMove();
+
+                if (IsCleared || Room.IsExit)
+                {
+                    IsEnemyTurn = false;
+                    ShowLootsPanel = true;
+                    LoadingScreenManager.Instance.UpdateLoadingScreen("Retrieving Loots, please wait...");
+                    NetworkManager.Instance.GetDungeonRoomLoots();
+                }
+                else
                 {
                     LoadingScreenManager.Instance.CloseLoadingScreen();
-
-                    ShowLootsPanel = false;
-                    NotifyPropertyChanged(nameof(Room));
-                    NotifyPropertyChanged(nameof(IsCleared));
-
-                    ResetNextMove();
-
-                    if (IsCleared || Room.IsExit)
-                    {
-                        IsEnemyTurn = false;
-                        ShowLootsPanel = true;
-                        LoadingScreenManager.Instance.AlertLoadingScreen("Room Cleaned", "You cleaned the room.");
-                        //LoadingScreenManager.Instance.OpenLoadingScreen("Retrieving Loots, pelase wait...");
-                        NetworkManager.Instance.LootDungeonRoom();
-                    }
-                });
+                }
             });
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulUpdated, (sender) =>
             {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    NotifyPropertyChanged(nameof(Soul));
-                });
+                NotifyPropertyChanged(nameof(Soul));
             });
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.LootItem>>(this, MessengerCodes.DungeonLootsReceived, (sender, loots) =>
             {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    Loots = loots;
-                    LoadingScreenManager.Instance.CloseLoadingScreen();
-                });
+                Loots = loots;
+                LoadingScreenManager.Instance.AlertLoadingScreen("Room Cleaned", "You cleaned the room.");
             });
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.EnemyTurnEnded, (sender) =>
@@ -74,12 +66,26 @@ namespace AiosKingdom.ViewModels.Dungeon
         public DataModels.Soul Soul => DatasManager.Instance.Soul;
 
         private List<Network.LootItem> _loots;
-        private List<Network.LootItem> Loots
+        public List<Network.LootItem> Loots
         {
             get { return _loots; }
             set
             {
                 _loots = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Network.LootItem SelectedLoot
+        {
+            get { return null; }
+            set
+            {
+                if (value != null)
+                {
+                    LoadingScreenManager.Instance.OpenLoadingScreen("Looting item, please wait...");
+                    NetworkManager.Instance.LootDungeonItem(value.LootId);
+                }
                 NotifyPropertyChanged();
             }
         }
@@ -222,7 +228,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand BuyShopItemAction =>
             _buyShopItemAction ?? (_buyShopItemAction = new Command(() =>
             {
-                var page = new Views.BuyItemPage(new ShopBuyItemPageViewModel(_navigation, 
+                var page = new Views.BuyItemPage(new ShopBuyItemPageViewModel(_navigation,
                     (KeyValuePair<Guid, Network.AdventureState.ShopState>)_selectedShopItem));
                 _navigation.PushModalAsync(page);
             }, () => { return _selectedShopItem != null; }));

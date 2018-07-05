@@ -60,6 +60,7 @@
     <Compile Include="Commands\ACommand.cs" />
     <Compile Include="Commands\Dungeon\BuyShopItemCommand.cs" />
     <Compile Include="Commands\Dungeon\EnterRoomCommand.cs" />
+    <Compile Include="Commands\Dungeon\LootDungeonItemCommand.cs" />
     <Compile Include="Commands\Listing\ArmorCommand.cs" />
     <Compile Include="Commands\Listing\BagCommand.cs" />
     <Compile Include="Commands\Listing\BookCommand.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="Commands\Dungeon\ExitCommand.cs" />
     <Compile Include="Commands\Dungeon\LeaveFinishedRoomCommand.cs" />
     <Compile Include="Commands\Listing\DungeonCommand.cs" />
-    <Compile Include="Commands\Dungeon\LootRoomCommand.cs" />
+    <Compile Include="Commands\Dungeon\GetLootsCommand.cs" />
     <Compile Include="Commands\Dungeon\UpdateRoomCommand.cs" />
     <Compile Include="Commands\Dungeon\UseSkillCommand.cs" />
     <Compile Include="Commands\Dungeon\DoNothingTurnCommand.cs" />

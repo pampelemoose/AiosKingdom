@@ -275,9 +275,48 @@ namespace Server.GameServer
             return false;
         }
 
-        public List<Network.LootItem> LootRoom()
+        public List<Network.LootItem> GetLoots()
         {
             return _loots.Values.ToList();
+        }
+
+        public bool LootItem(DataModels.Soul soul, Guid lootId)
+        {
+            if (_loots.ContainsKey(lootId))
+            {
+                DataModels.Items.ItemType type = (DataModels.Items.ItemType)Enum.Parse(typeof(DataModels.Items.ItemType), _loots[lootId].Type);
+                var exists = soul.Inventory.FirstOrDefault(i => i.ItemId.Equals(_loots[lootId].ItemId));
+                if (exists != null)
+                {
+                    soul.Inventory.Remove(exists);
+                    ++exists.Quantity;
+                    soul.Inventory.Add(exists);
+                }
+                else
+                {
+                    soul.Inventory.Add(new DataModels.InventorySlot
+                    {
+                        Id = Guid.NewGuid(),
+                        SoulId = soul.Id,
+                        ItemId = _loots[lootId].ItemId,
+                        Type = type,
+                        Quantity = 1,
+                        LootedAt = DateTime.Now
+                    });
+                }
+
+                if (DataRepositories.SoulRepository.Update(soul))
+                {
+                    --_loots[lootId].Quantity;
+                    if (_loots[lootId].Quantity <= 0)
+                    {
+                        _loots.Remove(lootId);
+                    }
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private int GetStatValue(DataModels.Soul.Stats stat, Network.SoulDatas datas)

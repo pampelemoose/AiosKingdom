@@ -394,7 +394,9 @@
                 
                 <ListView
                     Grid.Row="0"
+                    BackgroundColor="{StaticResource DarkBackgroundColor}"
                     ItemsSource="{Binding Loots, Mode=TwoWay}"
+                    SelectedItem="{Binding SelectedLoot}"
                     RowHeight="80">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -412,14 +414,8 @@
                                         FontAttributes="Bold"
                                         Margin="5, 0"
                                         VerticalTextAlignment="Center"
-                                        Text="Health :"/>
+                                        Text="Item"/>
 
-                                    <Label 
-                                        Grid.Column="1"
-                                        FontSize="50"
-                                        VerticalTextAlignment="Center"
-                                        HorizontalTextAlignment="Center"
-                                        Text="{Binding Value.CurrentHealth}"/>
                                     <Label 
                                         Grid.Column="2"
                                         FontSize="30"
