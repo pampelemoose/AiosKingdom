@@ -25,6 +25,8 @@ namespace AiosKingdom.Converters
                         return DatasManager.Instance.Bags.FirstOrDefault(a => a.ItemId.Equals(loot.ItemId))?.Name;
                     case DataModels.Items.ItemType.Consumable:
                         return DatasManager.Instance.Consumables.FirstOrDefault(a => a.ItemId.Equals(loot.ItemId))?.Name;
+                    case DataModels.Items.ItemType.Weapon:
+                        return DatasManager.Instance.Weapons.FirstOrDefault(a => a.ItemId.Equals(loot.ItemId))?.Name;
                 }
             }
 

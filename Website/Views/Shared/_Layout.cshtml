@@ -64,6 +64,13 @@
                                     @Html.ActionLink("Create", "Create", "Bags", null, new { @class = "dropdown-item" })
                                 </div>
                             </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Weapons</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @Html.ActionLink("Create", "Create", "Weapons", null, new { @class = "dropdown-item" })
+                                </div>
+                            </li>
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
@@ -122,6 +129,9 @@
                         </li>
                         <li class="nav-item @(action == "Index" && controller == "Bags" ? "active" : "")">
                             @Html.ActionLink("Bags", "Index", "Bags", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item @(action == "Index" && controller == "Weapons" ? "active" : "")">
+                            @Html.ActionLink("Weapons", "Index", "Weapons", null, new { @class = "nav-link" })
                         </li>
                         <li class="nav-item @(action == "Index" && controller == "Market" ? "active" : "")">
                             @Html.ActionLink("Market", "Index", "Market", null, new { @class = "nav-link" })

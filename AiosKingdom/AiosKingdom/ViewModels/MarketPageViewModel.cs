@@ -89,6 +89,9 @@ namespace AiosKingdom.ViewModels
                     case DataModels.Items.ItemType.Bag:
                         itm = DatasManager.Instance.Bags.FirstOrDefault(i => i.ItemId.Equals(slot.ItemId));
                         break;
+                    case DataModels.Items.ItemType.Weapon:
+                        itm = DatasManager.Instance.Weapons.FirstOrDefault(i => i.ItemId.Equals(slot.ItemId));
+                        break;
                 }
 
                 _items.Add(new Models.MarketItemModel

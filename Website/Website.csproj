@@ -172,6 +172,7 @@
     <Compile Include="Controllers\MarketController.cs" />
     <Compile Include="Controllers\MonstersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WeaponsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -189,6 +190,7 @@
     <Compile Include="Models\Filters\ConsumableFilter.cs" />
     <Compile Include="Models\ConsumableModel.cs" />
     <Compile Include="Models\Filters\DungeonFilter.cs" />
+    <Compile Include="Models\Filters\WeaponFilter.cs" />
     <Compile Include="Models\InscriptionModel.cs" />
     <Compile Include="Models\LootModel.cs" />
     <Compile Include="Models\Filters\MarketSlotFilter.cs" />
@@ -200,6 +202,7 @@
     <Compile Include="Models\Filters\UserFilter.cs" />
     <Compile Include="Models\RoomModel.cs" />
     <Compile Include="Models\ShopItemModel.cs" />
+    <Compile Include="Models\WeaponModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -318,6 +321,8 @@
     <Content Include="Views\Dungeons\RoomPartial.cshtml" />
     <Content Include="Views\Dungeons\ShopItemPartial.cshtml" />
     <Content Include="Views\Dungeons\EnemyPartial.cshtml" />
+    <Content Include="Views\Weapons\Index.cshtml" />
+    <Content Include="Views\Weapons\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

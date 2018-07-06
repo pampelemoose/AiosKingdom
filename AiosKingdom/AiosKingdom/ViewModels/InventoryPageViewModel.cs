@@ -102,6 +102,34 @@ namespace AiosKingdom.ViewModels
         private bool _consumableSlotIsSelected;
         public bool ConsumableSlotIsSelected => _consumableSlotIsSelected;
 
+        private List<Models.InventoryItemModel<DataModels.Items.Weapon>> _weapons;
+        public List<Models.InventoryItemModel<DataModels.Items.Weapon>> Weapons => _weapons;
+
+        private Models.InventoryItemModel<DataModels.Items.Weapon> _selectedWeapon;
+        public Models.InventoryItemModel<DataModels.Items.Weapon> SelectedWeapon
+        {
+            get { return _selectedWeapon; }
+            set
+            {
+                _selectedWeapon = value;
+                _weaponSlotIsSelected = _selectedWeapon != null;
+                _weaponSlotEquipAction?.ChangeCanExecute();
+
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(WeaponSlotIsSelected));
+            }
+        }
+
+        private bool _weaponSlotIsSelected;
+        public bool WeaponSlotIsSelected => _weaponSlotIsSelected;
+
+        private Command _weaponSlotEquipAction;
+        public ICommand WeaponSlotEquipAction =>
+            _weaponSlotEquipAction ?? (_weaponSlotEquipAction = new Command(() =>
+            {
+                //NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
+            }, () => { return _weaponSlotIsSelected && _selectedWeapon?.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
+
         private void SetInventories()
         {
             _armors = new List<Models.InventoryItemModel<DataModels.Items.Armor>>();
@@ -112,6 +140,9 @@ namespace AiosKingdom.ViewModels
 
             _consumables = new List<Models.InventoryItemModel<DataModels.Items.Consumable>>();
             SelectedConsumable = null;
+
+            _weapons = new List<Models.InventoryItemModel<DataModels.Items.Weapon>>();
+            SelectedWeapon = null;
 
             foreach (var slot in DatasManager.Instance.Soul.Inventory.OrderBy(i => i.LootedAt).ToList())
             {
@@ -144,6 +175,15 @@ namespace AiosKingdom.ViewModels
                             });
                         }
                         break;
+                    case DataModels.Items.ItemType.Weapon:
+                        {
+                            _weapons.Add(new Models.InventoryItemModel<DataModels.Items.Weapon>
+                            {
+                                Slot = slot,
+                                Item = DatasManager.Instance.Weapons.FirstOrDefault(a => a.ItemId.Equals(slot.ItemId))
+                            });
+                        }
+                        break;
                 }
             }
 
@@ -155,6 +195,9 @@ namespace AiosKingdom.ViewModels
 
             NotifyPropertyChanged(nameof(Consumables));
             NotifyPropertyChanged(nameof(SelectedConsumable));
+
+            NotifyPropertyChanged(nameof(Weapons));
+            NotifyPropertyChanged(nameof(SelectedWeapon));
         }
     }
 }
