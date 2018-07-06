@@ -20,6 +20,8 @@
             <converters:BookToPriceConverter x:Key="bookToPrice" />
             <converters:InscriptionToCalculatedValueConverter x:Key="inscToCalcVal" />
             <converters:LootItemToNameConverter x:Key="lootItemToName" />
+            <converters:EnemyTypeToColorConverter x:Key="enemyTypeToColor" />
+            <converters:RoomTypeToColorConverter x:Key="roomTypeToColor" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

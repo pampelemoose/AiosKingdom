@@ -73,7 +73,8 @@ namespace DataModels.Skills
                 var result = new List<Items.WeaponType>();
                 foreach (var str in InternalWeaponTypes.Split(';'))
                 {
-                    result.Add((Items.WeaponType)Enum.Parse(typeof(Items.WeaponType), str));
+                    if (!String.IsNullOrEmpty(str))
+                        result.Add((Items.WeaponType)Enum.Parse(typeof(Items.WeaponType), str));
                 }
                 return result;
             }
@@ -96,7 +97,8 @@ namespace DataModels.Skills
                 var result = new List<Items.WeaponType>();
                 foreach (var str in InternalPreferredWeaponTypes.Split(';'))
                 {
-                    result.Add((Items.WeaponType)Enum.Parse(typeof(Items.WeaponType), str));
+                    if (!String.IsNullOrEmpty(str))
+                        result.Add((Items.WeaponType)Enum.Parse(typeof(Items.WeaponType), str));
                 }
                 return result;
             }

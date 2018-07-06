@@ -14,21 +14,7 @@ namespace AiosKingdom.Converters
             {
                 var stat = (DataModels.Soul.Stats)value;
 
-                switch (stat)
-                {
-                    case DataModels.Soul.Stats.Stamina:
-                        return Application.Current.Resources["StatColor_Stamina"];
-                    case DataModels.Soul.Stats.Energy:
-                        return Application.Current.Resources["StatColor_Energy"];
-                    case DataModels.Soul.Stats.Strength:
-                        return Application.Current.Resources["StatColor_Strength"];
-                    case DataModels.Soul.Stats.Agility:
-                        return Application.Current.Resources["StatColor_Agility"];
-                    case DataModels.Soul.Stats.Intelligence:
-                        return Application.Current.Resources["StatColor_Intelligence"];
-                    case DataModels.Soul.Stats.Wisdom:
-                        return Application.Current.Resources["StatColor_Wisdom"];
-                }
+                return Application.Current.Resources["StatColor_" + stat.ToString()];
             }
 
             return 0;

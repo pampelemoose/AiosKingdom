@@ -203,6 +203,8 @@ namespace AiosKingdom.ViewModels.Dungeon
 
         private void ResetNextMove()
         {
+            SelectedEnemy = null;
+
             if (IsSkillSelected)
             {
                 IsSkillSelected = false;

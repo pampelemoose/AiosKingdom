@@ -115,6 +115,7 @@ namespace Website.Controllers
                             {
                                 Id = Guid.NewGuid(),
                                 RoomId = roomId,
+                                EnemyType = enemyModel.EnemyType,
                                 MonsterId = enemyModel.MonsterId,
                                 Level = enemyModel.Level,
                                 ShardReward = enemyModel.ShardReward

@@ -4,6 +4,12 @@
     @using (Html.BeginCollectionItem($"Rooms[{Model.RoomId}].Enemies"))
     {
         @Html.HiddenFor(model => model.RoomId);
+        <td class="col-md-2">
+            <div class="form-group">
+                @Html.EnumDropDownListFor(model => model.EnemyType, new { @class = "form-control item-list-changer" })
+                @Html.ValidationMessageFor(model => model.EnemyType, "", new { @class = "text-danger" })
+            </div>
+        </td>
         <td class="col-md-6">
             <div class="form-group">
                 @Html.DropDownListFor(model => model.MonsterId, new SelectList(Model.AvailableMonsters, "MonsterId", "Name"), new { @class = "form-control" })

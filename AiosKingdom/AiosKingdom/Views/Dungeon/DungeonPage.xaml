@@ -13,7 +13,7 @@
 
             <Grid
                 Grid.Row="0"
-                BackgroundColor="Aqua"
+                BackgroundColor="{Binding Room, Converter={StaticResource roomTypeToColor}}"
                 IsVisible="{Binding Room.IsFightArea}">
                 <ListView
                     ItemsSource="{Binding Room.Enemies, Mode=TwoWay}"
@@ -23,7 +23,8 @@
                         <DataTemplate>
                             <ViewCell>
                                 <Grid
-                                Margin="5">
+                                Margin="5"
+                                    BackgroundColor="{Binding Value.EnemyType, Converter={StaticResource enemyTypeToColor}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="6*"/>
                                         <ColumnDefinition Width="3*"/>

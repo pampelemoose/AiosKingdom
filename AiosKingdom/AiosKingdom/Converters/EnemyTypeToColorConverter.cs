@@ -6,15 +6,15 @@ using Xamarin.Forms;
 
 namespace AiosKingdom.Converters
 {
-    public class ItemQualityToColorConverter : IValueConverter
+    public class EnemyTypeToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is DataModels.Items.ItemQuality)
+            if (value is string)
             {
-                var quality = (DataModels.Items.ItemQuality)value;
+                var type = (DataModels.Dungeons.EnemyType)Enum.Parse(typeof(DataModels.Dungeons.EnemyType), (string)value);
 
-                return Application.Current.Resources["ItemQualityColor_" + quality.ToString()];
+                return Application.Current.Resources["EnemyTypeColor_" + type.ToString()];
             }
 
             return 0;

@@ -50,6 +50,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr class="row">
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Enemies.FirstOrDefault().EnemyType, htmlAttributes: new { @class = "control-label" })</th>
                         <th scope="col" class="col-md-6">@Html.LabelFor(model => model.Enemies.FirstOrDefault().MonsterId, htmlAttributes: new { @class = "control-label" })</th>
                         <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Enemies.FirstOrDefault().Level, htmlAttributes: new { @class = "control-label" })</th>
                         <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Enemies.FirstOrDefault().ShardReward, htmlAttributes: new { @class = "control-label" })</th>

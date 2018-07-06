@@ -10,6 +10,8 @@ namespace Network
         {
             public Guid MonsterId { get; set; }
 
+            public string EnemyType { get; set; }
+
             public double CurrentHealth { get; set; }
             public double MaxHealth { get; set; }
 

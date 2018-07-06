@@ -581,6 +581,7 @@ namespace Server.GameServer
                 _state.Enemies.Add(tempId, new Network.AdventureState.EnemyState
                 {
                     MonsterId = enemy.MonsterId,
+                    EnemyType = enemy.EnemyType.ToString(),
                     MaxHealth = enemy.Level * monster.HealthPerLevel,
                     CurrentHealth = enemy.Level * monster.HealthPerLevel
                 });
