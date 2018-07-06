@@ -107,6 +107,7 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Listing.Armor, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Consumable, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Bag, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Weapon, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Book, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Monster, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Dungeon, 0);
@@ -115,6 +116,7 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Listing.Armor, (args) => { return new Commands.Listing.ArmorCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Consumable, (args) => { return new Commands.Listing.ConsumableCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Bag, (args) => { return new Commands.Listing.BagCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Weapon, (args) => { return new Commands.Listing.WeaponCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Book, (args) => { return new Commands.Listing.BookCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Monster, (args) => { return new Commands.Listing.MonsterCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Dungeon, (args) => { return new Commands.Listing.DungeonCommand(args); });
@@ -468,6 +470,8 @@ namespace Server.GameServer
                 case Network.CommandCodes.Listing.Consumable:
                     break;
                 case Network.CommandCodes.Listing.Bag:
+                    break;
+                case Network.CommandCodes.Listing.Weapon:
                     break;
                 case Network.CommandCodes.Listing.Book:
                     break;

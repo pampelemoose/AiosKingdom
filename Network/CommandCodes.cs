@@ -45,6 +45,7 @@ namespace Network
             public const int Monster = _default + 5;
             public const int Dungeon = _default + 6;
             public const int Market = _default + 7;
+            public const int Weapon = _default + 8;
         }
 
         public static class Dungeon

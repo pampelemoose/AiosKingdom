@@ -435,6 +435,7 @@ namespace AiosKingdom
                             AskArmorList();
                             AskConsumableList();
                             AskBagList();
+                            AskWeaponList();
                             AskBookList();
                             AskMonsterList();
                             AskDungeonList();
@@ -516,6 +517,12 @@ namespace AiosKingdom
                     {
                         var bags = JsonConvert.DeserializeObject<List<DataModels.Items.Bag>>(message.Json);
                         DatasManager.Instance.Bags = bags;
+                    }
+                    break;
+                case Network.CommandCodes.Listing.Weapon:
+                    {
+                        var weapons = JsonConvert.DeserializeObject<List<DataModels.Items.Weapon>>(message.Json);
+                        DatasManager.Instance.Weapons = weapons;
                     }
                     break;
                 case Network.CommandCodes.Listing.Book:
@@ -699,6 +706,11 @@ namespace AiosKingdom
         public void AskBagList()
         {
             SendRequest(Network.CommandCodes.Listing.Bag);
+        }
+
+        public void AskWeaponList()
+        {
+            SendRequest(Network.CommandCodes.Listing.Weapon);
         }
 
         public void AskBookList()
