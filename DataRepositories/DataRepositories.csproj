@@ -67,6 +67,14 @@
     <Compile Include="Migrations\201806280950388_ShopItemType.Designer.cs">
       <DependentUpon>201806280950388_ShopItemType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807060110597_WeaponUpdate.cs" />
+    <Compile Include="Migrations\201807060110597_WeaponUpdate.Designer.cs">
+      <DependentUpon>201807060110597_WeaponUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807060128426_InscriptionWeaponUpdate.cs" />
+    <Compile Include="Migrations\201807060128426_InscriptionWeaponUpdate.Designer.cs">
+      <DependentUpon>201807060128426_InscriptionWeaponUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,6 +83,7 @@
     <Compile Include="AuthTokenRepository.cs" />
     <Compile Include="UserRepository.cs" />
     <Compile Include="VersionRepository.cs" />
+    <Compile Include="WeaponRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -95,6 +104,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806280950388_ShopItemType.resx">
       <DependentUpon>201806280950388_ShopItemType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807060110597_WeaponUpdate.resx">
+      <DependentUpon>201807060110597_WeaponUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807060128426_InscriptionWeaponUpdate.resx">
+      <DependentUpon>201807060128426_InscriptionWeaponUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

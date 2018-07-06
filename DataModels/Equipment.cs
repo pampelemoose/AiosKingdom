@@ -21,5 +21,8 @@ namespace DataModels
         public Guid Leg { get; set; }
         public Guid Feet { get; set; }
         public Guid Hand { get; set; }
+
+        public Guid WeaponRight { get; set; }
+        public Guid WeaponLeft { get; set; }
     }
 }

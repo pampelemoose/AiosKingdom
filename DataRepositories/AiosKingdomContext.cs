@@ -24,6 +24,7 @@ namespace DataRepositories
 
         public DbSet<DataModels.Items.Bag> Bags { get; set; }
         public DbSet<DataModels.Items.Armor> Armors { get; set; }
+        public DbSet<DataModels.Items.Weapon> Weapons { get; set; }
         public DbSet<DataModels.Items.ItemStat> ItemStats { get; set; }
         public DbSet<DataModels.Items.Consumable> Consumables { get; set; }
         public DbSet<DataModels.Items.ConsumableEffect> ConsumableEffects { get; set; }

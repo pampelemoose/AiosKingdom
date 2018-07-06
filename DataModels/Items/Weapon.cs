@@ -5,20 +5,39 @@ using System.Text;
 
 namespace DataModels.Items
 {
+    public enum HandlingType
+    {
+        OneHand = 0,
+        TwoHand
+    }
+
     public enum WeaponType
     {
-        Head = 0,
-        Shoulder = 1,
-        Torso = 2,
-        Belt = 3,
-        Pants = 4,
-        Leg = 5,
-        Feet = 6,
-        Hand = 7
+        Fist = 0,
+        Dagger,
+        Sword,
+        Axe,
+        Mace,
+
+        Polearm,
+        Staff,
+
+        Shield,
+
+        Wand,
+        Bow,
+        Gun,
+        Crossbow,
+        Book,
+        Whip
     }
 
     public class Weapon : AEquipableItem
     {
+        [Required(ErrorMessage = "HandlingType required")]
+        [Display(Name = "HandlingType")]
+        public HandlingType HandlingType { get; set; }
+
         [Required(ErrorMessage = "WeaponType required")]
         [Display(Name = "WeaponType")]
         public WeaponType WeaponType { get; set; }

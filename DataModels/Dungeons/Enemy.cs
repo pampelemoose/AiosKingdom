@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 
 namespace DataModels.Dungeons
 {
+    public enum EnemyType
+    {
+        Normal = 0,
+        Elite = 1,
+        Boss = 2
+    }
+
     public class Enemy
     {
         [Key]
@@ -17,6 +24,9 @@ namespace DataModels.Dungeons
 
         [Required]
         public Guid MonsterId { get; set; }
+
+        [Required]
+        public EnemyType EnemyType { get; set; }
 
         [Required]
         public int Level { get; set; }
