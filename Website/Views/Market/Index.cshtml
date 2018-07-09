@@ -4,45 +4,64 @@
     ViewBag.Title = "Index";
 }
 
-<section>
-    <div class="container">
-        <h2>Market Items</h2>
-    </div>
-</section>
-
 @using (Html.BeginForm())
 {
-    <section class="bg-info">
+    <section>
         <div class="container">
-            <table class="table">
-                <thead>
-                    <tr class="row" data-toggle="collapse" href="#filter-body" aria-expanded="false" aria-controls="filter-body">
-                        <th scope="col" class="col-md-11">
-                            Filters
-                        </th>
-                        <th scope="col" class="col-md-1"></th>
-                    </tr>
-                </thead>
-                <tbody id="filter-body" class="collapse">
-                    <tr class="row">
-                        <td class="col-md-2">
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.SelectedServer, htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownListFor(model => model.SelectedServer, new SelectList(Model.Servers, "Id", "Name"), new { @class = "form-control" })
-                            </div>
-                        </td>
-                        <td class="col-md-2">
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label" })
-                                @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control" })
-                            </div>
-                        </td>
-                        <td class="offset-md-6 col-md-2">
-                            <input type="submit" value="Filter" class="btn btn-default btn-block" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Market Items</h2>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @* 
+                                @Html.LabelFor(model => model.SelectedServer, htmlAttributes: new { @class = "input-group-text" })
+                            *@
+                        </div>
+                        @*
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        *@
+                        <div class="input-group-append">
+                            <input type="submit" value="Search" class="btn btn-primary btn-block" />
+                            <button class="btn btn-primary dropdown-toggle dropdown-toggle-split" type="button" data-toggle="collapse" data-target="#filter-body" aria-expanded="false" aria-controls="filter-body">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-info collapse p-2" id="filter-body">
+        <div class="container">
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.SelectedServer, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.DropDownListFor(model => model.SelectedServer, new SelectList(Model.Servers, "Id", "Name"), new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="offset-md-10 col-md-2">
+                    <input type="submit" value="Filter" class="btn btn-default btn-block" />
+                </div>
+            </div>
         </div>
     </section>
 }
