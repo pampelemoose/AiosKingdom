@@ -4,131 +4,152 @@
     ViewBag.Title = "Armors";
 }
 
-<section>
-    <div class="container">
-        <h2>Armors</h2>
-    </div>
-</section>
-
 @using (Html.BeginForm())
 {
-    <section class="bg-info">
+    <section>
         <div class="container">
-            <table class="table">
-                <thead>
-                    <tr class="row" data-toggle="collapse" href="#filter-body" aria-expanded="false" aria-controls="filter-body">
-                        <th scope="col" class="col-md-11">
-                            Filters
-                        </th>
-                        <th scope="col" class="col-md-1"></th>
-                    </tr>
-                </thead>
-                <tbody id="filter-body" class="collapse">
-                    <tr class="row">
-                        <td class="col-md-2">
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
-                            </div>
-                        </td>
-                        <td class="col-md-10">
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
-                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                            </div>
-                        </td>
-                        <td class="col-md-2">
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "control-label" })
-                                @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
-                            </div>
-                        </td>
-                        <td class="col-md-2">
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.ItemLevel, htmlAttributes: new { @class = "control-label" })
-                                @Html.EditorFor(model => model.ItemLevel, new { htmlAttributes = new { @class = "form-control" } })
-                            </div>
-                        </td>
-                        <td class="col-md-2">
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.UseLevelRequired, htmlAttributes: new { @class = "control-label" })
-                                @Html.EditorFor(model => model.UseLevelRequired, new { htmlAttributes = new { @class = "form-control" } })
-                            </div>
-                        </td>
-                        <td class="col-md-2">
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.Part, htmlAttributes: new { @class = "control-label" })
-                                @Html.EnumDropDownListFor(model => model.Part, new { @class = "form-control" })
-                            </div>
-                        </td>
-                        <td class="offset-md-2 col-md-2">
-                            <input type="submit" value="Filter" class="btn btn-default btn-block" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Armors</h2>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="input-group-append">
+                            <input type="submit" value="Search" class="btn btn-primary btn-block" />
+                            <button class="btn btn-primary dropdown-toggle dropdown-toggle-split" type="button" data-toggle="collapse" data-target="#filter-body" aria-expanded="false" aria-controls="filter-body">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-info collapse p-2" id="filter-body">
+        <div class="container">
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Part, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EnumDropDownListFor(model => model.Part, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ItemLevel, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ItemLevel, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.UseLevelRequired, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.UseLevelRequired, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="offset-md-10 col-md-2">
+                    <input type="submit" value="Filter" class="btn btn-default btn-block" />
+                </div>
+            </div>
         </div>
     </section>
 }
 <section>
     <div class="container">
         <div class="row">
-            @foreach (var armor in Model.Items)
-            {
-                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-                    <div class="card text-center mt-3 @armor.Quality.ToString().ToLower()">
-                        <img class="card-img-top" src="@armor.Image">
-                        <div class="card-header">
-                            @armor.Name
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item ">
-                                <div class="row">
-                                    <div class="col-6 @armor.Quality.ToString().ToLower()-text">
-                                        <strong>@armor.Quality</strong>
-                                    </div>
-                                    <div class="col-6">@armor.Part</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-8">Level Required</div>
-                                    <div class="col-4">@armor.UseLevelRequired</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-8">Item Level</div>
-                                    <div class="col-4">@armor.ItemLevel</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-8">Armor</div>
-                                    <div class="col-4">@armor.ArmorValue</div>
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="card-body font-weight-light font-italic">
-                            @armor.Description
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            @if (armor.Stats != null)
-                            {
-                                foreach (var stat in armor.Stats)
-                                {
-                                    <li class="list-group-item">
-                                        <div class="row">
-                                            <div class="col-8">@stat.Type</div>
-                                            <div class="col-4"><strong>+ @stat.StatValue</strong></div>
+                @foreach (var armor in Model.Items)
+                {
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                        <div class="card text-center mt-3 @armor.Quality.ToString().ToLower()">
+                            <img class="card-img-top" src="@armor.Image">
+                            <div class="card-header">
+                                @armor.Name
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item ">
+                                    <div class="row">
+                                        <div class="col-6 @armor.Quality.ToString().ToLower()-text">
+                                            <strong>@armor.Quality</strong>
                                         </div>
-                                    </li>
+                                        <div class="col-6">@armor.Part</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-8">Level Required</div>
+                                        <div class="col-4">@armor.UseLevelRequired</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-8">Item Level</div>
+                                        <div class="col-4">@armor.ItemLevel</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-8">Armor</div>
+                                        <div class="col-4">@armor.ArmorValue</div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="card-body font-weight-light font-italic">
+                                @armor.Description
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                @if (armor.Stats != null)
+                                {
+                                    foreach (var stat in armor.Stats)
+                                    {
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-8">@stat.Type</div>
+                                                <div class="col-4"><strong>+ @stat.StatValue</strong></div>
+                                            </div>
+                                        </li>
+                                    }
                                 }
-                            }
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            }
+                }
         </div>
 
     </div>
