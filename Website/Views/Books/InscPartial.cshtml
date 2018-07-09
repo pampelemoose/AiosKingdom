@@ -5,40 +5,100 @@
     {
         @Html.HiddenFor(model => model.PageId);
         <td class="col-md-12">
-            @Html.LabelFor(model => model.Inscription.Description, htmlAttributes: new { @class = "control-label" })
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
             <div class="form-group">
-                @Html.EditorFor(model => model.Inscription.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Inscription.Description, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">
             <div class="form-group">
-                @Html.EnumDropDownListFor(model => model.Inscription.Type, new { @class = "form-control item-list-changer" })
-                @Html.ValidationMessageFor(model => model.Inscription.Type, "", new { @class = "text-danger" })
+                @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control item-list-changer" })
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">
             <div class="form-group">
-                @Html.EditorFor(model => model.Inscription.BaseValue, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Inscription.BaseValue, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.BaseValue, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BaseValue, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">
             <div class="form-group">
-                @Html.EnumDropDownListFor(model => model.Inscription.StatType, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Inscription.StatType, "", new { @class = "text-danger" })
+                @Html.EnumDropDownListFor(model => model.StatType, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StatType, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">
             <div class="form-group">
-                @Html.EditorFor(model => model.Inscription.Ratio, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Inscription.Ratio, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Ratio, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Ratio, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">
             <div class="form-group">
-                @Html.EditorFor(model => model.Inscription.Duration, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Inscription.Duration, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
+            </div>
+        </td>
+        <td class="col-md-2">
+            <div class="form-group">
+                @Html.EditorFor(model => model.IncludeWeaponDamages, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IncludeWeaponDamages, "", new { @class = "text-danger" })
+            </div>
+        </td>
+        <td class="col-md-2">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="row">
+                        <th scope="col" class="col-md-10">@Html.LabelFor(model => model.WeaponTypes, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">
+                            <input class="btn btn-primary btn-block" type="button" onclick="addWeaponTypeToInsc('@Model.PageId', this)" value="Add Type" />
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="weaponTypeList_@Model.PageId">
+                    @if (Model != null && Model.WeaponTypes != null)
+                    {
+                        for (var i = 0; i < Model.WeaponTypes.Count; i++)
+                        {
+                            Html.RenderPartial("WeaponTypePartial", Model.WeaponTypes[i]);
+                        }
+                    }
+                </tbody>
+            </table>
+        </td>
+        <td class="col-md-2">
+            <div class="form-group">
+                @Html.EditorFor(model => model.WeaponDamagesRatio, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.WeaponDamagesRatio, "", new { @class = "text-danger" })
+            </div>
+        </td>
+        <td class="col-md-2">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="row">
+                        <th scope="col" class="col-md-10">@Html.LabelFor(model => model.PreferredWeaponTypes, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">
+                            <input class="btn btn-primary btn-block" type="button" onclick="addPrefferedWeaponTypeToInsc('@Model.PageId', this)" value="Add Type" />
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="prefferedWeaponTypeList_@Model.PageId">
+                    @if (Model != null && Model.PreferredWeaponTypes != null)
+                    {
+                        for (var i = 0; i < Model.PreferredWeaponTypes.Count; i++)
+                        {
+                            Html.RenderPartial("WeaponTypePartial", Model.PreferredWeaponTypes[i]);
+                        }
+                    }
+                </tbody>
+            </table>
+        </td>
+        <td class="col-md-2">
+            <div class="form-group">
+                @Html.EditorFor(model => model.PreferredWeaponDamagesRatio, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PreferredWeaponDamagesRatio, "", new { @class = "text-danger" })
             </div>
         </td>
         <td class="col-md-2">

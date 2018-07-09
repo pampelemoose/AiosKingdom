@@ -75,6 +75,10 @@
     <Compile Include="Migrations\201807060128426_InscriptionWeaponUpdate.Designer.cs">
       <DependentUpon>201807060128426_InscriptionWeaponUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807090759295_InscriptionWeapon_Changes.cs" />
+    <Compile Include="Migrations\201807090759295_InscriptionWeapon_Changes.Designer.cs">
+      <DependentUpon>201807090759295_InscriptionWeapon_Changes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807060128426_InscriptionWeaponUpdate.resx">
       <DependentUpon>201807060128426_InscriptionWeaponUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807090759295_InscriptionWeapon_Changes.resx">
+      <DependentUpon>201807090759295_InscriptionWeapon_Changes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

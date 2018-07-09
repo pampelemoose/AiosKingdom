@@ -60,11 +60,16 @@
                 <thead>
                     <tr class="row">
                         <th hidden></th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Inscription.Type, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Inscription.BaseValue, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Inscription.StatType, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Inscription.Ratio, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Inscription.Duration, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Type, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().BaseValue, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().StatType, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Ratio, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Duration, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().IncludeWeaponDamages, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().WeaponTypes, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().WeaponDamagesRatio, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().PreferredWeaponTypes, htmlAttributes: new { @class = "control-label" })</th>
+                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().PreferredWeaponDamagesRatio, htmlAttributes: new { @class = "control-label" })</th>
                         <th scope="col" class="col-md-2">
                             <input class="btn btn-primary btn-block" type="button" onclick="addInscToPage(this)" value="Add Insc" id="@pageId" />
                         </th>

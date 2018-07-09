@@ -13,6 +13,9 @@ namespace Website.Models.Filters
         [Display(Name = "Version")]
         public List<DataModels.Version> VersionList { get; set; }
 
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
         [Display(Name = "Quality")]
         public DataModels.Skills.BookQuality? Quality { get; set; }
 
@@ -23,6 +26,11 @@ namespace Website.Models.Filters
             if (!Guid.Empty.Equals(SelectedVersion))
             {
                 list = list.Where(a => a.VersionId.Equals(SelectedVersion)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(Name))
+            {
+                list = list.Where(a => a.Name.Contains(Name)).ToList();
             }
 
             if (Quality != null)

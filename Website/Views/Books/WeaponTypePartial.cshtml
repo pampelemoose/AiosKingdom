@@ -1,0 +1,21 @@
+﻿@model Website.Models.InscWeaponTypeModel
+
+<tr class="row">
+    @using (Html.BeginCollectionItem($"Pages[{Model.PageId}].Inscriptions[{Model.InscId}].{Model.TypeExtension}"))
+    {
+        @Html.HiddenFor(model => model.PageId)
+        @Html.HiddenFor(model => model.InscId)
+        @Html.HiddenFor(model => model.TypeExtension)
+        <td class="col-md-11">
+            <div>
+                @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control item-list-changer" })
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+            </div>
+        </td>
+        <td class="col-md-1">
+            <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().remove();">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </td>
+    }
+</tr>

@@ -192,6 +192,7 @@
     <Compile Include="Models\Filters\DungeonFilter.cs" />
     <Compile Include="Models\Filters\WeaponFilter.cs" />
     <Compile Include="Models\InscriptionModel.cs" />
+    <Compile Include="Models\InscWeaponTypeModel.cs" />
     <Compile Include="Models\LootModel.cs" />
     <Compile Include="Models\Filters\MarketSlotFilter.cs" />
     <Compile Include="Models\MarketSlotModel.cs" />
@@ -323,6 +324,7 @@
     <Content Include="Views\Dungeons\EnemyPartial.cshtml" />
     <Content Include="Views\Weapons\Index.cshtml" />
     <Content Include="Views\Weapons\Create.cshtml" />
+    <Content Include="Views\Books\WeaponTypePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

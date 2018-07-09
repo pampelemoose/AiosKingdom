@@ -36,6 +36,8 @@ namespace Website.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.BookModel bookModel)
         {
+            ViewBag.Errors = new List<string>();
+
             if (bookModel.Pages == null)
             {
                 bookModel.Pages = new List<Models.PageModel>();
@@ -53,6 +55,35 @@ namespace Website.Controllers
                 bookModel.Pages.RemoveAll(p => p.Inscriptions.Count == 0);
 
                 if (bookModel.Pages.Count == 0 || bookModel.Pages?.Select(p => p.Inscriptions.Count).Sum() == 0)
+                {
+                    ViewBag.Errors.Add("You need at least one page and one inscription per page.");
+                    bookModel.VersionList = DataRepositories.VersionRepository.GetAll();
+                    return View(bookModel);
+                }
+
+                bool hasErrors = false;
+                foreach (var insc in bookModel.Pages.SelectMany(p => p.Inscriptions))
+                {
+                    if (insc.WeaponTypes != null)
+                        insc.WeaponTypes = insc.WeaponTypes.Where(wt => wt.Type != null).Distinct().ToList();
+
+                    if (insc.PreferredWeaponTypes != null)
+                        insc.PreferredWeaponTypes = insc.PreferredWeaponTypes.Where(wt => wt.Type != null).Distinct().ToList();
+
+                    if (insc.IncludeWeaponDamages && 
+                        ((insc.PreferredWeaponTypes?.Count > 0 && insc.PreferredWeaponDamagesRatio <= 0)
+                        && (insc.WeaponTypes?.Count > 0 || insc.WeaponDamagesRatio <= 0)))
+                    {
+                        ModelState.AddModelError("IncludeWeaponDamages", "It is active so you need at least one WeaponType or PrefferedWeaponType specified. Ratios should be > 0");
+                        hasErrors = true;
+                    }
+                    if (!insc.IncludeWeaponDamages && (insc.PreferredWeaponTypes?.Count > 0 || insc.WeaponTypes?.Count > 0))
+                    {
+                        ModelState.AddModelError("IncludeWeaponDamages", "It is inactive but one WeaponType or PrefferedWeaponType is specified.");
+                        hasErrors = true;
+                    }
+                }
+                if (hasErrors)
                 {
                     bookModel.VersionList = DataRepositories.VersionRepository.GetAll();
                     return View(bookModel);
@@ -89,12 +120,17 @@ namespace Website.Controllers
                         {
                             Id = Guid.NewGuid(),
                             PageId = pageId,
-                            Description = inscModel.Inscription.Description,
-                            Type = inscModel.Inscription.Type,
-                            BaseValue = inscModel.Inscription.BaseValue,
-                            StatType = inscModel.Inscription.StatType,
-                            Ratio = inscModel.Inscription.Ratio,
-                            Duration = inscModel.Inscription.Duration
+                            Description = inscModel.Description,
+                            Type = inscModel.Type,
+                            BaseValue = inscModel.BaseValue,
+                            StatType = inscModel.StatType,
+                            Ratio = inscModel.Ratio,
+                            Duration = inscModel.Duration,
+                            IncludeWeaponDamages = inscModel.IncludeWeaponDamages,
+                            WeaponTypes = inscModel.WeaponTypes?.Select(wt => (DataModels.Items.WeaponType)wt.Type).ToList(),
+                            WeaponDamagesRatio = inscModel.WeaponDamagesRatio,
+                            PreferredWeaponTypes = inscModel.PreferredWeaponTypes?.Select(wt => (DataModels.Items.WeaponType)wt.Type).ToList(),
+                            PreferredWeaponDamagesRatio = inscModel.PreferredWeaponDamagesRatio
                         };
                         page.Inscriptions.Add(insc);
                     }
@@ -126,11 +162,24 @@ namespace Website.Controllers
         {
             var insc = new Models.InscriptionModel
             {
-                PageId = id,
-                Inscription = new DataModels.Skills.Inscription()
+                PageId = id
             };
 
             return PartialView("InscPartial", insc);
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpGet]
+        public ActionResult AddWeaponTypePartial(string id, string inscId, string typeExtension)
+        {
+            var type = new Models.InscWeaponTypeModel
+            {
+                PageId = id,
+                InscId = inscId,
+                TypeExtension = typeExtension
+            };
+
+            return PartialView("WeaponTypePartial", type);
         }
     }
 }

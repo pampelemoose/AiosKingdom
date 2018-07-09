@@ -101,10 +101,6 @@
                     }
                 });
             });
-
-            $("#addInscToPage").click(function () {
-
-            });
         });
 
         function addInscToPage(page) {
@@ -124,6 +120,68 @@
                             success: function (data) {
                                 $('#inscList_' + page.id).append(data);
                                 $('#inscList_' + page.id).fadeIn('fast');
+                            }
+                        });
+                        break;
+                    }
+                    isSecond = true;
+                }
+                elem = elem.parentNode;
+            }
+        }
+
+        function addWeaponTypeToInsc(page, insc) {
+            var elem = insc;
+            var isSecond = false;
+            while (elem && elem !== document) {
+                if (elem.tagName == "TR") {
+                    if (isSecond) {
+                        console.log(page);
+                        console.log($(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val());
+
+                        $.ajax({
+                            url: "/Books/AddWeaponTypePartial",
+                            cache: false,
+                            type: "GET",
+                            data: {
+                                "id": page,
+                                "inscId": $(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val(),
+                                "typeExtension": "WeaponTypes"
+                            },
+                            success: function (data) {
+                                $('#weaponTypeList_' + page).append(data);
+                                $('#weaponTypeList_' + page).fadeIn('fast');
+                            }
+                        });
+                        break;
+                    }
+                    isSecond = true;
+                }
+                elem = elem.parentNode;
+            }
+        }
+
+        function addPrefferedWeaponTypeToInsc(page, insc) {
+            var elem = insc;
+            var isSecond = false;
+            while (elem && elem !== document) {
+                if (elem.tagName == "TR") {
+                    if (isSecond) {
+                        console.log(page);
+                        console.log($(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val());
+
+                        $.ajax({
+                            url: "/Books/AddWeaponTypePartial",
+                            cache: false,
+                            type: "GET",
+                            data: {
+                                "id": page,
+                                "inscId": $(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val(),
+                                "typeExtension": "PreferredWeaponTypes"
+                            },
+                            success: function (data) {
+                                $('#prefferedWeaponTypeList_' + page).append(data);
+                                $('#prefferedWeaponTypeList_' + page).fadeIn('fast');
                             }
                         });
                         break;
