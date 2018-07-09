@@ -13,6 +13,9 @@ namespace Website.Models.Filters
         [Display(Name = "Version")]
         public List<DataModels.Version> VersionList { get; set; }
 
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
         public List<DataModels.Monsters.Monster> Monsters { get; set; }
 
         public List<DataModels.Monsters.Monster> FilterList(List<DataModels.Monsters.Monster> list)
@@ -20,6 +23,11 @@ namespace Website.Models.Filters
             if (!Guid.Empty.Equals(SelectedVersion))
             {
                 list = list.Where(a => a.VersionId.Equals(SelectedVersion)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(Name))
+            {
+                list = list.Where(a => a.Name.Contains(Name)).ToList();
             }
 
             return list;

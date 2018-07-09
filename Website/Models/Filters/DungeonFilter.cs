@@ -13,6 +13,15 @@ namespace Website.Models.Filters
         [Display(Name = "Version")]
         public List<DataModels.Version> VersionList { get; set; }
 
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
+        [Display(Name = "RequiredLevel")]
+        public int RequiredLevel { get; set; }
+
+        [Display(Name = "MaxLevel")]
+        public int MaxLevel { get; set; }
+
         public List<DataModels.Dungeons.Dungeon> Dungeons { get; set; }
 
         public List<DataModels.Dungeons.Dungeon> FilterList(List<DataModels.Dungeons.Dungeon> list)
@@ -20,6 +29,21 @@ namespace Website.Models.Filters
             if (!Guid.Empty.Equals(SelectedVersion))
             {
                 list = list.Where(a => a.VersionId.Equals(SelectedVersion)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(Name))
+            {
+                list = list.Where(a => a.Name.Contains(Name)).ToList();
+            }
+
+            if (RequiredLevel > 0)
+            {
+                list = list.Where(a => a.RequiredLevel.Equals(RequiredLevel)).ToList();
+            }
+
+            if (MaxLevel > 0)
+            {
+                list = list.Where(a => a.MaxLevelAuthorized.Equals(MaxLevel)).ToList();
             }
 
             return list;
