@@ -12,91 +12,108 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
+    <section class="p-2">
+        <div class="container">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-horizontal">
-        <section>
-            <div class="container">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
                         @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.VersionList, "", new { @class = "text-danger" })
                     </div>
+                    @Html.ValidationMessageFor(model => model.VersionList, "", new { @class = "text-danger" })
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.RequiredLevel, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.RequiredLevel, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.RequiredLevel, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.MaxLevelAuthorized, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.MaxLevelAuthorized, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.MaxLevelAuthorized, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ExperienceReward, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ExperienceReward, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ExperienceReward, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ShardReward, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ShardReward, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ShardReward, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="bg-info">
-            <div class="container">
-                @Html.LabelFor(model => model.Rooms, htmlAttributes: new { @class = "control-label" })
-                <table class="table table-striped">
-                    <thead>
-                        <tr class="row">
-                            <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Rooms.FirstOrDefault().Type, htmlAttributes: new { @class = "control-label" })</th>
-                            <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Rooms.FirstOrDefault().RoomNumber, htmlAttributes: new { @class = "control-label" })</th>
-                            <th scope="col" class="col-md-12">@Html.LabelFor(model => model.Rooms.FirstOrDefault().ShopItems, htmlAttributes: new { @class = "control-label" })</th>
-                            <th scope="col" class="col-md-12">@Html.LabelFor(model => model.Rooms.FirstOrDefault().Enemies, htmlAttributes: new { @class = "control-label" })</th>
-                            <th scope="col" class="col-md-2">
-                                <input class="btn btn-primary btn-block" type="button" id="addRoomToDungeon" value="Add Room" />
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="roomList">
-                        @if (Model != null && Model.Rooms != null)
-                        {
-                            for (var i = 0; i < Model.Rooms.Count; i++)
-                            {
-                                Html.RenderPartial("RoomPartial", Model.Rooms[i]);
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </section>
 
-        <section>
-            <div class="container">
-                <input type="submit" value="Create" class="btn btn-success btn-block" />
+                <div class="col-md-9">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+    <section class="bg-info p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.RequiredLevel, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.RequiredLevel, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.RequiredLevel, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.MaxLevelAuthorized, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.MaxLevelAuthorized, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.MaxLevelAuthorized, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ExperienceReward, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ExperienceReward, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ExperienceReward, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ShardReward, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ShardReward, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ShardReward, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10">
+                    <h2>@Html.LabelFor(model => model.Rooms, htmlAttributes: new { @class = "control-label" })</h2>
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-primary btn-block" type="button" id="addRoomToDungeon" value="Add Room" />
+                </div>
+            </div>
+            <div class="row mt-2" id="roomList">
+                @if (Model != null && Model.Rooms != null)
+                {
+                    for (var i = 0; i < Model.Rooms.Count; i++)
+                    {
+                        Html.RenderPartial("RoomPartial", Model.Rooms[i]);
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <input type="submit" value="Create" class="btn btn-success btn-block" />
+        </div>
+    </section>
 
     if (ViewBag.Message != null)
     {
@@ -123,57 +140,35 @@
         });
 
         function addShopItemToRoom(room) {
-            var elem = room;
-            var isSecond = false;
-            while (elem && elem !== document) {
-                if (elem.tagName == "TR") {
-                    if (isSecond) {
-
-                        $.ajax({
-                            url: "/Dungeons/AddShopItemPartial",
-                            cache: false,
-                            type: "GET",
-                            data: {
-                                "id": $(elem).children("input[name='Rooms.index']").val()
-                            },
-                            success: function (data) {
-                                $('#shop_item_list_' + room.id).append(data);
-                                $('#shop_item_list_' + room.id).fadeIn('fast');
-                            }
-                        });
-                        break;
-                    }
-                    isSecond = true;
+            var elem = document.getElementById('room-card-' + room.id);
+            $.ajax({
+                url: "/Dungeons/AddShopItemPartial",
+                cache: false,
+                type: "GET",
+                data: {
+                    "id": $(elem).children("input[name='Rooms.index']").val()
+                },
+                success: function (data) {
+                    $('#shop_item_list_' + room.id).append(data);
+                    $('#shop_item_list_' + room.id).fadeIn('fast');
                 }
-                elem = elem.parentNode;
-            }
+            });
         }
 
         function addEnnemyToRoom(ennemy) {
-            var elem = ennemy;
-            var isSecond = false;
-            while (elem && elem !== document) {
-                if (elem.tagName == "TR") {
-                    if (isSecond) {
-
-                        $.ajax({
-                            url: "/Dungeons/AddEnemyPartial",
-                            cache: false,
-                            type: "GET",
-                            data: {
-                                "id": $(elem).children("input[name='Rooms.index']").val()
-                            },
-                            success: function (data) {
-                                $('#enemy_list_' + ennemy.id).append(data);
-                                $('#enemy_list_' + ennemy.id).fadeIn('fast');
-                            }
-                        });
-                        break;
-                    }
-                    isSecond = true;
+            var elem = document.getElementById('room-card-' + ennemy.id);
+            $.ajax({
+                url: "/Dungeons/AddEnemyPartial",
+                cache: false,
+                type: "GET",
+                data: {
+                    "id": $(elem).children("input[name='Rooms.index']").val()
+                },
+                success: function (data) {
+                    $('#enemy_list_' + ennemy.id).append(data);
+                    $('#enemy_list_' + ennemy.id).fadeIn('fast');
                 }
-                elem = elem.parentNode;
-            }
+            });
         }
     </script>
 }

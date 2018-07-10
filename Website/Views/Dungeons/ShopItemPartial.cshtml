@@ -1,31 +1,48 @@
 ﻿@model Website.Models.ShopItemModel
 
-<tr class="row">
+<div class="col-md-12 mt-2">
     @using (Html.BeginCollectionItem($"Rooms[{Model.RoomId}].ShopItems"))
     {
         @Html.HiddenFor(model => model.RoomId);
-    <td class="col-md-6">
-        <div class="form-group">
-            @Html.DropDownListFor(model => model.SelectedItem, new SelectList(Model.Items, "ItemId", "ItemName"), new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
+        <div class="card bg-info">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.DropDownListFor(model => model.SelectedItem, new SelectList(Model.Items, "ItemId", "ItemName"), new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-md-6">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.ShardPrice, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.EditorFor(model => model.ShardPrice, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.ShardPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         </div>
-    </td>
-        <td class="col-md-2">
-            <div class="form-group">
-                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
-            </div>
-        </td>
-        <td class="col-md-2">
-            <div class="form-group">
-                @Html.EditorFor(model => model.ShardPrice, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ShardPrice, "", new { @class = "text-danger" })
-            </div>
-        </td>
-        <td class="col-md-2">
-            <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().remove();">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </td>
     }
-</tr>
+</div>

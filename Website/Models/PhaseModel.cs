@@ -8,48 +8,38 @@ namespace Website.Models
 {
     public class PhaseModel
     {
-        [Required]
-        [Range(0, 10000)]
-        [Display(Name = "Stamina Per Level")]
-        public double StaminaPerLevel { get; set; }
+        public class SkillChoice
+        {
+            public string Name { get; set; }
+            public Guid PageId { get; set; }
+            public int Rank { get; set; }
 
-        [Required]
-        [Range(0, 10000)]
-        [Display(Name = "Energy Per Level")]
-        public double EnergyPerLevel { get; set; }
-
-        [Required]
-        [Range(0, 10000)]
-        [Display(Name = "Strength Per Level")]
-        public double StrengthPerLevel { get; set; }
-
-        [Required]
-        [Range(0, 10000)]
-        [Display(Name = "Agility Per Level")]
-        public double AgilityPerLevel { get; set; }
-
-        [Required]
-        [Range(0, 10000)]
-        [Display(Name = "Intelligence Per Level")]
-        public double IntelligencePerLevel { get; set; }
-
-        [Required]
-        [Range(0, 10000)]
-        [Display(Name = "Wisdom Per Level")]
-        public double WisdomPerLevel { get; set; }
+            public string PhaseName
+            {
+                get { return $"{Name} (Rank {Rank})"; }
+            }
+        }
 
         [Required]
         public Guid SelectedSkill { get; set; }
-        [Display(Name = "Item")]
-        public List<DataModels.Skills.Page> Skills
+        [Display(Name = "Skill")]
+        public List<SkillChoice> Skills
         {
             get
             {
-                var pages = new List<DataModels.Skills.Page>();
+                var pages = new List<SkillChoice>();
 
                 foreach (var book in DataRepositories.BookRepository.GetAll())
                 {
-                    pages.AddRange(book.Pages);
+                    foreach (var page in book.Pages)
+                    {
+                        pages.Add(new SkillChoice
+                        {
+                            Name = book.Name,
+                            PageId = page.Id,
+                            Rank = page.Rank
+                        });
+                    }
                 }
 
                 return pages;

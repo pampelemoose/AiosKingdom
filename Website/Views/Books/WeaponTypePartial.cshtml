@@ -1,21 +1,23 @@
 ﻿@model Website.Models.InscWeaponTypeModel
 
-<tr class="row">
-    @using (Html.BeginCollectionItem($"Pages[{Model.PageId}].Inscriptions[{Model.InscId}].{Model.TypeExtension}"))
-    {
+<div class="col-md-12 mt-1">
+    <div class="row">
         @Html.HiddenFor(model => model.PageId)
         @Html.HiddenFor(model => model.InscId)
         @Html.HiddenFor(model => model.TypeExtension)
-        <td class="col-md-11">
-            <div>
+        <div class="col-md-11">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "input-group-text" })
+                </div>
                 @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control item-list-changer" })
-                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
             </div>
-        </td>
-        <td class="col-md-1">
-            <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().remove();">
+            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
                 <span aria-hidden="true">&times;</span>
             </button>
-        </td>
-    }
-</tr>
+        </div>
+    </div>
+</div>

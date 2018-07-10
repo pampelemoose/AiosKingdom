@@ -1,96 +1,117 @@
 ﻿@model Website.Models.PageModel
 
-@{ 
+@{
     var pageId = Guid.NewGuid();
 }
 
-<tr class="row">
+<div id="page-card-@pageId" class="col-md-6 mb-2">
     @using (Html.BeginCollectionItem("Pages"))
     {
-        <td class="col-md-12">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
-            <div class="form-group">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs pull-right" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="page-tab" data-toggle="tab" href="#page" role="tab" aria-controls="page" aria-selected="true">Page</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="inscriptions-tab" data-toggle="tab" href="#inscriptions" role="tab" aria-controls="inscriptions" aria-selected="false">Inscriptions</a>
+                    </li>
+                </ul>
             </div>
-        </td>
-        <td class="col-md-12">
-            @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label" })
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="form-group">
-                        @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control image-url-setter" } })
-                        @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="page" role="tabpanel" aria-labelledby="page-tab">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "input-group-text" })
+                                    </div>
+                                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-md-10">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "input-group-text" })
+                                    </div>
+                                    @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control image-url-setter" } })
+                                    <div class="input-group-append">
+                                        <input type="button" value="Update" class="btn btn-info" onclick="UpdateImage(this)" />
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-2">
+                                <img class="img-fluid img-thumbnail image-viewer" src="@Model.Image" />
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-md-12">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.StatCost, htmlAttributes: new { @class = "input-group-text" })
+                                    </div>
+                                    @Html.EditorFor(model => model.StatCost, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.StatCost, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.Rank, htmlAttributes: new { @class = "input-group-text" })
+                                    </div>
+                                    @Html.EditorFor(model => model.Rank, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.Rank, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.ManaCost, htmlAttributes: new { @class = "input-group-text" })
+                                    </div>
+                                    @Html.EditorFor(model => model.ManaCost, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.ManaCost, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.Cooldown, htmlAttributes: new { @class = "input-group-text" })
+                                    </div>
+                                    @Html.EditorFor(model => model.Cooldown, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.Cooldown, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
                     </div>
-                    <input type="button" value="Update" class="col-md-2 btn btn-info update-image-viewer" />
-                </div>
-                <div class="col-md-2">
-                    <img class="img-fluid img-thumbnail image-viewer" src="@Model.Image" />
-                </div>
-            </div>
-        </td>
-        <td class="col-md-3">
-            <div class="form-group">
-                @Html.EditorFor(model => model.StatCost, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.StatCost, "", new { @class = "text-danger" })
-            </div>
-        </td>
-        <td class="col-md-3">
-            <div class="form-group">
-                @Html.EditorFor(model => model.Rank, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Rank, "", new { @class = "text-danger" })
-            </div>
-        </td>
-        <td class="col-md-3">
-            <div class="form-group">
-                @Html.EditorFor(model => model.ManaCost, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ManaCost, "", new { @class = "text-danger" })
-            </div>
-        </td>
-        <td class="col-md-3">
-            <div class="form-group">
-                @Html.EditorFor(model => model.Cooldown, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Cooldown, "", new { @class = "text-danger" })
-            </div>
-        </td>
-        <td class="col-md-12">
+                    <div class="tab-pane fade" id="inscriptions" role="tabpanel" aria-labelledby="inscriptions-tab">
+                        <div class="row mt-1">
+                            <div class="offset-md-8 col-md-4">
+                                <input class="btn btn-primary btn-block" type="button" onclick="addInscToPage(this)" value="Add Insc" id="@pageId" />
+                            </div>
 
-            @Html.LabelFor(model => model.Inscriptions, htmlAttributes: new { @class = "control-label" })
-            <table class="table table-striped">
-                <thead>
-                    <tr class="row">
-                        <th hidden></th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Type, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().BaseValue, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().StatType, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Ratio, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().Duration, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().IncludeWeaponDamages, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().WeaponTypes, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().WeaponDamagesRatio, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().PreferredWeaponTypes, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">@Html.LabelFor(model => model.Inscriptions.FirstOrDefault().PreferredWeaponDamagesRatio, htmlAttributes: new { @class = "control-label" })</th>
-                        <th scope="col" class="col-md-2">
-                            <input class="btn btn-primary btn-block" type="button" onclick="addInscToPage(this)" value="Add Insc" id="@pageId" />
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="inscList_@pageId">
-                    @if (Model != null && Model.Inscriptions != null)
-                    {
-                        for (var i = 0; i < Model.Inscriptions.Count; i++)
-                        {
-                            Html.RenderPartial("InscPartial", Model.Inscriptions[i]);
-                        }
-                    }
-                </tbody>
-            </table>
-
-        </td>
-        <td class="col-md-2">
-            <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().remove();">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </td>
+                            <div class="row mt-1" id="inscList_@pageId">
+                                @if (Model != null && Model.Inscriptions != null)
+                                {
+                                    for (var i = 0; i < Model.Inscriptions.Count; i++)
+                                    {
+                                        Html.RenderPartial("InscPartial", Model.Inscriptions[i]);
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
     }
-</tr>
+</div>

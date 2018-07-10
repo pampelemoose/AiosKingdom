@@ -4,16 +4,20 @@
 
 $(document).ready(function () {
     $(".update-image-viewer").click(function () {
-        var image = this.parentElement.parentElement.getElementsByClassName("image-viewer")[0];
-        if (image != null) {
-            var elem = image.parentElement.parentElement.getElementsByClassName('image-url-setter')[0];
-            $(image).attr("src", $(elem).val())
-        }
+        UpdateImage(this);
     });
 
     $("#registration_form").on("submit", SubmitRegistrationForm);
     $("#login_form").on("submit", SubmitLoginForm);
 });
+
+function UpdateImage(update) {
+    var image = update.parentElement.parentElement.parentElement.parentElement.getElementsByClassName("image-viewer")[0];
+    if (image != null) {
+        var elem = image.parentElement.parentElement.parentElement.parentElement.getElementsByClassName('image-url-setter')[0];
+        $(image).attr("src", $(elem).val())
+    }
+}
 
 /**
  * Loading page Show/Hide

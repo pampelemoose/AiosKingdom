@@ -12,72 +12,73 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
+    <section class="p-2">
+        <div class="container">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-horizontal">
-        <section>
-            <div class="container">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
                         @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.VersionList, "", new { @class = "text-danger" })
                     </div>
+                    @Html.ValidationMessageFor(model => model.VersionList, "", new { @class = "text-danger" })
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Quality, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="bg-info">
-            <div class="container">
-                @Html.LabelFor(model => model.Pages, htmlAttributes: new { @class = "control-label" })
-                <table class="table table-striped">
-                    <thead>
-                        <tr class="row">
-                            <th hidden></th>
-                            <th hidden></th>
-                            <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Pages.FirstOrDefault().StatCost, htmlAttributes: new { @class = "control-label" })</th>
-                            <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Pages.FirstOrDefault().Rank, htmlAttributes: new { @class = "control-label" })</th>
-                            <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Pages.FirstOrDefault().ManaCost, htmlAttributes: new { @class = "control-label" })</th>
-                            <th scope="col" class="col-md-3">@Html.LabelFor(model => model.Pages.FirstOrDefault().Cooldown, htmlAttributes: new { @class = "control-label" })</th>
-                            <th scope="col" class="col-md-2">
-                                <input class="btn btn-primary btn-block" type="button" id="addPageToBook" value="Add Page" />
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="pageList">
-                        @if (Model != null && Model.Pages != null)
-                        {
-                            for (var i = 0; i < Model.Pages.Count; i++)
-                            {
-                                Html.RenderPartial("PagePartial", Model.Pages[i]);
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </section>
 
-        <section>
-            <div class="container">
-                <input type="submit" value="Create" class="btn btn-success btn-block" />
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Quality, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+
+    <section class="bg-info p-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10">
+                    <h2>@Html.LabelFor(model => model.Pages, htmlAttributes: new { @class = "control-label" })</h2>
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-primary btn-block" type="button" id="addPageToBook" value="Add Page" />
+                </div>
+            </div>
+
+            <div class="row mt-2" id="pageList">
+                @if (Model != null && Model.Pages != null)
+                {
+                    for (var i = 0; i < Model.Pages.Count; i++)
+                    {
+                        Html.RenderPartial("PagePartial", Model.Pages[i]);
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-2">
+        <div class="container">
+            <input type="submit" value="Create" class="btn btn-success btn-block" />
+        </div>
+    </section>
 
     if (ViewBag.Message != null)
     {
@@ -104,92 +105,55 @@
         });
 
         function addInscToPage(page) {
-            var elem = page;
-            var isSecond = false;
-            while (elem && elem !== document) {
-                if (elem.tagName == "TR") {
-                    if (isSecond) {
-
-                        $.ajax({
-                            url: "/Books/AddInscPartial",
-                            cache: false,
-                            type: "GET",
-                            data: {
-                                "id": $(elem).children("input[name='Pages.index']").val()
-                            },
-                            success: function (data) {
-                                $('#inscList_' + page.id).append(data);
-                                $('#inscList_' + page.id).fadeIn('fast');
-                            }
-                        });
-                        break;
-                    }
-                    isSecond = true;
+            var elem = document.getElementById('page-card-' + page.id);
+            $.ajax({
+                url: "/Books/AddInscPartial",
+                cache: false,
+                type: "GET",
+                data: {
+                    "id": $(elem).children("input[name='Pages.index']").val()
+                },
+                success: function (data) {
+                    $('#inscList_' + page.id).append(data);
+                    $('#inscList_' + page.id).fadeIn('fast');
                 }
-                elem = elem.parentNode;
-            }
+            });
         }
 
         function addWeaponTypeToInsc(page, insc) {
-            var elem = insc;
-            var isSecond = false;
-            while (elem && elem !== document) {
-                if (elem.tagName == "TR") {
-                    if (isSecond) {
-                        console.log(page);
-                        console.log($(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val());
-
-                        $.ajax({
-                            url: "/Books/AddWeaponTypePartial",
-                            cache: false,
-                            type: "GET",
-                            data: {
-                                "id": page,
-                                "inscId": $(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val(),
-                                "typeExtension": "WeaponTypes"
-                            },
-                            success: function (data) {
-                                $('#weaponTypeList_' + page).append(data);
-                                $('#weaponTypeList_' + page).fadeIn('fast');
-                            }
-                        });
-                        break;
-                    }
-                    isSecond = true;
+            var elem = document.getElementById('insc-card-' + insc.id);
+            $.ajax({
+                url: "/Books/AddWeaponTypePartial",
+                cache: false,
+                type: "GET",
+                data: {
+                    "id": page,
+                    "inscId": $(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val(),
+                    "typeExtension": "WeaponTypes"
+                },
+                success: function (data) {
+                    $('#weaponTypeList_' + insc.id).append(data);
+                    $('#weaponTypeList_' + insc.id).fadeIn('fast');
                 }
-                elem = elem.parentNode;
-            }
+            });
         }
 
         function addPrefferedWeaponTypeToInsc(page, insc) {
-            var elem = insc;
-            var isSecond = false;
-            while (elem && elem !== document) {
-                if (elem.tagName == "TR") {
-                    if (isSecond) {
-                        console.log(page);
-                        console.log($(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val());
-
-                        $.ajax({
-                            url: "/Books/AddWeaponTypePartial",
-                            cache: false,
-                            type: "GET",
-                            data: {
-                                "id": page,
-                                "inscId": $(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val(),
-                                "typeExtension": "PreferredWeaponTypes"
-                            },
-                            success: function (data) {
-                                $('#prefferedWeaponTypeList_' + page).append(data);
-                                $('#prefferedWeaponTypeList_' + page).fadeIn('fast');
-                            }
-                        });
-                        break;
-                    }
-                    isSecond = true;
+            var elem = document.getElementById('insc-card-' + insc.id);
+            $.ajax({
+                url: "/Books/AddWeaponTypePartial",
+                cache: false,
+                type: "GET",
+                data: {
+                    "id": page,
+                    "inscId": $(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val(),
+                    "typeExtension": "PreferredWeaponTypes"
+                },
+                success: function (data) {
+                    $('#prefferedWeaponTypeList_' + insc.id).append(data);
+                    $('#prefferedWeaponTypeList_' + insc.id).fadeIn('fast');
                 }
-                elem = elem.parentNode;
-            }
+            });
         }
     </script>
 }
