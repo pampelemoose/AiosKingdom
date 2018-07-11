@@ -65,104 +65,20 @@
 
 <section>
     <div class="container">
-        <div class="row">
+        <ul class="list-unstyled">
             @foreach (var book in Model.Books)
             {
-                <div class="card col-12 mt-2">
-                    <div class="card-header" data-toggle="collapse" href="#@book.Id" aria-expanded="false" aria-controls="@book.Id">
-                        <div class="row">
-                            <div class="col-10">@book.Name</div>
-                            <div class="col-2"><strong>@book.Quality</strong></div>
+                <li class="media align-items-center @book.Quality.ToString().ToLower()">
+                    <div class="media-body row">
+                        <div class="col-md-10">
+                            <h3 class="mt-0">@book.Name</h3>
+                        </div>
+                        <div class="col-md-2">
+                            @Html.ActionLink("Details", "Details", new { id = book.BookId }, new { @class = "btn btn-info btn-block" })
                         </div>
                     </div>
-                    <div class="card-body collapse" id="@book.Id">
-                        <div class="row">
-                            <ul class="list-unstyled col-md-12">
-                                @if (book.Pages != null)
-                                {
-                                    foreach (var page in book.Pages)
-                                    {
-                                        <li class="media mt-2 border border-primary">
-                                            <img class="mr-3" src="@page.Image">
-                                            <div class="media-body">
-                                                <div class="row">
-                                                    <div class="col-md-12 text-center font-weight-bold p-2">
-                                                        @page.Description
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="row">
-                                                            <div class="col-8">Rank</div>
-                                                            <div class="col-4"><strong>@page.Rank</strong></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="row">
-                                                            <div class="col-8">StatCost</div>
-                                                            <div class="col-4"><strong>@page.EmberCost</strong></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="row">
-                                                            <div class="col-8">ManaCost</div>
-                                                            <div class="col-4"><strong>@page.ManaCost</strong></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <ul class="list-unstyled">
-                                                    @if (page.Inscriptions != null)
-                                                    {
-                                                        foreach (var insc in page.Inscriptions)
-                                                        {
-                                                            <li class="media border border-success">
-                                                                <div class="media-body">
-                                                                    <div class="row">
-                                                                        <div class="col-12 text-center font-weight-bold p-2">
-                                                                            @insc.Description
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-5">@insc.Type</div>
-                                                                        <div class="col-1">@insc.BaseValue</div>
-                                                                        <div class="col-4">@insc.StatType</div>
-                                                                        <div class="col-1">@insc.Ratio</div>
-                                                                        <div class="col-1">@insc.Duration</div>
-                                                                    </div>
-                                                                    @if (@insc.IncludeWeaponDamages)
-                                                                    {
-                                                                        <div class="row">
-                                                                            <div class="col-4">
-                                                                                @foreach (var type in insc.WeaponTypes)
-                                                                                {
-                                                                                    <span>@type</span>
-                                                                                }
-                                                                            </div>
-                                                                            <div class="col-2">@insc.WeaponDamagesRatio</div>
-                                                                            <div class="col-4">
-                                                                                @foreach (var type in insc.PreferredWeaponTypes)
-                                                                                {
-                                                                                    <span>@type</span>
-                                                                                }
-                                                                            </div>
-                                                                            <div class="col-2">@insc.PreferredWeaponDamagesRatio</div>
-                                                                        </div>
-                                                                    }
-                                                                </div>
-                                                            </li>
-                                                        }
-                                                    }
-
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    }
-                                }
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                </li>
             }
-        </div>
+        </ul>
     </div>
 </section>

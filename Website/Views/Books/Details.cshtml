@@ -1,0 +1,110 @@
+﻿@model DataModels.Skills.Book
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <h2>@Model.Name</h2>
+            </div>
+            <div class="col-md-3">
+                <strong class="@Model.Quality.ToString().ToLower()-text">@Model.Quality</strong>
+            </div>
+        </div>
+    </div>
+</section>
+
+@foreach (var pageIt in Model.Pages.Select((value, index) => new { index, value }))
+{
+    var page = pageIt.value;
+
+    <section class="@(pageIt.index % 2 == 0 ? "bg-dark" : "") p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-8">Rank</div>
+                                        <div class="col-4"><strong>@page.Rank</strong></div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-8">StatCost</div>
+                                        <div class="col-4"><strong>@page.EmberCost</strong></div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-8">ManaCost</div>
+                                        <div class="col-4"><strong>@page.ManaCost</strong></div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <img class="img-thumbnail" src="@page.Image" width="128" height="128">
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-12 text-center font-weight-bold p-2">
+                            @page.Description
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ul class="list-group list-group-flush">
+                            @if (page.Inscriptions != null)
+                            {
+                                foreach (var insc in page.Inscriptions)
+                                {
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-12 text-center font-weight-bold p-2">
+                                                @insc.Description
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-5">@insc.Type</div>
+                                            <div class="col-1">@insc.BaseValue</div>
+                                            <div class="col-4">@insc.StatType</div>
+                                            <div class="col-1">@insc.Ratio</div>
+                                            <div class="col-1">@insc.Duration</div>
+                                        </div>
+                                        @if (@insc.IncludeWeaponDamages)
+                                        {
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    @foreach (var type in insc.WeaponTypes)
+                                                    {
+                                                        <span>@type</span>
+                                                    }
+                                                </div>
+                                                <div class="col-2">@insc.WeaponDamagesRatio</div>
+                                                <div class="col-4">
+                                                    @foreach (var type in insc.PreferredWeaponTypes)
+                                                    {
+                                                        <span>@type</span>
+                                                    }
+                                                </div>
+                                                <div class="col-2">@insc.PreferredWeaponDamagesRatio</div>
+                                            </div>
+                                        }
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+}

@@ -20,6 +20,13 @@ namespace Website.Controllers
             return View(filter);
         }
 
+        public ActionResult Details(Guid id)
+        {
+            var book = DataRepositories.BookRepository.GetById(id);
+
+            return View(book);
+        }
+
         [CustomAuthorize(Roles = "SuperAdmin")]
         [HttpGet]
         public ActionResult Create()

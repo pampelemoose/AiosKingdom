@@ -6,7 +6,6 @@
 
 <section>
     <div class="container">
-
         <div class="row">
             <div class="media">
                 <img class="mr-3" src="@Model.Image" height="128" width="128" />
@@ -16,9 +15,9 @@
                 </div>
             </div>
         </div>
-
     </div>
 </section>
+
 <section class="bg-dark mt-5 text-muted">
     <div class="container">
         <p class="mb-0">@Model.Story</p>
@@ -82,16 +81,17 @@
                         </thead>
                         <tbody>
                             @foreach (var type in Model.Types)
-                {
-                    <tr>
-                        <td>@type</td>
-                    </tr>
-    }
+                            {
+                                <tr>
+                                    <td>@type</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+    </div>
 </section>
 <section class="mt-5 bg-dark">
     <div class="container">
@@ -110,7 +110,6 @@
                 }
             </tbody>
         </table>
-    </div>
     </div>
 </section>
 
