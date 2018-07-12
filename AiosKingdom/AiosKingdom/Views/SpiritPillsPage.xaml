@@ -18,10 +18,10 @@
                 Grid.Column="0"
                 BackgroundColor="{Binding StatType, Converter={StaticResource statToColor}}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="200" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
                 </Grid.RowDefinitions>
 
                 <Label
