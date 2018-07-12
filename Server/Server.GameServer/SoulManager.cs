@@ -215,6 +215,7 @@ namespace Server.GameServer
             {
                 var item = DataRepositories.WeaponRepository.GetById(equipment.WeaponRight);
 
+                data.ItemLevel += item.ItemLevel;
                 data.MinDamages += item.MinDamages;
                 data.MaxDamages += item.MaxDamages;
                 data.WeaponTypes.Add(item.WeaponType.ToString());
@@ -225,6 +226,7 @@ namespace Server.GameServer
             {
                 var item = DataRepositories.WeaponRepository.GetById(equipment.WeaponLeft);
 
+                data.ItemLevel += item.ItemLevel;
                 data.MinDamages += item.MinDamages;
                 data.MaxDamages += item.MaxDamages;
                 data.WeaponTypes.Add(item.WeaponType.ToString());

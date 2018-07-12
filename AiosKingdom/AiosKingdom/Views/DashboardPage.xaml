@@ -18,6 +18,34 @@
             </Grid.ColumnDefinitions>
 
             <Grid
+                Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid 
+                    Grid.Row="2">
+                    <Image Source="{Binding WeaponRight, Converter={StaticResource objectToImage}}"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding ShowWeaponAction}"
+                        CommandParameter="{Binding WeaponRight}"/>
+                </Grid>
+
+                <Grid 
+                    Grid.Row="3">
+                    <Image Source="{Binding WeaponLeft, Converter={StaticResource objectToImage}}"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding ShowWeaponAction}"
+                        CommandParameter="{Binding WeaponLeft}"/>
+                </Grid>
+            </Grid>
+            
+            <Grid
                 Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -494,6 +522,125 @@
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
                                     Text="{Binding SelectedItem.ArmorValue}"/>
+                            </ContentView>
+                        </Grid>
+                    </Grid>
+                    <ListView
+                        Grid.Row="2"
+                        BackgroundColor="Transparent"
+                        ItemsSource="{Binding SelectedItem.Stats}"
+                        HeightRequest="{Binding SelectedItem.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
+                        RowHeight="20"
+                        SeparatorVisibility="None"
+                        IsEnabled="false">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="10*" />
+                                            <ColumnDefinition Width="2*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label 
+                                            Grid.Column="0"
+                                            Text="{Binding Type}" />
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="{Binding StatValue}" />
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>
+
+            <Grid
+                Grid.Column="2"
+                BackgroundColor="{Binding SelectedItem.Quality, Converter={StaticResource itemQualityToColor}}"
+                IsVisible="{Binding ShowWeaponDetails}">
+                <Grid
+                    BackgroundColor="Transparent"
+                    WidthRequest="200"
+                    HorizontalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="100" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        BackgroundColor="Transparent"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding SelectedItem.Name}"/>
+
+                    <Grid
+                        Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            Grid.Column="0"
+                            Source="{Binding SelectedItem, Converter={StaticResource objectToImage}}" />
+                        <Grid
+                            Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <ContentView
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                BackgroundColor="Blue"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedItem.UseLevelRequired}"/>
+                            </ContentView>
+                            <ContentView
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                BackgroundColor="Gray"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedItem.ItemLevel}"/>
+                            </ContentView>
+                            <ContentView
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                BackgroundColor="Gray"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedItem.MinDamages}"/>
+                            </ContentView>
+                            <ContentView
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                BackgroundColor="Gray"
+                                Padding="5">
+                                <Label
+                                    BackgroundColor="Gray"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding SelectedItem.MaxDamages}"/>
                             </ContentView>
                         </Grid>
                     </Grid>

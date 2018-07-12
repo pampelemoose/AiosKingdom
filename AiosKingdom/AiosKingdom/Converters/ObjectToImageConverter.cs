@@ -26,6 +26,14 @@ namespace AiosKingdom.Converters
                     return dto.Image;
             }
 
+            if (value is DataModels.Items.Weapon)
+            {
+                var dto = value as DataModels.Items.Weapon;
+
+                if (!string.IsNullOrEmpty(dto.Image))
+                    return dto.Image;
+            }
+
             if (value is DataModels.Skills.Page)
             {
                 var dto = value as DataModels.Skills.Page;

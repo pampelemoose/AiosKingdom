@@ -26,6 +26,9 @@ namespace AiosKingdom.ViewModels
                 NotifyPropertyChanged(nameof(Leg));
                 NotifyPropertyChanged(nameof(Pants));
                 NotifyPropertyChanged(nameof(Feet));
+
+                NotifyPropertyChanged(nameof(WeaponRight));
+                NotifyPropertyChanged(nameof(WeaponLeft));
             });
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulDatasUpdated, (sender) =>
@@ -54,6 +57,9 @@ namespace AiosKingdom.ViewModels
         public DataModels.Items.Armor Leg => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Leg));
         public DataModels.Items.Armor Pants => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Pants));
         public DataModels.Items.Armor Feet => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Feet));
+
+        public DataModels.Items.Weapon WeaponRight => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.WeaponRight));
+        public DataModels.Items.Weapon WeaponLeft => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.WeaponLeft));
         //public DataModels.Items.Bag Bag => DatasManager.Instance.Bags?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Bag));
 
         private bool _showArmorDetails;
@@ -67,10 +73,21 @@ namespace AiosKingdom.ViewModels
             }
         }
 
+        private bool _showWeaponDetails;
+        public bool ShowWeaponDetails
+        {
+            get { return _showWeaponDetails; }
+            set
+            {
+                _showWeaponDetails = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private DataModels.Items.AItem _selectedItem;
         public DataModels.Items.AItem SelectedItem => _selectedItem;
 
-        private Command _showArmorAction;
+        private ICommand _showArmorAction;
         public ICommand ShowArmorAction =>
             _showArmorAction ?? (_showArmorAction = new Command((item) =>
             {
@@ -78,14 +95,40 @@ namespace AiosKingdom.ViewModels
 
                 if (armor == null) return;
 
-                if (_selectedItem == null || (_selectedItem != null && _selectedItem == armor))
+                if (_selectedItem == null || (_selectedItem != null && _selectedItem == armor) || ShowWeaponDetails)
                 {
                     ShowArmorDetails = !ShowArmorDetails;
                 }
 
                 if (ShowArmorDetails)
                 {
+                    ShowWeaponDetails = false;
                     _selectedItem = armor;
+                    NotifyPropertyChanged(nameof(SelectedItem));
+                }
+                else
+                {
+                    _selectedItem = null;
+                }
+            }));
+
+        private ICommand _showWeaponAction;
+        public ICommand ShowWeaponAction =>
+            _showWeaponAction ?? (_showWeaponAction = new Command((item) =>
+            {
+                var weapon = (DataModels.Items.Weapon)item;
+
+                if (weapon == null) return;
+
+                if (_selectedItem == null || (_selectedItem != null && _selectedItem == weapon) || ShowArmorDetails)
+                {
+                    ShowWeaponDetails = !ShowWeaponDetails;
+                }
+
+                if (ShowWeaponDetails)
+                {
+                    ShowArmorDetails = false;
+                    _selectedItem = weapon;
                     NotifyPropertyChanged(nameof(SelectedItem));
                 }
                 else

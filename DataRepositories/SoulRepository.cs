@@ -93,6 +93,9 @@ namespace DataRepositories
                 online.Equipment.Leg = soul.Equipment.Leg;
                 online.Equipment.Feet = soul.Equipment.Feet;
 
+                online.Equipment.WeaponRight = soul.Equipment.WeaponRight;
+                online.Equipment.WeaponLeft = soul.Equipment.WeaponLeft;
+
                 // INVENTORY
                 var oldInv = online.Inventory;
                 online.Inventory = new List<DataModels.InventorySlot>();

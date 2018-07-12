@@ -80,7 +80,7 @@ namespace AiosKingdom.ViewModels
         public ICommand BagSlotEquipAction =>
             _bagSlotEquipAction ?? (_bagSlotEquipAction = new Command(() =>
             {
-                //NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
+                //NetworkManager.Instance.EquipItem(_selectedWeapon.Slot.Id);
             }, () => { return _bagSlotIsSelected && _selectedBag?.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
 
         private List<Models.InventoryItemModel<DataModels.Items.Consumable>> _consumables;
@@ -127,7 +127,8 @@ namespace AiosKingdom.ViewModels
         public ICommand WeaponSlotEquipAction =>
             _weaponSlotEquipAction ?? (_weaponSlotEquipAction = new Command(() =>
             {
-                //NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
+                NetworkManager.Instance.EquipItem(_selectedWeapon.Slot.Id);
+                LoadingScreenManager.Instance.OpenLoadingScreen($"Equiping {_selectedWeapon.Item.Name}...");
             }, () => { return _weaponSlotIsSelected && _selectedWeapon?.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
 
         private void SetInventories()

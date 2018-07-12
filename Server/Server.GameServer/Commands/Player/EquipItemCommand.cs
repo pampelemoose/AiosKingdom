@@ -11,7 +11,7 @@ namespace Server.GameServer.Commands.Player
     {
         private DataModels.Config _config;
 
-        public EquipItemCommand(CommandArgs args, DataModels.Config config) 
+        public EquipItemCommand(CommandArgs args, DataModels.Config config)
             : base(args)
         {
             _config = config;
@@ -162,9 +162,94 @@ namespace Server.GameServer.Commands.Player
                             //var item = DataRepositories.RealPGRepository.Instance.Bags.GetById(itemSlot.ItemId);
                         }
                         break;
-                    case DataModels.Items.ItemType.Weapon: // TODO
+                    case DataModels.Items.ItemType.Weapon:
                         {
-                            //var item = DataRepositories.RealPGRepository.Instance.Weapons.GetById(itemSlot.ItemId);
+                            var item = DataRepositories.WeaponRepository.GetById(itemSlot.ItemId);
+                            datas.Inventory.Remove(itemSlot);
+                            switch (item.HandlingType)
+                            {
+                                case DataModels.Items.HandlingType.OneHand:
+                                    {
+                                        if (Guid.Empty.Equals(datas.Equipment.WeaponRight))
+                                        {
+                                            datas.Equipment.WeaponRight = item.ItemId;
+                                        }
+                                        else
+                                        {
+                                            var rHand = DataRepositories.WeaponRepository.GetById(datas.Equipment.WeaponRight);
+                                            if (rHand != null)
+                                            {
+                                                if (rHand.HandlingType == DataModels.Items.HandlingType.TwoHand)
+                                                {
+                                                    Guid toSwap = datas.Equipment.WeaponRight;
+                                                    datas.Equipment.WeaponRight = item.ItemId;
+                                                    itemSlot.ItemId = toSwap;
+                                                    datas.Inventory.Add(itemSlot);
+                                                }
+                                                else
+                                                {
+                                                    if (Guid.Empty.Equals(datas.Equipment.WeaponLeft))
+                                                    {
+                                                        datas.Equipment.WeaponLeft = item.ItemId;
+                                                    }
+                                                    else
+                                                    {
+                                                        Guid toSwap = datas.Equipment.WeaponLeft;
+                                                        datas.Equipment.WeaponLeft = datas.Equipment.WeaponRight;
+                                                        datas.Equipment.WeaponRight = item.ItemId;
+                                                        itemSlot.ItemId = toSwap;
+                                                        datas.Inventory.Add(itemSlot);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case DataModels.Items.HandlingType.TwoHand:
+                                    {
+                                        if (Guid.Empty.Equals(datas.Equipment.WeaponRight) && Guid.Empty.Equals(datas.Equipment.WeaponLeft))
+                                        {
+                                            datas.Equipment.WeaponRight = item.ItemId;
+                                        }
+                                        else
+                                        {
+                                            Guid itemId = item.ItemId;
+
+                                            bool swaped = false;
+                                            if (!Guid.Empty.Equals(datas.Equipment.WeaponRight))
+                                            {
+                                                Guid toSwap = datas.Equipment.WeaponRight;
+                                                itemSlot.ItemId = toSwap;
+                                                datas.Inventory.Add(itemSlot);
+                                                swaped = true;
+                                            }
+                                            if (!Guid.Empty.Equals(datas.Equipment.WeaponLeft))
+                                            {
+                                                if (!swaped)
+                                                {
+                                                    Guid toSwap = datas.Equipment.WeaponLeft;
+                                                    itemSlot.ItemId = toSwap;
+                                                    datas.Inventory.Add(itemSlot);
+                                                }
+                                                else
+                                                {
+                                                    datas.Inventory.Add(new DataModels.InventorySlot
+                                                    {
+                                                        ItemId = datas.Equipment.WeaponLeft,
+                                                        Quantity = 1,
+                                                        SoulId = itemSlot.SoulId,
+                                                        Type = DataModels.Items.ItemType.Weapon,
+                                                        LootedAt = DateTime.Now
+                                                    });
+                                                    datas.Equipment.WeaponLeft = Guid.Empty;
+                                                }
+                                            }
+
+                                            datas.Equipment.WeaponRight = itemId;
+                                        }
+                                    }
+                                    break;
+                            }
                         }
                         break;
                 }
