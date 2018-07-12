@@ -48,12 +48,6 @@ namespace Website.Controllers
             {
                 armorModel.Stats.RemoveAll(s => s.StatValue == 0);
 
-                if (armorModel.Stats.Count == 0)
-                {
-                    armorModel.VersionList = DataRepositories.VersionRepository.GetAll();
-                    return View(armorModel);
-                }
-
                 if (DataRepositories.ArmorRepository.Create(new DataModels.Items.Armor
                 {
                     Id = Guid.NewGuid(),

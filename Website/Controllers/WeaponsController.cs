@@ -47,12 +47,6 @@ namespace Website.Controllers
             {
                 weaponModel.Stats.RemoveAll(s => s.StatValue == 0);
 
-                if (weaponModel.Stats.Count == 0)
-                {
-                    weaponModel.VersionList = DataRepositories.VersionRepository.GetAll();
-                    return View(weaponModel);
-                }
-
                 if (DataRepositories.WeaponRepository.Create(new DataModels.Items.Weapon
                 {
                     Id = Guid.NewGuid(),
