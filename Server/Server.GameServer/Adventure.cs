@@ -467,6 +467,26 @@ namespace Server.GameServer
 
         private void ExecutePlayerInscription(DataModels.Skills.Inscription inscription, Network.SoulDatas datas, Guid enemyId = new Guid())
         {
+            Random rand = new Random();
+            double amount = inscription.BaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, datas));
+
+            if (inscription.IncludeWeaponDamages)
+            {
+                if (inscription.WeaponTypes.Where(w => datas.WeaponTypes.Contains(w.ToString())).Count() > 0)
+                {
+                    int wpDmg = rand.Next(datas.MinDamages, datas.MaxDamages + 1);
+                    Console.WriteLine($"IncludeWeaponType += {wpDmg} * {inscription.WeaponDamagesRatio}");
+                    amount += (wpDmg * inscription.WeaponDamagesRatio);
+                }
+
+                if (inscription.PreferredWeaponTypes.Where(w => datas.WeaponTypes.Contains(w.ToString())).Count() > 0)
+                {
+                    int wpDmg = rand.Next(datas.MinDamages, datas.MaxDamages + 1);
+                    Console.WriteLine($"IncludePreferredWeaponType += {wpDmg} * {inscription.PreferredWeaponDamagesRatio}");
+                    amount += (wpDmg * inscription.PreferredWeaponDamagesRatio);
+                }
+            }
+
             switch (inscription.Type)
             {
                 case DataModels.Skills.InscriptionType.Damages:
@@ -475,7 +495,7 @@ namespace Server.GameServer
                         {
                             var enemy = _state.Enemies[enemyId];
 
-                            enemy.CurrentHealth -= inscription.BaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, datas));
+                            enemy.CurrentHealth -= amount;
                             Console.WriteLine($"Using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, datas)})*{inscription.Ratio}) on {enemy.MonsterId}.({enemy.CurrentHealth}/{enemy.MaxHealth}) .");
 
                             _state.Enemies[enemyId] = enemy;
@@ -488,7 +508,7 @@ namespace Server.GameServer
                     break;
                 case DataModels.Skills.InscriptionType.Heal:
                     {
-                        _state.CurrentHealth += inscription.BaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, datas));
+                        _state.CurrentHealth += amount;
                         if (_state.CurrentHealth > datas.MaxHealth)
                         {
                             _state.CurrentHealth = datas.MaxHealth;

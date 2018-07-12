@@ -125,6 +125,10 @@ namespace Server.GameServer
             data.TotalIntelligence = soul.Intelligence;
             data.TotalWisdom = soul.Wisdom;
 
+            data.MinDamages = 0;
+            data.MaxDamages = 0;
+            data.WeaponTypes = new List<string>();
+
             var equipment = soul.Equipment;
 
             if (!Guid.Empty.Equals(equipment.Head))
@@ -204,6 +208,26 @@ namespace Server.GameServer
                 var item = DataRepositories.BagRepository.GetById(equipment.Bag);
 
                 data.ItemLevel += item.ItemLevel;
+                AddStatValue(data, item.Stats);
+            }
+
+            if (!Guid.Empty.Equals(equipment.WeaponRight))
+            {
+                var item = DataRepositories.WeaponRepository.GetById(equipment.WeaponRight);
+
+                data.MinDamages += item.MinDamages;
+                data.MaxDamages += item.MaxDamages;
+                data.WeaponTypes.Add(item.WeaponType.ToString());
+                AddStatValue(data, item.Stats);
+            }
+
+            if (!Guid.Empty.Equals(equipment.WeaponLeft))
+            {
+                var item = DataRepositories.WeaponRepository.GetById(equipment.WeaponLeft);
+
+                data.MinDamages += item.MinDamages;
+                data.MaxDamages += item.MaxDamages;
+                data.WeaponTypes.Add(item.WeaponType.ToString());
                 AddStatValue(data, item.Stats);
             }
         }

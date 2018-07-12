@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 
@@ -10,7 +11,7 @@ namespace AiosKingdom.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is DataModels.Skills.Inscription)
+            if (value is DataModels.Skills.Inscription && (parameter is string && ((string)parameter == "min" || (string)parameter == "max")))
             {
                 var insc = (DataModels.Skills.Inscription)value;
                 int statVal = 0;
@@ -37,7 +38,20 @@ namespace AiosKingdom.Converters
                         break;
                 }
 
-                return insc.BaseValue + (statVal * insc.Ratio);
+                double wpDmg = 0;
+                if (insc.IncludeWeaponDamages)
+                {
+                    if (insc.WeaponTypes.Where(w => DatasManager.Instance.Datas.WeaponTypes.Contains(w.ToString())).Count() > 0)
+                    {
+                        wpDmg += (((string)parameter == "min") ? DatasManager.Instance.Datas.MinDamages : DatasManager.Instance.Datas.MaxDamages) * insc.WeaponDamagesRatio;
+                    }
+                    if (insc.PreferredWeaponTypes.Where(w => DatasManager.Instance.Datas.WeaponTypes.Contains(w.ToString())).Count() > 0)
+                    {
+                        wpDmg += (((string)parameter == "min") ? DatasManager.Instance.Datas.MinDamages : DatasManager.Instance.Datas.MaxDamages) * insc.PreferredWeaponDamagesRatio;
+                    }
+                }
+
+                return insc.BaseValue + (statVal * insc.Ratio) + wpDmg;
             }
 
             return 0;

@@ -20,5 +20,9 @@ namespace Network
 
         public int ItemLevel { get; set; }
         public int Armor { get; set; }
+
+        public List<string> WeaponTypes { get; set; }
+        public int MinDamages { get; set; }
+        public int MaxDamages { get; set; }
     }
 }
