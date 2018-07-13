@@ -7,7 +7,7 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class ConsumablesController : Controller
+    public class ConsumablesController : AKBaseController
     {
         public ActionResult Index(Models.Filters.ConsumableFilter filter)
         {
@@ -45,6 +45,7 @@ namespace Website.Controllers
 
                 if (consumableModel.Effects.Count == 0)
                 {
+                    Alert(AlertMessage.AlertType.Danger, $"Need at least one effect.", "Effect missing !");
                     consumableModel.VersionList = DataRepositories.VersionRepository.GetAll();
                     return View(consumableModel);
                 }

@@ -179,12 +179,27 @@
     <main role="main" class="@(User.IsInRole("SuperAdmin") ? "admin-section" : "")">
         <section class="section">
             <div class="container">
-                @if (ViewBag.Errors != null)
+                @if (ViewBag.Alerts != null)
                 {
-                    foreach (var error in ViewBag.Errors)
+                    foreach (var alert in ViewBag.Alerts)
                     {
-                        <div class="alert alert-danger mt-2">
-                            <strong>Error!</strong>@error
+                        <div class="alert alert-@alert.Type.ToString().ToLower() mt-2">
+                            @if (!string.IsNullOrEmpty(alert.Title))
+                            {
+                                <h4 class="alert-heading">
+                                    @alert.Title
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            }
+                            else
+                            {
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            }
+                            @alert.Message
                         </div>
                     }
                 }

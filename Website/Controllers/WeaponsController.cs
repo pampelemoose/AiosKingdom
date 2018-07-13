@@ -7,7 +7,7 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class WeaponsController : Controller
+    public class WeaponsController : AKBaseController
     {
         public ActionResult Index(Models.Filters.WeaponFilter filter)
         {

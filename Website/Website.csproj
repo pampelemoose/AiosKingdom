@@ -160,6 +160,7 @@
     <Compile Include="Authentication\CustomRole.cs" />
     <Compile Include="Authentication\CustomSerializeModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AKBaseController.cs" />
     <Compile Include="Controllers\ArmorsController.cs" />
     <Compile Include="Controllers\BagsController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
@@ -329,6 +330,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\AKBase\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -7,7 +7,7 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class MarketController : Controller
+    public class MarketController : AKBaseController
     {
         // GET: Market
         public ActionResult Index(Models.Filters.MarketSlotFilter filter)

@@ -7,7 +7,7 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class GameServersController : Controller
+    public class GameServersController : AKBaseController
     {
         public ActionResult Index()
         {

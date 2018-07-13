@@ -8,7 +8,7 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class ArmorsController : Controller
+    public class ArmorsController : AKBaseController
     {
         public ActionResult Index(Models.Filters.ArmorFilter filter)
         {

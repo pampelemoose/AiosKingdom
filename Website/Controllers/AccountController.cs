@@ -10,7 +10,7 @@ using System.Web.Security;
 
 namespace Website.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : AKBaseController
     {
         // GET: Account
         public ActionResult Index()
@@ -103,6 +103,7 @@ namespace Website.Controllers
 
                 if (DataRepositories.UserRepository.Create(user))
                 {
+                    Alert(AlertMessage.AlertType.Success, $"Account created.", "Success !");
                     Response.StatusCode = (int)HttpStatusCode.OK;
                     return PartialView("RegistrationSuccessfulPartial");
                 }

@@ -7,7 +7,7 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class MonstersController : Controller
+    public class MonstersController : AKBaseController
     {
         public ActionResult Index(Models.Filters.MonsterFilter filter)
         {
@@ -113,6 +113,10 @@ namespace Website.Controllers
                     {
                         return RedirectToAction("Index");
                     }
+                }
+                else
+                {
+                    Alert(AlertMessage.AlertType.Danger, $"You need at least one Type and one Phase.", "Type or Phase missing !");
                 }
             }
 

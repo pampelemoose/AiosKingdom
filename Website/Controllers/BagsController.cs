@@ -7,7 +7,7 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class BagsController : Controller
+    public class BagsController : AKBaseController
     {
         public ActionResult Index(Models.Filters.BagFilter filter)
         {

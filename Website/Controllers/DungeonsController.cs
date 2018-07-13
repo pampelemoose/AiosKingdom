@@ -7,7 +7,7 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class DungeonsController : Controller
+    public class DungeonsController : AKBaseController
     {
         public ActionResult Index(Models.Filters.DungeonFilter filter)
         {
@@ -61,7 +61,7 @@ namespace Website.Controllers
 
                 if (dungeonModel.Rooms?.FirstOrDefault(r => r.Type == DataModels.Dungeons.RoomType.Exit) == null)
                 {
-                    ViewBag.Errors = new List<string> { "No exit room in the dungeon. You must add an exit as the last room you want the player to leave." };
+                    Alert(AlertMessage.AlertType.Danger, $"No exit room in the dungeon. You must add an exit as the last room you want the player to leave.", "Exit needed !");
                     dungeonModel.VersionList = DataRepositories.VersionRepository.GetAll();
                     return View(dungeonModel);
                 }

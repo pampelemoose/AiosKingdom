@@ -7,7 +7,7 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class BooksController : Controller
+    public class BooksController : AKBaseController
     {
         // GET: Books
         public ActionResult Index(Models.Filters.BookFilter filter)
@@ -63,7 +63,8 @@ namespace Website.Controllers
 
                 if (bookModel.Pages.Count == 0 || bookModel.Pages?.Select(p => p.Inscriptions.Count).Sum() == 0)
                 {
-                    ViewBag.Errors.Add("You need at least one page and one inscription per page.");
+                    Alert(AlertMessage.AlertType.Danger, $"You need at least one page and one inscription per page.");
+                    ViewBag.Errors.Add();
                     bookModel.VersionList = DataRepositories.VersionRepository.GetAll();
                     return View(bookModel);
                 }
@@ -92,6 +93,7 @@ namespace Website.Controllers
                 }
                 if (hasErrors)
                 {
+                    Alert(AlertMessage.AlertType.Danger, $"Please check the data inputed and retry.", "Error !");
                     bookModel.VersionList = DataRepositories.VersionRepository.GetAll();
                     return View(bookModel);
                 }
