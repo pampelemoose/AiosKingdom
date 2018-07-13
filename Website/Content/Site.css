@@ -77,32 +77,48 @@
 }
 
 .tierone {
-    border-color: #ff1c1c;
+    background-color: #ff1c1c;
+    color: #1d0101;
 }
 
-    .tierone > .card-header {
-        background-color: #ff1c1c;
-        color: #1d0101;
-    }
+.tierone:hover {
+    background-color: #5a0e0e;
+}
 
 .tierone-text {
     color: #ff1c1c;
 }
 
-    .tiertwo {
-        background-color: #ff8a0c;
-    }
+.tiertwo {
+    background-color: #ff8a0c;
+}
+
+.tiertwo:hover {
+    background-color: #5a3d09;
+}
 
 .tierthree {
     background-color: #fffa0e;
+}
+
+.tierthree:hover {
+    background-color: #444206;
 }
 
 .tierfour {
     background-color: #22ff00;
 }
 
+.tierfour:hover {
+    background-color: #0b4502;
+}
+
 .tierfive {
     background-color: #0fe2ff;
+}
+
+.tierfive:hover {
+    background-color: #07505a;
 }
 
 /*Sticky Footer*/
@@ -187,4 +203,17 @@ body {
     padding-bottom: 20px;
     color: #fff;
     text-align: center;
+}
+
+/* Dungeon Style */
+.dungeon-level-box {
+    border: 5px solid #b915ff !important;
+    background-color: #7887AB;
+    color: #b915ff;
+}
+
+.dungeon-max-level-box {
+    border: 5px solid #ff1c1c !important;
+    background-color: #7887AB;
+    color: #ff1c1c;
 }
