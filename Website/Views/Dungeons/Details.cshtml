@@ -1,0 +1,135 @@
+﻿@model DataModels.Dungeons.Dungeon
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <h1>@Model.Name</h1>
+            </div>
+            <div class="col-md-1 p-2">
+                <div class="dungeon-level-box text-center">
+                    <h2>@Model.RequiredLevel</h2>
+                </div>
+            </div>
+            <div class="col-md-1 p-2">
+                <div class="dungeon-max-level-box text-center">
+                    <h2>@Model.MaxLevelAuthorized</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@foreach (var roomIt in Model.Rooms.OrderBy(x => x.RoomNumber).Select((value, index) => new { value, index }))
+{
+    var room = roomIt.value;
+
+    <section class="@(roomIt.index % 2 == 0 ? "bg-dark" : "") p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    @room.Type
+                </div>
+            </div>
+            @if (room.ShopItems != null && room.ShopItems.Count > 0)
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>ShopItems</h3>
+                    </div>
+                    @foreach (var shopItem in room.ShopItems)
+                    {
+                        <div class="col-md-3">
+                            <div class="card bg-info">
+                                <div class="card-header text-dark">
+                                    <h5>
+                                        @switch (shopItem.Type)
+                                        {
+                                            case DataModels.Items.ItemType.Armor:
+                                                {
+                                                    @DataRepositories.ArmorRepository.GetById(shopItem.ItemId).ItemName
+                                                }
+                                                break;
+                                            case DataModels.Items.ItemType.Consumable:
+                                                {
+                                                    @DataRepositories.ConsumableRepository.GetById(shopItem.ItemId).ItemName
+                                                }
+                                                break;
+                                            case DataModels.Items.ItemType.Bag:
+                                                {
+                                                    @DataRepositories.BagRepository.GetById(shopItem.ItemId).ItemName
+                                                }
+                                                break;
+                                            case DataModels.Items.ItemType.Weapon:
+                                                {
+                                                    @DataRepositories.ArmorRepository.GetById(shopItem.ItemId).ItemName
+                                                }
+                                                break;
+                                        }
+                                    </h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-8">Quantity</div>
+                                            <div class="col-md-4">@shopItem.Quantity</div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-8">Shard Price</div>
+                                            <div class="col-md-4">@shopItem.ShardPrice</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (room.Ennemies != null && room.Ennemies.Count > 0)
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Ennemies</h3>
+                    </div>
+                    @foreach (var ennemy in room.Ennemies)
+                    {
+                        <div class="col-md-3">
+                            <div class="card bg-success">
+                                <div class="card-header text-dark">
+                                    <h5>@DataRepositories.MonsterRepository.GetById(ennemy.MonsterId).Name</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-8">Level</div>
+                                            <div class="col-md-4">@ennemy.Level</div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-4">Type</div>
+                                            <div class="col-md-8 text-right">@ennemy.EnemyType</div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-8">Shard Reward</div>
+                                            <div class="col-md-4">@ennemy.ShardReward</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </section>
+}

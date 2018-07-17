@@ -27,30 +27,36 @@
                 <div class="col-md-3">
                     <div class="row">
                         <div class="col-md-12">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-8">Rank</div>
-                                        <div class="col-4"><strong>@page.Rank</strong></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-8">StatCost</div>
-                                        <div class="col-4"><strong>@page.EmberCost</strong></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-8">ManaCost</div>
-                                        <div class="col-4"><strong>@page.ManaCost</strong></div>
-                                    </div>
-                                </li>
-                            </ul>
+                            <div class="card">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-8">Rank</div>
+                                            <div class="col-4"><strong>@page.Rank</strong></div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-8">StatCost</div>
+                                            <div class="col-4"><strong>@page.EmberCost</strong></div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-8">ManaCost</div>
+                                            <div class="col-4"><strong>@page.ManaCost</strong></div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-8">Cooldown</div>
+                                            <div class="col-4"><strong>@page.Cooldown</strong></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <img class="card-img-bottom" src="@page.Image">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12 text-center">
-                        <img class="img-thumbnail" src="@page.Image" width="128" height="128">
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -60,47 +66,122 @@
                         </div>
                     </div>
                     <div class="row">
-                        <ul class="list-group list-group-flush">
-                            @if (page.Inscriptions != null)
+
+                        @if (page.Inscriptions != null)
+                        {
+                            foreach (var insc in page.Inscriptions)
                             {
-                                foreach (var insc in page.Inscriptions)
-                                {
-                                    <li class="list-group-item">
-                                        <div class="row">
-                                            <div class="col-12 text-center font-weight-bold p-2">
-                                                @insc.Description
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-5">@insc.Type</div>
-                                            <div class="col-1">@insc.BaseValue</div>
-                                            <div class="col-4">@insc.StatType</div>
-                                            <div class="col-1">@insc.Ratio</div>
-                                            <div class="col-1">@insc.Duration</div>
-                                        </div>
-                                        @if (@insc.IncludeWeaponDamages)
-                                        {
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    @foreach (var type in insc.WeaponTypes)
-                                                    {
-                                                        <span>@type</span>
-                                                    }
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col-12 text-center font-weight-bold p-2">
+                                                        @insc.Description
+                                                    </div>
                                                 </div>
-                                                <div class="col-2">@insc.WeaponDamagesRatio</div>
-                                                <div class="col-4">
-                                                    @foreach (var type in insc.PreferredWeaponTypes)
-                                                    {
-                                                        <span>@type</span>
-                                                    }
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col-md-6 font-weight-bold">
+                                                        Type
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        @insc.Type
+                                                    </div>
                                                 </div>
-                                                <div class="col-2">@insc.PreferredWeaponDamagesRatio</div>
-                                            </div>
-                                        }
-                                    </li>
-                                }
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col-md-8 font-weight-bold">
+                                                        BaseValue
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        @insc.BaseValue
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col-md-6 font-weight-bold">
+                                                        StatType
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        @insc.StatType
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col-md-8 font-weight-bold">
+                                                        Ratio
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        @insc.Ratio
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col-md-8 font-weight-bold">
+                                                        Duration
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        @insc.Duration
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                            @if (@insc.IncludeWeaponDamages)
+                                            {
+                                                <li class="list-group-item">
+                                                    <div class="row">
+                                                        <div class="col-md-12 text-center">
+                                                            <strong>Weapon Types</strong>
+                                                        </div>
+
+                                                        <div class="col-md-8">Damage Ratio</div>
+                                                        <div class="col-md-4">@insc.WeaponDamagesRatio</div>
+
+                                                        @foreach (var type in insc.WeaponTypes)
+                                                        {
+                                                            <div class="col-md-12 text-center">
+                                                                @type
+                                                            </div>
+                                                        }
+
+                                                    </div>
+                                                </li>
+
+                                                if (insc.PreferredWeaponTypes.Count > 0)
+                                                {
+                                                    <li class="list-group-item">
+                                                        <div class="row">
+                                                            <div class="col-md-12 text-center">
+                                                                <strong>Pref Weapon Types</strong>
+                                                            </div>
+                                                            <div class="col-md-8">Preff Damage Ratio</div>
+                                                            <div class="col-md-4">@insc.PreferredWeaponDamagesRatio</div>
+                                                            @foreach (var type in insc.PreferredWeaponTypes)
+                                                            {
+                                                                <div class="col-md-12 text-center">
+                                                                    @type
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
                             }
-                        </ul>
+                        }
                     </div>
                 </div>
             </div>

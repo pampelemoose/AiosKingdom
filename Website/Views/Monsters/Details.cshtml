@@ -4,7 +4,7 @@
     ViewBag.Title = "Details";
 }
 
-<section>
+<section class="p-2">
     <div class="container">
         <div class="row">
             <div class="media">
@@ -18,98 +18,183 @@
     </div>
 </section>
 
-<section class="bg-dark mt-5 text-muted">
+<section class="bg-dark p-2 text-muted">
     <div class="container">
         <p class="mb-0">@Model.Story</p>
     </div>
 </section>
 
-<section class="mt-5">
+<section class="p-2">
     <div class="container">
         <div class="row">
-            <table class="table col-md-9">
-                <thead>
-                    <tr>
-                        <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().DropRate)</th>
-                        <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().ItemId)</th>
-                        <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().Quantity)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var loot in Model.Loots)
-                    {
-                        <tr>
-                            <td>@loot.DropRate</td>
-                            <td>@loot.ItemId</td>
-                            <td>@loot.Quantity</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <div class="col-md-1"></div>
-            <div class="col-md-2">
-                <div class="row">
-                    <div class="col-md-10">
-                        @Html.LabelFor(model => model.HealthPerLevel)
-                    </div>
-                    <div class="col-md-2">
-                        @Model.HealthPerLevel
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-10">
-                        @Html.LabelFor(model => model.BaseExperience)
-                    </div>
-                    <div class="col-md-2">
-                        @Model.BaseExperience
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-10">
-                        @Html.LabelFor(model => model.ExperiencePerLevelRatio)
-                    </div>
-                    <div class="col-md-2">
-                        @Model.ExperiencePerLevelRatio
-                    </div>
-                </div>
-                <div class="row">
-                    <table class="table col-md-12">
-                        <thead>
+            <div class="col-md-8">
+                <div class="card card-body">
+                    <table class="table">
+                        <thead class="table-borderless">
                             <tr>
-                                <th>@Html.LabelFor(model => model.Types)</th>
+                                <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().DropRate)</th>
+                                <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().ItemId)</th>
+                                <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().Quantity)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var type in Model.Types)
+                            @foreach (var loot in Model.Loots)
                             {
                                 <tr>
-                                    <td>@type</td>
+                                    <td>@loot.DropRate</td>
+                                    <td>
+                                        @switch (loot.Type)
+                                        {
+                                            case DataModels.Items.ItemType.Armor:
+                                                {
+                                                    @DataRepositories.ArmorRepository.GetById(loot.ItemId).ItemName
+                                                }
+                                                break;
+                                            case DataModels.Items.ItemType.Consumable:
+                                                {
+                                                    @DataRepositories.ConsumableRepository.GetById(loot.ItemId).ItemName
+                                                }
+                                                break;
+                                            case DataModels.Items.ItemType.Bag:
+                                                {
+                                                    @DataRepositories.BagRepository.GetById(loot.ItemId).ItemName
+                                                }
+                                                break;
+                                            case DataModels.Items.ItemType.Weapon:
+                                                {
+                                                    @DataRepositories.WeaponRepository.GetById(loot.ItemId).ItemName
+                                                }
+                                                break;
+                                        }
+                                    </td>
+                                    <td>@loot.Quantity</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="card card-body">
+                    <div class="row">
+                        <div class="col-md-10">
+                            @Html.LabelFor(model => model.HealthPerLevel, new { @class = "font-weight-bold" })
+                        </div>
+                        <div class="col-md-2">
+                            @Model.HealthPerLevel
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            @Html.LabelFor(model => model.BaseExperience, new { @class = "font-weight-bold" })
+                        </div>
+                        <div class="col-md-2">
+                            @Model.BaseExperience
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            @Html.LabelFor(model => model.ExperiencePerLevelRatio, new { @class = "font-weight-bold" })
+                        </div>
+                        <div class="col-md-2">
+                            @Model.ExperiencePerLevelRatio
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-body mt-2">
+                    <div class="row">
+                        <table class="table col-md-12">
+                            <thead class="table-borderless">
+                                <tr>
+                                    <th>@Html.LabelFor(model => model.Types)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var type in Model.Types)
+                                {
+                                    <tr>
+                                        <td>@type</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 </section>
-<section class="mt-5 bg-dark">
+<section class="p-2 bg-dark">
     <div class="container">
-        <table class="table col-md-12">
-            <thead>
-                <tr>
-                    <th>@Html.LabelFor(model => model.Phases.FirstOrDefault().SkillId)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var phase in Model.Phases)
-                {
-                    <tr>
-                        <td>@phase.SkillId</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Phases</h2>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var phase in Model.Phases)
+            {
+                var skill = DataRepositories.BookRepository.GetAll().SelectMany(b => b.Pages).FirstOrDefault(i => i.Id.Equals(phase.SkillId));
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>@skill.Description</h4>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var insc in skill.Inscriptions)
+                            {
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5>@insc.Description</h5>
+                                        </div>
+                                    </div>
+                                    @if (insc.IncludeWeaponDamages)
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <strong>Weapon Types</strong>
+                                                <div class="row border">
+                                                    <div class="col-md-8">
+                                                        WD Ratio
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        @insc.WeaponDamagesRatio
+                                                    </div>
+                                                </div>
+                                                @foreach (var type in insc.WeaponTypes)
+                                                {
+                                                    @type
+                                                }
+                                            </div>
+                                            @if (insc.PreferredWeaponTypes.Count > 0)
+                                            {
+                                                <div class="col-md-6 border-left">
+                                                    <strong>Preferred Weapon Types</strong>
+                                                    <div class="row border">
+                                                        <div class="col-md-8">
+                                                            WD Ratio
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            @insc.PreferredWeaponDamagesRatio
+                                                        </div>
+                                                    </div>
+                                                    @foreach (var type in insc.PreferredWeaponTypes)
+                                                    {
+                                                        @type
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+
+        </div>
     </div>
 </section>
 
