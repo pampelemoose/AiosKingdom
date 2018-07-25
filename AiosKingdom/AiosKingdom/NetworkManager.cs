@@ -475,10 +475,6 @@ namespace AiosKingdom
                             
                                 MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, "Disconnected.");
                             }
-                            else
-                            {
-                                DisconnectGame();
-                            }
                         }
                     }
                     break;

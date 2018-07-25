@@ -16,18 +16,13 @@ namespace AiosKingdom
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
+                    MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.GameServerDisconnected);
+
                     NetworkManager.Instance.Disconnect();
                     NetworkManager.Instance.DisconnectSoul();
-                    LoadingScreenManager.Instance.ChangePage(new Views.LoginPage());
-                });
-            });
-
-            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.GameServerDisconnected, (sender, message) =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
                     NetworkManager.Instance.DisconnectGame();
-                    LoadingScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(new List<Network.GameServerInfos>())));
+
+                    LoadingScreenManager.Instance.ChangePage(new Views.LoginPage());
                 });
             });
 
@@ -36,6 +31,7 @@ namespace AiosKingdom
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     LoadingScreenManager.Instance.ChangePage(new MainPage());
+                    Subscribe_GameServerDisconnected();
                 });
             });
 
@@ -51,6 +47,21 @@ namespace AiosKingdom
 
             LoadingScreenCallbacks();
         }
+
+        private void Subscribe_GameServerDisconnected()
+        {
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.GameServerDisconnected, (sender, message) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    NetworkManager.Instance.DisconnectGame();
+                    LoadingScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(new List<Network.GameServerInfos>())));
+                    MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.GameServerDisconnected);
+                });
+            });
+        }
+
+        #region LOADING SCREEN
 
         private Views.LoadingPage _loadingPage = new Views.LoadingPage();
         private void LoadingScreenCallbacks()
@@ -104,6 +115,8 @@ namespace AiosKingdom
                 });
             });
         }
+
+        #endregion
 
         protected override void OnStart()
         {
