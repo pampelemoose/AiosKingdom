@@ -25,6 +25,8 @@ namespace Server.DispatchServer
         private Dictionary<Guid, Socket> _clients;
         private Dictionary<Guid, Guid> _authTokens;
 
+        private List<Guid> _disconnectedClients;
+
         private Dictionary<Guid, Guid> _userIds;
         private Dictionary<Guid, DateTime> _pings;
 
@@ -32,6 +34,8 @@ namespace Server.DispatchServer
         {
             _clients = new Dictionary<Guid, Socket>();
             _authTokens = new Dictionary<Guid, Guid>();
+
+            _disconnectedClients = new List<Guid>();
 
             _userIds = new Dictionary<Guid, Guid>();
             _pings = new Dictionary<Guid, DateTime>();
@@ -44,11 +48,32 @@ namespace Server.DispatchServer
             _clients.Add(id, socket);
         }
 
+        public void DisconnectClient(Guid id)
+        {
+            if (_clients.ContainsKey(id))
+            {
+                _disconnectedClients.Add(id);
+            }
+        }
+
+        public List<Guid> DisconnectedClientList
+        {
+            get
+            {
+                return new List<Guid>(_disconnectedClients);
+            }
+        }
+
         public bool RemoveClient(Guid id)
         {
             if (_clients.ContainsKey(id))
             {
                 _clients.Remove(id);
+
+                if (_disconnectedClients.Contains(id))
+                {
+                    _disconnectedClients.Remove(id);
+                }
 
                 if (_authTokens.ContainsKey(id))
                 {
@@ -135,6 +160,7 @@ namespace Server.DispatchServer
             }
         }
 
+        [Obsolete("Shouldn't use it to disconnect anymore. Please see DisconnectClient(Guid) instead.", true)]
         public void Timeout(Guid clientId)
         {
             if (_pings.ContainsKey(clientId))

@@ -45,7 +45,7 @@ namespace Server.DispatchServer.Commands
                 };
                 ret.Succeeded = true;
 
-                ClientsManager.Instance.Timeout(ret.ClientId);
+                ClientsManager.Instance.DisconnectClient(ret.ClientId);
             }
 
             return ret;

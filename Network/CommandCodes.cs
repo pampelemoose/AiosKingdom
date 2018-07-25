@@ -11,6 +11,7 @@ namespace Network
         public const int Client_Authenticate = 0;
         public const int Client_ServerList = 1;
         public const int Client_AnnounceGameConnection = 2;
+        public const int Client_AnnounceDisconnection = 3;
 
         public static class Server
         {
@@ -19,6 +20,7 @@ namespace Network
             public const int SoulList = _default + 1;
             public const int CreateSoul = _default + 2;
             public const int ConnectSoul = _default + 3;
+            public const int DisconnectSoul = _default + 4;
         }
 
         public static class Player

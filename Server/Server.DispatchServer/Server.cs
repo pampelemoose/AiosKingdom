@@ -75,12 +75,14 @@ namespace Server.DispatchServer
             _commandArgCount.Add(Network.CommandCodes.Client_Authenticate, 2);
             _commandArgCount.Add(Network.CommandCodes.Client_ServerList, 0);
             _commandArgCount.Add(Network.CommandCodes.Client_AnnounceGameConnection, 1);
+            _commandArgCount.Add(Network.CommandCodes.Client_AnnounceDisconnection, 0);
 
             _delegates.Add(Network.CommandCodes.Ping, (args) => { return new Commands.PingCommand(args); });
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.ClientAuthenticateCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_ServerList, (args) => { return new Commands.ClientServerListCommand(args); });
             _delegates.Add(Network.CommandCodes.Client_AnnounceGameConnection, (args) => { return new Commands.ClientAnnounceGameConnectionCommand(args); });
+            _delegates.Add(Network.CommandCodes.Client_AnnounceDisconnection, (args) => { return new Commands.ClientAnnounceDisconnectionCommand(args); });
         }
 
         private void Run()
@@ -102,11 +104,12 @@ namespace Server.DispatchServer
                     AddPingerToClient(clientId);
                 }
 
-                List<Guid> disconnectedClients = new List<Guid>();
+                List<Guid> disconnectedClients = ClientsManager.Instance.DisconnectedClientList;
                 foreach (var client in ClientsManager.Instance.Clients)
                 {
                     if (ClientsManager.Instance.GetPing(client.Key) > 10)
                     {
+                        Console.WriteLine($"{client.Key} Timed out.");
                         disconnectedClients.Add(client.Key);
                         continue;
                     }
@@ -147,8 +150,6 @@ namespace Server.DispatchServer
                     {
                         socket.Shutdown(SocketShutdown.Both);
                         socket.Close();
-
-                        Console.WriteLine($"{disc} Timed out.");
                     }
                 }
 
@@ -162,27 +163,7 @@ namespace Server.DispatchServer
                         try
                         {
                             var socket = ClientsManager.Instance.Clients[response.ClientId];
-
-                            var jsonObj = JsonConvert.SerializeObject(response.ClientResponse);
-                            var encoder = new ASCIIEncoding();
-                            var mess = encoder.GetBytes(jsonObj + "|");
-
-                            object tmpLock = new object();
-                            int offset = 0;
-                            int sent = 0;
-
-                            do
-                            {
-                                try
-                                {
-                                    sent = socket.Send(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None);
-                                    offset += sent;
-                                }
-                                catch (SocketException sockE)
-                                {
-                                    Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
-                                }
-                            } while (sent == 256);
+                            SendPacketOnSocket(socket, response.ClientResponse);
                         }
                         catch (SocketException sockEx)
                         {
@@ -194,6 +175,12 @@ namespace Server.DispatchServer
 
             foreach (var client in ClientsManager.Instance.Clients)
             {
+                SendPacketOnSocket(client.Value, new Network.Message
+                {
+                    Code = Network.CommandCodes.Client_AnnounceDisconnection,
+                    Success = true,
+                    Json = "Disconnected"
+                });
                 Console.WriteLine($"client [{client.Key}] socket shutdown.");
                 client.Value.Shutdown(SocketShutdown.Both);
                 client.Value.Close();
@@ -205,6 +192,30 @@ namespace Server.DispatchServer
             Console.WriteLine($"TCP Server stopped.");
 
             _thread.Abort();
+        }
+
+        private void SendPacketOnSocket(Socket socket, Network.Message message)
+        {
+            var jsonObj = JsonConvert.SerializeObject(message);
+            var encoder = new ASCIIEncoding();
+            var mess = encoder.GetBytes(jsonObj + "|");
+
+            object tmpLock = new object();
+            int offset = 0;
+            int sent = 0;
+
+            do
+            {
+                try
+                {
+                    sent = socket.Send(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None);
+                    offset += sent;
+                }
+                catch (SocketException sockE)
+                {
+                    Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
+                }
+            } while (sent == 256);
         }
 
         private void AddPingerToClient(Guid clientId)
@@ -309,6 +320,8 @@ namespace Server.DispatchServer
                     break;
                 case Network.CommandCodes.Client_AnnounceGameConnection:
                     retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Client_AnnounceDisconnection:
                     break;
                 default:
                     retVal.IsValid = false;

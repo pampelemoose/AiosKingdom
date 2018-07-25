@@ -17,6 +17,7 @@ namespace AiosKingdom
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     NetworkManager.Instance.Disconnect();
+                    NetworkManager.Instance.DisconnectSoul();
                     LoadingScreenManager.Instance.ChangePage(new Views.LoginPage());
                 });
             });

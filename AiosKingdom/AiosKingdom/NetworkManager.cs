@@ -150,6 +150,11 @@ namespace AiosKingdom
                         ConnectToGameServer(connection);
                     }
                     break;
+                case Network.CommandCodes.Client_AnnounceDisconnection:
+                    {
+                        MessagingCenter.Send(this, MessengerCodes.Disconnected, "You disconnected !");
+                    }
+                    break;
                 default:
                     return false;
             }
@@ -241,6 +246,17 @@ namespace AiosKingdom
             SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
         }
 
+        public void AnnounceDisconnection()
+        {
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_AnnounceDisconnection,
+                Json = JsonConvert.SerializeObject(new string[0]),
+                Token = _dispatchAuthToken
+            };
+            SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
+        }
+
         private void SendJsonToDispatch(string json)
         {
             var encoder = new ASCIIEncoding();
@@ -323,10 +339,9 @@ namespace AiosKingdom
 
         public void DisconnectGame()
         {
-            if (_game.Connected)
+            if (_game != null && _game.Connected)
             {
-                _game.Client.Close();
-                _game.Close();
+                _isGameRunning = false;
             }
         }
 
@@ -385,6 +400,10 @@ namespace AiosKingdom
                     _isGameRunning = false;
                 }
             }
+
+            _game.GetStream().Flush();
+            _game.Client.Close();
+            _game.Close();
         }
 
         private bool ProcessGameMessage(Network.Message message)
@@ -443,6 +462,23 @@ namespace AiosKingdom
                         else
                         {
                             MessagingCenter.Send(this, MessengerCodes.SoulConnectionFailed, message.Json);
+                        }
+                    }
+                    break;
+                case Network.CommandCodes.Server.DisconnectSoul:
+                    {
+                        if (message.Success)
+                        {
+                            if (_isDispatchRunning)
+                            {
+                                AskServerInfos();
+                            
+                                MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, "Disconnected.");
+                            }
+                            else
+                            {
+                                DisconnectGame();
+                            }
                         }
                     }
                     break;
@@ -687,6 +723,11 @@ namespace AiosKingdom
         public void ConnectSoul(Guid id)
         {
             SendRequest(Network.CommandCodes.Server.ConnectSoul, new string[1] { id.ToString() });
+        }
+
+        public void DisconnectSoul()
+        {
+            SendRequest(Network.CommandCodes.Server.DisconnectSoul);
         }
 
         #endregion

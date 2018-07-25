@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace AiosKingdom.ViewModels
@@ -66,38 +67,20 @@ namespace AiosKingdom.ViewModels
             }
         }
 
-        /*public event Action BackToSoulTriggered;
         private ICommand _backToSoulListAction;
         public ICommand BackToSoulListAction =>
         _backToSoulListAction ?? (_backToSoulListAction = new Command(() =>
         {
-            NetworkManager.Instance.DisconnectionFromSoul();
-
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
-            {
-                if (DatasManager.Instance.CurrentSoul == null)
-                {
-                    DatasManager.Instance.SoftReset();
-                    _menus = new List<MasterPageItem>();
-                    NotifyPropertyChanged(nameof(Menus));
-                    NotifyPropertyChanged(nameof(ConnectedToSoul));
-                    NotifyPropertyChanged(nameof(Soul));
-                    NotifyPropertyChanged(nameof(Datas));
-                    BackToSoulTriggered?.Invoke();
-                    return false;
-                }
-
-                return true;
-            });
-
-
+            NetworkManager.Instance.DisconnectSoul();
+            LoadingScreenManager.Instance.OpenLoadingScreen("Disconnecting Soul, please wait...");
         }));
 
         private ICommand _disconnectAction;
         public ICommand DisconnectAction =>
         _disconnectAction ?? (_disconnectAction = new Command(() =>
         {
-            NetworkManager.Instance.DisconnectFromServer();
-        }));*/
+            NetworkManager.Instance.AnnounceDisconnection();
+            LoadingScreenManager.Instance.OpenLoadingScreen("Disconnecting, please wait...");
+        }));
     }
 }

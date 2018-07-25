@@ -95,11 +95,13 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Server.SoulList, 0);
             _commandArgCount.Add(Network.CommandCodes.Server.CreateSoul, 1);
             _commandArgCount.Add(Network.CommandCodes.Server.ConnectSoul, 1);
+            _commandArgCount.Add(Network.CommandCodes.Server.DisconnectSoul, 0);
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.Server.AuthenticateCommand(args); });
             _delegates.Add(Network.CommandCodes.Server.SoulList, (args) => { return new Commands.Server.SoulListCommand(args); });
             _delegates.Add(Network.CommandCodes.Server.CreateSoul, (args) => { return new Commands.Server.CreateSoulCommand(args, _config); });
             _delegates.Add(Network.CommandCodes.Server.ConnectSoul, (args) => { return new Commands.Server.ConnectSoulCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Server.DisconnectSoul, (args) => { return new Commands.Server.DisconnectSoulCommand(args); });
         }
 
         private void SetupListingDelegates()
@@ -188,11 +190,12 @@ namespace Server.GameServer
                     AddPingerToClient(clientId);
                 }
 
-                List<Guid> disconnectedClients = new List<Guid>();
+                List<Guid> disconnectedClients = ClientsManager.Instance.DisconnectedClientList;
                 foreach (var client in ClientsManager.Instance.Clients)
                 {
                     if (ClientsManager.Instance.GetPing(client.Key) > 10)
                     {
+                        Console.WriteLine($"{client.Key} Timed out.");
                         disconnectedClients.Add(client.Key);
                         continue;
                     }
@@ -237,8 +240,6 @@ namespace Server.GameServer
                     {
                         socket.Shutdown(SocketShutdown.Both);
                         socket.Close();
-
-                        Console.WriteLine($"{disc} Timed out.");
                     }
                 }
 
@@ -252,47 +253,7 @@ namespace Server.GameServer
                         try
                         {
                             var socket = ClientsManager.Instance.Clients[response.ClientId];
-
-                            var jsonObj = JsonConvert.SerializeObject(response.ClientResponse);
-                            var encoder = new ASCIIEncoding();
-                            var mess = encoder.GetBytes(jsonObj + "|");
-
-                            object tmpLock = new object();
-                            int offset = 0;
-                            int sent = 0;
-
-                            do
-                            {
-                                try
-                                {
-                                    sent = socket.Send(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None);
-                                    offset += sent;
-                                }
-                                catch (SocketException sockE)
-                                {
-                                    Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
-                                }
-
-                                /*var result = socket.BeginSend(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None, (asyncResult) =>
-                                {
-                                    try
-                                    {
-                                        sent = socket.EndSend(asyncResult);
-                                        offset += sent;
-                                        Console.WriteLine($"(0)sent[{sent}]");
-                                    }
-                                    catch (SocketException sockE)
-                                    {
-                                        Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
-                                    }
-                                }, null);
-
-                                if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
-                                {
-                                    Console.WriteLine($"Socket is not connected..");
-                                }*/
-
-                            } while (sent == 256);
+                            SendPacketOnSocket(socket, response.ClientResponse);
                         }
                         catch (SocketException sockEx)
                         {
@@ -306,6 +267,12 @@ namespace Server.GameServer
             {
                 if (SoulManager.Instance.DisconnectSoul(client.Key))
                 {
+                    SendPacketOnSocket(client.Value, new Network.Message
+                    {
+                        Code = Network.CommandCodes.Server.DisconnectSoul,
+                        Success = true,
+                        Json = "Soul Disconnected"
+                    });
                     Console.WriteLine($"{client.Key} Soul disconnected.");
                 }
 
@@ -322,6 +289,30 @@ namespace Server.GameServer
             Console.WriteLine($"TCP Server stopped.");
 
             _thread.Abort();
+        }
+
+        private void SendPacketOnSocket(Socket socket, Network.Message message)
+        {
+            var jsonObj = JsonConvert.SerializeObject(message);
+            var encoder = new ASCIIEncoding();
+            var mess = encoder.GetBytes(jsonObj + "|");
+
+            object tmpLock = new object();
+            int offset = 0;
+            int sent = 0;
+
+            do
+            {
+                try
+                {
+                    sent = socket.Send(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None);
+                    offset += sent;
+                }
+                catch (SocketException sockE)
+                {
+                    Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
+                }
+            } while (sent == 256);
         }
 
         private void AddPingerToClient(Guid clientId)
@@ -444,6 +435,8 @@ namespace Server.GameServer
                     break;
                 case Network.CommandCodes.Server.ConnectSoul:
                     retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Server.DisconnectSoul:
                     break;
 
                 // PLAYER

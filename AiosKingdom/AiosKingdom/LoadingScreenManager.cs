@@ -79,10 +79,7 @@ namespace AiosKingdom
 
         public void ChangePage(Page page)
         {
-            if (_isOpen)
-            {
-                MessagingCenter.Send(this, MessengerCodes.LoadingScreenChangePage, page);
-            }
+            MessagingCenter.Send(this, MessengerCodes.LoadingScreenChangePage, page);
         }
 
         public void PushPage(Page page)
