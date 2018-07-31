@@ -8,10 +8,13 @@ namespace Network
     {
         public const int Ping = -1;
 
-        public const int Client_Authenticate = 0;
-        public const int Client_ServerList = 1;
-        public const int Client_AnnounceGameConnection = 2;
-        public const int Client_AnnounceDisconnection = 3;
+        public const int Client_CreateAccount = 0;
+        public const int Client_Authenticate = 1;
+        public const int Client_ServerList = 2;
+        public const int Client_AnnounceGameConnection = 3;
+        public const int Client_AnnounceDisconnection = 4;
+        public const int Client_RetrieveAccount = 5;
+        
 
         public static class Server
         {

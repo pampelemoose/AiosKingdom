@@ -13,29 +13,56 @@
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand">
             <Grid
+                IsVisible="{Binding IsNewDevice, Converter={StaticResource inverseBoolean}}"
+                Padding="100, 20"
+                VerticalOptions="Center">
+                <Label
+                    Text="Aios Kingdom"/>
+            </Grid>
+
+            <Grid
+                IsVisible="{Binding IsNewDevice}"
                 Padding="100, 20"
                 VerticalOptions="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50" />
                     <RowDefinition Height="50" />
                     <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
                 </Grid.RowDefinitions>
 
-                <!--custom:NoHelperEntry -->
-                <Entry
+                <Label
                     Grid.Row="0"
-                    Placeholder="Username" 
-                    Text="{Binding Username}"/>
-                <Entry 
-                    Grid.Row="1"
-                    Placeholder="Password" 
-                    Text="{Binding Password}" 
-                    IsPassword="true" />
-                <Button 
+                    Text="If you already have an account, please input your SafeKey"/>
+
+                <Grid
+                    Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="9*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Entry
+                        Grid.Column="0"
+                        Placeholder="SafeKey" 
+                        Text="{Binding SafeKey}"/>
+                    <Button
+                        Grid.Column="1"
+                        Style="{StaticResource MenuButton}"
+                        Text="Go"
+                        Command="{Binding RetrieveAccountAction}"/>
+                </Grid>
+
+                <Label
                     Grid.Row="2"
-                    Text="Log In" 
-                    BackgroundColor="Navy"
-                    Command="{Binding LogInAction}" />
+                    Text="Create a new account !"/>
+
+                <Button
+                    Grid.Row="3"
+                    Style="{StaticResource MenuButton}"
+                    Text="New Account"
+                    Command="{Binding NewAccountAction}"/>
+
             </Grid>
         </Grid>
     </ContentPage.Content>

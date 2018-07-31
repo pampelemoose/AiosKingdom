@@ -43,6 +43,7 @@ namespace Server.GameServer
 
         public Adventure OpenRoom(DataModels.Soul soul, Guid dungeonId)
         {
+            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().OpenRoom({soul}, {dungeonId})");
             var dungeon = DataRepositories.DungeonRepository.GetById(dungeonId);
 
             if (_adventures.ContainsKey(soul.Id) && _adventures[soul.Id].DungeonId.Equals(dungeonId))
@@ -69,6 +70,7 @@ namespace Server.GameServer
 
         public void ExitRoom(Guid soulId)
         {
+            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().ExitRoom({soulId})");
             if (_adventures.ContainsKey(soulId))
             {
                 var adventure = _adventures[soulId];

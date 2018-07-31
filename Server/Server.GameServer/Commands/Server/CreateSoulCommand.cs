@@ -28,7 +28,7 @@ namespace Server.GameServer.Commands.Server
                 Id = Guid.NewGuid(),
                 ServerId = Guid.Parse(ConfigurationManager.AppSettings.Get("ConfigId")),
                 Name = soulName,
-                UserId = userId,
+                AppUserId = userId,
                 Level = 1,
                 TimePlayed = 0,
                 CurrentExperience = 0,

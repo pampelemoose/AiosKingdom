@@ -22,6 +22,8 @@ namespace DataRepositories
         public DbSet<DataModels.User> Users { get; set; }
         public DbSet<DataModels.Role> Roles { get; set; }
 
+        public DbSet<DataModels.AppUser> AppUsers { get; set; }
+
         public DbSet<DataModels.Items.Bag> Bags { get; set; }
         public DbSet<DataModels.Items.Armor> Armors { get; set; }
         public DbSet<DataModels.Items.Weapon> Weapons { get; set; }

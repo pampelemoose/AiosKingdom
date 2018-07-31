@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppUserRepository.cs" />
     <Compile Include="ArmorRepository.cs" />
     <Compile Include="BagRepository.cs" />
     <Compile Include="BookRepository.cs" />
@@ -55,29 +56,9 @@
     <Compile Include="ConfigRepository.cs" />
     <Compile Include="DungeonRepository.cs" />
     <Compile Include="MarketRepository.cs" />
-    <Compile Include="Migrations\201806150818304_InitialMigration.cs" />
-    <Compile Include="Migrations\201806150818304_InitialMigration.Designer.cs">
-      <DependentUpon>201806150818304_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806260633177_ShardReward.cs" />
-    <Compile Include="Migrations\201806260633177_ShardReward.Designer.cs">
-      <DependentUpon>201806260633177_ShardReward.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806280950388_ShopItemType.cs" />
-    <Compile Include="Migrations\201806280950388_ShopItemType.Designer.cs">
-      <DependentUpon>201806280950388_ShopItemType.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807060110597_WeaponUpdate.cs" />
-    <Compile Include="Migrations\201807060110597_WeaponUpdate.Designer.cs">
-      <DependentUpon>201807060110597_WeaponUpdate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807060128426_InscriptionWeaponUpdate.cs" />
-    <Compile Include="Migrations\201807060128426_InscriptionWeaponUpdate.Designer.cs">
-      <DependentUpon>201807060128426_InscriptionWeaponUpdate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807090759295_InscriptionWeapon_Changes.cs" />
-    <Compile Include="Migrations\201807090759295_InscriptionWeapon_Changes.Designer.cs">
-      <DependentUpon>201807090759295_InscriptionWeapon_Changes.cs</DependentUpon>
+    <Compile Include="Migrations\201807270250247_InitialMigration.cs" />
+    <Compile Include="Migrations\201807270250247_InitialMigration.Designer.cs">
+      <DependentUpon>201807270250247_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
@@ -100,23 +81,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201806150818304_InitialMigration.resx">
-      <DependentUpon>201806150818304_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806260633177_ShardReward.resx">
-      <DependentUpon>201806260633177_ShardReward.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806280950388_ShopItemType.resx">
-      <DependentUpon>201806280950388_ShopItemType.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807060110597_WeaponUpdate.resx">
-      <DependentUpon>201807060110597_WeaponUpdate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807060128426_InscriptionWeaponUpdate.resx">
-      <DependentUpon>201807060128426_InscriptionWeaponUpdate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807090759295_InscriptionWeapon_Changes.resx">
-      <DependentUpon>201807090759295_InscriptionWeapon_Changes.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807270250247_InitialMigration.resx">
+      <DependentUpon>201807270250247_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -26,12 +26,48 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed, (sender, arg) =>
             {
                 LoadingScreenManager.Instance.AlertLoadingScreen("Login Failed", arg);
+                Application.Current.Properties.Remove("AiosKingdom_IdentifyingKey");
+                IsNewDevice = true;
+            });
+
+            MessagingCenter.Subscribe<NetworkManager, Guid>(this, MessengerCodes.CreateNewAccount, (sender, arg) =>
+            {
+                LoadingScreenManager.Instance.AlertLoadingScreen("New Account Created", $"Please save this SafeKey[{arg}] in case you need to retrieve your account to any Device.");
+                var identifier = Application.Current.Properties["AiosKingdom_IdentifyingKey"] as string;
+
+                if (!string.IsNullOrEmpty(identifier))
+                {
+                    NetworkManager.Instance.AskAuthentication(identifier);
+                }
+                IsNewDevice = false;
+            });
+
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.RetrievedAccount, (sender) =>
+            {
+                var identifier = Application.Current.Properties["AiosKingdom_IdentifyingKey"] as string;
+
+                if (!string.IsNullOrEmpty(identifier))
+                {
+                    NetworkManager.Instance.AskAuthentication(identifier);
+                }
+                IsNewDevice = false;
             });
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived, (sender, servers) =>
             {
                 LoadingScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(servers)));
             });
+
+            _isNewDevice = true;
+            if (Application.Current.Properties.ContainsKey("AiosKingdom_IdentifyingKey"))
+            {
+                var identifier = Application.Current.Properties["AiosKingdom_IdentifyingKey"] as string;
+
+                if (!string.IsNullOrEmpty(identifier))
+                {
+                    _isNewDevice = false;
+                }
+            }
         }
 
         ~LoginPageViewModel()
@@ -42,44 +78,47 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Unsubscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived);
         }
 
-        private string _username;
-        public string Username
+        private bool _isNewDevice;
+        public bool IsNewDevice
         {
-            get { return _username; }
+            get { return _isNewDevice; }
             set
             {
-                _username = value;
+                _isNewDevice = value;
                 NotifyPropertyChanged();
-                _logInAction?.ChangeCanExecute();
             }
         }
 
-        private string _password;
-        public string Password
+        private Guid _key;
+        private string _safeKey;
+        public string SafeKey
         {
-            get { return _password; }
+            get { return _safeKey; }
             set
             {
-                _password = value;
+                _safeKey = value;
                 NotifyPropertyChanged();
-                _logInAction?.ChangeCanExecute();
+                _retrieveAccountAction?.ChangeCanExecute();
             }
         }
 
-        private Command _logInAction;
-        public ICommand LogInAction =>
-        _logInAction ?? (_logInAction = new Command(() =>
+        private Command _retrieveAccountAction;
+        public ICommand RetrieveAccountAction =>
+        _retrieveAccountAction ?? (_retrieveAccountAction = new Command(() =>
         {
-            LogIn();
+            LoadingScreenManager.Instance.OpenLoadingScreen("Try to retrieve account. Please wait...");
+            NetworkManager.Instance.AskOldAccount(_safeKey);
         }, () =>
         {
-            return !string.IsNullOrEmpty(_username) && !string.IsNullOrEmpty(_password);
+            return !string.IsNullOrEmpty(_safeKey) && Guid.TryParse(_safeKey, out _key) && !Guid.Empty.Equals(_key);
         }));
 
-        private void LogIn()
+        private ICommand _newAccountAction;
+        public ICommand NewAccountAction =>
+        _newAccountAction ?? (_newAccountAction = new Command(() =>
         {
-            LoadingScreenManager.Instance.OpenLoadingScreen("Connecting to the server. Please wait...");
-            NetworkManager.Instance.ConnectToServer(_username, _password);
-        }
+            LoadingScreenManager.Instance.OpenLoadingScreen("Creating new account. Please wait...");
+            NetworkManager.Instance.AskNewAccount();
+        }));
     }
 }

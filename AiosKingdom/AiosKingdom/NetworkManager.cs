@@ -120,18 +120,29 @@ namespace AiosKingdom
                         SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
                     }
                     break;
+                case Network.CommandCodes.Client_CreateAccount:
+                    {
+                        if (message.Success)
+                        {
+                            var appUser = JsonConvert.DeserializeObject<DataModels.AppUser>(message.Json);
+
+                            Application.Current.Properties["AiosKingdom_IdentifyingKey"] = appUser.Identifier.ToString();
+                            Application.Current.SavePropertiesAsync();
+                            MessagingCenter.Send(this, MessengerCodes.CreateNewAccount, appUser.SafeKey);
+                        }
+                    }
+                    break;
                 case Network.CommandCodes.Client_Authenticate:
                     {
-                        var authToken = JsonConvert.DeserializeObject<Guid>(message.Json);
-
-                        if (!Guid.Empty.Equals(authToken))
+                        if (message.Success)
                         {
+                            var authToken = JsonConvert.DeserializeObject<Guid>(message.Json);
+
                             _dispatchAuthToken = authToken;
                             MessagingCenter.Send(this, MessengerCodes.LoginSuccessful);
                         }
                         else
                         {
-                            Disconnect();
                             MessagingCenter.Send(this, MessengerCodes.LoginFailed, "Credentials not matching any existing account.");
                         }
                     }
@@ -139,7 +150,6 @@ namespace AiosKingdom
                 case Network.CommandCodes.Client_ServerList:
                     {
                         var servers = JsonConvert.DeserializeObject<List<Network.GameServerInfos>>(message.Json);
-                        _serverListRequested = false;
                         MessagingCenter.Send(this, MessengerCodes.ServerListReceived, servers);
                     }
                     break;
@@ -155,6 +165,18 @@ namespace AiosKingdom
                         MessagingCenter.Send(this, MessengerCodes.Disconnected, "You disconnected !");
                     }
                     break;
+                case Network.CommandCodes.Client_RetrieveAccount:
+                    {
+                        if (message.Success)
+                        {
+                            var appUser = JsonConvert.DeserializeObject<DataModels.AppUser>(message.Json);
+
+                            Application.Current.Properties["AiosKingdom_IdentifyingKey"] = appUser.Identifier.ToString();
+                            Application.Current.SavePropertiesAsync();
+                            MessagingCenter.Send(this, MessengerCodes.RetrievedAccount);
+                        }
+                    }
+                    break;
                 default:
                     return false;
             }
@@ -164,8 +186,10 @@ namespace AiosKingdom
             return true;
         }
 
-        public void ConnectToServer(string username, string password)
+        public void ConnectToServer()
         {
+            if (_isDispatchRunning) return;
+
             try
             {
                 _dispatch = new TcpClient();
@@ -174,7 +198,6 @@ namespace AiosKingdom
                     try
                     {
                         Task.Factory.StartNew(RunDispatch, TaskCreationOptions.LongRunning);
-                        AskLogin(username, password);
                         _dispatch.EndConnect(asyncResult);
                     }
                     catch (SocketException sockE)
@@ -204,11 +227,31 @@ namespace AiosKingdom
             }
         }
 
-        private void AskLogin(string username, string password)
+        public void AskNewAccount()
         {
-            var args = new string[2];
-            args[0] = username;
-            args[1] = DataModels.User.EncryptPassword(password);
+            var args = new string[0];
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_CreateAccount,
+                Json = JsonConvert.SerializeObject(args)
+            };
+            SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void AskOldAccount(string publicKey)
+        {
+            var args = new string[1] { publicKey };
+            var retMess = new Network.Message
+            {
+                Code = Network.CommandCodes.Client_RetrieveAccount,
+                Json = JsonConvert.SerializeObject(args)
+            };
+            SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
+        }
+
+        public void AskAuthentication(string identifier)
+        {
+            var args = new string[1] { identifier };
             var retMess = new Network.Message
             {
                 Code = Network.CommandCodes.Client_Authenticate,
@@ -217,11 +260,8 @@ namespace AiosKingdom
             SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
         }
 
-        private bool _serverListRequested = false;
         public void AskServerInfos()
         {
-            if (_serverListRequested) return;
-
             var args = new string[0];
             var retMess = new Network.Message
             {
@@ -230,7 +270,6 @@ namespace AiosKingdom
                 Token = _dispatchAuthToken
             };
             SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
-            _serverListRequested = true;
         }
 
         public void AnnounceGameServerConnection(Guid serverId)
@@ -259,6 +298,8 @@ namespace AiosKingdom
 
         private void SendJsonToDispatch(string json)
         {
+            if (!_isDispatchRunning) return;
+
             var encoder = new ASCIIEncoding();
             var bytes = encoder.GetBytes(json + '|');
 
@@ -443,6 +484,9 @@ namespace AiosKingdom
                 case Network.CommandCodes.Server.SoulList:
                     {
                         var souls = JsonConvert.DeserializeObject<List<DataModels.Soul>>(message.Json);
+                        // TEMP BECAUSE OF UWP NAVBAR BUG
+                        if (souls.Count == 0)
+                            CreateSoul("test");
                         MessagingCenter.Send(this, MessengerCodes.SoulListReceived, souls);
                     }
                     break;
@@ -472,7 +516,7 @@ namespace AiosKingdom
                             if (_isDispatchRunning)
                             {
                                 AskServerInfos();
-                            
+
                                 MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, "Disconnected.");
                             }
                         }
@@ -872,6 +916,8 @@ namespace AiosKingdom
 
         private void SendRequest(int code, string[] args = null)
         {
+            if (!_isGameRunning) return;
+
             var retMess = new Network.Message
             {
                 Code = code,
@@ -912,6 +958,10 @@ namespace AiosKingdom
             catch (NullReferenceException nullE)
             {
                 MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, $"{nullE.StackTrace} : {nullE.Message}");
+            }
+            catch (ObjectDisposedException disposedE)
+            {
+                MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, $"{disposedE.StackTrace} : {disposedE.Message}");
             }
         }
 

@@ -9,6 +9,9 @@ namespace AiosKingdom
         public static string ConnectionFailed = "connectionFailed";
         public static string Disconnected = "disconnected";
 
+        public static string CreateNewAccount = "createNewAccount";
+        public static string RetrievedAccount = "retrievedAccount";
+
         public static string LoginSuccessful = "loginSuccessful";
         public static string LoginFailed = "loginFailed";
 

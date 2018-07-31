@@ -34,7 +34,6 @@ namespace DataRepositories
             {
                 return context.Users
                     .Include(r => r.Roles)
-                    .Include(s => s.Souls)
                     .FirstOrDefault(u => u.Id.Equals(id));
             }
         }
@@ -45,7 +44,6 @@ namespace DataRepositories
             {
                 return context.Users
                     .Include(r => r.Roles)
-                    .Include(s => s.Souls)
                     .FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(password));
             }
         }

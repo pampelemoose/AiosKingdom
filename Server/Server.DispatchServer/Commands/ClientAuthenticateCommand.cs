@@ -14,23 +14,23 @@ namespace Server.DispatchServer.Commands
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            string username = _args.Args[0];
-            string password = _args.Args[1];
+            Guid identifier = Guid.Parse(_args.Args[0]);
 
-            var userExists = DataRepositories.UserRepository.GetByCredentials(username, password);
+            var userExists = DataRepositories.AppUserRepository.GetByIdentifier(identifier);
             if (userExists != null)
             {
-                Console.WriteLine($"User [{userExists.Username}] connected.");
+                Console.WriteLine($"User [{userExists.Identifier}] connected.");
 
                 var token = Guid.NewGuid();
 
                 ClientsManager.Instance.AuthenticateClient(_args.ClientId, token);
-                ClientsManager.Instance.SetUserId(_args.ClientId, userExists.Id);
+                ClientsManager.Instance.SetUserId(_args.ClientId, userExists.Identifier);
 
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Client_Authenticate,
-                    Json = JsonConvert.SerializeObject(token)
+                    Json = JsonConvert.SerializeObject(token),
+                    Success = true
                 };
                 ret.Succeeded = true;
             }
@@ -41,11 +41,10 @@ namespace Server.DispatchServer.Commands
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Client_Authenticate,
-                    Json = JsonConvert.SerializeObject(Guid.Empty)
+                    Json = JsonConvert.SerializeObject(Guid.Empty),
+                    Success = false
                 };
                 ret.Succeeded = true;
-
-                ClientsManager.Instance.DisconnectClient(ret.ClientId);
             }
 
             return ret;

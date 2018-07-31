@@ -27,9 +27,10 @@ namespace Server.GameServer.Commands.Server
                 if ((now - tokenExists.CreatedAt).Seconds < 5)
                 {
                     var authToken = Guid.NewGuid();
+                    var user = DataRepositories.AppUserRepository.GetByIdentifier(tokenExists.UserId);
 
                     ClientsManager.Instance.AuthenticateClient(_args.ClientId, authToken);
-                    ClientsManager.Instance.SetUserId(_args.ClientId, tokenExists.UserId);
+                    ClientsManager.Instance.SetUserId(_args.ClientId, user.Id);
 
                     ret.ClientResponse = new Network.Message
                     {

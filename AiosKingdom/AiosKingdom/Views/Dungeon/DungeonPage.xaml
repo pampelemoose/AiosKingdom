@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AiosKingdom.Views.Dungeon.DungeonPage"
              Title="{Binding Title}"
-             x:Name="DungeonPage">
+             x:Name="Dungeon">
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -229,7 +229,7 @@
                         <Button
                             Grid.Column="0"
                             Text="X"
-                            Command="{Binding BindingContext.RemoveNextMoveAction, Source={x:Reference DungeonPage}}"
+                            Command="{Binding BindingContext.RemoveNextMoveAction, Source={x:Reference Dungeon}}"
                             CommandParameter="{Binding .}"/>
 
                         <Label
@@ -266,7 +266,7 @@
                         <Button
                             Grid.Column="0"
                             Text="X"
-                            Command="{Binding BindingContext.RemoveNextMoveAction, Source={x:Reference DungeonPage}}"
+                            Command="{Binding BindingContext.RemoveNextMoveAction, Source={x:Reference Dungeon}}"
                             CommandParameter="{Binding .}"/>
 
                         <Label

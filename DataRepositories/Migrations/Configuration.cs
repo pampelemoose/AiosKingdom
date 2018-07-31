@@ -19,7 +19,6 @@ namespace DataRepositories.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
 
-            /*
             foreach (var entity in context.Versions)
                 context.Versions.Remove(entity);
 
@@ -70,8 +69,7 @@ namespace DataRepositories.Migrations
                 Password = DataModels.User.EncryptPassword("pampe123"),
                 ActivationCode = Guid.NewGuid(),
                 IsActivated = true,
-                Roles = context.Roles.ToList(),
-                SoulSlots = 1
+                Roles = context.Roles.ToList()
             });
 
 
@@ -107,7 +105,6 @@ namespace DataRepositories.Migrations
             });
 
             context.SaveChanges();
-            */
         }
     }
 }

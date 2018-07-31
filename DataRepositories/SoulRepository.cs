@@ -10,12 +10,12 @@ namespace DataRepositories
 {
     public static class SoulRepository
     {
-        public static List<DataModels.Soul> GetSoulsByUserId(Guid id)
+        public static List<DataModels.Soul> GetSoulsByAppUserId(Guid id)
         {
             using (var context = new AiosKingdomContext())
             {
                 return context.Souls
-                    .Where(s => s.UserId.Equals(id)).ToList();
+                    .Where(s => s.AppUserId.Equals(id)).ToList();
             }
         }
 

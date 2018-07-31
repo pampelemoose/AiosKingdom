@@ -16,10 +16,12 @@ namespace Server.DispatchServer.Commands
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
+            var ping = ClientsManager.Instance.GetPing(ret.ClientId);
+
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Ping,
-                Json = JsonConvert.SerializeObject(0)
+                Json = JsonConvert.SerializeObject(ping)
             };
             ret.Succeeded = true;
 

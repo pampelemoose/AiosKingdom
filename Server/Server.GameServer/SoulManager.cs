@@ -35,6 +35,7 @@ namespace Server.GameServer
 
         public bool ConnectSoul(Guid token, DataModels.Soul soul)
         {
+            Log.Instance.Write(Log.Level.Infos, $"SoulManager().ConnectSoul({token}, {soul})");
             if (!_souls.ContainsKey(token))
             {
                 _souls.Add(token, soul);
@@ -48,6 +49,7 @@ namespace Server.GameServer
 
         public bool DisconnectSoul(Guid token)
         {
+            Log.Instance.Write(Log.Level.Infos, $"SoulManager().DisconnectSoul({token})");
             if (_souls.ContainsKey(token))
             {
                 var soul = _souls[token];
@@ -69,6 +71,7 @@ namespace Server.GameServer
 
         public void UpdateCurrentDatas(Guid token, DataModels.Config config)
         {
+            Log.Instance.Write(Log.Level.Infos, $"SoulManager().UpdateCurrentDatas({token})");
             if (_souls.ContainsKey(token))
             {
                 var datas = _soulDatas[token];
@@ -95,6 +98,7 @@ namespace Server.GameServer
 
         public void UpdateSoul(Guid token, DataModels.Soul soul)
         {
+            Log.Instance.Write(Log.Level.Infos, $"SoulManager().UpdateSoul({token}, {soul})");
             if (_souls.ContainsKey(token))
             {
                 _souls[token] = soul;

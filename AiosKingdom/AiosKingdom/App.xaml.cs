@@ -121,6 +121,17 @@ namespace AiosKingdom
         protected override void OnStart()
         {
             // Handle when your app starts
+            NetworkManager.Instance.ConnectToServer();
+
+            if (Application.Current.Properties.ContainsKey("AiosKingdom_IdentifyingKey"))
+            {
+                var identifier = Application.Current.Properties["AiosKingdom_IdentifyingKey"] as string;
+
+                if (!string.IsNullOrEmpty(identifier))
+                {
+                    NetworkManager.Instance.AskAuthentication(identifier);
+                }
+            }
         }
 
         protected override void OnSleep()
@@ -131,6 +142,7 @@ namespace AiosKingdom
         protected override void OnResume()
         {
             // Handle when your app resumes
+            NetworkManager.Instance.Disconnect();
         }
     }
 }
