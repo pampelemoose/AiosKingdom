@@ -23,13 +23,13 @@ namespace Server.GameServer.Commands.Player
 
             var marketItem = DataRepositories.MarketRepository.GetById(marketSlotId);
 
-            if (marketItem == null || (marketItem != null && marketItem.Quantity >= quantity && IsCurrencyAvailable(datas, marketItem, quantity, isBits)))
+            if (marketItem == null || (marketItem != null && (!IsQuantityEnought(marketItem.Quantity, quantity) || !IsCurrencyAvailable(datas, marketItem, quantity, isBits))))
             {
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Player.BuyMarketItem,
                     Success = false,
-                    Json = "Item sold or not available anymore."
+                    Json = !IsCurrencyAvailable(datas, marketItem, quantity, isBits) ? $"Not enought {(isBits ? "bits" : "shards")}" : "Item sold or not available anymore."
                 };
                 ret.Succeeded = true;
                 return ret;
@@ -106,6 +106,11 @@ namespace Server.GameServer.Commands.Player
             };
             ret.Succeeded = true;
             return ret;
+        }
+
+        private bool IsQuantityEnought(int marketQuantity, int quantity)
+        {
+            return marketQuantity < 0 ? true : marketQuantity <= quantity;
         }
 
         private bool IsCurrencyAvailable(DataModels.Soul datas, DataModels.MarketSlot slot, int quantity, bool isBits)

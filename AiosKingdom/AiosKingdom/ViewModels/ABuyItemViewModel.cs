@@ -116,7 +116,7 @@ namespace AiosKingdom.ViewModels
             {
                 IsBitSelected = false;
                 IsShardSelected = true;
-            }));
+            }, () => { return GetMaxQuantityForShards() > 0; }));
 
         private ICommand _selectBitAction;
         public ICommand SelectBitAction =>
@@ -124,7 +124,7 @@ namespace AiosKingdom.ViewModels
             {
                 IsBitSelected = true;
                 IsShardSelected = false;
-            }));
+            }, () => { return GetMaxQuantityForBits() > 0; }));
 
         private ICommand _closeAction;
         public ICommand CloseAction =>

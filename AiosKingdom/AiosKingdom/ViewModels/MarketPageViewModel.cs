@@ -68,7 +68,7 @@ namespace AiosKingdom.ViewModels
         }, () =>
         {
             return DatasManager.Instance.Soul?.Shards >= _selectedItem?.Slot.ShardPrice
-                       && DatasManager.Instance.Soul?.Bits >= _selectedItem?.Slot.BitPrice;
+                       || DatasManager.Instance.Soul?.Bits >= _selectedItem?.Slot.BitPrice;
         }));
 
         private void SetItems()
