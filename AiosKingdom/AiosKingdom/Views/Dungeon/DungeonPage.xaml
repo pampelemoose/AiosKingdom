@@ -17,7 +17,7 @@
                 IsVisible="{Binding Room.IsFightArea}">
                 <ListView
                     ItemsSource="{Binding Room.Enemies, Mode=TwoWay}"
-                    SelectedItem="{Binding SelectedEnemy}"
+                    SelectedItem="{Binding SelectedEnemy, Mode=TwoWay}"
                     RowHeight="80">
                     <ListView.ItemTemplate>
                         <DataTemplate>
