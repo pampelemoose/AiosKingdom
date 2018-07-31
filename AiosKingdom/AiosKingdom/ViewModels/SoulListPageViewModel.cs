@@ -19,25 +19,13 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, soulsUpdated) =>
             {
                 Souls = soulsUpdated;
-                LoadingScreenManager.Instance.CloseLoadingScreen();
-            });
-
-            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SoulCreationFailed, (sender, message) =>
-            {
-                LoadingScreenManager.Instance.AlertLoadingScreen("Soul Creation Failed", message);
-            });
-
-            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SoulConnectionFailed, (sender, message) =>
-            {
-                LoadingScreenManager.Instance.AlertLoadingScreen("Soul Connection Failed", message);
+                ScreenManager.Instance.CloseLoadingScreen();
             });
         }
 
         ~SoulListPageViewModel()
         {
             MessagingCenter.Unsubscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived);
-            MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.SoulCreationFailed);
-            MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.SoulConnectionFailed);
         }
 
         private List<DataModels.Soul> _souls;
@@ -59,7 +47,7 @@ namespace AiosKingdom.ViewModels
             {
                 if (value != null)
                 {
-                    LoadingScreenManager.Instance.OpenLoadingScreen($"Connecting {value.Name}, please wait...");
+                    ScreenManager.Instance.OpenLoadingScreen($"Connecting {value.Name}, please wait...");
                     NetworkManager.Instance.ConnectSoul(value.Id);
                 }
 
@@ -71,7 +59,7 @@ namespace AiosKingdom.ViewModels
         public ICommand CreateSoulAction =>
             _createSoulAction ?? (_createSoulAction = new Command(() =>
             {
-                LoadingScreenManager.Instance.OpenLoadingScreen("Creating new soul...");
+                ScreenManager.Instance.OpenLoadingScreen("Creating new soul...");
                 NetworkManager.Instance.CreateSoul("test");
             }));
     }

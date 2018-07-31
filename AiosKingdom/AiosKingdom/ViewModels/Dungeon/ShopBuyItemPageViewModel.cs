@@ -25,7 +25,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         {
             _navigation.PopModalAsync();
 
-            LoadingScreenManager.Instance.OpenLoadingScreen($"Buying {_item.Value.ItemId} * ({_quantity}) with { (IsShardSelected ? "Shards" : "Bits") }, please wait...");
+            ScreenManager.Instance.OpenLoadingScreen($"Buying {_item.Value.ItemId} * ({_quantity}) with { (IsShardSelected ? "Shards" : "Bits") }, please wait...");
             NetworkManager.Instance.BuyShopItem(_item.Key, _quantity);
         }
 

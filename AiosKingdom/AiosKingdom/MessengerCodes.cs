@@ -10,31 +10,29 @@ namespace AiosKingdom
         public static string Disconnected = "disconnected";
 
         public static string CreateNewAccount = "createNewAccount";
+        public static string CreateNewAccountFailed = "createNewAccountFailed";
         public static string RetrievedAccount = "retrievedAccount";
 
         public static string LoginSuccessful = "loginSuccessful";
         public static string LoginFailed = "loginFailed";
 
         public static string ServerListReceived = "initialDatasReceived";
-        public static string GameServerDatasReceived = "gameServerDatasReceived";
         public static string GameServerDisconnected = "gameServerDisconnected";
 
         public static string ConnectedToServer = "connectedToServer";
+        public static string ConnectedToServerFailed = "connectedToServerFailed";
+
         public static string SoulListReceived = "soulListReceived";
-        public static string SoulCreationFailed = "soulCreationFailed";
 
         public static string SoulConnected = "soulConnected";
-        public static string SoulConnectionFailed = "soulConnectionFailed";
         public static string SoulUpdated = "soulUpdated";
         public static string SoulDatasUpdated = "soulDatasUpdated";
 
         public static string MarketUpdated = "marketUpdated";
-
-        public static string SpiritPillUsed = "spiritPillUsed";
+        
         public static string SkillLearned = "skillLearned";
 
         public static string EnterDungeon = "enterDungeon";
-        public static string EnterDungeonFailed = "enterDungeonFailed";
         public static string DungeonSelectSkillEnded = "dungeonSelectSkillEnded";
         public static string DungeonSelectConsumableEnded = "dungeonSelectConsumableEnded";
         public static string EnemyTurnEnded = "enemyTurnEnded";
@@ -44,7 +42,7 @@ namespace AiosKingdom
         public static string OpenLoadingScreen = "openLoadingScreen";
         public static string LoadingScreenOpenned = "loadingScreenOpenned";
         public static string UpdateLoadingScreen = "updateLoadingScreen";
-        public static string AlertLoadingScreen = "alertLoadingScreen";
+        public static string AlertScreen = "alertScreen";
         public static string CloseLoadingScreen = "closeLoadingScreen";
         public static string LoadingScreenClosed = "loadingScreenClosed";
         public static string LoadingScreenChangePage = "loadingScreenChangePage";

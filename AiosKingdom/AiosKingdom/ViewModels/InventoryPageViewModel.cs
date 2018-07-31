@@ -19,11 +19,16 @@ namespace AiosKingdom.ViewModels
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     SetInventories();
-                    LoadingScreenManager.Instance.CloseLoadingScreen();
+                    ScreenManager.Instance.CloseLoadingScreen();
                 });
             });
 
             SetInventories();
+        }
+
+        ~InventoryPageViewModel()
+        {
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.SoulUpdated);
         }
 
         private List<Models.InventoryItemModel<DataModels.Items.Armor>> _armors;
@@ -52,7 +57,7 @@ namespace AiosKingdom.ViewModels
             _armorSlotEquipAction ?? (_armorSlotEquipAction = new Command(() =>
             {
                 NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
-                LoadingScreenManager.Instance.OpenLoadingScreen($"Equiping {_selectedArmor.Item.Name}...");
+                ScreenManager.Instance.OpenLoadingScreen($"Equiping {_selectedArmor.Item.Name}...");
             }, () => { return _armorSlotIsSelected && _selectedArmor?.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
 
         private List<Models.InventoryItemModel<DataModels.Items.Bag>> _bags;
@@ -128,7 +133,7 @@ namespace AiosKingdom.ViewModels
             _weaponSlotEquipAction ?? (_weaponSlotEquipAction = new Command(() =>
             {
                 NetworkManager.Instance.EquipItem(_selectedWeapon.Slot.Id);
-                LoadingScreenManager.Instance.OpenLoadingScreen($"Equiping {_selectedWeapon.Item.Name}...");
+                ScreenManager.Instance.OpenLoadingScreen($"Equiping {_selectedWeapon.Item.Name}...");
             }, () => { return _weaponSlotIsSelected && _selectedWeapon?.Item.UseLevelRequired <= DatasManager.Instance.Soul.Level; }));
 
         private void SetInventories()

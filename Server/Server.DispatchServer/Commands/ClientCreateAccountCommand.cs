@@ -42,7 +42,6 @@ namespace Server.DispatchServer.Commands
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Client_CreateAccount,
-                Json = JsonConvert.SerializeObject("Failed to create appUser."),
                 Success = false
             };
             ret.Succeeded = false;

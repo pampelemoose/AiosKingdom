@@ -16,11 +16,16 @@ namespace AiosKingdom.ViewModels
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SkillLearned, (sender, message) =>
             {
-                LoadingScreenManager.Instance.AlertLoadingScreen("Upgrading Skill", message);
+                ScreenManager.Instance.AlertScreen("Upgrading Skill", message);
                 SetKnowledge();
             });
 
             SetKnowledge();
+        }
+
+        ~KnowledgePageViewModel()
+        {
+            MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.SkillLearned);
         }
 
         private List<Models.KnowledgeModel> _knowledges;
@@ -48,7 +53,7 @@ namespace AiosKingdom.ViewModels
         public ICommand UpgradeSkillAction =>
         _upgradeSkillAction ?? (_upgradeSkillAction = new Command(() =>
         {
-            LoadingScreenManager.Instance.OpenLoadingScreen($"Upgrading {_selectedKnowledge.Name}, please wait...");
+            ScreenManager.Instance.OpenLoadingScreen($"Upgrading {_selectedKnowledge.Name}, please wait...");
             NetworkManager.Instance.LearnSkill(_selectedKnowledge.Knowledge.BookId, _selectedKnowledge.Page.Rank + 1);
         }, () =>
         {

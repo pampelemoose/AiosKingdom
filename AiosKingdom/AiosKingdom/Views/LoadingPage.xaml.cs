@@ -16,7 +16,7 @@ namespace AiosKingdom.Views
         {
             InitializeComponent();
 
-            MessagingCenter.Subscribe<LoadingScreenManager, string>(this, MessengerCodes.UpdateLoadingScreen, (sender, content) =>
+            MessagingCenter.Subscribe<ScreenManager, string>(this, MessengerCodes.UpdateLoadingScreen, (sender, content) =>
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
@@ -24,12 +24,12 @@ namespace AiosKingdom.Views
                 });
             });
 
-            MessagingCenter.Subscribe<LoadingScreenManager, string[]>(this, MessengerCodes.AlertLoadingScreen, (sender, args) =>
+            MessagingCenter.Subscribe<ScreenManager, string[]>(this, MessengerCodes.AlertScreen, (sender, args) =>
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
                     await DisplayAlert(args[0], args[1], "OK");
-                    LoadingScreenManager.Instance.CloseLoadingScreen();
+                    ScreenManager.Instance.CloseLoadingScreen();
                 });
             });
         }
@@ -41,8 +41,8 @@ namespace AiosKingdom.Views
 
         ~LoadingPage()
         {
-            MessagingCenter.Unsubscribe<LoadingScreenManager, string>(this, MessengerCodes.UpdateLoadingScreen);
-            MessagingCenter.Unsubscribe<LoadingScreenManager, string[]>(this, MessengerCodes.AlertLoadingScreen);
+            MessagingCenter.Unsubscribe<ScreenManager, string>(this, MessengerCodes.UpdateLoadingScreen);
+            MessagingCenter.Unsubscribe<ScreenManager, string[]>(this, MessengerCodes.AlertScreen);
         }
     }
 }

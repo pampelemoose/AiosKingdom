@@ -72,7 +72,7 @@ namespace AiosKingdom.ViewModels
         _backToSoulListAction ?? (_backToSoulListAction = new Command(() =>
         {
             NetworkManager.Instance.DisconnectSoul();
-            LoadingScreenManager.Instance.OpenLoadingScreen("Disconnecting Soul, please wait...");
+            ScreenManager.Instance.OpenLoadingScreen("Disconnecting Soul, please wait...");
         }));
 
         private ICommand _disconnectAction;
@@ -80,7 +80,7 @@ namespace AiosKingdom.ViewModels
         _disconnectAction ?? (_disconnectAction = new Command(() =>
         {
             NetworkManager.Instance.AnnounceDisconnection();
-            LoadingScreenManager.Instance.OpenLoadingScreen("Disconnecting, please wait...");
+            ScreenManager.Instance.OpenLoadingScreen("Disconnecting, please wait...");
         }));
     }
 }

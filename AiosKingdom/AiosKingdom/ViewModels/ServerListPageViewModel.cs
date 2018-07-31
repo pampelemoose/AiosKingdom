@@ -16,25 +16,31 @@ namespace AiosKingdom.ViewModels
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.ConnectedToServer, (sender) =>
             {
-                LoadingScreenManager.Instance.UpdateLoadingScreen("Loading Soul list, please wait.");
+                ScreenManager.Instance.UpdateLoadingScreen("Loading Soul list, please wait.");
                 NetworkManager.Instance.AskSoulList();
+            });
+
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ConnectedToServerFailed, (sender, arg) =>
+            {
+                ScreenManager.Instance.AlertScreen("Connection Failed", $"Couldn't connect to server. Please try again later.\n{arg}");
             });
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived, (sender, servers) =>
             {
                 ServerInfos = servers;
-                LoadingScreenManager.Instance.CloseLoadingScreen();
+                ScreenManager.Instance.CloseLoadingScreen();
             });
 
             MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, souls) =>
             {
-                LoadingScreenManager.Instance.PushPage(new Views.SoulListPage(new SoulListPageViewModel(souls)));
+                ScreenManager.Instance.PushPage(new Views.SoulListPage(new SoulListPageViewModel(souls)));
             });
         }
 
         ~ServerListPageViewModel()
         {
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.ConnectedToServer);
+            MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.ConnectedToServerFailed);
             MessagingCenter.Unsubscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived);
             MessagingCenter.Unsubscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived);
         }
@@ -57,7 +63,7 @@ namespace AiosKingdom.ViewModels
             {
                 if (value != null && value.Online)
                 {
-                    LoadingScreenManager.Instance.OpenLoadingScreen($"Connecting to {value.Name}, please wait...");
+                    ScreenManager.Instance.OpenLoadingScreen($"Connecting to {value.Name}, please wait...");
                     NetworkManager.Instance.AnnounceGameServerConnection(value.Id);
                 }
 
@@ -69,7 +75,7 @@ namespace AiosKingdom.ViewModels
         public ICommand RefreshServersAction =>
             _refreshServersAction ?? (_refreshServersAction = new Command(() =>
             {
-                LoadingScreenManager.Instance.OpenLoadingScreen("Refreshing server list, please wait.");
+                ScreenManager.Instance.OpenLoadingScreen("Refreshing server list, please wait.");
                 NetworkManager.Instance.AskServerInfos();
             }));
     }

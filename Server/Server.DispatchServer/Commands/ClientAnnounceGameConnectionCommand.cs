@@ -9,7 +9,7 @@ namespace Server.DispatchServer.Commands
 {
     public class ClientAnnounceGameConnectionCommand : ACommand
     {
-        public ClientAnnounceGameConnectionCommand(CommandArgs args) 
+        public ClientAnnounceGameConnectionCommand(CommandArgs args)
             : base(args)
         {
         }
@@ -33,10 +33,35 @@ namespace Server.DispatchServer.Commands
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Client_AnnounceGameConnection,
-                    Json = JsonConvert.SerializeObject(connect)
+                    Json = JsonConvert.SerializeObject(connect),
+                    Success = true
+                };
+                ret.Succeeded = true;
+
+                return ret;
+            }
+
+            if (server != null && server.SlotAvailable >= server.SlotLimit)
+            {
+                ret.ClientResponse = new Network.Message
+                {
+                    Code = Network.CommandCodes.Client_AnnounceGameConnection,
+                    Json = "No free slot available, please connect to another server or try again later.",
+                    Success = false
                 };
                 ret.Succeeded = true;
             }
+            else
+            {
+                ret.ClientResponse = new Network.Message
+                {
+                    Code = Network.CommandCodes.Client_AnnounceGameConnection,
+                    Json = "Server unknown. Please connect to a listed server.",
+                    Success = false
+                };
+                ret.Succeeded = true;
+            }
+
 
             return ret;
         }

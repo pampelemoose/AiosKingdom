@@ -40,7 +40,7 @@ namespace AiosKingdom.ViewModels
         {
             _navigation.PopModalAsync();
 
-            LoadingScreenManager.Instance.OpenLoadingScreen($"Buying {_item.Item.Name} * ({_quantity}) with { (IsShardSelected ? "Shards" : "Bits") }, please wait...");
+            ScreenManager.Instance.OpenLoadingScreen($"Buying {_item.Item.Name} * ({_quantity}) with { (IsShardSelected ? "Shards" : "Bits") }, please wait...");
             NetworkManager.Instance.BuyMarketItem(_item.Slot.Id, _quantity, IsBitSelected);
         }
     }

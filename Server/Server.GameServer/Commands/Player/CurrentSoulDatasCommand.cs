@@ -23,10 +23,21 @@ namespace Server.GameServer.Commands.Player
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Player.CurrentSoulDatas,
-                    Json = JsonConvert.SerializeObject(datas)
+                    Json = JsonConvert.SerializeObject(datas),
+                    Success = true
                 };
                 ret.Succeeded = true;
+
+                return ret;
             }
+
+            ret.ClientResponse = new Network.Message
+            {
+                Code = Network.CommandCodes.Player.CurrentSoulDatas,
+                Json = "No datas available.",
+                Success = false
+            };
+            ret.Succeeded = true;
 
             return ret;
         }

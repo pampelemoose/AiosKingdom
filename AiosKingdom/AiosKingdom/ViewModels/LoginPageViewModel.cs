@@ -12,27 +12,29 @@ namespace AiosKingdom.ViewModels
         public LoginPageViewModel()
             : base(null)
         {
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful, (sender) =>
-            {
-                LoadingScreenManager.Instance.UpdateLoadingScreen("Logged In ! Receiving Server list..");
-                NetworkManager.Instance.AskServerInfos();
-            });
-
+            // TODO : Show `connect` button to retry the process.
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ConnectionFailed, (sender, arg) =>
             {
-                LoadingScreenManager.Instance.AlertLoadingScreen(MessengerCodes.ConnectionFailed, arg);
+                ScreenManager.Instance.AlertScreen(MessengerCodes.ConnectionFailed, arg);
+            });
+
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful, (sender) =>
+            {
+                ScreenManager.Instance.UpdateLoadingScreen("Logged In ! Receiving Server list..");
+                NetworkManager.Instance.AskServerInfos();
             });
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed, (sender, arg) =>
             {
-                LoadingScreenManager.Instance.AlertLoadingScreen("Login Failed", arg);
+                ScreenManager.Instance.AlertScreen("Login Failed", arg);
                 Application.Current.Properties.Remove("AiosKingdom_IdentifyingKey");
                 IsNewDevice = true;
             });
 
+            #region Account Management
             MessagingCenter.Subscribe<NetworkManager, Guid>(this, MessengerCodes.CreateNewAccount, (sender, arg) =>
             {
-                LoadingScreenManager.Instance.AlertLoadingScreen("New Account Created", $"Please save this SafeKey[{arg}] in case you need to retrieve your account to any Device.");
+                ScreenManager.Instance.AlertScreen("Account", $"Please save this SafeKey[{arg}] in case you need to retrieve your account to any Device.");
                 var identifier = Application.Current.Properties["AiosKingdom_IdentifyingKey"] as string;
 
                 if (!string.IsNullOrEmpty(identifier))
@@ -40,6 +42,12 @@ namespace AiosKingdom.ViewModels
                     NetworkManager.Instance.AskAuthentication(identifier);
                 }
                 IsNewDevice = false;
+            });
+
+            // TODO : Show `retry` button to retry the process.
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.CreateNewAccountFailed, (sender, arg) =>
+            {
+                ScreenManager.Instance.AlertScreen("Account", $"There were an error creating a new account. Please try again later.\n{arg}");
             });
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.RetrievedAccount, (sender) =>
@@ -52,10 +60,11 @@ namespace AiosKingdom.ViewModels
                 }
                 IsNewDevice = false;
             });
+            #endregion
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived, (sender, servers) =>
             {
-                LoadingScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(servers)));
+                ScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(servers)));
             });
 
             _isNewDevice = true;
@@ -75,6 +84,9 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.ConnectionFailed);
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful);
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed);
+            MessagingCenter.Unsubscribe<NetworkManager, Guid>(this, MessengerCodes.CreateNewAccount);
+            MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.CreateNewAccountFailed);
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.RetrievedAccount);
             MessagingCenter.Unsubscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived);
         }
 
@@ -106,7 +118,7 @@ namespace AiosKingdom.ViewModels
         public ICommand RetrieveAccountAction =>
         _retrieveAccountAction ?? (_retrieveAccountAction = new Command(() =>
         {
-            LoadingScreenManager.Instance.OpenLoadingScreen("Try to retrieve account. Please wait...");
+            ScreenManager.Instance.OpenLoadingScreen("Try to retrieve account. Please wait...");
             NetworkManager.Instance.AskOldAccount(_safeKey);
         }, () =>
         {
@@ -117,7 +129,7 @@ namespace AiosKingdom.ViewModels
         public ICommand NewAccountAction =>
         _newAccountAction ?? (_newAccountAction = new Command(() =>
         {
-            LoadingScreenManager.Instance.OpenLoadingScreen("Creating new account. Please wait...");
+            ScreenManager.Instance.OpenLoadingScreen("Creating new account. Please wait...");
             NetworkManager.Instance.AskNewAccount();
         }));
     }

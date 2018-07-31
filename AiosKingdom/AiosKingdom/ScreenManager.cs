@@ -6,23 +6,23 @@ using Xamarin.Forms;
 
 namespace AiosKingdom
 {
-    public class LoadingScreenManager
+    public class ScreenManager
     {
-        private static LoadingScreenManager _instance;
-        public static LoadingScreenManager Instance
+        private static ScreenManager _instance;
+        public static ScreenManager Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new LoadingScreenManager();
+                    _instance = new ScreenManager();
                 }
 
                 return _instance;
             }
         }
 
-        private LoadingScreenManager()
+        private ScreenManager()
         {
             MessagingCenter.Subscribe<App>(this, MessengerCodes.LoadingScreenOpenned, (sender) =>
             {
@@ -66,13 +66,13 @@ namespace AiosKingdom
             }
         }
 
-        public void AlertLoadingScreen(string title, string message)
+        public void AlertScreen(string title, string message)
         {
             lock (_screenLock)
             {
                 if (_isOpen)
                 {
-                    MessagingCenter.Send(this, MessengerCodes.AlertLoadingScreen, new string[2] { title, message });
+                    MessagingCenter.Send(this, MessengerCodes.AlertScreen, new string[2] { title, message });
                 }
             }
         }
@@ -84,10 +84,7 @@ namespace AiosKingdom
 
         public void PushPage(Page page)
         {
-            if (_isOpen)
-            {
-                MessagingCenter.Send(this, MessengerCodes.LoadingScreenPushPage, page);
-            }
+            MessagingCenter.Send(this, MessengerCodes.LoadingScreenPushPage, page);
         }
 
         public void CloseLoadingScreen()

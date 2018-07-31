@@ -16,18 +16,12 @@ namespace AiosKingdom.ViewModels
                 SetDatas();
             });
 
-            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SpiritPillUsed, (sender, message) =>
-            {
-                LoadingScreenManager.Instance.AlertLoadingScreen("Spirit Pills", message);
-            });
-
             SetDatas();
         }
 
         ~SpiritPillsPageViewModel()
         {
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.SoulUpdated);
-            MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.SpiritPillUsed);
         }
 
         private int _spirits;
@@ -76,7 +70,7 @@ namespace AiosKingdom.ViewModels
         public ICommand UsePillAction =>
         _usePillsAction ?? (_usePillsAction = new Command(() =>
         {
-            LoadingScreenManager.Instance.OpenLoadingScreen("Using pills, please wait for the effect to apply..");
+            ScreenManager.Instance.OpenLoadingScreen("Using pills, please wait for the effect to apply..");
             NetworkManager.Instance.UseSpiritPills(_statType, _pillsAmount);
 
             _decreasePillsAmountAction?.ChangeCanExecute();

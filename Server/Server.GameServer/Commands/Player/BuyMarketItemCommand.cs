@@ -102,7 +102,7 @@ namespace Server.GameServer.Commands.Player
             {
                 Code = Network.CommandCodes.Player.BuyMarketItem,
                 Success = true,
-                Json = "Item added to inventory."
+                Json = $"Buy successful. Please check your inventory."
             };
             ret.Succeeded = true;
             return ret;

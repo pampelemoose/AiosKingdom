@@ -24,14 +24,15 @@ namespace AiosKingdom.ViewModels.Dungeon
                 {
                     IsEnemyTurn = false;
                     ShowLootsPanel = true;
-                    LoadingScreenManager.Instance.UpdateLoadingScreen("Retrieving Loots, please wait...");
+                    ScreenManager.Instance.UpdateLoadingScreen("Retrieving Loots, please wait...");
                     NetworkManager.Instance.GetDungeonRoomLoots();
                 }
                 else
                 {
-                    LoadingScreenManager.Instance.CloseLoadingScreen();
+                    ScreenManager.Instance.CloseLoadingScreen();
                 }
             });
+
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulUpdated, (sender) =>
             {
@@ -41,13 +42,13 @@ namespace AiosKingdom.ViewModels.Dungeon
             MessagingCenter.Subscribe<NetworkManager, List<Network.LootItem>>(this, MessengerCodes.DungeonLootsReceived, (sender, loots) =>
             {
                 Loots = loots;
-                LoadingScreenManager.Instance.AlertLoadingScreen("Room Cleaned", "You cleaned the room.");
+                ScreenManager.Instance.AlertScreen("Room Cleaned", "You cleaned the room.");
             });
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.EnemyTurnEnded, (sender) =>
             {
                 IsEnemyTurn = false;
-                LoadingScreenManager.Instance.CloseLoadingScreen();
+                ScreenManager.Instance.CloseLoadingScreen();
             });
 
             NetworkManager.Instance.UpdateDungeonRoom();
@@ -83,7 +84,7 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 if (value != null)
                 {
-                    LoadingScreenManager.Instance.OpenLoadingScreen("Looting item, please wait...");
+                    ScreenManager.Instance.OpenLoadingScreen("Looting item, please wait...");
                     NetworkManager.Instance.LootDungeonItem(value.LootId);
                 }
                 NotifyPropertyChanged();
@@ -222,7 +223,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand EnemyTurnAction =>
             _enemyTurnAction ?? (_enemyTurnAction = new Command(() =>
             {
-                LoadingScreenManager.Instance.OpenLoadingScreen($"Enemy turn. Please wait...");
+                ScreenManager.Instance.OpenLoadingScreen($"Enemy turn. Please wait...");
                 NetworkManager.Instance.EnemyTurn();
             }));
 
@@ -256,7 +257,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand EndTurnAction =>
             _endTurnActionAction ?? (_endTurnActionAction = new Command(() =>
             {
-                LoadingScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
+                ScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
                 NetworkManager.Instance.DoNothingTurn();
 
                 IsEnemyTurn = true;
@@ -293,14 +294,14 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 if (IsSkillSelected)
                 {
-                    LoadingScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
+                    ScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
                     NetworkManager.Instance.DungeonUseSkill(_selectedSkill.KnowledgeId,
                         (_selectedEnemy != null ? _selectedEnemy.Value.Key : Guid.Empty));
                 }
 
                 if (IsConsumableSelected)
                 {
-                    LoadingScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
+                    ScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
                     NetworkManager.Instance.DungeonUseConsumable(_selectedConsumable.SlotId,
                         (_selectedEnemy != null ? _selectedEnemy.Value.Key : Guid.Empty));
                 }
@@ -338,7 +339,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand NextRoomAction =>
             _nextRoomAction ?? (_nextRoomAction = new Command(() =>
             {
-                LoadingScreenManager.Instance.OpenLoadingScreen($"Going to next room. Please wait.");
+                ScreenManager.Instance.OpenLoadingScreen($"Going to next room. Please wait.");
                 NetworkManager.Instance.OpenDungeonRoom();
             }));
 
@@ -346,7 +347,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand LeaveFinishedAction =>
             _leaveFinishedAction ?? (_leaveFinishedAction = new Command(() =>
             {
-                LoadingScreenManager.Instance.OpenLoadingScreen($"Leaving room, you will receive {Room.StackedExperience} experience. Please wait.");
+                ScreenManager.Instance.OpenLoadingScreen($"Leaving room, you will receive {Room.StackedExperience} experience. Please wait.");
                 NetworkManager.Instance.LeaveFinishedRoom();
             }));
 

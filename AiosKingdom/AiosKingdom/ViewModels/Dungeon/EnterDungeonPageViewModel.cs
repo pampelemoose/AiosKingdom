@@ -14,11 +14,10 @@ namespace AiosKingdom.ViewModels.Dungeon
             : base(nav)
         {
             _dungeon = dungeon;
+        }
 
-            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.EnterDungeonFailed, (sender, message) =>
-            {
-                LoadingScreenManager.Instance.AlertLoadingScreen("Enter Dungeon", message);
-            });
+        ~EnterDungeonPageViewModel()
+        {
         }
 
         public DataModels.Dungeons.Dungeon Dungeon => _dungeon;
@@ -39,7 +38,7 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 _navigation.PopModalAsync();
 
-                LoadingScreenManager.Instance.OpenLoadingScreen($"Entering {_dungeon.Name}, please wait...");
+                ScreenManager.Instance.OpenLoadingScreen($"Entering {_dungeon.Name}, please wait...");
                 NetworkManager.Instance.EnterDungeon(_dungeon.DungeonId);
             }));
     }

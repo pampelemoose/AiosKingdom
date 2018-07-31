@@ -36,12 +36,12 @@ namespace Server.DispatchServer.Commands
             }
             else
             {
-                Console.WriteLine($"credentials unknown or not matching");
+                Console.WriteLine("Unknown Identifier, couldnt connect.");
 
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Client_Authenticate,
-                    Json = JsonConvert.SerializeObject(Guid.Empty),
+                    Json = "Wrong data sent. Please retrieve account with SafeKey or create new account.",
                     Success = false
                 };
                 ret.Succeeded = true;

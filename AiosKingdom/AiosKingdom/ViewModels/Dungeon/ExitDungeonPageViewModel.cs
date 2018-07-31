@@ -29,7 +29,7 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 _navigation.PopModalAsync();
 
-                LoadingScreenManager.Instance.OpenLoadingScreen("Exiting Dungeon. Please wait...");
+                ScreenManager.Instance.OpenLoadingScreen("Exiting Dungeon. Please wait...");
                 NetworkManager.Instance.ExitDungeon();
             }));
     }

@@ -15,10 +15,15 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.MarketUpdated, (sender) =>
             {
                 SetItems();
-                LoadingScreenManager.Instance.CloseLoadingScreen();
+                ScreenManager.Instance.CloseLoadingScreen();
             });
 
             NetworkManager.Instance.AskMarketItems();
+        }
+
+        ~MarketPageViewModel()
+        {
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.MarketUpdated);
         }
 
         private DataModels.Items.ItemType _filter;

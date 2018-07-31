@@ -130,6 +130,10 @@ namespace AiosKingdom
                             Application.Current.SavePropertiesAsync();
                             MessagingCenter.Send(this, MessengerCodes.CreateNewAccount, appUser.SafeKey);
                         }
+                        else
+                        {
+                            MessagingCenter.Send(this, MessengerCodes.CreateNewAccountFailed, message.Json);
+                        }
                     }
                     break;
                 case Network.CommandCodes.Client_Authenticate:
@@ -143,7 +147,7 @@ namespace AiosKingdom
                         }
                         else
                         {
-                            MessagingCenter.Send(this, MessengerCodes.LoginFailed, "Credentials not matching any existing account.");
+                            MessagingCenter.Send(this, MessengerCodes.LoginFailed, message.Json);
                         }
                     }
                     break;
@@ -155,9 +159,16 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Client_AnnounceGameConnection:
                     {
-                        var connection = JsonConvert.DeserializeObject<Network.GameServerConnection>(message.Json);
-                        MessagingCenter.Send(this, MessengerCodes.GameServerDatasReceived);
-                        ConnectToGameServer(connection);
+                        if (message.Success)
+                        {
+                            var connection = JsonConvert.DeserializeObject<Network.GameServerConnection>(message.Json);
+                            ConnectToGameServer(connection);
+                        }
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Server Connection", message.Json);
+                            AskServerInfos();
+                        }
                     }
                     break;
                 case Network.CommandCodes.Client_AnnounceDisconnection:
@@ -174,6 +185,10 @@ namespace AiosKingdom
                             Application.Current.Properties["AiosKingdom_IdentifyingKey"] = appUser.Identifier.ToString();
                             Application.Current.SavePropertiesAsync();
                             MessagingCenter.Send(this, MessengerCodes.RetrievedAccount);
+                        }
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Failed", message.Json);
                         }
                     }
                     break;
@@ -460,12 +475,19 @@ namespace AiosKingdom
                 // SERVER
                 case Network.CommandCodes.Client_Authenticate:
                     {
-                        var authToken = JsonConvert.DeserializeObject<Guid>(message.Json);
-
-                        if (!Guid.Empty.Equals(authToken))
+                        if (message.Success)
                         {
-                            _gameAuthToken = authToken;
-                            MessagingCenter.Send(this, MessengerCodes.ConnectedToServer);
+                            var authToken = JsonConvert.DeserializeObject<Guid>(message.Json);
+
+                            if (!Guid.Empty.Equals(authToken))
+                            {
+                                _gameAuthToken = authToken;
+                                MessagingCenter.Send(this, MessengerCodes.ConnectedToServer);
+                            }
+                        }
+                        else
+                        {
+                            MessagingCenter.Send(this, MessengerCodes.ConnectedToServerFailed, message.Json);
                         }
                     }
                     break;
@@ -475,18 +497,17 @@ namespace AiosKingdom
                         {
                             AskSoulList();
                         }
-                        else
-                        {
-                            MessagingCenter.Send(this, MessengerCodes.SoulCreationFailed, message.Json);
-                        }
+                        ScreenManager.Instance.AlertScreen("Soul Creation", message.Json);
                     }
                     break;
                 case Network.CommandCodes.Server.SoulList:
                     {
                         var souls = JsonConvert.DeserializeObject<List<DataModels.Soul>>(message.Json);
+
                         // TEMP BECAUSE OF UWP NAVBAR BUG
                         if (souls.Count == 0)
                             CreateSoul("test");
+
                         MessagingCenter.Send(this, MessengerCodes.SoulListReceived, souls);
                     }
                     break;
@@ -505,12 +526,13 @@ namespace AiosKingdom
                         }
                         else
                         {
-                            MessagingCenter.Send(this, MessengerCodes.SoulConnectionFailed, message.Json);
+                            ScreenManager.Instance.AlertScreen("Soul Connection", message.Json);
                         }
                     }
                     break;
                 case Network.CommandCodes.Server.DisconnectSoul:
                     {
+                        // TODO : What if not success ? Is there a case ?
                         if (message.Success)
                         {
                             if (_isDispatchRunning)
@@ -526,16 +548,30 @@ namespace AiosKingdom
                 // PLAYER
                 case Network.CommandCodes.Player.SoulDatas:
                     {
-                        var soul = JsonConvert.DeserializeObject<DataModels.Soul>(message.Json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                        DatasManager.Instance.Soul = soul;
-                        MessagingCenter.Send(this, MessengerCodes.SoulUpdated);
+                        if (message.Success)
+                        {
+                            var soul = JsonConvert.DeserializeObject<DataModels.Soul>(message.Json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                            DatasManager.Instance.Soul = soul;
+                            MessagingCenter.Send(this, MessengerCodes.SoulUpdated);
+                        }
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Soul Datas", message.Json);
+                        }
                     }
                     break;
                 case Network.CommandCodes.Player.CurrentSoulDatas:
                     {
-                        var soulDatas = JsonConvert.DeserializeObject<Network.SoulDatas>(message.Json);
-                        DatasManager.Instance.Datas = soulDatas;
-                        MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
+                        if (message.Success)
+                        {
+                            var soulDatas = JsonConvert.DeserializeObject<Network.SoulDatas>(message.Json);
+                            DatasManager.Instance.Datas = soulDatas;
+                            MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
+                        }
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Current Soul Datas", message.Json);
+                        }
                     }
                     break;
                 case Network.CommandCodes.Player.BuyMarketItem:
@@ -545,6 +581,7 @@ namespace AiosKingdom
                             AskSoulDatas();
                             AskMarketItems();
                         }
+                        ScreenManager.Instance.AlertScreen("Market Item", message.Json);
                     }
                     break;
                 case Network.CommandCodes.Player.EquipItem:
@@ -554,6 +591,7 @@ namespace AiosKingdom
                             AskSoulDatas();
                             AskSoulCurrentDatas();
                         }
+                        ScreenManager.Instance.AlertScreen("Equip Item", message.Json);
                     }
                     break;
                 case Network.CommandCodes.Player.UseSpiritPills:
@@ -563,7 +601,7 @@ namespace AiosKingdom
                             AskSoulDatas();
                             AskSoulCurrentDatas();
                         }
-                        MessagingCenter.Send(this, MessengerCodes.SpiritPillUsed, message.Json);
+                        ScreenManager.Instance.AlertScreen("Spirit Pills", message.Json);
                     }
                     break;
                 case Network.CommandCodes.Player.LearnSkill:
@@ -636,7 +674,7 @@ namespace AiosKingdom
                         }
                         else
                         {
-                            MessagingCenter.Send(this, MessengerCodes.EnterDungeonFailed, message.Json);
+                            ScreenManager.Instance.AlertScreen("Enter Dungeon", message.Json);
                         }
                     }
                     break;
@@ -646,6 +684,10 @@ namespace AiosKingdom
                         {
                             UpdateDungeonRoom();
                         }
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Enter Room", message.Json);
+                        }
                     }
                     break;
                 case Network.CommandCodes.Dungeon.Exit:
@@ -654,6 +696,10 @@ namespace AiosKingdom
                         {
                             AskSoulDatas();
                             MessagingCenter.Send(this, MessengerCodes.SoulConnected);
+                        }
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Exit Room", message.Json);
                         }
                     }
                     break;
@@ -665,6 +711,10 @@ namespace AiosKingdom
                             DatasManager.Instance.Adventure = adventure;
                             MessagingCenter.Send(this, MessengerCodes.DungeonUpdated);
                         }
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Update Room", message.Json);
+                        }
                     }
                     break;
                 case Network.CommandCodes.Dungeon.UseSkill:
@@ -673,6 +723,7 @@ namespace AiosKingdom
                         {
                             UpdateDungeonRoom();
                         }
+                        ScreenManager.Instance.AlertScreen("Skill", message.Json);
                     }
                     break;
                 case Network.CommandCodes.Dungeon.UseConsumable:
@@ -682,6 +733,7 @@ namespace AiosKingdom
                             AskSoulDatas();
                             UpdateDungeonRoom();
                         }
+                        ScreenManager.Instance.AlertScreen("Consumable", message.Json);
                     }
                     break;
                 case Network.CommandCodes.Dungeon.EnemyTurn:
@@ -717,6 +769,7 @@ namespace AiosKingdom
                         {
                             GetDungeonRoomLoots();
                         }
+                        ScreenManager.Instance.AlertScreen("Looting", message.Json);
                     }
                     break;
                 case Network.CommandCodes.Dungeon.LeaveFinishedRoom:
@@ -727,6 +780,7 @@ namespace AiosKingdom
                             AskSoulDatas();
                             AskSoulCurrentDatas();
                         }
+                        ScreenManager.Instance.AlertScreen("Room", message.Json);
                     }
                     break;
                 case Network.CommandCodes.Dungeon.BuyShopItem:
@@ -736,6 +790,7 @@ namespace AiosKingdom
                             AskSoulDatas();
                             UpdateDungeonRoom();
                         }
+                        ScreenManager.Instance.AlertScreen("Shop", message.Json);
                     }
                     break;
 

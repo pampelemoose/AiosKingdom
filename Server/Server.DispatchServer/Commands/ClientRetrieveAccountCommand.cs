@@ -37,7 +37,7 @@ namespace Server.DispatchServer.Commands
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Client_RetrieveAccount,
-                Json = JsonConvert.SerializeObject("Failed to retrieve account."),
+                Json = "Failed to retrieve account.",
                 Success = false
             };
             ret.Succeeded = false;

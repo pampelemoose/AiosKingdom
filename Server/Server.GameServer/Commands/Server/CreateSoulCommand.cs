@@ -54,7 +54,7 @@ namespace Server.GameServer.Commands.Server
             {
                 Code = Network.CommandCodes.Server.CreateSoul,
                 Success = result,
-                Json = result ? "Soul created !" : "Soulname already in use. Please enter another one."
+                Json = result ? $"Soul {soulName} created !" : $"Soulname {soulName} already in use. Please enter another one."
             };
             ret.Succeeded = true;
 

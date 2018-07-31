@@ -22,7 +22,7 @@ namespace AiosKingdom
                     NetworkManager.Instance.DisconnectSoul();
                     NetworkManager.Instance.DisconnectGame();
 
-                    LoadingScreenManager.Instance.ChangePage(new Views.LoginPage());
+                    ScreenManager.Instance.ChangePage(new Views.LoginPage());
                 });
             });
 
@@ -30,7 +30,7 @@ namespace AiosKingdom
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    LoadingScreenManager.Instance.ChangePage(new MainPage());
+                    ScreenManager.Instance.ChangePage(new MainPage());
                     Subscribe_GameServerDisconnected();
                 });
             });
@@ -39,7 +39,7 @@ namespace AiosKingdom
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    LoadingScreenManager.Instance.ChangePage(new Views.Dungeon.DungeonPage());
+                    ScreenManager.Instance.ChangePage(new Views.Dungeon.DungeonPage());
                 });
             });
 
@@ -55,7 +55,7 @@ namespace AiosKingdom
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     NetworkManager.Instance.DisconnectGame();
-                    LoadingScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(new List<Network.GameServerInfos>())));
+                    ScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(new List<Network.GameServerInfos>())));
                     MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.GameServerDisconnected);
                 });
             });
@@ -66,7 +66,7 @@ namespace AiosKingdom
         private Views.LoadingPage _loadingPage = new Views.LoadingPage();
         private void LoadingScreenCallbacks()
         {
-            MessagingCenter.Subscribe<LoadingScreenManager, string>(this, MessengerCodes.OpenLoadingScreen, (sender, message) =>
+            MessagingCenter.Subscribe<ScreenManager, string>(this, MessengerCodes.OpenLoadingScreen, (sender, message) =>
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
@@ -77,7 +77,7 @@ namespace AiosKingdom
             });
 
 
-            MessagingCenter.Subscribe<LoadingScreenManager>(this, MessengerCodes.CloseLoadingScreen, (sender) =>
+            MessagingCenter.Subscribe<ScreenManager>(this, MessengerCodes.CloseLoadingScreen, (sender) =>
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
@@ -89,7 +89,7 @@ namespace AiosKingdom
                 });
             });
 
-            MessagingCenter.Subscribe<LoadingScreenManager, Page>(this, MessengerCodes.LoadingScreenChangePage, (sender, page) =>
+            MessagingCenter.Subscribe<ScreenManager, Page>(this, MessengerCodes.LoadingScreenChangePage, (sender, page) =>
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
@@ -102,7 +102,7 @@ namespace AiosKingdom
                 });
             });
 
-            MessagingCenter.Subscribe<LoadingScreenManager, Page>(this, MessengerCodes.LoadingScreenPushPage, (sender, page) =>
+            MessagingCenter.Subscribe<ScreenManager, Page>(this, MessengerCodes.LoadingScreenPushPage, (sender, page) =>
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
