@@ -20,7 +20,7 @@ namespace Server.GameServer.Commands.Dungeon
             var adventure = AdventureManager.Instance.GetAdventure(soul);
             var lootId = Guid.Parse(_args.Args[0]);
 
-            if (adventure.LootItem(soul, lootId))
+            if (adventure.LootItem(soul, ret.ClientId, lootId))
             {
                 ret.ClientResponse = new Network.Message
                 {

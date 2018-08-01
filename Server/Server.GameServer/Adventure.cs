@@ -198,7 +198,7 @@ namespace Server.GameServer
             return true;
         }
 
-        public bool BuyShopItem(Guid tempId, int quantity, DataModels.Soul soul)
+        public bool BuyShopItem(Guid tempId, int quantity, DataModels.Soul soul, Guid clientId)
         {
             if (_state.Shops.ContainsKey(tempId))
             {
@@ -268,6 +268,8 @@ namespace Server.GameServer
                         }
                     }
 
+                    SoulManager.Instance.UpdateSoul(clientId, soul);
+
                     return true;
                 }
             }
@@ -280,7 +282,7 @@ namespace Server.GameServer
             return _loots.Values.ToList();
         }
 
-        public bool LootItem(DataModels.Soul soul, Guid lootId)
+        public bool LootItem(DataModels.Soul soul, Guid clientId, Guid lootId)
         {
             if (_loots.ContainsKey(lootId))
             {
@@ -312,6 +314,8 @@ namespace Server.GameServer
                     {
                         _loots.Remove(lootId);
                     }
+
+                    SoulManager.Instance.UpdateSoul(clientId, soul);
                     return true;
                 }
             }

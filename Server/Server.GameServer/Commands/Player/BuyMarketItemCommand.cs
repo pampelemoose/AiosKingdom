@@ -98,6 +98,8 @@ namespace Server.GameServer.Commands.Player
                 }
             }
 
+            SoulManager.Instance.UpdateSoul(ret.ClientId, datas);
+
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Player.BuyMarketItem,

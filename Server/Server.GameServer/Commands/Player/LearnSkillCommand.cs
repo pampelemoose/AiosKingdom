@@ -121,6 +121,8 @@ namespace Server.GameServer.Commands.Player
                 DataRepositories.SoulRepository.Update(datas);
             }
 
+            SoulManager.Instance.UpdateSoul(ret.ClientId, datas);
+
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Player.LearnSkill,

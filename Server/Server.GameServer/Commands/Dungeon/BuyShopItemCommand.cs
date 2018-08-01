@@ -23,7 +23,7 @@ namespace Server.GameServer.Commands.Dungeon
 
             if (adventure != null)
             {
-                if (adventure.BuyShopItem(tempId, quantity, soul))
+                if (adventure.BuyShopItem(tempId, quantity, soul, ret.ClientId))
                 {
                     ret.ClientResponse = new Network.Message
                     {
