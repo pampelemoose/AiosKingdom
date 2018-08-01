@@ -504,10 +504,6 @@ namespace AiosKingdom
                     {
                         var souls = JsonConvert.DeserializeObject<List<DataModels.Soul>>(message.Json);
 
-                        // TEMP BECAUSE OF UWP NAVBAR BUG
-                        if (souls.Count == 0)
-                            CreateSoul("test");
-
                         MessagingCenter.Send(this, MessengerCodes.SoulListReceived, souls);
                     }
                     break;

@@ -21,6 +21,16 @@ namespace AiosKingdom.ViewModels
                 Souls = soulsUpdated;
                 ScreenManager.Instance.CloseLoadingScreen();
             });
+
+            // TODO : Fix when Top bar UWP is fixed
+            Task.Delay(5000).ContinueWith(t =>
+            {
+                if (Souls.Count == 0)
+                {
+                    ScreenManager.Instance.OpenLoadingScreen("Create Soul");
+                    ScreenManager.Instance.PushPage(new Views.CreateSoulPage());
+                }
+            });
         }
 
         ~SoulListPageViewModel()
@@ -59,8 +69,8 @@ namespace AiosKingdom.ViewModels
         public ICommand CreateSoulAction =>
             _createSoulAction ?? (_createSoulAction = new Command(() =>
             {
-                ScreenManager.Instance.OpenLoadingScreen("Creating new soul...");
-                NetworkManager.Instance.CreateSoul("test");
+                ScreenManager.Instance.OpenLoadingScreen("Create Soul");
+                ScreenManager.Instance.PushPage(new Views.CreateSoulPage());
             }));
     }
 }
