@@ -21,7 +21,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         {
             get
             {
-                var knowledges = DatasManager.Instance.Soul.Knowledge;
+                var knowledges = DatasManager.Instance.Knowledges;
                 var skills = new List<Models.Dungeon.SkillSelectionItemModel>();
                 foreach (var knowledge in knowledges)
                 {

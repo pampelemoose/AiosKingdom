@@ -25,8 +25,12 @@ namespace AiosKingdom
         public static string SoulListReceived = "soulListReceived";
 
         public static string SoulConnected = "soulConnected";
-        public static string SoulUpdated = "soulUpdated";
         public static string SoulDatasUpdated = "soulDatasUpdated";
+
+        public static string CurrenciesUpdated = "currenciesUpdated";
+        public static string InventoryUpdated = "inventoryUpdated";
+        public static string KnowledgeUpdated = "knowledgeUpdated";
+        public static string EquipmentUpdated = "equipmentUpdated";
 
         public static string MarketUpdated = "marketUpdated";
         

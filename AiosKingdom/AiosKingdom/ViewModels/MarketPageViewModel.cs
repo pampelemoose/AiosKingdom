@@ -67,8 +67,8 @@ namespace AiosKingdom.ViewModels
             _navigation.PushModalAsync(new Views.BuyItemPage(new MarketBuyItemPageViewModel(_navigation, _selectedItem)));
         }, () =>
         {
-            return DatasManager.Instance.Soul?.Shards >= _selectedItem?.Slot.ShardPrice
-                       || DatasManager.Instance.Soul?.Bits >= _selectedItem?.Slot.BitPrice;
+            return DatasManager.Instance.Currencies?.Shards >= _selectedItem?.Slot.ShardPrice
+                       || DatasManager.Instance.Currencies?.Bits >= _selectedItem?.Slot.BitPrice;
         }));
 
         private void SetItems()

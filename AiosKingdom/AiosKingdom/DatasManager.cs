@@ -24,8 +24,15 @@ namespace AiosKingdom
         {
         }
 
+        [Obsolete("Need to not send all the object.", true)]
         public DataModels.Soul Soul { get; set; }
+
         public Network.SoulDatas Datas { get; set; }
+
+        public Network.Currencies Currencies { get; set; }
+        public List<DataModels.InventorySlot> Inventory { get; set; }
+        public List<DataModels.Knowledge> Knowledges { get; set; }
+        public DataModels.Equipment Equipment { get; set; }
 
         public List<DataModels.Items.Armor> Armors { get; set; }
         public List<DataModels.Items.Consumable> Consumables { get; set; }

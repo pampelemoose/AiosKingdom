@@ -546,20 +546,6 @@ namespace AiosKingdom
                     break;
 
                 // PLAYER
-                case Network.CommandCodes.Player.SoulDatas:
-                    {
-                        if (message.Success)
-                        {
-                            var soul = JsonConvert.DeserializeObject<DataModels.Soul>(message.Json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                            DatasManager.Instance.Soul = soul;
-                            MessagingCenter.Send(this, MessengerCodes.SoulUpdated);
-                        }
-                        else
-                        {
-                            ScreenManager.Instance.AlertScreen("Soul Datas", message.Json);
-                        }
-                    }
-                    break;
                 case Network.CommandCodes.Player.CurrentSoulDatas:
                     {
                         if (message.Success)
@@ -578,7 +564,8 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            AskSoulDatas();
+                            AskCurrencies();
+                            AskInventory();
                             AskMarketItems();
                         }
                         ScreenManager.Instance.AlertScreen("Market Item", message.Json);
@@ -588,7 +575,8 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            AskSoulDatas();
+                            AskInventory();
+                            AskEquipment();
                             AskSoulCurrentDatas();
                         }
                         ScreenManager.Instance.AlertScreen("Equip Item", message.Json);
@@ -598,7 +586,7 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            AskSoulDatas();
+                            AskCurrencies();
                             AskSoulCurrentDatas();
                         }
                         ScreenManager.Instance.AlertScreen("Spirit Pills", message.Json);
@@ -608,9 +596,50 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            AskSoulDatas();
+                            AskCurrencies();
+                            AskKnowledges();
                         }
                         MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
+                    }
+                    break;
+                case Network.CommandCodes.Player.Currencies:
+                    {
+                        if (message.Success)
+                        {
+                            var currencies = JsonConvert.DeserializeObject<Network.Currencies>(message.Json);
+                            DatasManager.Instance.Currencies = currencies;
+                        }
+                        MessagingCenter.Send(this, MessengerCodes.CurrenciesUpdated);
+                    }
+                    break;
+                case Network.CommandCodes.Player.Inventory:
+                    {
+                        if (message.Success)
+                        {
+                            var inventory = JsonConvert.DeserializeObject<List<DataModels.InventorySlot>>(message.Json);
+                            DatasManager.Instance.Inventory = inventory;
+                        }
+                        MessagingCenter.Send(this, MessengerCodes.InventoryUpdated);
+                    }
+                    break;
+                case Network.CommandCodes.Player.Knowledges:
+                    {
+                        if (message.Success)
+                        {
+                            var knowledges = JsonConvert.DeserializeObject<List<DataModels.Knowledge>>(message.Json);
+                            DatasManager.Instance.Knowledges = knowledges;
+                        }
+                        MessagingCenter.Send(this, MessengerCodes.KnowledgeUpdated);
+                    }
+                    break;
+                case Network.CommandCodes.Player.Equipment:
+                    {
+                        if (message.Success)
+                        {
+                            var equipment = JsonConvert.DeserializeObject<DataModels.Equipment>(message.Json);
+                            DatasManager.Instance.Equipment = equipment;
+                        }
+                        MessagingCenter.Send(this, MessengerCodes.EquipmentUpdated);
                     }
                     break;
 
@@ -694,7 +723,9 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            AskSoulDatas();
+                            AskCurrencies();
+                            AskInventory();
+                            AskSoulCurrentDatas();
                             MessagingCenter.Send(this, MessengerCodes.SoulConnected);
                         }
                         else
@@ -730,7 +761,7 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            AskSoulDatas();
+                            AskInventory();
                             UpdateDungeonRoom();
                         }
                         ScreenManager.Instance.AlertScreen("Consumable", message.Json);
@@ -740,7 +771,6 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            AskSoulDatas();
                             UpdateDungeonRoom();
                         }
                         MessagingCenter.Send(this, MessengerCodes.EnemyTurnEnded);
@@ -777,7 +807,8 @@ namespace AiosKingdom
                         if (message.Success)
                         {
                             MessagingCenter.Send(this, MessengerCodes.SoulConnected);
-                            AskSoulDatas();
+                            AskCurrencies();
+                            AskInventory();
                             AskSoulCurrentDatas();
                         }
                         ScreenManager.Instance.AlertScreen("Room", message.Json);
@@ -787,7 +818,8 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            AskSoulDatas();
+                            AskCurrencies();
+                            AskInventory();
                             UpdateDungeonRoom();
                         }
                         ScreenManager.Instance.AlertScreen("Shop", message.Json);
@@ -873,11 +905,6 @@ namespace AiosKingdom
 
         #region Player Commands 
 
-        public void AskSoulDatas()
-        {
-            SendRequest(Network.CommandCodes.Player.SoulDatas);
-        }
-
         public void AskSoulCurrentDatas()
         {
             SendRequest(Network.CommandCodes.Player.CurrentSoulDatas);
@@ -901,6 +928,26 @@ namespace AiosKingdom
         public void LearnSkill(Guid bookId, int rank)
         {
             SendRequest(Network.CommandCodes.Player.LearnSkill, new string[2] { bookId.ToString(), rank.ToString() });
+        }
+
+        public void AskCurrencies()
+        {
+            SendRequest(Network.CommandCodes.Player.Currencies);
+        }
+
+        public void AskInventory()
+        {
+            SendRequest(Network.CommandCodes.Player.Inventory);
+        }
+
+        public void AskKnowledges()
+        {
+            SendRequest(Network.CommandCodes.Player.Knowledges);
+        }
+
+        public void AskEquipment()
+        {
+            SendRequest(Network.CommandCodes.Player.Equipment);
         }
 
         #endregion

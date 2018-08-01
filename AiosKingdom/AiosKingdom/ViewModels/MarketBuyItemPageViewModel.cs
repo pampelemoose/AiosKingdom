@@ -24,14 +24,14 @@ namespace AiosKingdom.ViewModels
 
         protected override int GetMaxQuantityForShards()
         {
-            var shards = DatasManager.Instance.Soul.Shards;
+            var shards = DatasManager.Instance.Currencies.Shards;
             var max = shards / _item.Slot.ShardPrice;
             return _item.Slot.Quantity > 0 ? (max > _item.Slot.Quantity ? _item.Slot.Quantity : max) : max;
         }
 
         protected override int GetMaxQuantityForBits()
         {
-            var bits = DatasManager.Instance.Soul.Bits;
+            var bits = DatasManager.Instance.Currencies.Bits;
             var max = bits / _item.Slot.BitPrice;
             return _item.Slot.Quantity > 0 ? (max > _item.Slot.Quantity ? _item.Slot.Quantity : max) : max;
         }

@@ -18,7 +18,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         {
             get
             {
-                var consumableSlots = DatasManager.Instance.Soul.Inventory.Where(i => i.Type == DataModels.Items.ItemType.Consumable).ToList();
+                var consumableSlots = DatasManager.Instance.Inventory.Where(i => i.Type == DataModels.Items.ItemType.Consumable).ToList();
                 var consumables = new List<Models.Dungeon.ConsumableSelectionItemModel>();
                 foreach (var slot in consumableSlots)
                 {

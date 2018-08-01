@@ -7,23 +7,23 @@ using System.Threading.Tasks;
 
 namespace Server.GameServer.Commands.Player
 {
-    public class SoulDatasCommand : ACommand
+    public class InventoryCommand : ACommand
     {
-        public SoulDatasCommand(CommandArgs args) 
+        public InventoryCommand(CommandArgs args) 
             : base(args)
         {
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var datas = SoulManager.Instance.GetSoul(ret.ClientId);
+            var soul = SoulManager.Instance.GetSoul(ret.ClientId);
 
-            if (datas != null)
+            if (soul != null)
             {
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Player.SoulDatas,
-                    Json = JsonConvert.SerializeObject(datas, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }),
+                    Code = Network.CommandCodes.Player.Inventory,
+                    Json = JsonConvert.SerializeObject(soul.Inventory),
                     Success = true
                 };
                 ret.Succeeded = true;
@@ -33,7 +33,7 @@ namespace Server.GameServer.Commands.Player
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Player.SoulDatas,
+                Code = Network.CommandCodes.Player.Inventory,
                 Json = "No datas available.",
                 Success = false
             };

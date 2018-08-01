@@ -65,6 +65,10 @@
     <Compile Include="Commands\Listing\BagCommand.cs" />
     <Compile Include="Commands\Listing\BookCommand.cs" />
     <Compile Include="Commands\Listing\WeaponCommand.cs" />
+    <Compile Include="Commands\Player\CurrenciesCommand.cs" />
+    <Compile Include="Commands\Player\EquipmentCommand.cs" />
+    <Compile Include="Commands\Player\InventoryCommand.cs" />
+    <Compile Include="Commands\Player\KnowledgeCommand.cs" />
     <Compile Include="Commands\Server\AuthenticateCommand.cs" />
     <Compile Include="Commands\Player\BuyMarketItemCommand.cs" />
     <Compile Include="Commands\Server\ConnectSoulCommand.cs" />
@@ -73,7 +77,6 @@
     <Compile Include="Commands\Player\EquipItemCommand.cs" />
     <Compile Include="Commands\Player\LearnSkillCommand.cs" />
     <Compile Include="Commands\Listing\MarketCommand.cs" />
-    <Compile Include="Commands\Player\SoulDatasCommand.cs" />
     <Compile Include="Commands\Server\DisconnectSoulCommand.cs" />
     <Compile Include="Commands\Server\SoulListCommand.cs" />
     <Compile Include="Commands\Player\UseSpiritPillsCommand.cs" />

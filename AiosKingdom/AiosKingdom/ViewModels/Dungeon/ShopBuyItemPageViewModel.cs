@@ -36,7 +36,7 @@ namespace AiosKingdom.ViewModels.Dungeon
 
         protected override int GetMaxQuantityForShards()
         {
-            var shards = DatasManager.Instance.Soul.Shards;
+            var shards = DatasManager.Instance.Currencies.Shards;
             var max = shards / _item.Value.ShardPrice;
             return _item.Value.Quantity > 0 ? (max > _item.Value.Quantity ? _item.Value.Quantity : max) : max;
         }

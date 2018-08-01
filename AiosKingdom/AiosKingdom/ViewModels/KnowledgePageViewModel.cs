@@ -14,17 +14,23 @@ namespace AiosKingdom.ViewModels
         {
             Title = "Knowledges";
 
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.KnowledgeUpdated, (sender) =>
+            {
+                SetKnowledge();
+            });
+
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SkillLearned, (sender, message) =>
             {
                 ScreenManager.Instance.AlertScreen("Upgrading Skill", message);
                 SetKnowledge();
             });
 
-            SetKnowledge();
+            NetworkManager.Instance.AskKnowledges();
         }
 
         ~KnowledgePageViewModel()
         {
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.KnowledgeUpdated);
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.SkillLearned);
         }
 
@@ -58,7 +64,7 @@ namespace AiosKingdom.ViewModels
         }, () =>
         {
             return (_selectedKnowledge != null && !_selectedKnowledge.IsMaxRank)
-            && DatasManager.Instance.Soul?.Embers >= _selectedKnowledge?.CostToUpdate;
+            && DatasManager.Instance.Currencies?.Embers >= _selectedKnowledge?.CostToUpdate;
         }));
 
         private void SetKnowledge()
@@ -66,7 +72,7 @@ namespace AiosKingdom.ViewModels
             _knowledges = new List<Models.KnowledgeModel>();
             SelectedKnowledge = null;
 
-            foreach (var slot in DatasManager.Instance.Soul.Knowledge.OrderBy(i => i.Rank).ToList())
+            foreach (var slot in DatasManager.Instance.Knowledges.OrderBy(i => i.Rank).ToList())
             {
                 var book = DatasManager.Instance.Books.FirstOrDefault(b => b.BookId.Equals(slot.BookId));
                 var isMaxRank = book.Pages.Exists(p => p.Rank.Equals(slot.Rank + 1));

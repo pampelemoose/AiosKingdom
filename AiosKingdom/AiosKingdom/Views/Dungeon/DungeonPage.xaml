@@ -341,7 +341,7 @@
                         <Label
                             Grid.Row="0"
                             Grid.Column="1"
-                            Text="{Binding Soul.Shards}" />
+                            Text="{Binding Currencies.Shards}" />
 
                         <Label
                             Grid.Row="1"
@@ -350,7 +350,7 @@
                         <Label
                             Grid.Row="1"
                             Grid.Column="1"
-                            Text="{Binding Soul.Bits}" />
+                            Text="{Binding Currencies.Bits}" />
                     </Grid>
                 </Grid>
 

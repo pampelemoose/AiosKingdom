@@ -34,9 +34,9 @@ namespace AiosKingdom.ViewModels.Dungeon
             });
 
 
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulUpdated, (sender) =>
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated, (sender) =>
             {
-                NotifyPropertyChanged(nameof(Soul));
+                NotifyPropertyChanged(nameof(Currencies));
             });
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.LootItem>>(this, MessengerCodes.DungeonLootsReceived, (sender, loots) =>
@@ -51,20 +51,22 @@ namespace AiosKingdom.ViewModels.Dungeon
                 ScreenManager.Instance.CloseLoadingScreen();
             });
 
+            NetworkManager.Instance.AskInventory();
+            NetworkManager.Instance.AskKnowledges();
             NetworkManager.Instance.UpdateDungeonRoom();
         }
 
         ~DungeonPageViewModel()
         {
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.DungeonUpdated);
-            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.SoulUpdated);
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated);
             MessagingCenter.Unsubscribe<NetworkManager, List<Network.LootItem>>(this, MessengerCodes.DungeonLootsReceived);
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.EnemyTurnEnded);
         }
 
         public Network.AdventureState Room => DatasManager.Instance.Adventure;
         public Network.SoulDatas Datas => DatasManager.Instance.Datas;
-        public DataModels.Soul Soul => DatasManager.Instance.Soul;
+        public Network.Currencies Currencies => DatasManager.Instance.Currencies;
 
         private List<Network.LootItem> _loots;
         public List<Network.LootItem> Loots

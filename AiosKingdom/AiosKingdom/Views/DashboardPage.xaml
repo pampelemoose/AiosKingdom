@@ -148,7 +148,7 @@
 
                 <Image 
                     Grid.Row="3"
-                    Source="{Binding Soul.Equipment.Bag, Converter={StaticResource objectToImage}}"/>
+                    Source="{Binding Equipment.Bag, Converter={StaticResource objectToImage}}"/>
             </Grid>
 
             <Grid
@@ -188,7 +188,7 @@
                                 FontAttributes="Bold"
                                 VerticalTextAlignment="Center"
                                 HorizontalTextAlignment="Center"
-                                Text="{Binding Soul.Level}"/>
+                                Text="{Binding Datas.Level}"/>
                         </ContentView>
                         <Grid
                             Grid.Column="1"
@@ -206,7 +206,7 @@
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
                                     TextColor="Black"
-                                    Text="{Binding Soul.Name}" />
+                                    Text="{Binding Datas.Name}" />
                             </ContentView>
 
                             <Grid
@@ -220,7 +220,7 @@
                                     Grid.Column="0"
                                     HorizontalTextAlignment="Center"
                                     VerticalTextAlignment="Center"
-                                    Text="{Binding Soul.CurrentExperience}" />
+                                    Text="{Binding Datas.CurrentExperience}" />
                                 <Label
                                     Grid.Column="1"
                                     HorizontalTextAlignment="Center"
@@ -435,16 +435,16 @@
 
                     <Label 
                         Grid.Column="0"
-                        Text="{Binding Soul.Spirits}"/>
+                        Text="{Binding Currencies.Spirits}"/>
                     <Label 
                         Grid.Column="1"
-                        Text="{Binding Soul.Embers}"/>
+                        Text="{Binding Currencies.Embers}"/>
                     <Label 
                         Grid.Column="2"
-                        Text="{Binding Soul.Shards}"/>
+                        Text="{Binding Currencies.Shards}"/>
                     <Label 
                         Grid.Column="3"
-                        Text="{Binding Soul.Bits}"/>
+                        Text="{Binding Currencies.Bits}"/>
                 </Grid>
             </Grid>
 

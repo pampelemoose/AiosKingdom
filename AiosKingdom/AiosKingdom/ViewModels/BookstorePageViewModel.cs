@@ -70,7 +70,7 @@ namespace AiosKingdom.ViewModels
             NetworkManager.Instance.LearnSkill(_selectedBook.BookId, 1);
         }, () =>
         {
-            return DatasManager.Instance.Soul?.Embers >= _selectedBook?.Pages[0].EmberCost;
+            return DatasManager.Instance.Currencies?.Embers >= _selectedBook?.Pages[0].EmberCost;
         }));
     }
 }

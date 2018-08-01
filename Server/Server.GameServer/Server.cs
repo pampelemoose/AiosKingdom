@@ -132,19 +132,27 @@ namespace Server.GameServer
 
         private void SetupPlayerDelegates()
         {
-            _commandArgCount.Add(Network.CommandCodes.Player.SoulDatas, 0);
             _commandArgCount.Add(Network.CommandCodes.Player.CurrentSoulDatas, 0);
             _commandArgCount.Add(Network.CommandCodes.Player.BuyMarketItem, 3);
             _commandArgCount.Add(Network.CommandCodes.Player.EquipItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.UseSpiritPills, 2);
             _commandArgCount.Add(Network.CommandCodes.Player.LearnSkill, 2);
 
-            _delegates.Add(Network.CommandCodes.Player.SoulDatas, (args) => { return new Commands.Player.SoulDatasCommand(args); });
+            _commandArgCount.Add(Network.CommandCodes.Player.Currencies, 0);
+            _commandArgCount.Add(Network.CommandCodes.Player.Inventory, 0);
+            _commandArgCount.Add(Network.CommandCodes.Player.Knowledges, 0);
+            _commandArgCount.Add(Network.CommandCodes.Player.Equipment, 0);
+            
             _delegates.Add(Network.CommandCodes.Player.CurrentSoulDatas, (args) => { return new Commands.Player.CurrentSoulDatasCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.BuyMarketItem, (args) => { return new Commands.Player.BuyMarketItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.EquipItem, (args) => { return new Commands.Player.EquipItemCommand(args, _config); });
             _delegates.Add(Network.CommandCodes.Player.UseSpiritPills, (args) => { return new Commands.Player.UseSpiritPillsCommand(args, _config); });
             _delegates.Add(Network.CommandCodes.Player.LearnSkill, (args) => { return new Commands.Player.LearnSkillCommand(args); });
+
+            _delegates.Add(Network.CommandCodes.Player.Currencies, (args) => { return new Commands.Player.CurrenciesCommand(args); });
+            _delegates.Add(Network.CommandCodes.Player.Inventory, (args) => { return new Commands.Player.InventoryCommand(args); });
+            _delegates.Add(Network.CommandCodes.Player.Knowledges, (args) => { return new Commands.Player.KnowledgeCommand(args); });
+            _delegates.Add(Network.CommandCodes.Player.Equipment, (args) => { return new Commands.Player.EquipmentCommand(args); });
         }
 
         private void SetupDungeonDelegates()
@@ -476,8 +484,6 @@ namespace Server.GameServer
                     break;
 
                 // PLAYER
-                case Network.CommandCodes.Player.SoulDatas:
-                    break;
                 case Network.CommandCodes.Player.CurrentSoulDatas:
                     break;
                 case Network.CommandCodes.Player.BuyMarketItem:
@@ -491,6 +497,14 @@ namespace Server.GameServer
                     break;
                 case Network.CommandCodes.Player.LearnSkill:
                     retVal.Args = new string[2] { args[0], args[1] };
+                    break;
+                case Network.CommandCodes.Player.Currencies:
+                    break;
+                case Network.CommandCodes.Player.Inventory:
+                    break;
+                case Network.CommandCodes.Player.Knowledges:
+                    break;
+                case Network.CommandCodes.Player.Equipment:
                     break;
 
                 // LISTING

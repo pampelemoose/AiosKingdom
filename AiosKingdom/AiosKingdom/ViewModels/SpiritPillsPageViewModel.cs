@@ -11,7 +11,7 @@ namespace AiosKingdom.ViewModels
         public SpiritPillsPageViewModel() 
             : base(null)
         {
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulUpdated, (sender) =>
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated, (sender) =>
             {
                 SetDatas();
             });
@@ -21,7 +21,7 @@ namespace AiosKingdom.ViewModels
 
         ~SpiritPillsPageViewModel()
         {
-            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.SoulUpdated);
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated);
         }
 
         private int _spirits;
@@ -134,7 +134,7 @@ namespace AiosKingdom.ViewModels
         private void SetDatas()
         {
             PillsAmount = 0;
-            Spirits = DatasManager.Instance.Soul.Spirits;
+            Spirits = DatasManager.Instance.Currencies.Spirits;
         }
     }
 }

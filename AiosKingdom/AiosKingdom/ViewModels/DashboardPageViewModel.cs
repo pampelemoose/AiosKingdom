@@ -14,9 +14,14 @@ namespace AiosKingdom.ViewModels
         {
             Title = "Dashboard";
 
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SoulUpdated, (sender) =>
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated, (sender) =>
             {
-                NotifyPropertyChanged(nameof(Soul));
+                NotifyPropertyChanged(nameof(Currencies));
+            });
+
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.EquipmentUpdated, (sender) =>
+            {
+                NotifyPropertyChanged(nameof(Equipment));
 
                 NotifyPropertyChanged(nameof(Head));
                 NotifyPropertyChanged(nameof(Shoulder));
@@ -36,30 +41,33 @@ namespace AiosKingdom.ViewModels
                 NotifyPropertyChanged(nameof(Datas));
             });
 
-            NetworkManager.Instance.AskSoulDatas();
+            NetworkManager.Instance.AskCurrencies();
+            NetworkManager.Instance.AskEquipment();
             NetworkManager.Instance.AskSoulCurrentDatas();
         }
 
         ~DashboardPageViewModel()
         {
-            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.SoulUpdated);
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated);
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.EquipmentUpdated);
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.SoulDatasUpdated);
         }
 
-        public DataModels.Soul Soul => DatasManager.Instance.Soul;
+        public Network.Currencies Currencies => DatasManager.Instance.Currencies;
+        public DataModels.Equipment Equipment => DatasManager.Instance.Equipment;
         public Network.SoulDatas Datas => DatasManager.Instance.Datas;
 
-        public DataModels.Items.Armor Head => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Head));
-        public DataModels.Items.Armor Shoulder => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Shoulder));
-        public DataModels.Items.Armor Torso => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Torso));
-        public DataModels.Items.Armor Belt => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Belt));
-        public DataModels.Items.Armor Hand => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Hand));
-        public DataModels.Items.Armor Leg => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Leg));
-        public DataModels.Items.Armor Pants => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Pants));
-        public DataModels.Items.Armor Feet => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Feet));
+        public DataModels.Items.Armor Head => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Head));
+        public DataModels.Items.Armor Shoulder => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Shoulder));
+        public DataModels.Items.Armor Torso => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Torso));
+        public DataModels.Items.Armor Belt => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Belt));
+        public DataModels.Items.Armor Hand => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Hand));
+        public DataModels.Items.Armor Leg => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Leg));
+        public DataModels.Items.Armor Pants => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Pants));
+        public DataModels.Items.Armor Feet => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Feet));
 
-        public DataModels.Items.Weapon WeaponRight => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.WeaponRight));
-        public DataModels.Items.Weapon WeaponLeft => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.WeaponLeft));
+        public DataModels.Items.Weapon WeaponRight => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.ItemId.Equals(Equipment.WeaponRight));
+        public DataModels.Items.Weapon WeaponLeft => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.ItemId.Equals(Equipment.WeaponLeft));
         //public DataModels.Items.Bag Bag => DatasManager.Instance.Bags?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Bag));
 
         private bool _showArmorDetails;

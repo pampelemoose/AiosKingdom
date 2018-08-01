@@ -28,15 +28,19 @@ namespace Network
 
         public static class Player
         {
-            private const int _default = 20;
+            private const int _default = 100;
 
             public const int BuyMarketItem = _default + 1;
             public const int EquipItem = _default + 2;
             public const int UseSpiritPills = _default + 3;
             public const int LearnSkill = _default + 4;
 
-            public const int SoulDatas = _default + 5;
             public const int CurrentSoulDatas = _default + 6;
+
+            public const int Currencies = _default + 7;
+            public const int Inventory = _default + 8;
+            public const int Knowledges = _default + 9;
+            public const int Equipment = _default + 10;
         }
 
         public static class Listing

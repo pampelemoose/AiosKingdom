@@ -78,6 +78,7 @@ namespace Server.GameServer
 
                 SetStats(datas, token);
 
+                datas.CurrentExperience = _souls[token].CurrentExperience;
                 datas.RequiredExperience = GetRequiredExperienceToLevelUp(token, config);
                 datas.MaxHealth = GetMaxHealth(token, config);
                 datas.MaxMana = GetMaxMana(token, config);
@@ -115,10 +116,29 @@ namespace Server.GameServer
             return null;
         }
 
+        public Network.Currencies GetCurrencies(Guid token)
+        {
+            if (_souls.ContainsKey(token))
+            {
+                var soul = _souls[token];
+                return new Network.Currencies
+                {
+                    Spirits = soul.Spirits,
+                    Embers = soul.Embers,
+                    Shards = soul.Shards,
+                    Bits = soul.Bits
+                };
+            }
+
+            return null;
+        }
+
         private void SetStats(Network.SoulDatas data, Guid token)
         {
             var soul = _souls[token];
 
+            data.Name = soul.Name;
+            data.Level = soul.Level;
             data.ItemLevel = 0;
             data.Armor = 0;
 
