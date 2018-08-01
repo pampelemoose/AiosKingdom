@@ -73,6 +73,7 @@ namespace Network
             public const int LeaveFinishedRoom = _default + 10;
             public const int DoNothingTurn = _default + 11;
             public const int BuyShopItem = _default + 12;
+            public const int PlayerDied = _default + 13;
         }
     }
 }

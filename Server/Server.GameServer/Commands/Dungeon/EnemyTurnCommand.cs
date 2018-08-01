@@ -23,13 +23,30 @@ namespace Server.GameServer.Commands.Dungeon
             {
                 if (adventure.EnemyTurn(datas))
                 {
-                    ret.ClientResponse = new Network.Message
+                    var state = adventure.GetActualState();
+
+                    if (state.CurrentHealth <= 0)
                     {
-                        Code = Network.CommandCodes.Dungeon.EnemyTurn,
-                        Success = true,
-                        Json = "Enemy turn successful."
-                    };
-                    ret.Succeeded = true;
+                        AdventureManager.Instance.PlayerDied(soul.Id);
+
+                        ret.ClientResponse = new Network.Message
+                        {
+                            Code = Network.CommandCodes.Dungeon.PlayerDied,
+                            Success = true,
+                            Json = "You died. You lost all Experience and Shards from this dungeon."
+                        };
+                        ret.Succeeded = true;
+                    }
+                    else
+                    {
+                        ret.ClientResponse = new Network.Message
+                        {
+                            Code = Network.CommandCodes.Dungeon.EnemyTurn,
+                            Success = true,
+                            Json = "Enemy turn successful."
+                        };
+                        ret.Succeeded = true;
+                    }
 
                     return ret;
                 }

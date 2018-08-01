@@ -825,6 +825,16 @@ namespace AiosKingdom
                         ScreenManager.Instance.AlertScreen("Shop", message.Json);
                     }
                     break;
+                case Network.CommandCodes.Dungeon.PlayerDied:
+                    {
+
+                        MessagingCenter.Send(this, MessengerCodes.SoulConnected);
+                        AskCurrencies();
+                        AskInventory();
+                        AskSoulCurrentDatas();
+                        ScreenManager.Instance.AlertScreen("YOU DIED", message.Json);
+                    }
+                    break;
 
                 default:
                     return false;

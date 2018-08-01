@@ -78,5 +78,15 @@ namespace Server.GameServer
                 _adventures.Remove(soulId);
             }
         }
+
+        public void PlayerDied(Guid soulId)
+        {
+            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().PlayerDied({soulId})");
+            if (_adventures.ContainsKey(soulId))
+            {
+                var adventure = _adventures[soulId];
+                _adventures.Remove(soulId);
+            }
+        }
     }
 }
