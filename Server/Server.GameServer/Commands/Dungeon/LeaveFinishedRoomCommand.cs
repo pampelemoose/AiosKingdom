@@ -42,13 +42,18 @@ namespace Server.GameServer.Commands.Dungeon
                     soul.Spirits += _config.SpiritsPerLevelUp;
                     soul.Embers += _config.EmbersPerLevelUp;
 
+                    Log.Instance.Write(Log.Level.Infos, $"{soul.Name} Level up {soul.CurrentExperience}/{soulDatas.RequiredExperience} => ({soul.Level}).");
+
                     soul.CurrentExperience -= soulDatas.RequiredExperience;
 
                     SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
                     SoulManager.Instance.UpdateCurrentDatas(_args.ClientId, _config);
+                    soulDatas = SoulManager.Instance.GetDatas(_args.ClientId);
                     Console.WriteLine($"{soul.Name} Level up({soul.Level}).");
                 }
 
+                SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
+                SoulManager.Instance.UpdateCurrentDatas(_args.ClientId, _config);
                 AdventureManager.Instance.ExitRoom(soul.Id);
 
                 ret.ClientResponse = new Network.Message

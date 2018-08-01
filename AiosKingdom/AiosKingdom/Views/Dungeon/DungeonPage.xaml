@@ -386,6 +386,34 @@
                 Grid.Row="0"
                 Grid.RowSpan="2"
                 BackgroundColor="{StaticResource BackgroundColor}"
+                IsVisible="{Binding IsRestArea}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                </Grid.RowDefinitions>
+
+                <Grid
+                    Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        Text="Resting area ! Here you will rest and get 10% of Health and Mana back." />
+                    <Button
+                        Grid.Column="1"
+                        Text="Rest"
+                        Command="{Binding PlayerRestAction}"/>
+                </Grid>
+            </Grid>
+
+            <Grid
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                BackgroundColor="{StaticResource BackgroundColor}"
                 IsVisible="{Binding ShowLootsPanel}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="9*"/>
@@ -484,7 +512,7 @@
                     <Button
                         Grid.Column="1"
                         Text="Exit dungeon." 
-                        Command="{Binding LeaveFinishedAction}"
+                        Command="{Binding ExitDungeonAction}"
                         IsVisible="{Binding Room.IsExit, Converter={StaticResource inverseBoolean}}"/>
                 </Grid>
             </Grid>

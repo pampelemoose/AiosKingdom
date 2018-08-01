@@ -57,7 +57,8 @@ namespace Website.Controllers
 
             if (ModelState.IsValid)
             {
-                dungeonModel.Rooms?.RemoveAll(r => r.Enemies.Count == 0 && r.ShopItems.Count == 0 && r.Type != (DataModels.Dungeons.RoomType.Exit | DataModels.Dungeons.RoomType.Rest));
+                dungeonModel.Rooms?.RemoveAll(r => r.Enemies.Count == 0 && r.ShopItems.Count == 0 
+                && r.Type != DataModels.Dungeons.RoomType.Exit && r.Type != DataModels.Dungeons.RoomType.Rest);
 
                 if (dungeonModel.Rooms?.FirstOrDefault(r => r.Type == DataModels.Dungeons.RoomType.Exit) == null)
                 {

@@ -831,6 +831,15 @@ namespace AiosKingdom
                         ScreenManager.Instance.AlertScreen("YOU DIED", message.Json);
                     }
                     break;
+                case Network.CommandCodes.Dungeon.PlayerRest:
+                    {
+                        if (message.Success)
+                        {
+                            OpenDungeonRoom();
+                        }
+                        ScreenManager.Instance.AlertScreen("Resting", message.Json);
+                    }
+                    break;
 
                 default:
                     return false;
@@ -1018,6 +1027,11 @@ namespace AiosKingdom
         public void LeaveFinishedRoom()
         {
             SendRequest(Network.CommandCodes.Dungeon.LeaveFinishedRoom);
+        }
+
+        public void PlayerRest()
+        {
+            SendRequest(Network.CommandCodes.Dungeon.PlayerRest);
         }
 
         #endregion

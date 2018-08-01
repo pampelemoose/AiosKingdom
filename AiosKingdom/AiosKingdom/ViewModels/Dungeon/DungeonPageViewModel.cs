@@ -17,6 +17,7 @@ namespace AiosKingdom.ViewModels.Dungeon
                 ShowLootsPanel = false;
                 NotifyPropertyChanged(nameof(Room));
                 NotifyPropertyChanged(nameof(IsCleared));
+                NotifyPropertyChanged(nameof(IsRestArea));
 
                 ResetNextMove();
 
@@ -186,6 +187,8 @@ namespace AiosKingdom.ViewModels.Dungeon
             }
         }
 
+        public bool IsRestArea => Room.IsRestingArea;
+
         private bool _isEnemyTurn;
         public bool IsEnemyTurn
         {
@@ -337,6 +340,14 @@ namespace AiosKingdom.ViewModels.Dungeon
             return false;
         }
 
+        private ICommand _playerRestAction;
+        public ICommand PlayerRestAction =>
+            _playerRestAction ?? (_playerRestAction = new Command(() =>
+            {
+                ScreenManager.Instance.OpenLoadingScreen($"Resting, please wait..");
+                NetworkManager.Instance.PlayerRest();
+            }));
+
         private ICommand _nextRoomAction;
         public ICommand NextRoomAction =>
             _nextRoomAction ?? (_nextRoomAction = new Command(() =>
@@ -349,9 +360,8 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand LeaveFinishedAction =>
             _leaveFinishedAction ?? (_leaveFinishedAction = new Command(() =>
             {
-                ScreenManager.Instance.OpenLoadingScreen($"Leaving room, you will receive {Room.StackedExperience} experience. Please wait.");
+                ScreenManager.Instance.OpenLoadingScreen($"Leaving room, you will receive {Room.StackedExperience + Room.ExperienceReward} experience and {Room.StackedShards + Room.ShardReward} shards. Please wait.");
                 NetworkManager.Instance.LeaveFinishedRoom();
             }));
-
     }
 }

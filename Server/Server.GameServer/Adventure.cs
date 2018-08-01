@@ -277,6 +277,27 @@ namespace Server.GameServer
             return false;
         }
 
+        public void PlayerRest(DataModels.Soul soul, Network.SoulDatas datas)
+        {
+            int toHeal = datas.MaxHealth / 10;
+
+            _state.CurrentHealth += toHeal;
+
+            if (_state.CurrentHealth > datas.MaxHealth)
+            {
+                _state.CurrentHealth = datas.MaxHealth;
+            }
+
+            int toRegen = datas.MaxMana / 10;
+
+            _state.CurrentMana += toRegen;
+
+            if (_state.CurrentMana > datas.MaxMana)
+            {
+                _state.CurrentMana = datas.MaxMana;
+            }
+        }
+
         public List<Network.LootItem> GetLoots()
         {
             return _loots.Values.ToList();
