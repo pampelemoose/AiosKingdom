@@ -59,6 +59,8 @@ namespace Server.GameServer
             }
             else
             {
+                if (soul.Level > dungeon.MaxLevelAuthorized) return null;
+
                 var adventure = new Adventure(dungeon);
                 _adventures.Add(soul.Id, adventure);
 
