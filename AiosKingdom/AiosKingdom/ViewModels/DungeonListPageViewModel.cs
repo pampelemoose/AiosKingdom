@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -24,10 +25,14 @@ namespace AiosKingdom.ViewModels
             {
                 if (value != null)
                 {
-                    _navigation.PushModalAsync(new Views.Dungeon.EnterDungeonPage(value));
+                    if (value.MaxLevelAuthorized >= DatasManager.Instance.Datas.Level)
+                        _navigation.PushModalAsync(new Views.Dungeon.EnterDungeonPage(value));
+                    else
+                        ScreenManager.Instance.AlertScreen(value.Name, $"You can't enter here because your level is too high. (Max Level is {value.MaxLevelAuthorized})");
                 }
 
                 value = null;
+                NotifyPropertyChanged();
             }
         }
     }
