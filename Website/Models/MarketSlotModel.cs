@@ -8,6 +8,8 @@ namespace Website.Models
 {
     public class MarketSlotModel
     {
+        public Guid Id { get; set; }
+
         [Display(Name = "Server")]
         public Guid SelectedServer { get; set; }
 

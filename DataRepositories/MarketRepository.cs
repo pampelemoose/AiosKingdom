@@ -68,6 +68,8 @@ namespace DataRepositories
                 if (online == null) return false;
 
                 online.Quantity = slot.Quantity;
+                online.ShardPrice = slot.ShardPrice;
+                online.BitPrice = slot.BitPrice;
 
                 try
                 {

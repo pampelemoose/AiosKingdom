@@ -13,8 +13,8 @@ namespace Website.Controllers
         public ActionResult Index(Models.Filters.MarketSlotFilter filter)
         {
             var slots = DataRepositories.MarketRepository.GetAll();
-            
-            filter.Slots = filter.FilterList(slots); 
+
+            filter.Slots = filter.FilterList(slots);
 
             return View(filter);
         }
@@ -35,7 +35,8 @@ namespace Website.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (DataRepositories.MarketRepository.Create(new DataModels.MarketSlot {
+                if (DataRepositories.MarketRepository.Create(new DataModels.MarketSlot
+                {
                     Id = Guid.NewGuid(),
                     ServerId = slot.SelectedServer,
                     Type = slot.Type,
@@ -48,7 +49,49 @@ namespace Website.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            
+
+            return View(slot);
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpGet]
+        public ActionResult Edit(Guid id)
+        {
+            var slot = DataRepositories.MarketRepository.GetById(id);
+
+            if (slot != null)
+            {
+                return View(new Models.MarketSlotModel
+                {
+                    Id = slot.Id,
+                    Quantity = slot.Quantity,
+                    ShardPrice = slot.ShardPrice,
+                    BitPrice = slot.BitPrice
+                });
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Models.MarketSlotModel slot)
+        {
+            if (ModelState.IsValid)
+            {
+                if (DataRepositories.MarketRepository.Update(new DataModels.MarketSlot
+                {
+                    Id = slot.Id,
+                    Quantity = slot.Quantity,
+                    ShardPrice = slot.ShardPrice,
+                    BitPrice = slot.BitPrice
+                }))
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
             return View(slot);
         }
     }
