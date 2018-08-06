@@ -103,7 +103,9 @@
                         <div class="col-md-3">
                             <div class="card bg-success">
                                 <div class="card-header text-dark">
-                                    <h5>@DataRepositories.MonsterRepository.GetById(ennemy.MonsterId).Name</h5>
+                                    <a href="/Monsters/Details/@ennemy.MonsterId">
+                                        <h5>@DataRepositories.MonsterRepository.GetById(ennemy.MonsterId).Name</h5>
+                                    </a>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
