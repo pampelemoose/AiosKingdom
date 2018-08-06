@@ -55,5 +55,51 @@ namespace DataRepositories
                 return true;
             }
         }
+
+        public static bool Update(DataModels.Items.Weapon weapon)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                var oldWeapon = context.Weapons
+                    .Include(a => a.Stats)
+                    .FirstOrDefault(u => u.Id.Equals(weapon.Id));
+
+                if (oldWeapon == null)
+                    return false;
+
+                oldWeapon.VersionId = weapon.VersionId;
+                oldWeapon.Name = weapon.Name;
+                oldWeapon.Description = weapon.Description;
+                oldWeapon.Image = weapon.Image;
+                oldWeapon.Quality = weapon.Quality;
+                oldWeapon.ItemLevel = weapon.ItemLevel;
+                oldWeapon.HandlingType = weapon.HandlingType;
+                oldWeapon.WeaponType = weapon.WeaponType;
+                oldWeapon.UseLevelRequired = weapon.UseLevelRequired;
+                oldWeapon.MinDamages = weapon.MinDamages;
+                oldWeapon.MaxDamages = weapon.MaxDamages;
+
+                context.ItemStats.RemoveRange(oldWeapon.Stats);
+
+                oldWeapon.Stats = weapon.Stats;
+
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var error in e.EntityValidationErrors)
+                    {
+                        foreach (var mess in error.ValidationErrors)
+                        {
+                            Console.WriteLine(mess.ErrorMessage);
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            }
+        }
     }
 }

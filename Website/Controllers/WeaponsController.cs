@@ -13,7 +13,6 @@ namespace Website.Controllers
         {
             var weapons = DataRepositories.WeaponRepository.GetAll();
 
-            filter.VersionList = DataRepositories.VersionRepository.GetAll();
             filter.Items = filter.FilterList(weapons);
 
             return View(filter);
@@ -24,7 +23,7 @@ namespace Website.Controllers
         public ActionResult Create()
         {
             var weapon = new Models.WeaponModel();
-            weapon.VersionList = DataRepositories.VersionRepository.GetAll();
+
             weapon.Stats = new List<DataModels.Items.ItemStat>();
 
             foreach (DataModels.Soul.Stats en in Enum.GetValues(typeof(DataModels.Soul.Stats)))
@@ -69,7 +68,82 @@ namespace Website.Controllers
                 }
             }
 
-            weaponModel.VersionList = DataRepositories.VersionRepository.GetAll();
+            return View(weaponModel);
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpGet]
+        public ActionResult Edit(Guid id)
+        {
+            var weapon = DataRepositories.WeaponRepository.GetById(id);
+
+            if (weapon != null)
+            {
+                var model = new Models.WeaponModel
+                {
+                    Id = weapon.Id,
+                    SelectedVersion = weapon.VersionId,
+                    ItemId = weapon.ItemId,
+                    Name = weapon.Name,
+                    Description = weapon.Description,
+                    Image = weapon.Image,
+                    ItemLevel = weapon.ItemLevel,
+                    Quality = weapon.Quality,
+                    HandlingType = weapon.HandlingType,
+                    Type = weapon.WeaponType,
+                    UseLevelRequired = weapon.UseLevelRequired,
+                    MinDamages = weapon.MinDamages,
+                    MaxDamages = weapon.MaxDamages,
+                    Stats = weapon.Stats
+                };
+
+                foreach (DataModels.Soul.Stats en in Enum.GetValues(typeof(DataModels.Soul.Stats)))
+                {
+                    if (model.Stats.FirstOrDefault(s => s.Type == en) == null)
+                    {
+                        model.Stats.Add(new DataModels.Items.ItemStat
+                        {
+                            Type = en
+                        });
+                    }
+                }
+
+                return View(model);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Models.WeaponModel weaponModel)
+        {
+            if (ModelState.IsValid)
+            {
+                weaponModel.Stats.RemoveAll(s => s.StatValue == 0);
+
+                if (DataRepositories.WeaponRepository.Update(new DataModels.Items.Weapon
+                {
+                    Id = weaponModel.Id,
+                    VersionId = weaponModel.SelectedVersion,
+                    ItemId = weaponModel.ItemId,
+                    Name = weaponModel.Name,
+                    Description = weaponModel.Description,
+                    Image = weaponModel.Image,
+                    ItemLevel = weaponModel.ItemLevel,
+                    Quality = weaponModel.Quality,
+                    HandlingType = weaponModel.HandlingType,
+                    WeaponType = weaponModel.Type,
+                    UseLevelRequired = weaponModel.UseLevelRequired,
+                    MinDamages = weaponModel.MinDamages,
+                    MaxDamages = weaponModel.MaxDamages,
+                    Stats = weaponModel.Stats
+                }))
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
             return View(weaponModel);
         }
     }

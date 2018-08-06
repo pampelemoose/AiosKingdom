@@ -1,4 +1,5 @@
-﻿@model Website.Models.WeaponModel
+﻿
+@model Website.Models.WeaponModel
 
 @{
     ViewBag.Title = "Create";
@@ -16,6 +17,9 @@
         <div class="container">
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <input type="hidden" name="ItemId" value="@Model.ItemId" />
 
             <div class="row">
                 <div class="col-md-6">
