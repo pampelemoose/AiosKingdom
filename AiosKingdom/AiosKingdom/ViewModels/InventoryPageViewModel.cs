@@ -19,7 +19,7 @@ namespace AiosKingdom.ViewModels
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     SetInventories();
-                    ScreenManager.Instance.CloseLoadingScreen();
+                    IsBusy = false;
                 });
             });
 
@@ -30,6 +30,94 @@ namespace AiosKingdom.ViewModels
         {
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.InventoryUpdated);
         }
+
+        #region Panels IsActive
+
+        private bool _isArmorPanelActive = true;
+        public bool IsArmorPanelActive
+        {
+            get { return _isArmorPanelActive; }
+            set
+            {
+                _isArmorPanelActive = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private bool _isWeaponPanelActive;
+        public bool IsWeaponPanelActive
+        {
+            get { return _isWeaponPanelActive; }
+            set
+            {
+                _isWeaponPanelActive = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private bool _isBagPanelActive;
+        public bool IsBagPanelActive
+        {
+            get { return _isBagPanelActive; }
+            set
+            {
+                _isBagPanelActive = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private bool _isConsumablePanelActive;
+        public bool IsConsumablePanelActive
+        {
+            get { return _isConsumablePanelActive; }
+            set
+            {
+                _isConsumablePanelActive = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ICommand _showArmorPanelAction;
+        public ICommand ShowArmorPanelAction =>
+            _showArmorPanelAction ?? (_showArmorPanelAction = new Command(() =>
+            {
+                IsArmorPanelActive = true;
+                IsWeaponPanelActive = false;
+                IsBagPanelActive = false;
+                IsConsumablePanelActive = false;
+            }));
+
+        private ICommand _showWeaponPanelAction;
+        public ICommand ShowWeaponPanelAction =>
+            _showWeaponPanelAction ?? (_showWeaponPanelAction = new Command(() =>
+            {
+                IsArmorPanelActive = false;
+                IsWeaponPanelActive = true;
+                IsBagPanelActive = false;
+                IsConsumablePanelActive = false;
+            }));
+
+        private ICommand _showBagPanelAction;
+        public ICommand ShowBagPanelAction =>
+            _showBagPanelAction ?? (_showBagPanelAction = new Command(() =>
+            {
+                IsArmorPanelActive = false;
+                IsWeaponPanelActive = false;
+                IsBagPanelActive = true;
+                IsConsumablePanelActive = false;
+            }));
+
+        private ICommand _showConsumablePanelAction;
+        public ICommand ShowConsumablePanelAction =>
+            _showConsumablePanelAction ?? (_showConsumablePanelAction = new Command(() =>
+            {
+                IsArmorPanelActive = false;
+                IsWeaponPanelActive = false;
+                IsBagPanelActive = false;
+                IsConsumablePanelActive = true;
+            }));
+
+        #endregion
 
         private List<Models.InventoryItemModel<DataModels.Items.Armor>> _armors;
         public List<Models.InventoryItemModel<DataModels.Items.Armor>> Armors => _armors;
@@ -57,7 +145,7 @@ namespace AiosKingdom.ViewModels
             _armorSlotEquipAction ?? (_armorSlotEquipAction = new Command(() =>
             {
                 NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
-                ScreenManager.Instance.OpenLoadingScreen($"Equiping {_selectedArmor.Item.Name}...");
+                IsBusy = true;
             }, () => { return _armorSlotIsSelected && _selectedArmor?.Item.UseLevelRequired <= DatasManager.Instance.Datas.Level; }));
 
         private List<Models.InventoryItemModel<DataModels.Items.Bag>> _bags;
@@ -133,7 +221,7 @@ namespace AiosKingdom.ViewModels
             _weaponSlotEquipAction ?? (_weaponSlotEquipAction = new Command(() =>
             {
                 NetworkManager.Instance.EquipItem(_selectedWeapon.Slot.Id);
-                ScreenManager.Instance.OpenLoadingScreen($"Equiping {_selectedWeapon.Item.Name}...");
+                IsBusy = true;
             }, () => { return _weaponSlotIsSelected && _selectedWeapon?.Item.UseLevelRequired <= DatasManager.Instance.Datas.Level; }));
 
         private void SetInventories()

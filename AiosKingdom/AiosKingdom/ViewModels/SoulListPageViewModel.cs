@@ -19,7 +19,7 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, soulsUpdated) =>
             {
                 Souls = soulsUpdated;
-                ScreenManager.Instance.CloseLoadingScreen();
+                IsBusy = false;
             });
 
             // TODO : Fix when Top bar UWP is fixed
@@ -27,7 +27,6 @@ namespace AiosKingdom.ViewModels
             {
                 if (Souls.Count == 0)
                 {
-                    ScreenManager.Instance.OpenLoadingScreen("Create Soul");
                     ScreenManager.Instance.PushPage(new Views.CreateSoulPage());
                 }
             });
@@ -57,7 +56,7 @@ namespace AiosKingdom.ViewModels
             {
                 if (value != null)
                 {
-                    ScreenManager.Instance.OpenLoadingScreen($"Connecting {value.Name}, please wait...");
+                    IsBusy = true;
                     NetworkManager.Instance.ConnectSoul(value.Id);
                 }
 
@@ -69,7 +68,7 @@ namespace AiosKingdom.ViewModels
         public ICommand CreateSoulAction =>
             _createSoulAction ?? (_createSoulAction = new Command(() =>
             {
-                ScreenManager.Instance.OpenLoadingScreen("Create Soul");
+                IsBusy = true;
                 ScreenManager.Instance.PushPage(new Views.CreateSoulPage());
             }));
     }

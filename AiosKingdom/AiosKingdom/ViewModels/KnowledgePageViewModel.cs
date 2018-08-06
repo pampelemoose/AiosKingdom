@@ -16,13 +16,10 @@ namespace AiosKingdom.ViewModels
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.KnowledgeUpdated, (sender) =>
             {
-                SetKnowledge();
-            });
-
-            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SkillLearned, (sender, message) =>
-            {
-                ScreenManager.Instance.AlertScreen("Upgrading Skill", message);
-                SetKnowledge();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    SetKnowledge();
+                });
             });
 
             NetworkManager.Instance.AskKnowledges();
@@ -31,7 +28,19 @@ namespace AiosKingdom.ViewModels
         ~KnowledgePageViewModel()
         {
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.KnowledgeUpdated);
-            MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.SkillLearned);
+        }
+
+        private void Subscribe_SkillLearned()
+        {
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SkillLearned, (sender, message) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ScreenManager.Instance.AlertScreen("Upgrading Skill", message);
+                    IsBusy = false;
+                    MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.SkillLearned);
+                });
+            });
         }
 
         private List<Models.KnowledgeModel> _knowledges;
@@ -59,7 +68,9 @@ namespace AiosKingdom.ViewModels
         public ICommand UpgradeSkillAction =>
         _upgradeSkillAction ?? (_upgradeSkillAction = new Command(() =>
         {
-            ScreenManager.Instance.OpenLoadingScreen($"Upgrading {_selectedKnowledge.Name}, please wait...");
+            Subscribe_SkillLearned();
+
+            IsBusy = true;
             NetworkManager.Instance.LearnSkill(_selectedKnowledge.Knowledge.BookId, _selectedKnowledge.Page.Rank + 1);
         }, () =>
         {

@@ -457,7 +457,9 @@ namespace AiosKingdom
                 }
             }
 
-            _game.GetStream().Flush();
+            if (_game.Connected)
+                _game.GetStream().Flush();
+
             _game.Client.Close();
             _game.Close();
         }
@@ -482,7 +484,7 @@ namespace AiosKingdom
                             if (!Guid.Empty.Equals(authToken))
                             {
                                 _gameAuthToken = authToken;
-                                MessagingCenter.Send(this, MessengerCodes.ConnectedToServer);
+                                AskSoulList();
                             }
                         }
                         else
@@ -496,6 +498,11 @@ namespace AiosKingdom
                         if (message.Success)
                         {
                             AskSoulList();
+                            MessagingCenter.Send(this, MessengerCodes.CreateSoulSuccess);
+                        }
+                        else
+                        {
+                            MessagingCenter.Send(this, MessengerCodes.CreateSoulFailed);
                         }
                         ScreenManager.Instance.AlertScreen("Soul Creation", message.Json);
                     }
@@ -564,6 +571,7 @@ namespace AiosKingdom
                             AskInventory();
                             AskMarketItems();
                         }
+                        MessagingCenter.Send(this, MessengerCodes.BuyMarketItem);
                         ScreenManager.Instance.AlertScreen("Market Item", message.Json);
                     }
                     break;
@@ -584,6 +592,10 @@ namespace AiosKingdom
                         {
                             AskCurrencies();
                             AskSoulCurrentDatas();
+                        }
+                        else
+                        {
+                            MessagingCenter.Send(this, MessengerCodes.SpiritPillsFailed);
                         }
                         ScreenManager.Instance.AlertScreen("Spirit Pills", message.Json);
                     }
@@ -722,7 +734,7 @@ namespace AiosKingdom
                             AskCurrencies();
                             AskInventory();
                             AskSoulCurrentDatas();
-                            MessagingCenter.Send(this, MessengerCodes.SoulConnected);
+                            MessagingCenter.Send(this, MessengerCodes.ExitedDungeon);
                         }
                         else
                         {
@@ -769,6 +781,7 @@ namespace AiosKingdom
                         {
                             UpdateDungeonRoom();
                         }
+                        ScreenManager.Instance.AlertScreen("Turn", message.Json);
                         MessagingCenter.Send(this, MessengerCodes.EnemyTurnEnded);
                     }
                     break;
@@ -777,6 +790,11 @@ namespace AiosKingdom
                         if (message.Success)
                         {
                             UpdateDungeonRoom();
+                        }
+
+                        if (!string.IsNullOrEmpty(message.Json))
+                        {
+                            ScreenManager.Instance.AlertScreen("Turn", message.Json);
                         }
                     }
                     break;
@@ -807,7 +825,7 @@ namespace AiosKingdom
                             AskInventory();
                             AskSoulCurrentDatas();
                         }
-                        ScreenManager.Instance.AlertScreen("Room", message.Json);
+                        ScreenManager.Instance.AlertScreen("Dungeon", message.Json);
                     }
                     break;
                 case Network.CommandCodes.Dungeon.BuyShopItem:

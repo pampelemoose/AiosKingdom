@@ -11,13 +11,20 @@ namespace AiosKingdom.ViewModels
         public struct BuyableItem
         {
             public DataModels.Items.ItemType Type { get; set; }
-
         }
 
         public ABuyItemViewModel(INavigation nav, int quantity = 1) 
             : base(nav)
         {
             _quantity = quantity;
+
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.BuyMarketItem, (sender) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    _navigation.PopModalAsync();
+                });
+            });
         }
 
         protected int _quantity;

@@ -8,20 +8,30 @@ namespace AiosKingdom.ViewModels
 {
     public class SpiritPillsPageViewModel : BaseViewModel
     {
-        public SpiritPillsPageViewModel() 
+        public SpiritPillsPageViewModel()
             : base(null)
         {
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated, (sender) =>
-            {
-                SetDatas();
-            });
-
             SetDatas();
         }
 
-        ~SpiritPillsPageViewModel()
+        private void Subscribe_UsePills()
         {
-            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated);
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated, (sender) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    IsBusy = false;
+                    SetDatas();
+                });
+
+                MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated);
+            });
+
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.SpiritPillsFailed, (sender) =>
+            {
+                IsBusy = false;
+                MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.SpiritPillsFailed);
+            });
         }
 
         private int _spirits;
@@ -42,6 +52,9 @@ namespace AiosKingdom.ViewModels
             set
             {
                 _pillsAmount = value;
+                _decreasePillsAmountAction?.ChangeCanExecute();
+                _increasePillsAmountAction?.ChangeCanExecute();
+                _usePillsAction?.ChangeCanExecute();
                 NotifyPropertyChanged();
             }
         }
@@ -51,9 +64,6 @@ namespace AiosKingdom.ViewModels
         _decreasePillsAmountAction ?? (_decreasePillsAmountAction = new Command(() =>
         {
             --PillsAmount;
-            _decreasePillsAmountAction?.ChangeCanExecute();
-            _increasePillsAmountAction?.ChangeCanExecute();
-            _usePillsAction.ChangeCanExecute();
         }, () => { return _pillsAmount > 0; }));
 
         private Command _increasePillsAmountAction;
@@ -61,21 +71,16 @@ namespace AiosKingdom.ViewModels
         _increasePillsAmountAction ?? (_increasePillsAmountAction = new Command(() =>
         {
             ++PillsAmount;
-            _decreasePillsAmountAction?.ChangeCanExecute();
-            _increasePillsAmountAction?.ChangeCanExecute();
-            _usePillsAction.ChangeCanExecute();
         }, () => { return _pillsAmount < Spirits; }));
 
         private Command _usePillsAction;
         public ICommand UsePillAction =>
         _usePillsAction ?? (_usePillsAction = new Command(() =>
         {
-            ScreenManager.Instance.OpenLoadingScreen("Using pills, please wait for the effect to apply..");
-            NetworkManager.Instance.UseSpiritPills(_statType, _pillsAmount);
+            Subscribe_UsePills();
 
-            _decreasePillsAmountAction?.ChangeCanExecute();
-            _increasePillsAmountAction?.ChangeCanExecute();
-            _usePillsAction.ChangeCanExecute();
+            IsBusy = true;
+            NetworkManager.Instance.UseSpiritPills(_statType, _pillsAmount);
         }, () => { return _pillsAmount > 0; }));
 
         private DataModels.Soul.Stats _statType = DataModels.Soul.Stats.Stamina;

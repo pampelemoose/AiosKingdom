@@ -15,7 +15,7 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.MarketUpdated, (sender) =>
             {
                 SetItems();
-                ScreenManager.Instance.CloseLoadingScreen();
+                IsBusy = false;
             });
 
             NetworkManager.Instance.AskMarketItems();

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
              xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
              x:Class="AiosKingdom.Views.LoginPage"
              Title="{Binding Title}">
@@ -8,62 +9,66 @@
         <vm:LoginPageViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid
+        <Grid>
+            <Grid
             BackgroundColor="Teal"
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand">
-            <Grid
+                <Grid
                 IsVisible="{Binding IsNewDevice, Converter={StaticResource inverseBoolean}}"
                 Padding="100, 20"
                 VerticalOptions="Center">
-                <Label
+                    <Label
                     Text="Aios Kingdom"/>
-            </Grid>
+                </Grid>
 
-            <Grid
+                <Grid
                 IsVisible="{Binding IsNewDevice}"
                 Padding="100, 20"
                 VerticalOptions="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
 
-                <Label
+                    <Label
                     Grid.Row="0"
                     Text="If you already have an account, please input your SafeKey"/>
 
-                <Grid
+                    <Grid
                     Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="9*"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <Entry
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Entry
                         Grid.Column="0"
                         Placeholder="SafeKey" 
                         Text="{Binding SafeKey}"/>
-                    <Button
+                        <Button
                         Grid.Column="1"
                         Style="{StaticResource MenuButton}"
                         Text="Go"
                         Command="{Binding RetrieveAccountAction}"/>
-                </Grid>
+                    </Grid>
 
-                <Label
+                    <Label
                     Grid.Row="2"
                     Text="Create a new account !"/>
 
-                <Button
+                    <Button
                     Grid.Row="3"
                     Style="{StaticResource MenuButton}"
                     Text="New Account"
                     Command="{Binding NewAccountAction}"/>
 
+                </Grid>
             </Grid>
+
+            <ctrl:LoadingIndicator/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

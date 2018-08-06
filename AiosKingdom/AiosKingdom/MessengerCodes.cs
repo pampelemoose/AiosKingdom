@@ -19,10 +19,11 @@ namespace AiosKingdom
         public static string ServerListReceived = "initialDatasReceived";
         public static string GameServerDisconnected = "gameServerDisconnected";
 
-        public static string ConnectedToServer = "connectedToServer";
         public static string ConnectedToServerFailed = "connectedToServerFailed";
 
         public static string SoulListReceived = "soulListReceived";
+        public static string CreateSoulFailed = "createSoulFailed";
+        public static string CreateSoulSuccess = "createSoulSuccess";
 
         public static string SoulConnected = "soulConnected";
         public static string SoulDatasUpdated = "soulDatasUpdated";
@@ -33,23 +34,21 @@ namespace AiosKingdom
         public static string EquipmentUpdated = "equipmentUpdated";
 
         public static string MarketUpdated = "marketUpdated";
+        public static string BuyMarketItem = "buyMarketItem";
         
+        public static string SpiritPillsFailed = "spiritPillsFailed";
         public static string SkillLearned = "skillLearned";
 
         public static string EnterDungeon = "enterDungeon";
+        public static string ExitedDungeon = "exitedDungeon";
         public static string DungeonSelectSkillEnded = "dungeonSelectSkillEnded";
         public static string DungeonSelectConsumableEnded = "dungeonSelectConsumableEnded";
         public static string EnemyTurnEnded = "enemyTurnEnded";
         public static string DungeonUpdated = "dungeonUpdated";
         public static string DungeonLootsReceived = "dungeonLootsReceived";
 
-        public static string OpenLoadingScreen = "openLoadingScreen";
-        public static string LoadingScreenOpenned = "loadingScreenOpenned";
-        public static string UpdateLoadingScreen = "updateLoadingScreen";
         public static string AlertScreen = "alertScreen";
-        public static string CloseLoadingScreen = "closeLoadingScreen";
-        public static string LoadingScreenClosed = "loadingScreenClosed";
-        public static string LoadingScreenChangePage = "loadingScreenChangePage";
-        public static string LoadingScreenPushPage = "loadingScreenPushPage";
+        public static string ScreenChangePage = "ScreenChangePage";
+        public static string ScreenPushPage = "ScreenPushPage";
     }
 }

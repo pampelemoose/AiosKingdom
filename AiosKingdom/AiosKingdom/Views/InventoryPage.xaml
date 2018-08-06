@@ -1,571 +1,278 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
-             x:Class="AiosKingdom.Views.InventoryPage"
-             Title="{Binding Title}">
-    <TabbedPage.BindingContext>
+<ContentPage    xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:inv="clr-namespace:AiosKingdom.Controls.Inventory;"
+                xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
+                xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+                x:Class="AiosKingdom.Views.InventoryPage"
+                Title="{Binding Title}">
+    <ContentPage.BindingContext>
         <vm:InventoryPageViewModel />
-    </TabbedPage.BindingContext>
-    <TabbedPage.Children>
-        <ContentPage Title="Armors">
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="90"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid
-                    Grid.Column="0"
-                    BackgroundColor="{Binding SelectedArmor.Item.Quality, Converter={StaticResource itemQualityToColor}}"
-                    IsVisible="{Binding ArmorSlotIsSelected}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="50" />
-                    </Grid.RowDefinitions>
+                    Grid.Column="0">
 
                     <Grid
-                        Grid.Row="0">
+                        IsVisible="{Binding IsArmorPanelActive}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="200" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Image
-                            Grid.Column="0"
-                            Source="{Binding SelectedArmor.Item, Converter={StaticResource objectToImage}}" />
-                        <Grid
-                            Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                        <inv:ArmorDetailsPanel
+                            Grid.Column="0"/>
 
-                            <ContentView
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                BackgroundColor="Blue"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedArmor.Item.UseLevelRequired}"/>
-                            </ContentView>
-                            <ContentView
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                BackgroundColor="Gray"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedArmor.Item.ItemLevel}"/>
-                            </ContentView>
-                            <ContentView
-                                Grid.Row="1"
-                                Grid.ColumnSpan="2"
-                                BackgroundColor="Gray"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedArmor.Item.ArmorValue}"/>
-                            </ContentView>
-                        </Grid>
-                    </Grid>
-                    <ListView
-                        Grid.Row="1"
-                        BackgroundColor="Transparent"
-                        ItemsSource="{Binding SelectedArmor.Item.Stats}"
-                        HeightRequest="{Binding SelectedArmor.Item.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
-                        RowHeight="20"
-                        SeparatorVisibility="None"
-                        IsEnabled="false">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="10*" />
-                                            <ColumnDefinition Width="2*" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <Label 
-                                            Grid.Column="0"
-                                            Text="{Binding Type}" />
-                                        <Label
-                                            Grid.Column="1"
-                                            Text="{Binding StatValue}" />
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    <Button
-                        Grid.Row="2"
-                        Margin="5"
-                        Style="{StaticResource MenuButton}"
-                        Text="Equip"
-                        Command="{Binding ArmorSlotEquipAction}"/>
-                </Grid>
-
-                <ListView
-                    Grid.Column="1"
-                    BackgroundColor="Transparent"
-                    ItemsSource="{Binding Armors}"
-                    SelectedItem="{Binding SelectedArmor}"
-                    RowHeight="50"
-                    SeparatorVisibility="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid 
-                                    Margin="0, 5, 0, 0"
-                                    VerticalOptions="CenterAndExpand">
-                                    <ContentView
-                                        BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
-                                        Padding="5, 0, 0, 0">
-                                        <Label
-                                            TextColor="Aqua"
-                                            FontAttributes="Bold"
-                                            FontSize="25"
-                                            VerticalTextAlignment="Center"
-                                            Text="{Binding Item.Name}"/>
-                                    </ContentView>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Grid>
-        </ContentPage>
-        <ContentPage Title="Weapons">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid
-                    Grid.Column="0"
-                    BackgroundColor="{Binding SelectedWeapon.Item.Quality, Converter={StaticResource itemQualityToColor}}"
-                    IsVisible="{Binding WeaponSlotIsSelected}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="50" />
-                    </Grid.RowDefinitions>
-
-                    <Grid
-                        Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Image
-                            Grid.Column="0"
-                            Source="{Binding SelectedWeapon.Item, Converter={StaticResource objectToImage}}" />
-                        <Grid
-                            Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <ContentView
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                BackgroundColor="Blue"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedWeapon.Item.UseLevelRequired}"/>
-                            </ContentView>
-                            <ContentView
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                BackgroundColor="Gray"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedWeapon.Item.ItemLevel}"/>
-                            </ContentView>
-                            <ContentView
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                BackgroundColor="Gray"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedWeapon.Item.MinDamages}"/>
-                            </ContentView>
-                            <ContentView
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                BackgroundColor="Gray"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedWeapon.Item.MaxDamages}"/>
-                            </ContentView>
-                        </Grid>
-                    </Grid>
-                    <ListView
-                        Grid.Row="1"
-                        BackgroundColor="Transparent"
-                        ItemsSource="{Binding SelectedWeapon.Item.Stats}"
-                        HeightRequest="{Binding SelectedWeapon.Item.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
-                        RowHeight="20"
-                        SeparatorVisibility="None"
-                        IsEnabled="false">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="10*" />
-                                            <ColumnDefinition Width="2*" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <Label 
-                                            Grid.Column="0"
-                                            Text="{Binding Type}" />
-                                        <Label
-                                            Grid.Column="1"
-                                            Text="{Binding StatValue}" />
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    <Button
-                        Grid.Row="2"
-                        Margin="5"
-                        Style="{StaticResource MenuButton}"
-                        Text="Equip"
-                        Command="{Binding WeaponSlotEquipAction}"/>
-                </Grid>
-
-                <ListView
-                    Grid.Column="1"
-                    BackgroundColor="Transparent"
-                    ItemsSource="{Binding Weapons}"
-                    SelectedItem="{Binding SelectedWeapon}"
-                    RowHeight="50"
-                    SeparatorVisibility="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid 
-                                    Margin="0, 5, 0, 0"
-                                    VerticalOptions="CenterAndExpand">
-                                    <ContentView
-                                        BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
-                                        Padding="5, 0, 0, 0">
-                                        <Label
-                                            TextColor="Aqua"
-                                            FontAttributes="Bold"
-                                            FontSize="25"
-                                            VerticalTextAlignment="Center"
-                                            Text="{Binding Item.Name}"/>
-                                    </ContentView>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Grid>
-        </ContentPage>
-        <ContentPage Title="Bags">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid
-                    Grid.Column="0"
-                    BackgroundColor="{Binding SelectedBag.Item.Quality, Converter={StaticResource itemQualityToColor}}"
-                    IsVisible="{Binding BagSlotIsSelected}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="50" />
-                    </Grid.RowDefinitions>
-
-                    <Grid
-                        Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Image
-                            Grid.Column="0"
-                            Source="{Binding SelectedBag.Item, Converter={StaticResource objectToImage}}" />
-                        <Grid
-                            Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <ContentView
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                BackgroundColor="Blue"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedBag.Item.UseLevelRequired}"/>
-                            </ContentView>
-                            <ContentView
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                BackgroundColor="Gray"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedBag.Item.ItemLevel}"/>
-                            </ContentView>
-                            <ContentView
-                                Grid.Row="1"
-                                Grid.ColumnSpan="2"
-                                BackgroundColor="Gray"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedBag.Item.ArmorValue}"/>
-                            </ContentView>
-                        </Grid>
-                    </Grid>
-                    <ListView
-                        Grid.Row="1"
-                        BackgroundColor="Transparent"
-                        ItemsSource="{Binding SelectedBag.Item.Stats}"
-                        HeightRequest="{Binding SelectedBag.Item.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
-                        RowHeight="20"
-                        SeparatorVisibility="None"
-                        IsEnabled="false">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="10*" />
-                                            <ColumnDefinition Width="2*" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <Label 
-                                            Grid.Column="0"
-                                            Text="{Binding Type}" />
-                                        <Label
-                                            Grid.Column="1"
-                                            Text="{Binding StatValue}" />
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    <Button
-                        Grid.Row="2"
-                        Margin="5"
-                        Style="{StaticResource MenuButton}"
-                        Text="Equip"
-                        Command="{Binding BagSlotEquipAction}"/>
-                </Grid>
-
-                <ListView
-                    Grid.Column="1"
-                    BackgroundColor="Transparent"
-                    ItemsSource="{Binding Bags}"
-                    SelectedItem="{Binding SelectedBag}"
-                    RowHeight="50"
-                    SeparatorVisibility="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid 
-                                    Margin="0, 5, 0, 0"
-                                    VerticalOptions="CenterAndExpand">
-                                    <ContentView
-                                        BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
-                                        Padding="5, 0, 0, 0">
-                                        <Label
-                                            TextColor="Aqua"
-                                            FontAttributes="Bold"
-                                            FontSize="25"
-                                            VerticalTextAlignment="Center"
-                                            Text="{Binding Item.Name}"/>
-                                    </ContentView>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Grid>
-        </ContentPage>
-        <ContentPage Title="Consumables">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid
-                    Grid.Column="0"
-                    BackgroundColor="{Binding SelectedConsumable.Item.Quality, Converter={StaticResource itemQualityToColor}}"
-                    IsVisible="{Binding ConsumableSlotIsSelected}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-
-                    <Grid
-                        Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Image
-                            Grid.Column="0"
-                            Source="{Binding SelectedConsumable.Item, Converter={StaticResource objectToImage}}" />
-                        <Grid
-                            Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-
-                            <ContentView
-                                Grid.Row="0"
-                                BackgroundColor="Blue"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedConsumable.Item.UseLevelRequired}"/>
-                            </ContentView>
-                            <ContentView
-                                Grid.Row="1"
-                                BackgroundColor="Gray"
-                                Padding="5">
-                                <Label
-                                    BackgroundColor="Gray"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding SelectedConsumable.Item.ItemLevel}"/>
-                            </ContentView>
-                        </Grid>
-                    </Grid>
-
-                    <ListView
-                        Grid.Row="1"
-                        BackgroundColor="Transparent"
-                        IsEnabled="false"
-                        ItemsSource="{Binding SelectedConsumable.Item.Effects}"
-                        HeightRequest="{Binding SelectedConsumable.Item.Effects, Converter={StaticResource listToHeight}, ConverterParameter=20}"
-                        RowHeight="20"
-                        SeparatorVisibility="None">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="10*" />
-                                            <ColumnDefinition Width="2*" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <Label 
-                                            Grid.Column="0"
-                                            Text="{Binding Type}" />
-                                        <Label
-                                            Grid.Column="1"
-                                            Text="{Binding AffectValue}" />
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </Grid>
-
-                <ListView
-                    Grid.Column="1"
-                    BackgroundColor="Transparent"
-                    ItemsSource="{Binding Consumables}"
-                    SelectedItem="{Binding SelectedConsumable}"
-                    RowHeight="50"
-                    SeparatorVisibility="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid 
-                                    Margin="0, 5, 0, 0"
-                                    ColumnSpacing="0">
-                                    <ContentView
-                                        BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
-                                        Padding="5, 0, 0, 0">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="10*"/>
-                                                <ColumnDefinition Width="2*"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <Label
-                                                Grid.Column="0"
-                                                TextColor="Aqua"
-                                                FontAttributes="Bold"
-                                                FontSize="25"
-                                                VerticalTextAlignment="Center"
-                                                Text="{Binding Item.Name}"/>
-                                            <Label
-                                                Grid.Column="1"
-                                                TextColor="Black"
-                                                FontAttributes="Bold"
-                                                FontSize="10"
-                                                VerticalTextAlignment="End"
-                                                Text="{Binding Slot.Quantity}"/>
+                        <ListView
+                            Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            ItemsSource="{Binding Armors}"
+                            SelectedItem="{Binding SelectedArmor}"
+                            RowHeight="50"
+                            SeparatorVisibility="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid 
+                                            Margin="0, 5, 0, 0"
+                                            VerticalOptions="CenterAndExpand">
+                                            <ContentView
+                                                BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
+                                                Padding="5, 0, 0, 0">
+                                                <Label
+                                                    TextColor="Aqua"
+                                                    FontAttributes="Bold"
+                                                    FontSize="25"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding Item.Name}"/>
+                                            </ContentView>
                                         </Grid>
-                                    </ContentView>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+
+                    <Grid
+                        IsVisible="{Binding IsWeaponPanelActive}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <inv:WeaponDetailsPanel
+                            Grid.Column="0"/>
+
+                        <ListView
+                            Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            ItemsSource="{Binding Weapons}"
+                            SelectedItem="{Binding SelectedWeapon}"
+                            RowHeight="50"
+                            SeparatorVisibility="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid 
+                                            Margin="0, 5, 0, 0"
+                                            VerticalOptions="CenterAndExpand">
+                                            <ContentView
+                                                BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
+                                                Padding="5, 0, 0, 0">
+                                                <Label
+                                                    TextColor="Aqua"
+                                                    FontAttributes="Bold"
+                                                    FontSize="25"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding Item.Name}"/>
+                                            </ContentView>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+
+                    <Grid
+                        IsVisible="{Binding IsBagPanelActive}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <inv:BagDetailsPanel
+                            Grid.Column="0"/>
+
+                        <ListView
+                            Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            ItemsSource="{Binding Bags}"
+                            SelectedItem="{Binding SelectedBag}"
+                            RowHeight="50"
+                            SeparatorVisibility="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid 
+                                            Margin="0, 5, 0, 0"
+                                            VerticalOptions="CenterAndExpand">
+                                            <ContentView
+                                                BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
+                                                Padding="5, 0, 0, 0">
+                                                <Label
+                                                    TextColor="Aqua"
+                                                    FontAttributes="Bold"
+                                                    FontSize="25"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding Item.Name}"/>
+                                            </ContentView>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+
+                    <Grid
+                        IsVisible="{Binding IsConsumablePanelActive}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <inv:ConsumableDetailsPanel
+                            Grid.Column="0"/>
+
+                        <ListView
+                            Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            ItemsSource="{Binding Consumables}"
+                            SelectedItem="{Binding SelectedConsumable}"
+                            RowHeight="50"
+                            SeparatorVisibility="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid 
+                                            Margin="0, 5, 0, 0"
+                                            ColumnSpacing="0">
+                                            <ContentView
+                                                BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
+                                                Padding="5, 0, 0, 0">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="10*"/>
+                                                        <ColumnDefinition Width="2*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Label
+                                                        Grid.Column="0"
+                                                        TextColor="Aqua"
+                                                        FontAttributes="Bold"
+                                                        FontSize="25"
+                                                        VerticalTextAlignment="Center"
+                                                        Text="{Binding Item.Name}"/>
+                                                    <Label
+                                                        Grid.Column="1"
+                                                        TextColor="Black"
+                                                        FontAttributes="Bold"
+                                                        FontSize="10"
+                                                        VerticalTextAlignment="End"
+                                                        Text="{Binding Slot.Quantity}"/>
+                                                </Grid>
+                                            </ContentView>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </Grid>
+
+                <StackLayout
+                    VerticalOptions="Center"
+                    Grid.Column="1"
+                    Padding="5">
+
+                    <ContentView
+                        HeightRequest="80"
+                        Padding="5">
+                        <ContentView.Triggers>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsArmorPanelActive}" Value="False">
+                                <Setter Property="BackgroundColor" Value="Blue" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsArmorPanelActive}" Value="True">
+                                <Setter Property="BackgroundColor" Value="Red" />
+                            </DataTrigger>
+                        </ContentView.Triggers>
+                        <Button
+                            BackgroundColor="Gray"
+                            Text="A"
+                            Command="{Binding ShowArmorPanelAction}"/>
+                    </ContentView>
+
+                    <ContentView
+                        HeightRequest="80"
+                        Padding="5">
+                        <ContentView.Triggers>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsWeaponPanelActive}" Value="False">
+                                <Setter Property="BackgroundColor" Value="Blue" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsWeaponPanelActive}" Value="True">
+                                <Setter Property="BackgroundColor" Value="Red" />
+                            </DataTrigger>
+                        </ContentView.Triggers>
+                        <Button
+                            BackgroundColor="Gray"
+                            Text="W"
+                            Command="{Binding ShowWeaponPanelAction}"/>
+                    </ContentView>
+
+                    <ContentView
+                        HeightRequest="80"
+                        Padding="5">
+                        <ContentView.Triggers>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsBagPanelActive}" Value="False">
+                                <Setter Property="BackgroundColor" Value="Blue" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsBagPanelActive}" Value="True">
+                                <Setter Property="BackgroundColor" Value="Red" />
+                            </DataTrigger>
+                        </ContentView.Triggers>
+                        <Button
+                            BackgroundColor="Gray"
+                            Text="B"
+                            Command="{Binding ShowBagPanelAction}"/>
+                    </ContentView>
+
+                    <ContentView
+                        HeightRequest="80"
+                        Padding="5">
+                        <ContentView.Triggers>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsConsumablePanelActive}" Value="False">
+                                <Setter Property="BackgroundColor" Value="Blue" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsConsumablePanelActive}" Value="True">
+                                <Setter Property="BackgroundColor" Value="Red" />
+                            </DataTrigger>
+                        </ContentView.Triggers>
+                        <Button
+                            BackgroundColor="Gray"
+                            Text="C"
+                            Command="{Binding ShowConsumablePanelAction}"/>
+                    </ContentView>
+
+                </StackLayout>
             </Grid>
-        </ContentPage>
-    </TabbedPage.Children>
-</TabbedPage>
+
+            <ctrl:LoadingIndicator/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

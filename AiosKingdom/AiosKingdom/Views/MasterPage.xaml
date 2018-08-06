@@ -8,10 +8,15 @@
         <vm:MasterPageViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout
+        <Grid
             BackgroundColor="#02A8C4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            
             <ListView 
-                Grid.Row="1"
+                Grid.Row="0"
                 Style="{StaticResource MenuList}"
                 ItemTemplate="{StaticResource MenuListItem}"
                 ItemsSource="{Binding Menus}" 
@@ -38,8 +43,8 @@
             </ListView>
 
             <Grid
-                Margin="5, 0, 5, 5"
-                HeightRequest="40">
+                Grid.Row="1"
+                Margin="5, 0, 5, 5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8*"/>
                     <ColumnDefinition Width="4*"/>
@@ -58,6 +63,6 @@
                     Text="Souls"
                     Command="{Binding BackToSoulListAction}"/>
             </Grid>
-        </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

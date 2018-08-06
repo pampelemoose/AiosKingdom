@@ -14,35 +14,39 @@ namespace AiosKingdom.ViewModels
             Title = "Server List";
             ServerInfos = serverList;
 
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.ConnectedToServer, (sender) =>
-            {
-                ScreenManager.Instance.UpdateLoadingScreen("Loading Soul list, please wait.");
-                NetworkManager.Instance.AskSoulList();
-            });
-
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ConnectedToServerFailed, (sender, arg) =>
             {
                 ScreenManager.Instance.AlertScreen("Connection Failed", $"Couldn't connect to server. Please try again later.\n{arg}");
+                IsBusy = false;
             });
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived, (sender, servers) =>
             {
                 ServerInfos = servers;
-                ScreenManager.Instance.CloseLoadingScreen();
+                IsBusy = false;
             });
+        }
 
-            MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, souls) =>
+        private bool _subscribed;
+        private void Subscribe_SoulListReceived()
+        {
+            if (!_subscribed)
             {
-                ScreenManager.Instance.PushPage(new Views.SoulListPage(new SoulListPageViewModel(souls)));
-            });
+                MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, souls) =>
+                {
+                    ScreenManager.Instance.PushPage(new Views.SoulListPage(new SoulListPageViewModel(souls)));
+                    IsBusy = false;
+                    _subscribed = false;
+                    MessagingCenter.Unsubscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived);
+                });
+                _subscribed = true;
+            }
         }
 
         ~ServerListPageViewModel()
         {
-            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.ConnectedToServer);
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.ConnectedToServerFailed);
             MessagingCenter.Unsubscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived);
-            MessagingCenter.Unsubscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived);
         }
 
         private List<Network.GameServerInfos> _serverInfos;
@@ -63,10 +67,13 @@ namespace AiosKingdom.ViewModels
             {
                 if (value != null && value.Online)
                 {
-                    ScreenManager.Instance.OpenLoadingScreen($"Connecting to {value.Name}, please wait...");
+                    Subscribe_SoulListReceived();
+
+                    IsBusy = true;
                     NetworkManager.Instance.AnnounceGameServerConnection(value.Id);
                 }
 
+                value = null;
                 NotifyPropertyChanged();
             }
         }
@@ -75,7 +82,7 @@ namespace AiosKingdom.ViewModels
         public ICommand RefreshServersAction =>
             _refreshServersAction ?? (_refreshServersAction = new Command(() =>
             {
-                ScreenManager.Instance.OpenLoadingScreen("Refreshing server list, please wait.");
+                IsBusy = true;
                 NetworkManager.Instance.AskServerInfos();
             }));
     }

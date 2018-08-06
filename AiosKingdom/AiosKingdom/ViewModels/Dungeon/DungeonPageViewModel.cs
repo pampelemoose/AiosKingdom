@@ -25,12 +25,12 @@ namespace AiosKingdom.ViewModels.Dungeon
                 {
                     IsEnemyTurn = false;
                     ShowLootsPanel = true;
-                    ScreenManager.Instance.UpdateLoadingScreen("Retrieving Loots, please wait...");
+                    IsBusy = true;
                     NetworkManager.Instance.GetDungeonRoomLoots();
                 }
                 else
                 {
-                    ScreenManager.Instance.CloseLoadingScreen();
+                    IsBusy = false;
                 }
             });
 
@@ -42,14 +42,14 @@ namespace AiosKingdom.ViewModels.Dungeon
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.LootItem>>(this, MessengerCodes.DungeonLootsReceived, (sender, loots) =>
             {
+                IsBusy = false;
                 Loots = loots;
-                ScreenManager.Instance.AlertScreen("Room Cleaned", "You cleaned the room.");
             });
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.EnemyTurnEnded, (sender) =>
             {
                 IsEnemyTurn = false;
-                ScreenManager.Instance.CloseLoadingScreen();
+                IsBusy = false;
             });
 
             NetworkManager.Instance.AskInventory();
@@ -87,7 +87,7 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 if (value != null)
                 {
-                    ScreenManager.Instance.OpenLoadingScreen("Looting item, please wait...");
+                    IsBusy = true;
                     NetworkManager.Instance.LootDungeonItem(value.LootId);
                 }
                 NotifyPropertyChanged();
@@ -228,7 +228,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand EnemyTurnAction =>
             _enemyTurnAction ?? (_enemyTurnAction = new Command(() =>
             {
-                ScreenManager.Instance.OpenLoadingScreen($"Enemy turn. Please wait...");
+                IsBusy = true;
                 NetworkManager.Instance.EnemyTurn();
             }));
 
@@ -262,7 +262,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand EndTurnAction =>
             _endTurnActionAction ?? (_endTurnActionAction = new Command(() =>
             {
-                ScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
+                IsBusy = true;
                 NetworkManager.Instance.DoNothingTurn();
 
                 IsEnemyTurn = true;
@@ -299,14 +299,14 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 if (IsSkillSelected)
                 {
-                    ScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
+                    IsBusy = true;
                     NetworkManager.Instance.DungeonUseSkill(_selectedSkill.KnowledgeId,
                         (_selectedEnemy != null ? _selectedEnemy.Value.Key : Guid.Empty));
                 }
 
                 if (IsConsumableSelected)
                 {
-                    ScreenManager.Instance.OpenLoadingScreen($"Ending turn. Please wait.");
+                    IsBusy = true;
                     NetworkManager.Instance.DungeonUseConsumable(_selectedConsumable.SlotId,
                         (_selectedEnemy != null ? _selectedEnemy.Value.Key : Guid.Empty));
                 }
@@ -344,7 +344,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand PlayerRestAction =>
             _playerRestAction ?? (_playerRestAction = new Command(() =>
             {
-                ScreenManager.Instance.OpenLoadingScreen($"Resting, please wait..");
+                IsBusy = true;
                 NetworkManager.Instance.PlayerRest();
             }));
 
@@ -352,7 +352,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand NextRoomAction =>
             _nextRoomAction ?? (_nextRoomAction = new Command(() =>
             {
-                ScreenManager.Instance.OpenLoadingScreen($"Going to next room. Please wait.");
+                IsBusy = true;
                 NetworkManager.Instance.OpenDungeonRoom();
             }));
 
@@ -360,7 +360,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand LeaveFinishedAction =>
             _leaveFinishedAction ?? (_leaveFinishedAction = new Command(() =>
             {
-                ScreenManager.Instance.OpenLoadingScreen($"Leaving room, you will receive {Room.StackedExperience + Room.ExperienceReward} experience and {Room.StackedShards + Room.ShardReward} shards. Please wait.");
+                IsBusy = true;
                 NetworkManager.Instance.LeaveFinishedRoom();
             }));
     }

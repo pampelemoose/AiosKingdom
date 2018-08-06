@@ -38,9 +38,7 @@ namespace AiosKingdom.ViewModels
 
         protected override void ExecuteBuyAction()
         {
-            _navigation.PopModalAsync();
-
-            ScreenManager.Instance.OpenLoadingScreen($"Buying {_item.Item.Name} * ({_quantity}) with { (IsShardSelected ? "Shards" : "Bits") }, please wait...");
+            IsBusy = true;
             NetworkManager.Instance.BuyMarketItem(_item.Slot.Id, _quantity, IsBitSelected);
         }
     }

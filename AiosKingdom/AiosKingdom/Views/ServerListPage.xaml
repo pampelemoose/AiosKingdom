@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
              xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
              x:Class="AiosKingdom.Views.ServerListPage"
              Title="{Binding Title}">
@@ -59,6 +60,8 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            
+            <ctrl:LoadingIndicator/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

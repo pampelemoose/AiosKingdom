@@ -11,6 +11,21 @@ namespace AiosKingdom.ViewModels
         public CreateSoulPageViewModel(INavigation nav) 
             : base(nav)
         {
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.CreateSoulFailed, (sender) =>
+            {
+                IsBusy = false;
+            });
+
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.CreateSoulSuccess, (sender) =>
+            {
+                _navigation.PopAsync();
+            });
+        }
+
+        ~CreateSoulPageViewModel()
+        {
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.CreateSoulFailed);
+            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.CreateSoulSuccess);
         }
 
         private string _name;
@@ -29,7 +44,7 @@ namespace AiosKingdom.ViewModels
         public ICommand CreateAction =>
             _createAction ?? (_createAction = new Command(() =>
             {
-                ScreenManager.Instance.OpenLoadingScreen("Creating new soul...");
+                IsBusy = true;
                 NetworkManager.Instance.CreateSoul(_name);
             }, () => { return !string.IsNullOrWhiteSpace(_name) && _name.Length > 4; }));
     }

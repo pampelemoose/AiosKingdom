@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AiosKingdom.Controls.Inventory.ConsumableDetailsPanel"
+             IsVisible="{Binding ConsumableSlotIsSelected}"
+             Padding="5">
+    <Grid
+        BackgroundColor="Black"
+        Padding="5">
+        <Grid
+            BackgroundColor="{Binding SelectedConsumable.Item.Quality, Converter={StaticResource itemQualityToColor}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Image
+                    Grid.Column="0"
+                    Source="{Binding SelectedConsumable.Item, Converter={StaticResource objectToImage}}" />
+                <Grid
+                    Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <ContentView
+                        Grid.Row="0"
+                        BackgroundColor="Blue"
+                        Padding="5">
+                        <Label
+                            BackgroundColor="Gray"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding SelectedConsumable.Item.UseLevelRequired}"/>
+                    </ContentView>
+                    <ContentView
+                        Grid.Row="1"
+                        BackgroundColor="Gray"
+                        Padding="5">
+                        <Label
+                            BackgroundColor="Gray"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding SelectedConsumable.Item.ItemLevel}"/>
+                    </ContentView>
+                </Grid>
+            </Grid>
+
+            <ListView
+                Grid.Row="1"
+                BackgroundColor="Transparent"
+                IsEnabled="false"
+                ItemsSource="{Binding SelectedConsumable.Item.Effects}"
+                HeightRequest="{Binding SelectedConsumable.Item.Effects, Converter={StaticResource listToHeight}, ConverterParameter=20}"
+                RowHeight="20"
+                SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label 
+                                    Grid.Column="0"
+                                    Text="{Binding Type}" />
+                                <Label
+                                    Grid.Column="1"
+                                    Text="{Binding AffectValue}" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Grid>
+</ContentView>

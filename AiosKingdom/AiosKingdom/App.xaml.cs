@@ -45,7 +45,7 @@ namespace AiosKingdom
 
             MainPage = new Views.LoginPage();
 
-            LoadingScreenCallbacks();
+            ScreenCallbacks();
         }
 
         private void Subscribe_GameServerDisconnected()
@@ -63,55 +63,29 @@ namespace AiosKingdom
 
         #region LOADING SCREEN
 
-        private Views.LoadingPage _loadingPage = new Views.LoadingPage();
-        private void LoadingScreenCallbacks()
+        private void ScreenCallbacks()
         {
-            MessagingCenter.Subscribe<ScreenManager, string>(this, MessengerCodes.OpenLoadingScreen, (sender, message) =>
+            MessagingCenter.Subscribe<ScreenManager, Page>(this, MessengerCodes.ScreenPushPage, (sender, page) =>
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    _loadingPage.SetMessage(message);
-                    await MainPage.Navigation.PushModalAsync(_loadingPage);
-                    MessagingCenter.Send(this, MessengerCodes.LoadingScreenOpenned);
+                    await MainPage.Navigation.PushAsync(page);
                 });
             });
 
-
-            MessagingCenter.Subscribe<ScreenManager>(this, MessengerCodes.CloseLoadingScreen, (sender) =>
+            MessagingCenter.Subscribe<ScreenManager, Page>(this, MessengerCodes.ScreenChangePage, (sender, page) =>
             {
-                Device.BeginInvokeOnMainThread(async () =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    if (MainPage.Navigation.ModalStack.Count > 0)
-                    {
-                        await MainPage.Navigation.PopModalAsync();
-                        MessagingCenter.Send(this, MessengerCodes.LoadingScreenClosed);
-                    }
-                });
-            });
-
-            MessagingCenter.Subscribe<ScreenManager, Page>(this, MessengerCodes.LoadingScreenChangePage, (sender, page) =>
-            {
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    if (MainPage.Navigation.ModalStack.Count > 0)
-                    {
-                        await MainPage.Navigation.PopModalAsync();
-                        MessagingCenter.Send(this, MessengerCodes.LoadingScreenClosed);
-                    }
                     MainPage = page;
                 });
             });
 
-            MessagingCenter.Subscribe<ScreenManager, Page>(this, MessengerCodes.LoadingScreenPushPage, (sender, page) =>
+            MessagingCenter.Subscribe<ScreenManager, string[]>(this, MessengerCodes.AlertScreen, (sender, args) =>
             {
-                Device.BeginInvokeOnMainThread(async () =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    if (MainPage.Navigation.ModalStack.Count > 0)
-                    {
-                        await MainPage.Navigation.PopModalAsync();
-                        MessagingCenter.Send(this, MessengerCodes.LoadingScreenClosed);
-                    }
-                    await MainPage.Navigation.PushAsync(page);
+                    MainPage.DisplayAlert(args[0], args[1], "OK");
                 });
             });
         }

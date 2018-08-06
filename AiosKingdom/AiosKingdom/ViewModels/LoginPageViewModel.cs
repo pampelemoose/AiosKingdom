@@ -16,11 +16,12 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ConnectionFailed, (sender, arg) =>
             {
                 ScreenManager.Instance.AlertScreen(MessengerCodes.ConnectionFailed, arg);
+                IsBusy = false;
             });
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.LoginSuccessful, (sender) =>
             {
-                ScreenManager.Instance.UpdateLoadingScreen("Logged In ! Receiving Server list..");
+                IsBusy = true;
                 NetworkManager.Instance.AskServerInfos();
             });
 
@@ -29,16 +30,19 @@ namespace AiosKingdom.ViewModels
                 ScreenManager.Instance.AlertScreen("Login Failed", arg);
                 Application.Current.Properties.Remove("AiosKingdom_IdentifyingKey");
                 IsNewDevice = true;
+                IsBusy = false;
             });
 
             #region Account Management
             MessagingCenter.Subscribe<NetworkManager, Guid>(this, MessengerCodes.CreateNewAccount, (sender, arg) =>
             {
                 ScreenManager.Instance.AlertScreen("Account", $"Please save this SafeKey[{arg}] in case you need to retrieve your account to any Device.");
+                IsBusy = false;
                 var identifier = Application.Current.Properties["AiosKingdom_IdentifyingKey"] as string;
 
                 if (!string.IsNullOrEmpty(identifier))
                 {
+                    IsBusy = true;
                     NetworkManager.Instance.AskAuthentication(identifier);
                 }
                 IsNewDevice = false;
@@ -48,14 +52,17 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.CreateNewAccountFailed, (sender, arg) =>
             {
                 ScreenManager.Instance.AlertScreen("Account", $"There were an error creating a new account. Please try again later.\n{arg}");
+                IsBusy = false;
             });
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.RetrievedAccount, (sender) =>
             {
+                IsBusy = false;
                 var identifier = Application.Current.Properties["AiosKingdom_IdentifyingKey"] as string;
 
                 if (!string.IsNullOrEmpty(identifier))
                 {
+                    IsBusy = true;
                     NetworkManager.Instance.AskAuthentication(identifier);
                 }
                 IsNewDevice = false;
@@ -64,6 +71,7 @@ namespace AiosKingdom.ViewModels
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived, (sender, servers) =>
             {
+                IsBusy = false;
                 ScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(servers)));
             });
 
@@ -75,6 +83,7 @@ namespace AiosKingdom.ViewModels
                 if (!string.IsNullOrEmpty(identifier))
                 {
                     _isNewDevice = false;
+                    IsBusy = true;
                 }
             }
         }
@@ -118,7 +127,7 @@ namespace AiosKingdom.ViewModels
         public ICommand RetrieveAccountAction =>
         _retrieveAccountAction ?? (_retrieveAccountAction = new Command(() =>
         {
-            ScreenManager.Instance.OpenLoadingScreen("Try to retrieve account. Please wait...");
+            IsBusy = true;
             NetworkManager.Instance.AskOldAccount(_safeKey);
         }, () =>
         {
@@ -129,7 +138,7 @@ namespace AiosKingdom.ViewModels
         public ICommand NewAccountAction =>
         _newAccountAction ?? (_newAccountAction = new Command(() =>
         {
-            ScreenManager.Instance.OpenLoadingScreen("Creating new account. Please wait...");
+            IsBusy = true;
             NetworkManager.Instance.AskNewAccount();
         }));
     }

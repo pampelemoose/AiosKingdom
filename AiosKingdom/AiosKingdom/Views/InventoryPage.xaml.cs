@@ -9,6 +9,7 @@ using Xamarin.Forms.Xaml;
 
 namespace AiosKingdom.Views
 {
+    /*
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class InventoryPage : TabbedPage
 	{
@@ -17,4 +18,13 @@ namespace AiosKingdom.Views
 			InitializeComponent();
 		}
 	}
+    */
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class InventoryPage : ContentPage
+    {
+        public InventoryPage()
+        {
+            InitializeComponent();
+        }
+    }
 }

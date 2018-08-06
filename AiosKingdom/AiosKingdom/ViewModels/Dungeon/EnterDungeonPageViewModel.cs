@@ -38,7 +38,7 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 _navigation.PopModalAsync();
 
-                ScreenManager.Instance.OpenLoadingScreen($"Entering {_dungeon.Name}, please wait...");
+                IsBusy = true;
                 NetworkManager.Instance.EnterDungeon(_dungeon.DungeonId);
             }));
     }
