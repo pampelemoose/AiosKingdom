@@ -31,13 +31,14 @@ namespace Server.GameServer.Commands.Dungeon
                     {
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
 
-                        if (adventure.UseSkill(skill, SoulManager.Instance.GetDatas(ret.ClientId), enemyId))
+                        string skillResult;
+                        if (adventure.UseSkill(skill, SoulManager.Instance.GetDatas(ret.ClientId), enemyId, out skillResult))
                         {
                             ret.ClientResponse = new Network.Message
                             {
                                 Code = Network.CommandCodes.Dungeon.UseSkill,
                                 Success = true,
-                                Json = "Skill successfully used."
+                                Json = $"Skill successfully used. {skillResult}"
                             };
                             ret.Succeeded = true;
 

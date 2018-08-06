@@ -54,20 +54,21 @@ namespace Server.GameServer
             }
         }
 
-        public bool UseSkill(DataModels.Skills.Page skill, Network.SoulDatas datas, Guid enemyId = new Guid())
+        public bool UseSkill(DataModels.Skills.Page skill, Network.SoulDatas datas, Guid enemyId, out string message)
         {
             // check if skill is in cooldown list
             if (_state.Cooldowns.FirstOrDefault(c => c.SkillId.Equals(skill.Id)) != null)
             {
                 // In Cooldown
+                message = "";
                 return false;
             }
 
-            TickTurn(datas); // TODO : Maybe create a step in between to execute turn related logic
+            message = TickTurn(datas); // TODO : Maybe create a step in between to execute turn related logic
 
             foreach (var inscription in skill.Inscriptions)
             {
-                ExecutePlayerInscription(inscription, datas, enemyId);
+                message += ExecutePlayerInscription(inscription, datas, enemyId);
 
                 if (inscription.Duration > 0)
                 {
@@ -92,6 +93,7 @@ namespace Server.GameServer
 
             _state.CurrentMana -= skill.ManaCost;
             Console.WriteLine($"Consumed {skill.ManaCost} mana.");
+            message += $"Consumed {skill.ManaCost} mana.";
 
             var enemies = _enemiesStats.Keys.ToList();
             foreach (var enemyKeys in enemies)
@@ -136,9 +138,9 @@ namespace Server.GameServer
             return true;
         }
 
-        public bool UseConsumable(DataModels.Items.Consumable consumable, Network.SoulDatas datas, Guid enemyId = new Guid())
+        public bool UseConsumable(DataModels.Items.Consumable consumable, Network.SoulDatas datas, Guid enemyId, out string message)
         {
-            TickTurn(datas); // TODO : Maybe create a step in between to execute turn related logic
+            message = TickTurn(datas); // TODO : Maybe create a step in between to execute turn related logic
 
             /*if (_enemiesStats.ContainsKey(enemyId))
             {
@@ -147,7 +149,7 @@ namespace Server.GameServer
 
             foreach (var effect in consumable.Effects)
             {
-                ExecutePlayerEffects(effect, datas);
+                message += ExecutePlayerEffects(effect, datas);
 
                 if (effect.AffectTime > 0)
                 {
@@ -164,9 +166,9 @@ namespace Server.GameServer
             return true;
         }
 
-        public bool EnemyTurn(Network.SoulDatas datas)
+        public bool EnemyTurn(Network.SoulDatas datas, out string message)
         {
-            TickTurn(datas); // TODO : Maybe create a step in between to execute turn related logic
+            message = TickTurn(datas); // TODO : Maybe create a step in between to execute turn related logic
 
             var enemies = _enemiesStats.Keys.ToList();
             foreach (var enemyKeys in enemies)
@@ -184,16 +186,16 @@ namespace Server.GameServer
 
                 foreach (var inscription in skill.Inscriptions)
                 {
-                    ExecuteEnemyInscription(inscription, enemyKeys);
+                    message += ExecuteEnemyInscription(inscription, enemyKeys);
                 }
             }
 
             return true;
         }
 
-        public bool DoNothingTurn(Network.SoulDatas datas)
+        public bool DoNothingTurn(Network.SoulDatas datas, out string message)
         {
-            TickTurn(datas); // TODO : Maybe create a step in between to execute turn related logic
+            message = TickTurn(datas); // TODO : Maybe create a step in between to execute turn related logic
 
             return true;
         }
@@ -398,9 +400,9 @@ namespace Server.GameServer
             _state.StackedExperience = 0;
         }
 
-        private void TickTurn(Network.SoulDatas datas)
+        private string TickTurn(Network.SoulDatas datas)
         {
-            TickMarks(datas); // TODO : is this the right way ?...
+            var message = TickMarks(datas); // TODO : is this the right way ?...
 
             var rand = new Random();
 
@@ -463,35 +465,43 @@ namespace Server.GameServer
                 }
             }
             _state.Effects = newEffects;
+
+            return message;
         }
 
-        private void TickMarks(Network.SoulDatas datas)
+        private string TickMarks(Network.SoulDatas datas)
         {
+            string result = "";
+
             foreach (var buff in _state.Marks)
             {
                 var insc = _marks.FirstOrDefault(i => i.Id.Equals(buff.Id));
 
-                ExecutePlayerInscription(insc, datas, buff.EnemyId);
+                result += ExecutePlayerInscription(insc, datas, buff.EnemyId);
             }
 
             foreach (var mod in _state.Effects)
             {
                 var effect = _effects.FirstOrDefault(i => i.Id.Equals(mod.Id));
 
-                ExecutePlayerEffects(effect, datas, mod.EnemyId);
+                result += ExecutePlayerEffects(effect, datas, mod.EnemyId);
             }
 
             foreach (var enemyMarks in _enemyMarks)
             {
                 foreach (var buff in enemyMarks.Value)
                 {
-                    ExecuteEnemyInscription(buff, enemyMarks.Key);
+                    result += ExecuteEnemyInscription(buff, enemyMarks.Key);
                 }
             }
+
+            return result;
         }
 
-        private void ExecutePlayerInscription(DataModels.Skills.Inscription inscription, Network.SoulDatas datas, Guid enemyId = new Guid())
+        private string ExecutePlayerInscription(DataModels.Skills.Inscription inscription, Network.SoulDatas datas, Guid enemyId = new Guid())
         {
+            string result = "";
+
             Random rand = new Random();
             double amount = inscription.BaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, datas));
 
@@ -523,6 +533,8 @@ namespace Server.GameServer
                             enemy.CurrentHealth -= amount;
                             Console.WriteLine($"Using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, datas)})*{inscription.Ratio}) on {enemy.MonsterId}.({enemy.CurrentHealth}/{enemy.MaxHealth}) .");
 
+                            result = $"Dealt {amount} Damages.";
+
                             _state.Enemies[enemyId] = enemy;
                         }
                         else
@@ -539,42 +551,58 @@ namespace Server.GameServer
                             _state.CurrentHealth = datas.MaxHealth;
                         }
                         Console.WriteLine($"Using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, datas)})*{inscription.Ratio}) on yourself .");
+
+                        result = $"Healed yourself for {amount} HP";
                     }
                     break;
             }
+
+            return result;
         }
 
-        private void ExecuteEnemyInscription(DataModels.Skills.Inscription inscription, Guid enemyKeys)
+        private string ExecuteEnemyInscription(DataModels.Skills.Inscription inscription, Guid enemyKeys)
         {
+            string result = "";
+
             var enemy = _state.Enemies[enemyKeys];
             var enemyStats = _enemiesStats[enemyKeys];
+
+            double amount = inscription.BaseValue + (inscription.Ratio * GetEnemyStatValue(inscription.StatType, enemyStats));
 
             switch (inscription.Type)
             {
                 case DataModels.Skills.InscriptionType.Damages:
                     {
-                        _state.CurrentHealth -= inscription.BaseValue + (inscription.Ratio * GetEnemyStatValue(inscription.StatType, enemyStats));
+                        _state.CurrentHealth -= amount;
                         Console.WriteLine($"Enemy {enemyKeys} using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetEnemyStatValue(inscription.StatType, enemyStats)})*{inscription.Ratio}) on yourself.");
+
+                        result = $"Received {amount} of damages.";
                     }
                     break;
                 case DataModels.Skills.InscriptionType.Heal:
                     {
-                        enemy.CurrentHealth += inscription.BaseValue + (inscription.Ratio * GetEnemyStatValue(inscription.StatType, enemyStats));
+                        enemy.CurrentHealth += amount;
                         if (enemy.CurrentHealth > enemy.MaxHealth)
                         {
                             enemy.CurrentHealth = enemy.MaxHealth;
                         }
                         Console.WriteLine($"Enemy {enemyKeys} using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetEnemyStatValue(inscription.StatType, enemyStats)})*{inscription.Ratio}) on himself .");
 
+                        result = $"Healed himself for {amount} HP";
+
                         _enemiesStats[enemyKeys] = enemyStats;
                         _state.Enemies[enemyKeys] = enemy;
                     }
                     break;
             }
+
+            return result;
         }
 
-        private void ExecutePlayerEffects(DataModels.Items.ConsumableEffect effect, Network.SoulDatas datas, Guid enemyId = new Guid())
+        private string ExecutePlayerEffects(DataModels.Items.ConsumableEffect effect, Network.SoulDatas datas, Guid enemyId = new Guid())
         {
+            string result = "";
+
             switch (effect.Type)
             {
                 case DataModels.Items.EffectType.RestoreHealth:
@@ -585,9 +613,13 @@ namespace Server.GameServer
                             _state.CurrentHealth = datas.MaxHealth;
                         }
                         Console.WriteLine($"Using consumable doing ({effect.Type}).({effect.AffectValue}) on yourself .");
+
+                        result = $"Healing yourself for {effect.AffectValue} HP";
                     }
                     break;
             }
+
+            return result;
         }
 
         private void SetState()

@@ -21,7 +21,8 @@ namespace Server.GameServer.Commands.Dungeon
 
             if (adventure != null)
             {
-                if (adventure.EnemyTurn(datas))
+                string message = "";
+                if (adventure.EnemyTurn(datas, out message))
                 {
                     var state = adventure.GetActualState();
 
@@ -33,7 +34,7 @@ namespace Server.GameServer.Commands.Dungeon
                         {
                             Code = Network.CommandCodes.Dungeon.PlayerDied,
                             Success = true,
-                            Json = "You died. You lost all Experience and Shards from this dungeon."
+                            Json = $"{message}. You died. You lost all Experience and Shards from this dungeon."
                         };
                         ret.Succeeded = true;
                     }
@@ -43,7 +44,7 @@ namespace Server.GameServer.Commands.Dungeon
                         {
                             Code = Network.CommandCodes.Dungeon.EnemyTurn,
                             Success = true,
-                            Json = "Enemy turn successful."
+                            Json = message
                         };
                         ret.Succeeded = true;
                     }

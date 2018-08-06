@@ -33,7 +33,8 @@ namespace Server.GameServer.Commands.Dungeon
 
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
 
-                        if (adventure.UseConsumable(item, SoulManager.Instance.GetDatas(ret.ClientId), enemyId))
+                        string consumableResult;
+                        if (adventure.UseConsumable(item, SoulManager.Instance.GetDatas(ret.ClientId), enemyId, out consumableResult))
                         {
                             --slotKnown.Quantity;
 
@@ -48,7 +49,7 @@ namespace Server.GameServer.Commands.Dungeon
                             {
                                 Code = Network.CommandCodes.Dungeon.UseConsumable,
                                 Success = true,
-                                Json = "Consumable successfully used."
+                                Json = $"Consumable successfully used. {consumableResult}"
                             };
                             ret.Succeeded = true;
 

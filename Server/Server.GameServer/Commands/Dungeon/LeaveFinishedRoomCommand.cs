@@ -60,7 +60,7 @@ namespace Server.GameServer.Commands.Dungeon
                 {
                     Code = Network.CommandCodes.Dungeon.LeaveFinishedRoom,
                     Success = true,
-                    Json = "Exited the dungeon."
+                    Json = $"Exited the dungeon. you earned {adventureState.StackedExperience + adventureState.ExperienceReward} experience and {adventureState.StackedShards + adventureState.ShardReward} shards."
                 };
                 ret.Succeeded = true;
 

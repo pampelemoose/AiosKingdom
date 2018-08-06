@@ -21,13 +21,14 @@ namespace Server.GameServer.Commands.Dungeon
 
             if (adventure != null)
             {
-                if (adventure.DoNothingTurn(datas))
+                string message = "";
+                if (adventure.DoNothingTurn(datas, out message))
                 {
                     ret.ClientResponse = new Network.Message
                     {
                         Code = Network.CommandCodes.Dungeon.DoNothingTurn,
                         Success = true,
-                        Json = "Did nothing."
+                        Json = message
                     };
                     ret.Succeeded = true;
 
