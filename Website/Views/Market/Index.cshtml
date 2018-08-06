@@ -65,24 +65,20 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
                     <div class="card text-center mt-3">
                         <div class="card-header">
-                            @{
-                                var name = "";
-                                switch (slot.Type)
-                                {
-                                    case DataModels.Items.ItemType.Armor:
-                                        name = DataRepositories.ArmorRepository.GetById(slot.ItemId).ItemName;
-                                        break;
-                                    case DataModels.Items.ItemType.Bag:
-                                        name = DataRepositories.BagRepository.GetById(slot.ItemId).ItemName;
-                                        break;
-                                    case DataModels.Items.ItemType.Consumable:
-                                        name = DataRepositories.ConsumableRepository.GetById(slot.ItemId).ItemName;
-                                        break;
-                                    case DataModels.Items.ItemType.Weapon:
-                                        name = DataRepositories.WeaponRepository.GetById(slot.ItemId).ItemName;
-                                        break;
-                                };
-                                @name;
+                            @switch (slot.Type)
+                            {
+                                case DataModels.Items.ItemType.Armor:
+                                    @DataRepositories.ArmorRepository.GetById(slot.ItemId).ItemName
+                                    break;
+                                case DataModels.Items.ItemType.Bag:
+                                    @DataRepositories.BagRepository.GetById(slot.ItemId).ItemName
+                                    break;
+                                case DataModels.Items.ItemType.Consumable:
+                                    @DataRepositories.ConsumableRepository.GetById(slot.ItemId).ItemName
+                                    break;
+                                case DataModels.Items.ItemType.Weapon:
+                                    @DataRepositories.WeaponRepository.GetById(slot.ItemId).ItemName
+                                    break;
                             }
                         </div>
                         <ul class="list-group list-group-flush">
@@ -113,7 +109,7 @@
                         }
                     </div>
                 </div>
-        }
+            }
         </div>
     </div>
 </section>
