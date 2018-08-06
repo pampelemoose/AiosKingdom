@@ -9,9 +9,8 @@ namespace Website.Models
     public class MonsterModel
     {
         [Required]
-        public Guid SelectedVersion { get; set; }
         [Display(Name = "Version")]
-        public List<DataModels.Version> VersionList { get; set; }
+        public Guid SelectedVersion { get; set; }
 
         [Display(Name = "Types")]
         public List<DataModels.Monsters.MonsterType> Types { get; set; }

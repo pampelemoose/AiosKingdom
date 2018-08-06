@@ -41,6 +41,12 @@ namespace Website.Models
                     items.Add(bag);
                 }
 
+                var weapons = DataRepositories.WeaponRepository.GetAll();
+                foreach (var weapon in weapons)
+                {
+                    items.Add(weapon);
+                }
+
                 return items;
             }
         }

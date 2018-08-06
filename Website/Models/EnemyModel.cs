@@ -16,14 +16,6 @@ namespace Website.Models
         [Required]
         public Guid MonsterId { get; set; }
 
-        public List<DataModels.Monsters.Monster> AvailableMonsters
-        {
-            get
-            {
-                return DataRepositories.MonsterRepository.GetAll();
-            }
-        }
-
         [Required]
         [Range(1, 10000000)]
         public int Level { get; set; }

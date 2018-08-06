@@ -13,7 +13,6 @@ namespace Website.Controllers
         {
             var dungeons = DataRepositories.DungeonRepository.GetAll();
 
-            filter.VersionList = DataRepositories.VersionRepository.GetAll();
             filter.Dungeons = filter.FilterList(dungeons);
 
             return View(filter);
@@ -31,7 +30,7 @@ namespace Website.Controllers
         public ActionResult Create()
         {
             var dungeon = new Models.DungeonModel();
-            dungeon.VersionList = DataRepositories.VersionRepository.GetAll();
+
             dungeon.Rooms = new List<Models.RoomModel>();
 
             return View(dungeon);
@@ -63,7 +62,6 @@ namespace Website.Controllers
                 if (dungeonModel.Rooms?.FirstOrDefault(r => r.Type == DataModels.Dungeons.RoomType.Exit) == null)
                 {
                     Alert(AlertMessage.AlertType.Danger, $"No exit room in the dungeon. You must add an exit as the last room you want the player to leave.", "Exit needed !");
-                    dungeonModel.VersionList = DataRepositories.VersionRepository.GetAll();
                     return View(dungeonModel);
                 }
 
@@ -133,8 +131,7 @@ namespace Website.Controllers
                     }
                 }
             }
-
-            dungeonModel.VersionList = DataRepositories.VersionRepository.GetAll();
+            
             return View(dungeonModel);
         }
 

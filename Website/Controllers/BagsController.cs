@@ -13,7 +13,6 @@ namespace Website.Controllers
         {
             var bags = DataRepositories.BagRepository.GetAll();
 
-            filter.VersionList = DataRepositories.VersionRepository.GetAll();
             filter.Items = filter.FilterList(bags);
 
             return View(filter);
@@ -25,7 +24,6 @@ namespace Website.Controllers
         {
             var bag = new Models.BagModel();
 
-            bag.VersionList = DataRepositories.VersionRepository.GetAll();
             bag.Stats = new List<DataModels.Items.ItemStat>();
 
             foreach (DataModels.Soul.Stats en in Enum.GetValues(typeof(DataModels.Soul.Stats)))
@@ -65,8 +63,7 @@ namespace Website.Controllers
                     return RedirectToAction("Index");
                 }
             }
-
-            bag.VersionList = DataRepositories.VersionRepository.GetAll();
+            
             return View(bag);
         }
     }

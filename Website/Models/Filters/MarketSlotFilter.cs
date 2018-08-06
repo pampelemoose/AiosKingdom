@@ -8,9 +8,8 @@ namespace Website.Models.Filters
 {
     public class MarketSlotFilter
     {
-        public Guid SelectedServer { get; set; }
         [Display(Name = "Server")]
-        public List<DataModels.Config> Servers { get; set; }
+        public Guid SelectedServer { get; set; }
 
         [Display(Name = "Type")]
         public DataModels.Items.ItemType? Type { get; set; }

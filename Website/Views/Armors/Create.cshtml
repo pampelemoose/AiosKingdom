@@ -23,11 +23,11 @@
                         <div class="col-md-12">
                             <div class="input-group input-group-sm">
                                 <div class="input-group-prepend">
-                                    @Html.LabelFor(model => model.VersionList, htmlAttributes: new { @class = "input-group-text" })
+                                    @Html.LabelFor(model => model.SelectedVersion, htmlAttributes: new { @class = "input-group-text" })
                                 </div>
-                                @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(Model.VersionList, "Id", null), new { @class = "form-control" })
+                                @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(DataRepositories.VersionRepository.GetAll(), "Id", null), new { @class = "form-control" })
                             </div>
-                            @Html.ValidationMessageFor(model => model.VersionList, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.SelectedVersion, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="row mt-1">

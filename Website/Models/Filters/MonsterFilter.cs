@@ -9,9 +9,8 @@ namespace Website.Models.Filters
     public class MonsterFilter
     {
         [Required]
-        public Guid SelectedVersion { get; set; }
         [Display(Name = "Version")]
-        public List<DataModels.Version> VersionList { get; set; }
+        public Guid SelectedVersion { get; set; }
 
         [Display(Name = "Name")]
         public string Name { get; set; }

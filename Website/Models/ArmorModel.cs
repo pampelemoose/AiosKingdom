@@ -9,9 +9,8 @@ namespace Website.Models
     public class ArmorModel
     {
         [Required]
-        public Guid SelectedVersion { get; set; }
         [Display(Name = "Version")]
-        public List<DataModels.Version> VersionList { get; set; }
+        public Guid SelectedVersion { get; set; }
 
         [Required(ErrorMessage = "Name required"), MinLength(4), MaxLength(50)]
         [Display(Name = "Name")]

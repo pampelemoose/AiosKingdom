@@ -14,7 +14,6 @@ namespace Website.Controllers
         {
             var books = DataRepositories.BookRepository.GetAll();
 
-            filter.VersionList = DataRepositories.VersionRepository.GetAll();
             filter.Books = filter.FilterList(books);
 
             return View(filter);
@@ -32,7 +31,7 @@ namespace Website.Controllers
         public ActionResult Create()
         {
             var book = new Models.BookModel();
-            book.VersionList = DataRepositories.VersionRepository.GetAll();
+
             book.Pages = new List<Models.PageModel>();
 
             return View(book);
@@ -65,7 +64,6 @@ namespace Website.Controllers
                 {
                     Alert(AlertMessage.AlertType.Danger, $"You need at least one page and one inscription per page.");
                     ViewBag.Errors.Add();
-                    bookModel.VersionList = DataRepositories.VersionRepository.GetAll();
                     return View(bookModel);
                 }
 
@@ -94,7 +92,6 @@ namespace Website.Controllers
                 if (hasErrors)
                 {
                     Alert(AlertMessage.AlertType.Danger, $"Please check the data inputed and retry.", "Error !");
-                    bookModel.VersionList = DataRepositories.VersionRepository.GetAll();
                     return View(bookModel);
                 }
 
@@ -150,8 +147,7 @@ namespace Website.Controllers
                     return RedirectToAction("Index");
                 }
             }
-
-            bookModel.VersionList = DataRepositories.VersionRepository.GetAll();
+            
             return View(bookModel);
         }
 

@@ -12,8 +12,7 @@ namespace Website.Controllers
         public ActionResult Index(Models.Filters.ConsumableFilter filter)
         {
             var consumables = DataRepositories.ConsumableRepository.GetAll();
-
-            filter.VersionList = DataRepositories.VersionRepository.GetAll();
+            
             filter.Items = filter.FilterList(consumables);
 
             return View(filter);
@@ -25,7 +24,6 @@ namespace Website.Controllers
         {
             var consumable = new Models.ConsumableModel();
 
-            consumable.VersionList = DataRepositories.VersionRepository.GetAll();
             consumable.Effects = new List<DataModels.Items.ConsumableEffect>();
 
             return View(consumable);
@@ -46,7 +44,6 @@ namespace Website.Controllers
                 if (consumableModel.Effects.Count == 0)
                 {
                     Alert(AlertMessage.AlertType.Danger, $"Need at least one effect.", "Effect missing !");
-                    consumableModel.VersionList = DataRepositories.VersionRepository.GetAll();
                     return View(consumableModel);
                 }
                 
@@ -68,7 +65,6 @@ namespace Website.Controllers
                 }
             }
 
-            consumableModel.VersionList = DataRepositories.VersionRepository.GetAll();
             if (consumableModel.Effects == null)
             {
                 consumableModel.Effects = new List<DataModels.Items.ConsumableEffect>();

@@ -42,7 +42,7 @@
                         <div class="input-group-prepend">
                             @Html.LabelFor(model => model.SelectedServer, htmlAttributes: new { @class = "input-group-text" })
                         </div>
-                        @Html.DropDownListFor(model => model.SelectedServer, new SelectList(Model.Servers, "Id", "Name"), new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.SelectedServer, new SelectList(DataRepositories.ConfigRepository.GetAll(), "Id", "Name"), new { @class = "form-control" })
                     </div>
                 </div>
             </div>

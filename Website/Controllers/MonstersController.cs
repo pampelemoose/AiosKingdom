@@ -12,8 +12,7 @@ namespace Website.Controllers
         public ActionResult Index(Models.Filters.MonsterFilter filter)
         {
             var monsters = DataRepositories.MonsterRepository.GetAll();
-
-            filter.VersionList = DataRepositories.VersionRepository.GetAll();
+            
             filter.Monsters = filter.FilterList(monsters);
 
             return View(filter);
@@ -31,7 +30,7 @@ namespace Website.Controllers
         public ActionResult Create()
         {
             var monster = new Models.MonsterModel();
-            monster.VersionList = DataRepositories.VersionRepository.GetAll();
+
             monster.Loots = new List<Models.LootModel>();
             monster.Phases = new List<Models.PhaseModel>();
 
@@ -119,8 +118,7 @@ namespace Website.Controllers
                     Alert(AlertMessage.AlertType.Danger, $"You need at least one Type and one Phase.", "Type or Phase missing !");
                 }
             }
-
-            monsterModel.VersionList = DataRepositories.VersionRepository.GetAll();
+            
             return View(monsterModel);
         }
 

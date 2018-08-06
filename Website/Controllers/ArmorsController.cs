@@ -14,7 +14,6 @@ namespace Website.Controllers
         {
             var armors = DataRepositories.ArmorRepository.GetAll();
 
-            filter.VersionList = DataRepositories.VersionRepository.GetAll();
             filter.Items = filter.FilterList(armors);
 
             return View(filter);
@@ -25,7 +24,6 @@ namespace Website.Controllers
         public ActionResult Create()
         {
             var armor = new Models.ArmorModel();
-            armor.VersionList = DataRepositories.VersionRepository.GetAll();
             armor.Stats = new List<DataModels.Items.ItemStat>();
 
             foreach (DataModels.Soul.Stats en in Enum.GetValues(typeof(DataModels.Soul.Stats)))
@@ -67,8 +65,7 @@ namespace Website.Controllers
                     return RedirectToAction("Index");
                 }
             }
-
-            armorModel.VersionList = DataRepositories.VersionRepository.GetAll();
+            
             return View(armorModel);
         }
     }

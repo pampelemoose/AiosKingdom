@@ -21,11 +21,11 @@
                 <div class="col-md-3">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.Servers, htmlAttributes: new { @class = "input-group-text" })
+                            @Html.LabelFor(model => model.SelectedServer, htmlAttributes: new { @class = "input-group-text" })
                         </div>
-                        @Html.DropDownListFor(model => model.SelectedServer, new SelectList(Model.Servers, "Id", "Name"), new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.SelectedServer, new SelectList(DataRepositories.ConfigRepository.GetAll(), "Id", "Name"), new { @class = "form-control" })
                     </div>
-                    @Html.ValidationMessageFor(model => model.Servers, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.SelectedServer, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-3">
                     <div class="input-group input-group-sm">
