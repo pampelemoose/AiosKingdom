@@ -47,12 +47,6 @@ namespace Server.GameServer
             _errorFile.AutoFlush = true;
         }
 
-        ~Log()
-        {
-            _file.Close();
-            _errorFile.Close();
-        }
-
         public void Write(Level level, string message)
         {
             var stackTrace = new StackTrace(true);
