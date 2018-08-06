@@ -9,7 +9,7 @@ namespace Website.Controllers
 {
     public class MarketController : AKBaseController
     {
-        // GET: Market
+        [CustomAuthorize(Roles = "SuperAdmin")]
         public ActionResult Index(Models.Filters.MarketSlotFilter filter)
         {
             var slots = DataRepositories.MarketRepository.GetAll();

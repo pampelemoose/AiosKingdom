@@ -9,21 +9,12 @@
     <section>
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-11">
                     <h2>Market Items</h2>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-1">
                     <div class="input-group input-group-sm">
-                        <div class="input-group-prepend">
-                            @* 
-                                @Html.LabelFor(model => model.SelectedServer, htmlAttributes: new { @class = "input-group-text" })
-                            *@
-                        </div>
-                        @*
-                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                        *@
-                        <div class="input-group-append">
-                            <input type="submit" value="Search" class="btn btn-primary btn-block" />
+                        <div class="input-group">
                             <button class="btn btn-primary dropdown-toggle dropdown-toggle-split" type="button" data-toggle="collapse" data-target="#filter-body" aria-expanded="false" aria-controls="filter-body">
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
@@ -74,7 +65,25 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
                     <div class="card text-center mt-3">
                         <div class="card-header">
-                            @slot.ItemId
+                            @{
+                                var name = "";
+                                switch (slot.Type)
+                                {
+                                    case DataModels.Items.ItemType.Armor:
+                                        name = DataRepositories.ArmorRepository.GetById(slot.ItemId).ItemName;
+                                        break;
+                                    case DataModels.Items.ItemType.Bag:
+                                        name = DataRepositories.BagRepository.GetById(slot.ItemId).ItemName;
+                                        break;
+                                    case DataModels.Items.ItemType.Consumable:
+                                        name = DataRepositories.ConsumableRepository.GetById(slot.ItemId).ItemName;
+                                        break;
+                                    case DataModels.Items.ItemType.Weapon:
+                                        name = DataRepositories.WeaponRepository.GetById(slot.ItemId).ItemName;
+                                        break;
+                                };
+                                @name;
+                            }
                         </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -104,7 +113,7 @@
                         }
                     </div>
                 </div>
-            }
+        }
         </div>
     </div>
 </section>
