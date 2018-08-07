@@ -145,6 +145,12 @@
                                 }
                             }
                         </ul>
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <div class="card-footer">
+                                @Html.ActionLink("Edit", "Edit", new { id = bag.ItemId }, new { @class = "btn btn-block btn-primary" })
+                            </div>
+                        }
                     </div>
                 </div>
             }
