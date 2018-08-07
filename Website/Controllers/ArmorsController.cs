@@ -65,7 +65,77 @@ namespace Website.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            
+
+            return View(armorModel);
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpGet]
+        public ActionResult Edit(Guid id)
+        {
+            var armor = DataRepositories.ArmorRepository.GetById(id);
+
+            if (armor != null)
+            {
+                var model = new Models.ArmorModel
+                {
+                    Id = armor.Id,
+                    SelectedVersion = armor.VersionId,
+                    Name = armor.Name,
+                    Description = armor.Description,
+                    Image = armor.Image,
+                    Quality = armor.Quality,
+                    Part = armor.Part,
+                    ItemLevel = armor.ItemLevel,
+                    UseLevelRequired = armor.UseLevelRequired,
+                    ArmorValue = armor.ArmorValue,
+                    Stats = armor.Stats
+                };
+
+                foreach (DataModels.Soul.Stats en in Enum.GetValues(typeof(DataModels.Soul.Stats)))
+                {
+                    if (model.Stats.FirstOrDefault(s => s.Type == en) == null)
+                    {
+                        model.Stats.Add(new DataModels.Items.ItemStat
+                        {
+                            Type = en
+                        });
+                    }
+                }
+
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Models.ArmorModel armorModel)
+        {
+            if (ModelState.IsValid)
+            {
+                armorModel.Stats.RemoveAll(s => s.StatValue == 0);
+
+                if (DataRepositories.ArmorRepository.Update(new DataModels.Items.Armor
+                {
+                    Id = armorModel.Id,
+                    VersionId = armorModel.SelectedVersion,
+                    Name = armorModel.Name,
+                    Description = armorModel.Description,
+                    Image = armorModel.Image,
+                    ItemLevel = armorModel.ItemLevel,
+                    Quality = armorModel.Quality,
+                    UseLevelRequired = armorModel.UseLevelRequired,
+                    ArmorValue = armorModel.ArmorValue,
+                    Stats = armorModel.Stats
+                }))
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
             return View(armorModel);
         }
     }
