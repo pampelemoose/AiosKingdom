@@ -83,7 +83,6 @@ namespace Website.Controllers
                 {
                     Id = weapon.Id,
                     SelectedVersion = weapon.VersionId,
-                    ItemId = weapon.ItemId,
                     Name = weapon.Name,
                     Description = weapon.Description,
                     Image = weapon.Image,
@@ -126,7 +125,6 @@ namespace Website.Controllers
                 {
                     Id = weaponModel.Id,
                     VersionId = weaponModel.SelectedVersion,
-                    ItemId = weaponModel.ItemId,
                     Name = weaponModel.Name,
                     Description = weaponModel.Description,
                     Image = weaponModel.Image,

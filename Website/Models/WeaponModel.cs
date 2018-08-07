@@ -9,7 +9,6 @@ namespace Website.Models
     public class WeaponModel
     {
         public Guid Id { get; set; }
-        public Guid ItemId { get; set; }
 
         [Required]
         [Display(Name = "Version")]
