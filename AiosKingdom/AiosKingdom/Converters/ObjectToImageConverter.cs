@@ -42,7 +42,7 @@ namespace AiosKingdom.Converters
                     return dto.Image;
             }
 
-            return "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";
+            return "http://startyoungfinancial.com/wp-content/uploads/2015/05/default-image.png";
 
         }
 
