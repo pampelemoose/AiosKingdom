@@ -55,5 +55,47 @@ namespace DataRepositories
                 return true;
             }
         }
+
+        public static bool Update(DataModels.Items.Consumable consumable)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                var online = context.Consumables
+                    .Include(a => a.Effects)
+                    .FirstOrDefault(u => u.Id.Equals(consumable.Id));
+
+                if (online == null)
+                    return false;
+
+                online.VersionId = consumable.VersionId;
+                online.Name = consumable.Name;
+                online.Description = consumable.Description;
+                online.Image = consumable.Image;
+                online.ItemLevel = consumable.ItemLevel;
+                online.Quality = consumable.Quality;
+                online.UseLevelRequired = consumable.UseLevelRequired;
+
+                context.ConsumableEffects.RemoveRange(online.Effects);
+
+                online.Effects = consumable.Effects;
+
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var error in e.EntityValidationErrors)
+                    {
+                        foreach (var mess in error.ValidationErrors)
+                        {
+                            Console.WriteLine(mess.ErrorMessage);
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            }
+        }
     }
 }

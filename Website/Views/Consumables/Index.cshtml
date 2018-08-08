@@ -86,42 +86,42 @@
 <section>
     <div class="container">
         <div class="row">
-            @foreach (var armor in Model.Items)
+            @foreach (var consumable in Model.Items)
             {
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-                    <div class="card text-center mt-3 @armor.Quality.ToString().ToLower()">
-                        <img class="card-img-top" src="@armor.Image">
+                    <div class="card text-center mt-3 @consumable.Quality.ToString().ToLower()">
+                        <img class="card-img-top" src="@consumable.Image">
                         <div class="card-header">
-                            @armor.Name
+                            @consumable.Name
                         </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item ">
                                 <div class="row">
-                                    <div class="col-12 @armor.Quality.ToString().ToLower()-text">
-                                        <strong>@armor.Quality</strong>
+                                    <div class="col-12 @consumable.Quality.ToString().ToLower()-text">
+                                        <strong>@consumable.Quality</strong>
                                     </div>
                                 </div>
                             </li>
                             <li class="list-group-item">
                                 <div class="row">
                                     <div class="col-8">Level Required</div>
-                                    <div class="col-4">@armor.UseLevelRequired</div>
+                                    <div class="col-4">@consumable.UseLevelRequired</div>
                                 </div>
                             </li>
                             <li class="list-group-item">
                                 <div class="row">
                                     <div class="col-8">Item Level</div>
-                                    <div class="col-4">@armor.ItemLevel</div>
+                                    <div class="col-4">@consumable.ItemLevel</div>
                                 </div>
                             </li>
                         </ul>
                         <div class="card-body font-weight-light font-italic">
-                            @armor.Description
+                            @consumable.Description
                         </div>
                         <ul class="list-group list-group-flush">
-                            @if (armor.Effects != null)
+                            @if (consumable.Effects != null)
                             {
-                                foreach (var effect in armor.Effects)
+                                foreach (var effect in consumable.Effects)
                                 {
                                     <li tabindex="0" class="list-group-item" data-toggle="popover" data-trigger="focus" title="@effect.Type - @effect.AffectValue" data-content="@effect.Description">
                                         <div class="row">
@@ -132,6 +132,12 @@
                                 }
                             }
                         </ul>
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <div class="card-footer">
+                                @Html.ActionLink("Edit", "Edit", new { id = consumable.ItemId }, new { @class = "btn btn-block btn-primary" })
+                            </div>
+                        }
                     </div>
                 </div>
             }
