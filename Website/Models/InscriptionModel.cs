@@ -10,6 +10,8 @@ namespace Website.Models
 {
     public class InscriptionModel
     {
+        public Guid Id { get; set; }
+
         public string PageId { get; set; }
 
         [Required, MaxLength(50)]

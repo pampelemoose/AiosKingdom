@@ -42,8 +42,6 @@ namespace Website.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.BookModel bookModel)
         {
-            ViewBag.Errors = new List<string>();
-
             if (bookModel.Pages == null)
             {
                 bookModel.Pages = new List<Models.PageModel>();
@@ -63,7 +61,6 @@ namespace Website.Controllers
                 if (bookModel.Pages.Count == 0 || bookModel.Pages?.Select(p => p.Inscriptions.Count).Sum() == 0)
                 {
                     Alert(AlertMessage.AlertType.Danger, $"You need at least one page and one inscription per page.");
-                    ViewBag.Errors.Add();
                     return View(bookModel);
                 }
 
@@ -76,7 +73,7 @@ namespace Website.Controllers
                     if (insc.PreferredWeaponTypes != null)
                         insc.PreferredWeaponTypes = insc.PreferredWeaponTypes.Where(wt => wt.Type != null).Distinct().ToList();
 
-                    if (insc.IncludeWeaponDamages && 
+                    if (insc.IncludeWeaponDamages &&
                         ((insc.PreferredWeaponTypes?.Count > 0 && insc.PreferredWeaponDamagesRatio <= 0)
                         && (insc.WeaponTypes?.Count > 0 || insc.WeaponDamagesRatio <= 0)))
                     {
@@ -147,7 +144,7 @@ namespace Website.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            
+
             return View(bookModel);
         }
 
@@ -185,6 +182,192 @@ namespace Website.Controllers
             };
 
             return PartialView("WeaponTypePartial", type);
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpGet]
+        public ActionResult Edit(Guid id)
+        {
+            var book = DataRepositories.BookRepository.GetById(id);
+
+            if (book != null)
+            {
+                var model = new Models.BookModel
+                {
+                    Id = book.Id,
+                    SelectedVersion = book.VersionId,
+                    Name = book.Name,
+                    Quality = book.Quality,
+                    Pages = new List<Models.PageModel>()
+                };
+
+                foreach (var page in book.Pages)
+                {
+                    var pageModel = new Models.PageModel
+                    {
+                        Id = page.Id,
+                        Description = page.Description,
+                        Image = page.Image,
+                        Rank = page.Rank,
+                        StatCost = page.EmberCost,
+                        ManaCost = page.ManaCost,
+                        Cooldown = page.Cooldown,
+                        Inscriptions = new List<Models.InscriptionModel>()
+                    };
+
+                    foreach (var insc in page.Inscriptions)
+                    {
+                        var inscModel = new Models.InscriptionModel
+                        {
+                            Id = insc.Id,
+                            Description = insc.Description,
+                            Type = insc.Type,
+                            BaseValue = insc.BaseValue,
+                            StatType = insc.StatType,
+                            Ratio = insc.Ratio,
+                            Duration = insc.Duration,
+                            IncludeWeaponDamages = insc.IncludeWeaponDamages,
+                            WeaponTypes = new List<Models.InscWeaponTypeModel>(),
+                            WeaponDamagesRatio = insc.WeaponDamagesRatio,
+                            PreferredWeaponTypes = new List<Models.InscWeaponTypeModel>(),
+                            PreferredWeaponDamagesRatio = insc.PreferredWeaponDamagesRatio,
+                        };
+
+                        foreach (var type in insc.WeaponTypes)
+                        {
+                            inscModel.WeaponTypes.Add(new Models.InscWeaponTypeModel
+                            {
+                                Type = type
+                            });
+                        }
+
+                        foreach (var type in insc.PreferredWeaponTypes)
+                        {
+                            inscModel.PreferredWeaponTypes.Add(new Models.InscWeaponTypeModel
+                            {
+                                Type = type
+                            });
+                        }
+
+                        pageModel.Inscriptions.Add(inscModel);
+                    }
+
+                    model.Pages.Add(pageModel);
+                }
+
+                Alert(AlertMessage.AlertType.Warning, "You can only Edit the already existing infos. No new Pages or Inscription possible as of now.");
+                Alert(AlertMessage.AlertType.Info, "You can add new WeaponTypes to Inscriptions.");
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Models.BookModel bookModel)
+        {
+            if (bookModel.Pages == null)
+            {
+                bookModel.Pages = new List<Models.PageModel>();
+            }
+            foreach (var page in bookModel.Pages)
+            {
+                if (page.Inscriptions == null)
+                {
+                    page.Inscriptions = new List<Models.InscriptionModel>();
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                bookModel.Pages.RemoveAll(p => p.Inscriptions.Count == 0);
+
+                if (bookModel.Pages.Count == 0 || bookModel.Pages?.Select(p => p.Inscriptions.Count).Sum() == 0)
+                {
+                    Alert(AlertMessage.AlertType.Danger, $"You need at least one page and one inscription per page.");
+                    return View(bookModel);
+                }
+
+                bool hasErrors = false;
+                foreach (var insc in bookModel.Pages.SelectMany(p => p.Inscriptions))
+                {
+                    if (insc.WeaponTypes != null)
+                        insc.WeaponTypes = insc.WeaponTypes.Where(wt => wt.Type != null).Distinct().ToList();
+
+                    if (insc.PreferredWeaponTypes != null)
+                        insc.PreferredWeaponTypes = insc.PreferredWeaponTypes.Where(wt => wt.Type != null).Distinct().ToList();
+
+                    if (insc.IncludeWeaponDamages &&
+                        ((insc.PreferredWeaponTypes?.Count > 0 && insc.PreferredWeaponDamagesRatio <= 0)
+                        && (insc.WeaponTypes?.Count > 0 || insc.WeaponDamagesRatio <= 0)))
+                    {
+                        ModelState.AddModelError("IncludeWeaponDamages", "It is active so you need at least one WeaponType or PrefferedWeaponType specified. Ratios should be > 0");
+                        hasErrors = true;
+                    }
+                    if (!insc.IncludeWeaponDamages && (insc.PreferredWeaponTypes?.Count > 0 || insc.WeaponTypes?.Count > 0))
+                    {
+                        ModelState.AddModelError("IncludeWeaponDamages", "It is inactive but one WeaponType or PrefferedWeaponType is specified.");
+                        hasErrors = true;
+                    }
+                }
+                if (hasErrors)
+                {
+                    Alert(AlertMessage.AlertType.Danger, $"Please check the data inputed and retry.", "Error !");
+                    return View(bookModel);
+                }
+
+                var book = new DataModels.Skills.Book
+                {
+                    Id = bookModel.Id,
+                    VersionId = bookModel.SelectedVersion,
+                    Quality = bookModel.Quality,
+                    Name = bookModel.Name,
+                    Pages = new List<DataModels.Skills.Page>()
+                };
+                foreach (var pageModel in bookModel.Pages)
+                {
+                    var page = new DataModels.Skills.Page
+                    {
+                        Id = pageModel.Id,
+                        Description = pageModel.Description,
+                        Image = pageModel.Image,
+                        Rank = pageModel.Rank,
+                        EmberCost = pageModel.StatCost,
+                        ManaCost = pageModel.ManaCost,
+                        Cooldown = pageModel.Cooldown,
+                        Inscriptions = new List<DataModels.Skills.Inscription>()
+                    };
+                    foreach (var inscModel in pageModel.Inscriptions)
+                    {
+                        var insc = new DataModels.Skills.Inscription
+                        {
+                            Id = inscModel.Id,
+                            Description = inscModel.Description,
+                            Type = inscModel.Type,
+                            BaseValue = inscModel.BaseValue,
+                            StatType = inscModel.StatType,
+                            Ratio = inscModel.Ratio,
+                            Duration = inscModel.Duration,
+                            IncludeWeaponDamages = inscModel.IncludeWeaponDamages,
+                            WeaponTypes = inscModel.WeaponTypes?.Select(wt => (DataModels.Items.WeaponType)wt.Type).ToList(),
+                            WeaponDamagesRatio = inscModel.WeaponDamagesRatio,
+                            PreferredWeaponTypes = inscModel.PreferredWeaponTypes?.Select(wt => (DataModels.Items.WeaponType)wt.Type).ToList(),
+                            PreferredWeaponDamagesRatio = inscModel.PreferredWeaponDamagesRatio
+                        };
+                        page.Inscriptions.Add(insc);
+                    }
+                    book.Pages.Add(page);
+                }
+                if (DataRepositories.BookRepository.Update(book))
+                {
+                    return RedirectToAction("Index");
+                }
+                return RedirectToAction("Index");
+            }
+
+            return View(bookModel);
         }
     }
 }

@@ -8,6 +8,8 @@ namespace Website.Models
 {
     public class PageModel
     {
+        public Guid Id { get; set; }
+
         [Required(ErrorMessage = "Description required"), MinLength(4), MaxLength(200)]
         [Display(Name = "Description")]
         public string Description { get; set; }

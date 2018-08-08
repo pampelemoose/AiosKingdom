@@ -180,7 +180,7 @@
                 {
                     foreach (var alert in ViewBag.Alerts)
                     {
-                        <div class="alert alert-@alert.Type.ToString().ToLower() mt-2">
+                        <div class="alert alert-@alert.Type.ToString().ToLower() @(User.IsInRole("SuperAdmin") ? "mt-3" : "mt-2")">
                             @if (!string.IsNullOrEmpty(alert.Title))
                             {
                                 <h4 class="alert-heading">
