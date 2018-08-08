@@ -70,7 +70,7 @@
                         var pageId = Guid.NewGuid();
 
                         <div id="page-card-@pageId" class="col-md-6 mb-2">
-                                @Html.HiddenFor(model => Model.Id)
+                                @Html.HiddenFor(model => model.Pages[i].Id)
 
                                 <div class="card">
                                     <div class="card-header">
@@ -165,7 +165,6 @@
                                                                 <div id="insc-card-@inscId" class="col-md-12 mt-2">
                                                                         @Html.HiddenFor(model => Model.Pages[i].Inscriptions[j].Id)
 
-                                                                        @Html.HiddenFor(model => Model.Pages[i].Inscriptions[j].PageId)
                                                                         <div class="card bg-info">
                                                                             <div class="card-body">
                                                                                 <div class="row">

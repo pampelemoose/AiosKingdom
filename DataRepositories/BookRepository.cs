@@ -90,7 +90,9 @@ namespace DataRepositories
                     }
                     else
                     {
-                        var onlinePage = context.Pages.FirstOrDefault(i => i.Id.Equals(page.Id));
+                        var onlinePage = context.Pages
+                            .Include(i => i.Inscriptions)
+                            .FirstOrDefault(i => i.Id.Equals(page.Id));
                         onlinePage.Description = page.Description;
                         onlinePage.Image = page.Image;
                         onlinePage.Rank = page.Rank;
