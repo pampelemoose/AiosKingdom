@@ -20,6 +20,8 @@ namespace Website.Models
             }
         }
 
+        public Guid Id { get; set; }
+
         [Required]
         public Guid SelectedSkill { get; set; }
         [Display(Name = "Skill")]

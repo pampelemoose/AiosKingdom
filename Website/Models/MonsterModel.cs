@@ -8,6 +8,8 @@ namespace Website.Models
 {
     public class MonsterModel
     {
+        public Guid Id { get; set; }
+
         [Required]
         [Display(Name = "Version")]
         public Guid SelectedVersion { get; set; }

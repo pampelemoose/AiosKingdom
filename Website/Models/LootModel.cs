@@ -8,6 +8,8 @@ namespace Website.Models
 {
     public class LootModel
     {
+        public Guid Id { get; set; }
+
         [Required]
         [Range(0, 100)]
         public double DropRate { get; set; }
