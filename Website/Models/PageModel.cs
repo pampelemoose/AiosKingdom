@@ -42,6 +42,10 @@ namespace Website.Models
         [Range(0, 400)]
         public int Cooldown { get; set; }
 
+        [Display(Name = "New Insc")]
+        [Range(0, 1000000)]
+        public int NewInsc { get; set; }
+
         public List<InscriptionModel> Inscriptions { get; set; }
     }
 }

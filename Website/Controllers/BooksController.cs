@@ -255,8 +255,6 @@ namespace Website.Controllers
                     model.Pages.Add(pageModel);
                 }
 
-                Alert(AlertMessage.AlertType.Warning, "You can only Edit the already existing infos. No new Pages or Inscription possible as of now.");
-                Alert(AlertMessage.AlertType.Info, "You can add new WeaponTypes to Inscriptions.");
                 return View(model);
             }
 
@@ -268,6 +266,37 @@ namespace Website.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Models.BookModel bookModel)
         {
+            bool newItems = false;
+            foreach (var page in bookModel.Pages)
+            {
+                if (page.NewInsc > 0)
+                {
+                    while (page.NewInsc > 0)
+                    {
+                        if (page.Inscriptions == null)
+                            page.Inscriptions = new List<Models.InscriptionModel>();
+
+                        page.Inscriptions.Add(new Models.InscriptionModel());
+                        page.NewInsc--;
+                    }
+
+                    newItems = true;
+                }
+            }
+            if (bookModel.NewPages > 0)
+            {
+                while (bookModel.NewPages > 0)
+                {
+                    bookModel.Pages.Add(new Models.PageModel());
+                    bookModel.NewPages--;
+                }
+
+                newItems = true;
+            }
+
+            if (newItems)
+                return View(bookModel);
+
             if (bookModel.Pages == null)
             {
                 bookModel.Pages = new List<Models.PageModel>();

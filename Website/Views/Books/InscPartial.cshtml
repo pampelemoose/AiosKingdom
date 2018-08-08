@@ -7,7 +7,8 @@
 <div id="insc-card-@inscId" class="col-md-12 mt-2">
     @using (Html.BeginCollectionItem($"Pages[{Model.PageId}].Inscriptions"))
     {
-        @Html.HiddenFor(model => model.PageId);
+        @Html.HiddenFor(model => Model.Id)
+
         <div class="card bg-info">
             <div class="card-body">
                 <div class="row">

@@ -57,8 +57,19 @@
     <section class="bg-info p-3">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-8">
                     <h2>@Html.LabelFor(model => model.Pages, htmlAttributes: new { @class = "control-label" })</h2>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.NewPages, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.NewPages, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="input-group-append">
+                            <input type="submit" value="+" class="btn btn-primary btn-block" />
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -70,272 +81,279 @@
                         var pageId = Guid.NewGuid();
 
                         <div id="page-card-@pageId" class="col-md-6 mb-2">
-                                @Html.HiddenFor(model => model.Pages[i].Id)
+                            @Html.HiddenFor(model => model.Pages[i].Id)
 
-                                <div class="card">
-                                    <div class="card-header">
-                                        <ul class="nav nav-tabs card-header-tabs pull-right" id="page-tab-list-@pageId" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="page-tab-@pageId" data-toggle="tab" href="#page-@pageId" role="tab" aria-controls="page-@pageId" aria-selected="true">Page</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="inscriptions-tab-@pageId" data-toggle="tab" href="#inscriptions-@pageId" role="tab" aria-controls="inscriptions-@pageId" aria-selected="false">Inscriptions</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="tab-content">
-                                            <div class="tab-pane fade show active" id="page-@pageId" role="tabpanel" aria-labelledby="page-tab-@pageId">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="input-group input-group-sm">
-                                                            <div class="input-group-prepend">
-                                                                @Html.LabelFor(model => model.Pages[i].Description, htmlAttributes: new { @class = "input-group-text" })
-                                                            </div>
-                                                            @Html.TextAreaFor(model => model.Pages[i].Description, new { @class = "form-control" })
+                            <div class="card">
+                                <div class="card-header">
+                                    <ul class="nav nav-tabs card-header-tabs pull-right" id="page-tab-list-@pageId" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="page-tab-@pageId" data-toggle="tab" href="#page-@pageId" role="tab" aria-controls="page-@pageId" aria-selected="true">Page</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="inscriptions-tab-@pageId" data-toggle="tab" href="#inscriptions-@pageId" role="tab" aria-controls="inscriptions-@pageId" aria-selected="false">Inscriptions</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="page-@pageId" role="tabpanel" aria-labelledby="page-tab-@pageId">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            @Html.LabelFor(model => model.Pages[i].Description, htmlAttributes: new { @class = "input-group-text" })
                                                         </div>
-                                                        @Html.ValidationMessageFor(model => model.Pages[i].Description, "", new { @class = "text-danger" })
+                                                        @Html.TextAreaFor(model => model.Pages[i].Description, new { @class = "form-control" })
                                                     </div>
-                                                </div>
-                                                <div class="row mt-1">
-                                                    <div class="col-md-10">
-                                                        <div class="input-group input-group-sm">
-                                                            <div class="input-group-prepend">
-                                                                @Html.LabelFor(model => Model.Pages[i].Image, htmlAttributes: new { @class = "input-group-text" })
-                                                            </div>
-                                                            @Html.EditorFor(model => Model.Pages[i].Image, new { htmlAttributes = new { @class = "form-control image-url-setter" } })
-                                                            <div class="input-group-append">
-                                                                <input type="button" value="Update" class="btn btn-info" onclick="UpdateImage(this)" />
-                                                            </div>
-                                                        </div>
-                                                        @Html.ValidationMessageFor(model => Model.Pages[i].Image, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <img class="img-fluid img-thumbnail image-viewer" src="@Model.Pages[i].Image" />
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-1">
-                                                    <div class="col-md-12">
-                                                        <div class="input-group input-group-sm">
-                                                            <div class="input-group-prepend">
-                                                                @Html.LabelFor(model => Model.Pages[i].StatCost, htmlAttributes: new { @class = "input-group-text" })
-                                                            </div>
-                                                            @Html.EditorFor(model => Model.Pages[i].StatCost, new { htmlAttributes = new { @class = "form-control" } })
-                                                        </div>
-                                                        @Html.ValidationMessageFor(model => Model.Pages[i].StatCost, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-12 mt-1">
-                                                        <div class="input-group input-group-sm">
-                                                            <div class="input-group-prepend">
-                                                                @Html.LabelFor(model => Model.Pages[i].Rank, htmlAttributes: new { @class = "input-group-text" })
-                                                            </div>
-                                                            @Html.EditorFor(model => Model.Pages[i].Rank, new { htmlAttributes = new { @class = "form-control" } })
-                                                        </div>
-                                                        @Html.ValidationMessageFor(model => Model.Pages[i].Rank, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-12 mt-1">
-                                                        <div class="input-group input-group-sm">
-                                                            <div class="input-group-prepend">
-                                                                @Html.LabelFor(model => Model.Pages[i].ManaCost, htmlAttributes: new { @class = "input-group-text" })
-                                                            </div>
-                                                            @Html.EditorFor(model => Model.Pages[i].ManaCost, new { htmlAttributes = new { @class = "form-control" } })
-                                                        </div>
-                                                        @Html.ValidationMessageFor(model => Model.Pages[i].ManaCost, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-12 mt-1">
-                                                        <div class="input-group input-group-sm">
-                                                            <div class="input-group-prepend">
-                                                                @Html.LabelFor(model => Model.Pages[i].Cooldown, htmlAttributes: new { @class = "input-group-text" })
-                                                            </div>
-                                                            @Html.EditorFor(model => Model.Pages[i].Cooldown, new { htmlAttributes = new { @class = "form-control" } })
-                                                        </div>
-                                                        @Html.ValidationMessageFor(model => Model.Pages[i].Cooldown, "", new { @class = "text-danger" })
-                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.Pages[i].Description, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
-                                            <div class="tab-pane fade" id="inscriptions-@pageId" role="tabpanel" aria-labelledby="inscriptions-tab-@pageId">
-                                                <div class="row mt-1">
-                                                       <div class="row mt-1" id="inscList_@pageId">
-                                                        @if (Model != null && Model.Pages[i].Inscriptions != null)
+                                            <div class="row mt-1">
+                                                <div class="col-md-10">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            @Html.LabelFor(model => Model.Pages[i].Image, htmlAttributes: new { @class = "input-group-text" })
+                                                        </div>
+                                                        @Html.EditorFor(model => Model.Pages[i].Image, new { htmlAttributes = new { @class = "form-control image-url-setter" } })
+                                                        <div class="input-group-append">
+                                                            <input type="button" value="Update" class="btn btn-info" onclick="UpdateImage(this)" />
+                                                        </div>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => Model.Pages[i].Image, "", new { @class = "text-danger" })
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <img class="img-fluid img-thumbnail image-viewer" src="@Model.Pages[i].Image" />
+                                                </div>
+                                            </div>
+                                            <div class="row mt-1">
+                                                <div class="col-md-12">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            @Html.LabelFor(model => Model.Pages[i].StatCost, htmlAttributes: new { @class = "input-group-text" })
+                                                        </div>
+                                                        @Html.EditorFor(model => Model.Pages[i].StatCost, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => Model.Pages[i].StatCost, "", new { @class = "text-danger" })
+                                                </div>
+                                                <div class="col-md-12 mt-1">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            @Html.LabelFor(model => Model.Pages[i].Rank, htmlAttributes: new { @class = "input-group-text" })
+                                                        </div>
+                                                        @Html.EditorFor(model => Model.Pages[i].Rank, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => Model.Pages[i].Rank, "", new { @class = "text-danger" })
+                                                </div>
+                                                <div class="col-md-12 mt-1">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            @Html.LabelFor(model => Model.Pages[i].ManaCost, htmlAttributes: new { @class = "input-group-text" })
+                                                        </div>
+                                                        @Html.EditorFor(model => Model.Pages[i].ManaCost, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => Model.Pages[i].ManaCost, "", new { @class = "text-danger" })
+                                                </div>
+                                                <div class="col-md-12 mt-1">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            @Html.LabelFor(model => Model.Pages[i].Cooldown, htmlAttributes: new { @class = "input-group-text" })
+                                                        </div>
+                                                        @Html.EditorFor(model => Model.Pages[i].Cooldown, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => Model.Pages[i].Cooldown, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="inscriptions-@pageId" role="tabpanel" aria-labelledby="inscriptions-tab-@pageId">
+                                            <div class="row mt-1">
+                                                <div class="offset-md-4 col-md-8">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            @Html.LabelFor(model => Model.Pages[i].NewInsc, htmlAttributes: new { @class = "input-group-text" })
+                                                        </div>
+                                                        @Html.EditorFor(model => Model.Pages[i].NewInsc, new { htmlAttributes = new { @class = "form-control" } })
+                                                        <div class="input-group-append">
+                                                            <input type="submit" value="+" class="btn btn-primary btn-block" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-1" id="inscList_@pageId">
+                                                    @if (Model != null && Model.Pages[i].Inscriptions != null)
+                                                    {
+                                                        for (var j = 0; j < Model.Pages[i].Inscriptions.Count; j++)
                                                         {
-                                                            for (var j = 0; j < Model.Pages[i].Inscriptions.Count; j++)
-                                                            {
-                                                                var inscId = Guid.NewGuid();
+                                                            var inscId = Guid.NewGuid();
 
-                                                                <div id="insc-card-@inscId" class="col-md-12 mt-2">
-                                                                        @Html.HiddenFor(model => Model.Pages[i].Inscriptions[j].Id)
+                                                            <div id="insc-card-@inscId" class="col-md-12 mt-2">
+                                                                @Html.HiddenFor(model => Model.Pages[i].Inscriptions[j].Id)
 
-                                                                        <div class="card bg-info">
-                                                                            <div class="card-body">
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12">
-                                                                                        <div class="input-group input-group-sm">
-                                                                                            <div class="input-group-prepend">
-                                                                                                @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Description, htmlAttributes: new { @class = "input-group-text" })
-                                                                                            </div>
-                                                                                            @Html.TextAreaFor(model => Model.Pages[i].Inscriptions[j].Description, new { @class = "form-control" })
-                                                                                        </div>
-                                                                                        @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Description, "", new { @class = "text-danger" })
+                                                                <div class="card bg-info">
+                                                                    <div class="card-body">
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <div class="input-group-prepend">
+                                                                                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Description, htmlAttributes: new { @class = "input-group-text" })
                                                                                     </div>
+                                                                                    @Html.TextAreaFor(model => Model.Pages[i].Inscriptions[j].Description, new { @class = "form-control" })
                                                                                 </div>
-                                                                                <div class="row mt-1">
-                                                                                    <div class="col-md-12">
-                                                                                        <div class="input-group input-group-sm">
-                                                                                            <div class="input-group-prepend">
-                                                                                                @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Type, htmlAttributes: new { @class = "input-group-text" })
-                                                                                            </div>
-                                                                                            @Html.EnumDropDownListFor(model => Model.Pages[i].Inscriptions[j].Type, new { @class = "form-control item-list-changer" })
-                                                                                        </div>
-                                                                                        @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Type, "", new { @class = "text-danger" })
-                                                                                    </div>
-                                                                                    <div class="col-md-12 mt-1">
-                                                                                        <div class="input-group input-group-sm">
-                                                                                            <div class="input-group-prepend">
-                                                                                                @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].BaseValue, htmlAttributes: new { @class = "input-group-text" })
-                                                                                            </div>
-                                                                                            @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].BaseValue, new { htmlAttributes = new { @class = "form-control" } })
-                                                                                        </div>
-                                                                                        @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].BaseValue, "", new { @class = "text-danger" })
-                                                                                    </div>
-                                                                                    <div class="col-md-12 mt-1">
-                                                                                        <div class="input-group input-group-sm">
-                                                                                            <div class="input-group-prepend">
-                                                                                                @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].StatType, htmlAttributes: new { @class = "input-group-text" })
-                                                                                            </div>
-                                                                                            @Html.EnumDropDownListFor(model => Model.Pages[i].Inscriptions[j].StatType, new { @class = "form-control item-list-changer" })
-                                                                                        </div>
-                                                                                        @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].StatType, "", new { @class = "text-danger" })
-                                                                                    </div>
-
-                                                                                    <div class="col-md-12 mt-1">
-                                                                                        <div class="input-group input-group-sm">
-                                                                                            <div class="input-group-prepend">
-                                                                                                @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Ratio, htmlAttributes: new { @class = "input-group-text" })
-                                                                                            </div>
-                                                                                            @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].Ratio, new { htmlAttributes = new { @class = "form-control" } })
-                                                                                        </div>
-                                                                                        @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Ratio, "", new { @class = "text-danger" })
-                                                                                    </div>
-                                                                                    <div class="col-md-12 mt-1">
-                                                                                        <div class="input-group input-group-sm">
-                                                                                            <div class="input-group-prepend">
-                                                                                                @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Duration, htmlAttributes: new { @class = "input-group-text" })
-                                                                                            </div>
-                                                                                            @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].Duration, new { htmlAttributes = new { @class = "form-control" } })
-                                                                                        </div>
-                                                                                        @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Duration, "", new { @class = "text-danger" })
-                                                                                    </div>
-                                                                                    <div class="col-md-12 mt-1">
-                                                                                        <div class="input-group input-group-sm">
-                                                                                            <div class="input-group-prepend">
-                                                                                                <div class="input-group-text">
-                                                                                                    @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].IncludeWeaponDamages)
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].IncludeWeaponDamages, htmlAttributes: new { @class = "form-control disabled" })
-                                                                                        </div>
-                                                                                        @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].IncludeWeaponDamages, "", new { @class = "text-danger" })
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <ul class="list-group list-group-flush">
-                                                                                <li class="list-group-item">
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-8">
-                                                                                            <h5>@Html.LabelFor(model => Model.Pages[i].Inscriptions[j].WeaponTypes, htmlAttributes: new { @class = "control-label" })</h5>
-                                                                                        </div>
-                                                                                        <div class="col-md-4">
-                                                                                            @{
-                                                                                                var wpCount = Model.Pages[i].Inscriptions[j].WeaponTypes.Count;
-                                                                                            }
-                                                                                            <input class="btn btn-primary btn-block" type="button" onclick="addWeaponTypeToInsc('@i', '@j', this)" value="Add Type" id="@inscId" />
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <li class="list-group-item bg-info">
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-12">
-                                                                                            <div class="input-group input-group-sm">
-                                                                                                <div class="input-group-prepend">
-                                                                                                    @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].WeaponDamagesRatio, htmlAttributes: new { @class = "input-group-text" })
-                                                                                                </div>
-                                                                                                @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].WeaponDamagesRatio, new { htmlAttributes = new { @class = "form-control" } })
-                                                                                            </div>
-                                                                                            @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].WeaponDamagesRatio, "", new { @class = "text-danger" })
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="row" id="weaponTypeList_@inscId">
-                                                                                        @if (Model != null && Model.Pages[i].Inscriptions[j].WeaponTypes != null)
-                                                                                        {
-                                                                                            for (var k = 0; k < Model.Pages[i].Inscriptions[j].WeaponTypes.Count; k++)
-                                                                                            {
-                                                                                                Model.Pages[i].Inscriptions[j].WeaponTypes[k].PageId = i.ToString();
-                                                                                                Model.Pages[i].Inscriptions[j].WeaponTypes[k].InscId = j.ToString();
-                                                                                                Model.Pages[i].Inscriptions[j].WeaponTypes[k].TypeExtension = "WeaponTypes";
-                                                                                                Html.RenderPartial("WeaponTypePartial", Model.Pages[i].Inscriptions[j].WeaponTypes[k]);
-                                                                                            }
-                                                                                        }
-                                                                                    </div>
-                                                                                </li>
-                                                                                <li class="list-group-item">
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-8">
-                                                                                            <h5>@Html.LabelFor(model => Model.Pages[i].Inscriptions[j].PreferredWeaponTypes, htmlAttributes: new { @class = "control-label" })</h5>
-                                                                                        </div>
-                                                                                        <div class="col-md-4">
-                                                                                            
-                                                                                            <input class="btn btn-primary btn-block" type="button" onclick="addPrefferedWeaponTypeToInsc('@i', '@j', this)" value="Add Type" id="@inscId" />
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <li class="list-group-item">
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-12">
-                                                                                            <div class="input-group input-group-sm">
-                                                                                                <div class="input-group-prepend">
-                                                                                                    @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].PreferredWeaponDamagesRatio, htmlAttributes: new { @class = "input-group-text" })
-                                                                                                </div>
-                                                                                                @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].PreferredWeaponDamagesRatio, new { htmlAttributes = new { @class = "form-control" } })
-                                                                                            </div>
-                                                                                            @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].PreferredWeaponDamagesRatio, "", new { @class = "text-danger" })
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="row" id="prefferedWeaponTypeList_@inscId">
-                                                                                        @if (Model != null && Model.Pages[i].Inscriptions[j].PreferredWeaponTypes != null)
-                                                                                        {
-                                                                                            for (var k = 0; k < Model.Pages[i].Inscriptions[j].PreferredWeaponTypes.Count; k++)
-                                                                                            {
-                                                                                                Model.Pages[i].Inscriptions[j].PreferredWeaponTypes[k].PageId = i.ToString();
-                                                                                                Model.Pages[i].Inscriptions[j].PreferredWeaponTypes[k].InscId = j.ToString();
-                                                                                                Model.Pages[i].Inscriptions[j].PreferredWeaponTypes[k].TypeExtension = "PreferredWeaponTypes";
-                                                                                                Html.RenderPartial("WeaponTypePartial", Model.Pages[i].Inscriptions[j].PreferredWeaponTypes[k]);
-                                                                                            }
-                                                                                        }
-                                                                                    </div>
-                                                                                </li>
-                                                                            </ul>
-                                                                            <div class="card-footer">
-                                                                                <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
-                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                </button>
+                                                                                @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Description, "", new { @class = "text-danger" })
                                                                             </div>
                                                                         </div>
+                                                                        <div class="row mt-1">
+                                                                            <div class="col-md-12">
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <div class="input-group-prepend">
+                                                                                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Type, htmlAttributes: new { @class = "input-group-text" })
+                                                                                    </div>
+                                                                                    @Html.EnumDropDownListFor(model => Model.Pages[i].Inscriptions[j].Type, new { @class = "form-control item-list-changer" })
+                                                                                </div>
+                                                                                @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Type, "", new { @class = "text-danger" })
+                                                                            </div>
+                                                                            <div class="col-md-12 mt-1">
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <div class="input-group-prepend">
+                                                                                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].BaseValue, htmlAttributes: new { @class = "input-group-text" })
+                                                                                    </div>
+                                                                                    @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].BaseValue, new { htmlAttributes = new { @class = "form-control" } })
+                                                                                </div>
+                                                                                @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].BaseValue, "", new { @class = "text-danger" })
+                                                                            </div>
+                                                                            <div class="col-md-12 mt-1">
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <div class="input-group-prepend">
+                                                                                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].StatType, htmlAttributes: new { @class = "input-group-text" })
+                                                                                    </div>
+                                                                                    @Html.EnumDropDownListFor(model => Model.Pages[i].Inscriptions[j].StatType, new { @class = "form-control item-list-changer" })
+                                                                                </div>
+                                                                                @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].StatType, "", new { @class = "text-danger" })
+                                                                            </div>
+
+                                                                            <div class="col-md-12 mt-1">
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <div class="input-group-prepend">
+                                                                                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Ratio, htmlAttributes: new { @class = "input-group-text" })
+                                                                                    </div>
+                                                                                    @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].Ratio, new { htmlAttributes = new { @class = "form-control" } })
+                                                                                </div>
+                                                                                @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Ratio, "", new { @class = "text-danger" })
+                                                                            </div>
+                                                                            <div class="col-md-12 mt-1">
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <div class="input-group-prepend">
+                                                                                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Duration, htmlAttributes: new { @class = "input-group-text" })
+                                                                                    </div>
+                                                                                    @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].Duration, new { htmlAttributes = new { @class = "form-control" } })
+                                                                                </div>
+                                                                                @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Duration, "", new { @class = "text-danger" })
+                                                                            </div>
+                                                                            <div class="col-md-12 mt-1">
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <div class="input-group-text">
+                                                                                            @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].IncludeWeaponDamages)
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].IncludeWeaponDamages, htmlAttributes: new { @class = "form-control disabled" })
+                                                                                </div>
+                                                                                @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].IncludeWeaponDamages, "", new { @class = "text-danger" })
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <ul class="list-group list-group-flush">
+                                                                        <li class="list-group-item">
+                                                                            <div class="row">
+                                                                                <div class="col-md-8">
+                                                                                    <h5>@Html.LabelFor(model => Model.Pages[i].Inscriptions[j].WeaponTypes, htmlAttributes: new { @class = "control-label" })</h5>
+                                                                                </div>
+                                                                                <div class="col-md-4">
+                                                                                    <input class="btn btn-primary btn-block" type="button" onclick="addWeaponTypeToInsc('@i', '@j', this)" value="Add Type" id="@inscId" />
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="list-group-item bg-info">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">
+                                                                                    <div class="input-group input-group-sm">
+                                                                                        <div class="input-group-prepend">
+                                                                                            @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].WeaponDamagesRatio, htmlAttributes: new { @class = "input-group-text" })
+                                                                                        </div>
+                                                                                        @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].WeaponDamagesRatio, new { htmlAttributes = new { @class = "form-control" } })
+                                                                                    </div>
+                                                                                    @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].WeaponDamagesRatio, "", new { @class = "text-danger" })
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row" id="weaponTypeList_@inscId">
+                                                                                @if (Model != null && Model.Pages[i].Inscriptions[j].WeaponTypes != null)
+                                                                                {
+                                                                                    for (var k = 0; k < Model.Pages[i].Inscriptions[j].WeaponTypes.Count; k++)
+                                                                                    {
+                                                                                        Model.Pages[i].Inscriptions[j].WeaponTypes[k].PageId = i.ToString();
+                                                                                        Model.Pages[i].Inscriptions[j].WeaponTypes[k].InscId = j.ToString();
+                                                                                        Model.Pages[i].Inscriptions[j].WeaponTypes[k].TypeExtension = "WeaponTypes";
+                                                                                        Html.RenderPartial("WeaponTypePartial", Model.Pages[i].Inscriptions[j].WeaponTypes[k]);
+                                                                                    }
+                                                                                }
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="list-group-item">
+                                                                            <div class="row">
+                                                                                <div class="col-md-8">
+                                                                                    <h5>@Html.LabelFor(model => Model.Pages[i].Inscriptions[j].PreferredWeaponTypes, htmlAttributes: new { @class = "control-label" })</h5>
+                                                                                </div>
+                                                                                <div class="col-md-4">
+
+                                                                                    <input class="btn btn-primary btn-block" type="button" onclick="addPrefferedWeaponTypeToInsc('@i', '@j', this)" value="Add Type" id="@inscId" />
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="list-group-item">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">
+                                                                                    <div class="input-group input-group-sm">
+                                                                                        <div class="input-group-prepend">
+                                                                                            @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].PreferredWeaponDamagesRatio, htmlAttributes: new { @class = "input-group-text" })
+                                                                                        </div>
+                                                                                        @Html.EditorFor(model => Model.Pages[i].Inscriptions[j].PreferredWeaponDamagesRatio, new { htmlAttributes = new { @class = "form-control" } })
+                                                                                    </div>
+                                                                                    @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].PreferredWeaponDamagesRatio, "", new { @class = "text-danger" })
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row" id="prefferedWeaponTypeList_@inscId">
+                                                                                @if (Model != null && Model.Pages[i].Inscriptions[j].PreferredWeaponTypes != null)
+                                                                                {
+                                                                                    for (var k = 0; k < Model.Pages[i].Inscriptions[j].PreferredWeaponTypes.Count; k++)
+                                                                                    {
+                                                                                        Model.Pages[i].Inscriptions[j].PreferredWeaponTypes[k].PageId = i.ToString();
+                                                                                        Model.Pages[i].Inscriptions[j].PreferredWeaponTypes[k].InscId = j.ToString();
+                                                                                        Model.Pages[i].Inscriptions[j].PreferredWeaponTypes[k].TypeExtension = "PreferredWeaponTypes";
+                                                                                        Html.RenderPartial("WeaponTypePartial", Model.Pages[i].Inscriptions[j].PreferredWeaponTypes[k]);
+                                                                                    }
+                                                                                }
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <div class="card-footer">
+                                                                        <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
-                                                            }
+                                                            </div>
                                                         }
-                                                    </div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-footer">
-                                        <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
                                 </div>
+                                <div class="card-footer">
+                                    <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-
                     }
                 }
             </div>
