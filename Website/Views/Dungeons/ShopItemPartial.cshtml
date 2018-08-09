@@ -3,6 +3,8 @@
 <div class="col-md-12 mt-2">
     @using (Html.BeginCollectionItem($"Rooms[{Model.RoomId}].ShopItems"))
     {
+        @Html.HiddenFor(model => Model.Id)
+
         @Html.HiddenFor(model => model.RoomId);
         <div class="card bg-info">
             <div class="card-body">

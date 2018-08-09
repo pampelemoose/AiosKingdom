@@ -66,7 +66,7 @@
                                                 break;
                                             case DataModels.Items.ItemType.Weapon:
                                                 {
-                                                    @DataRepositories.ArmorRepository.GetById(shopItem.ItemId).ItemName
+                                                    @DataRepositories.WeaponRepository.GetById(shopItem.ItemId).ItemName
                                                 }
                                                 break;
                                         }
@@ -132,6 +132,19 @@
                     }
                 </div>
             }
+        </div>
+    </section>
+}
+
+@if (User.IsInRole("SuperAdmin"))
+{
+    <section class="@(Model.Rooms.Count % 2 == 0 ? "bg-dark" : "") p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.DungeonId }, new { @class = "btn btn-block btn-primary" })
+                </div>
+            </div>
         </div>
     </section>
 }

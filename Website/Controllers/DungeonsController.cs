@@ -56,7 +56,7 @@ namespace Website.Controllers
 
             if (ModelState.IsValid)
             {
-                dungeonModel.Rooms?.RemoveAll(r => r.Enemies.Count == 0 && r.ShopItems.Count == 0 
+                dungeonModel.Rooms?.RemoveAll(r => r.Enemies.Count == 0 && r.ShopItems.Count == 0
                 && r.Type != DataModels.Dungeons.RoomType.Exit && r.Type != DataModels.Dungeons.RoomType.Rest);
 
                 if (dungeonModel.Rooms?.FirstOrDefault(r => r.Type == DataModels.Dungeons.RoomType.Exit) == null)
@@ -131,7 +131,7 @@ namespace Website.Controllers
                     }
                 }
             }
-            
+
             return View(dungeonModel);
         }
 
@@ -164,6 +164,207 @@ namespace Website.Controllers
             enemy.RoomId = id;
 
             return PartialView("EnemyPartial", enemy);
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpGet]
+        public ActionResult Edit(Guid id)
+        {
+            var dungeon = DataRepositories.DungeonRepository.GetById(id);
+
+            if (dungeon != null)
+            {
+                var model = new Models.DungeonModel
+                {
+                    Id = dungeon.Id,
+                    SelectedVersion = dungeon.VersionId,
+                    Name = dungeon.Name,
+                    RequiredLevel = dungeon.RequiredLevel,
+                    MaxLevelAuthorized = dungeon.MaxLevelAuthorized,
+                    ExperienceReward = dungeon.ExperienceReward,
+                    ShardReward = dungeon.ShardReward,
+                    Rooms = new List<Models.RoomModel>()
+                };
+                
+                foreach (var room in dungeon.Rooms)
+                {
+                    var roomModel = new Models.RoomModel
+                    {
+                        Id = room.Id,
+                        RoomNumber = room.RoomNumber,
+                        Type = room.Type,
+                        Enemies = new List<Models.EnemyModel>(),
+                        ShopItems = new List<Models.ShopItemModel>()
+                    };
+
+                    foreach (var shopItem in room.ShopItems)
+                    {
+                        roomModel.ShopItems.Add(new Models.ShopItemModel
+                        {
+                            Id = shopItem.Id,
+                            SelectedItem = shopItem.ItemId,
+                            Quantity = shopItem.Quantity,
+                            ShardPrice = shopItem.ShardPrice
+                        });
+                    }
+
+                    foreach (var ennemy in room.Ennemies)
+                    {
+                        roomModel.Enemies.Add(new Models.EnemyModel
+                        {
+                            Id = ennemy.Id,
+                            EnemyType = ennemy.EnemyType,
+                            MonsterId = ennemy.MonsterId,
+                            Level = ennemy.Level,
+                            ShardReward = ennemy.ShardReward
+                        });
+                    }
+
+                    model.Rooms.Add(roomModel);
+                }
+
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [CustomAuthorize(Roles = "SuperAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Models.DungeonModel dungeonModel)
+        {
+            bool newItems = false;
+            foreach (var room in dungeonModel.Rooms)
+            {
+                if (room.NewItems > 0)
+                {
+                    while (room.NewItems > 0)
+                    {
+                        if (room.ShopItems == null)
+                            room.ShopItems = new List<Models.ShopItemModel>();
+
+                        room.ShopItems.Add(new Models.ShopItemModel());
+                        room.NewItems--;
+                    }
+
+                    newItems = true;
+                }
+
+                if (room.NewEnemies > 0)
+                {
+                    while (room.NewEnemies > 0)
+                    {
+                        if (room.Enemies == null)
+                            room.Enemies = new List<Models.EnemyModel>();
+
+                        room.Enemies.Add(new Models.EnemyModel());
+                        room.NewEnemies--;
+                    }
+
+                    newItems = true;
+                }
+            }
+            if (dungeonModel.NewRooms > 0)
+            {
+                while (dungeonModel.NewRooms > 0)
+                {
+                    dungeonModel.Rooms.Add(new Models.RoomModel());
+                    dungeonModel.NewRooms--;
+                }
+
+                newItems = true;
+            }
+
+            if (newItems)
+                return View(dungeonModel);
+
+            if (dungeonModel.Rooms == null)
+            {
+                dungeonModel.Rooms = new List<Models.RoomModel>();
+            }
+            foreach (var room in dungeonModel.Rooms)
+            {
+                if (room.ShopItems == null)
+                    room.ShopItems = new List<Models.ShopItemModel>();
+
+                if (room.Enemies == null)
+                    room.Enemies = new List<Models.EnemyModel>();
+            }
+
+            if (ModelState.IsValid)
+            {
+                dungeonModel.Rooms?.RemoveAll(r => r.Enemies.Count == 0 && r.ShopItems.Count == 0
+                && r.Type != DataModels.Dungeons.RoomType.Exit && r.Type != DataModels.Dungeons.RoomType.Rest);
+
+                if (dungeonModel.Rooms?.FirstOrDefault(r => r.Type == DataModels.Dungeons.RoomType.Exit) == null)
+                {
+                    Alert(AlertMessage.AlertType.Danger, $"No exit room in the dungeon. You must add an exit as the last room you want the player to leave.", "Exit needed !");
+                    return View(dungeonModel);
+                }
+
+                if (dungeonModel.Rooms.Count > 0)
+                {
+                    var dungeon = new DataModels.Dungeons.Dungeon
+                    {
+                        Id = dungeonModel.Id,
+                        VersionId = dungeonModel.SelectedVersion,
+                        Name = dungeonModel.Name,
+                        RequiredLevel = dungeonModel.RequiredLevel,
+                        MaxLevelAuthorized = dungeonModel.RequiredLevel,
+                        Rooms = new List<DataModels.Dungeons.Room>(),
+                        ExperienceReward = dungeonModel.ExperienceReward,
+                        ShardReward = dungeonModel.ShardReward
+                    };
+
+                    foreach (var roomModel in dungeonModel.Rooms)
+                    {
+                        var room = new DataModels.Dungeons.Room
+                        {
+                            Id = roomModel.Id,
+                            Type = roomModel.Type,
+                            RoomNumber = roomModel.RoomNumber,
+                            ShopItems = new List<DataModels.Dungeons.ShopItem>(),
+                            Ennemies = new List<DataModels.Dungeons.Enemy>()
+                        };
+
+                        foreach (var shopItemModel in roomModel.ShopItems)
+                        {
+                            var shopItem = new DataModels.Dungeons.ShopItem
+                            {
+                                Id = shopItemModel.Id,
+                                ItemId = shopItemModel.SelectedItem,
+                                Type = shopItemModel.Items.FirstOrDefault(i => i.ItemId.Equals(shopItemModel.SelectedItem)).Type,
+                                Quantity = shopItemModel.Quantity,
+                                ShardPrice = shopItemModel.ShardPrice
+                            };
+                            room.ShopItems.Add(shopItem);
+                        }
+
+                        foreach (var enemyModel in roomModel.Enemies)
+                        {
+                            var enemy = new DataModels.Dungeons.Enemy
+                            {
+                                Id = enemyModel.Id,
+                                EnemyType = enemyModel.EnemyType,
+                                MonsterId = enemyModel.MonsterId,
+                                Level = enemyModel.Level,
+                                ShardReward = enemyModel.ShardReward
+                            };
+                            room.Ennemies.Add(enemy);
+                        }
+
+                        dungeon.Rooms.Add(room);
+                    }
+
+                    if (DataRepositories.DungeonRepository.Update(dungeon))
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+
+            return View(dungeonModel);
         }
     }
 }

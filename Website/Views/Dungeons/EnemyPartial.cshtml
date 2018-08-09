@@ -3,6 +3,8 @@
 <div class="col-md-12 mt-2">
     @using (Html.BeginCollectionItem($"Rooms[{Model.RoomId}].Enemies"))
     {
+        @Html.HiddenFor(model => Model.Id)
+
         @Html.HiddenFor(model => model.RoomId);
         <div class="card bg-info">
             <div class="card-body">
@@ -10,13 +12,13 @@
                     <div class="col-md-12">
                         <div class="input-group input-group-sm">
                             <div class="input-group-prepend">
-                                @Html.LabelFor(model => model.AvailableMonsters, htmlAttributes: new { @class = "input-group-text" })
+                                @Html.LabelFor(model => model.MonsterId, htmlAttributes: new { @class = "input-group-text" })
                             </div>
-                            @Html.DropDownListFor(model => model.MonsterId, new SelectList(Model.AvailableMonsters, "MonsterId", "Name"), new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.MonsterId, new SelectList(DataRepositories.MonsterRepository.GetAll(), "MonsterId", "Name"), new { @class = "form-control" })
                         </div>
-                        @Html.ValidationMessageFor(model => model.AvailableMonsters, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.MonsterId, "", new { @class = "text-danger" })
                     </div>
-                    
+
                 </div>
                 <div class="row mt-1">
                     <div class="col-md-6">

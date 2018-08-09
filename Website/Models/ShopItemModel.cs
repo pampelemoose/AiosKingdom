@@ -8,6 +8,8 @@ namespace Website.Models
 {
     public class ShopItemModel
     {
+        public Guid Id { get; set; }
+
         public string RoomId { get; set; }
 
         public Guid SelectedItem { get; set; }

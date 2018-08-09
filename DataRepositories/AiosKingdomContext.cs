@@ -46,7 +46,11 @@ namespace DataRepositories
         public DbSet<DataModels.Monsters.Monster> Monsters { get; set; }
         public DbSet<DataModels.Monsters.Loot> Loots { get; set; }
         public DbSet<DataModels.Monsters.Phase> Phases { get; set; }
+
         public DbSet<DataModels.Dungeons.Dungeon> Dungeons { get; set; }
+        public DbSet<DataModels.Dungeons.Room> Rooms { get; set; }
+        public DbSet<DataModels.Dungeons.ShopItem> ShopItems { get; set; }
+        public DbSet<DataModels.Dungeons.Enemy> Enemies { get; set; }
 
         public DbSet<DataModels.Website.Section> Sections { get; set; }
 

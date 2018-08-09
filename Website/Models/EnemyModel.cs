@@ -8,6 +8,8 @@ namespace Website.Models
 {
     public class EnemyModel
     {
+        public Guid Id { get; set; }
+
         public string RoomId { get; set; }
 
         [Required]

@@ -8,6 +8,8 @@ namespace Website.Models
 {
     public class DungeonModel
     {
+        public Guid Id { get; set; }
+
         [Required]
         [Display(Name = "Version")]
         public Guid SelectedVersion { get; set; }
@@ -33,6 +35,10 @@ namespace Website.Models
         [Display(Name = "MaxLevelAuthorized")]
         [Range(1, 10000, ErrorMessage = "MaxLevelAuthorized should be higher than 0")]
         public int MaxLevelAuthorized { get; set; }
+
+        [Display(Name = "New Rooms")]
+        [Range(0, 1000000)]
+        public int NewRooms { get; set; }
 
         [Display(Name = "Rooms")]
         public List<RoomModel> Rooms { get; set; }
