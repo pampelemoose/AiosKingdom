@@ -78,7 +78,7 @@ namespace DataRepositories
                 online.Name = book.Name;
                 online.Quality = book.Quality;
 
-                // INVENTORY
+                // PAGES
                 var oldPages = online.Pages;
                 online.Pages = new List<DataModels.Skills.Page>();
                 foreach (var page in book.Pages)
