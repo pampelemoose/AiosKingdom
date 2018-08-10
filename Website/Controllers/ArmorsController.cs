@@ -58,6 +58,7 @@ namespace Website.Controllers
                     Quality = armorModel.Quality,
                     Part = armorModel.Part,
                     UseLevelRequired = armorModel.UseLevelRequired,
+                    Space = armorModel.Space,
                     ArmorValue = armorModel.ArmorValue,
                     Stats = armorModel.Stats
                 }))
@@ -88,6 +89,7 @@ namespace Website.Controllers
                     Part = armor.Part,
                     ItemLevel = armor.ItemLevel,
                     UseLevelRequired = armor.UseLevelRequired,
+                    Space = armor.Space,
                     ArmorValue = armor.ArmorValue,
                     Stats = armor.Stats
                 };
@@ -128,6 +130,7 @@ namespace Website.Controllers
                     ItemLevel = armorModel.ItemLevel,
                     Quality = armorModel.Quality,
                     UseLevelRequired = armorModel.UseLevelRequired,
+                    Space = armorModel.Space,
                     ArmorValue = armorModel.ArmorValue,
                     Stats = armorModel.Stats
                 }))

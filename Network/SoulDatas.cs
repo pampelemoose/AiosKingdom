@@ -28,5 +28,7 @@ namespace Network
         public List<string> WeaponTypes { get; set; }
         public int MinDamages { get; set; }
         public int MaxDamages { get; set; }
+
+        public int BagSpace { get; set; }
     }
 }

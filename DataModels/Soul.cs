@@ -27,7 +27,7 @@ namespace DataModels
 
         public Guid AppUserId { get; set; }
         [ForeignKey("AppUserId")]
-        public User AppUser { get; set; }
+        public AppUser AppUser { get; set; }
 
         [MaxLength(25)]
         public string Name { get; set; }

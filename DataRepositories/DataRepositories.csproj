@@ -56,9 +56,9 @@
     <Compile Include="ConfigRepository.cs" />
     <Compile Include="DungeonRepository.cs" />
     <Compile Include="MarketRepository.cs" />
-    <Compile Include="Migrations\201807270250247_InitialMigration.cs" />
-    <Compile Include="Migrations\201807270250247_InitialMigration.Designer.cs">
-      <DependentUpon>201807270250247_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201808100346479_InitialMigration.cs" />
+    <Compile Include="Migrations\201808100346479_InitialMigration.Designer.cs">
+      <DependentUpon>201808100346479_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
@@ -81,8 +81,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807270250247_InitialMigration.resx">
-      <DependentUpon>201807270250247_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201808100346479_InitialMigration.resx">
+      <DependentUpon>201808100346479_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

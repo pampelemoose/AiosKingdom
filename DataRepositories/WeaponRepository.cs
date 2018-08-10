@@ -76,6 +76,7 @@ namespace DataRepositories
                 oldWeapon.HandlingType = weapon.HandlingType;
                 oldWeapon.WeaponType = weapon.WeaponType;
                 oldWeapon.UseLevelRequired = weapon.UseLevelRequired;
+                oldWeapon.Space = weapon.Space;
                 oldWeapon.MinDamages = weapon.MinDamages;
                 oldWeapon.MaxDamages = weapon.MaxDamages;
 

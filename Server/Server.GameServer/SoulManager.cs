@@ -152,6 +152,7 @@ namespace Server.GameServer
             data.MinDamages = 0;
             data.MaxDamages = 0;
             data.WeaponTypes = new List<string>();
+            data.BagSpace = 0;
 
             var equipment = soul.Equipment;
 
@@ -232,6 +233,7 @@ namespace Server.GameServer
                 var item = DataRepositories.BagRepository.GetById(equipment.Bag);
 
                 data.ItemLevel += item.ItemLevel;
+                data.BagSpace = item.SlotCount;
                 AddStatValue(data, item.Stats);
             }
 

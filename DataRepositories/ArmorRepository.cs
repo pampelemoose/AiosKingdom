@@ -74,6 +74,7 @@ namespace DataRepositories
                 online.ItemLevel = armor.ItemLevel;
                 online.Quality = armor.Quality;
                 online.UseLevelRequired = armor.UseLevelRequired;
+                online.Space = armor.Space;
                 online.ArmorValue = armor.ArmorValue;
 
                 context.ItemStats.RemoveRange(online.Stats);

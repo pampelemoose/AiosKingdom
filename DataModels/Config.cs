@@ -62,5 +62,8 @@ namespace DataModels
         public float ManaPerLevelRatio { get; set; }
         [Required]
         public float ManaPerEnergyRatio { get; set; }
+
+        [Required]
+        public Guid DefaultBagId { get; set; }
     }
 }

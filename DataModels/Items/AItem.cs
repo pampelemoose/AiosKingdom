@@ -79,6 +79,11 @@ namespace DataModels.Items
         [Range(1, 400)]
         public int UseLevelRequired { get; set; }
 
+        [Required(ErrorMessage = "Space required")]
+        [Display(Name = "Space")]
+        [Range(1, 400)]
+        public int Space { get; set; }
+
         public AItem(ItemType type)
         {
             _type = type;

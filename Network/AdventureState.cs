@@ -48,6 +48,8 @@ namespace Network
         public List<ModifierApplied> Marks { get; set; }
         public List<ModifierApplied> Effects { get; set; }
 
+        public List<ShopState> Bag { get; set; }
+
         public bool IsRestingArea { get; set; }
         public bool IsFightArea { get; set; }
         public bool IsShopArea { get; set; }

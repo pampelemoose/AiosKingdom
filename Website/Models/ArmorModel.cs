@@ -44,6 +44,11 @@ namespace Website.Models
         [Range(1, 400)]
         public int UseLevelRequired { get; set; }
 
+        [Required(ErrorMessage = "Space required")]
+        [Display(Name = "Space")]
+        [Range(1, 400)]
+        public int Space { get; set; }
+
         [Required(ErrorMessage = "Part required")]
         [Display(Name = "Part")]
         public DataModels.Items.ArmorPart Part { get; set; }

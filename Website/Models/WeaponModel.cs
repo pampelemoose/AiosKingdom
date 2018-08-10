@@ -44,6 +44,11 @@ namespace Website.Models
         [Range(1, 400)]
         public int UseLevelRequired { get; set; }
 
+        [Required(ErrorMessage = "Space required")]
+        [Display(Name = "Space")]
+        [Range(1, 400)]
+        public int Space { get; set; }
+
         [Required(ErrorMessage = "HandlingType required")]
         [Display(Name = "HandlingType")]
         public DataModels.Items.HandlingType HandlingType { get; set; }

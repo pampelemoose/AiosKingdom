@@ -157,9 +157,25 @@ namespace Server.GameServer.Commands.Player
                             }
                         }
                         break;
-                    case DataModels.Items.ItemType.Bag: // TODO
+                    case DataModels.Items.ItemType.Bag:
                         {
-                            //var item = DataRepositories.RealPGRepository.Instance.Bags.GetById(itemSlot.ItemId);
+                            var item = DataRepositories.BagRepository.GetById(itemSlot.ItemId);
+                            datas.Inventory.Remove(itemSlot);
+                            if (Guid.Empty.Equals(datas.Equipment.Bag))
+                            {
+                                datas.Equipment.Bag = item.ItemId;
+                            }
+                            else
+                            {
+                                var bag = DataRepositories.BagRepository.GetById(datas.Equipment.Bag);
+                                if (bag != null)
+                                {
+                                    Guid toSwap = datas.Equipment.Bag;
+                                    datas.Equipment.Bag = item.ItemId;
+                                    itemSlot.ItemId = toSwap;
+                                    datas.Inventory.Add(itemSlot);
+                                }
+                            }
                         }
                         break;
                     case DataModels.Items.ItemType.Weapon:

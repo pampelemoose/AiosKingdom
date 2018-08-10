@@ -58,6 +58,7 @@ namespace Website.Controllers
                     ItemLevel = consumableModel.ItemLevel,
                     Quality = consumableModel.Quality,
                     UseLevelRequired = consumableModel.UseLevelRequired,
+                    Space = consumableModel.Space,
                     Effects = consumableModel.Effects
                 }))
                 {
@@ -100,6 +101,7 @@ namespace Website.Controllers
                     Quality = consumable.Quality,
                     UseLevelRequired = consumable.UseLevelRequired,
                     ItemLevel = consumable.ItemLevel,
+                    Space = consumable.Space,
                     Effects = consumable.Effects
                 };
 
@@ -137,6 +139,7 @@ namespace Website.Controllers
                     ItemLevel = consumableModel.ItemLevel,
                     Quality = consumableModel.Quality,
                     UseLevelRequired = consumableModel.UseLevelRequired,
+                    Space = consumableModel.Space,
                     Effects = consumableModel.Effects
                 }))
                 {

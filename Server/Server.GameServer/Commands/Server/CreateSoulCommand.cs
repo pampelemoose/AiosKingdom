@@ -44,7 +44,8 @@ namespace Server.GameServer.Commands.Server
                 Bits = 0,
                 Equipment = new DataModels.Equipment
                 {
-                    Id = Guid.NewGuid()
+                    Id = Guid.NewGuid(),
+                    Bag = _config.DefaultBagId
                 }
             };
 
