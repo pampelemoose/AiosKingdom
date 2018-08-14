@@ -239,7 +239,7 @@ namespace AiosKingdom.ViewModels.Dungeon
                 var page = new Views.BuyItemPage(new ShopBuyItemPageViewModel(_navigation,
                     (KeyValuePair<Guid, Network.AdventureState.ShopState>)_selectedShopItem));
                 _navigation.PushModalAsync(page);
-            }, () => { return _selectedShopItem != null; }));
+            }, () => { return _selectedShopItem != null && _selectedShopItem.Value.Value.ShardPrice <= DatasManager.Instance.Currencies.Shards; }));
 
         private ICommand _skillsAction;
         public ICommand SkillsAction =>

@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
+             xmlns:views="clr-namespace:AiosKingdom.Views;"
+             x:Class="AiosKingdom.Views.HomePage">
+    <ContentPage.Content>
+        <Grid
+            RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0"
+                BackgroundColor="Black"
+                ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="0"
+                    ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ContentView
+                        Grid.Column="0"
+                        Padding="3"
+                        BackgroundColor="Gray">
+                        <Label
+                            BackgroundColor="Silver"
+                            TextColor="Black"
+                            FontSize="28"
+                            FontAttributes="Bold"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding Datas.Level}"/>
+                    </ContentView>
+                    
+                    <Grid
+                        Grid.Column="1"
+                        RowSpacing="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <ContentView
+                            Grid.Row="0"
+                            Padding="5"
+                            BackgroundColor="Gray">
+                            <Label
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Text="{Binding Datas.Name}" />
+                        </ContentView>
+
+                        <Grid
+                            Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label
+                                Grid.Column="0"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding Datas.CurrentExperience}" />
+                            <Label
+                                Grid.Column="1"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding Datas.RequiredExperience}" />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                
+                <Button
+                    Grid.Column="0"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ShowSoulDetailsAction}"/>
+
+                <Button
+                    Grid.Column="1"
+                    BackgroundColor="Yellow"
+                    TextColor="White"
+                    Text="S"
+                    Clicked="ShowSetting_Clicked"/>
+            </Grid>
+
+            <Grid
+                Grid.Row="1"
+                ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="0"
+                    ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="0"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Text="PvE"
+                        Command="{Binding ShowContentAction}"
+                        CommandParameter="Dungeons"/>
+                    <Button
+                        Grid.Column="1"
+                        BackgroundColor="Blue"
+                        TextColor="White"
+                        Text="PvP"
+                        IsEnabled="False"/>
+
+                    <ContentView
+                        Grid.ColumnSpan="2"
+                        Content="{Binding HomeContent}"
+                        IsVisible="{Binding ShowContent}"/>
+                </Grid>
+
+                <StackLayout
+                    Grid.Column="1"
+                    BackgroundColor="Red"
+                    VerticalOptions="End"
+                    Padding="0, 1"
+                    Spacing="0">
+                    <Button
+                        HeightRequest="40"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Text="H"
+                        Command="{Binding ShowContentAction}"
+                        CommandParameter="Home"/>
+                    <Button
+                        HeightRequest="40"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Text="Inv"
+                        Command="{Binding ShowContentAction}"
+                        CommandParameter="Inventory"/>
+                    <Button
+                        HeightRequest="40"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Text="Spi"
+                        Command="{Binding ShowContentAction}"
+                        CommandParameter="Spirits"/>
+                    <Button
+                        HeightRequest="40"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Text="Kno"
+                        Command="{Binding ShowContentAction}"
+                        CommandParameter="Knowledge"/>
+                    <Button
+                        HeightRequest="40"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Text="Mark"
+                        Command="{Binding ShowContentAction}"
+                        CommandParameter="Market"/>
+                    <Button
+                        HeightRequest="40"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Text="Book"
+                        Command="{Binding ShowContentAction}"
+                        CommandParameter="Bookstore"/>
+                </StackLayout>
+            </Grid>
+
+            <views:DashboardView
+                Grid.Row="1"
+                BackgroundColor="White"
+                IsVisible="{Binding ShowSoulDetails}"/>
+
+            <ctrl:LoadingIndicator
+                Grid.RowSpan="2"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

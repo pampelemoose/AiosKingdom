@@ -20,7 +20,7 @@ namespace AiosKingdom.Views
 	}
     */
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class InventoryPage : ContentPage
+    public partial class InventoryPage : ContentView
     {
         public InventoryPage()
         {

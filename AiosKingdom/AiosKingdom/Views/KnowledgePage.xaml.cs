@@ -10,8 +10,8 @@ using Xamarin.Forms.Xaml;
 namespace AiosKingdom.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class KnowledgePage : ContentPage
-	{
+	public partial class KnowledgePage : ContentView
+    {
 		public KnowledgePage ()
 		{
 			InitializeComponent ();

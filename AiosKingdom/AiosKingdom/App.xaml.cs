@@ -30,7 +30,16 @@ namespace AiosKingdom
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    ScreenManager.Instance.ChangePage(new MainPage());
+                    ScreenManager.Instance.ChangePage(new Views.HomePage());
+                    Subscribe_GameServerDisconnected();
+                });
+            });
+
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.ExitedDungeon, (sender) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ScreenManager.Instance.ChangePage(new Views.HomePage());
                     Subscribe_GameServerDisconnected();
                 });
             });

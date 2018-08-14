@@ -8,12 +8,15 @@ namespace AiosKingdom.ViewModels.Dungeon
 {
     public class ExitDungeonPageViewModel : BaseViewModel
     {
-        public ExitDungeonPageViewModel(INavigation nav) 
+        public ExitDungeonPageViewModel(INavigation nav)
             : base(nav)
         {
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.ExitedDungeon, (sender) =>
             {
-                _navigation.PopModalAsync();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    _navigation.PopModalAsync();
+                });
             });
         }
 

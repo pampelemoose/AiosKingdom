@@ -10,8 +10,8 @@ using Xamarin.Forms.Xaml;
 namespace AiosKingdom.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class DungeonListPage : ContentPage
-	{
+	public partial class DungeonListPage : ContentView
+    {
         public DungeonListPage()
 		{
 			InitializeComponent();

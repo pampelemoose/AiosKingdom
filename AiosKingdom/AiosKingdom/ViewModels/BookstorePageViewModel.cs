@@ -9,8 +9,8 @@ namespace AiosKingdom.ViewModels
 {
     public class BookstorePageViewModel : BaseViewModel
     {
-        public BookstorePageViewModel(INavigation nav)
-            : base(nav)
+        public BookstorePageViewModel()
+            : base(null)
         {
             Title = "Bookstore";
         }

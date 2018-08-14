@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage    xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentView    xmlns="http://xamarin.com/schemas/2014/forms"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 xmlns:inv="clr-namespace:AiosKingdom.Controls.Inventory;"
                 xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
                 xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
                 x:Class="AiosKingdom.Views.InventoryPage"
-                Title="{Binding Title}">
-    <ContentPage.BindingContext>
+                BackgroundColor="White">
+    <ContentView.BindingContext>
         <vm:InventoryPageViewModel />
-    </ContentPage.BindingContext>
-    <ContentPage.Content>
+    </ContentView.BindingContext>
+    <ContentView.Content>
         <Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="90"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid
-                    Grid.Column="0">
+                    Grid.Column="1">
 
                     <Grid
                         IsVisible="{Binding IsArmorPanelActive}">
@@ -198,12 +198,12 @@
 
                 <StackLayout
                     VerticalOptions="Center"
-                    Grid.Column="1"
-                    Padding="5">
+                    Grid.Column="0"
+                    Padding="3">
 
                     <ContentView
-                        HeightRequest="80"
-                        Padding="5">
+                        HeightRequest="50"
+                        Padding="3">
                         <ContentView.Triggers>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsArmorPanelActive}" Value="False">
                                 <Setter Property="BackgroundColor" Value="Blue" />
@@ -219,8 +219,8 @@
                     </ContentView>
 
                     <ContentView
-                        HeightRequest="80"
-                        Padding="5">
+                        HeightRequest="50"
+                        Padding="3">
                         <ContentView.Triggers>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsWeaponPanelActive}" Value="False">
                                 <Setter Property="BackgroundColor" Value="Blue" />
@@ -236,8 +236,8 @@
                     </ContentView>
 
                     <ContentView
-                        HeightRequest="80"
-                        Padding="5">
+                        HeightRequest="50"
+                        Padding="3">
                         <ContentView.Triggers>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsBagPanelActive}" Value="False">
                                 <Setter Property="BackgroundColor" Value="Blue" />
@@ -253,8 +253,8 @@
                     </ContentView>
 
                     <ContentView
-                        HeightRequest="80"
-                        Padding="5">
+                        HeightRequest="50"
+                        Padding="3">
                         <ContentView.Triggers>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsConsumablePanelActive}" Value="False">
                                 <Setter Property="BackgroundColor" Value="Blue" />
@@ -274,5 +274,5 @@
 
             <ctrl:LoadingIndicator/>
         </Grid>
-    </ContentPage.Content>
-</ContentPage>
+    </ContentView.Content>
+</ContentView>

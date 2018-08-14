@@ -10,8 +10,8 @@ using Xamarin.Forms.Xaml;
 namespace AiosKingdom.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class SpiritPillsPage : ContentPage
-	{
+	public partial class SpiritPillsPage : ContentView
+    {
 		public SpiritPillsPage ()
 		{
 			InitializeComponent ();

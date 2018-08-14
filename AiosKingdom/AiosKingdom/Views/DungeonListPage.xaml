@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
              x:Class="AiosKingdom.Views.DungeonListPage"
-             Title="{Binding Title}">
-    <ContentPage.Content>
+             BackgroundColor="White">
+    <ContentView.Content>
         <Grid>
             <ListView
                 ItemsSource="{Binding Dungeons}"
@@ -49,5 +49,5 @@
 
             <ctrl:LoadingIndicator/>
         </Grid>
-    </ContentPage.Content>
-</ContentPage>
+    </ContentView.Content>
+</ContentView>

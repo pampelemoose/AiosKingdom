@@ -368,18 +368,11 @@
                         Grid.Column="0"
                         Text="Buy"
                         Command="{Binding BuyShopItemAction}"/>
-                    
-                    <Button
-                        Margin="2"
-                        Grid.Column="1"
-                        Text="Exit"
-                        Command="{Binding ExitDungeonAction}"/>
 
                     <Button
                         Grid.Column="1"
                         Text="Next Room"
-                        Command="{Binding NextRoomAction}"
-                        IsVisible="{Binding Room.IsExit, Converter={StaticResource inverseBoolean}}"/>
+                        Command="{Binding NextRoomAction}"/>
                 </Grid>
             </Grid>
 

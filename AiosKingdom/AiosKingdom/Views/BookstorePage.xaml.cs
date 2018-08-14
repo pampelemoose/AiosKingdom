@@ -10,13 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace AiosKingdom.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class BookstorePage : ContentPage
-	{
+	public partial class BookstorePage : ContentView
+    {
 		public BookstorePage()
 		{
 			InitializeComponent();
-
-            BindingContext = new ViewModels.BookstorePageViewModel(Navigation);
 		}
 	}
 }
