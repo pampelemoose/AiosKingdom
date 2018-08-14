@@ -50,6 +50,10 @@ namespace Website.Controllers
             {
                 monsterModel.Phases = new List<Models.PhaseModel>();
             }
+            if (monsterModel.Types == null)
+            {
+                monsterModel.Types = new List<DataModels.Monsters.MonsterType>();
+            }
 
             if (ModelState.IsValid)
             {
