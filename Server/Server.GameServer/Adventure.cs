@@ -321,7 +321,6 @@ namespace Server.GameServer
                 {
                     soul.Inventory.Add(new DataModels.InventorySlot
                     {
-                        Id = Guid.NewGuid(),
                         SoulId = soul.Id,
                         ItemId = _loots[lootId].ItemId,
                         Type = type,
