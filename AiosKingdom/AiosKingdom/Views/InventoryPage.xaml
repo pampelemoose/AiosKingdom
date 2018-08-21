@@ -5,7 +5,7 @@
                 xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
                 xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
                 x:Class="AiosKingdom.Views.InventoryPage"
-                BackgroundColor="White">
+                BackgroundColor="{StaticResource PrimaryColor_0}">
     <ContentView.BindingContext>
         <vm:InventoryPageViewModel />
     </ContentView.BindingContext>
@@ -13,13 +13,12 @@
         <Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="40"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid
                     Grid.Column="1">
-
                     <Grid
                         IsVisible="{Binding IsArmorPanelActive}">
                         <Grid.ColumnDefinitions>
@@ -41,17 +40,19 @@
                                 <DataTemplate>
                                     <ViewCell>
                                         <Grid 
-                                            Margin="0, 5, 0, 0"
-                                            VerticalOptions="CenterAndExpand">
+                                            Margin="0, 5">
                                             <ContentView
                                                 BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
                                                 Padding="5, 0, 0, 0">
-                                                <Label
-                                                    TextColor="Aqua"
-                                                    FontAttributes="Bold"
-                                                    FontSize="25"
-                                                    VerticalTextAlignment="Center"
-                                                    Text="{Binding Item.Name}"/>
+                                                <Grid
+                                                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                                                    <Label
+                                                        Margin="5, 0"
+                                                        FontAttributes="Bold"
+                                                        FontSize="15"
+                                                        VerticalTextAlignment="Center"
+                                                        Text="{Binding Item.Name}"/>
+                                                </Grid>
                                             </ContentView>
                                         </Grid>
                                     </ViewCell>
@@ -81,17 +82,19 @@
                                 <DataTemplate>
                                     <ViewCell>
                                         <Grid 
-                                            Margin="0, 5, 0, 0"
-                                            VerticalOptions="CenterAndExpand">
+                                            Margin="0, 5">
                                             <ContentView
                                                 BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
                                                 Padding="5, 0, 0, 0">
-                                                <Label
-                                                    TextColor="Aqua"
-                                                    FontAttributes="Bold"
-                                                    FontSize="25"
-                                                    VerticalTextAlignment="Center"
-                                                    Text="{Binding Item.Name}"/>
+                                                <Grid
+                                                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                                                    <Label
+                                                        Margin="5, 0"
+                                                        FontAttributes="Bold"
+                                                        FontSize="15"
+                                                        VerticalTextAlignment="Center"
+                                                        Text="{Binding Item.Name}"/>
+                                                </Grid>
                                             </ContentView>
                                         </Grid>
                                     </ViewCell>
@@ -121,17 +124,19 @@
                                 <DataTemplate>
                                     <ViewCell>
                                         <Grid 
-                                            Margin="0, 5, 0, 0"
-                                            VerticalOptions="CenterAndExpand">
+                                            Margin="0, 5">
                                             <ContentView
                                                 BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
                                                 Padding="5, 0, 0, 0">
-                                                <Label
-                                                    TextColor="Aqua"
-                                                    FontAttributes="Bold"
-                                                    FontSize="25"
-                                                    VerticalTextAlignment="Center"
-                                                    Text="{Binding Item.Name}"/>
+                                                <Grid
+                                                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                                                    <Label
+                                                        Margin="5, 0"
+                                                        FontAttributes="Bold"
+                                                        FontSize="15"
+                                                        VerticalTextAlignment="Center"
+                                                        Text="{Binding Item.Name}"/>
+                                                </Grid>
                                             </ContentView>
                                         </Grid>
                                     </ViewCell>
@@ -161,31 +166,48 @@
                                 <DataTemplate>
                                     <ViewCell>
                                         <Grid 
-                                            Margin="0, 5, 0, 0"
+                                            Margin="0, 5"
                                             ColumnSpacing="0">
                                             <ContentView
                                                 BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
                                                 Padding="5, 0, 0, 0">
-                                                <Grid>
+                                                <Grid
+                                                    BackgroundColor="{StaticResource PrimaryColor_2}">
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="10*"/>
-                                                        <ColumnDefinition Width="2*"/>
+                                                        <ColumnDefinition Width="9*"/>
+                                                        <ColumnDefinition Width="3*"/>
                                                     </Grid.ColumnDefinitions>
 
                                                     <Label
                                                         Grid.Column="0"
-                                                        TextColor="Aqua"
+                                                        Margin="5, 0"
                                                         FontAttributes="Bold"
-                                                        FontSize="25"
+                                                        FontSize="15"
                                                         VerticalTextAlignment="Center"
                                                         Text="{Binding Item.Name}"/>
-                                                    <Label
-                                                        Grid.Column="1"
-                                                        TextColor="Black"
-                                                        FontAttributes="Bold"
-                                                        FontSize="10"
-                                                        VerticalTextAlignment="End"
-                                                        Text="{Binding Slot.Quantity}"/>
+
+                                                    <Grid
+                                                        Grid.Column="1">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="5*"/>
+                                                            <RowDefinition Height="7*"/>
+                                                        </Grid.RowDefinitions>
+
+                                                        <Label
+                                                            Grid.Row="0"
+                                                            FontSize="10"
+                                                            VerticalOptions="Center"
+                                                            HorizontalOptions="Center"
+                                                            Text="Quantity :"/>
+                                                        
+                                                        <Label
+                                                            Grid.Row="1"
+                                                            FontAttributes="Bold"
+                                                            FontSize="12"
+                                                            VerticalOptions="Center"
+                                                            HorizontalOptions="Center"
+                                                            Text="{Binding Slot.Quantity}"/>
+                                                    </Grid>
                                                 </Grid>
                                             </ContentView>
                                         </Grid>
@@ -197,74 +219,73 @@
                 </Grid>
 
                 <StackLayout
-                    VerticalOptions="Center"
+                    VerticalOptions="End"
                     Grid.Column="0"
-                    Padding="3">
-
+                    Spacing="0">
                     <ContentView
-                        HeightRequest="50"
+                        HeightRequest="40"
                         Padding="3">
                         <ContentView.Triggers>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsArmorPanelActive}" Value="False">
-                                <Setter Property="BackgroundColor" Value="Blue" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
                             </DataTrigger>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsArmorPanelActive}" Value="True">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
                             </DataTrigger>
                         </ContentView.Triggers>
                         <Button
-                            BackgroundColor="Gray"
+                            Style="{StaticResource MenuButton}"
                             Text="A"
                             Command="{Binding ShowArmorPanelAction}"/>
                     </ContentView>
 
                     <ContentView
-                        HeightRequest="50"
+                        HeightRequest="40"
                         Padding="3">
                         <ContentView.Triggers>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsWeaponPanelActive}" Value="False">
-                                <Setter Property="BackgroundColor" Value="Blue" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
                             </DataTrigger>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsWeaponPanelActive}" Value="True">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
                             </DataTrigger>
                         </ContentView.Triggers>
                         <Button
-                            BackgroundColor="Gray"
+                            Style="{StaticResource MenuButton}"
                             Text="W"
                             Command="{Binding ShowWeaponPanelAction}"/>
                     </ContentView>
 
                     <ContentView
-                        HeightRequest="50"
+                        HeightRequest="40"
                         Padding="3">
                         <ContentView.Triggers>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsBagPanelActive}" Value="False">
-                                <Setter Property="BackgroundColor" Value="Blue" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
                             </DataTrigger>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsBagPanelActive}" Value="True">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
                             </DataTrigger>
                         </ContentView.Triggers>
                         <Button
-                            BackgroundColor="Gray"
+                            Style="{StaticResource MenuButton}"
                             Text="B"
                             Command="{Binding ShowBagPanelAction}"/>
                     </ContentView>
 
                     <ContentView
-                        HeightRequest="50"
+                        HeightRequest="40"
                         Padding="3">
                         <ContentView.Triggers>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsConsumablePanelActive}" Value="False">
-                                <Setter Property="BackgroundColor" Value="Blue" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
                             </DataTrigger>
                             <DataTrigger TargetType="ContentView" Binding="{Binding IsConsumablePanelActive}" Value="True">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
                             </DataTrigger>
                         </ContentView.Triggers>
                         <Button
-                            BackgroundColor="Gray"
+                            Style="{StaticResource MenuButton}"
                             Text="C"
                             Command="{Binding ShowConsumablePanelAction}"/>
                     </ContentView>

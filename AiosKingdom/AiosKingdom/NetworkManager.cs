@@ -836,6 +836,7 @@ namespace AiosKingdom
                             AskInventory();
                             UpdateDungeonRoom();
                         }
+                        MessagingCenter.Send(this, MessengerCodes.BuyMarketItem);
                         ScreenManager.Instance.AlertScreen("Shop", message.Json);
                     }
                     break;

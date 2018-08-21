@@ -6,30 +6,30 @@
              Title="{Binding Title}">
     <ContentPage.Content>
         <Grid
-            BackgroundColor="{StaticResource BackgroundColor}"
+            BackgroundColor="{StaticResource PrimaryColor_0}"
             Padding="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="10*" />
-                <RowDefinition Height="1*" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
             <Label 
                 Grid.Row="0"
                 Text="{Binding Dungeon.Name}"
-                FontSize="40"
+                FontSize="15"
                 FontAttributes="Bold"
                 HorizontalOptions="CenterAndExpand"/>
             <StackLayout
                 Grid.Row="1">
                 <Label 
                     Text="{Binding Confirmation}"
-                    FontSize="33"
+                    FontSize="20"
                     VerticalOptions="CenterAndExpand" 
                     HorizontalOptions="CenterAndExpand" />
                 <Label 
                     Text="{Binding Warning}"
                     FontAttributes="Italic"
-                    FontSize="25"
+                    FontSize="13"
                     Margin="20"
                     VerticalOptions="CenterAndExpand" 
                     HorizontalOptions="CenterAndExpand" />
@@ -45,16 +45,17 @@
                 <Button
                     Grid.Column="0"
                     Text="Close"
-                    BackgroundColor="{StaticResource DarkMainColor}"
+                    Style="{StaticResource LightMenuButton}"
                     Command="{Binding CloseAction}"/>
                 <Button
                     Grid.Column="2"
                     Text="Enter"
-                    BackgroundColor="{StaticResource LightMainColor}"
+                    Style="{StaticResource MenuButton}"
                     Command="{Binding EnterAction}"/>
             </Grid>
 
-            <ctrl:LoadingIndicator/>
+            <ctrl:LoadingIndicator
+                Grid.RowSpan="3"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

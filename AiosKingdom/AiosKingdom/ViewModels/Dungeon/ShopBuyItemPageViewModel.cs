@@ -24,7 +24,6 @@ namespace AiosKingdom.ViewModels.Dungeon
         protected override void ExecuteBuyAction()
         {
             IsBusy = true;
-            ScreenManager.Instance.AlertScreen("Shop", $"Buying {_item.Value.ItemId} * ({_quantity}) with { (IsShardSelected ? "Shards" : "Bits") }, please wait...");
             NetworkManager.Instance.BuyShopItem(_item.Key, _quantity);
         }
 

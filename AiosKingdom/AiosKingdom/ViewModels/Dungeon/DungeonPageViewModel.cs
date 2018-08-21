@@ -14,30 +14,34 @@ namespace AiosKingdom.ViewModels.Dungeon
         {
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.DungeonUpdated, (sender) =>
             {
-                ShowLootsPanel = false;
-                NotifyPropertyChanged(nameof(Room));
-                NotifyPropertyChanged(nameof(IsCleared));
-                NotifyPropertyChanged(nameof(IsRestArea));
-
-                ResetNextMove();
-
-                if (IsCleared || Room.IsExit)
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    IsEnemyTurn = false;
-                    ShowLootsPanel = true;
-                    IsBusy = true;
-                    NetworkManager.Instance.GetDungeonRoomLoots();
-                }
-                else
-                {
-                    IsBusy = false;
-                }
+                    ShowLootsPanel = false;
+                    NotifyPropertyChanged(nameof(Room));
+                    NotifyPropertyChanged(nameof(IsCleared));
+                    NotifyPropertyChanged(nameof(IsRestArea));
+
+                    ResetNextMove();
+
+                    if (IsCleared || Room.IsExit)
+                    {
+                        IsEnemyTurn = false;
+                        ShowLootsPanel = true;
+                        IsBusy = true;
+                        NetworkManager.Instance.GetDungeonRoomLoots();
+                    }
+                    else
+                    {
+                        IsBusy = false;
+                    }
+                });
             });
 
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated, (sender) =>
             {
                 NotifyPropertyChanged(nameof(Currencies));
+                IsBusy = false;
             });
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.LootItem>>(this, MessengerCodes.DungeonLootsReceived, (sender, loots) =>
@@ -221,6 +225,11 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 IsConsumableSelected = false;
                 SelectedConsumable = null;
+            }
+
+            if (_selectedShopItem != null)
+            {
+                SelectedShopItem = null;
             }
         }
 

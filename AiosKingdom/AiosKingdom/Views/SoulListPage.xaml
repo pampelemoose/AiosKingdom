@@ -5,46 +5,106 @@
              xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
              x:Class="AiosKingdom.Views.SoulListPage"
              Title="{Binding Title}">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Name="Create" Command="{Binding CreateSoulAction}"></ToolbarItem>
-    </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <Grid>
+        <Grid
+            BackgroundColor="{StaticResource PrimaryColor_0}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Margin="5"
+                    Style="{StaticResource MenuButton}"
+                    Text="B"
+                    Command="{Binding BackAction}"/>
+
+                <Label
+                    Grid.Column="1"
+                    FontSize="30"
+                    FontAttributes="Bold"
+                    Margin="5, 0"
+                    VerticalTextAlignment="Center"
+                    Text="Souls"/>
+
+                <Button
+                    Grid.Column="2"
+                    Margin="5"
+                    Style="{StaticResource MenuButton}"
+                    Text="New"
+                    Command="{Binding CreateSoulAction}"/>
+            </Grid>
+
             <ListView
+                Grid.Row="1"
                 ItemsSource="{Binding Souls}"
                 SelectedItem="{Binding SelectedSoul, Mode=TwoWay}"
-                RowHeight="80">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid
-                                Margin="5"
-                                BackgroundColor="Blue">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="10*"/>
-                                    <ColumnDefinition Width="2*"/>
-                                </Grid.ColumnDefinitions>
-                                <Label
-                                    Grid.Column="0"
-                                    FontSize="40"
-                                    FontAttributes="Bold"
-                                    Margin="5, 0"
-                                    VerticalTextAlignment="Center"
-                                    Text="{Binding Name}"/>
+                RowHeight="50"
+                ItemTemplate="{StaticResource SoulListItem}"/>
 
-                                <Label 
-                                    Grid.Column="1"
-                                    FontSize="50"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding Level}"/>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <Grid
+                Grid.RowSpan="2"
+                BackgroundColor="{StaticResource SecondaryColor_3}"
+                IsVisible="{Binding ShowCreatePanel}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <ctrl:LoadingIndicator />
+                <Grid
+                    Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="1"
+                        Margin="5"
+                        Style="{StaticResource SecondaryMenuButton}"
+                        Text="Close"
+                        Command="{Binding CloseAction}"/>
+                </Grid>
+                
+                <Grid
+                    Grid.Row="1"
+                    Padding="50">
+
+                    <Grid
+                        BackgroundColor="{StaticResource SecondaryColor_0}"
+                        Opacity="1"
+                        HeightRequest="100"
+                        VerticalOptions="Center"
+                        Padding="30">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Entry
+                            Grid.Row="0"
+                            Text="{Binding Name}"/>
+
+                        <Button
+                            Grid.Row="1"
+                            Style="{StaticResource SecondaryMenuButton}"
+                            Text="Create"
+                            Command="{Binding CreateAction}"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <ctrl:LoadingIndicator
+                Grid.RowSpan="2"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

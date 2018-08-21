@@ -11,13 +11,6 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ExitDungeonPageViewModel(INavigation nav)
             : base(nav)
         {
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.ExitedDungeon, (sender) =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    _navigation.PopModalAsync();
-                });
-            });
         }
 
         public string Confirmation => $"Are you sure you want to leave the dungeon ?";
@@ -34,8 +27,22 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand ExitAction =>
             _exitAction ?? (_exitAction = new Command(() =>
             {
+                Subscribe_ExitDungeon();
+
                 IsBusy = true;
                 NetworkManager.Instance.ExitDungeon();
             }));
+
+        private void Subscribe_ExitDungeon()
+        {
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.ExitedDungeon, (sender) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    _navigation.PopModalAsync();
+                    MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.ExitedDungeon);
+                });
+            });
+        }
     }
 }

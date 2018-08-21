@@ -4,7 +4,7 @@
              xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
              xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
              x:Class="AiosKingdom.Views.SpiritPillsPage"
-             BackgroundColor="White">
+             BackgroundColor="{StaticResource PrimaryColor_0}">
     <ContentView.BindingContext>
         <vm:SpiritPillsPageViewModel />
     </ContentView.BindingContext>
@@ -17,63 +17,77 @@
 
             <Grid
                 Grid.Column="0"
+                Margin="5"
                 BackgroundColor="{Binding StatType, Converter={StaticResource statToColor}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
+                <Grid
+                    Margin="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
 
-                <Label
-                    Grid.Row="1"
-                    BackgroundColor="Transparent"
-                    TextColor="Black"
-                    VerticalTextAlignment="Center"
-                    HorizontalTextAlignment="Center"
-                    Text="{Binding StatType}" />
+                    <Label
+                        Grid.Row="1"
+                        BackgroundColor="Transparent"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding StatType}" />
 
-                <ContentView
-                    Grid.Row="2"
-                    Padding="5"
-                    BackgroundColor="Silver">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*" />
-                            <ColumnDefinition Width="3*" />
-                            <ColumnDefinition Width="3*" />
-                            <ColumnDefinition Width="3*" />
-                        </Grid.ColumnDefinitions>
+                    <ContentView
+                        Grid.Row="2"
+                        Padding="5"
+                        BackgroundColor="{StaticResource SecondaryColor_2}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="3*" />
+                            </Grid.ColumnDefinitions>
 
-                        <Button
-                            Grid.Column="0"
-                            Text="-"
-                            Command="{Binding DecreasePillAmountAction}" />
-                        <Label
-                            Grid.Column="1"
-                            BackgroundColor="Black"
-                            TextColor="Silver"
-                            Text="{Binding PillsAmount}" />
-                        <Label
-                            Grid.Column="2"
-                            BackgroundColor="Black"
-                            TextColor="Silver"
-                            Text="{Binding Spirits}" />
-                        <Button
-                            Grid.Column="3"
-                            Text="+"
-                            Command="{Binding IncreasePillAmountAction}" />
-                    </Grid>
-                </ContentView>
+                            <Button
+                                Grid.Column="0"
+                                Text="-"
+                                Style="{StaticResource TertiaryMenuButton}"
+                                Command="{Binding DecreasePillAmountAction}" />
+                            <Label
+                                Grid.Column="1"
+                                BackgroundColor="{StaticResource SecondaryColor_3}"
+                                TextColor="{StaticResource SecondaryColor_1}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding PillsAmount}" />
+                            <Label
+                                Grid.Column="2"
+                                BackgroundColor="{StaticResource SecondaryColor_3}"
+                                TextColor="{StaticResource SecondaryColor_1}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding Spirits}" />
+                            <Button
+                                Grid.Column="3"
+                                Text="+"
+                                Style="{StaticResource TertiaryMenuButton}"
+                                Command="{Binding IncreasePillAmountAction}" />
+                        </Grid>
+                    </ContentView>
 
-                <Button
-                    Grid.Row="3"
-                    Text="Use"
-                    Command="{Binding UsePillAction}" />
+                    <Button
+                        Grid.Row="3"
+                        Text="Use"
+                        Style="{StaticResource MenuButton}"
+                        Command="{Binding UsePillAction}" />
+                </Grid>
             </Grid>
 
             <Grid
-                Grid.Column="1">
+                Grid.Column="1"
+                Margin="0, 0, 5, 0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -85,14 +99,14 @@
 
                 <Grid
                     Grid.Row="0"
-                    BackgroundColor="Black"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
                     Padding="5"
                     Margin="0, 5">
 
                     <Label
                         BackgroundColor="{StaticResource StatColor_Stamina}"
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="15"
                         VerticalTextAlignment="Center"
                         HorizontalTextAlignment="Center"
                         Text="Stamina"/>
@@ -103,14 +117,14 @@
 
                 <Grid
                     Grid.Row="1"
-                    BackgroundColor="Black"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
                     Padding="5"
                     Margin="0, 5">
 
                     <Label
                         BackgroundColor="{StaticResource StatColor_Energy}"
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="15"
                         VerticalTextAlignment="Center"
                         HorizontalTextAlignment="Center"
                         Text="Energy"/>
@@ -121,7 +135,7 @@
 
                 <Grid
                     Grid.Row="2"
-                    BackgroundColor="Black"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
                     Padding="5"
                     Margin="0, 5">
 
@@ -129,7 +143,7 @@
                         Grid.Row="0"
                         BackgroundColor="{StaticResource StatColor_Strength}"
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="15"
                         VerticalTextAlignment="Center"
                         HorizontalTextAlignment="Center"
                         Text="Strength"/>
@@ -140,7 +154,7 @@
 
                 <Grid
                     Grid.Row="3"
-                    BackgroundColor="Black"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
                     Padding="5"
                     Margin="0, 5">
 
@@ -148,7 +162,7 @@
                         Grid.Row="0"
                         BackgroundColor="{StaticResource StatColor_Agility}"
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="15"
                         VerticalTextAlignment="Center"
                         HorizontalTextAlignment="Center"
                         Text="Agility"/>
@@ -159,7 +173,7 @@
 
                 <Grid
                     Grid.Row="4"
-                    BackgroundColor="Black"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
                     Padding="5"
                     Margin="0, 5">
 
@@ -167,7 +181,7 @@
                         Grid.Row="0"
                         BackgroundColor="{StaticResource StatColor_Intelligence}"
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="15"
                         VerticalTextAlignment="Center"
                         HorizontalTextAlignment="Center"
                         Text="Intelligence"/>
@@ -178,7 +192,7 @@
 
                 <Grid
                     Grid.Row="5"
-                    BackgroundColor="Black"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
                     Padding="5"
                     Margin="0, 5">
 
@@ -186,7 +200,7 @@
                         Grid.Row="0"
                         BackgroundColor="{StaticResource StatColor_Wisdom}"
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="15"
                         VerticalTextAlignment="Center"
                         HorizontalTextAlignment="Center"
                         Text="Wisdom"/>

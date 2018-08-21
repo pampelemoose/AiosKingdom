@@ -4,9 +4,10 @@
              xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
              xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
              x:Class="AiosKingdom.Views.MarketPage"
-             BackgroundColor="White">
+             BackgroundColor="{StaticResource PrimaryColor_0}">
     <ContentView.Content>
-        <Grid>
+        <Grid
+            RowSpacing="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="*" />
@@ -14,34 +15,33 @@
 
             <Grid
                 Grid.Column="0"
+                Margin="10"
                 BackgroundColor="{Binding SelectedItem.Item.Quality, Converter={StaticResource itemQualityToColor}}"
                 IsVisible="{Binding IsItemSelected}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="150" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
-
                 <Grid
-                    Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                    Margin="3"
+                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
 
-                    <Image
-                        Grid.Column="0"
-                        Source="{Binding SelectedItem.Item, Converter={StaticResource objectToImage}}" />
                     <Grid
-                        Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
+                        Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            Grid.Column="0"
+                            Source="{Binding SelectedItem.Item, Converter={StaticResource objectToImage}}" />
 
                         <ContentView
-                            Grid.Row="0"
+                            Grid.Column="1"
                             BackgroundColor="Blue"
                             Padding="5">
                             <Label
@@ -50,119 +50,130 @@
                                 HorizontalTextAlignment="Center"
                                 Text="{Binding SelectedItem.Item.UseLevelRequired}"/>
                         </ContentView>
-                        <ContentView
-                            Grid.Row="1"
-                            BackgroundColor="Gray"
-                            Padding="5">
+
+                        <Grid
+                            Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="8*"/>
+                                <ColumnDefinition Width="4*"/>
+                            </Grid.ColumnDefinitions>
+
                             <Label
-                                BackgroundColor="Gray"
-                                VerticalTextAlignment="Center"
-                                HorizontalTextAlignment="Center"
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                FontSize="10"
+                                Text="Item Level :"/>
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                FontSize="10"
+                                FontAttributes="Bold"
                                 Text="{Binding SelectedItem.Item.ItemLevel}"/>
-                        </ContentView>
+
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                FontSize="10"
+                                Text="Armor :"/>
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                FontSize="10"
+                                FontAttributes="Bold"
+                                Text="{Binding SelectedItem.Item.ArmorValue}"/>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <ListView
+
+                    <ListView
                         Grid.Row="1"
                         BackgroundColor="Transparent"
                         ItemsSource="{Binding SelectedItem.Item.Stats}"
                         HeightRequest="{Binding SelectedItem.Item.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
                         RowHeight="20"
                         SeparatorVisibility="None"
-                        IsEnabled="false">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="10*" />
-                                        <ColumnDefinition Width="2*" />
-                                    </Grid.ColumnDefinitions>
+                        IsEnabled="false"
+                        ItemTemplate="{StaticResource StatListItem}"/>
 
-                                    <Label 
-                                            Grid.Column="0"
-                                            Text="{Binding Type}" />
-                                    <Label
-                                            Grid.Column="1"
-                                            Text="{Binding StatValue}" />
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <ListView
+                    <ListView
                         Grid.Row="1"
                         BackgroundColor="Transparent"
                         IsEnabled="false"
                         ItemsSource="{Binding SelectedItem.Item.Effects}"
                         HeightRequest="{Binding SelectedItem.Item.Effects, Converter={StaticResource listToHeight}, ConverterParameter=20}"
                         RowHeight="20"
-                        SeparatorVisibility="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="10*" />
-                                        <ColumnDefinition Width="2*" />
-                                    </Grid.ColumnDefinitions>
+                        SeparatorVisibility="None"
+                        ItemTemplate="{StaticResource EffectListItem}"/>
 
-                                    <Label 
-                                            Grid.Column="0"
-                                            Text="{Binding Type}" />
-                                    <Label
-                                            Grid.Column="1"
-                                            Text="{Binding AffectValue}" />
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <Grid
-                    Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                    <Grid
+                        Grid.Row="2"
+                        BackgroundColor="{StaticResource PrimaryColor_3}"
+                        Padding="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7*" />
+                            <ColumnDefinition Width="5*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-                    <ContentView
-                        Grid.Column="0"
-                        BackgroundColor="Gray"
-                        Padding="5">
                         <Label
-                            BackgroundColor="Gray"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontSize="10"
+                            VerticalTextAlignment="Center"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            Text="Shard Price :"/>
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            FontSize="12"
+                            FontAttributes="Bold"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="Center"
+                            TextColor="{StaticResource PrimaryColor_1}"
                             Text="{Binding SelectedItem.Slot.ShardPrice}"/>
-                    </ContentView>
-                    <ContentView
-                        Grid.Column="1"
-                        BackgroundColor="Gray"
-                        Padding="5">
+
                         <Label
-                            BackgroundColor="Gray"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            FontSize="10"
+                            VerticalTextAlignment="Center"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            Text="Bit Price :"/>
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            FontSize="12"
+                            FontAttributes="Bold"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="Center"
+                            TextColor="{StaticResource PrimaryColor_1}"
                             Text="{Binding SelectedItem.Slot.BitPrice}"/>
-                    </ContentView>
+                    </Grid>
+                    <Button
+                        Grid.Row="3"
+                        Margin="5"
+                        Style="{StaticResource MenuButton}"
+                        Text="Buy"
+                        Command="{Binding BuyItemAction}"/>
                 </Grid>
-                <Button
-                    Grid.Row="3"
-                    Margin="5"
-                    Style="{StaticResource MenuButton}"
-                    Text="Buy"
-                    Command="{Binding BuyItemAction}"/>
             </Grid>
 
             <Grid
                 Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
+                    <RowDefinition Height="40" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <Picker 
                     Grid.Row="0" 
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
                     ItemsSource="{Binding FilterList}" 
                     SelectedItem="{Binding Filter}" />
 
@@ -170,29 +181,49 @@
                     Grid.Row="1"
                     ItemsSource="{Binding Items}" 
                     SelectedItem="{Binding SelectedItem}"
-                    RowHeight="30"
+                    RowHeight="40"
                     SeparatorVisibility="None">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="30" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Label
-                                        Grid.Column="0" 
-                                        VerticalTextAlignment="Center"
-                                        FontSize="22"
-                                        Text="{Binding Item.Name}" />
-
+                                <Grid
+                                    BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}">
                                     <Grid
-                                        Grid.Column="1">
+                                        Margin="5, 0, 0, 0"
+                                        BackgroundColor="{StaticResource PrimaryColor_2}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="60" />
+                                        </Grid.ColumnDefinitions>
+
                                         <Label
+                                            Grid.Column="0" 
                                             VerticalTextAlignment="Center"
-                                            HorizontalTextAlignment="Center"
-                                            Text="{Binding Slot.Quantity}" />
+                                            FontSize="15"
+                                            FontAttributes="Bold"
+                                            Text="{Binding Item.Name}" />
+
+                                        <Grid
+                                            Grid.Column="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="5*"/>
+                                                <RowDefinition Height="7*"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Label
+                                                Grid.Row="0"
+                                                FontSize="10"
+                                                VerticalTextAlignment="Center"
+                                                HorizontalTextAlignment="Center"
+                                                Text="Quantity :" />
+                                            <Label
+                                                Grid.Row="1"
+                                                FontSize="12"
+                                                FontAttributes="Bold"
+                                                VerticalTextAlignment="Center"
+                                                HorizontalTextAlignment="Center"
+                                                Text="{Binding Slot.Quantity}" />
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                             </ViewCell>

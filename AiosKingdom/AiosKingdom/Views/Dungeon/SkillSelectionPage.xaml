@@ -5,64 +5,28 @@
              Title="{Binding Title}">
     <ContentPage.Content>
         <Grid
-            BackgroundColor="{StaticResource BackgroundColor}"
+            BackgroundColor="{StaticResource PrimaryColor_0}"
             Padding="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="10*" />
-                <RowDefinition Height="1*" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
             <Label 
                 Grid.Row="0"
                 Text="Skills"
-                FontSize="40"
+                FontSize="20"
                 FontAttributes="Bold"
                 HorizontalOptions="CenterAndExpand"/>
 
             <ListView
                 Grid.Row="1"
-                BackgroundColor="{StaticResource DarkBackgroundColor}"
+                BackgroundColor="{StaticResource PrimaryColor_3}"
                 ItemsSource="{Binding Skills}"
                 SelectedItem="{Binding SelectedSkill}"
                 RowHeight="50"
-                SeparatorVisibility="None">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid 
-                                Margin="5"
-                                ColumnSpacing="0">
-                                <Grid
-                                    BackgroundColor="{StaticResource BackgroundColor}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="4*"/>
-                                        <ColumnDefinition Width="4*"/>
-                                        <ColumnDefinition Width="4*"/>
-                                    </Grid.ColumnDefinitions>
-                                    
-                                    <Label
-                                        Grid.Column="0"
-                                        TextColor="Aqua"
-                                        FontSize="22"
-                                        VerticalTextAlignment="Center"
-                                        Text="{Binding BookName}"/>
-                                    <Label
-                                        Grid.Column="1"
-                                        TextColor="Aqua"
-                                        FontAttributes="Bold"
-                                        FontSize="18"
-                                        VerticalTextAlignment="Center"
-                                        Text="{Binding Skill.Rank, StringFormat='(Rank {0})'}"/>
-                                    <Label
-                                        Grid.Column="2"
-                                        VerticalTextAlignment="Center"
-                                        Text="{Binding Skill.ManaCost}"/>
-                                </Grid>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                SeparatorVisibility="None"
+                ItemTemplate="{StaticResource DungeonSelectSkillListItem}"/>
 
             <Grid
                 Grid.Row="2">
@@ -74,12 +38,12 @@
                 <Button
                     Grid.Column="0"
                     Text="Close"
-                    BackgroundColor="{StaticResource DarkMainColor}"
+                    Style="{StaticResource SecondaryMenuButton}"
                     Command="{Binding CloseAction}"/>
                 <Button
                     Grid.Column="2"
                     Text="Validate"
-                    BackgroundColor="{StaticResource LightMainColor}"
+                    Style="{StaticResource MenuButton}"
                     Command="{Binding ValidateAction}"/>
             </Grid>
         </Grid>

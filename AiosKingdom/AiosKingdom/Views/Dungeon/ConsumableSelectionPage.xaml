@@ -1,63 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:dvm="clr-namespace:AiosKingdom.ViewModels.Dungeon;"
              x:Class="AiosKingdom.Views.Dungeon.ConsumableSelectionPage"
              Title="{Binding Title}">
     <ContentPage.Content>
         <Grid
-            BackgroundColor="{StaticResource BackgroundColor}"
+            BackgroundColor="{StaticResource PrimaryColor_0}"
             Padding="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="10*" />
-                <RowDefinition Height="1*" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
             <Label 
                 Grid.Row="0"
                 Text="Consumables"
-                FontSize="40"
+                FontSize="20"
                 FontAttributes="Bold"
                 HorizontalOptions="CenterAndExpand"/>
 
             <ListView
                 Grid.Row="1"
-                BackgroundColor="{StaticResource DarkBackgroundColor}"
+                BackgroundColor="{StaticResource PrimaryColor_3}"
                 ItemsSource="{Binding Consumables}"
                 SelectedItem="{Binding SelectedConsumable}"
                 RowHeight="50"
-                SeparatorVisibility="None">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid 
-                                Margin="5"
-                                ColumnSpacing="0">
-                                <Grid
-                                    BackgroundColor="{StaticResource BackgroundColor}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="4*"/>
-                                        <ColumnDefinition Width="4*"/>
-                                        <ColumnDefinition Width="4*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Label
-                                        Grid.Column="0"
-                                        TextColor="Aqua"
-                                        FontSize="22"
-                                        VerticalTextAlignment="Center"
-                                        Text="{Binding Consumable.Name}"/>
-
-                                    <Label
-                                        Grid.Column="2"
-                                        VerticalTextAlignment="Center"
-                                        Text="{Binding Quantity}"/>
-                                </Grid>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                SeparatorVisibility="None"
+                ItemTemplate="{StaticResource DungeonSelectConsumableListItem}"/>
 
             <Grid
                 Grid.Row="2">
@@ -69,12 +38,12 @@
                 <Button
                     Grid.Column="0"
                     Text="Close"
-                    BackgroundColor="{StaticResource DarkMainColor}"
+                    Style="{StaticResource SecondaryMenuButton}"
                     Command="{Binding CloseAction}"/>
                 <Button
                     Grid.Column="2"
                     Text="Validate"
-                    BackgroundColor="{StaticResource LightMainColor}"
+                    Style="{StaticResource MenuButton}"
                     Command="{Binding ValidateAction}"/>
             </Grid>
         </Grid>

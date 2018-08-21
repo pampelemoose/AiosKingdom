@@ -6,7 +6,8 @@
              Title="{Binding Title}"
              x:Name="Dungeon">
     <ContentPage.Content>
-        <Grid>
+        <Grid
+            RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="8*"/>
                 <RowDefinition Height="4*"/>
@@ -19,95 +20,24 @@
                 <ListView
                     ItemsSource="{Binding Room.Enemies, Mode=TwoWay}"
                     SelectedItem="{Binding SelectedEnemy, Mode=TwoWay}"
-                    RowHeight="80">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid
-                                Margin="5"
-                                    BackgroundColor="{Binding Value.EnemyType, Converter={StaticResource enemyTypeToColor}}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="6*"/>
-                                        <ColumnDefinition Width="3*"/>
-                                        <ColumnDefinition Width="3*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Label
-                                        Grid.Column="0"
-                                        FontSize="40"
-                                        FontAttributes="Bold"
-                                        Margin="5, 0"
-                                        VerticalTextAlignment="Center"
-                                        Text="Health :"/>
-
-                                    <Label 
-                                        Grid.Column="1"
-                                        FontSize="50"
-                                        VerticalTextAlignment="Center"
-                                        HorizontalTextAlignment="Center"
-                                        Text="{Binding Value.CurrentHealth}"/>
-                                    <Label 
-                                        Grid.Column="2"
-                                        FontSize="30"
-                                        FontAttributes="Bold"
-                                        VerticalTextAlignment="Center"
-                                        HorizontalTextAlignment="End"
-                                        Text="{Binding Value.MaxHealth}"/>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    RowHeight="50"
+                    ItemTemplate="{StaticResource DungeonEnemyListItem}"/>
             </Grid>
 
             <Grid
                 Grid.Row="0"
-                BackgroundColor="Red"
+                BackgroundColor="{StaticResource SecondaryColor_3}"
                 IsVisible="{Binding Room.IsShopArea}">
                 <ListView
                     ItemsSource="{Binding Room.Shops, Mode=TwoWay}"
                     SelectedItem="{Binding SelectedShopItem}"
-                    RowHeight="80">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid
-                                Margin="5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="6*"/>
-                                        <ColumnDefinition Width="3*"/>
-                                        <ColumnDefinition Width="3*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Label
-                                        Grid.Column="0"
-                                        FontSize="40"
-                                        FontAttributes="Bold"
-                                        Margin="5, 0"
-                                        VerticalTextAlignment="Center"
-                                        Text="Item :"/>
-
-                                    <Label 
-                                        Grid.Column="1"
-                                        FontSize="50"
-                                        VerticalTextAlignment="Center"
-                                        HorizontalTextAlignment="Center"
-                                        Text="{Binding Value.Quantity}"/>
-                                    <Label 
-                                        Grid.Column="2"
-                                        FontSize="30"
-                                        FontAttributes="Bold"
-                                        VerticalTextAlignment="Center"
-                                        HorizontalTextAlignment="End"
-                                        Text="{Binding Value.ShardPrice}"/>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    RowHeight="50"
+                    ItemTemplate="{StaticResource DungeonShopListItem}"/>
             </Grid>
 
             <Grid
                 Grid.Row="1"
-                BackgroundColor="Green"
+                BackgroundColor="{StaticResource PrimaryColor_3}"
                 IsVisible="{Binding Room.IsFightArea}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -117,8 +47,8 @@
                 <Grid
                     Grid.Row="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <Grid
@@ -136,27 +66,33 @@
                         <Label
                             Grid.Row="0"
                             Grid.Column="0"
+                            TextColor="{StaticResource PrimaryColor_1}"
                             Text="Health :" />
                         <Label
                             Grid.Row="0"
                             Grid.Column="1"
+                            TextColor="{StaticResource PrimaryColor_1}"
                             Text="{Binding Room.CurrentHealth}" />
                         <Label
                             Grid.Row="0"
                             Grid.Column="2"
+                            TextColor="{StaticResource PrimaryColor_1}"
                             Text="{Binding Datas.MaxHealth}" />
 
                         <Label
                             Grid.Row="1"
                             Grid.Column="0"
+                            TextColor="{StaticResource PrimaryColor_1}"
                             Text="Mana :" />
                         <Label
                             Grid.Row="1"
                             Grid.Column="1"
+                            TextColor="{StaticResource PrimaryColor_1}"
                             Text="{Binding Room.CurrentMana}" />
                         <Label
                             Grid.Row="1"
                             Grid.Column="2"
+                            TextColor="{StaticResource PrimaryColor_1}"
                             Text="{Binding Datas.MaxMana}" />
                     </Grid>
 
@@ -174,19 +110,33 @@
                         <Label
                             Grid.Row="0"
                             Grid.Column="0"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            FontSize="10"
+                            VerticalOptions="End"
+                            HorizontalOptions="End"
                             Text="Stacked Experience :" />
                         <Label
                             Grid.Row="0"
                             Grid.Column="1"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            TextColor="{StaticResource PrimaryColor_1}"
                             Text="{Binding Room.StackedExperience}" />
 
                         <Label
                             Grid.Row="1"
                             Grid.Column="0"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            FontSize="10"
+                            VerticalOptions="End"
+                            HorizontalOptions="End"
                             Text="Stacked Shards :" />
                         <Label
                             Grid.Row="1"
                             Grid.Column="1"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            TextColor="{StaticResource PrimaryColor_1}"
                             Text="{Binding Room.StackedShards}" />
                     </Grid>
                 </Grid>
@@ -205,95 +155,138 @@
                     <Button
                         Grid.Column="0"
                         Text="Skills"
+                        Style="{StaticResource MenuButton}"
                         Command="{Binding SkillsAction}"/>
                     <Button
                         Grid.Column="1"
                         Text="Nothing"
+                        Style="{StaticResource MenuButton}"
                         Command="{Binding EndTurnAction}"/>
                     <Button
                         Grid.Column="2"
                         Text="Consumables"
+                        Style="{StaticResource MenuButton}"
                         Command="{Binding ConsumablesAction}"/>
 
                     <Grid
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
-                        BackgroundColor="{StaticResource BackgroundColor}"
+                        BackgroundColor="{StaticResource PrimaryColor_0}"
                         IsVisible="{Binding IsSkillSelected}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="4*"/>
-                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
 
                         <Button
                             Grid.Column="0"
                             Text="X"
+                            Style="{StaticResource MenuButton}"
                             Command="{Binding BindingContext.RemoveNextMoveAction, Source={x:Reference Dungeon}}"
                             CommandParameter="{Binding .}"/>
 
                         <Label
                             Grid.Column="1"
-                            TextColor="Aqua"
-                            FontSize="22"
+                            FontSize="20"
+                            FontAttributes="Bold"
                             VerticalTextAlignment="Center"
                             Text="{Binding SelectedSkill.BookName}"/>
                         <Label
                             Grid.Column="2"
-                            TextColor="Aqua"
-                            FontAttributes="Bold"
-                            FontSize="18"
+                            FontSize="15"
                             VerticalTextAlignment="Center"
                             Text="{Binding SelectedSkill.Skill.Rank, StringFormat='(Rank {0})'}"/>
-                        <Label
-                            Grid.Column="3"
-                            VerticalTextAlignment="Center"
-                            Text="{Binding SelectedSkill.Skill.ManaCost}"/>
+
+                        <Grid
+                            Grid.Column="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid
+                                Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="7*"/>
+                                    <ColumnDefinition Width="5*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label
+                                    Grid.Column="0"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="10"
+                                    Text="Mana Cost :"/>
+
+                                <Label
+                                    Grid.Column="1"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="12"
+                                    FontAttributes="Bold"
+                                    Text="{Binding SelectedSkill.Skill.ManaCost}"/>
+                            </Grid>
+
+                            <Grid
+                                Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="7*"/>
+                                    <ColumnDefinition Width="5*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label
+                                    Grid.Column="0"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="10"
+                                    Text="Cooldown :"/>
+
+                                <Label
+                                    Grid.Column="1"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="12"
+                                    FontAttributes="Bold"
+                                    Text="{Binding SelectedSkill.Skill.Cooldown}"/>
+                            </Grid>
+                        </Grid>
                     </Grid>
 
                     <Grid
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
-                        BackgroundColor="{StaticResource BackgroundColor}"
+                        BackgroundColor="{StaticResource PrimaryColor_0}"
                         IsVisible="{Binding IsConsumableSelected}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="4*"/>
-                            <ColumnDefinition Width="4*"/>
-                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="7*"/>
                         </Grid.ColumnDefinitions>
 
                         <Button
                             Grid.Column="0"
                             Text="X"
+                            Style="{StaticResource MenuButton}"
                             Command="{Binding BindingContext.RemoveNextMoveAction, Source={x:Reference Dungeon}}"
                             CommandParameter="{Binding .}"/>
 
                         <Label
                             Grid.Column="1"
-                            TextColor="Aqua"
-                            FontSize="22"
+                            FontSize="20"
+                            FontAttributes="Bold"
                             VerticalTextAlignment="Center"
                             Text="{Binding SelectedConsumable.Consumable.Name}"/>
-                        
-                        <Label
-                            Grid.Column="3"
-                            VerticalTextAlignment="Center"
-                            Text="{Binding SelectedConsumable.Quantity}"/>
                     </Grid>
 
                     <Button
                         Margin="2"
                         Grid.Column="3"
                         Text="Exit"
+                        Style="{StaticResource MenuButton}"
                         Command="{Binding ExitDungeonAction}"
                         IsVisible="{Binding CanExecuteAction, Converter={StaticResource inverseBoolean}}"/>
 
                     <Button
                         Grid.Column="3"
-                        BackgroundColor="{StaticResource BackgroundColor}"
                         Text="End Turn"
+                        Style="{StaticResource MenuButton}"
                         Command="{Binding ExecuteAction}"
                         IsVisible="{Binding CanExecuteAction}"/>
                 </Grid>
@@ -302,7 +295,8 @@
                     Grid.Row="1"
                     IsVisible="{Binding IsEnemyTurn}">
                     <Button
-                        BackgroundColor="{StaticResource BackgroundColor}"
+                        Margin="3"
+                        Style="{StaticResource MenuButton}"
                         Text="Enemies Turn"
                         Command="{Binding EnemyTurnAction}"/>
                 </Grid>
@@ -310,7 +304,7 @@
 
             <Grid
                 Grid.Row="1"
-                BackgroundColor="Yellow"
+                BackgroundColor="{StaticResource TertiaryColor_3}"
                 IsVisible="{Binding Room.IsShopArea}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -338,19 +332,25 @@
                         <Label
                             Grid.Row="0"
                             Grid.Column="0"
+                            FontSize="10"
+                            HorizontalOptions="End"
                             Text="Shards :" />
                         <Label
                             Grid.Row="0"
                             Grid.Column="1"
+                            FontAttributes="Bold"
                             Text="{Binding Currencies.Shards}" />
 
                         <Label
                             Grid.Row="1"
                             Grid.Column="0"
+                            FontSize="10"
+                            HorizontalOptions="End"
                             Text="Bits :" />
                         <Label
                             Grid.Row="1"
                             Grid.Column="1"
+                            FontAttributes="Bold"
                             Text="{Binding Currencies.Bits}" />
                     </Grid>
                 </Grid>
@@ -367,11 +367,13 @@
                     <Button
                         Grid.Column="0"
                         Text="Buy"
+                        Style="{StaticResource MenuButton}"
                         Command="{Binding BuyShopItemAction}"/>
 
                     <Button
                         Grid.Column="1"
                         Text="Next Room"
+                        Style="{StaticResource MenuButton}"
                         Command="{Binding NextRoomAction}"/>
                 </Grid>
             </Grid>
@@ -379,85 +381,44 @@
             <Grid
                 Grid.Row="0"
                 Grid.RowSpan="2"
-                BackgroundColor="{StaticResource BackgroundColor}"
+                BackgroundColor="{StaticResource PrimaryColor_0}"
                 IsVisible="{Binding IsRestArea}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="4*"/>
-                    <RowDefinition Height="4*"/>
-                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
 
-                <Grid
-                    Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Label
-                        Grid.Column="0"
-                        Text="Resting area ! Here you will rest and get 10% of Health and Mana back." />
-                    <Button
-                        Grid.Column="1"
-                        Text="Rest"
-                        Command="{Binding PlayerRestAction}"/>
-                </Grid>
+                <Label
+                    Grid.Row="1"
+                    Margin="10"
+                    Text="Resting area ! Here you will rest and get 10% of Health and Mana back." />
+                
+                <Button
+                    Margin="3"
+                    Grid.Row="2"
+                    Text="Rest"
+                    Style="{StaticResource MenuButton}"
+                    Command="{Binding PlayerRestAction}"/>
             </Grid>
 
             <Grid
                 Grid.Row="0"
                 Grid.RowSpan="2"
-                BackgroundColor="{StaticResource BackgroundColor}"
+                BackgroundColor="{StaticResource PrimaryColor_0}"
                 IsVisible="{Binding ShowLootsPanel}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="9*"/>
+                    <RowDefinition Height="10*"/>
                     <RowDefinition Height="2*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
-                
+
                 <ListView
                     Grid.Row="0"
-                    BackgroundColor="{StaticResource DarkBackgroundColor}"
                     ItemsSource="{Binding Loots, Mode=TwoWay}"
                     SelectedItem="{Binding SelectedLoot}"
-                    RowHeight="80">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid
-                                Margin="5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="6*"/>
-                                        <ColumnDefinition Width="3*"/>
-                                        <ColumnDefinition Width="3*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Label
-                                        Grid.Column="0"
-                                        FontSize="40"
-                                        FontAttributes="Bold"
-                                        Margin="5, 0"
-                                        VerticalTextAlignment="Center"
-                                        Text="{Binding ., Converter={StaticResource lootItemToName}}"/>
-
-                                    <Label
-                                        Grid.Column="2"
-                                        FontSize="30"
-                                        Margin="5, 0"
-                                        VerticalTextAlignment="Center"
-                                        Text="{Binding Type}"/>
-
-                                    <Label 
-                                        Grid.Column="2"
-                                        FontSize="30"
-                                        FontAttributes="Bold"
-                                        VerticalTextAlignment="Center"
-                                        HorizontalTextAlignment="End"
-                                        Text="{Binding Quantity}"/>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    RowHeight="50"
+                    ItemTemplate="{StaticResource DungeonLootListItem}"/>
 
                 <Grid
                     Grid.Row="1">
@@ -467,25 +428,56 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="7*"/>
+                    </Grid.RowDefinitions>
 
                     <Label
                         Grid.Column="0"
-                        Text="{Binding Room.StackedExperience, StringFormat='{0:N} Experience stacked'}" />
+                        Grid.Row="0"
+                        FontSize="10"
+                        Text="Experience stacked :" />
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        Text="{Binding Room.StackedExperience}" />
                     <Label
                         Grid.Column="1"
-                        Text="{Binding Room.StackedShards, StringFormat='{0:N} Shards stacked'}" />
+                        Grid.Row="0"
+                        FontSize="10"
+                        Text="Shards stacked :" />
+                    <Label
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Text="{Binding Room.StackedShards}" />
                     <Label
                         Grid.Column="2"
+                        Grid.Row="0"
+                        FontSize="10"
                         IsVisible="{Binding Room.IsExit}"
-                        Text="{Binding Room.ExperienceReward, StringFormat='{0:N} Experience Rewarded'}" />
+                        Text="Experience Rewarded :" />
+                    <Label
+                        Grid.Column="2"
+                        Grid.Row="1"
+                        IsVisible="{Binding Room.IsExit}"
+                        Text="{Binding Room.ExperienceReward}" />
                     <Label
                         Grid.Column="3"
+                        Grid.Row="0"
+                        FontSize="10"
                         IsVisible="{Binding Room.IsExit}"
-                        Text="{Binding Room.ShardReward, StringFormat='{0:N} Shards Rewarded'}" />
+                        Text="Shards Rewarded :" />
+                    <Label
+                        Grid.Column="3"
+                        Grid.Row="1"
+                        IsVisible="{Binding Room.IsExit}"
+                        Text="{Binding Room.ShardReward}" />
                 </Grid>
                 
                 <Grid
-                    Grid.Row="2">
+                    Grid.Row="2"
+                    Margin="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -494,18 +486,21 @@
                     <Button
                         Grid.Column="0"
                         Text="Next Room"
+                        Style="{StaticResource MenuButton}"
                         Command="{Binding NextRoomAction}"
                         IsVisible="{Binding IsCleared}"/>
                     
                     <Button
                         Grid.Column="1"
                         Text="Leave with Loots." 
+                        Style="{StaticResource MenuButton}"
                         Command="{Binding LeaveFinishedAction}"
                         IsVisible="{Binding Room.IsExit}"/>
 
                     <Button
                         Grid.Column="1"
                         Text="Exit dungeon." 
+                        Style="{StaticResource SecondaryMenuButton}"
                         Command="{Binding ExitDungeonAction}"
                         IsVisible="{Binding Room.IsExit, Converter={StaticResource inverseBoolean}}"/>
                 </Grid>

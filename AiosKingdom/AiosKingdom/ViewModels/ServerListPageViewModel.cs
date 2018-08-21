@@ -25,6 +25,12 @@ namespace AiosKingdom.ViewModels
                 ServerInfos = servers;
                 IsBusy = false;
             });
+
+            if (ServerInfos.Count == 0)
+            {
+                NetworkManager.Instance.AskServerInfos();
+                IsBusy = true;
+            }
         }
 
         private bool _subscribed;
@@ -34,10 +40,13 @@ namespace AiosKingdom.ViewModels
             {
                 MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, souls) =>
                 {
-                    ScreenManager.Instance.PushPage(new Views.SoulListPage(new SoulListPageViewModel(souls)));
-                    IsBusy = false;
-                    _subscribed = false;
-                    MessagingCenter.Unsubscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived);
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        ScreenManager.Instance.ChangePage(new NavigationPage(new Views.SoulListPage(new SoulListPageViewModel(souls))));
+                        IsBusy = false;
+                        _subscribed = false;
+                        MessagingCenter.Unsubscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived);
+                    });
                 });
                 _subscribed = true;
             }

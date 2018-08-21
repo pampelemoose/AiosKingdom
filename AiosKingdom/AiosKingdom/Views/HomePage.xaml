@@ -6,7 +6,8 @@
              x:Class="AiosKingdom.Views.HomePage">
     <ContentPage.Content>
         <Grid
-            RowSpacing="0">
+            RowSpacing="0"
+            BackgroundColor="{StaticResource PrimaryColor_0}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
@@ -14,7 +15,6 @@
 
             <Grid
                 Grid.Row="0"
-                BackgroundColor="Black"
                 ColumnSpacing="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -26,16 +26,17 @@
                     ColumnSpacing="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="40" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="8*" />
+                        <ColumnDefinition Width="4*" />
                     </Grid.ColumnDefinitions>
 
                     <ContentView
                         Grid.Column="0"
                         Padding="3"
-                        BackgroundColor="Gray">
+                        BackgroundColor="{StaticResource PrimaryColor_2}">
                         <Label
-                            BackgroundColor="Silver"
-                            TextColor="Black"
+                            BackgroundColor="{StaticResource PrimaryColor_3}"
+                            TextColor="{StaticResource PrimaryColor_1}"
                             FontSize="28"
                             FontAttributes="Bold"
                             VerticalTextAlignment="Center"
@@ -54,7 +55,7 @@
                         <ContentView
                             Grid.Row="0"
                             Padding="5"
-                            BackgroundColor="Gray">
+                            BackgroundColor="{StaticResource PrimaryColor_2}">
                             <Label
                                 VerticalTextAlignment="Center"
                                 HorizontalTextAlignment="Center"
@@ -63,23 +64,82 @@
                         </ContentView>
 
                         <Grid
-                            Grid.Row="1">
+                            Grid.Row="1"
+                            BackgroundColor="{StaticResource PrimaryColor_1}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="6*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
 
                             <Label
                                 Grid.Column="0"
                                 HorizontalTextAlignment="Center"
                                 VerticalTextAlignment="Center"
-                                Text="{Binding Datas.CurrentExperience}" />
+                                FontSize="10"
+                                Text="Experience : " />
+                            
                             <Label
                                 Grid.Column="1"
-                                HorizontalTextAlignment="Center"
+                                HorizontalTextAlignment="End"
                                 VerticalTextAlignment="Center"
-                                Text="{Binding Datas.RequiredExperience}" />
+                                FontSize="10"
+                                FontAttributes="Bold"
+                                Text="{Binding Datas.CurrentExperience}" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="Start"
+                                VerticalTextAlignment="Center"
+                                FontSize="10"
+                                FontAttributes="Bold"
+                                Text="{Binding Datas.RequiredExperience, StringFormat='/ {0}'}" />
                         </Grid>
+                    </Grid>
+
+                    <Grid
+                        Grid.Column="2"
+                        BackgroundColor="{StaticResource TertiaryColor_0}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="10"
+                            Text="Health :" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="10"
+                            FontAttributes="Bold"
+                            Text="{Binding Datas.MaxHealth}" />
+                        
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="10"
+                            Text="Mana :" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="10"
+                            FontAttributes="Bold"
+                            Text="{Binding Datas.MaxMana}" />
+
                     </Grid>
                 </Grid>
                 
@@ -90,8 +150,8 @@
 
                 <Button
                     Grid.Column="1"
-                    BackgroundColor="Yellow"
-                    TextColor="White"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
+                    TextColor="{StaticResource PrimaryColor_1}"
                     Text="S"
                     Clicked="ShowSetting_Clicked"/>
             </Grid>
@@ -114,17 +174,29 @@
 
                     <Button
                         Grid.Column="0"
-                        BackgroundColor="Green"
-                        TextColor="White"
+                        BackgroundColor="{StaticResource SecondaryColor_0}"
+                        TextColor="{StaticResource SecondaryColor_4}"
+                        BorderWidth="5"
+                        FontSize="60"
                         Text="PvE"
                         Command="{Binding ShowContentAction}"
                         CommandParameter="Dungeons"/>
                     <Button
                         Grid.Column="1"
-                        BackgroundColor="Blue"
-                        TextColor="White"
+                        BackgroundColor="{StaticResource SecondaryColor_0}"
+                        TextColor="{StaticResource SecondaryColor_4}"
+                        BorderWidth="5"
+                        FontSize="60"
                         Text="PvP"
                         IsEnabled="False"/>
+                    <Label
+                        Grid.Column="1"
+                        Margin="20"
+                        BackgroundColor="Transparent"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="End"
+                        FontSize="10"
+                        Text="(Coming soon)" />
 
                     <ContentView
                         Grid.ColumnSpan="2"
@@ -134,49 +206,36 @@
 
                 <StackLayout
                     Grid.Column="1"
-                    BackgroundColor="Red"
                     VerticalOptions="End"
-                    Padding="0, 1"
+                    Padding="0"
                     Spacing="0">
                     <Button
-                        HeightRequest="40"
-                        BackgroundColor="Green"
-                        TextColor="White"
+                        Style="{StaticResource HomeMenuButton}"
                         Text="H"
                         Command="{Binding ShowContentAction}"
                         CommandParameter="Home"/>
                     <Button
-                        HeightRequest="40"
-                        BackgroundColor="Green"
-                        TextColor="White"
+                        Style="{StaticResource HomeMenuButton}"
                         Text="Inv"
                         Command="{Binding ShowContentAction}"
                         CommandParameter="Inventory"/>
                     <Button
-                        HeightRequest="40"
-                        BackgroundColor="Green"
-                        TextColor="White"
+                        Style="{StaticResource HomeMenuButton}"
                         Text="Spi"
                         Command="{Binding ShowContentAction}"
                         CommandParameter="Spirits"/>
                     <Button
-                        HeightRequest="40"
-                        BackgroundColor="Green"
-                        TextColor="White"
+                        Style="{StaticResource HomeMenuButton}"
                         Text="Kno"
                         Command="{Binding ShowContentAction}"
                         CommandParameter="Knowledge"/>
                     <Button
-                        HeightRequest="40"
-                        BackgroundColor="Green"
-                        TextColor="White"
+                        Style="{StaticResource HomeMenuButton}"
                         Text="Mark"
                         Command="{Binding ShowContentAction}"
                         CommandParameter="Market"/>
                     <Button
-                        HeightRequest="40"
-                        BackgroundColor="Green"
-                        TextColor="White"
+                        Style="{StaticResource HomeMenuButton}"
                         Text="Book"
                         Command="{Binding ShowContentAction}"
                         CommandParameter="Bookstore"/>
@@ -185,7 +244,6 @@
 
             <views:DashboardView
                 Grid.Row="1"
-                BackgroundColor="White"
                 IsVisible="{Binding ShowSoulDetails}"/>
 
             <ctrl:LoadingIndicator

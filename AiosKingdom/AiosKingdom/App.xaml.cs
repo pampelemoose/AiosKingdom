@@ -7,7 +7,6 @@ namespace AiosKingdom
 {
     public partial class App : Application
     {
-
         public App()
         {
             InitializeComponent();
@@ -64,7 +63,7 @@ namespace AiosKingdom
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     NetworkManager.Instance.DisconnectGame();
-                    ScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(new List<Network.GameServerInfos>())));
+                    ScreenManager.Instance.ChangePage(new Views.ServerListPage(new List<Network.GameServerInfos>()));
                     MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.GameServerDisconnected);
                 });
             });

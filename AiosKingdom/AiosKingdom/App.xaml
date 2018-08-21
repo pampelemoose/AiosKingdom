@@ -22,6 +22,8 @@
             <converters:LootItemToNameConverter x:Key="lootItemToName" />
             <converters:EnemyTypeToColorConverter x:Key="enemyTypeToColor" />
             <converters:RoomTypeToColorConverter x:Key="roomTypeToColor" />
+            <converters:EnemyToNameConverter x:Key="enemyToName" />
+            <converters:ShopItemToNameConverter x:Key="shopItemToName" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

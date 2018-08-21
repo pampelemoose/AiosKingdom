@@ -3,203 +3,312 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
              xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+             xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
              x:Class="AiosKingdom.Views.BookstorePage"
-             BackgroundColor="White">
+             BackgroundColor="{StaticResource PrimaryColor_0}">
     <ContentView.BindingContext>
         <vm:BookstorePageViewModel />
     </ContentView.BindingContext>
     <ContentView.Content>
-        <Grid>
+        <Grid
+            ColumnSpacing="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="230" />
+                <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
 
             <Grid
                 Grid.Column="0"
-                BackgroundColor="{Binding SelectedBook.Quality, Converter={StaticResource bookQualityToColor}}"
-                IsVisible="{Binding BookIsSelected}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
-                </Grid.RowDefinitions>
-                
-                <ListView
-                    Grid.Row="0"
-                    BackgroundColor="Transparent"
-                    ItemsSource="{Binding SelectedBook.Pages}"
-                    SelectedItem="{Binding SelectedPage}"
-                    RowHeight="50"
-                    SeparatorVisibility="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid 
-                                Margin="0, 5, 0, 0"
-                                ColumnSpacing="0">
-                                    <ContentView
-                                        BackgroundColor="{StaticResource BackgroundColor}"
-                                        Padding="5, 0, 0, 0">
-                                        <Label
-                                            TextColor="Aqua"
-                                            FontAttributes="Bold"
-                                            FontSize="18"
-                                            VerticalTextAlignment="Center"
-                                            Text="{Binding Rank, StringFormat='Rank {0}'}"/>
-                                    </ContentView>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                
-                <Label
-                    Grid.Row="1"
-                    FontAttributes="Bold"
-                    FontSize="20"
-                    VerticalTextAlignment="Center"
-                    Text="{Binding SelectedBook, Converter={StaticResource bookToPrice}}"/>
+                Margin="5"
+                IsVisible="{Binding PageIsSelected}"
+                BackgroundColor="{Binding SelectedBook.Quality, Converter={StaticResource bookQualityToColor}}">
+                <Grid
+                    Margin="3"
+                    BackgroundColor="{StaticResource PrimaryColor_1}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
 
-                <Button
-                    Grid.Row="2"
-                    Margin="5"
-                    Style="{StaticResource MenuButton}"
-                    Text="Buy"
-                    Command="{Binding BuyBookAction}"/>
+                    <cards:CarouselView 
+                        Grid.Row="0"
+                        ItemsSource="{Binding SelectedBook.Pages}"
+                        VerticalOptions="FillAndExpand">
+                        <cards:CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <ContentView>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="40"/>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Grid
+                                            Grid.Row="0"
+                                            ColumnSpacing="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="40" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Image
+                                                Grid.Column="0"
+                                                Source="{Binding ., Converter={StaticResource objectToImage}}" />
+                                            <Grid
+                                                BackgroundColor="{StaticResource PrimaryColor_3}"
+                                                Grid.Column="1">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="4*"/>
+                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="4*"/>
+                                                    <ColumnDefinition Width="2*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    FontSize="10"
+                                                    TextColor="{StaticResource PrimaryColor_1}"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="Ember Cost :"/>
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.Column="1"
+                                                    FontSize="12"
+                                                    FontAttributes="Bold"
+                                                    TextColor="{StaticResource PrimaryColor_1}"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding EmberCost}"/>
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.Column="2"
+                                                    FontSize="10"
+                                                    TextColor="{StaticResource PrimaryColor_1}"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="Rank :"/>
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.Column="3"
+                                                    FontSize="12"
+                                                    FontAttributes="Bold"
+                                                    TextColor="{StaticResource PrimaryColor_1}"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding Rank}"/>
+                                                <Label
+                                                    Grid.Row="1"
+                                                    Grid.Column="0"
+                                                    FontSize="10"
+                                                    TextColor="{StaticResource PrimaryColor_1}"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="Mana Cost :"/>
+                                                <Label
+                                                    Grid.Row="1"
+                                                    Grid.Column="1"
+                                                    FontSize="12"
+                                                    FontAttributes="Bold"
+                                                    TextColor="{StaticResource PrimaryColor_1}"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding ManaCost}"/>
+                                                <Label
+                                                    Grid.Row="1"
+                                                    Grid.Column="2"
+                                                    FontSize="10"
+                                                    TextColor="{StaticResource PrimaryColor_1}"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="Cooldown :"/>
+                                                <Label
+                                                    Grid.Row="1"
+                                                    Grid.Column="3"
+                                                    FontSize="12"
+                                                    FontAttributes="Bold"
+                                                    TextColor="{StaticResource PrimaryColor_1}"
+                                                    VerticalTextAlignment="Center"
+                                                    Text="{Binding Cooldown}"/>
+                                            </Grid>
+                                        </Grid>
+
+                                        <Label
+                                            Grid.Row="1"
+                                            FontAttributes="Italic"
+                                            VerticalTextAlignment="Center"
+                                            Text="{Binding Description}"/>
+
+                                        <ListView
+                                            Grid.Row="2"
+                                            BackgroundColor="Transparent"
+                                            ItemsSource="{Binding Inscriptions}"
+                                            HasUnevenRows="True"
+                                            SeparatorVisibility="None"
+                                            ItemTemplate="{StaticResource InscriptionListItem}"/>
+                                    </Grid>
+                                </ContentView>
+                            </DataTemplate>
+                        </cards:CarouselView.ItemTemplate>
+                    </cards:CarouselView>
+                    <Grid
+                        Grid.Row="1"
+                        IsVisible="{Binding BookIsSelected}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="8*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid
+                            Grid.Column="0"
+                            BackgroundColor="{StaticResource PrimaryColor_3}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height="7*"/>
+                            </Grid.RowDefinitions>
+                            <Label
+                                Grid.Row="0"
+                                FontSize="10"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                TextColor="{StaticResource PrimaryColor_1}"
+                                Text="Price"/>
+
+                            <Label
+                                Grid.Row="1"
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                TextColor="{StaticResource PrimaryColor_1}"
+                                Text="{Binding SelectedBook, Converter={StaticResource bookToPrice}}"/>
+                        </Grid>
+
+                        <Button
+                            Grid.Column="1"
+                            Style="{StaticResource MenuButton}"
+                            Text="Buy"
+                            Command="{Binding BuyBookAction}"/>
+                    </Grid>
+                </Grid>
             </Grid>
 
+            <!--
             <Grid
                 Grid.Column="1"
                 IsVisible="{Binding PageIsSelected}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition Height="50"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Label
-                    Grid.Row="0"
-                    FontAttributes="Italic"
-                    FontSize="20"
-                    VerticalTextAlignment="Center"
-                    Text="{Binding SelectedPage.Description}"/>
-
                 <Grid
-                    Grid.Row="1">
+                    Grid.Row="0"
+                    ColumnSpacing="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Label
+                    <Image
                         Grid.Column="0"
-                        FontSize="20"
-                        VerticalTextAlignment="Center"
-                        Text="{Binding SelectedPage.EmberCost}"/>
-                    <Label
-                        Grid.Column="1"
-                        FontSize="20"
-                        VerticalTextAlignment="Center"
-                        Text="{Binding SelectedPage.Rank}"/>
-                    <Label
-                        Grid.Column="2"
-                        FontSize="20"
-                        VerticalTextAlignment="Center"
-                        Text="{Binding SelectedPage.ManaCost}"/>
-                    <Label
-                        Grid.Column="3"
-                        FontSize="20"
-                        VerticalTextAlignment="Center"
-                        Text="{Binding SelectedPage.Cooldown}"/>
+                        Source="{Binding SelectedPage, Converter={StaticResource objectToImage}}" />
+                    <Grid
+                        BackgroundColor="{StaticResource PrimaryColor_3}"
+                        Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontSize="10"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            VerticalTextAlignment="Center"
+                            Text="Ember Cost :"/>
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding SelectedPage.EmberCost}"/>
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            FontSize="10"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            VerticalTextAlignment="Center"
+                            Text="Rank :"/>
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding SelectedPage.Rank}"/>
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            FontSize="10"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            VerticalTextAlignment="Center"
+                            Text="Mana Cost :"/>
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding SelectedPage.ManaCost}"/>
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            FontSize="10"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            VerticalTextAlignment="Center"
+                            Text="Cooldown :"/>
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding SelectedPage.Cooldown}"/>
+                    </Grid>
                 </Grid>
+
+                <Label
+                    Grid.Row="1"
+                    FontAttributes="Italic"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding SelectedPage.Description}"/>
 
                 <ListView
                     Grid.Row="2"
                     BackgroundColor="Transparent"
                     ItemsSource="{Binding SelectedPage.Inscriptions}"
                     HasUnevenRows="True"
-                    SeparatorVisibility="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <ContentView
-                                    InputTransparent="True"
-                                    BackgroundColor="{StaticResource BackgroundColor}"
-                                    Padding="5"
-                                    Margin="0, 5, 0, 0">
-                                    <Grid
-                                        BackgroundColor="White"
-                                        ColumnSpacing="0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto"/>
-                                            <RowDefinition Height="50"/>
-                                        </Grid.RowDefinitions>
-                                        <Label
-                                            Grid.Row="0"
-                                            TextColor="Green"
-                                            FontAttributes="Bold"
-                                            FontSize="18"
-                                            VerticalTextAlignment="Center"
-                                            Text="{Binding Description}"/>
-                                            <Grid
-                                                Grid.Row="1">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="5*"/>
-                                                    <ColumnDefinition Width="1*"/>
-                                                    <ColumnDefinition Width="4*"/>
-                                                    <ColumnDefinition Width="1*"/>
-                                                    <ColumnDefinition Width="1*"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Label
-                                                    Grid.Column="0"
-                                                    TextColor="Aqua"
-                                                    FontAttributes="Bold"
-                                                    FontSize="18"
-                                                    VerticalTextAlignment="Center"
-                                                    Text="{Binding Type}"/>
-                                                <Label
-                                                    Grid.Column="1"
-                                                    TextColor="Aqua"
-                                                    FontAttributes="Bold"
-                                                    FontSize="18"
-                                                    VerticalTextAlignment="Center"
-                                                    Text="{Binding BaseValue}"/>
-                                                <Label
-                                                    Grid.Column="2"
-                                                    TextColor="Aqua"
-                                                    FontAttributes="Bold"
-                                                    FontSize="18"
-                                                    VerticalTextAlignment="Center"
-                                                    Text="{Binding StatType}"/>
-                                                <Label
-                                                    Grid.Column="3"
-                                                    TextColor="Aqua"
-                                                    FontAttributes="Bold"
-                                                    FontSize="18"
-                                                    VerticalTextAlignment="Center"
-                                                    Text="{Binding Ratio}"/>
-                                                <Label
-                                                    Grid.Column="4"
-                                                    TextColor="Aqua"
-                                                    FontAttributes="Bold"
-                                                    FontSize="18"
-                                                    VerticalTextAlignment="Center"
-                                                    Text="{Binding Duration}"/>
-                                        </Grid>
-                                    </Grid>
-                                </ContentView>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    SeparatorVisibility="None"
+                    ItemTemplate="{StaticResource InscriptionListItem}"/>
             </Grid>
+            -->
 
             <ListView
-                Grid.Column="2"
+                Grid.Column="1"
+                Margin="0, 0, 5, 0"
                 BackgroundColor="Transparent"
                 ItemsSource="{Binding Books}"
                 SelectedItem="{Binding SelectedBook}"
@@ -209,17 +318,17 @@
                     <DataTemplate>
                         <ViewCell>
                             <Grid 
-                                Margin="0, 5, 0, 0"
+                                Margin="0, 5"
                                 ColumnSpacing="0">
                                 <ContentView
                                         BackgroundColor="{Binding Quality, Converter={StaticResource bookQualityToColor}}"
                                         Padding="5, 0, 0, 0">
                                     <Label
-                                            TextColor="Aqua"
-                                            FontAttributes="Bold"
-                                            FontSize="25"
-                                            VerticalTextAlignment="Center"
-                                            Text="{Binding Name}"/>
+                                        BackgroundColor="{StaticResource PrimaryColor_2}"
+                                        FontAttributes="Bold"
+                                        FontSize="15"
+                                        VerticalTextAlignment="Center"
+                                        Text="{Binding Name}"/>
                                 </ContentView>
                             </Grid>
                         </ViewCell>
@@ -228,7 +337,7 @@
             </ListView>
 
             <ctrl:LoadingIndicator
-                Grid.ColumnSpan="3"/>
+                Grid.ColumnSpan="2"/>
         </Grid>
     </ContentView.Content>
 </ContentView>

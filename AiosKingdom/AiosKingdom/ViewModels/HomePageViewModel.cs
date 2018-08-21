@@ -30,6 +30,8 @@ namespace AiosKingdom.ViewModels
                 NotifyPropertyChanged(nameof(Pants));
                 NotifyPropertyChanged(nameof(Feet));
 
+                NotifyPropertyChanged(nameof(Bag));
+
                 NotifyPropertyChanged(nameof(WeaponRight));
                 NotifyPropertyChanged(nameof(WeaponLeft));
             });
@@ -181,7 +183,8 @@ namespace AiosKingdom.ViewModels
 
         public DataModels.Items.Weapon WeaponRight => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.ItemId.Equals(Equipment.WeaponRight));
         public DataModels.Items.Weapon WeaponLeft => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.ItemId.Equals(Equipment.WeaponLeft));
-        //public DataModels.Items.Bag Bag => DatasManager.Instance.Bags?.FirstOrDefault(a => a.ItemId.Equals(Soul.Equipment.Bag));
+
+        public DataModels.Items.Bag Bag => DatasManager.Instance.Bags?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Bag));
 
         private bool _showArmorDetails;
         public bool ShowArmorDetails
@@ -205,6 +208,17 @@ namespace AiosKingdom.ViewModels
             }
         }
 
+        private bool _showBagDetails;
+        public bool ShowBagDetails
+        {
+            get { return _showBagDetails; }
+            set
+            {
+                _showBagDetails = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private DataModels.Items.AItem _selectedItem;
         public DataModels.Items.AItem SelectedItem => _selectedItem;
 
@@ -216,7 +230,7 @@ namespace AiosKingdom.ViewModels
 
                 if (armor == null) return;
 
-                if (_selectedItem == null || (_selectedItem != null && _selectedItem == armor) || ShowWeaponDetails)
+                if (_selectedItem == null || (_selectedItem != null && _selectedItem == armor) || ShowWeaponDetails || ShowBagDetails)
                 {
                     ShowArmorDetails = !ShowArmorDetails;
                 }
@@ -224,6 +238,7 @@ namespace AiosKingdom.ViewModels
                 if (ShowArmorDetails)
                 {
                     ShowWeaponDetails = false;
+                    ShowBagDetails = false;
                     _selectedItem = armor;
                     NotifyPropertyChanged(nameof(SelectedItem));
                 }
@@ -241,7 +256,7 @@ namespace AiosKingdom.ViewModels
 
                 if (weapon == null) return;
 
-                if (_selectedItem == null || (_selectedItem != null && _selectedItem == weapon) || ShowArmorDetails)
+                if (_selectedItem == null || (_selectedItem != null && _selectedItem == weapon) || ShowArmorDetails || ShowBagDetails)
                 {
                     ShowWeaponDetails = !ShowWeaponDetails;
                 }
@@ -249,7 +264,34 @@ namespace AiosKingdom.ViewModels
                 if (ShowWeaponDetails)
                 {
                     ShowArmorDetails = false;
+                    ShowBagDetails = false;
                     _selectedItem = weapon;
+                    NotifyPropertyChanged(nameof(SelectedItem));
+                }
+                else
+                {
+                    _selectedItem = null;
+                }
+            }));
+
+        private ICommand _showBagAction;
+        public ICommand ShowBagAction =>
+            _showBagAction ?? (_showBagAction = new Command((item) =>
+            {
+                var bag = (DataModels.Items.Bag)item;
+
+                if (bag == null) return;
+
+                if (_selectedItem == null || (_selectedItem != null && _selectedItem == bag) || ShowArmorDetails || ShowWeaponDetails)
+                {
+                    ShowBagDetails = !ShowBagDetails;
+                }
+
+                if (ShowBagDetails)
+                {
+                    ShowArmorDetails = false;
+                    ShowWeaponDetails = false;
+                    _selectedItem = bag;
                     NotifyPropertyChanged(nameof(SelectedItem));
                 }
                 else

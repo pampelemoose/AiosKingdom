@@ -66,13 +66,18 @@ namespace AiosKingdom.ViewModels
                     NetworkManager.Instance.AskAuthentication(identifier);
                 }
                 IsNewDevice = false;
+                MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.RetrievedAccount);
             });
             #endregion
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived, (sender, servers) =>
             {
-                IsBusy = false;
-                ScreenManager.Instance.ChangePage(new NavigationPage(new Views.ServerListPage(servers)));
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    IsBusy = false;
+                    ScreenManager.Instance.ChangePage(new Views.ServerListPage(servers));
+                    MessagingCenter.Unsubscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived);
+                });
             });
 
             _isNewDevice = true;
@@ -95,8 +100,6 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed);
             MessagingCenter.Unsubscribe<NetworkManager, Guid>(this, MessengerCodes.CreateNewAccount);
             MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.CreateNewAccountFailed);
-            MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.RetrievedAccount);
-            MessagingCenter.Unsubscribe<NetworkManager, List<Network.GameServerInfos>>(this, MessengerCodes.ServerListReceived);
         }
 
         private bool _isNewDevice;

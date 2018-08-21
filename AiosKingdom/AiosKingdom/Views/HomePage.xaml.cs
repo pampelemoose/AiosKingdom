@@ -27,12 +27,12 @@ namespace AiosKingdom.Views
 
         private static string Close = "Close";
         private static string Souls = "Souls";
-        private static string Disconnect = "Disconnect";
+        private static string Exit = "Exit";
         private void ShowSetting_Clicked(object sender, EventArgs e)
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                var result = await App.Current.MainPage.DisplayActionSheet("Settings", Close, null, new string[] { Souls, Disconnect });
+                var result = await App.Current.MainPage.DisplayActionSheet("Settings", Close, null, new string[] { Souls, Exit });
 
                 if (result == Souls)
                 {
@@ -40,11 +40,13 @@ namespace AiosKingdom.Views
 
                     _model.IsBusy = true;
                 }
-                if (result == Disconnect)
+                if (result == Exit)
                 {
                     NetworkManager.Instance.AnnounceDisconnection();
 
                     _model.IsBusy = true;
+
+                    System.Diagnostics.Process.GetCurrentProcess().Kill();
                 }
             });
         }

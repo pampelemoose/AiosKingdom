@@ -3,49 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
              x:Class="AiosKingdom.Views.DungeonListPage"
-             BackgroundColor="White">
+             BackgroundColor="{StaticResource PrimaryColor_0}">
     <ContentView.Content>
         <Grid>
             <ListView
                 ItemsSource="{Binding Dungeons}"
                 SelectedItem="{Binding SelectedDungeon, Mode=TwoWay}"
-                RowHeight="80">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid
-                                Margin="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="8*"/>
-                                    <ColumnDefinition Width="2*"/>
-                                    <ColumnDefinition Width="2*"/>
-                                </Grid.ColumnDefinitions>
-                                <Label
-                                    Grid.Column="0"
-                                    FontSize="40"
-                                    FontAttributes="Bold"
-                                    Margin="5, 0"
-                                    VerticalTextAlignment="Center"
-                                    Text="{Binding Name}"/>
-
-                                <Label 
-                                    Grid.Column="1"
-                                    FontSize="50"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding RequiredLevel}"/>
-                                <Label 
-                                    Grid.Column="2"
-                                    FontSize="30"
-                                    FontAttributes="Bold"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="End"
-                                    Text="{Binding MaxLevelAuthorized}"/>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                RowHeight="50"
+                ItemTemplate="{StaticResource DungeonListItem}"/>
 
             <ctrl:LoadingIndicator/>
         </Grid>

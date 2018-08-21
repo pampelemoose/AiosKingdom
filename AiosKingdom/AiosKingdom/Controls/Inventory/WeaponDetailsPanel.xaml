@@ -5,114 +5,119 @@
              IsVisible="{Binding WeaponSlotIsSelected}"
              Padding="5">
     <Grid
-        BackgroundColor="Black"
+        BackgroundColor="{Binding SelectedWeapon.Item.Quality, Converter={StaticResource itemQualityToColor}}"
         Padding="5">
-
         <Grid
-            BackgroundColor="{Binding SelectedWeapon.Item.Quality, Converter={StaticResource itemQualityToColor}}">
+            BackgroundColor="{StaticResource PrimaryColor_1}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="20" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
 
             <Grid
                 Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="40" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Image
                     Grid.Column="0"
                     Source="{Binding SelectedWeapon.Item, Converter={StaticResource objectToImage}}" />
+                <ContentView
+                    Grid.Column="1"
+                    BackgroundColor="Blue"
+                    Padding="5">
+                    <Label
+                        BackgroundColor="Gray"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding SelectedWeapon.Item.UseLevelRequired}"/>
+                </ContentView>
+
                 <Grid
-                    Grid.Column="1">
+                    Grid.Column="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="4*"/>
                     </Grid.ColumnDefinitions>
 
-                    <ContentView
+                    <Label
                         Grid.Row="0"
                         Grid.Column="0"
-                        BackgroundColor="Blue"
-                        Padding="5">
-                        <Label
-                            BackgroundColor="Gray"
-                            VerticalTextAlignment="Center"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding SelectedWeapon.Item.UseLevelRequired}"/>
-                    </ContentView>
-                    <ContentView
+                        FontSize="10"
+                        Text="Item Level :"/>
+                    <Label
                         Grid.Row="0"
                         Grid.Column="1"
-                        BackgroundColor="Gray"
-                        Padding="5">
-                        <Label
-                            BackgroundColor="Gray"
-                            VerticalTextAlignment="Center"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding SelectedWeapon.Item.ItemLevel}"/>
-                    </ContentView>
-                    <ContentView
-                        Grid.Row="1"
+                        FontSize="10"
+                        FontAttributes="Bold"
+                        Text="{Binding SelectedWeapon.Item.ItemLevel}"/>
+
+                </Grid>
+            </Grid>
+            <Grid
+                Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
                         Grid.Column="0"
-                        BackgroundColor="Gray"
-                        Padding="5">
-                        <Label
-                            BackgroundColor="Gray"
-                            VerticalTextAlignment="Center"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding SelectedWeapon.Item.MinDamages}"/>
-                    </ContentView>
-                    <ContentView
-                        Grid.Row="1"
+                        FontSize="10"
+                        Text="Min Dmg :"/>
+                    <Label
                         Grid.Column="1"
-                        BackgroundColor="Gray"
-                        Padding="5">
-                        <Label
-                            BackgroundColor="Gray"
-                            VerticalTextAlignment="Center"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding SelectedWeapon.Item.MaxDamages}"/>
-                    </ContentView>
+                        FontSize="10"
+                        FontAttributes="Bold"
+                        Text="{Binding SelectedWeapon.Item.MinDamages}"/>
+                </Grid>
+
+                <Grid
+                    Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        FontSize="10"
+                        Text="Max Dmg :"/>
+                    <Label
+                        Grid.Column="1"
+                        FontSize="10"
+                        FontAttributes="Bold"
+                        Text="{Binding SelectedWeapon.Item.MaxDamages}"/>
                 </Grid>
             </Grid>
             <ListView
-                Grid.Row="1"
+                Grid.Row="2"
                 BackgroundColor="Transparent"
                 ItemsSource="{Binding SelectedWeapon.Item.Stats}"
                 HeightRequest="{Binding SelectedWeapon.Item.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
                 RowHeight="20"
                 SeparatorVisibility="None"
-                IsEnabled="false">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="10*" />
-                                    <ColumnDefinition Width="2*" />
-                                </Grid.ColumnDefinitions>
-
-                                <Label 
-                                    Grid.Column="0"
-                                    Text="{Binding Type}" />
-                                <Label
-                                    Grid.Column="1"
-                                    Text="{Binding StatValue}" />
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                IsEnabled="false"
+                ItemTemplate="{StaticResource StatListItem}"/>
+            
             <Button
-                Grid.Row="2"
+                Grid.Row="3"
                 Margin="5"
                 Style="{StaticResource MenuButton}"
                 Text="Equip"

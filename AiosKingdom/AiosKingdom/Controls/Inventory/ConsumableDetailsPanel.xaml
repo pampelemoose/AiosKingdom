@@ -5,52 +5,59 @@
              IsVisible="{Binding ConsumableSlotIsSelected}"
              Padding="5">
     <Grid
-        BackgroundColor="Black"
+        BackgroundColor="{Binding SelectedConsumable.Item.Quality, Converter={StaticResource itemQualityToColor}}"
         Padding="5">
         <Grid
-            BackgroundColor="{Binding SelectedConsumable.Item.Quality, Converter={StaticResource itemQualityToColor}}">
+            BackgroundColor="{StaticResource PrimaryColor_1}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100" />
+                <RowDefinition Height="40" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <Grid
                 Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="40" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Image
                     Grid.Column="0"
                     Source="{Binding SelectedConsumable.Item, Converter={StaticResource objectToImage}}" />
-                <Grid
-                    Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-
-                    <ContentView
-                        Grid.Row="0"
-                        BackgroundColor="Blue"
-                        Padding="5">
-                        <Label
-                            BackgroundColor="Gray"
-                            VerticalTextAlignment="Center"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding SelectedConsumable.Item.UseLevelRequired}"/>
-                    </ContentView>
-                    <ContentView
-                        Grid.Row="1"
+                <ContentView
+                    Grid.Column="1"
+                    BackgroundColor="Blue"
+                    Padding="5">
+                    <Label
                         BackgroundColor="Gray"
-                        Padding="5">
-                        <Label
-                            BackgroundColor="Gray"
-                            VerticalTextAlignment="Center"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding SelectedConsumable.Item.ItemLevel}"/>
-                    </ContentView>
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding SelectedConsumable.Item.UseLevelRequired}"/>
+                </ContentView>
+
+                <Grid
+                    Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontSize="10"
+                        Text="Item Level :"/>
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontSize="10"
+                        FontAttributes="Bold"
+                        Text="{Binding SelectedConsumable.Item.ItemLevel}"/>
                 </Grid>
             </Grid>
 
@@ -61,27 +68,8 @@
                 ItemsSource="{Binding SelectedConsumable.Item.Effects}"
                 HeightRequest="{Binding SelectedConsumable.Item.Effects, Converter={StaticResource listToHeight}, ConverterParameter=20}"
                 RowHeight="20"
-                SeparatorVisibility="None">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="10*" />
-                                    <ColumnDefinition Width="2*" />
-                                </Grid.ColumnDefinitions>
-
-                                <Label 
-                                    Grid.Column="0"
-                                    Text="{Binding Type}" />
-                                <Label
-                                    Grid.Column="1"
-                                    Text="{Binding AffectValue}" />
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                SeparatorVisibility="None"
+                ItemTemplate="{StaticResource EffectListItem}"/>
         </Grid>
     </Grid>
 </ContentView>
