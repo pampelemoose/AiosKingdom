@@ -49,6 +49,11 @@ namespace Website.Models
         [Range(1, 400)]
         public int SlotCount { get; set; }
 
+        [Required(ErrorMessage = "SellingPrice required")]
+        [Display(Name = "SellingPrice")]
+        [Range(1, 10000000)]
+        public int SellingPrice { get; set; }
+
         [Display(Name = "Stats")]
         public List<DataModels.Items.ItemStat> Stats { get; set; }
     }

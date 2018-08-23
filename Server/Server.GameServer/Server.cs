@@ -153,6 +153,7 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Player.CurrentSoulDatas, 0);
             _commandArgCount.Add(Network.CommandCodes.Player.BuyMarketItem, 3);
             _commandArgCount.Add(Network.CommandCodes.Player.EquipItem, 1);
+            _commandArgCount.Add(Network.CommandCodes.Player.SellItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.UseSpiritPills, 2);
             _commandArgCount.Add(Network.CommandCodes.Player.LearnSkill, 2);
 
@@ -164,6 +165,7 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Player.CurrentSoulDatas, (args) => { return new Commands.Player.CurrentSoulDatasCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.BuyMarketItem, (args) => { return new Commands.Player.BuyMarketItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.EquipItem, (args) => { return new Commands.Player.EquipItemCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Player.SellItem, (args) => { return new Commands.Player.SellItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.UseSpiritPills, (args) => { return new Commands.Player.UseSpiritPillsCommand(args, _config); });
             _delegates.Add(Network.CommandCodes.Player.LearnSkill, (args) => { return new Commands.Player.LearnSkillCommand(args); });
 
@@ -510,6 +512,9 @@ namespace Server.GameServer
                     retVal.Args = new string[3] { args[0], args[1], args[2] };
                     break;
                 case Network.CommandCodes.Player.EquipItem:
+                    retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Player.SellItem:
                     retVal.Args = new string[1] { args[0] };
                     break;
                 case Network.CommandCodes.Player.UseSpiritPills:

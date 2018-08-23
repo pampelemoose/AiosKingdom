@@ -119,6 +119,15 @@
                     </div>
                     @Html.ValidationMessageFor(model => model.Space, "", new { @class = "text-danger" })
                 </div>
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.SellingPrice, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.SellingPrice, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.SellingPrice, "", new { @class = "text-danger" })
+                </div>
             </div>
         </div>
     </section>

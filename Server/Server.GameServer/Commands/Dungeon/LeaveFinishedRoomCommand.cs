@@ -83,6 +83,7 @@ namespace Server.GameServer.Commands.Dungeon
                     }
                 }
 
+                int leveledUp = 0;
                 while (soul.CurrentExperience >= soulDatas.RequiredExperience)
                 {
                     ++soul.Level;
@@ -98,17 +99,23 @@ namespace Server.GameServer.Commands.Dungeon
                     SoulManager.Instance.UpdateCurrentDatas(_args.ClientId, _config);
                     soulDatas = SoulManager.Instance.GetDatas(_args.ClientId);
                     Console.WriteLine($"{soul.Name} Level up({soul.Level}).");
+                    leveledUp++;
                 }
 
                 SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
                 SoulManager.Instance.UpdateCurrentDatas(_args.ClientId, _config);
                 AdventureManager.Instance.ExitRoom(soul.Id);
 
+                string json = $"Exited the dungeon. you earned {adventureState.StackedExperience + adventureState.ExperienceReward} experience and {adventureState.StackedShards + adventureState.ShardReward} shards.";
+                if (leveledUp > 0)
+                {
+                    json += $" Leveled {leveledUp} levels. New Spirit points Available !";
+                }
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Dungeon.LeaveFinishedRoom,
                     Success = true,
-                    Json = $"Exited the dungeon. you earned {adventureState.StackedExperience + adventureState.ExperienceReward} experience and {adventureState.StackedShards + adventureState.ShardReward} shards."
+                    Json = json
                 };
                 ret.Succeeded = true;
 

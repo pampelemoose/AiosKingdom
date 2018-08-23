@@ -42,6 +42,7 @@ namespace AiosKingdom.Views
                 }
                 if (result == Exit)
                 {
+                    NetworkManager.Instance.DisconnectSoul();
                     NetworkManager.Instance.AnnounceDisconnection();
 
                     _model.IsBusy = true;

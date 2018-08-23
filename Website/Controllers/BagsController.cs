@@ -57,6 +57,7 @@ namespace Website.Controllers
                     Quality = bag.Quality,
                     UseLevelRequired = bag.UseLevelRequired,
                     SlotCount = bag.SlotCount,
+                    SellingPrice = bag.SellingPrice,
                     Stats = bag.Stats
                 }))
                 {
@@ -86,6 +87,7 @@ namespace Website.Controllers
                     ItemLevel = bag.ItemLevel,
                     UseLevelRequired = bag.UseLevelRequired,
                     SlotCount = bag.SlotCount,
+                    SellingPrice = bag.SellingPrice,
                     Stats = bag.Stats
                 };
 
@@ -126,6 +128,7 @@ namespace Website.Controllers
                     Quality = bag.Quality,
                     UseLevelRequired = bag.UseLevelRequired,
                     SlotCount = bag.SlotCount,
+                    SellingPrice = bag.SellingPrice,
                     Stats = bag.Stats
                 }))
                 {

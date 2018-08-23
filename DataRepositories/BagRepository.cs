@@ -75,6 +75,7 @@ namespace DataRepositories
                 online.Quality = bag.Quality;
                 online.UseLevelRequired = bag.UseLevelRequired;
                 online.SlotCount = bag.SlotCount;
+                online.SellingPrice = bag.SellingPrice;
 
                 context.ItemStats.RemoveRange(online.Stats);
 

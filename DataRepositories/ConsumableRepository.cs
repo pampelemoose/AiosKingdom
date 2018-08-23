@@ -75,6 +75,7 @@ namespace DataRepositories
                 online.Quality = consumable.Quality;
                 online.UseLevelRequired = consumable.UseLevelRequired;
                 online.Space = consumable.Space;
+                online.SellingPrice = consumable.SellingPrice;
 
                 context.ConsumableEffects.RemoveRange(online.Effects);
 

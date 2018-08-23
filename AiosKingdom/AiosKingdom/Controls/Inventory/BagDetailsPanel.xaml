@@ -82,13 +82,27 @@
                 SeparatorVisibility="None"
                 IsEnabled="false"
                 ItemTemplate="{StaticResource StatListItem}"/>
-            
-            <Button
+
+            <Grid
                 Grid.Row="2"
-                Margin="5"
-                Style="{StaticResource MenuButton}"
-                Text="Equip"
-                Command="{Binding BagSlotEquipAction}"/>
+                Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Style="{StaticResource SecondaryMenuButton}"
+                    Text="{Binding SelectedBag.Item.SellingPrice, StringFormat='Sell({0})'}"
+                    Command="{Binding SellItemAction}"/>
+
+                <Button
+                    Grid.Column="1"
+                    Style="{StaticResource MenuButton}"
+                    Text="Equip"
+                    Command="{Binding BagSlotEquipAction}"/>
+            </Grid>
         </Grid>
     </Grid>
 </ContentView>

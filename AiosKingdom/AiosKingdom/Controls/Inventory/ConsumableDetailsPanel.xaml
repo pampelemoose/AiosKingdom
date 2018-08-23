@@ -12,6 +12,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
 
             <Grid
@@ -70,6 +71,21 @@
                 RowHeight="20"
                 SeparatorVisibility="None"
                 ItemTemplate="{StaticResource EffectListItem}"/>
+
+            <Grid
+                Grid.Row="2"
+                Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Style="{StaticResource SecondaryMenuButton}"
+                    Text="{Binding SelectedConsumable.Item.SellingPrice, StringFormat='Sell({0})'}"
+                    Command="{Binding SellItemAction}"/>
+            </Grid>
         </Grid>
     </Grid>
 </ContentView>

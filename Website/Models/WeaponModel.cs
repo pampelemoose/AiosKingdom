@@ -49,6 +49,11 @@ namespace Website.Models
         [Range(1, 400)]
         public int Space { get; set; }
 
+        [Required(ErrorMessage = "SellingPrice required")]
+        [Display(Name = "SellingPrice")]
+        [Range(1, 10000000)]
+        public int SellingPrice { get; set; }
+
         [Required(ErrorMessage = "HandlingType required")]
         [Display(Name = "HandlingType")]
         public DataModels.Items.HandlingType HandlingType { get; set; }

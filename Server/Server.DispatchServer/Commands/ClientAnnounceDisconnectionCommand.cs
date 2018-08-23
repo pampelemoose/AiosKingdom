@@ -21,7 +21,8 @@ namespace Server.DispatchServer.Commands
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Client_AnnounceDisconnection,
-                Json = JsonConvert.SerializeObject("Disconnected !")
+                Json = JsonConvert.SerializeObject("Disconnected !"),
+                Success = true
             };
             ret.Succeeded = true;
 

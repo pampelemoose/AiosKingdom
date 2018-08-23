@@ -59,6 +59,7 @@ namespace Website.Controllers
                     Quality = consumableModel.Quality,
                     UseLevelRequired = consumableModel.UseLevelRequired,
                     Space = consumableModel.Space,
+                    SellingPrice = consumableModel.SellingPrice,
                     Effects = consumableModel.Effects
                 }))
                 {
@@ -102,6 +103,7 @@ namespace Website.Controllers
                     UseLevelRequired = consumable.UseLevelRequired,
                     ItemLevel = consumable.ItemLevel,
                     Space = consumable.Space,
+                    SellingPrice = consumable.SellingPrice,
                     Effects = consumable.Effects
                 };
 
@@ -140,6 +142,7 @@ namespace Website.Controllers
                     Quality = consumableModel.Quality,
                     UseLevelRequired = consumableModel.UseLevelRequired,
                     Space = consumableModel.Space,
+                    SellingPrice = consumableModel.SellingPrice,
                     Effects = consumableModel.Effects
                 }))
                 {

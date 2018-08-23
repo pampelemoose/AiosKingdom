@@ -84,6 +84,11 @@ namespace DataModels.Items
         [Range(1, 400)]
         public int Space { get; set; }
 
+        [Required(ErrorMessage = "SellingPrice required")]
+        [Display(Name = "SellingPrice")]
+        [Range(1, 10000000)]
+        public int SellingPrice { get; set; }
+
         public AItem(ItemType type)
         {
             _type = type;

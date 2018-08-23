@@ -49,6 +49,11 @@ namespace Website.Models
         [Range(1, 400)]
         public int Space { get; set; }
 
+        [Required(ErrorMessage = "SellingPrice required")]
+        [Display(Name = "SellingPrice")]
+        [Range(1, 10000000)]
+        public int SellingPrice { get; set; }
+
         [Required(ErrorMessage = "Part required")]
         [Display(Name = "Part")]
         public DataModels.Items.ArmorPart Part { get; set; }

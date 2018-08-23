@@ -224,6 +224,22 @@ namespace AiosKingdom.ViewModels
                 IsBusy = true;
             }, () => { return _weaponSlotIsSelected && _selectedWeapon?.Item.UseLevelRequired <= DatasManager.Instance.Datas.Level; }));
 
+        private Command _sellItemAction;
+        public ICommand SellItemAction =>
+            _sellItemAction ?? (_sellItemAction = new Command(() =>
+            {
+                if (_isArmorPanelActive && _armorSlotIsSelected)
+                    NetworkManager.Instance.SellItem(_selectedArmor.Slot.Id);
+                if (_isConsumablePanelActive && _consumableSlotIsSelected)
+                    NetworkManager.Instance.SellItem(_selectedConsumable.Slot.Id);
+                if (_isBagPanelActive && _bagSlotIsSelected)
+                    NetworkManager.Instance.SellItem(_selectedBag.Slot.Id);
+                if (_isWeaponPanelActive && _weaponSlotIsSelected)
+                    NetworkManager.Instance.SellItem(_selectedWeapon.Slot.Id);
+
+                IsBusy = true;
+            }));
+
         private void SetInventories()
         {
             _armors = new List<Models.InventoryItemModel<DataModels.Items.Armor>>();

@@ -597,6 +597,16 @@ namespace AiosKingdom
                         ScreenManager.Instance.AlertScreen("Equip Item", message.Json);
                     }
                     break;
+                case Network.CommandCodes.Player.SellItem:
+                    {
+                        if (message.Success)
+                        {
+                            AskInventory();
+                            AskCurrencies();
+                        }
+                        ScreenManager.Instance.AlertScreen("Sell Item", message.Json);
+                    }
+                    break;
                 case Network.CommandCodes.Player.UseSpiritPills:
                     {
                         if (message.Success)
@@ -963,6 +973,11 @@ namespace AiosKingdom
         public void EquipItem(Guid slotId)
         {
             SendRequest(Network.CommandCodes.Player.EquipItem, new string[1] { slotId.ToString() });
+        }
+
+        public void SellItem(Guid slotId)
+        {
+            SendRequest(Network.CommandCodes.Player.SellItem, new string[1] { slotId.ToString() });
         }
 
         public void UseSpiritPills(DataModels.Soul.Stats statType, int quantity)

@@ -186,6 +186,7 @@ namespace Server.DispatchServer
                     if (ClientsManager.Instance.RemoveClient(disc))
                     {
                         Log.Instance.Write(Log.Level.Warning, $"Client [{socket.RemoteEndPoint}] closed");
+                        Console.WriteLine($"Client [{socket.RemoteEndPoint}] closed");
                         socket.Shutdown(SocketShutdown.Both);
                         socket.Close();
                     }

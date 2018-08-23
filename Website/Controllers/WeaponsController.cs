@@ -60,6 +60,7 @@ namespace Website.Controllers
                     WeaponType = weaponModel.Type,
                     UseLevelRequired = weaponModel.UseLevelRequired,
                     Space = weaponModel.Space,
+                    SellingPrice = weaponModel.SellingPrice,
                     MinDamages = weaponModel.MinDamages,
                     MaxDamages = weaponModel.MaxDamages,
                     Stats = weaponModel.Stats
@@ -93,6 +94,7 @@ namespace Website.Controllers
                     Type = weapon.WeaponType,
                     UseLevelRequired = weapon.UseLevelRequired,
                     Space = weapon.Space,
+                    SellingPrice = weapon.SellingPrice,
                     MinDamages = weapon.MinDamages,
                     MaxDamages = weapon.MaxDamages,
                     Stats = weapon.Stats
@@ -136,6 +138,7 @@ namespace Website.Controllers
                     WeaponType = weaponModel.Type,
                     UseLevelRequired = weaponModel.UseLevelRequired,
                     Space = weaponModel.Space,
+                    SellingPrice = weaponModel.SellingPrice,
                     MinDamages = weaponModel.MinDamages,
                     MaxDamages = weaponModel.MaxDamages,
                     Stats = weaponModel.Stats

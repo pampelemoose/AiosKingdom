@@ -59,6 +59,7 @@ namespace Website.Controllers
                     Part = armorModel.Part,
                     UseLevelRequired = armorModel.UseLevelRequired,
                     Space = armorModel.Space,
+                    SellingPrice = armorModel.SellingPrice,
                     ArmorValue = armorModel.ArmorValue,
                     Stats = armorModel.Stats
                 }))
@@ -90,6 +91,7 @@ namespace Website.Controllers
                     ItemLevel = armor.ItemLevel,
                     UseLevelRequired = armor.UseLevelRequired,
                     Space = armor.Space,
+                    SellingPrice = armor.SellingPrice,
                     ArmorValue = armor.ArmorValue,
                     Stats = armor.Stats
                 };
@@ -131,6 +133,7 @@ namespace Website.Controllers
                     Quality = armorModel.Quality,
                     UseLevelRequired = armorModel.UseLevelRequired,
                     Space = armorModel.Space,
+                    SellingPrice = armorModel.SellingPrice,
                     ArmorValue = armorModel.ArmorValue,
                     Stats = armorModel.Stats
                 }))
