@@ -119,12 +119,14 @@ namespace AiosKingdom
         protected override void OnSleep()
         {
             // Handle when your app sleeps
+            NetworkManager.Instance.DisconnectGame();
+            NetworkManager.Instance.AnnounceDisconnection();
+            NetworkManager.Instance.Disconnect();
         }
 
         protected override void OnResume()
         {
             // Handle when your app resumes
-            NetworkManager.Instance.Disconnect();
         }
     }
 }
