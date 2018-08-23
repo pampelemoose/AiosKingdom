@@ -193,17 +193,6 @@
                                                                             <div class="col-md-12">
                                                                                 <div class="input-group input-group-sm">
                                                                                     <div class="input-group-prepend">
-                                                                                        @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Description, htmlAttributes: new { @class = "input-group-text" })
-                                                                                    </div>
-                                                                                    @Html.TextAreaFor(model => Model.Pages[i].Inscriptions[j].Description, new { @class = "form-control" })
-                                                                                </div>
-                                                                                @Html.ValidationMessageFor(model => Model.Pages[i].Inscriptions[j].Description, "", new { @class = "text-danger" })
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row mt-1">
-                                                                            <div class="col-md-12">
-                                                                                <div class="input-group input-group-sm">
-                                                                                    <div class="input-group-prepend">
                                                                                         @Html.LabelFor(model => Model.Pages[i].Inscriptions[j].Type, htmlAttributes: new { @class = "input-group-text" })
                                                                                     </div>
                                                                                     @Html.EnumDropDownListFor(model => Model.Pages[i].Inscriptions[j].Type, new { @class = "form-control item-list-changer" })

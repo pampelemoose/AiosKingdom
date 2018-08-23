@@ -64,6 +64,10 @@
     <Compile Include="Migrations\201808230259043_Item_SellingPrice.Designer.cs">
       <DependentUpon>201808230259043_Item_SellingPrice.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808230548187_Inscription_RemoveDesciption.cs" />
+    <Compile Include="Migrations\201808230548187_Inscription_RemoveDesciption.Designer.cs">
+      <DependentUpon>201808230548187_Inscription_RemoveDesciption.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,6 +94,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808230259043_Item_SellingPrice.resx">
       <DependentUpon>201808230259043_Item_SellingPrice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808230548187_Inscription_RemoveDesciption.resx">
+      <DependentUpon>201808230548187_Inscription_RemoveDesciption.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

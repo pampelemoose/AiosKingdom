@@ -40,9 +40,6 @@ namespace DataModels.Skills
 
         public Guid PageId { get; set; }
 
-        [Required, MaxLength(50)]
-        public string Description { get; set; }
-
         [Required]
         public InscriptionType Type { get; set; }
 

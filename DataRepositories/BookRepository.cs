@@ -113,7 +113,6 @@ namespace DataRepositories
                             else
                             {
                                 var onlineInsc = context.Inscriptions.FirstOrDefault(i => i.Id.Equals(insc.Id));
-                                onlineInsc.Description = insc.Description;
                                 onlineInsc.Type = insc.Type;
                                 onlineInsc.BaseValue = insc.BaseValue;
                                 onlineInsc.StatType = insc.StatType;

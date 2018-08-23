@@ -123,7 +123,6 @@ namespace Website.Controllers
                         {
                             Id = Guid.NewGuid(),
                             PageId = pageId,
-                            Description = inscModel.Description,
                             Type = inscModel.Type,
                             BaseValue = inscModel.BaseValue,
                             StatType = inscModel.StatType,
@@ -220,7 +219,6 @@ namespace Website.Controllers
                         var inscModel = new Models.InscriptionModel
                         {
                             Id = insc.Id,
-                            Description = insc.Description,
                             Type = insc.Type,
                             BaseValue = insc.BaseValue,
                             StatType = insc.StatType,
@@ -373,7 +371,6 @@ namespace Website.Controllers
                         var insc = new DataModels.Skills.Inscription
                         {
                             Id = inscModel.Id,
-                            Description = inscModel.Description,
                             Type = inscModel.Type,
                             BaseValue = inscModel.BaseValue,
                             StatType = inscModel.StatType,
