@@ -16,7 +16,6 @@ namespace Network
         public const int Client_RetrieveAccount = 5;
 
         public const int GlobalMessage = 1337;
-        
 
         public static class Server
         {

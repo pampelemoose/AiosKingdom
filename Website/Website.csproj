@@ -170,6 +170,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\GameServersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KingdomsController.cs" />
     <Compile Include="Controllers\MarketController.cs" />
     <Compile Include="Controllers\MonstersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -336,6 +337,7 @@
     <Content Include="Views\Consumables\Edit.cshtml" />
     <Content Include="Views\Monsters\Edit.cshtml" />
     <Content Include="Views\Dungeons\Edit.cshtml" />
+    <Content Include="Views\Kingdoms\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

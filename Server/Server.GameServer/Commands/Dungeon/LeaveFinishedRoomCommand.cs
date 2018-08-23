@@ -21,6 +21,7 @@ namespace Server.GameServer.Commands.Dungeon
             var soul = SoulManager.Instance.GetSoul(_args.ClientId);
             var soulDatas = SoulManager.Instance.GetDatas(_args.ClientId);
             var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
+            var kingdom = DataRepositories.KingdomRepository.GetById(_config.KingdomId);
 
             if (adventure.IsCleared)
             {
@@ -29,9 +30,13 @@ namespace Server.GameServer.Commands.Dungeon
 
                 if (adventureState.IsExit)
                 {
-                    soul.CurrentExperience += adventureState.StackedExperience;
+                    if (soul.Level < kingdom.CurrentMaxLevel)
+                    {
+                        soul.CurrentExperience += adventureState.StackedExperience;
+                        soul.CurrentExperience += dungeon.ExperienceReward;
+                    }
+
                     soul.Shards += adventureState.StackedShards;
-                    soul.CurrentExperience += dungeon.ExperienceReward;
                     soul.Shards += dungeon.ShardReward;
 
                     foreach (var bag in adventureState.Bag)
@@ -82,7 +87,7 @@ namespace Server.GameServer.Commands.Dungeon
                         }
                     }
                 }
-
+                
                 int leveledUp = 0;
                 while (soul.CurrentExperience >= soulDatas.RequiredExperience)
                 {
@@ -100,6 +105,14 @@ namespace Server.GameServer.Commands.Dungeon
                     soulDatas = SoulManager.Instance.GetDatas(_args.ClientId);
                     Console.WriteLine($"{soul.Name} Level up({soul.Level}).");
                     leveledUp++;
+
+                    if (soul.Level == kingdom.CurrentMaxLevel)
+                    {
+                        kingdom.CurrentMaxLevelCount++;
+                        DataRepositories.KingdomRepository.Update(kingdom);
+                        soul.CurrentExperience = 0;
+                        break;
+                    }
                 }
 
                 SoulManager.Instance.UpdateSoul(_args.ClientId, soul);

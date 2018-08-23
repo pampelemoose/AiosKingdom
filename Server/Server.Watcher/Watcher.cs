@@ -45,7 +45,7 @@ namespace Server.Watcher
                 catch (SocketException sockEx)
                 {
                     config.Online = false;
-                    Console.WriteLine($"Server {config.Name} is not online... [{sockEx.Message}]");
+                    //Console.WriteLine($"Server {config.Name} is not online... [{sockEx.Message}]");
                 }
 
                 DataRepositories.ConfigRepository.Update(config);

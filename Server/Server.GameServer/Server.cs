@@ -80,7 +80,7 @@ namespace Server.GameServer
             DataRepositories.ConfigRepository.Update(_config);
         }
 
-        public void SendMessageToAll(string message)
+        public void SendMessageToAll(int code, string message)
         {
             foreach (var client in ClientsManager.Instance.Clients)
             {
@@ -89,13 +89,19 @@ namespace Server.GameServer
                     ClientId = client.Key,
                     ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.GlobalMessage,
+                        Code = code,
                         Json = message,
                         Success = true
                     },
                     Succeeded = true
                 });
             }
+        }
+
+        private bool _refuseNewConnection = false;
+        public void RefuseNewConnection()
+        {
+            _refuseNewConnection = true;
         }
 
         private void SetupDelegates()
@@ -215,7 +221,7 @@ namespace Server.GameServer
 
             while (_isRunning)
             {
-                if (_listener.Pending())
+                if (_listener.Pending() && !_refuseNewConnection)
                 {
                     Socket newClient = _listener.AcceptSocket();
 

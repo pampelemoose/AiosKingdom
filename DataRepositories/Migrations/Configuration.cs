@@ -84,6 +84,7 @@ namespace DataRepositories.Migrations
                     Name = "Aios",
 
                     LevelGap = 5,
+                    CurrentMaxLevel = 10,
                     MaxLevelCountForGap = 100
                 });
 

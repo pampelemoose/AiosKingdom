@@ -18,6 +18,7 @@ namespace AiosKingdom.ViewModels
 
             MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, soulsUpdated) =>
             {
+                IsBusy = false;
                 Souls = soulsUpdated;
             });
 
@@ -28,6 +29,7 @@ namespace AiosKingdom.ViewModels
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.CreateSoulSuccess, (sender) =>
             {
+                IsBusy = false;
                 ShowCreatePanel = false;
             });
         }

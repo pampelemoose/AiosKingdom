@@ -25,7 +25,12 @@ namespace Server.GameServer
                 if (cmdArgs.Length >= 2 && cmdArgs[0].Equals("msgall"))
                 {
                     var msg = string.Join(" ", cmdArgs.Skip(1).ToArray());
-                    server.SendMessageToAll(msg);
+                    server.SendMessageToAll(Network.CommandCodes.GlobalMessage, msg);
+                }
+
+                if (command.Equals("willrestart"))
+                {
+                    server.RefuseNewConnection();
                 }
 
                 if (command.Equals("exit"))

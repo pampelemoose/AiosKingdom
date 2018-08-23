@@ -55,6 +55,7 @@
     <Compile Include="AiosKingdomContext.cs" />
     <Compile Include="ConfigRepository.cs" />
     <Compile Include="DungeonRepository.cs" />
+    <Compile Include="KingdomRepository.cs" />
     <Compile Include="MarketRepository.cs" />
     <Compile Include="Migrations\201808100346479_InitialMigration.cs" />
     <Compile Include="Migrations\201808100346479_InitialMigration.Designer.cs">
@@ -67,6 +68,14 @@
     <Compile Include="Migrations\201808230548187_Inscription_RemoveDesciption.cs" />
     <Compile Include="Migrations\201808230548187_Inscription_RemoveDesciption.Designer.cs">
       <DependentUpon>201808230548187_Inscription_RemoveDesciption.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808230737114_Kingdom_AddCurrentLevelCount.cs" />
+    <Compile Include="Migrations\201808230737114_Kingdom_AddCurrentLevelCount.Designer.cs">
+      <DependentUpon>201808230737114_Kingdom_AddCurrentLevelCount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808230837537_Kingdom_AddCurrentLevelCountRangeFix.cs" />
+    <Compile Include="Migrations\201808230837537_Kingdom_AddCurrentLevelCountRangeFix.Designer.cs">
+      <DependentUpon>201808230837537_Kingdom_AddCurrentLevelCountRangeFix.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
@@ -97,6 +106,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808230548187_Inscription_RemoveDesciption.resx">
       <DependentUpon>201808230548187_Inscription_RemoveDesciption.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808230737114_Kingdom_AddCurrentLevelCount.resx">
+      <DependentUpon>201808230737114_Kingdom_AddCurrentLevelCount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808230837537_Kingdom_AddCurrentLevelCountRangeFix.resx">
+      <DependentUpon>201808230837537_Kingdom_AddCurrentLevelCountRangeFix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

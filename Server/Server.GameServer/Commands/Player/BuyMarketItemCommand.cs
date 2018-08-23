@@ -16,29 +16,29 @@ namespace Server.GameServer.Commands.Player
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var datas = SoulManager.Instance.GetSoul(ret.ClientId);
+            var soul = SoulManager.Instance.GetSoul(ret.ClientId);
             var marketSlotId = Guid.Parse(_args.Args[0]);
             var quantity = int.Parse(_args.Args[1]);
             var isBits = bool.Parse(_args.Args[2]);
 
             var marketItem = DataRepositories.MarketRepository.GetById(marketSlotId);
 
-            if (marketItem == null || (marketItem != null && (!IsQuantityEnought(marketItem.Quantity, quantity) || !IsCurrencyAvailable(datas, marketItem, quantity, isBits))))
+            if (marketItem == null || (marketItem != null && (!IsQuantityEnought(marketItem.Quantity, quantity) || !IsCurrencyAvailable(soul, marketItem, quantity, isBits))))
             {
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Player.BuyMarketItem,
                     Success = false,
-                    Json = !IsCurrencyAvailable(datas, marketItem, quantity, isBits) ? $"Not enought {(isBits ? "bits" : "shards")}" : "Item sold or not available anymore."
+                    Json = !IsCurrencyAvailable(soul, marketItem, quantity, isBits) ? $"Not enought {(isBits ? "bits" : "shards")}" : "Item sold or not available anymore."
                 };
                 ret.Succeeded = true;
                 return ret;
             }
 
             if (isBits)
-                datas.Bits -= (marketItem.BitPrice * quantity);
+                soul.Bits -= (marketItem.BitPrice * quantity);
             else
-                datas.Shards -= (marketItem.ShardPrice * quantity);
+                soul.Shards -= (marketItem.ShardPrice * quantity);
 
             switch (marketItem.Type)
             {
@@ -47,38 +47,38 @@ namespace Server.GameServer.Commands.Player
                 case DataModels.Items.ItemType.Weapon:
                 case DataModels.Items.ItemType.Jewelry:
                     {
-                        datas.Inventory.Add(new DataModels.InventorySlot
+                        soul.Inventory.Add(new DataModels.InventorySlot
                         {
                             ItemId = marketItem.ItemId,
                             Type = marketItem.Type,
                             Quantity = quantity,
-                            SoulId = datas.Id,
+                            SoulId = soul.Id,
                             LootedAt = DateTime.Now
                         });
-                        DataRepositories.SoulRepository.Update(datas);
+                        DataRepositories.SoulRepository.Update(soul);
                     }
                     break;
                 case DataModels.Items.ItemType.Consumable:
                     {
-                        var exists = datas.Inventory.FirstOrDefault(i => i.ItemId.Equals(marketItem.ItemId));
+                        var exists = soul.Inventory.FirstOrDefault(i => i.ItemId.Equals(marketItem.ItemId));
                         if (exists != null)
                         {
-                            datas.Inventory.Remove(exists);
+                            soul.Inventory.Remove(exists);
                             exists.Quantity += quantity;
-                            datas.Inventory.Add(exists);
-                            DataRepositories.SoulRepository.Update(datas);
+                            soul.Inventory.Add(exists);
+                            DataRepositories.SoulRepository.Update(soul);
                         }
                         else
                         {
-                            datas.Inventory.Add(new DataModels.InventorySlot
+                            soul.Inventory.Add(new DataModels.InventorySlot
                             {
                                 ItemId = marketItem.ItemId,
                                 Type = marketItem.Type,
                                 Quantity = quantity,
-                                SoulId = datas.Id,
+                                SoulId = soul.Id,
                                 LootedAt = DateTime.Now
                             });
-                            DataRepositories.SoulRepository.Update(datas);
+                            DataRepositories.SoulRepository.Update(soul);
                         }
                     }
                     break;
@@ -98,7 +98,7 @@ namespace Server.GameServer.Commands.Player
                 }
             }
 
-            SoulManager.Instance.UpdateSoul(ret.ClientId, datas);
+            SoulManager.Instance.UpdateSoul(ret.ClientId, soul);
 
             ret.ClientResponse = new Network.Message
             {
