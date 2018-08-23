@@ -17,10 +17,10 @@ namespace Server.GameServer.Commands.Dungeon
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var soul = SoulManager.Instance.GetSoul(ret.ClientId);
-            var adventure = AdventureManager.Instance.GetAdventure(soul);
+            var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
             var lootId = Guid.Parse(_args.Args[0]);
 
-            if (adventure.LootItem(soul, ret.ClientId, lootId))
+            if (adventure.LootItem(ret.ClientId, lootId))
             {
                 ret.ClientResponse = new Network.Message
                 {

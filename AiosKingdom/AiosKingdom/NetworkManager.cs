@@ -988,9 +988,9 @@ namespace AiosKingdom
 
         #region Dungeon Commands
 
-        public void EnterDungeon(Guid dungeonId)
+        public void EnterDungeon(Guid dungeonId, List<Network.AdventureState.BagItem> items)
         {
-            SendRequest(Network.CommandCodes.Dungeon.Enter, new string[1] { dungeonId.ToString() });
+            SendRequest(Network.CommandCodes.Dungeon.Enter, new string[2] { dungeonId.ToString(), JsonConvert.SerializeObject(items) });
         }
 
         public void OpenDungeonRoom()

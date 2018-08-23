@@ -161,60 +161,8 @@
                             ItemsSource="{Binding Consumables}"
                             SelectedItem="{Binding SelectedConsumable}"
                             RowHeight="50"
-                            SeparatorVisibility="None">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Grid 
-                                            Margin="0, 5"
-                                            ColumnSpacing="0">
-                                            <ContentView
-                                                BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
-                                                Padding="5, 0, 0, 0">
-                                                <Grid
-                                                    BackgroundColor="{StaticResource PrimaryColor_2}">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="9*"/>
-                                                        <ColumnDefinition Width="3*"/>
-                                                    </Grid.ColumnDefinitions>
-
-                                                    <Label
-                                                        Grid.Column="0"
-                                                        Margin="5, 0"
-                                                        FontAttributes="Bold"
-                                                        FontSize="15"
-                                                        VerticalTextAlignment="Center"
-                                                        Text="{Binding Item.Name}"/>
-
-                                                    <Grid
-                                                        Grid.Column="1">
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="5*"/>
-                                                            <RowDefinition Height="7*"/>
-                                                        </Grid.RowDefinitions>
-
-                                                        <Label
-                                                            Grid.Row="0"
-                                                            FontSize="10"
-                                                            VerticalOptions="Center"
-                                                            HorizontalOptions="Center"
-                                                            Text="Quantity :"/>
-                                                        
-                                                        <Label
-                                                            Grid.Row="1"
-                                                            FontAttributes="Bold"
-                                                            FontSize="12"
-                                                            VerticalOptions="Center"
-                                                            HorizontalOptions="Center"
-                                                            Text="{Binding Slot.Quantity}"/>
-                                                    </Grid>
-                                                </Grid>
-                                            </ContentView>
-                                        </Grid>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                            SeparatorVisibility="None"
+                            ItemTemplate="{StaticResource InventoryConsumableListItem}"/>
                     </Grid>
                 </Grid>
 

@@ -23,7 +23,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public DataModels.Dungeons.Dungeon Dungeon => _dungeon;
 
         public string Confirmation => $"Are you sure you want to enter {_dungeon.Name} ? Level {_dungeon.RequiredLevel} is required.";
-        public string Warning => "**Each room you clear increase the amount of experience you receive and the chances of drop for items gets higher. Leaving before the end will reset those bonuses. The dungeon will stay open until cleared.**";
+        public string Warning => "**Each room you clear increase the amount of experience and shards you receive. If you leave before the end, you will lose all your items in your Bag and all the experience stacked.**";
 
         private ICommand _closeAction;
         public ICommand CloseAction =>
@@ -39,7 +39,7 @@ namespace AiosKingdom.ViewModels.Dungeon
                 _navigation.PopModalAsync();
 
                 IsBusy = true;
-                NetworkManager.Instance.EnterDungeon(_dungeon.DungeonId);
+                ScreenManager.Instance.ChangePage(new Views.CreateBagPage(_dungeon));
             }));
     }
 }

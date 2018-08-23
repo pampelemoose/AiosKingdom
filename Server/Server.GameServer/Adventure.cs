@@ -30,12 +30,15 @@ namespace Server.GameServer
         private List<DataModels.Items.ConsumableEffect> _effects;
         private Dictionary<Guid, List<DataModels.Skills.Inscription>> _enemyMarks;
 
-        public Adventure(DataModels.Dungeons.Dungeon dungeon, int roomNumber = 0)
+        public Adventure(DataModels.Dungeons.Dungeon dungeon, List<Network.AdventureState.BagItem> bagItems, int roomNumber = 0)
         {
             _dungeon = dungeon;
             _roomNumber = roomNumber;
 
             _state = new Network.AdventureState();
+
+            _state.Bag = bagItems;
+
             SetState();
         }
 
@@ -110,14 +113,23 @@ namespace Server.GameServer
 
                     foreach (var loot in monster.Loots)
                     {
-                        var id = Guid.NewGuid();
-                        _loots.Add(id, new Network.LootItem
+                        var lootExists = _loots.Values.FirstOrDefault(l => l.ItemId.Equals(loot.ItemId));
+                        if (lootExists != null)
                         {
-                            LootId = id,
-                            Type = loot.Type.ToString(),
-                            ItemId = loot.ItemId,
-                            Quantity = loot.Quantity
-                        });
+                            lootExists.Quantity += loot.Quantity;
+                            _loots[lootExists.LootId] = lootExists;
+                        }
+                        else
+                        {
+                            var id = Guid.NewGuid();
+                            _loots.Add(id, new Network.LootItem
+                            {
+                                LootId = id,
+                                Type = loot.Type.ToString(),
+                                ItemId = loot.ItemId,
+                                Quantity = loot.Quantity
+                            });
+                        }
                     }
 
                     _enemiesStats.Remove(enemyKeys);
@@ -138,9 +150,17 @@ namespace Server.GameServer
             return true;
         }
 
-        public bool UseConsumable(DataModels.Items.Consumable consumable, Network.SoulDatas datas, Guid enemyId, out string message)
+        public bool UseConsumable(Network.AdventureState.BagItem bagItem, DataModels.Items.Consumable consumable, Network.SoulDatas datas, Guid enemyId, out string message)
         {
             message = TickTurn(datas); // TODO : Maybe create a step in between to execute turn related logic
+
+            _state.Bag.Remove(bagItem);
+            bagItem.Quantity--;
+
+            if (bagItem.Quantity > 0)
+            {
+                _state.Bag.Add(bagItem);
+            }
 
             /*if (_enemiesStats.ContainsKey(enemyId))
             {
@@ -200,15 +220,17 @@ namespace Server.GameServer
             return true;
         }
 
-        public bool BuyShopItem(Guid tempId, int quantity, DataModels.Soul soul, Guid clientId)
+        public bool BuyShopItem(Guid tempId, int quantity, Guid soulId, Guid clientId)
         {
+            var currencies = SoulManager.Instance.GetCurrencies(clientId);
+
             if (_state.Shops.ContainsKey(tempId))
             {
                 var shopItem = _state.Shops[tempId];
 
-                if (shopItem.Quantity >= quantity && (soul.Shards >= (shopItem.ShardPrice * quantity)))
+                if (shopItem.Quantity >= quantity && (currencies.Shards >= (shopItem.ShardPrice * quantity)))
                 {
-                    soul.Shards -= (shopItem.ShardPrice * quantity);
+                    currencies.Shards -= (shopItem.ShardPrice * quantity);
 
                     var type = (DataModels.Items.ItemType)Enum.Parse(typeof(DataModels.Items.ItemType), shopItem.Type);
 
@@ -219,6 +241,13 @@ namespace Server.GameServer
                         case DataModels.Items.ItemType.Weapon:
                         case DataModels.Items.ItemType.Jewelry:
                             {
+                                _state.Bag.Add(new Network.AdventureState.BagItem
+                                {
+                                    ItemId = shopItem.ItemId,
+                                    Type = shopItem.Type,
+                                    Quantity = shopItem.Quantity
+                                });
+                                /*
                                 soul.Inventory.Add(new DataModels.InventorySlot
                                 {
                                     ItemId = shopItem.ItemId,
@@ -228,10 +257,28 @@ namespace Server.GameServer
                                     LootedAt = DateTime.Now
                                 });
                                 DataRepositories.SoulRepository.Update(soul);
+                                */
                             }
                             break;
                         case DataModels.Items.ItemType.Consumable:
                             {
+                                var exists = _state.Bag.FirstOrDefault(b => b.ItemId.Equals(shopItem.ItemId));
+                                if (exists != null)
+                                {
+                                    _state.Bag.Remove(exists);
+                                    exists.Quantity += shopItem.Quantity;
+                                    _state.Bag.Add(exists);
+                                }
+                                else
+                                {
+                                    _state.Bag.Add(new Network.AdventureState.BagItem
+                                    {
+                                        ItemId = shopItem.ItemId,
+                                        Type = shopItem.Type,
+                                        Quantity = shopItem.Quantity
+                                    });
+                                }
+                                /*
                                 var exists = soul.Inventory.FirstOrDefault(i => i.ItemId.Equals(shopItem.ItemId));
                                 if (exists != null)
                                 {
@@ -252,6 +299,7 @@ namespace Server.GameServer
                                     });
                                     DataRepositories.SoulRepository.Update(soul);
                                 }
+                                */
                             }
                             break;
                     }
@@ -270,8 +318,6 @@ namespace Server.GameServer
                         }
                     }
 
-                    SoulManager.Instance.UpdateSoul(clientId, soul);
-
                     return true;
                 }
             }
@@ -279,7 +325,7 @@ namespace Server.GameServer
             return false;
         }
 
-        public void PlayerRest(DataModels.Soul soul, Network.SoulDatas datas)
+        public void PlayerRest(Network.SoulDatas datas)
         {
             int toHeal = datas.MaxHealth / 10;
 
@@ -305,41 +351,35 @@ namespace Server.GameServer
             return _loots.Values.ToList();
         }
 
-        public bool LootItem(DataModels.Soul soul, Guid clientId, Guid lootId)
+        public bool LootItem(Guid clientId, Guid lootId)
         {
             if (_loots.ContainsKey(lootId))
             {
                 DataModels.Items.ItemType type = (DataModels.Items.ItemType)Enum.Parse(typeof(DataModels.Items.ItemType), _loots[lootId].Type);
-                var exists = soul.Inventory.FirstOrDefault(i => i.ItemId.Equals(_loots[lootId].ItemId));
+                var exists = _state.Bag.FirstOrDefault(i => i.ItemId.Equals(_loots[lootId].ItemId));
                 if (exists != null)
                 {
-                    soul.Inventory.Remove(exists);
+                    _state.Bag.Remove(exists);
                     ++exists.Quantity;
-                    soul.Inventory.Add(exists);
+                    _state.Bag.Add(exists);
                 }
                 else
                 {
-                    soul.Inventory.Add(new DataModels.InventorySlot
+                    _state.Bag.Add(new Network.AdventureState.BagItem
                     {
-                        SoulId = soul.Id,
                         ItemId = _loots[lootId].ItemId,
-                        Type = type,
-                        Quantity = 1,
-                        LootedAt = DateTime.Now
+                        Type = type.ToString(),
+                        Quantity = 1
                     });
                 }
 
-                if (DataRepositories.SoulRepository.Update(soul))
+                --_loots[lootId].Quantity;
+                if (_loots[lootId].Quantity <= 0)
                 {
-                    --_loots[lootId].Quantity;
-                    if (_loots[lootId].Quantity <= 0)
-                    {
-                        _loots.Remove(lootId);
-                    }
-
-                    SoulManager.Instance.UpdateSoul(clientId, soul);
-                    return true;
+                    _loots.Remove(lootId);
                 }
+
+                return true;
             }
 
             return false;

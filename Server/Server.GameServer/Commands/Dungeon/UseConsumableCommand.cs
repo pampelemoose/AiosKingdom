@@ -19,32 +19,21 @@ namespace Server.GameServer.Commands.Dungeon
             var slotId = Guid.Parse(_args.Args[0]);
             var enemyId = Guid.Parse(_args.Args[1]);
 
-            var adventure = AdventureManager.Instance.GetAdventure(soul);
+            var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
 
             if (adventure != null)
             {
-                var slotKnown = soul.Inventory.FirstOrDefault(s => s.Id.Equals(slotId));
+                var slotKnown = adventure.GetActualState().Bag.FirstOrDefault(s => s.InventoryId.Equals(slotId));
                 if (slotKnown != null)
                 {
                     var item = DataRepositories.ConsumableRepository.GetById(slotKnown.ItemId);
                     if (item != null)
                     {
-                        soul.Inventory.Remove(slotKnown);
-
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
 
                         string consumableResult;
-                        if (adventure.UseConsumable(item, SoulManager.Instance.GetDatas(ret.ClientId), enemyId, out consumableResult))
+                        if (adventure.UseConsumable(slotKnown, item, SoulManager.Instance.GetDatas(ret.ClientId), enemyId, out consumableResult))
                         {
-                            --slotKnown.Quantity;
-
-                            if (slotKnown.Quantity > 0)
-                            {
-                                soul.Inventory.Add(slotKnown);
-                            }
-
-                            SoulManager.Instance.UpdateSoul(ret.ClientId, soul);
-
                             ret.ClientResponse = new Network.Message
                             {
                                 Code = Network.CommandCodes.Dungeon.UseConsumable,

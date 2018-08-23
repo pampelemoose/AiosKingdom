@@ -29,11 +29,11 @@ namespace Server.GameServer
 
         private Dictionary<Guid, Adventure> _adventures;
 
-        public Adventure GetAdventure(DataModels.Soul soul)
+        public Adventure GetAdventure(Guid soulId)
         {
-            if (_adventures.ContainsKey(soul.Id))
+            if (_adventures.ContainsKey(soulId))
             {
-                var adventure = _adventures[soul.Id];
+                var adventure = _adventures[soulId];
 
                 return adventure;
             }
@@ -41,9 +41,9 @@ namespace Server.GameServer
             return null;
         }
 
-        public Adventure OpenRoom(DataModels.Soul soul, Guid dungeonId)
+        public Adventure OpenRoom(DataModels.Soul soul, Network.SoulDatas datas, Guid dungeonId, List<Network.AdventureState.BagItem> bagItems = null)
         {
-            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().OpenRoom({soul}, {dungeonId})");
+            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().OpenRoom({soul.Id}, {dungeonId})");
             var dungeon = DataRepositories.DungeonRepository.GetById(dungeonId);
 
             if (_adventures.ContainsKey(soul.Id) && _adventures[soul.Id].DungeonId.Equals(dungeonId))
@@ -59,9 +59,23 @@ namespace Server.GameServer
             }
             else
             {
-                if (soul.Level > dungeon.MaxLevelAuthorized) return null;
+                if (datas.Level > dungeon.MaxLevelAuthorized) return null;
 
-                var adventure = new Adventure(dungeon);
+                foreach (var bagItem in bagItems)
+                {
+                    var exists = soul.Inventory.FirstOrDefault(i => i.Id.Equals(bagItem.InventoryId));
+                    if (exists != null)
+                    {
+                        soul.Inventory.Remove(exists);
+                        exists.Quantity -= bagItem.Quantity;
+                        if (exists.Quantity > 0)
+                        {
+                            soul.Inventory.Add(exists);
+                        }
+                    }
+                }
+
+                var adventure = new Adventure(dungeon, bagItems);
                 _adventures.Add(soul.Id, adventure);
 
                 return adventure;

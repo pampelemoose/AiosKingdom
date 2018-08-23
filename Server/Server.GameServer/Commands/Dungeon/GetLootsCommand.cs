@@ -17,7 +17,7 @@ namespace Server.GameServer.Commands.Dungeon
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var soul = SoulManager.Instance.GetSoul(ret.ClientId);
-            var adventure = AdventureManager.Instance.GetAdventure(soul);
+            var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
 
             ret.ClientResponse = new Network.Message
             {

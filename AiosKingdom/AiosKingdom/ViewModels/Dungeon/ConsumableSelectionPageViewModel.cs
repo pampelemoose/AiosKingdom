@@ -18,17 +18,19 @@ namespace AiosKingdom.ViewModels.Dungeon
         {
             get
             {
-                var consumableSlots = DatasManager.Instance.Inventory.Where(i => i.Type == DataModels.Items.ItemType.Consumable).ToList();
+                var consumableSlots = DatasManager.Instance.Adventure.Bag;
                 var consumables = new List<Models.Dungeon.ConsumableSelectionItemModel>();
                 foreach (var slot in consumableSlots)
                 {
+                    if (slot.Type != DataModels.Items.ItemType.Consumable.ToString()) continue;
+
                     var item = DatasManager.Instance.Consumables.FirstOrDefault(b => b.ItemId.Equals(slot.ItemId));
 
                     if (item != null)
                     {
                         consumables.Add(new Models.Dungeon.ConsumableSelectionItemModel
                         {
-                            SlotId = slot.Id,
+                            SlotId = slot.InventoryId,
                             Quantity = slot.Quantity,
                             Consumable = item
                         });

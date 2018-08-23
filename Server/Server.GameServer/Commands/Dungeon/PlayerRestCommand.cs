@@ -19,11 +19,11 @@ namespace Server.GameServer.Commands.Dungeon
 
             if (soul != null)
             {
-                var adventure = AdventureManager.Instance.GetAdventure(soul);
+                var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
 
                 if (adventure != null)
                 {
-                    adventure.PlayerRest(soul, SoulManager.Instance.GetDatas(ret.ClientId));
+                    adventure.PlayerRest(SoulManager.Instance.GetDatas(ret.ClientId));
 
                     ret.ClientResponse = new Network.Message
                     {

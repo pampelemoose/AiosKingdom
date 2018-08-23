@@ -157,7 +157,7 @@ namespace Server.GameServer
 
         private void SetupDungeonDelegates()
         {
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.Enter, 1);
+            _commandArgCount.Add(Network.CommandCodes.Dungeon.Enter, 2);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.EnterRoom, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.UpdateRoom, 0);
             _commandArgCount.Add(Network.CommandCodes.Dungeon.Exit, 0);
@@ -529,7 +529,7 @@ namespace Server.GameServer
 
                 // DUNGEON
                 case Network.CommandCodes.Dungeon.Enter:
-                    retVal.Args = new string[1] { args[0] };
+                    retVal.Args = new string[2] { args[0], args[1] };
                     break;
                 case Network.CommandCodes.Dungeon.EnterRoom:
                     break;

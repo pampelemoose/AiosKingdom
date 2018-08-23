@@ -19,7 +19,7 @@ namespace Server.GameServer.Commands.Dungeon
             var knowledgeId = Guid.Parse(_args.Args[0]);
             var enemyId = Guid.Parse(_args.Args[1]);
 
-            var adventure = AdventureManager.Instance.GetAdventure(soul);
+            var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
 
             if (adventure != null)
             {

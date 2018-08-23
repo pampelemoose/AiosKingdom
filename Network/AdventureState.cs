@@ -40,6 +40,16 @@ namespace Network
             public Guid EnemyId { get; set; }
         }
 
+        public class BagItem
+        {
+            public Guid InventoryId { get; set; }
+
+            public string Type { get; set; }
+            public Guid ItemId { get; set; }
+
+            public int Quantity { get; set; }
+        }
+
         public Dictionary<Guid, EnemyState> Enemies { get; set; }
         public Dictionary<Guid, ShopState> Shops { get; set; }
 
@@ -48,7 +58,7 @@ namespace Network
         public List<ModifierApplied> Marks { get; set; }
         public List<ModifierApplied> Effects { get; set; }
 
-        public List<ShopState> Bag { get; set; }
+        public List<BagItem> Bag { get; set; }
 
         public bool IsRestingArea { get; set; }
         public bool IsFightArea { get; set; }

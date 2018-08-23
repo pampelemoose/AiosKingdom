@@ -14,7 +14,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         }
 
         public string Confirmation => $"Are you sure you want to leave the dungeon ?";
-        public string Warning => $"**You will lose {DatasManager.Instance.Adventure.StackedExperience} experience. And start from the last Resting Room.**";
+        public string Warning => $"**You will lose {DatasManager.Instance.Adventure.StackedExperience} experience. You will lose all your items in your Bag.**";
 
         private ICommand _closeAction;
         public ICommand CloseAction =>

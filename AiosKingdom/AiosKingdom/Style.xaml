@@ -262,6 +262,57 @@
         </ViewCell>
     </DataTemplate>
 
+    <DataTemplate x:Key="InventoryConsumableListItem">
+        <ViewCell>
+            <Grid 
+                Margin="0, 5"
+                ColumnSpacing="0">
+                <ContentView
+                    BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
+                    Padding="5, 0, 0, 0">
+                    <Grid
+                        BackgroundColor="{StaticResource PrimaryColor_2}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Column="0"
+                            Margin="5, 0"
+                            FontAttributes="Bold"
+                            FontSize="15"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding Item.Name}"/>
+
+                        <Grid
+                            Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height="7*"/>
+                            </Grid.RowDefinitions>
+
+                            <Label
+                                Grid.Row="0"
+                                FontSize="10"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center"
+                                Text="Quantity :"/>
+
+                            <Label
+                                Grid.Row="1"
+                                FontAttributes="Bold"
+                                FontSize="12"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center"
+                                Text="{Binding Slot.Quantity}"/>
+                        </Grid>
+                    </Grid>
+                </ContentView>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
     <DataTemplate x:Key="DungeonListItem">
         <ViewCell>
             <Grid
@@ -667,6 +718,103 @@
         </ViewCell>
     </DataTemplate>
 
+    <DataTemplate x:Key="InscriptionListItem">
+        <ViewCell>
+            <Grid
+                BackgroundColor="{StaticResource PrimaryColor_2}"
+                ColumnSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                <Grid
+                    Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding Type, StringFormat='Base {0} :'}"/>
+                    <Label
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding BaseValue}"/>
+                    <Label
+                        Grid.Column="2"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding StatType, StringFormat='{0} Ratio :'}"/>
+                    <Label
+                        Grid.Column="3"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding Ratio, StringFormat='{0}'}"/>
+                </Grid>
+                <Grid
+                    Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        Text="Duration :"/>
+                    <Label
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding Duration}"/>
+                </Grid>
+                <Grid
+                    Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        Text="Min :"/>
+                    <Label
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding ., Converter={StaticResource inscToCalcVal}, ConverterParameter='min', StringFormat='{0:N}'}"/>
+                    <Label
+                        Grid.Column="2"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        Text="Max :"/>
+                    <Label
+                        Grid.Column="3"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding ., Converter={StaticResource inscToCalcVal}, ConverterParameter='max', StringFormat='{0:N}'}"/>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
     <DataTemplate x:Key="BodyValuesListItem">
         <ViewCell>
             <Frame 
@@ -774,103 +922,6 @@
                     </Grid>
                 </Grid>
             </Frame>
-        </ViewCell>
-    </DataTemplate>
-
-    <DataTemplate x:Key="InscriptionListItem">
-        <ViewCell>
-            <Grid
-                BackgroundColor="{StaticResource PrimaryColor_2}"
-                ColumnSpacing="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                </Grid.RowDefinitions>
-                <Grid
-                    Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="2*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label
-                        Grid.Column="0"
-                        FontSize="10"
-                        VerticalTextAlignment="Center"
-                        Text="{Binding Type, StringFormat='Base {0} :'}"/>
-                    <Label
-                        Grid.Column="1"
-                        FontAttributes="Bold"
-                        FontSize="12"
-                        VerticalTextAlignment="Center"
-                        Text="{Binding BaseValue}"/>
-                    <Label
-                        Grid.Column="2"
-                        FontSize="10"
-                        VerticalTextAlignment="Center"
-                        Text="{Binding StatType, StringFormat='{0} Ratio :'}"/>
-                    <Label
-                        Grid.Column="3"
-                        FontAttributes="Bold"
-                        FontSize="12"
-                        VerticalTextAlignment="Center"
-                        Text="{Binding Ratio, StringFormat='{0}'}"/>
-                </Grid>
-                <Grid
-                    Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="2*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Label
-                        Grid.Column="0"
-                        FontSize="10"
-                        VerticalTextAlignment="Center"
-                        Text="Duration :"/>
-                    <Label
-                        Grid.Column="1"
-                        FontAttributes="Bold"
-                        FontSize="12"
-                        VerticalTextAlignment="Center"
-                        Text="{Binding Duration}"/>
-                </Grid>
-                <Grid
-                    Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="2*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label
-                        Grid.Column="0"
-                        FontSize="10"
-                        VerticalTextAlignment="Center"
-                        Text="Min :"/>
-                    <Label
-                        Grid.Column="1"
-                        FontAttributes="Bold"
-                        FontSize="12"
-                        VerticalTextAlignment="Center"
-                        Text="{Binding ., Converter={StaticResource inscToCalcVal}, ConverterParameter='min', StringFormat='{0:N}'}"/>
-                    <Label
-                        Grid.Column="2"
-                        FontSize="10"
-                        VerticalTextAlignment="Center"
-                        Text="Max :"/>
-                    <Label
-                        Grid.Column="3"
-                        FontAttributes="Bold"
-                        FontSize="12"
-                        VerticalTextAlignment="Center"
-                        Text="{Binding ., Converter={StaticResource inscToCalcVal}, ConverterParameter='max', StringFormat='{0:N}'}"/>
-                </Grid>
-            </Grid>
         </ViewCell>
     </DataTemplate>
 

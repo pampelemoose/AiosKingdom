@@ -17,11 +17,15 @@ namespace Server.GameServer.Commands.Dungeon
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var soul = SoulManager.Instance.GetSoul(_args.ClientId);
+            var datas = SoulManager.Instance.GetDatas(_args.ClientId);
             var dungeonId = Guid.Parse(_args.Args[0]);
+            var bagItems = JsonConvert.DeserializeObject<List<Network.AdventureState.BagItem>>(_args.Args[1]);
 
             if (soul.Knowledge.Count > 0)
             {
-                var adventure = AdventureManager.Instance.OpenRoom(soul, dungeonId);
+                var adventure = AdventureManager.Instance.OpenRoom(soul, datas, dungeonId, bagItems);
+
+                SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
 
                 if (adventure.RoomNumber == 0)
                 {

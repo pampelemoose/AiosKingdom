@@ -18,13 +18,13 @@ namespace Server.GameServer.Commands.Dungeon
         {
             var soul = SoulManager.Instance.GetSoul(_args.ClientId);
             var datas = SoulManager.Instance.GetDatas(_args.ClientId);
-            var adventure = AdventureManager.Instance.GetAdventure(soul);
+            var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
 
             if (adventure != null)
             {
                 var dungeonId = adventure.DungeonId;
 
-                AdventureManager.Instance.OpenRoom(soul, dungeonId);
+                AdventureManager.Instance.OpenRoom(soul, datas, dungeonId);
 
                 ret.ClientResponse = new Network.Message
                 {

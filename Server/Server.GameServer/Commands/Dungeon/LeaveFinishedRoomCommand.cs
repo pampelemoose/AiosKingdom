@@ -20,7 +20,7 @@ namespace Server.GameServer.Commands.Dungeon
         {
             var soul = SoulManager.Instance.GetSoul(_args.ClientId);
             var soulDatas = SoulManager.Instance.GetDatas(_args.ClientId);
-            var adventure = AdventureManager.Instance.GetAdventure(soul);
+            var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
 
             if (adventure.IsCleared)
             {
@@ -33,6 +33,54 @@ namespace Server.GameServer.Commands.Dungeon
                     soul.Shards += adventureState.StackedShards;
                     soul.CurrentExperience += dungeon.ExperienceReward;
                     soul.Shards += dungeon.ShardReward;
+
+                    foreach (var bag in adventureState.Bag)
+                    {
+                        var type = (DataModels.Items.ItemType)Enum.Parse(typeof(DataModels.Items.ItemType), bag.Type);
+
+                        switch (type)
+                        {
+                            case DataModels.Items.ItemType.Armor:
+                            case DataModels.Items.ItemType.Bag:
+                            case DataModels.Items.ItemType.Weapon:
+                            case DataModels.Items.ItemType.Jewelry:
+                                {
+                                    soul.Inventory.Add(new DataModels.InventorySlot
+                                    {
+                                        ItemId = bag.ItemId,
+                                        Type = type,
+                                        Quantity = bag.Quantity,
+                                        SoulId = soul.Id,
+                                        LootedAt = DateTime.Now
+                                    });
+                                }
+                                break;
+                            case DataModels.Items.ItemType.Consumable:
+                                {
+                                    var exists = soul.Inventory.FirstOrDefault(i => i.ItemId.Equals(bag.ItemId));
+                                    if (exists != null)
+                                    {
+                                        soul.Inventory.Remove(exists);
+                                        exists.Quantity += bag.Quantity;
+                                        soul.Inventory.Add(exists);
+                                        DataRepositories.SoulRepository.Update(soul);
+                                    }
+                                    else
+                                    {
+                                        soul.Inventory.Add(new DataModels.InventorySlot
+                                        {
+                                            ItemId = bag.ItemId,
+                                            Type = type,
+                                            Quantity = bag.Quantity,
+                                            SoulId = soul.Id,
+                                            LootedAt = DateTime.Now
+                                        });
+                                        DataRepositories.SoulRepository.Update(soul);
+                                    }
+                                }
+                                break;
+                        }
+                    }
                 }
 
                 while (soul.CurrentExperience >= soulDatas.RequiredExperience)

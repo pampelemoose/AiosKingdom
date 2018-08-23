@@ -19,11 +19,11 @@ namespace Server.GameServer.Commands.Dungeon
             var tempId = Guid.Parse(_args.Args[0]);
             var quantity = int.Parse(_args.Args[1]);
 
-            var adventure = AdventureManager.Instance.GetAdventure(soul);
+            var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
 
             if (adventure != null)
             {
-                if (adventure.BuyShopItem(tempId, quantity, soul, ret.ClientId))
+                if (adventure.BuyShopItem(tempId, quantity, soul.Id, ret.ClientId))
                 {
                     ret.ClientResponse = new Network.Message
                     {
