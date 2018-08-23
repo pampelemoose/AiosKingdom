@@ -80,6 +80,24 @@ namespace Server.GameServer
             DataRepositories.ConfigRepository.Update(_config);
         }
 
+        public void SendMessageToAll(string message)
+        {
+            foreach (var client in ClientsManager.Instance.Clients)
+            {
+                _responses.Add(new Commands.CommandResult
+                {
+                    ClientId = client.Key,
+                    ClientResponse = new Network.Message
+                    {
+                        Code = Network.CommandCodes.GlobalMessage,
+                        Json = message,
+                        Success = true
+                    },
+                    Succeeded = true
+                });
+            }
+        }
+
         private void SetupDelegates()
         {
             _commandArgCount = new Dictionary<int, int>();
@@ -142,7 +160,7 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Player.Inventory, 0);
             _commandArgCount.Add(Network.CommandCodes.Player.Knowledges, 0);
             _commandArgCount.Add(Network.CommandCodes.Player.Equipment, 0);
-            
+
             _delegates.Add(Network.CommandCodes.Player.CurrentSoulDatas, (args) => { return new Commands.Player.CurrentSoulDatasCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.BuyMarketItem, (args) => { return new Commands.Player.BuyMarketItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.EquipItem, (args) => { return new Commands.Player.EquipItemCommand(args, _config); });

@@ -14,6 +14,8 @@ namespace Network
         public const int Client_AnnounceGameConnection = 3;
         public const int Client_AnnounceDisconnection = 4;
         public const int Client_RetrieveAccount = 5;
+
+        public const int GlobalMessage = 1337;
         
 
         public static class Server

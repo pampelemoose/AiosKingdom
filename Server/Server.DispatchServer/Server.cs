@@ -73,6 +73,24 @@ namespace Server.DispatchServer
             _isRunning = false;
         }
 
+        public void SendMessageToAll(string message)
+        {
+            foreach (var client in ClientsManager.Instance.Clients)
+            {
+                _responses.Add(new Commands.CommandResult
+                {
+                    ClientId = client.Key,
+                    ClientResponse = new Network.Message
+                    {
+                        Code = Network.CommandCodes.GlobalMessage,
+                        Json = message,
+                        Success = true
+                    },
+                    Succeeded = true
+                });
+            }
+        }
+
         private void SetupClientDelegates()
         {
             _commandArgCount.Add(Network.CommandCodes.Ping, 0);

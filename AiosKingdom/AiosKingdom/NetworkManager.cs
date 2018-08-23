@@ -120,6 +120,12 @@ namespace AiosKingdom
                         SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
                     }
                     break;
+                case Network.CommandCodes.GlobalMessage:
+                    {
+                        ScreenManager.Instance.AlertScreen("Server Message", message.Json);
+                    }
+                    break;
+
                 case Network.CommandCodes.Client_CreateAccount:
                     {
                         if (message.Success)
@@ -471,6 +477,11 @@ namespace AiosKingdom
                 case Network.CommandCodes.Ping:
                     {
                         SendRequest(Network.CommandCodes.Ping);
+                    }
+                    break;
+                case Network.CommandCodes.GlobalMessage:
+                    {
+                        ScreenManager.Instance.AlertScreen("Kingdom Message", message.Json);
                     }
                     break;
 

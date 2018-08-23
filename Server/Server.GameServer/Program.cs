@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 
 namespace Server.GameServer
@@ -19,6 +20,13 @@ namespace Server.GameServer
             while (server.IsRunning)
             {
                 var command = Console.ReadLine();
+                var cmdArgs = command.Split(' ');
+
+                if (cmdArgs.Length >= 2 && cmdArgs[0].Equals("msgall"))
+                {
+                    var msg = string.Join(" ", cmdArgs.Skip(1).ToArray());
+                    server.SendMessageToAll(msg);
+                }
 
                 if (command.Equals("exit"))
                 {
