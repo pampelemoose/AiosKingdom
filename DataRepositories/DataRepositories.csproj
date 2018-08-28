@@ -73,9 +73,25 @@
     <Compile Include="Migrations\201808230737114_Kingdom_AddCurrentLevelCount.Designer.cs">
       <DependentUpon>201808230737114_Kingdom_AddCurrentLevelCount.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201808230837537_Kingdom_AddCurrentLevelCountRangeFix.cs" />
-    <Compile Include="Migrations\201808230837537_Kingdom_AddCurrentLevelCountRangeFix.Designer.cs">
-      <DependentUpon>201808230837537_Kingdom_AddCurrentLevelCountRangeFix.cs</DependentUpon>
+    <Compile Include="Migrations\201808240237236_Section_ContentType.cs" />
+    <Compile Include="Migrations\201808240237236_Section_ContentType.Designer.cs">
+      <DependentUpon>201808240237236_Section_ContentType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808240243588_Banner_TextColor.cs" />
+    <Compile Include="Migrations\201808240243588_Banner_TextColor.Designer.cs">
+      <DependentUpon>201808240243588_Banner_TextColor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808240345134_Banner_Order.cs" />
+    <Compile Include="Migrations\201808240345134_Banner_Order.Designer.cs">
+      <DependentUpon>201808240345134_Banner_Order.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808270236238_Page_DescSiceChanged.cs" />
+    <Compile Include="Migrations\201808270236238_Page_DescSiceChanged.Designer.cs">
+      <DependentUpon>201808270236238_Page_DescSiceChanged.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808270635018_Monster_BaseHealth.cs" />
+    <Compile Include="Migrations\201808270635018_Monster_BaseHealth.Designer.cs">
+      <DependentUpon>201808270635018_Monster_BaseHealth.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
@@ -110,8 +126,20 @@
     <EmbeddedResource Include="Migrations\201808230737114_Kingdom_AddCurrentLevelCount.resx">
       <DependentUpon>201808230737114_Kingdom_AddCurrentLevelCount.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808230837537_Kingdom_AddCurrentLevelCountRangeFix.resx">
-      <DependentUpon>201808230837537_Kingdom_AddCurrentLevelCountRangeFix.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201808240237236_Section_ContentType.resx">
+      <DependentUpon>201808240237236_Section_ContentType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808240243588_Banner_TextColor.resx">
+      <DependentUpon>201808240243588_Banner_TextColor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808240345134_Banner_Order.resx">
+      <DependentUpon>201808240345134_Banner_Order.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808270236238_Page_DescSiceChanged.resx">
+      <DependentUpon>201808270236238_Page_DescSiceChanged.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808270635018_Monster_BaseHealth.resx">
+      <DependentUpon>201808270635018_Monster_BaseHealth.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

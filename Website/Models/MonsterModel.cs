@@ -37,6 +37,11 @@ namespace Website.Models
             set { _image = value; }
         }
 
+        [Required(ErrorMessage = "BaseHealth required")]
+        [Display(Name = "BaseHealth")]
+        [Range(1, 10000000, ErrorMessage = "BaseHealth should be higher than 0")]
+        public int BaseHealth { get; set; }
+
         [Required(ErrorMessage = "HealthPerLevel required")]
         [Display(Name = "HealthPerLevel")]
         [Range(1, 10000, ErrorMessage = "HealthPerLevel should be higher than 0")]

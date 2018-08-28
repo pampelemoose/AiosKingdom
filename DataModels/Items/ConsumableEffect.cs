@@ -8,7 +8,8 @@ namespace DataModels.Items
 {
     public enum EffectType
     {
-        RestoreHealth = 0
+        RestoreHealth = 0,
+        ResoreMana = 1
     }
 
     public class ConsumableEffect

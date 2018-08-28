@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -98,54 +99,7 @@ namespace Server.GameServer
             Console.WriteLine($"Consumed {skill.ManaCost} mana.");
             message += $"Consumed {skill.ManaCost} mana.";
 
-            var enemies = _enemiesStats.Keys.ToList();
-            foreach (var enemyKeys in enemies)
-            {
-                var enemy = _state.Enemies[enemyKeys];
-                var enemyStats = _enemiesStats[enemyKeys];
-
-                if (enemy.CurrentHealth <= 0)
-                {
-                    var monster = DataRepositories.MonsterRepository.GetById(enemy.MonsterId);
-
-                    _state.StackedExperience += monster.BaseExperience + (int)(enemyStats.Level * monster.ExperiencePerLevelRatio);
-                    _state.StackedShards += enemyStats.ShardReward;
-
-                    foreach (var loot in monster.Loots)
-                    {
-                        var lootExists = _loots.Values.FirstOrDefault(l => l.ItemId.Equals(loot.ItemId));
-                        if (lootExists != null)
-                        {
-                            lootExists.Quantity += loot.Quantity;
-                            _loots[lootExists.LootId] = lootExists;
-                        }
-                        else
-                        {
-                            var id = Guid.NewGuid();
-                            _loots.Add(id, new Network.LootItem
-                            {
-                                LootId = id,
-                                Type = loot.Type.ToString(),
-                                ItemId = loot.ItemId,
-                                Quantity = loot.Quantity
-                            });
-                        }
-                    }
-
-                    _enemiesStats.Remove(enemyKeys);
-                    _state.Enemies.Remove(enemyKeys);
-                }
-                else
-                {
-                    _enemiesStats[enemyKeys] = enemyStats;
-                    _state.Enemies[enemyKeys] = enemy;
-                }
-            }
-
-            if (_enemiesStats.Count == 0)
-            {
-                _isCleared = true;
-            }
+            ClearDeadEnemies();
 
             return true;
         }
@@ -183,6 +137,8 @@ namespace Server.GameServer
                 }
             }
 
+            ClearDeadEnemies();
+
             return true;
         }
 
@@ -210,6 +166,8 @@ namespace Server.GameServer
                 }
             }
 
+            ClearDeadEnemies();
+
             return true;
         }
 
@@ -217,7 +175,63 @@ namespace Server.GameServer
         {
             message = TickTurn(datas); // TODO : Maybe create a step in between to execute turn related logic
 
+            ClearDeadEnemies();
+
             return true;
+        }
+
+        private void ClearDeadEnemies()
+        {
+            var enemies = _enemiesStats.Keys.ToList();
+            foreach (var enemyKeys in enemies)
+            {
+                var enemy = _state.Enemies[enemyKeys];
+                var enemyStats = _enemiesStats[enemyKeys];
+
+                if (enemy.CurrentHealth <= 0)
+                {
+                    var monster = DataRepositories.MonsterRepository.GetById(enemy.MonsterId);
+
+                    _state.StackedExperience += monster.BaseExperience + (int)(enemyStats.Level * monster.ExperiencePerLevelRatio);
+                    _state.StackedShards += enemyStats.ShardReward;
+
+                    foreach (var loot in monster.Loots)
+                    {
+                        var lootExists = _loots.Values.FirstOrDefault(l => l.ItemId.Equals(loot.ItemId));
+                        if (lootExists != null)
+                        {
+                            lootExists.Quantity += loot.Quantity;
+                            _loots[lootExists.LootId] = lootExists;
+                        }
+                        else
+                        {
+                            var id = Guid.NewGuid();
+                            _loots.Add(id, new Network.LootItem
+                            {
+                                LootId = id,
+                                Type = loot.Type.ToString(),
+                                ItemId = loot.ItemId,
+                                Quantity = loot.Quantity
+                            });
+                        }
+                    }
+
+                    _enemiesStats.Remove(enemyKeys);
+                    _state.Enemies.Remove(enemyKeys);
+                    _state.Marks.RemoveAll(m => m.EnemyId.Equals(enemyKeys));
+                    _state.Effects.RemoveAll(m => m.EnemyId.Equals(enemyKeys));
+                }
+                else
+                {
+                    _enemiesStats[enemyKeys] = enemyStats;
+                    _state.Enemies[enemyKeys] = enemy;
+                }
+            }
+
+            if (_enemiesStats.Count == 0)
+            {
+                _isCleared = true;
+            }
         }
 
         public bool BuyShopItem(Guid tempId, int quantity, Guid soulId, Guid clientId)
@@ -572,7 +586,7 @@ namespace Server.GameServer
                             enemy.CurrentHealth -= amount;
                             Console.WriteLine($"Using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, datas)})*{inscription.Ratio}) on {enemy.MonsterId}.({enemy.CurrentHealth}/{enemy.MaxHealth}) .");
 
-                            result = $"Dealt {amount} Damages.";
+                            result = $"Dealt {(int)amount} Damages.";
 
                             _state.Enemies[enemyId] = enemy;
                         }
@@ -591,7 +605,7 @@ namespace Server.GameServer
                         }
                         Console.WriteLine($"Using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, datas)})*{inscription.Ratio}) on yourself .");
 
-                        result = $"Healed yourself for {amount} HP";
+                        result = $"Healed yourself for {(int)amount} HP";
                     }
                     break;
             }
@@ -615,7 +629,7 @@ namespace Server.GameServer
                         _state.CurrentHealth -= amount;
                         Console.WriteLine($"Enemy {enemyKeys} using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetEnemyStatValue(inscription.StatType, enemyStats)})*{inscription.Ratio}) on yourself.");
 
-                        result = $"Received {amount} of damages.";
+                        result = $"Received {(int)amount} of damages.";
                     }
                     break;
                 case DataModels.Skills.InscriptionType.Heal:
@@ -627,7 +641,7 @@ namespace Server.GameServer
                         }
                         Console.WriteLine($"Enemy {enemyKeys} using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetEnemyStatValue(inscription.StatType, enemyStats)})*{inscription.Ratio}) on himself .");
 
-                        result = $"Healed himself for {amount} HP";
+                        result = $"Healed himself for {(int)amount} HP";
 
                         _enemiesStats[enemyKeys] = enemyStats;
                         _state.Enemies[enemyKeys] = enemy;
@@ -654,6 +668,18 @@ namespace Server.GameServer
                         Console.WriteLine($"Using consumable doing ({effect.Type}).({effect.AffectValue}) on yourself .");
 
                         result = $"Healing yourself for {effect.AffectValue} HP";
+                    }
+                    break;
+                case DataModels.Items.EffectType.ResoreMana:
+                    {
+                        _state.CurrentMana += effect.AffectValue;
+                        if (_state.CurrentMana > datas.MaxMana)
+                        {
+                            _state.CurrentMana = datas.MaxMana;
+                        }
+                        Console.WriteLine($"Using consumable doing ({effect.Type}).({effect.AffectValue}) on yourself .");
+
+                        result = $"Restoring mana on yourself for {effect.AffectValue} MP";
                     }
                     break;
             }
@@ -698,8 +724,8 @@ namespace Server.GameServer
                 {
                     MonsterId = enemy.MonsterId,
                     EnemyType = enemy.EnemyType.ToString(),
-                    MaxHealth = enemy.Level * monster.HealthPerLevel,
-                    CurrentHealth = enemy.Level * monster.HealthPerLevel
+                    MaxHealth = monster.BaseHealth + (enemy.Level * monster.HealthPerLevel),
+                    CurrentHealth = monster.BaseHealth + (enemy.Level * monster.HealthPerLevel)
                 });
 
                 _enemiesStats.Add(tempId, new EnemyStats

@@ -13,7 +13,7 @@ namespace DataModels.Skills
 
         public Guid BookId { get; set; }
 
-        [Required, MaxLength(50)]
+        [Required, MaxLength(400)]
         public string Description { get; set; }
 
         private string _image = "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";

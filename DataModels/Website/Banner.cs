@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace DataModels.Website
 {
+    public enum ImageSide
+    {
+        Left,
+        Right
+    }
+
     public class Banner
     {
         [Key]
@@ -16,6 +22,8 @@ namespace DataModels.Website
         public int SectionId { get; set; }
 
         public string Image { get; set; }
+
+        public ImageSide ImageSide { get; set; }
 
         private string _backgroundColor = "#000000";
         [MinLength(7), MaxLength(9)]
@@ -28,8 +36,22 @@ namespace DataModels.Website
             }
         }
 
+        private string _textColor = "#FFFFFF";
+        [MinLength(7), MaxLength(9)]
+        public string TextColor
+        {
+            get { return _textColor; }
+            set
+            {
+                _textColor = value;
+            }
+        }
+
         [Required]
         public string Content { get; set; }
+
+        [Required]
+        public int Order { get; set; }
 
         [Required]
         public bool Active { get; set; }

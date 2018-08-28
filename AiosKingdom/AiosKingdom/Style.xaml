@@ -319,12 +319,12 @@
                 Margin="5"
                 BackgroundColor="{StaticResource PrimaryColor_2}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="8*"/>
-                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <Label
                     Grid.Column="0"
-                    FontSize="20"
+                    FontSize="15"
                     FontAttributes="Bold"
                     Margin="5, 0"
                     VerticalTextAlignment="Center"
@@ -333,24 +333,25 @@
                 <Grid
                     Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="7*"/>
-                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="8*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="8*"/>
-                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="5*"/>
                     </Grid.ColumnDefinitions>
 
                     <Label 
                         Grid.Row="0"
-                        Grid.Column="0"
-                        FontSize="12"
+                        Grid.ColumnSpan="3"
+                        FontSize="10"
                         VerticalTextAlignment="Center"
-                        HorizontalTextAlignment="End"
-                        Text="Required Level :"/>
+                        HorizontalTextAlignment="Center"
+                        Text="Level :"/>
                     <Label 
-                        Grid.Row="0"
-                        Grid.Column="1"
+                        Grid.Row="1"
+                        Grid.Column="0"
                         FontSize="15"
                         FontAttributes="Bold"
                         VerticalTextAlignment="Center"
@@ -358,15 +359,15 @@
                         Text="{Binding RequiredLevel}"/>
                     <Label 
                         Grid.Row="1"
-                        Grid.Column="0"
+                        Grid.Column="1"
                         FontSize="10"
                         VerticalTextAlignment="Center"
-                        HorizontalTextAlignment="End"
-                        Text="Max Level :"/>
+                        HorizontalTextAlignment="Center"
+                        Text="-"/>
                     <Label 
                         Grid.Row="1"
-                        Grid.Column="1"
-                        FontSize="12"
+                        Grid.Column="2"
+                        FontSize="15"
                         FontAttributes="Bold"
                         VerticalTextAlignment="Center"
                         HorizontalTextAlignment="Center"

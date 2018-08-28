@@ -9,7 +9,19 @@ namespace DataModels.Skills
     public enum InscriptionType
     {
         Damages = 0,
-        Heal = 1
+        Heal = 1,
+
+        StatBuff = 2,
+        StatDebuff = 3,
+
+        Stunned = 4,
+        Charmed = 5,
+        Confused = 6,
+        
+
+        // ADVANCED IDEAS
+        Burn = 15,
+        Frozen = 16
     }
 
     public enum ElementType
@@ -51,7 +63,7 @@ namespace DataModels.Skills
         public Soul.Stats StatType { get; set; }
 
         [Required]
-        [Range(0.0001, 10000, ErrorMessage = "Ratio should be at least > 0")]
+        [Range(0, 10000, ErrorMessage = "Ratio should be >= 0")]
         public float Ratio { get; set; }
 
         [Required]

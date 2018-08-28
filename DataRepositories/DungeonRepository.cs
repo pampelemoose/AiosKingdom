@@ -76,7 +76,7 @@ namespace DataRepositories
                 online.VersionId = dungeon.VersionId;
                 online.Name = dungeon.Name;
                 online.RequiredLevel = dungeon.RequiredLevel;
-                online.MaxLevelAuthorized = dungeon.RequiredLevel;
+                online.MaxLevelAuthorized = dungeon.MaxLevelAuthorized;
                 online.ExperienceReward = dungeon.ExperienceReward;
                 online.ShardReward = dungeon.ShardReward;
 

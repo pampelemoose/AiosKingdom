@@ -9,7 +9,11 @@ namespace DataModels.Monsters
 {
     public enum MonsterType
     {
-        Human = 0
+        Human = 0,
+        Undead,
+        Animal,
+        Elementary,
+        Dragon
     }
 
     public class Monster
@@ -57,6 +61,10 @@ namespace DataModels.Monsters
             get { return _image; }
             set { _image = value; }
         }
+
+        [Required]
+        [Range(1, 10000000)]
+        public int BaseHealth { get; set; }
 
         [Required]
         [Range(1, 10000)]

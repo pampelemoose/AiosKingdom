@@ -78,6 +78,14 @@
                 <div class="card card-body">
                     <div class="row">
                         <div class="col-md-10">
+                            @Html.LabelFor(model => model.BaseHealth, new { @class = "font-weight-bold" })
+                        </div>
+                        <div class="col-md-2">
+                            @Model.BaseHealth
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
                             @Html.LabelFor(model => model.HealthPerLevel, new { @class = "font-weight-bold" })
                         </div>
                         <div class="col-md-2">

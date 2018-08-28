@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace DataModels.Website
 {
+    public enum ContentType
+    {
+        Carrousel,
+        Row
+    }
+
     public class Section
     {
         [Key]
@@ -23,6 +29,10 @@ namespace DataModels.Website
 
         public List<Banner> Contents { get; set; }
 
+        [Required]
         public bool Before { get; set; }
+
+        [Required]
+        public ContentType Type { get; set; }
     }
 }

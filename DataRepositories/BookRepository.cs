@@ -86,6 +86,12 @@ namespace DataRepositories
                     if (Guid.Empty.Equals(page.Id))
                     {
                         page.Id = Guid.NewGuid();
+
+                        foreach (var insc in page.Inscriptions)
+                        {
+                            insc.Id = Guid.NewGuid();
+                        }
+
                         online.Pages.Add(page);
                     }
                     else
@@ -117,6 +123,7 @@ namespace DataRepositories
                                 onlineInsc.BaseValue = insc.BaseValue;
                                 onlineInsc.StatType = insc.StatType;
                                 onlineInsc.Ratio = insc.Ratio;
+                                onlineInsc.Duration = insc.Duration;
                                 onlineInsc.IncludeWeaponDamages = insc.IncludeWeaponDamages;
                                 onlineInsc.WeaponTypes = insc.WeaponTypes;
                                 onlineInsc.WeaponDamagesRatio = insc.WeaponDamagesRatio;

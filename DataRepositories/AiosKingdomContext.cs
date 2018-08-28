@@ -54,6 +54,7 @@ namespace DataRepositories
         public DbSet<DataModels.DungeonProgress> DungeonProgresses { get; set; }
 
         public DbSet<DataModels.Website.Section> Sections { get; set; }
+        public DbSet<DataModels.Website.Banner> Contents { get; set; }
 
     }
 }

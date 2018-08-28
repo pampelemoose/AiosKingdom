@@ -834,7 +834,10 @@ namespace AiosKingdom
                         {
                             GetDungeonRoomLoots();
                         }
-                        ScreenManager.Instance.AlertScreen("Looting", message.Json);
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Looting", message.Json);
+                        }
                     }
                     break;
                 case Network.CommandCodes.Dungeon.LeaveFinishedRoom:

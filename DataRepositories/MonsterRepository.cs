@@ -79,6 +79,7 @@ namespace DataRepositories
                 online.Story = monster.Story;
                 online.Image = monster.Image;
                 online.Types = monster.Types;
+                online.BaseHealth = monster.BaseHealth;
                 online.HealthPerLevel = monster.HealthPerLevel;
                 online.BaseExperience = monster.BaseExperience;
                 online.ExperiencePerLevelRatio = monster.ExperiencePerLevelRatio;
