@@ -55,10 +55,44 @@ namespace Website.Controllers
             return PartialView("LoginPartial", loginView);
         }
 
-        [HttpGet]
-        public ActionResult Registration()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PreAlphaRegistration(Models.PreAlphaRegistrationView registrationView)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                string username = Membership.GetUserNameByEmail(registrationView.Email);
+                if (!string.IsNullOrEmpty(username))
+                {
+                    ModelState.AddModelError("Email", "Sorry, this email is already registered.");
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return PartialView("PreAlphaRegistrationPartial", registrationView);
+                }
+
+                var role = DataRepositories.UserRepository.Roles.FirstOrDefault(r => r.Name.Equals("User"));
+                var user = new DataModels.User
+                {
+                    Id = Guid.NewGuid(),
+                    Username = Guid.NewGuid().ToString(),
+                    Password = "dummyPassword",
+                    Email = registrationView.Email,
+                    ActivationCode = Guid.NewGuid(),
+                    IsActivated = false,
+                    Roles = new List<DataModels.Role> { role }
+                };
+
+                if (DataRepositories.UserRepository.Create(user))
+                {
+                    PreAlphaEmail(registrationView.Email);
+
+                    Alert(AlertMessage.AlertType.Success, $"Account created.", "Success !");
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    return PartialView("PreAlphaRegistrationSuccessfulPartial");
+                }
+            }
+
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return PartialView("PreAlphaRegistrationPartial", registrationView);
         }
 
         [HttpPost]
@@ -94,15 +128,10 @@ namespace Website.Controllers
                     Roles = new List<DataModels.Role> { role }
                 };
 
-                if (!VerificationEmail(registrationView.Email, registrationView.ActivationCode.ToString()))
-                {
-                    ModelState.AddModelError("Email", "Email is not valid, please input a valid email.");
-                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return PartialView("RegistrationPartial", registrationView);
-                }
-
                 if (DataRepositories.UserRepository.Create(user))
                 {
+                    VerificationEmail(registrationView.Email, registrationView.ActivationCode.ToString());
+
                     Alert(AlertMessage.AlertType.Success, $"Account created.", "Success !");
                     Response.StatusCode = (int)HttpStatusCode.OK;
                     return PartialView("RegistrationSuccessfulPartial");
@@ -154,7 +183,45 @@ namespace Website.Controllers
         }
 
         [NonAction]
-        public bool VerificationEmail(string email, string activationCode)
+        public void PreAlphaEmail(string email)
+        {
+            var fromEmail = new MailAddress("noreply@lemoosecorp.com", "[Aios Kingdom] Pre Alpha Registration !");
+            var toEmail = new MailAddress(email);
+
+            var fromEmailPassword = "Chouette002";
+            string subject = "[Aios Kingdom] Pre Alpha Registration !";
+
+            string body = RenderPartialViewToString(this, "PreAlphaRegistrationEmail", null);
+
+            var smtp = new SmtpClient
+            {
+                Host = "ssl0.ovh.net",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromEmail.Address, fromEmailPassword)
+            };
+
+            using (var message = new MailMessage(fromEmail, toEmail)
+            {
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            })
+            {
+                try
+                {
+                    smtp.Send(message);
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        [NonAction]
+        public void VerificationEmail(string email, string activationCode)
         {
             var url = string.Format("/Account/ActivationAccount/{0}", activationCode);
             var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, url);
@@ -163,9 +230,9 @@ namespace Website.Controllers
             var toEmail = new MailAddress(email);
 
             var fromEmailPassword = "Chouette002";
-            string subject = "Activation Account !";
+            string subject = "[Aios Kingdom] Activate your Account !";
 
-            string body = "<br/> Please click on the following link in order to activate your account" + "<br/><a href='" + link + "'> Activation Account ! </a>";
+            string body = RenderPartialViewToString(this, "RegistrationEmail", link);
 
             var smtp = new SmtpClient
             {
@@ -188,11 +255,9 @@ namespace Website.Controllers
                 try
                 {
                     smtp.Send(message);
-                    return true;
                 }
                 catch
                 {
-                    return false;
                 }
             }
         }

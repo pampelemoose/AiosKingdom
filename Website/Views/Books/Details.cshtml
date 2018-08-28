@@ -17,11 +17,11 @@
     </div>
 </section>
 
-@foreach (var pageIt in Model.Pages.Select((value, index) => new { index, value }))
+@foreach (var pageIt in Model.Pages.OrderBy(p => p.Rank).Select((value, index) => new { index, value }))
 {
     var page = pageIt.value;
 
-    <section class="@(pageIt.index % 2 == 0 ? "bg-dark" : "") p-2">
+    <section class="@(pageIt.index % 2 == 0 ? "ak-dark-section" : "") p-2">
         <div class="container">
             <div class="row">
                 <div class="col-md-3">

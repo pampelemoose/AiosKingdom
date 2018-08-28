@@ -1,14 +1,39 @@
 ﻿body {
     padding-top: 56px;
     padding-bottom: 20px;
-    background-color: #2E4172;
-    color: #061539;
+    background-color: #542B72;
+    color: #000000;
+}
+
+.ak-nav {
+    background-color: #2B1939;
+}
+
+    .ak-nav .navbar-brand {
+        color: #7A36AB;
+    }
+
+        .ak-nav .navbar-brand:hover, .ak-nav .navbar-brand:focus {
+            color: #542B72;
+        }
+
+    .ak-nav .navbar-nav .nav-link {
+        color: #542B72;
+    }
+
+        .ak-nav .navbar-nav .nav-link:hover, .ak-nav .navbar-nav .nav-link:focus {
+            color: #7A36AB;
+        }
+
+.ak-button {
+    background-color: #542B72;
+    color: #000000 !important;
 }
 
 .card, .list-group-item {
-    background-color: #061539;
-    color: #7887AB;
-    border-color: #4F628E;
+    background-color: #2B1939;
+    color: #B043FF;
+    border-color: #B043FF;
 }
 
 .legendary {
@@ -81,9 +106,9 @@
     color: #1d0101;
 }
 
-.tierone:hover {
-    background-color: #5a0e0e;
-}
+    .tierone:hover {
+        background-color: #5a0e0e;
+    }
 
 .tierone-text {
     color: #ff1c1c;
@@ -93,33 +118,33 @@
     background-color: #ff8a0c;
 }
 
-.tiertwo:hover {
-    background-color: #5a3d09;
-}
+    .tiertwo:hover {
+        background-color: #5a3d09;
+    }
 
 .tierthree {
     background-color: #fffa0e;
 }
 
-.tierthree:hover {
-    background-color: #444206;
-}
+    .tierthree:hover {
+        background-color: #444206;
+    }
 
 .tierfour {
     background-color: #22ff00;
 }
 
-.tierfour:hover {
-    background-color: #0b4502;
-}
+    .tierfour:hover {
+        background-color: #0b4502;
+    }
 
 .tierfive {
     background-color: #0fe2ff;
 }
 
-.tierfive:hover {
-    background-color: #07505a;
-}
+    .tierfive:hover {
+        background-color: #07505a;
+    }
 
 /*Sticky Footer*/
 body {
@@ -136,8 +161,8 @@ body {
     width: 100%;
     height: 60px;
     line-height: 60px;
-    background-color: #002e5f;
-    color: #8e8e8e;
+    background-color: #2B1939;
+    color: #7A36AB;
 }
 
     .footer > .container {
@@ -153,7 +178,7 @@ body {
 /* Loading page */
 #loading_screen {
     background-color: rgba(0, 0, 26, 0.86);
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
@@ -216,4 +241,8 @@ body {
     border: 5px solid #ff1c1c !important;
     background-color: #7887AB;
     color: #ff1c1c;
+}
+
+.ak-dark-section {
+    background-color: #7A36AB;
 }

@@ -11,8 +11,11 @@ namespace Website.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Your application description page.";
+            return View();
+        }
 
+        public ActionResult About()
+        {
             return View();
         }
     }

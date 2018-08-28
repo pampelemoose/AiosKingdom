@@ -20,7 +20,7 @@
     <section class="fixed-top">
         @if (User.IsInRole("SuperAdmin"))
         {
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <nav class="navbar navbar-expand-lg navbar-dark ak-nav">
                 <div class="container">
                     <a class="navbar-brand" href="#">Admin</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -52,62 +52,36 @@
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Armors</a>
+                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Create</a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @Html.ActionLink("Create", "Create", "Armors", null, new { @class = "dropdown-item" })
+                                    <h6 class="dropdown-header">Items</h6>
+                                    @Html.ActionLink("Armor", "Create", "Armors", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Consumable", "Create", "Consumables", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Bag", "Create", "Bags", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Weapon", "Create", "Weapons", null, new { @class = "dropdown-item" })
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header">Skills</h6>
+                                    @Html.ActionLink("Book", "Create", "Books", null, new { @class = "dropdown-item" })
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header">Monsters</h6>
+                                    @Html.ActionLink("Monster", "Create", "Monsters", null, new { @class = "dropdown-item" })
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header">Dungeons</h6>
+                                    @Html.ActionLink("Dungeon", "Create", "Dungeons", null, new { @class = "dropdown-item" })
                                 </div>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Consumables</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @Html.ActionLink("Create", "Create", "Consumables", null, new { @class = "dropdown-item" })
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Bags</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @Html.ActionLink("Create", "Create", "Bags", null, new { @class = "dropdown-item" })
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Weapons</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @Html.ActionLink("Create", "Create", "Weapons", null, new { @class = "dropdown-item" })
-                                </div>
-                            </li>
-
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="item-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Market</a>
                                 <div class="dropdown-menu" aria-labelledby="item-dropdown">
-                                    @Html.ActionLink("Index", "Index", "Market", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("List", "Index", "Market", null, new { @class = "dropdown-item" })
                                     @Html.ActionLink("Create", "Create", "Market", null, new { @class = "dropdown-item" })
                                 </div>
                             </li>
-
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Books</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @Html.ActionLink("Create", "Create", "Books", null, new { @class = "dropdown-item" })
-                                </div>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Monsters</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @Html.ActionLink("Create", "Create", "Monsters", null, new { @class = "dropdown-item" })
-                                </div>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dungeons</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @Html.ActionLink("Create", "Create", "Dungeons", null, new { @class = "dropdown-item" })
+                                <a class="nav-link dropdown-toggle" href="#" id="item-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sections</a>
+                                <div class="dropdown-menu" aria-labelledby="item-dropdown">
+                                    @Html.ActionLink("List", "Index", "Sections", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Create", "Create", "Sections", null, new { @class = "dropdown-item" })
                                 </div>
                             </li>
                         </ul>
@@ -116,7 +90,7 @@
             </nav>
         }
 
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark ak-nav">
             <div class="container">
                 @Html.ActionLink("AiosKingdom", "Index", "Home", null, new { @class = "navbar-brand" })
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -143,6 +117,9 @@
                         <li class="nav-item">
                             @Html.ActionLink("Dungeons", "Index", "Dungeons", null, new { @class = "nav-link" })
                         </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link" })
+                        </li>
                     </ul>
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
@@ -162,12 +139,12 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link" href="#" id="navbarDropdown"
                                    role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register</a>
-                                <div id="registration_panel" class="dropdown-menu dropdown-menu-right account-dropdown-menu" aria-labelledby="navbarDropdown">
+                                <div id="registration_panel" class="dropdown-menu dropdown-menu-right account-dropdown-menu ak-dark-section" aria-labelledby="navbarDropdown">
                                     @Html.Partial("RegistrationPartial", new Website.Models.RegistrationView())
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link btn btn-primary" href="#" id="navbarDropdown"
+                                <a class="nav-link btn ak-button" href="#" id="navbarDropdown"
                                    role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
                                 <div id="login_panel" class="dropdown-menu dropdown-menu-right account-dropdown-menu" aria-labelledby="navbarDropdown">
                                     @Html.Partial("LoginPartial", new Website.Models.LoginView())
@@ -181,11 +158,11 @@
     </section>
 
     <main role="main" class="@(User.IsInRole("SuperAdmin") ? "admin-section" : "")">
-        <section class="section">
-            <div class="container">
-                @if (ViewBag.Alerts != null)
-                {
-                    foreach (var alert in ViewBag.Alerts)
+        @if (ViewBag.Alerts != null)
+        {
+            <section class="section">
+                <div class="container">
+                    @foreach (var alert in ViewBag.Alerts)
                     {
                         <div class="alert alert-@alert.Type.ToString().ToLower() @(User.IsInRole("SuperAdmin") ? "mt-3" : "mt-2")">
                             @if (!string.IsNullOrEmpty(alert.Title))
@@ -206,9 +183,9 @@
                             @alert.Message
                         </div>
                     }
-                }
-            </div>
-        </section>
+                </div>
+            </section>
+        }
 
         @Html.Action("GetSection", "Content", new { action = action, controller = controller, before = true })
         @RenderBody()

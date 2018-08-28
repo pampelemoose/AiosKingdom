@@ -11,8 +11,8 @@ namespace Website.Controllers
         [ChildActionOnly]
         public ActionResult GetSection(string action, string controller, bool before = false)
         {
-            var section = DataRepositories.SectionRepository.GetForPage(action, controller, before);
-            return PartialView("SectionPartial", section);
+            var sections = DataRepositories.SectionRepository.GetForPage(action, controller, before);
+            return PartialView("SectionPartial", sections);
         }
     }
 }

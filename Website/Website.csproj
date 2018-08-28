@@ -173,6 +173,7 @@
     <Compile Include="Controllers\KingdomsController.cs" />
     <Compile Include="Controllers\MarketController.cs" />
     <Compile Include="Controllers\MonstersController.cs" />
+    <Compile Include="Controllers\SectionsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WeaponsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -338,6 +339,14 @@
     <Content Include="Views\Monsters\Edit.cshtml" />
     <Content Include="Views\Dungeons\Edit.cshtml" />
     <Content Include="Views\Kingdoms\Index.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Sections\Index.cshtml" />
+    <Content Include="Views\Sections\Create.cshtml" />
+    <Content Include="Views\Sections\Edit.cshtml" />
+    <Content Include="Views\Account\RegistrationEmail.cshtml" />
+    <Content Include="Views\Shared\PreAlphaRegistrationPartial.cshtml" />
+    <Content Include="Views\Account\PreAlphaRegistrationEmail.cshtml" />
+    <Content Include="Views\Shared\PreAlphaRegistrationSuccessfulPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

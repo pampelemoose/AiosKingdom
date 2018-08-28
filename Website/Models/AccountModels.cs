@@ -44,4 +44,12 @@ namespace Website.Models
         [Compare("Password", ErrorMessage = "Error : Confirm password does not match with password")]
         public string ConfirmPassword { get; set; }
     }
+
+    public class PreAlphaRegistrationView
+    {
+        [Required(ErrorMessage = "Email required")]
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+    }
 }

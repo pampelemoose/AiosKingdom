@@ -1,9 +1,20 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Home";
 }
 
-<section>
+<section class="section p-5 ak-dark-section">
     <div class="container">
-        <h2>@ViewBag.Message</h2>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2>
+                    Register now to have a chance to be part of the closed Alpha phase coming up soon !
+                </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div id="prealpha_registration_panel" class="col-md-6 offset-md-3">
+                @Html.Partial("PreAlphaRegistrationPartial", new Website.Models.PreAlphaRegistrationView())
+            </div>
+        </div>
     </div>
 </section>

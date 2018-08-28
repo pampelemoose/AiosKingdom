@@ -311,7 +311,7 @@ namespace Website.Controllers
                         VersionId = dungeonModel.SelectedVersion,
                         Name = dungeonModel.Name,
                         RequiredLevel = dungeonModel.RequiredLevel,
-                        MaxLevelAuthorized = dungeonModel.RequiredLevel,
+                        MaxLevelAuthorized = dungeonModel.MaxLevelAuthorized,
                         Rooms = new List<DataModels.Dungeons.Room>(),
                         ExperienceReward = dungeonModel.ExperienceReward,
                         ShardReward = dungeonModel.ShardReward

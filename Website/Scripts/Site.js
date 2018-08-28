@@ -8,6 +8,7 @@ $(document).ready(function () {
     });
 
     $("#registration_form").on("submit", SubmitRegistrationForm);
+    $("#prealpha_registration_form").on("submit", SubmitPreAlphaRegistrationForm);
     $("#login_form").on("submit", SubmitLoginForm);
 });
 
@@ -30,6 +31,36 @@ function HoldOn() {
 function EndHold() {
     var loader = document.getElementById("loading_screen");
     $(loader).hide();
+}
+
+/**
+ * Submit the Registration form from the menu
+ * @param {any} event
+ */
+function SubmitPreAlphaRegistrationForm(event) {
+    event.preventDefault();
+
+    HoldOn();
+
+    var panel = document.getElementById('prealpha_registration_panel');
+    var that = $(this);
+    var frmValues = that.serialize();
+    $.ajax({
+        type: that.attr('method'),
+        url: that.attr('action'),
+        data: frmValues,
+
+        success: function (data) {
+            $(panel).html(data);
+            EndHold();
+        },
+        error: function (data) {
+            $(panel).html(data.responseText);
+            var newForm = document.getElementById("prealpha_registration_form");
+            $(newForm).on("submit", SubmitPreAlphaRegistrationForm);
+            EndHold();
+        }
+    })
 }
 
 /**
