@@ -13,6 +13,10 @@ namespace AiosKingdom.ViewModels
             : base(null)
         {
             Title = "Bookstore";
+
+            Application.Current.Properties["AiosKingdom_TutorialStep"] = 2;
+            Application.Current.SavePropertiesAsync();
+            MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
         }
 
         private void Subscribe_SkillLearned()
@@ -25,7 +29,17 @@ namespace AiosKingdom.ViewModels
             });
         }
 
-        public List<DataModels.Skills.Book> Books => DatasManager.Instance.Books;
+        public List<DataModels.Skills.Book> Books
+        {
+            get
+            {
+                bool isTutorial = (bool)Application.Current.Properties["AiosKingdom_IsNewCharacter"];
+                if (isTutorial)
+                    return DatasManager.Instance.Books.Where(b => b.Pages.Any(p => p.EmberCost == 1)).ToList();
+
+                return DatasManager.Instance.Books;
+            }
+        }
 
         public bool BookIsSelected { get { return _selectedBook != null; } }
 

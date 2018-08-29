@@ -566,6 +566,16 @@ namespace AiosKingdom
                         {
                             var soulDatas = JsonConvert.DeserializeObject<Network.SoulDatas>(message.Json);
                             DatasManager.Instance.Datas = soulDatas;
+
+                            if (soulDatas.TotalStamina == 0 && soulDatas.TotalEnergy == 0
+                                && soulDatas.TotalStrength == 0 && soulDatas.TotalAgility == 0
+                                && soulDatas.TotalIntelligence == 0 && soulDatas.TotalWisdom == 0)
+                            {
+                                Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
+                                Application.Current.SavePropertiesAsync();
+                                MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+                            }
+
                             MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
                         }
                         else
@@ -613,6 +623,10 @@ namespace AiosKingdom
                         {
                             AskCurrencies();
                             AskSoulCurrentDatas();
+
+                            Application.Current.Properties["AiosKingdom_TutorialStep"] = 4;
+                            Application.Current.SavePropertiesAsync();
+                            MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
                         }
                         else
                         {
@@ -627,6 +641,10 @@ namespace AiosKingdom
                         {
                             AskCurrencies();
                             AskKnowledges();
+
+                            Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
+                            Application.Current.SavePropertiesAsync();
+                            MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
                         }
                         MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
                     }
@@ -656,6 +674,15 @@ namespace AiosKingdom
                         if (message.Success)
                         {
                             var knowledges = JsonConvert.DeserializeObject<List<DataModels.Knowledge>>(message.Json);
+
+                            if (knowledges.Count == 0)
+                            {
+                                Application.Current.Properties["AiosKingdom_IsNewCharacter"] = true;
+                                Application.Current.Properties["AiosKingdom_TutorialStep"] = 1;
+                                Application.Current.SavePropertiesAsync();
+                                MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+                            }
+
                             DatasManager.Instance.Knowledges = knowledges;
                         }
                         MessagingCenter.Send(this, MessengerCodes.KnowledgeUpdated);

@@ -48,7 +48,9 @@ namespace AiosKingdom
         public static string DungeonLootsReceived = "dungeonLootsReceived";
 
         public static string AlertScreen = "alertScreen";
-        public static string ScreenChangePage = "ScreenChangePage";
-        public static string ScreenPushPage = "ScreenPushPage";
+        public static string ScreenChangePage = "screenChangePage";
+        public static string ScreenPushPage = "screenPushPage";
+
+        public static string TutorialChanged = "tutorialChanged";
     }
 }

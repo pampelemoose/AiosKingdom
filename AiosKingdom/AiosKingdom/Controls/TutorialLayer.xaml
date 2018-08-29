@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+             x:Class="AiosKingdom.Controls.TutorialLayer"
+             VerticalOptions="FillAndExpand"
+             HorizontalOptions="FillAndExpand"
+             IsVisible="{Binding IsVisible}">
+    <ContentView.BindingContext>
+        <vm:TutorialLayerViewModel />
+    </ContentView.BindingContext>
+    <ContentView.Content>
+        <Grid>
+
+            <Grid
+                IsVisible="{Binding IsStepOne}"
+                ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="0"
+                    BackgroundColor="Black"
+                    Opacity="0.7"
+                    RowSpacing="0"
+                    ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="10"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        TextColor="{StaticResource PrimaryColor_1}"
+                        VerticalOptions="End"
+                        HorizontalOptions="Start"
+                        Text="First and foremost, we need a skill to fight. Got to the Bookstore and select your first skill."/>
+
+                    <ContentView
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="{StaticResource PrimaryColor_1}"/>
+                </Grid>
+
+                <Grid
+                    Grid.Column="1"
+                    RowSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+
+                    <ContentView
+                        Grid.Row="0"
+                        BackgroundColor="Black"
+                        Opacity="0.7"/>
+                </Grid>
+            </Grid>
+
+            <Grid
+                IsVisible="{Binding IsStepTwo}"
+                RowSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <ContentView
+                    Grid.Row="0"
+                    BackgroundColor="Black"
+                    Opacity="0.7"/>
+
+                <Grid
+                    Grid.Row="1"
+                    ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ContentView
+                        Grid.Column="1"
+                        BackgroundColor="Black"
+                        Opacity="0.7"/>
+                </Grid>
+            </Grid>
+
+            <Grid
+                IsVisible="{Binding IsStepThree}"
+                ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="0"
+                    BackgroundColor="Black"
+                    Opacity="0.7"
+                    RowSpacing="0"
+                    ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="140"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="10"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        TextColor="{StaticResource PrimaryColor_1}"
+                        VerticalOptions="End"
+                        HorizontalOptions="Start"
+                        Text="Now let's get some Spirit Pills to increase our stats. This is the Spirit Pills seller."/>
+
+                    <ContentView
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="{StaticResource PrimaryColor_1}"/>
+                </Grid>
+
+                <Grid
+                    Grid.Column="1"
+                    RowSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="120"/>
+                    </Grid.RowDefinitions>
+
+                    <ContentView
+                        Grid.Row="0"
+                        BackgroundColor="Black"
+                        Opacity="0.7"/>
+
+                    <ContentView
+                        Grid.Row="2"
+                        BackgroundColor="Black"
+                        Opacity="0.7"/>
+                </Grid>
+            </Grid>
+
+            <Grid
+                IsVisible="{Binding IsStepFour}"
+                ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="0"
+                    BackgroundColor="Black"
+                    Opacity="0.7"
+                    RowSpacing="0"
+                    ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="220"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="10"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        TextColor="{StaticResource PrimaryColor_1}"
+                        VerticalOptions="End"
+                        HorizontalOptions="Start"
+                        Text="We are done for now, go back Home."/>
+
+                    <ContentView
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="{StaticResource PrimaryColor_1}"/>
+                </Grid>
+
+                <Grid
+                    Grid.Column="1"
+                    RowSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="200"/>
+                    </Grid.RowDefinitions>
+
+                    <ContentView
+                        Grid.Row="0"
+                        BackgroundColor="Black"
+                        Opacity="0.7"/>
+
+                    <ContentView
+                        Grid.Row="2"
+                        BackgroundColor="Black"
+                        Opacity="0.7"/>
+                </Grid>
+            </Grid>
+
+            <Grid
+                IsVisible="{Binding IsStepFive}"
+                RowSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <ContentView
+                    Grid.Row="0"
+                    BackgroundColor="Black"
+                    Opacity="0.7"/>
+
+                <Grid
+                    Grid.Row="1"
+                    ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="Black"
+                        Opacity="0.7">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            Grid.Row="1"
+                            Margin="10, 0"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            Text="You are now free to explore. Go on adventures to earn experience and rewards."/>
+                        
+                        <Button
+                            Grid.Row="2"
+                            Margin="10, 0"
+                            Style="{StaticResource MenuButton}"
+                            Text="Got it !"
+                            Command="{Binding EndTutorialAction}"/>
+                    </Grid>
+                </Grid>
+
+
+            </Grid>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

@@ -44,6 +44,7 @@ namespace AiosKingdom.ViewModels
             NetworkManager.Instance.AskCurrencies();
             NetworkManager.Instance.AskEquipment();
             NetworkManager.Instance.AskSoulCurrentDatas();
+            NetworkManager.Instance.AskKnowledges();
         }
 
         ~HomePageViewModel()
@@ -104,6 +105,10 @@ namespace AiosKingdom.ViewModels
                     case "Home":
                         ShowContent = false;
                         _currentContent = "";
+
+                        Application.Current.Properties["AiosKingdom_TutorialStep"] = 5;
+                        Application.Current.SavePropertiesAsync();
+                        MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
                         break;
                     case "Inventory":
                         ShowContent = !(_currentContent == "Inventory");

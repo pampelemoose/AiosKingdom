@@ -11,7 +11,19 @@ namespace AiosKingdom.ViewModels
         public SpiritPillsPageViewModel()
             : base(null)
         {
-            SetDatas();
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated, (sender) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    SetDatas();
+                });
+            });
+
+            NetworkManager.Instance.AskCurrencies();
+
+            Application.Current.Properties["AiosKingdom_TutorialStep"] = 2;
+            Application.Current.SavePropertiesAsync();
+            MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
         }
 
         private void Subscribe_UsePills()
@@ -138,8 +150,8 @@ namespace AiosKingdom.ViewModels
 
         private void SetDatas()
         {
-            PillsAmount = 0;
             Spirits = DatasManager.Instance.Currencies.Spirits;
+            PillsAmount = 0;
         }
     }
 }
