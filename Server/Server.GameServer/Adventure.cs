@@ -116,11 +116,6 @@ namespace Server.GameServer
                 _state.Bag.Add(bagItem);
             }
 
-            /*if (_enemiesStats.ContainsKey(enemyId))
-            {
-                var enemy = _state.Enemies[enemyId];
-                var enemyStats = _enemiesStats[enemyId];*/
-
             foreach (var effect in consumable.Effects)
             {
                 message += ExecutePlayerEffects(effect, datas);
@@ -261,17 +256,6 @@ namespace Server.GameServer
                                     Type = shopItem.Type,
                                     Quantity = shopItem.Quantity
                                 });
-                                /*
-                                soul.Inventory.Add(new DataModels.InventorySlot
-                                {
-                                    ItemId = shopItem.ItemId,
-                                    Type = type,
-                                    Quantity = quantity,
-                                    SoulId = soul.Id,
-                                    LootedAt = DateTime.Now
-                                });
-                                DataRepositories.SoulRepository.Update(soul);
-                                */
                             }
                             break;
                         case DataModels.Items.ItemType.Consumable:
