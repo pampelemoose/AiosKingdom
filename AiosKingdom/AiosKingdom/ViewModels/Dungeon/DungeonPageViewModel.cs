@@ -56,6 +56,22 @@ namespace AiosKingdom.ViewModels.Dungeon
                 IsBusy = false;
             });
 
+            MessagingCenter.Subscribe<NetworkManager, List<Network.AdventureState.ActionResult>>(this, MessengerCodes.RoundResults, (sender, arl) =>
+            {
+                IsARPVisible = true;
+                _arList = arl;
+                NotifyPropertyChanged(nameof(ARList));
+            });
+
+            MessagingCenter.Subscribe<NetworkManager, List<Network.AdventureState.ActionResult>>(this, MessengerCodes.PlayerDied, (sender, arl) =>
+            {
+                _isDead = true;
+
+                IsARPVisible = true;
+                _arList = arl;
+                NotifyPropertyChanged(nameof(ARList));
+            });
+
             NetworkManager.Instance.AskInventory();
             NetworkManager.Instance.AskKnowledges();
             NetworkManager.Instance.UpdateDungeonRoom();
@@ -67,6 +83,8 @@ namespace AiosKingdom.ViewModels.Dungeon
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.CurrenciesUpdated);
             MessagingCenter.Unsubscribe<NetworkManager, List<Network.LootItem>>(this, MessengerCodes.DungeonLootsReceived);
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.EnemyTurnEnded);
+            MessagingCenter.Unsubscribe<NetworkManager, List<Network.AdventureState.ActionResult>>(this, MessengerCodes.RoundResults);
+            MessagingCenter.Unsubscribe<NetworkManager, List<Network.AdventureState.ActionResult>>(this, MessengerCodes.PlayerDied);
         }
 
         public Network.AdventureState Room => DatasManager.Instance.Adventure;
@@ -299,7 +317,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand ExitDungeonAction =>
             _exitDungeonAction ?? (_exitDungeonAction = new Command(() =>
             {
-                _navigation.PushModalAsync(new Views.Dungeon.ExitDungeonPage());
+                MessagingCenter.Send<DungeonPageViewModel>(this, MessengerCodes.OpenExitDungeon);
             }));
 
         private Command _executeAction;
@@ -369,8 +387,47 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ICommand LeaveFinishedAction =>
             _leaveFinishedAction ?? (_leaveFinishedAction = new Command(() =>
             {
+                MessagingCenter.Subscribe<DungeonPageViewModel>(this, MessengerCodes.RoundResultsClosed, (sender) =>
+                {
+                    NetworkManager.Instance.DungeonLeft();
+                    MessagingCenter.Unsubscribe<DungeonPageViewModel>(this, MessengerCodes.RoundResultsClosed);
+                });
+
                 IsBusy = true;
                 NetworkManager.Instance.LeaveFinishedRoom();
+            }));
+
+        private bool _isARPVisible;
+        public bool IsARPVisible
+        {
+            get { return _isARPVisible; }
+            set
+            {
+                _isARPVisible = value;
+                if (_isARPVisible == false)
+                {
+                    MessagingCenter.Send(this, MessengerCodes.RoundResultsClosed);
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        public List<Network.AdventureState.ActionResult> _arList;
+        public List<Network.AdventureState.ActionResult> ARList => _arList;
+
+        private bool _isDead = false;
+
+        private ICommand _closeARPAction;
+        public ICommand CloseARPAction =>
+            _closeARPAction ?? (_closeARPAction = new Command(() =>
+            {
+                IsARPVisible = false;
+
+                if (_isDead)
+                {
+                    IsBusy = true;
+                    NetworkManager.Instance.DungeonLeft();
+                }
             }));
     }
 }

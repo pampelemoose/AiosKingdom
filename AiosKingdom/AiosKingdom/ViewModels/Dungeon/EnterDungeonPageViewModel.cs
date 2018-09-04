@@ -22,7 +22,7 @@ namespace AiosKingdom.ViewModels.Dungeon
 
         public DataModels.Dungeons.Dungeon Dungeon => _dungeon;
 
-        public string Confirmation => $"Are you sure you want to enter {_dungeon.Name} ? Level {_dungeon.RequiredLevel} is required.";
+        public string Confirmation => $"Are you sure you want to enter {_dungeon.Name} ?";
         public string Warning => "**Each room you clear increase the amount of experience and shards you receive. If you leave before the end, you will lose all your items in your Bag and all the experience stacked.**";
 
         private ICommand _closeAction;

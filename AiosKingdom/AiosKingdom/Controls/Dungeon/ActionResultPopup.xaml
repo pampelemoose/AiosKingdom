@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView    xmlns="http://xamarin.com/schemas/2014/forms" 
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                x:Class="AiosKingdom.Controls.Dungeon.ActionResultPopup"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                IsVisible="{Binding IsARPVisible}">
+    <ContentView.Content>
+        <Grid
+            BackgroundColor="Black"
+            Opacity="0.7">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid
+                Grid.Row="1"
+                Grid.Column="1"
+                BackgroundColor="{StaticResource PrimaryColor_0}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid
+                    Grid.Row="0"
+                    BackgroundColor="{StaticResource PrimaryColor_3}">
+                    <Label
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalOptions="Center"
+                        TextColor="{StaticResource PrimaryColor_1}"
+                        Text="End of Round"/>
+                </Grid>
+
+                <ListView
+                    Grid.Row="1"
+                    ItemsSource="{Binding ARList}"
+                    ItemTemplate="{StaticResource ARListItem}"
+                    HeightRequest="40"/>
+
+            </Grid>
+
+            <Button
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.RowSpan="3"
+                Grid.ColumnSpan="3"
+                BackgroundColor="Transparent"
+                Command="{Binding CloseARPAction}"/>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

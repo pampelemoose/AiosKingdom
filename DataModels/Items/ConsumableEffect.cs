@@ -9,7 +9,14 @@ namespace DataModels.Items
     public enum EffectType
     {
         RestoreHealth = 0,
-        ResoreMana = 1
+        ResoreMana = 1,
+
+        IncreaseStamina = 10,
+        IncreaseEnergy = 11,
+        IncreaseStrength = 12,
+        IncreaseAgility = 13,
+        IncreaseIntelligence = 14,
+        IncreaseWisdom = 15
     }
 
     public class ConsumableEffect

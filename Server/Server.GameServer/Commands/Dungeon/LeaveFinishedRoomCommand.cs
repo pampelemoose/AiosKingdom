@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -119,16 +120,30 @@ namespace Server.GameServer.Commands.Dungeon
                 SoulManager.Instance.UpdateCurrentDatas(_args.ClientId, _config);
                 AdventureManager.Instance.ExitRoom(soul.Id);
 
-                string json = $"Exited the dungeon. you earned {adventureState.StackedExperience + adventureState.ExperienceReward} experience and {adventureState.StackedShards + adventureState.ShardReward} shards.";
+                List<Network.AdventureState.ActionResult> json = new List<Network.AdventureState.ActionResult>();
+                json.Add(new Network.AdventureState.ActionResult
+                {
+                    ResultType = Network.AdventureState.ActionResult.Type.EarnExperience,
+                    Amount = adventureState.StackedExperience + adventureState.ExperienceReward
+                });
+                json.Add(new Network.AdventureState.ActionResult
+                {
+                    ResultType = Network.AdventureState.ActionResult.Type.EarnShards,
+                    Amount = adventureState.StackedShards + adventureState.ShardReward
+                });
                 if (leveledUp > 0)
                 {
-                    json += $" Leveled {leveledUp} levels. New Spirit points Available !";
+                    json.Add(new Network.AdventureState.ActionResult
+                    {
+                        ResultType = Network.AdventureState.ActionResult.Type.LevelUp,
+                        Amount = leveledUp
+                    });
                 }
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Dungeon.LeaveFinishedRoom,
                     Success = true,
-                    Json = json
+                    Json = JsonConvert.SerializeObject(json)
                 };
                 ret.Succeeded = true;
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,13 +24,13 @@ namespace Server.GameServer.Commands.Dungeon
 
                 if (adventure != null)
                 {
-                    adventure.PlayerRest(SoulManager.Instance.GetDatas(ret.ClientId));
+                    var result = adventure.PlayerRest(SoulManager.Instance.GetDatas(ret.ClientId));
 
                     ret.ClientResponse = new Network.Message
                     {
                         Code = Network.CommandCodes.Dungeon.PlayerRest,
                         Success = true,
-                        Json = "You are well rested."
+                        Json = JsonConvert.SerializeObject(result)
                     };
                     ret.Succeeded = true;
 

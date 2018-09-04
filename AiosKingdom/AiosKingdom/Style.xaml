@@ -673,6 +673,51 @@
         </ViewCell>
     </DataTemplate>
 
+    <DataTemplate x:Key="ARListItem">
+        <ViewCell>
+            <Grid
+                Margin="5"
+                BackgroundColor="{StaticResource PrimaryColor_2}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!--
+                <Label
+                    Grid.Column="0"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    Margin="5, 0"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding ., Converter={StaticResource lootItemToName}}"/>
+                -->
+
+                <Grid
+                    Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="7*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        FontSize="10"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Text="{Binding ResultType}"/>
+
+                    <Label
+                        Grid.Row="1"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        FontAttributes="Bold"
+                        Text="{Binding Amount, StringFormat='{0:F0}'}"/>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+    
     <DataTemplate x:Key="EmtyTemplateLul">
 
     </DataTemplate>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,16 +32,38 @@ namespace Server.GameServer.Commands.Dungeon
                     {
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
 
-                        string consumableResult;
-                        if (adventure.UseConsumable(slotKnown, item, SoulManager.Instance.GetDatas(ret.ClientId), enemyId, out consumableResult))
+                        List<Network.AdventureState.ActionResult> consumableResult;
+                        if (adventure.UseConsumable(slotKnown, item, datas, enemyId, out consumableResult))
                         {
-                            ret.ClientResponse = new Network.Message
+                            var state = adventure.GetActualState();
+
+                            if (state.CurrentHealth <= 0)
                             {
-                                Code = Network.CommandCodes.Dungeon.UseConsumable,
-                                Success = true,
-                                Json = $"Consumable successfully used. {consumableResult}"
-                            };
-                            ret.Succeeded = true;
+                                AdventureManager.Instance.PlayerDied(soul.Id);
+
+                                consumableResult.Add(new Network.AdventureState.ActionResult
+                                {
+                                    ResultType = Network.AdventureState.ActionResult.Type.PlayerDeath
+                                });
+
+                                ret.ClientResponse = new Network.Message
+                                {
+                                    Code = Network.CommandCodes.Dungeon.PlayerDied,
+                                    Success = true,
+                                    Json = JsonConvert.SerializeObject(consumableResult)
+                                };
+                                ret.Succeeded = true;
+                            }
+                            else
+                            {
+                                ret.ClientResponse = new Network.Message
+                                {
+                                    Code = Network.CommandCodes.Dungeon.UseConsumable,
+                                    Success = true,
+                                    Json = JsonConvert.SerializeObject(consumableResult)
+                                };
+                                ret.Succeeded = true;
+                            }
 
                             return ret;
                         }

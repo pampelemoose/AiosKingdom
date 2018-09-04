@@ -31,7 +31,7 @@ namespace AiosKingdom.ViewModels
 
             NetworkManager.Instance.AskInventory();
 
-            ScreenManager.Instance.AlertScreen("Bag", "Fill your bag with Items from your Inventory that you want to go with.");
+            IsInfoVisible = true;
         }
 
         private void SetInventory()
@@ -283,6 +283,22 @@ namespace AiosKingdom.ViewModels
                 NetworkManager.Instance.EnterDungeon(_dungeon.DungeonId, bagItems);
             }));
 
+        private bool _isInfoVisible;
+        public bool IsInfoVisible
+        {
+            get { return _isInfoVisible; }
+            set
+            {
+                _isInfoVisible = value;
+                NotifyPropertyChanged();
+            }
+        }
 
+        private ICommand _closeInfoAction;
+        public ICommand CloseInfoAction =>
+            _closeInfoAction ?? (_closeInfoAction = new Command(() =>
+            {
+                IsInfoVisible = false;
+            }));
     }
 }

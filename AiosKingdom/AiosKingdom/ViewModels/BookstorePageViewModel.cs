@@ -17,14 +17,17 @@ namespace AiosKingdom.ViewModels
             Application.Current.Properties["AiosKingdom_TutorialStep"] = 2;
             Application.Current.SavePropertiesAsync();
             MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+
+            IsInfoVisible = false;
         }
 
         private void Subscribe_SkillLearned()
         {
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.SkillLearned, (sender, message) =>
             {
-                ScreenManager.Instance.AlertScreen("Learn Skill", message);
                 IsBusy = false;
+                IsInfoVisible = true;
+                ResultMessage = message;
                 MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.SkillLearned);
             });
         }
@@ -88,5 +91,34 @@ namespace AiosKingdom.ViewModels
         {
             return DatasManager.Instance.Currencies?.Embers >= _selectedBook?.Pages[0].EmberCost;
         }));
+
+        private bool _isInfoVisible;
+        public bool IsInfoVisible
+        {
+            get { return _isInfoVisible; }
+            set
+            {
+                _isInfoVisible = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string _resultMessage;
+        public string ResultMessage
+        {
+            get { return _resultMessage; }
+            set
+            {
+                _resultMessage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ICommand _closeInfoAction;
+        public ICommand CloseInfoAction =>
+            _closeInfoAction ?? (_closeInfoAction = new Command(() =>
+            {
+                IsInfoVisible = false;
+            }));
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,8 @@ namespace Server.GameServer.Commands.Dungeon
 
             if (adventure != null)
             {
-                string message = "";
+                List<Network.AdventureState.ActionResult> message;
+
                 if (adventure.EnemyTurn(datas, out message))
                 {
                     var state = adventure.GetActualState();
@@ -30,11 +32,16 @@ namespace Server.GameServer.Commands.Dungeon
                     {
                         AdventureManager.Instance.PlayerDied(soul.Id);
 
+                        message.Add(new Network.AdventureState.ActionResult
+                        {
+                            ResultType = Network.AdventureState.ActionResult.Type.PlayerDeath
+                        });
+
                         ret.ClientResponse = new Network.Message
                         {
                             Code = Network.CommandCodes.Dungeon.PlayerDied,
                             Success = true,
-                            Json = $"{message}. You died. You lost all Experience and Shards from this dungeon."
+                            Json = JsonConvert.SerializeObject(message)
                         };
                         ret.Succeeded = true;
                     }
@@ -44,7 +51,7 @@ namespace Server.GameServer.Commands.Dungeon
                         {
                             Code = Network.CommandCodes.Dungeon.EnemyTurn,
                             Success = true,
-                            Json = message
+                            Json = JsonConvert.SerializeObject(message)
                         };
                         ret.Succeeded = true;
                     }

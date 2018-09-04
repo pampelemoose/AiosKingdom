@@ -18,13 +18,17 @@ namespace AiosKingdom.ViewModels
         {
             _quantity = quantity;
 
-            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.BuyMarketItem, (sender) =>
+            MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.BuyMarketItem, (sender, msg) =>
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    _navigation.PopModalAsync();
+                    IsBusy = false;
+                    ResultMessage = msg;
+                    IsInfoVisible = true;
                 });
             });
+
+            IsInfoVisible = false;
         }
 
         protected int _quantity;
@@ -148,5 +152,34 @@ namespace AiosKingdom.ViewModels
             }));
 
         protected abstract void ExecuteBuyAction();
+
+        private bool _isInfoVisible;
+        public bool IsInfoVisible
+        {
+            get { return _isInfoVisible; }
+            set
+            {
+                _isInfoVisible = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string _resultMessage;
+        public string ResultMessage
+        {
+            get { return _resultMessage; }
+            set
+            {
+                _resultMessage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ICommand _closeInfoAction;
+        public ICommand CloseInfoAction =>
+            _closeInfoAction ?? (_closeInfoAction = new Command(() =>
+            {
+                _navigation.PopModalAsync();
+            }));
     }
 }

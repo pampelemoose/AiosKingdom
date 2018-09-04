@@ -11,8 +11,6 @@
                 SelectedItem="{Binding SelectedDungeon, Mode=TwoWay}"
                 RowHeight="50"
                 ItemTemplate="{StaticResource DungeonListItem}"/>
-
-            <ctrl:LoadingIndicator/>
         </Grid>
     </ContentView.Content>
 </ContentView>

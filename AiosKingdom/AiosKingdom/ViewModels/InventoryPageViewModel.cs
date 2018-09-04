@@ -24,6 +24,8 @@ namespace AiosKingdom.ViewModels
             });
 
             NetworkManager.Instance.AskInventory();
+
+            IsInfoVisible = false;
         }
 
         ~InventoryPageViewModel()
@@ -144,6 +146,15 @@ namespace AiosKingdom.ViewModels
         public ICommand ArmorSlotEquipAction =>
             _armorSlotEquipAction ?? (_armorSlotEquipAction = new Command(() =>
             {
+                MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ItemEquiped, (sender, msg) =>
+                {
+                    IsBusy = false;
+                    IsInfoVisible = true;
+                    ResultMessage = msg;
+
+                    MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.ItemEquiped);
+                });
+
                 NetworkManager.Instance.EquipItem(_selectedArmor.Slot.Id);
                 IsBusy = true;
             }, () => { return _armorSlotIsSelected && _selectedArmor?.Item.UseLevelRequired <= DatasManager.Instance.Datas.Level; }));
@@ -220,6 +231,15 @@ namespace AiosKingdom.ViewModels
         public ICommand WeaponSlotEquipAction =>
             _weaponSlotEquipAction ?? (_weaponSlotEquipAction = new Command(() =>
             {
+                MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ItemEquiped, (sender, msg) =>
+                {
+                    IsBusy = false;
+                    IsInfoVisible = true;
+                    ResultMessage = msg;
+
+                    MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.ItemEquiped);
+                });
+
                 NetworkManager.Instance.EquipItem(_selectedWeapon.Slot.Id);
                 IsBusy = true;
             }, () => { return _weaponSlotIsSelected && _selectedWeapon?.Item.UseLevelRequired <= DatasManager.Instance.Datas.Level; }));
@@ -237,7 +257,45 @@ namespace AiosKingdom.ViewModels
                 if (_isWeaponPanelActive && _weaponSlotIsSelected)
                     NetworkManager.Instance.SellItem(_selectedWeapon.Slot.Id);
 
+                MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ItemSold, (sender, msg) =>
+                {
+                    IsBusy = false;
+                    IsInfoVisible = true;
+                    ResultMessage = msg;
+
+                    MessagingCenter.Unsubscribe<NetworkManager, string>(this, MessengerCodes.ItemSold);
+                });
+
                 IsBusy = true;
+            }));
+
+        private bool _isInfoVisible;
+        public bool IsInfoVisible
+        {
+            get { return _isInfoVisible; }
+            set
+            {
+                _isInfoVisible = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string _resultMessage;
+        public string ResultMessage
+        {
+            get { return _resultMessage; }
+            set
+            {
+                _resultMessage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ICommand _closeInfoAction;
+        public ICommand CloseInfoAction =>
+            _closeInfoAction ?? (_closeInfoAction = new Command(() =>
+            {
+                IsInfoVisible = false;
             }));
 
         private void SetInventories()

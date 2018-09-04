@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,16 +22,38 @@ namespace Server.GameServer.Commands.Dungeon
 
             if (adventure != null)
             {
-                string message = "";
+                List<Network.AdventureState.ActionResult> message;
                 if (adventure.DoNothingTurn(datas, out message))
                 {
-                    ret.ClientResponse = new Network.Message
+                    var state = adventure.GetActualState();
+
+                    if (state.CurrentHealth <= 0)
                     {
-                        Code = Network.CommandCodes.Dungeon.DoNothingTurn,
-                        Success = true,
-                        Json = message
-                    };
-                    ret.Succeeded = true;
+                        AdventureManager.Instance.PlayerDied(soul.Id);
+
+                        message.Add(new Network.AdventureState.ActionResult
+                        {
+                            ResultType = Network.AdventureState.ActionResult.Type.PlayerDeath
+                        });
+
+                        ret.ClientResponse = new Network.Message
+                        {
+                            Code = Network.CommandCodes.Dungeon.PlayerDied,
+                            Success = true,
+                            Json = JsonConvert.SerializeObject(message)
+                        };
+                        ret.Succeeded = true;
+                    }
+                    else
+                    {
+                        ret.ClientResponse = new Network.Message
+                        {
+                            Code = Network.CommandCodes.Dungeon.DoNothingTurn,
+                            Success = true,
+                            Json = JsonConvert.SerializeObject(message)
+                        };
+                        ret.Succeeded = true;
+                    }
 
                     return ret;
                 }

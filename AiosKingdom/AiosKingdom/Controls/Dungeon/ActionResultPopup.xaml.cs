@@ -7,16 +7,14 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace AiosKingdom.Views.Dungeon
+namespace AiosKingdom.Controls.Dungeon
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ExitDungeonPage : ContentPage
+	public partial class ActionResultPopup : ContentView
 	{
-		public ExitDungeonPage()
+		public ActionResultPopup ()
 		{
-			InitializeComponent();
-
-            BindingContext = new ViewModels.Dungeon.ExitDungeonPageViewModel(Navigation);
+			InitializeComponent ();
 		}
 	}
 }

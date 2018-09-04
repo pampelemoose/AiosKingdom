@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Server.GameServer.Commands.Dungeon
 {
     public class UseSkillCommand : ACommand
     {
-        public UseSkillCommand(CommandArgs args) 
+        public UseSkillCommand(CommandArgs args)
             : base(args)
         {
         }
@@ -31,16 +32,38 @@ namespace Server.GameServer.Commands.Dungeon
                     {
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
 
-                        string skillResult;
+                        List<Network.AdventureState.ActionResult> skillResult;
                         if (adventure.UseSkill(skill, SoulManager.Instance.GetDatas(ret.ClientId), enemyId, out skillResult))
                         {
-                            ret.ClientResponse = new Network.Message
+                            var state = adventure.GetActualState();
+
+                            if (state.CurrentHealth <= 0)
                             {
-                                Code = Network.CommandCodes.Dungeon.UseSkill,
-                                Success = true,
-                                Json = $"Skill successfully used. {skillResult}"
-                            };
-                            ret.Succeeded = true;
+                                AdventureManager.Instance.PlayerDied(soul.Id);
+
+                                skillResult.Add(new Network.AdventureState.ActionResult
+                                {
+                                    ResultType = Network.AdventureState.ActionResult.Type.PlayerDeath
+                                });
+
+                                ret.ClientResponse = new Network.Message
+                                {
+                                    Code = Network.CommandCodes.Dungeon.PlayerDied,
+                                    Success = true,
+                                    Json = JsonConvert.SerializeObject(skillResult)
+                                };
+                                ret.Succeeded = true;
+                            }
+                            else
+                            {
+                                ret.ClientResponse = new Network.Message
+                                {
+                                    Code = Network.CommandCodes.Dungeon.UseSkill,
+                                    Success = true,
+                                    Json = JsonConvert.SerializeObject(skillResult)
+                                };
+                                ret.Succeeded = true;
+                            }
 
                             return ret;
                         }

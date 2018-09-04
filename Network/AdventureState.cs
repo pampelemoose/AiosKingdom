@@ -50,6 +50,30 @@ namespace Network
             public int Quantity { get; set; }
         }
 
+        public class ActionResult
+        {
+            public enum Type
+            {
+                Damage,
+                Heal,
+
+                ReceiveMana,
+                ConsumedMana,
+
+                EarnExperience,
+                EarnShards,
+                LevelUp,
+                EnemyDeath,
+                PlayerDeath
+            }
+
+            public Guid TargetId { get; set; }
+            public bool IsConsumable { get; set; }
+            public Type ResultType { get; set; }
+            public Guid Id { get; set; }
+            public double Amount { get; set; }
+        }
+
         public Dictionary<Guid, EnemyState> Enemies { get; set; }
         public Dictionary<Guid, ShopState> Shops { get; set; }
 

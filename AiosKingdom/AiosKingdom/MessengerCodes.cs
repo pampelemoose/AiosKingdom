@@ -34,18 +34,25 @@ namespace AiosKingdom
         public static string EquipmentUpdated = "equipmentUpdated";
 
         public static string MarketUpdated = "marketUpdated";
+        public static string DungeonListUpdated = "dungeonListUpdated";
         public static string BuyMarketItem = "buyMarketItem";
+        public static string ItemSold = "itemSold";
+        public static string ItemEquiped = "itemEquiped";
         
-        public static string SpiritPillsFailed = "spiritPillsFailed";
+        public static string LearnSpiritPills = "learnSpiritPills";
         public static string SkillLearned = "skillLearned";
 
         public static string EnterDungeon = "enterDungeon";
+        public static string OpenExitDungeon = "openExitDungeon";
         public static string ExitedDungeon = "exitedDungeon";
         public static string DungeonSelectSkillEnded = "dungeonSelectSkillEnded";
         public static string DungeonSelectConsumableEnded = "dungeonSelectConsumableEnded";
         public static string EnemyTurnEnded = "enemyTurnEnded";
         public static string DungeonUpdated = "dungeonUpdated";
         public static string DungeonLootsReceived = "dungeonLootsReceived";
+        public static string RoundResults = "roundResults";
+        public static string RoundResultsClosed = "roundResultsClosed";
+        public static string PlayerDied = "playerDied";
 
         public static string AlertScreen = "alertScreen";
         public static string ScreenChangePage = "screenChangePage";

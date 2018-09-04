@@ -15,7 +15,8 @@ namespace AiosKingdom.ViewModels
             // TODO : Show `connect` button to retry the process.
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.ConnectionFailed, (sender, arg) =>
             {
-                ScreenManager.Instance.AlertScreen(MessengerCodes.ConnectionFailed, arg);
+                IsInfoVisible = true;
+                ResultMessage = arg;
                 IsBusy = false;
             });
 
@@ -27,7 +28,9 @@ namespace AiosKingdom.ViewModels
 
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.LoginFailed, (sender, arg) =>
             {
-                ScreenManager.Instance.AlertScreen("Login Failed", arg);
+                IsInfoVisible = true;
+                ResultMessage = arg;
+
                 Application.Current.Properties.Remove("AiosKingdom_IdentifyingKey");
                 IsNewDevice = true;
                 IsBusy = false;
@@ -36,7 +39,9 @@ namespace AiosKingdom.ViewModels
             #region Account Management
             MessagingCenter.Subscribe<NetworkManager, Guid>(this, MessengerCodes.CreateNewAccount, (sender, arg) =>
             {
-                ScreenManager.Instance.AlertScreen("Account", $"Please save this SafeKey[{arg}] in case you need to retrieve your account to any Device.");
+                IsInfoVisible = true;
+                ResultMessage = $"Please save this SafeKey[{arg}] in case you need to retrieve your account to any Device.";
+
                 IsBusy = false;
                 var identifier = Application.Current.Properties["AiosKingdom_IdentifyingKey"] as string;
 
@@ -51,7 +56,9 @@ namespace AiosKingdom.ViewModels
             // TODO : Show `retry` button to retry the process.
             MessagingCenter.Subscribe<NetworkManager, string>(this, MessengerCodes.CreateNewAccountFailed, (sender, arg) =>
             {
-                ScreenManager.Instance.AlertScreen("Account", $"There were an error creating a new account. Please try again later.\n{arg}");
+                IsInfoVisible = true;
+                ResultMessage = $"There were an error creating a new account. Please try again later.\n{arg}";
+
                 IsBusy = false;
             });
 
@@ -91,6 +98,8 @@ namespace AiosKingdom.ViewModels
                     IsBusy = true;
                 }
             }
+
+            IsInfoVisible = false;
         }
 
         ~LoginPageViewModel()
@@ -144,5 +153,34 @@ namespace AiosKingdom.ViewModels
             IsBusy = true;
             NetworkManager.Instance.AskNewAccount();
         }));
+
+        private bool _isInfoVisible;
+        public bool IsInfoVisible
+        {
+            get { return _isInfoVisible; }
+            set
+            {
+                _isInfoVisible = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string _resultMessage;
+        public string ResultMessage
+        {
+            get { return _resultMessage; }
+            set
+            {
+                _resultMessage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ICommand _closeInfoAction;
+        public ICommand CloseInfoAction =>
+            _closeInfoAction ?? (_closeInfoAction = new Command(() =>
+            {
+                IsInfoVisible = false;
+            }));
     }
 }

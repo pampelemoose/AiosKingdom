@@ -592,8 +592,7 @@ namespace AiosKingdom
                             AskInventory();
                             AskMarketItems();
                         }
-                        MessagingCenter.Send(this, MessengerCodes.BuyMarketItem);
-                        ScreenManager.Instance.AlertScreen("Market Item", message.Json);
+                        MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
                     }
                     break;
                 case Network.CommandCodes.Player.EquipItem:
@@ -604,7 +603,7 @@ namespace AiosKingdom
                             AskEquipment();
                             AskSoulCurrentDatas();
                         }
-                        ScreenManager.Instance.AlertScreen("Equip Item", message.Json);
+                        MessagingCenter.Send(this, MessengerCodes.ItemEquiped, message.Json);
                     }
                     break;
                 case Network.CommandCodes.Player.SellItem:
@@ -614,7 +613,7 @@ namespace AiosKingdom
                             AskInventory();
                             AskCurrencies();
                         }
-                        ScreenManager.Instance.AlertScreen("Sell Item", message.Json);
+                        MessagingCenter.Send(this, MessengerCodes.ItemSold, message.Json);
                     }
                     break;
                 case Network.CommandCodes.Player.UseSpiritPills:
@@ -628,11 +627,8 @@ namespace AiosKingdom
                             Application.Current.SavePropertiesAsync();
                             MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
                         }
-                        else
-                        {
-                            MessagingCenter.Send(this, MessengerCodes.SpiritPillsFailed);
-                        }
-                        ScreenManager.Instance.AlertScreen("Spirit Pills", message.Json);
+
+                        MessagingCenter.Send(this, MessengerCodes.LearnSpiritPills, message.Json);
                     }
                     break;
                 case Network.CommandCodes.Player.LearnSkill:
@@ -740,6 +736,7 @@ namespace AiosKingdom
                     {
                         var dungeons = JsonConvert.DeserializeObject<List<DataModels.Dungeons.Dungeon>>(message.Json);
                         DatasManager.Instance.Dungeons = dungeons;
+                        MessagingCenter.Send(this, MessengerCodes.DungeonListUpdated);
                     }
                     break;
                 case Network.CommandCodes.Listing.Market:
@@ -809,8 +806,14 @@ namespace AiosKingdom
                         if (message.Success)
                         {
                             UpdateDungeonRoom();
+
+                            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
+                            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
                         }
-                        ScreenManager.Instance.AlertScreen("Skill", message.Json);
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Skill", message.Json);
+                        }
                     }
                     break;
                 case Network.CommandCodes.Dungeon.UseConsumable:
@@ -819,8 +822,14 @@ namespace AiosKingdom
                         {
                             AskInventory();
                             UpdateDungeonRoom();
+
+                            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
+                            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
                         }
-                        ScreenManager.Instance.AlertScreen("Consumable", message.Json);
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Consumable", message.Json);
+                        }
                     }
                     break;
                 case Network.CommandCodes.Dungeon.EnemyTurn:
@@ -828,8 +837,14 @@ namespace AiosKingdom
                         if (message.Success)
                         {
                             UpdateDungeonRoom();
+
+                            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
+                            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
                         }
-                        ScreenManager.Instance.AlertScreen("Turn", message.Json);
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Turn", message.Json);
+                        }
                         MessagingCenter.Send(this, MessengerCodes.EnemyTurnEnded);
                     }
                     break;
@@ -838,9 +853,11 @@ namespace AiosKingdom
                         if (message.Success)
                         {
                             UpdateDungeonRoom();
-                        }
 
-                        if (!string.IsNullOrEmpty(message.Json))
+                            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
+                            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
+                        }
+                        else
                         {
                             ScreenManager.Instance.AlertScreen("Turn", message.Json);
                         }
@@ -871,12 +888,13 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            MessagingCenter.Send(this, MessengerCodes.SoulConnected);
-                            AskCurrencies();
-                            AskInventory();
-                            AskSoulCurrentDatas();
+                            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
+                            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
                         }
-                        ScreenManager.Instance.AlertScreen("Dungeon", message.Json);
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Dungeon", message.Json);
+                        }
                     }
                     break;
                 case Network.CommandCodes.Dungeon.BuyShopItem:
@@ -887,18 +905,13 @@ namespace AiosKingdom
                             AskInventory();
                             UpdateDungeonRoom();
                         }
-                        MessagingCenter.Send(this, MessengerCodes.BuyMarketItem);
-                        ScreenManager.Instance.AlertScreen("Shop", message.Json);
+                        MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
                     }
                     break;
                 case Network.CommandCodes.Dungeon.PlayerDied:
                     {
-
-                        MessagingCenter.Send(this, MessengerCodes.SoulConnected);
-                        AskCurrencies();
-                        AskInventory();
-                        AskSoulCurrentDatas();
-                        ScreenManager.Instance.AlertScreen("YOU DIED", message.Json);
+                        var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
+                        MessagingCenter.Send(this, MessengerCodes.PlayerDied, arList);
                     }
                     break;
                 case Network.CommandCodes.Dungeon.PlayerRest:
@@ -906,8 +919,14 @@ namespace AiosKingdom
                         if (message.Success)
                         {
                             OpenDungeonRoom();
+
+                            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
+                            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
                         }
-                        ScreenManager.Instance.AlertScreen("Resting", message.Json);
+                        else
+                        {
+                            ScreenManager.Instance.AlertScreen("Resting", message.Json);
+                        }
                     }
                     break;
 
@@ -1107,6 +1126,14 @@ namespace AiosKingdom
         public void PlayerRest()
         {
             SendRequest(Network.CommandCodes.Dungeon.PlayerRest);
+        }
+
+        public void DungeonLeft()
+        {
+            MessagingCenter.Send(this, MessengerCodes.SoulConnected);
+            AskCurrencies();
+            AskInventory();
+            AskSoulCurrentDatas();
         }
 
         #endregion

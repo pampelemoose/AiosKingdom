@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
+             xmlns:dng="clr-namespace:AiosKingdom.Controls.Dungeon;"
              x:Class="AiosKingdom.Views.Dungeon.DungeonPage"
              Title="{Binding Title}"
              x:Name="Dungeon">
@@ -507,6 +508,12 @@
             </Grid>
 
             <ctrl:LoadingIndicator
+                Grid.RowSpan="2"/>
+
+            <dng:ExitDungeonPage
+                Grid.RowSpan="2"/>
+            
+            <dng:ActionResultPopup
                 Grid.RowSpan="2"/>
         </Grid>
     </ContentPage.Content>

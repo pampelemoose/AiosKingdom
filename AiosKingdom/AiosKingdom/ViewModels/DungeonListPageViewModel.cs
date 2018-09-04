@@ -15,10 +15,24 @@ namespace AiosKingdom.ViewModels
         {
             Title = "Dungeons";
 
+            MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.DungeonListUpdated, (sender) =>
+            {
+                NotifyPropertyChanged(nameof(Dungeons));
+            });
+
             NetworkManager.Instance.AskKnowledges();
         }
 
-        public List<DataModels.Dungeons.Dungeon> Dungeons => DatasManager.Instance.Dungeons;
+        public List<DataModels.Dungeons.Dungeon> Dungeons
+        {
+            get
+            {
+                if (DatasManager.Instance.Datas == null || DatasManager.Instance.Dungeons == null)
+                    return new List<DataModels.Dungeons.Dungeon>();
+
+                return DatasManager.Instance.Dungeons.Where(d => d.RequiredLevel <= DatasManager.Instance.Datas.Level && d.MaxLevelAuthorized >= DatasManager.Instance.Datas.Level).ToList();
+            }
+        }
 
         public DataModels.Dungeons.Dungeon SelectedDungeon
         {
@@ -27,14 +41,7 @@ namespace AiosKingdom.ViewModels
             {
                 if (value != null)
                 {
-                    if (value.RequiredLevel > DatasManager.Instance.Datas.Level)
-                        ScreenManager.Instance.AlertScreen(value.Name, $"You can't enter here because your level is too low. (Min Level is {value.RequiredLevel})");
-                    else if (value.MaxLevelAuthorized < DatasManager.Instance.Datas.Level)
-                        ScreenManager.Instance.AlertScreen(value.Name, $"You can't enter here because your level is too high. (Max Level is {value.MaxLevelAuthorized})");
-                    else if (DatasManager.Instance.Knowledges.Count <= 0)
-                        ScreenManager.Instance.AlertScreen(value.Name, $"You can't enter here because you didn't learn any skills.");
-                    else
-                        _navigation.PushModalAsync(new Views.Dungeon.EnterDungeonPage(value));
+                    _navigation.PushModalAsync(new Views.Dungeon.EnterDungeonPage(value));
                 }
 
                 value = null;

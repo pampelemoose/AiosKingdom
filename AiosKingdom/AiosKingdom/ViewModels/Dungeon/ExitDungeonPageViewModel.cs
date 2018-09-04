@@ -11,16 +11,31 @@ namespace AiosKingdom.ViewModels.Dungeon
         public ExitDungeonPageViewModel(INavigation nav)
             : base(nav)
         {
+            MessagingCenter.Subscribe<DungeonPageViewModel>(this, MessengerCodes.OpenExitDungeon, (sender) =>
+            {
+                ExitDungeonVisible = true;
+            });
         }
 
         public string Confirmation => $"Are you sure you want to leave the dungeon ?";
         public string Warning => $"**You will lose {DatasManager.Instance.Adventure.StackedExperience} experience. You will lose all your items in your Bag.**";
 
+        private bool _exitDungeonVisible;
+        public bool ExitDungeonVisible
+        {
+            get { return _exitDungeonVisible; }
+            set
+            {
+                _exitDungeonVisible = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private ICommand _closeAction;
         public ICommand CloseAction =>
             _closeAction ?? (_closeAction = new Command(() =>
             {
-                _navigation.PopModalAsync();
+                ExitDungeonVisible = false;
             }));
 
         private ICommand _exitAction;
@@ -39,7 +54,7 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    _navigation.PopModalAsync();
+                    ExitDungeonVisible = false;
                     MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.ExitedDungeon);
                 });
             });
