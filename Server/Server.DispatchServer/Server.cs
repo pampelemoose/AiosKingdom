@@ -128,7 +128,8 @@ namespace Server.DispatchServer
                     var clientId = Guid.NewGuid();
                     ClientsManager.Instance.AddClient(clientId, newClient);
 
-                    AddPingerToClient(clientId);
+                    // TODO : Pinger not used in this server anymore ?
+                    //AddPingerToClient(clientId);
 
                     Log.Instance.Write(Log.Level.Infos, $"New client [{newClient.RemoteEndPoint}] given id ({clientId})");
                 }
@@ -136,13 +137,14 @@ namespace Server.DispatchServer
                 List<Guid> disconnectedClients = ClientsManager.Instance.DisconnectedClientList;
                 foreach (var client in ClientsManager.Instance.Clients)
                 {
-                    if (ClientsManager.Instance.GetPing(client.Key) > 10)
-                    {
-                        Log.Instance.Write(Log.Level.Warning, $"Client [{client.Value.RemoteEndPoint}],id ({client.Key}) timed out");
-                        Console.WriteLine($"{client.Key} Timed out.");
-                        disconnectedClients.Add(client.Key);
-                        continue;
-                    }
+                    // TODO : Pinger not needed, i think ?
+                    //if (ClientsManager.Instance.GetPing(client.Key) > 10)
+                    //{
+                    //    Log.Instance.Write(Log.Level.Warning, $"Client [{client.Value.RemoteEndPoint}],id ({client.Key}) timed out");
+                    //    Console.WriteLine($"{client.Key} Timed out.");
+                    //    disconnectedClients.Add(client.Key);
+                    //    continue;
+                    //}
 
                     var socket = client.Value;
 
@@ -210,6 +212,7 @@ namespace Server.DispatchServer
                             {
                                 Log.Instance.Write(Log.Level.Error, $"Tried to send packet to {response.ClientId} but exception : {sockEx.Message}");
                                 Console.WriteLine($"Server is not online(1)... [{sockEx.Message}]");
+                                ClientsManager.Instance.DisconnectClient(response.ClientId);
                             }
                         }
                     }
@@ -221,12 +224,23 @@ namespace Server.DispatchServer
             foreach (var client in ClientsManager.Instance.Clients)
             {
                 Log.Instance.Write(Log.Level.Infos, $"Disconnecting {client.Value.RemoteEndPoint}");
-                SendPacketOnSocket(client.Value, new Network.Message
+
+                try
                 {
-                    Code = Network.CommandCodes.Client_AnnounceDisconnection,
-                    Success = true,
-                    Json = "Disconnected"
-                });
+                    SendPacketOnSocket(client.Value, new Network.Message
+                    {
+                        Code = Network.CommandCodes.Client_AnnounceDisconnection,
+                        Success = true,
+                        Json = "Disconnected"
+                    });
+                }
+                catch (SocketException sockEx)
+                {
+                    Log.Instance.Write(Log.Level.Error, $"Tried to send packet to {client.Key} but exception : {sockEx.Message}");
+                    Console.WriteLine($"Server is not online(1)... [{sockEx.Message}]");
+                    ClientsManager.Instance.DisconnectClient(client.Key);
+                }
+
                 Console.WriteLine($"client [{client.Key}] socket shutdown.");
                 client.Value.Shutdown(SocketShutdown.Both);
                 client.Value.Close();
@@ -256,15 +270,8 @@ namespace Server.DispatchServer
 
             do
             {
-                try
-                {
-                    sent = socket.Send(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None);
-                    offset += sent;
-                }
-                catch (SocketException sockE)
-                {
-                    Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
-                }
+                sent = socket.Send(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None);
+                offset += sent;
             } while (sent == 256);
         }
 

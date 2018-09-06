@@ -103,6 +103,22 @@ namespace AiosKingdom
         protected override void OnStart()
         {
             // Handle when your app starts
+            GoToAiosKingdom();
+        }
+
+        protected override void OnSleep()
+        {
+            // Handle when your app sleeps
+        }
+
+        protected override void OnResume()
+        {
+            // Handle when your app resumes
+            NetworkManager.Instance.AskSoulCurrentDatas();
+        }
+
+        private void GoToAiosKingdom()
+        {
             NetworkManager.Instance.ConnectToServer();
 
             if (Application.Current.Properties.ContainsKey("AiosKingdom_IdentifyingKey"))
@@ -114,19 +130,6 @@ namespace AiosKingdom
                     NetworkManager.Instance.AskAuthentication(identifier);
                 }
             }
-        }
-
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-            NetworkManager.Instance.DisconnectGame();
-            NetworkManager.Instance.AnnounceDisconnection();
-            NetworkManager.Instance.Disconnect();
-        }
-
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
         }
     }
 }

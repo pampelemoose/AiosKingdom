@@ -42,12 +42,13 @@ namespace AiosKingdom
 
         #region Dispatch Functions
 
-        private DateTime _dispatchTimedOut;
+        // TODO : Removing Timeout on Dispatch
+        //private DateTime _dispatchTimedOut;
 
         private void RunDispatch()
         {
             _isDispatchRunning = true;
-            _dispatchTimedOut = DateTime.Now;
+            //_dispatchTimedOut = DateTime.Now;
 
             while (_isDispatchRunning)
             {
@@ -92,12 +93,12 @@ namespace AiosKingdom
                     }
                 }
 
-                var diff = DateTime.Now - _dispatchTimedOut;
-                if (diff.TotalSeconds > 10)
-                {
-                    MessagingCenter.Send(this, MessengerCodes.Disconnected, "Timed out.");
-                    _isDispatchRunning = false;
-                }
+                //var diff = DateTime.Now - _dispatchTimedOut;
+                //if (diff.TotalSeconds > 10)
+                //{
+                //    MessagingCenter.Send(this, MessengerCodes.Disconnected, "Timed out.");
+                //    _isDispatchRunning = false;
+                //}
             }
 
             _dispatch.GetStream().Flush();
@@ -109,17 +110,17 @@ namespace AiosKingdom
         {
             switch (message.Code)
             {
-                case Network.CommandCodes.Ping:
-                    {
-                        var args = new string[0];
-                        var retMess = new Network.Message
-                        {
-                            Code = Network.CommandCodes.Ping,
-                            Json = JsonConvert.SerializeObject(args)
-                        };
-                        SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
-                    }
-                    break;
+                //case Network.CommandCodes.Ping:
+                //    {
+                //        var args = new string[0];
+                //        var retMess = new Network.Message
+                //        {
+                //            Code = Network.CommandCodes.Ping,
+                //            Json = JsonConvert.SerializeObject(args)
+                //        };
+                //        SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
+                //    }
+                //    break;
                 case Network.CommandCodes.GlobalMessage:
                     {
                         ScreenManager.Instance.AlertScreen("Server Message", message.Json);
@@ -202,7 +203,7 @@ namespace AiosKingdom
                     return false;
             }
 
-            _dispatchTimedOut = DateTime.Now;
+            //_dispatchTimedOut = DateTime.Now;
 
             return true;
         }
@@ -357,7 +358,8 @@ namespace AiosKingdom
 
         #region Game Function
 
-        private DateTime _gameTimedOut;
+        // TODO : Timout only in PVP
+        //private DateTime _gameTimedOut;
 
         public void ConnectToGameServer(Network.GameServerConnection connection)
         {
@@ -410,7 +412,7 @@ namespace AiosKingdom
         private void RunGame()
         {
             _isGameRunning = true;
-            _gameTimedOut = DateTime.Now;
+            //_gameTimedOut = DateTime.Now;
 
             while (_isGameRunning)
             {
@@ -455,12 +457,12 @@ namespace AiosKingdom
                     }
                 }
 
-                var diff = DateTime.Now - _gameTimedOut;
-                if (diff.TotalSeconds > 10)
-                {
-                    MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, "Timed out.");
-                    _isGameRunning = false;
-                }
+                //var diff = DateTime.Now - _gameTimedOut;
+                //if (diff.TotalSeconds > 10)
+                //{
+                //    MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, "Timed out.");
+                //    _isGameRunning = false;
+                //}
             }
 
             if (_game.Connected)
@@ -474,11 +476,11 @@ namespace AiosKingdom
         {
             switch (message.Code)
             {
-                case Network.CommandCodes.Ping:
-                    {
-                        SendRequest(Network.CommandCodes.Ping);
-                    }
-                    break;
+                //case Network.CommandCodes.Ping:
+                //    {
+                //        SendRequest(Network.CommandCodes.Ping);
+                //    }
+                //    break;
                 case Network.CommandCodes.GlobalMessage:
                     {
                         ScreenManager.Instance.AlertScreen("Kingdom Message", message.Json);
@@ -934,7 +936,7 @@ namespace AiosKingdom
                     return false;
             }
 
-            _gameTimedOut = DateTime.Now;
+            //_gameTimedOut = DateTime.Now;
 
             return true;
         }

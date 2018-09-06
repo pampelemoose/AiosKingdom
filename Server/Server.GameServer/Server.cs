@@ -228,7 +228,8 @@ namespace Server.GameServer
                     var clientId = Guid.NewGuid();
                     ClientsManager.Instance.AddClient(clientId, newClient);
 
-                    AddPingerToClient(clientId);
+                    // TODO : Pinger only in PVP, or check that players are both still live
+                    //AddPingerToClient(clientId);
 
                     Log.Instance.Write(Log.Level.Infos, $"New client [{newClient.RemoteEndPoint}] given id ({clientId})");
                 }
@@ -236,13 +237,14 @@ namespace Server.GameServer
                 List<Guid> disconnectedClients = ClientsManager.Instance.DisconnectedClientList;
                 foreach (var client in ClientsManager.Instance.Clients)
                 {
-                    if (ClientsManager.Instance.GetPing(client.Key) > 10)
-                    {
-                        Log.Instance.Write(Log.Level.Warning, $"Client [{client.Value.RemoteEndPoint}],id ({client.Key}) timed out");
-                        Console.WriteLine($"{client.Key} Timed out.");
-                        disconnectedClients.Add(client.Key);
-                        continue;
-                    }
+                    // TODO : Pinger needed only for PVP
+                    //if (ClientsManager.Instance.GetPing(client.Key) > 10)
+                    //{
+                    //    Log.Instance.Write(Log.Level.Warning, $"Client [{client.Value.RemoteEndPoint}],id ({client.Key}) timed out");
+                    //    Console.WriteLine($"{client.Key} Timed out.");
+                    //    disconnectedClients.Add(client.Key);
+                    //    continue;
+                    //}
 
                     var socket = client.Value;
                     int bufferSize = socket.Available;
@@ -313,6 +315,7 @@ namespace Server.GameServer
                             {
                                 Log.Instance.Write(Log.Level.Error, $"Tried to send packet to {response.ClientId} but exception : {sockEx.Message}");
                                 Console.WriteLine($"Server is not online(1)... [{sockEx.Message}]");
+                                ClientsManager.Instance.DisconnectClient(response.ClientId);
                             }
                         }
                     }
@@ -326,12 +329,21 @@ namespace Server.GameServer
                 Log.Instance.Write(Log.Level.Infos, $"Disconnecting {client.Value.RemoteEndPoint}");
                 if (SoulManager.Instance.DisconnectSoul(client.Key))
                 {
-                    SendPacketOnSocket(client.Value, new Network.Message
+                    try
                     {
-                        Code = Network.CommandCodes.Server.DisconnectSoul,
-                        Success = true,
-                        Json = "Soul Disconnected"
-                    });
+                        SendPacketOnSocket(client.Value, new Network.Message
+                        {
+                            Code = Network.CommandCodes.Server.DisconnectSoul,
+                            Success = true,
+                            Json = "Soul Disconnected"
+                        });
+                    }
+                    catch (SocketException sockEx)
+                    {
+                        Log.Instance.Write(Log.Level.Error, $"Tried to send packet to {client.Key} but exception : {sockEx.Message}");
+                        Console.WriteLine($"Server is not online(2)... [{sockEx.Message}]");
+                        ClientsManager.Instance.DisconnectClient(client.Key);
+                    }
                     Console.WriteLine($"{client.Key} Soul disconnected.");
                 }
 
@@ -367,15 +379,8 @@ namespace Server.GameServer
 
             do
             {
-                try
-                {
-                    sent = socket.Send(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None);
-                    offset += sent;
-                }
-                catch (SocketException sockE)
-                {
-                    Console.WriteLine($"Socket is not connected : [{sockE.Message}]");
-                }
+                sent = socket.Send(mess, offset, (mess.Length - offset <= 256 ? mess.Length - offset : 256), SocketFlags.None);
+                offset += sent;
             } while (sent == 256);
         }
 
