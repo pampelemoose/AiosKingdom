@@ -7,15 +7,115 @@
              BackgroundColor="{StaticResource PrimaryColor_0}">
     <ContentView.Content>
         <Grid
-            RowSpacing="0">
+            ColumnSpacing="0">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
+            <StackLayout
+                    VerticalOptions="End"
+                    Grid.Column="0"
+                    Spacing="0">
+
+                <ContentView
+                        HeightRequest="40"
+                        Padding="3">
+                    <ContentView.Triggers>
+                        <DataTrigger TargetType="ContentView" Binding="{Binding IsArmorPanelActive}" Value="False">
+                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="ContentView" Binding="{Binding IsArmorPanelActive}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
+                        </DataTrigger>
+                    </ContentView.Triggers>
+                    <Grid
+                            HeightRequest="40">
+                        <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/shield.png"/>
+                        <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding SetFilterAction}"
+                                CommandParameter="Armors"/>
+                    </Grid>
+                </ContentView>
+
+                <ContentView
+                        HeightRequest="40"
+                        Padding="3">
+                    <ContentView.Triggers>
+                        <DataTrigger TargetType="ContentView" Binding="{Binding IsWeaponPanelActive}" Value="False">
+                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="ContentView" Binding="{Binding IsWeaponPanelActive}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
+                        </DataTrigger>
+                    </ContentView.Triggers>
+                    <Grid
+                            HeightRequest="40">
+                        <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/swords.png"/>
+                        <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding SetFilterAction}"
+                                CommandParameter="Weapons"/>
+                    </Grid>
+                </ContentView>
+
+                <ContentView
+                        HeightRequest="40"
+                        Padding="3">
+                    <ContentView.Triggers>
+                        <DataTrigger TargetType="ContentView" Binding="{Binding IsBagPanelActive}" Value="False">
+                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="ContentView" Binding="{Binding IsBagPanelActive}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
+                        </DataTrigger>
+                    </ContentView.Triggers>
+                    <Grid
+                            HeightRequest="40">
+                        <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/backpack.png"/>
+                        <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding SetFilterAction}"
+                                CommandParameter="Bags"/>
+                    </Grid>
+                </ContentView>
+
+                <ContentView
+                        HeightRequest="40"
+                        Padding="3">
+                    <ContentView.Triggers>
+                        <DataTrigger TargetType="ContentView" Binding="{Binding IsConsumablePanelActive}" Value="False">
+                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="ContentView" Binding="{Binding IsConsumablePanelActive}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
+                        </DataTrigger>
+                    </ContentView.Triggers>
+                    <Grid
+                            HeightRequest="40">
+                        <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/flask.png"/>
+                        <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding SetFilterAction}"
+                                CommandParameter="Consumables"/>
+                    </Grid>
+                </ContentView>
+
+            </StackLayout>
+
             <Grid
-                Grid.Column="0"
-                Margin="10"
+                Grid.Column="1"
+                Margin="5"
                 BackgroundColor="{Binding SelectedItem.Item.Quality, Converter={StaticResource itemQualityToColor}}"
                 IsVisible="{Binding IsItemSelected}">
                 <Grid
@@ -164,73 +264,60 @@
                 </Grid>
             </Grid>
 
-            <Grid
-                Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <Picker 
-                    Grid.Row="0" 
-                    BackgroundColor="{StaticResource PrimaryColor_3}"
-                    ItemsSource="{Binding FilterList}" 
-                    SelectedItem="{Binding Filter}" />
-
-                <ListView 
-                    Grid.Row="1"
-                    ItemsSource="{Binding Items}" 
-                    SelectedItem="{Binding SelectedItem}"
-                    RowHeight="40"
-                    SeparatorVisibility="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
+            <ListView 
+                Margin="0, 5, 5, 5"
+                Grid.Column="2"
+                ItemsSource="{Binding Items}" 
+                SelectedItem="{Binding SelectedItem}"
+                RowHeight="40"
+                SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid
+                                BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}">
                                 <Grid
-                                    BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}">
+                                    Margin="5, 0, 0, 0"
+                                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="60" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        Grid.Column="0" 
+                                        VerticalTextAlignment="Center"
+                                        FontSize="15"
+                                        FontAttributes="Bold"
+                                        Text="{Binding Item.Name}" />
+
                                     <Grid
-                                        Margin="5, 0, 0, 0"
-                                        BackgroundColor="{StaticResource PrimaryColor_2}">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="60" />
-                                        </Grid.ColumnDefinitions>
+                                        Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="5*"/>
+                                            <RowDefinition Height="7*"/>
+                                        </Grid.RowDefinitions>
 
                                         <Label
-                                            Grid.Column="0" 
+                                            Grid.Row="0"
+                                            FontSize="10"
                                             VerticalTextAlignment="Center"
-                                            FontSize="15"
+                                            HorizontalTextAlignment="Center"
+                                            Text="Quantity :" />
+                                        <Label
+                                            Grid.Row="1"
+                                            FontSize="12"
                                             FontAttributes="Bold"
-                                            Text="{Binding Item.Name}" />
-
-                                        <Grid
-                                            Grid.Column="1">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="5*"/>
-                                                <RowDefinition Height="7*"/>
-                                            </Grid.RowDefinitions>
-
-                                            <Label
-                                                Grid.Row="0"
-                                                FontSize="10"
-                                                VerticalTextAlignment="Center"
-                                                HorizontalTextAlignment="Center"
-                                                Text="Quantity :" />
-                                            <Label
-                                                Grid.Row="1"
-                                                FontSize="12"
-                                                FontAttributes="Bold"
-                                                VerticalTextAlignment="Center"
-                                                HorizontalTextAlignment="Center"
-                                                Text="{Binding Slot.Quantity}" />
-                                        </Grid>
+                                            VerticalTextAlignment="Center"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding Slot.Quantity}" />
                                     </Grid>
                                 </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Grid>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
             <ctrl:LoadingIndicator/>
         </Grid>

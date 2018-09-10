@@ -12,6 +12,8 @@ namespace AiosKingdom.ViewModels
         public MarketPageViewModel(INavigation nav) 
             : base(nav)
         {
+            _filter = DataModels.Items.ItemType.Armor;
+
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.MarketUpdated, (sender) =>
             {
                 SetItems();
@@ -26,19 +28,91 @@ namespace AiosKingdom.ViewModels
             MessagingCenter.Unsubscribe<NetworkManager>(this, MessengerCodes.MarketUpdated);
         }
 
-        private DataModels.Items.ItemType _filter;
-        public DataModels.Items.ItemType Filter
+        private bool _isArmorPanelActive = true;
+        public bool IsArmorPanelActive
         {
-            get { return _filter; }
+            get { return _isArmorPanelActive; }
             set
             {
-                _filter = value;
-                SetItems();
+                _isArmorPanelActive = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public List<DataModels.Items.ItemType> FilterList => Enum.GetValues(typeof(DataModels.Items.ItemType)).Cast<DataModels.Items.ItemType>().ToList();
+        private bool _isWeaponPanelActive;
+        public bool IsWeaponPanelActive
+        {
+            get { return _isWeaponPanelActive; }
+            set
+            {
+                _isWeaponPanelActive = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private bool _isBagPanelActive;
+        public bool IsBagPanelActive
+        {
+            get { return _isBagPanelActive; }
+            set
+            {
+                _isBagPanelActive = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private bool _isConsumablePanelActive;
+        public bool IsConsumablePanelActive
+        {
+            get { return _isConsumablePanelActive; }
+            set
+            {
+                _isConsumablePanelActive = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private DataModels.Items.ItemType _filter;
+        private Command _setFilterAction;
+        public ICommand SetFilterAction =>
+        _setFilterAction ?? (_setFilterAction = new Command((arg) =>
+        {
+            string filter = (string)arg;
+            DataModels.Items.ItemType newFilter;
+
+            IsArmorPanelActive = false;
+            IsWeaponPanelActive = false;
+            IsBagPanelActive = false;
+            IsConsumablePanelActive = false;
+
+            switch (filter)
+            {
+                case "Armors":
+                    newFilter = DataModels.Items.ItemType.Armor;
+                    IsArmorPanelActive = true;
+                    break;
+                case "Consumables":
+                    newFilter = DataModels.Items.ItemType.Consumable;
+                    IsConsumablePanelActive = true;
+                    break;
+                case "Weapons":
+                    newFilter = DataModels.Items.ItemType.Weapon;
+                    IsWeaponPanelActive = true;
+                    break;
+                case "Bags":
+                    newFilter = DataModels.Items.ItemType.Bag;
+                    IsBagPanelActive = true;
+                    break;
+                default:
+                    return;
+            }
+
+            if (newFilter != _filter)
+            {
+                _filter = newFilter;
+                SetItems();
+            }
+        }));
 
         private List<Models.MarketItemModel> _items;
         public List<Models.MarketItemModel> Items => _items;

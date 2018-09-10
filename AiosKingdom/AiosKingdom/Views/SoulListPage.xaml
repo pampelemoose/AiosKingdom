@@ -17,16 +17,19 @@
                 Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="10*"/>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
 
-                <Button
-                    Grid.Column="0"
-                    Margin="5"
-                    Style="{StaticResource MenuButton}"
-                    Text="B"
-                    Command="{Binding BackAction}"/>
+                <Grid
+                    Grid.Column="0">
+                    <Image
+                        Margin="5"
+                        Source="Assets/Images/leftarrow.png"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding BackAction}"/>
+                </Grid>
 
                 <Label
                     Grid.Column="1"
@@ -36,12 +39,15 @@
                     VerticalTextAlignment="Center"
                     Text="Souls"/>
 
-                <Button
-                    Grid.Column="2"
-                    Margin="5"
-                    Style="{StaticResource MenuButton}"
-                    Text="New"
-                    Command="{Binding CreateSoulAction}"/>
+                <Grid
+                    Grid.Column="2">
+                    <Image
+                        Margin="5"
+                        Source="Assets/Images/newuser.png"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding CreateSoulAction}"/>
+                </Grid>
             </Grid>
 
             <ListView
@@ -74,7 +80,7 @@
                         Text="Close"
                         Command="{Binding CloseAction}"/>
                 </Grid>
-                
+
                 <Grid
                     Grid.Row="1"
                     Padding="50">

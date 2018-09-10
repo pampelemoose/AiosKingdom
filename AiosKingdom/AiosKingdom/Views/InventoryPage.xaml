@@ -170,6 +170,7 @@
                     VerticalOptions="End"
                     Grid.Column="0"
                     Spacing="0">
+
                     <ContentView
                         HeightRequest="40"
                         Padding="3">
@@ -181,10 +182,16 @@
                                 <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
                             </DataTrigger>
                         </ContentView.Triggers>
-                        <Button
-                            Style="{StaticResource MenuButton}"
-                            Text="A"
-                            Command="{Binding ShowArmorPanelAction}"/>
+                        <Grid
+                            HeightRequest="40">
+                            <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/shield.png"/>
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding ShowPanelAction}"
+                                CommandParameter="Armors"/>
+                        </Grid>
                     </ContentView>
 
                     <ContentView
@@ -198,10 +205,16 @@
                                 <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
                             </DataTrigger>
                         </ContentView.Triggers>
-                        <Button
-                            Style="{StaticResource MenuButton}"
-                            Text="W"
-                            Command="{Binding ShowWeaponPanelAction}"/>
+                        <Grid
+                            HeightRequest="40">
+                            <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/swords.png"/>
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding ShowPanelAction}"
+                                CommandParameter="Weapons"/>
+                        </Grid>
                     </ContentView>
 
                     <ContentView
@@ -215,10 +228,16 @@
                                 <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
                             </DataTrigger>
                         </ContentView.Triggers>
-                        <Button
-                            Style="{StaticResource MenuButton}"
-                            Text="B"
-                            Command="{Binding ShowBagPanelAction}"/>
+                        <Grid
+                            HeightRequest="40">
+                            <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/backpack.png"/>
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding ShowPanelAction}"
+                                CommandParameter="Bags"/>
+                        </Grid>
                     </ContentView>
 
                     <ContentView
@@ -232,10 +251,16 @@
                                 <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
                             </DataTrigger>
                         </ContentView.Triggers>
-                        <Button
-                            Style="{StaticResource MenuButton}"
-                            Text="C"
-                            Command="{Binding ShowConsumablePanelAction}"/>
+                        <Grid
+                            HeightRequest="40">
+                            <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/flask.png"/>
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding ShowPanelAction}"
+                                CommandParameter="Consumables"/>
+                        </Grid>
                     </ContentView>
 
                 </StackLayout>

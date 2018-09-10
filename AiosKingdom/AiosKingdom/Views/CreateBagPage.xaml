@@ -22,12 +22,15 @@
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button
-                        Grid.Column="0"
-                        Margin="5"
-                        Style="{StaticResource MenuButton}"
-                        Text="B"
-                        Command="{Binding BackAction}"/>
+                    <Grid
+                        Grid.Column="0">
+                        <Image
+                            Margin="5"
+                            Source="Assets/Images/leftarrow.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding BackAction}"/>
+                    </Grid>
 
                     <Label
                         Grid.Column="1"
@@ -152,7 +155,7 @@
                 <ctrl:LoadingIndicator
                     Grid.RowSpan="3"/>
             </Grid>
-            
+
             <Grid
                 IsVisible="{Binding IsInfoVisible}"
                 BackgroundColor="Black"

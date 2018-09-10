@@ -79,44 +79,33 @@ namespace AiosKingdom.ViewModels
             }
         }
 
-        private ICommand _showArmorPanelAction;
-        public ICommand ShowArmorPanelAction =>
-            _showArmorPanelAction ?? (_showArmorPanelAction = new Command(() =>
+        private ICommand _showPanelAction;
+        public ICommand ShowPanelAction =>
+            _showPanelAction ?? (_showPanelAction = new Command((arg) =>
             {
-                IsArmorPanelActive = true;
-                IsWeaponPanelActive = false;
-                IsBagPanelActive = false;
-                IsConsumablePanelActive = false;
-            }));
+                string type = (string)arg;
 
-        private ICommand _showWeaponPanelAction;
-        public ICommand ShowWeaponPanelAction =>
-            _showWeaponPanelAction ?? (_showWeaponPanelAction = new Command(() =>
-            {
-                IsArmorPanelActive = false;
-                IsWeaponPanelActive = true;
-                IsBagPanelActive = false;
-                IsConsumablePanelActive = false;
-            }));
-
-        private ICommand _showBagPanelAction;
-        public ICommand ShowBagPanelAction =>
-            _showBagPanelAction ?? (_showBagPanelAction = new Command(() =>
-            {
-                IsArmorPanelActive = false;
-                IsWeaponPanelActive = false;
-                IsBagPanelActive = true;
-                IsConsumablePanelActive = false;
-            }));
-
-        private ICommand _showConsumablePanelAction;
-        public ICommand ShowConsumablePanelAction =>
-            _showConsumablePanelAction ?? (_showConsumablePanelAction = new Command(() =>
-            {
                 IsArmorPanelActive = false;
                 IsWeaponPanelActive = false;
                 IsBagPanelActive = false;
-                IsConsumablePanelActive = true;
+                IsConsumablePanelActive = false;
+
+                switch (type)
+                {
+                    case "Armors":
+                        IsArmorPanelActive = true;
+                        break;
+                    case "Bags":
+                        IsBagPanelActive = true;
+                        break;
+                    case "Weapons":
+                        IsWeaponPanelActive = true;
+                        break;
+                    case "Consumables":
+                        IsConsumablePanelActive = true;
+                        break;
+                }
+                
             }));
 
         #endregion

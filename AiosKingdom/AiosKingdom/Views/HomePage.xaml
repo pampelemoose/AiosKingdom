@@ -43,7 +43,7 @@
                             HorizontalTextAlignment="Center"
                             Text="{Binding Datas.Level}"/>
                     </ContentView>
-                    
+
                     <Grid
                         Grid.Column="1"
                         RowSpacing="0">
@@ -78,7 +78,7 @@
                                 VerticalTextAlignment="Center"
                                 FontSize="10"
                                 Text="Experience : " />
-                            
+
                             <Label
                                 Grid.Column="1"
                                 HorizontalTextAlignment="End"
@@ -123,7 +123,7 @@
                             FontSize="10"
                             FontAttributes="Bold"
                             Text="{Binding Datas.MaxHealth}" />
-                        
+
                         <Label
                             Grid.Row="1"
                             Grid.Column="0"
@@ -142,18 +142,22 @@
 
                     </Grid>
                 </Grid>
-                
+
                 <Button
                     Grid.Column="0"
                     BackgroundColor="Transparent"
                     Command="{Binding ShowSoulDetailsAction}"/>
 
-                <Button
-                    Grid.Column="1"
-                    BackgroundColor="{StaticResource PrimaryColor_3}"
-                    TextColor="{StaticResource PrimaryColor_1}"
-                    Text="S"
-                    Clicked="ShowSetting_Clicked"/>
+                <Grid
+                    Grid.Column="1">
+                    <Image
+                        Margin="5"
+                        Source="Assets/Images/settings.png"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Clicked="ShowSetting_Clicked"/>
+                </Grid>
+
             </Grid>
 
             <Grid
@@ -209,36 +213,79 @@
                     VerticalOptions="End"
                     Padding="0"
                     Spacing="0">
-                    <Button
-                        Style="{StaticResource HomeMenuButton}"
-                        Text="H"
-                        Command="{Binding ShowContentAction}"
-                        CommandParameter="Home"/>
-                    <Button
-                        Style="{StaticResource HomeMenuButton}"
-                        Text="Inv"
-                        Command="{Binding ShowContentAction}"
-                        CommandParameter="Inventory"/>
-                    <Button
-                        Style="{StaticResource HomeMenuButton}"
-                        Text="Spi"
-                        Command="{Binding ShowContentAction}"
-                        CommandParameter="Spirits"/>
-                    <Button
-                        Style="{StaticResource HomeMenuButton}"
-                        Text="Kno"
-                        Command="{Binding ShowContentAction}"
-                        CommandParameter="Knowledge"/>
-                    <Button
-                        Style="{StaticResource HomeMenuButton}"
-                        Text="Mark"
-                        Command="{Binding ShowContentAction}"
-                        CommandParameter="Market"/>
-                    <Button
-                        Style="{StaticResource HomeMenuButton}"
-                        Text="Book"
-                        Command="{Binding ShowContentAction}"
-                        CommandParameter="Bookstore"/>
+
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/home.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Home"/>
+                    </Grid>
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/chest.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Inventory"/>
+                    </Grid>
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/pill.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Spirits"/>
+                    </Grid>
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/knowledge.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Knowledge"/>
+                    </Grid>
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/shop.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Market"/>
+                    </Grid>
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/bookstore.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Bookstore"/>
+                    </Grid>
                 </StackLayout>
             </Grid>
 

@@ -16,8 +16,8 @@
             <Grid
                 Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10*"/>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
 
                 <Label
@@ -28,12 +28,15 @@
                     VerticalTextAlignment="Center"
                     Text="Servers"/>
 
-                <Button
-                    Grid.Column="1"
-                    Margin="5"
-                    Style="{StaticResource MenuButton}"
-                    Text="Refresh"
-                    Command="{Binding RefreshServersAction}"/>
+                <Grid
+                    Grid.Column="1">
+                    <Image
+                        Margin="5"
+                        Source="Assets/Images/refreshbutton.png"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding RefreshServersAction}"/>
+                </Grid>
             </Grid>
 
             <ListView
