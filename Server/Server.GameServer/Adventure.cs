@@ -106,6 +106,7 @@ namespace Server.GameServer
             Console.WriteLine($"Consumed {skill.ManaCost} mana.");
             message.Add(new Network.AdventureState.ActionResult
             {
+                Id = skill.Id,
                 ResultType = Network.AdventureState.ActionResult.Type.ConsumedMana,
                 Amount = skill.ManaCost
             });
@@ -176,7 +177,7 @@ namespace Server.GameServer
                 foreach (var inscription in skill.Inscriptions)
                 {
                     var res = ExecuteEnemyInscription(inscription, enemyKeys);
-                    var inside = message.FirstOrDefault(m => m.IsConsumable == false && m.Id.Equals(res.Id));
+                    var inside = message.FirstOrDefault(m => m.IsConsumable == false && m.TargetId.Equals(res.TargetId) && m.Id.Equals(res.Id));
                     if (inside != null)
                     {
                         message.Remove(inside);
@@ -563,7 +564,7 @@ namespace Server.GameServer
                 foreach (var buff in enemyMarks.Value)
                 {
                     var res = ExecuteEnemyInscription(buff, enemyMarks.Key);
-                    var inside = result.FirstOrDefault(m => m.IsConsumable == false && m.Id.Equals(res.Id));
+                    var inside = result.FirstOrDefault(m => m.IsConsumable == false && m.TargetId.Equals(res.TargetId) && m.Id.Equals(res.Id));
                     if (inside != null)
                     {
                         result.Remove(inside);
@@ -663,12 +664,13 @@ namespace Server.GameServer
 
         private Network.AdventureState.ActionResult ExecuteEnemyInscription(DataModels.Skills.Inscription inscription, Guid enemyId)
         {
+            var enemy = _state.Enemies[enemyId];
             var enemyStats = _enemiesStats[enemyId];
             double amount = inscription.BaseValue + (inscription.Ratio * GetEnemyStatValue(inscription.StatType, enemyStats));
 
             Network.AdventureState.ActionResult result = new Network.AdventureState.ActionResult
             {
-                TargetId = enemyId,
+                TargetId = enemy.MonsterId,
                 IsConsumable = false,
                 Id = inscription.PageId,
                 Amount = amount
@@ -687,8 +689,6 @@ namespace Server.GameServer
                     break;
                 case DataModels.Skills.InscriptionType.Heal:
                     {
-                        var enemy = _state.Enemies[enemyId];
-
                         enemy.CurrentHealth += amount;
                         if (enemy.CurrentHealth > enemy.MaxHealth)
                         {
@@ -706,8 +706,6 @@ namespace Server.GameServer
                     {
                         foreach (var enemiesStat in _enemiesStats)
                         {
-                            var enemy = _state.Enemies[enemiesStat.Key];
-
                             enemy.CurrentHealth += amount;
                             if (enemy.CurrentHealth > enemy.MaxHealth)
                             {

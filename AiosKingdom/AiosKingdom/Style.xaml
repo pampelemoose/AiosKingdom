@@ -679,10 +679,25 @@
                 Margin="5"
                 BackgroundColor="{StaticResource PrimaryColor_2}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="8*"/>
-                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
+
+                <Image
+                    Grid.Column="0"
+                    Source="{Binding TargetId, Converter={StaticResource actionResultTargetToImage}}" />
                 
+                <Image
+                    Grid.Column="1"
+                    Source="{Binding ., Converter={StaticResource actionResultToImage}}" />
+                
+                <Image
+                    Grid.Column="2"
+                    Source="{Binding ResultType, Converter={StaticResource actionResultTypeToImage}}" />
+
                 <!--
                 <Label
                     Grid.Column="0"
@@ -694,7 +709,7 @@
                 -->
 
                 <Grid
-                    Grid.Column="1">
+                    Grid.Column="4">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="5*"/>
                         <RowDefinition Height="7*"/>

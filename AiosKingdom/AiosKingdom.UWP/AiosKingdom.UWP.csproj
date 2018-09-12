@@ -104,6 +104,11 @@
     <None Include="AiosKingdom.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Images\ActionResults\consumedmana.png" />
+    <Content Include="Assets\Images\ActionResults\damage.png" />
+    <Content Include="Assets\Images\ActionResults\heal.png" />
+    <Content Include="Assets\Images\ActionResults\receivemana.png" />
+    <Content Include="Assets\Images\imgnotfound.png" />
     <Content Include="Assets\Images\knowledge.png" />
     <Content Include="Assets\Images\backpack.png" />
     <Content Include="Assets\Images\bookstore.png" />
@@ -180,6 +185,7 @@
       <Name>AiosKingdom</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -24,6 +24,9 @@
             <converters:RoomTypeToColorConverter x:Key="roomTypeToColor" />
             <converters:EnemyToNameConverter x:Key="enemyToName" />
             <converters:ShopItemToNameConverter x:Key="shopItemToName" />
+            <converters:ActionResultToImageConverter x:Key="actionResultToImage" />
+            <converters:ActionResultTypeToImageConverter x:Key="actionResultTypeToImage" />
+            <converters:ActionResultTargetToImageConverter x:Key="actionResultTargetToImage" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
