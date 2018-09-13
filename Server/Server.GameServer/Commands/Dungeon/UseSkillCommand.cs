@@ -33,11 +33,11 @@ namespace Server.GameServer.Commands.Dungeon
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
 
                         List<Network.AdventureState.ActionResult> skillResult;
-                        if (adventure.UseSkill(skill, SoulManager.Instance.GetDatas(ret.ClientId), enemyId, out skillResult))
+                        if (adventure.UseSkill(skill, enemyId, out skillResult))
                         {
                             var state = adventure.GetActualState();
 
-                            if (state.CurrentHealth <= 0)
+                            if (state.State.CurrentHealth <= 0)
                             {
                                 AdventureManager.Instance.PlayerDied(soul.Id);
 

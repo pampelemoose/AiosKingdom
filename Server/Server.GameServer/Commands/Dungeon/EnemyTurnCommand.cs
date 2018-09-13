@@ -17,18 +17,17 @@ namespace Server.GameServer.Commands.Dungeon
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var soul = SoulManager.Instance.GetSoul(_args.ClientId);
-            var datas = SoulManager.Instance.GetDatas(_args.ClientId);
             var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
 
             if (adventure != null)
             {
                 List<Network.AdventureState.ActionResult> message;
 
-                if (adventure.EnemyTurn(datas, out message))
+                if (adventure.EnemyTurn(out message))
                 {
                     var state = adventure.GetActualState();
 
-                    if (state.CurrentHealth <= 0)
+                    if (state.State.CurrentHealth <= 0)
                     {
                         AdventureManager.Instance.PlayerDied(soul.Id);
 

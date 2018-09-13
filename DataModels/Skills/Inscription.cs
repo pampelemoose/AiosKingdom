@@ -17,9 +17,6 @@ namespace DataModels.Skills
         Stunned = 4,
         Charmed = 5,
         Confused = 6,
-        
-        DoT = 7,
-        HoT = 8,
 
         // ADVANCED IDEAS
         Burn = 15,

@@ -6,14 +6,13 @@ namespace Network
 {
     public struct AdventureState
     {
-        public struct EnemyState
+        public class EnemyState
         {
             public Guid MonsterId { get; set; }
 
             public string EnemyType { get; set; }
 
-            public double CurrentHealth { get; set; }
-            public double MaxHealth { get; set; }
+            public PlayerState State { get; set; }
 
             public int NextPhase { get; set; }
         }
@@ -91,8 +90,7 @@ namespace Network
         public bool IsBossFight { get; set; }
         public bool IsExit { get; set; }
 
-        public double CurrentHealth { get; set; }
-        public double CurrentMana { get; set; }
+        public PlayerState State { get; set; }
 
         public int ExperienceReward { get; set; }
         public int ShardReward { get; set; }

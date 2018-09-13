@@ -24,7 +24,7 @@ namespace Server.GameServer.Commands.Dungeon
 
                 if (adventure != null)
                 {
-                    var result = adventure.PlayerRest(SoulManager.Instance.GetDatas(ret.ClientId));
+                    var result = adventure.PlayerRest();
 
                     ret.ClientResponse = new Network.Message
                     {

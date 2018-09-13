@@ -33,11 +33,11 @@ namespace Server.GameServer.Commands.Dungeon
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
 
                         List<Network.AdventureState.ActionResult> consumableResult;
-                        if (adventure.UseConsumable(slotKnown, item, datas, enemyId, out consumableResult))
+                        if (adventure.UseConsumable(slotKnown, item, enemyId, out consumableResult))
                         {
                             var state = adventure.GetActualState();
 
-                            if (state.CurrentHealth <= 0)
+                            if (state.State.CurrentHealth <= 0)
                             {
                                 AdventureManager.Instance.PlayerDied(soul.Id);
 

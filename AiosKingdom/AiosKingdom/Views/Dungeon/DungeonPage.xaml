@@ -73,12 +73,12 @@
                             Grid.Row="0"
                             Grid.Column="1"
                             TextColor="{StaticResource PrimaryColor_1}"
-                            Text="{Binding Room.CurrentHealth, StringFormat='{0:F0}'}" />
+                            Text="{Binding Room.State.CurrentHealth, StringFormat='{0:F0}'}" />
                         <Label
                             Grid.Row="0"
                             Grid.Column="2"
                             TextColor="{StaticResource PrimaryColor_1}"
-                            Text="{Binding Datas.MaxHealth}" />
+                            Text="{Binding Room.State.MaxHealth}" />
 
                         <Label
                             Grid.Row="1"
@@ -89,12 +89,12 @@
                             Grid.Row="1"
                             Grid.Column="1"
                             TextColor="{StaticResource PrimaryColor_1}"
-                            Text="{Binding Room.CurrentMana, StringFormat='{0:F0}'}" />
+                            Text="{Binding Room.State.CurrentMana, StringFormat='{0:F0}'}" />
                         <Label
                             Grid.Row="1"
                             Grid.Column="2"
                             TextColor="{StaticResource PrimaryColor_1}"
-                            Text="{Binding Datas.MaxMana}" />
+                            Text="{Binding Room.State.MaxMana}" />
                     </Grid>
 
                     <Grid

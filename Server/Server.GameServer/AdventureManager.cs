@@ -75,7 +75,7 @@ namespace Server.GameServer
                     }
                 }
 
-                var adventure = new Adventure(dungeon, bagItems);
+                var adventure = new Adventure(dungeon, datas, bagItems);
                 _adventures.Add(soul.Id, adventure);
 
                 return adventure;

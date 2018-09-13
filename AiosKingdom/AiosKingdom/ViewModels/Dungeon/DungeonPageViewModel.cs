@@ -88,7 +88,6 @@ namespace AiosKingdom.ViewModels.Dungeon
         }
 
         public Network.AdventureState Room => DatasManager.Instance.Adventure;
-        public Network.SoulDatas Datas => DatasManager.Instance.Datas;
         public Network.Currencies Currencies => DatasManager.Instance.Currencies;
 
         private List<Network.LootItem> _loots;

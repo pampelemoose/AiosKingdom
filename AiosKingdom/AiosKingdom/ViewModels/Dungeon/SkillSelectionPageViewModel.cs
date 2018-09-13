@@ -40,7 +40,7 @@ namespace AiosKingdom.ViewModels.Dungeon
                                     KnowledgeId = knowledge.Id,
                                     BookName = book.Name,
                                     Skill = page,
-                                    CanSelect = page.ManaCost <= _state.CurrentMana
+                                    CanSelect = page.ManaCost <= _state.State.CurrentMana
                                 });
                             }
                         }
