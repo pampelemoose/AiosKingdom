@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -25,7 +27,6 @@ namespace AiosKingdom.ViewModels.Dungeon
 
                     if (IsCleared || Room.IsExit)
                     {
-                        IsEnemyTurn = false;
                         ShowLootsPanel = true;
                         IsBusy = true;
                         NetworkManager.Instance.GetDungeonRoomLoots();
@@ -52,8 +53,8 @@ namespace AiosKingdom.ViewModels.Dungeon
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.EnemyTurnEnded, (sender) =>
             {
-                IsEnemyTurn = false;
                 IsBusy = false;
+                IsEnemyTurn = false;
             });
 
             MessagingCenter.Subscribe<NetworkManager, List<Network.AdventureState.ActionResult>>(this, MessengerCodes.RoundResults, (sender, arl) =>
@@ -210,17 +211,6 @@ namespace AiosKingdom.ViewModels.Dungeon
 
         public bool IsRestArea => Room.IsRestingArea;
 
-        private bool _isEnemyTurn;
-        public bool IsEnemyTurn
-        {
-            get { return _isEnemyTurn; }
-            set
-            {
-                _isEnemyTurn = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         private ICommand _removeNextMoveAction;
         public ICommand RemoveNextMoveAction =>
             _removeNextMoveAction ?? (_removeNextMoveAction = new Command(() =>
@@ -250,13 +240,16 @@ namespace AiosKingdom.ViewModels.Dungeon
             }
         }
 
-        private ICommand _enemyTurnAction;
-        public ICommand EnemyTurnAction =>
-            _enemyTurnAction ?? (_enemyTurnAction = new Command(() =>
+        private bool _isEnemyTurn;
+        public bool IsEnemyTurn
+        {
+            get { return _isEnemyTurn; }
+            set
             {
-                IsBusy = true;
-                NetworkManager.Instance.EnemyTurn();
-            }));
+                _isEnemyTurn = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         private Command _buyShopItemAction;
         public ICommand BuyShopItemAction =>
@@ -291,8 +284,8 @@ namespace AiosKingdom.ViewModels.Dungeon
                 IsBusy = true;
                 NetworkManager.Instance.DoNothingTurn();
 
-                IsEnemyTurn = true;
                 ResetNextMove();
+                WaitEnemyTurn();
             }));
 
         private ICommand _consumablesAction;
@@ -337,8 +330,8 @@ namespace AiosKingdom.ViewModels.Dungeon
                         (_selectedEnemy != null ? _selectedEnemy.Value.Key : Guid.Empty));
                 }
 
-                IsEnemyTurn = true;
                 ResetNextMove();
+                WaitEnemyTurn();
             }, () => { return CanExecutCurrentAction(); }));
 
         private bool CanExecutCurrentAction()
@@ -428,5 +421,17 @@ namespace AiosKingdom.ViewModels.Dungeon
                     NetworkManager.Instance.DungeonLeft();
                 }
             }));
+
+        private void WaitEnemyTurn()
+        {
+            IsEnemyTurn = true;
+
+            Timer timer = null;
+            timer = new Timer((obj) =>
+            {
+                NetworkManager.Instance.EnemyTurn();
+                timer.Dispose();
+            }, null, 5000, System.Threading.Timeout.Infinite);
+        }
     }
 }

@@ -144,8 +144,7 @@
 
                 <Grid
                     Grid.Row="1"
-                    Margin="5"
-                    IsVisible="{Binding IsEnemyTurn, Converter={StaticResource inverseBoolean}}">
+                    Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4.5*"/>
                         <ColumnDefinition Width="1*"/>
@@ -291,16 +290,6 @@
                         Command="{Binding ExecuteAction}"
                         IsVisible="{Binding CanExecuteAction}"/>
                 </Grid>
-                
-                <Grid
-                    Grid.Row="1"
-                    IsVisible="{Binding IsEnemyTurn}">
-                    <Button
-                        Margin="3"
-                        Style="{StaticResource MenuButton}"
-                        Text="Enemies Turn"
-                        Command="{Binding EnemyTurnAction}"/>
-                </Grid>
             </Grid>
 
             <Grid
@@ -358,8 +347,7 @@
 
                 <Grid
                     Grid.Row="1"
-                    Margin="5"
-                    IsVisible="{Binding IsEnemyTurn, Converter={StaticResource inverseBoolean}}">
+                    Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="2*"/>
@@ -507,6 +495,20 @@
                 </Grid>
             </Grid>
 
+            <Grid
+                Grid.RowSpan="2"
+                BackgroundColor="{StaticResource PrimaryColor_4}"
+                Opacity="0.7"
+                 IsVisible="{Binding IsEnemyTurn}">
+                <Label
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    TextColor="{StaticResource PrimaryColor_1}"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    Text="Waiting for Enemy Turn"/>
+            </Grid>
+            
             <ctrl:LoadingIndicator
                 Grid.RowSpan="2"/>
 
