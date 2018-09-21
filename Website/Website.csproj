@@ -206,6 +206,7 @@
     <Compile Include="Models\Filters\UserFilter.cs" />
     <Compile Include="Models\RoomModel.cs" />
     <Compile Include="Models\ShopItemModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\WeaponModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -352,6 +353,7 @@
     <Content Include="Views\Shared\PreAlphaRegistrationPartial.cshtml" />
     <Content Include="Views\Account\PreAlphaRegistrationEmail.cshtml" />
     <Content Include="Views\Shared\PreAlphaRegistrationSuccessfulPartial.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

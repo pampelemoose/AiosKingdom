@@ -58,7 +58,6 @@
             <table class="table table-hover table-striped table-dark">
                 <thead>
                     <tr>
-                        <th scope="col">Username</th>
                         <th scope="col">Email</th>
                         <th scope="col">ActivationCode</th>
                         <th scope="col">IsActivated</th>
@@ -68,14 +67,12 @@
                     @foreach (var user in Model.Users)
                     {
                         <tr>
-                            <td>@user.Username</td>
                             <td>@user.Email</td>
                             <td>@user.ActivationCode</td>
                             <td>@user.IsActivated</td>
                             <td>
                                 <div>
-
-                                    <button type="button" class="btn btn-primary">Edit</button>
+                                    @Html.ActionLink("Edit", "Edit", new { id = user.Id }, new { @class = "btn btn-block btn-primary" })
                                     <button type="button" class="btn btn-danger">X</button>
                                 </div>
                             </td>

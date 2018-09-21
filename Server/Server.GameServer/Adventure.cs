@@ -564,6 +564,8 @@ namespace Server.GameServer
 
             var result = SkillAndEffect.ExecuteInscription(_state.State, enemy?.State, inscription, out state, out enemyNewState);
 
+            result.TargetId = enemy.MonsterId;
+
             _state.State = state;
             if (enemy != null)
             {

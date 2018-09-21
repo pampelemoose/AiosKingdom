@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace DataModels
@@ -19,7 +20,20 @@ namespace DataModels
         [Required, EmailAddress, ConcurrencyCheck]
         public string Email { get; set; }
 
-        public List<Role> Roles { get; set; }
+        [Required]
+        public string InternalRoles { get; set; }
+        public List<String> Roles
+        {
+            get
+            {
+                var result = new List<Role>();
+                return InternalRoles.Split(';').ToList();
+            }
+            set
+            {
+                InternalRoles = String.Join(";", value);
+            }
+        }
 
         [Required]
         public Guid ActivationCode { get; set; }

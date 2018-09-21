@@ -93,6 +93,10 @@
     <Compile Include="Migrations\201808270635018_Monster_BaseHealth.Designer.cs">
       <DependentUpon>201808270635018_Monster_BaseHealth.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809210321373_UserRolesUpdate.cs" />
+    <Compile Include="Migrations\201809210321373_UserRolesUpdate.Designer.cs">
+      <DependentUpon>201809210321373_UserRolesUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -140,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808270635018_Monster_BaseHealth.resx">
       <DependentUpon>201808270635018_Monster_BaseHealth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809210321373_UserRolesUpdate.resx">
+      <DependentUpon>201809210321373_UserRolesUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

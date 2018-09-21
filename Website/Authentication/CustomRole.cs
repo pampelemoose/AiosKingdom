@@ -26,7 +26,7 @@ namespace Website.Authentication
 
                     if (user != null)
                     {
-                        return user.Roles.Select(r => r.Name).ToArray();
+                        return user.Roles.ToArray();
                     }
                 }
             }

@@ -10,7 +10,7 @@ namespace Website.Authentication
     {
         public Guid UserId { get; set; }
         public string Username { get; set; }
-        public List<DataModels.Role> Roles { get; set; }
+        public List<string> Roles { get; set; }
 
         public CustomMembershipUser(DataModels.User user)
             : base("CustomMembership", user.Username, user.Id,

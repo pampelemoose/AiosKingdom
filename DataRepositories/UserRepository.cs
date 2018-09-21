@@ -33,7 +33,6 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 return context.Users
-                    .Include(r => r.Roles)
                     .FirstOrDefault(u => u.Id.Equals(id));
             }
         }
@@ -43,7 +42,6 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 return context.Users
-                    .Include(r => r.Roles)
                     .FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(password));
             }
         }
@@ -61,6 +59,38 @@ namespace DataRepositories
                 }
 
                 context.Users.Add(user);
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var error in e.EntityValidationErrors)
+                    {
+                        foreach (var mess in error.ValidationErrors)
+                        {
+                            Console.WriteLine(mess.ErrorMessage);
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public static bool Update(DataModels.User user)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                var online = context.Users.FirstOrDefault(u => u.Id.Equals(user.Id));
+
+                if (online == null)
+                    return false;
+
+                online.Username = user.Username;
+                online.Email = user.Email;
+                online.Roles = user.Roles;
+
                 try
                 {
                     context.SaveChanges();

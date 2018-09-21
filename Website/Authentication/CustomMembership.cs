@@ -30,7 +30,7 @@ namespace Website.Authentication
         {
             using (var context = new DataRepositories.AiosKingdomContext())
             {
-                var user = context.Users.Include(u => u.Roles).FirstOrDefault(u => u.Username.Equals(username));
+                var user = context.Users.FirstOrDefault(u => u.Username.Equals(username));
 
                 if (user != null)
                 {

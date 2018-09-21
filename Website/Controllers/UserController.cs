@@ -19,5 +19,44 @@ namespace Website.Controllers
 
             return View(filter);
         }
+
+        [HttpGet]
+        public ActionResult Edit(Guid id)
+        {
+            var user = DataRepositories.UserRepository.GetById(id);
+
+            var model = new Models.UserModel
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Roles = user.Roles
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Models.UserModel userModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = DataRepositories.UserRepository.GetById(userModel.Id);
+
+                user.Username = userModel.Username;
+                user.Email = userModel.Email;
+                if (userModel.Roles != null && userModel.Roles.Count > 0)
+                {
+                    user.Roles = userModel.Roles;
+                }
+
+                if (DataRepositories.UserRepository.Update(user))
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
+            return View(userModel);
+        }
     }
 }

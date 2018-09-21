@@ -98,7 +98,7 @@ namespace DataRepositories.Migrations
                     Password = DataModels.User.EncryptPassword("pampe123"),
                     ActivationCode = Guid.NewGuid(),
                     IsActivated = true,
-                    Roles = context.Roles.ToList()
+                    Roles = context.Roles.Select(r => r.Name).ToList()
                 });
 
                 var bag = context.Bags.Add(new DataModels.Items.Bag

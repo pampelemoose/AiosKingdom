@@ -34,7 +34,7 @@ namespace Website.Controllers
                             Id = user.UserId,
                             Username = user.Username,
                             Email = user.Email,
-                            Rolenames = user.Roles?.Select(r => r.Name).ToList()
+                            Rolenames = user.Roles
                         };
 
                         string userData = JsonConvert.SerializeObject(userModel);
@@ -69,7 +69,6 @@ namespace Website.Controllers
                     return PartialView("PreAlphaRegistrationPartial", registrationView);
                 }
 
-                var role = DataRepositories.UserRepository.Roles.FirstOrDefault(r => r.Name.Equals("User"));
                 var user = new DataModels.User
                 {
                     Id = Guid.NewGuid(),
@@ -78,7 +77,7 @@ namespace Website.Controllers
                     Email = registrationView.Email,
                     ActivationCode = Guid.NewGuid(),
                     IsActivated = false,
-                    Roles = new List<DataModels.Role> { role }
+                    Roles = new List<string> { "User" }
                 };
 
                 if (DataRepositories.UserRepository.Create(user))
@@ -116,7 +115,6 @@ namespace Website.Controllers
                     return PartialView("RegistrationPartial", registrationView);
                 }
 
-                var role = DataRepositories.UserRepository.Roles.FirstOrDefault(r => r.Name.Equals("User"));
                 var user = new DataModels.User
                 {
                     Id = Guid.NewGuid(),
@@ -125,7 +123,7 @@ namespace Website.Controllers
                     Email = registrationView.Email,
                     ActivationCode = registrationView.ActivationCode,
                     IsActivated = false,
-                    Roles = new List<DataModels.Role> { role }
+                    Roles = new List<string> { "User" }
                 };
 
                 if (DataRepositories.UserRepository.Create(user))
