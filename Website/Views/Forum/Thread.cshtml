@@ -1,0 +1,48 @@
+﻿@model DataModels.Website.Thread
+
+@{
+    ViewBag.Title = "Thread";
+}
+
+<section class="p-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <span class="h2">@Model.Name</span> - <span class="h4"><a href="/Forum/Category/@Model.Category.Id">@Model.Category.Name</a></span> - <span class="h5"><a href="/Forum">Forum</a></span>
+            </div>
+            @if (User.IsInRole("SuperAdmin"))
+            {
+                <div class="col-md-2">
+                    <a class="btn btn-info btn-block" href="/Forum/DeleteThread/@Model.Id">Delete</a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="ak-dark-section p-2">
+    <div class="container">
+        <div class="row">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="col-md-12 card mt-2">
+                    <div class="card-body">
+                        @Html.Raw(comment.Content)
+                    </div>
+                    <div class="card-footer text-right">
+                        @DataRepositories.UserRepository.GetById(comment.CreatedBy).Username - @comment.CreatedAt
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a href="/Forum/DeleteComment/@comment.Id"><strong>|DELETE|</strong></a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@if (Model.IsOpen)
+{
+    Html.RenderPartial("CommentFormPartial", new Website.Models.CommentModel());
+}

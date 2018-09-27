@@ -46,6 +46,15 @@ namespace DataRepositories
             }
         }
 
+        public static DataModels.User GetByUsername(string username)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Users
+                    .FirstOrDefault(u => u.Username.Equals(username));
+            }
+        }
+
         public static bool Create(DataModels.User user)
         {
             using (var context = new AiosKingdomContext())

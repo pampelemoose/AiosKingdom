@@ -1,0 +1,43 @@
+﻿@model DataModels.Website.Category
+
+@{
+    ViewBag.Title = "Category";
+}
+
+<section class="p-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <span class="h2">@Model.Name</span> - <span class="h5"><a href="/Forum">Forum</a></span>
+            </div>
+            @if (User.IsInRole(Model.CanCreateThreads))
+            {
+                Html.RenderPartial("ThreadFormPartial", new Website.Models.ThreadModel());
+            }
+        </div>
+    </div>
+</section>
+
+<section class="ak-dark-section p-2">
+    <div class="container">
+        <div class="row">
+            @foreach (var thread in Model.Threads.OrderByDescending(t => t.CreatedAt))
+            {
+                var commentCount = thread.Comments != null ? thread.Comments.Count : 0;
+                <div class="col-md-12 forum-thread mt-2">
+                    <a class="d-block" href="/Forum/Thread/@(thread.Id)">
+                        <div>
+                            <strong>@thread.Name</strong> <span class="badge badge-secondary">@commentCount</span>
+                        </div>
+                        <div>
+                            <small>
+
+                                @thread.CreatedAt - <strong>@DataRepositories.UserRepository.GetById(thread.CreatedBy).Username</strong>
+                            </small>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>

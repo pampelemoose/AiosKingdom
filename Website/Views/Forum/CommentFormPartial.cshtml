@@ -1,0 +1,24 @@
+﻿@model Website.Models.CommentModel
+
+@using (Html.BeginForm())
+{
+    <section class="p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.TextAreaFor(model => model.Content, new { @class = "form-control", rows = "3" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-2 offset-md-10 mt-1">
+                    <input class="btn btn-block" type="submit" value="Post" />
+                </div>
+            </div>
+        </div>
+    </section>
+}

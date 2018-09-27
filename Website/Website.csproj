@@ -168,6 +168,7 @@
     <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\DungeonsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\GameServersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KingdomsController.cs" />
@@ -181,6 +182,8 @@
     </Compile>
     <Compile Include="Helpers\ItemHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\CategoryModel.cs" />
+    <Compile Include="Models\CommentModel.cs" />
     <Compile Include="Models\DungeonModel.cs" />
     <Compile Include="Models\EnemyModel.cs" />
     <Compile Include="Models\Filters\AItemFilterModel.cs" />
@@ -206,6 +209,7 @@
     <Compile Include="Models\Filters\UserFilter.cs" />
     <Compile Include="Models\RoomModel.cs" />
     <Compile Include="Models\ShopItemModel.cs" />
+    <Compile Include="Models\ThreadModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\WeaponModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -354,6 +358,12 @@
     <Content Include="Views\Account\PreAlphaRegistrationEmail.cshtml" />
     <Content Include="Views\Shared\PreAlphaRegistrationSuccessfulPartial.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\Forum\Index.cshtml" />
+    <Content Include="Views\Forum\Thread.cshtml" />
+    <Content Include="Views\Forum\Category.cshtml" />
+    <Content Include="Views\Forum\CommentFormPartial.cshtml" />
+    <Content Include="Views\Forum\CategoryFormPartial.cshtml" />
+    <Content Include="Views\Forum\ThreadFormPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

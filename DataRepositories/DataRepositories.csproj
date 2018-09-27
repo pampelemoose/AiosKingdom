@@ -55,6 +55,7 @@
     <Compile Include="AiosKingdomContext.cs" />
     <Compile Include="ConfigRepository.cs" />
     <Compile Include="DungeonRepository.cs" />
+    <Compile Include="ForumRepository.cs" />
     <Compile Include="KingdomRepository.cs" />
     <Compile Include="MarketRepository.cs" />
     <Compile Include="Migrations\201808100346479_InitialMigration.cs" />
@@ -96,6 +97,18 @@
     <Compile Include="Migrations\201809210321373_UserRolesUpdate.cs" />
     <Compile Include="Migrations\201809210321373_UserRolesUpdate.Designer.cs">
       <DependentUpon>201809210321373_UserRolesUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809210556384_ForumInit.cs" />
+    <Compile Include="Migrations\201809210556384_ForumInit.Designer.cs">
+      <DependentUpon>201809210556384_ForumInit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809270550528_CategoryRoles.cs" />
+    <Compile Include="Migrations\201809270550528_CategoryRoles.Designer.cs">
+      <DependentUpon>201809270550528_CategoryRoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809270810147_CommentNoReplies.cs" />
+    <Compile Include="Migrations\201809270810147_CommentNoReplies.Designer.cs">
+      <DependentUpon>201809270810147_CommentNoReplies.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
@@ -147,6 +160,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809210321373_UserRolesUpdate.resx">
       <DependentUpon>201809210321373_UserRolesUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809210556384_ForumInit.resx">
+      <DependentUpon>201809210556384_ForumInit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809270550528_CategoryRoles.resx">
+      <DependentUpon>201809270550528_CategoryRoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809270810147_CommentNoReplies.resx">
+      <DependentUpon>201809270810147_CommentNoReplies.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
