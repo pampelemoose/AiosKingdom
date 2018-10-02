@@ -19,7 +19,7 @@ namespace Website.Controllers
             return View(filter);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "ArmorSmith")]
         [HttpGet]
         public ActionResult Create()
         {
@@ -37,7 +37,7 @@ namespace Website.Controllers
             return View(armor);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "ArmorSmith")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.ArmorModel armorModel)
@@ -71,7 +71,7 @@ namespace Website.Controllers
             return View(armorModel);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "ArmorSmith")]
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
@@ -113,7 +113,7 @@ namespace Website.Controllers
             return RedirectToAction("Index");
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "ArmorSmith")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Models.ArmorModel armorModel)

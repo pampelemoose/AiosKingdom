@@ -174,7 +174,9 @@
     <Compile Include="Controllers\KingdomsController.cs" />
     <Compile Include="Controllers\MarketController.cs" />
     <Compile Include="Controllers\MonstersController.cs" />
+    <Compile Include="Controllers\MyPageController.cs" />
     <Compile Include="Controllers\SectionsController.cs" />
+    <Compile Include="Controllers\TicketsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WeaponsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -204,6 +206,7 @@
     <Compile Include="Models\MarketSlotModel.cs" />
     <Compile Include="Models\Filters\MonsterFilter.cs" />
     <Compile Include="Models\MonsterModel.cs" />
+    <Compile Include="Models\MyPageModel.cs" />
     <Compile Include="Models\PageModel.cs" />
     <Compile Include="Models\PhaseModel.cs" />
     <Compile Include="Models\Filters\UserFilter.cs" />
@@ -361,9 +364,18 @@
     <Content Include="Views\Forum\Index.cshtml" />
     <Content Include="Views\Forum\Thread.cshtml" />
     <Content Include="Views\Forum\Category.cshtml" />
-    <Content Include="Views\Forum\CommentFormPartial.cshtml" />
+    <Content Include="Views\Shared\CommentFormPartial.cshtml" />
     <Content Include="Views\Forum\CategoryFormPartial.cshtml" />
     <Content Include="Views\Forum\ThreadFormPartial.cshtml" />
+    <Content Include="Views\MyPage\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\MyPage\ResetPassword.cshtml" />
+    <Content Include="Views\MyPage\ChangeUsername.cshtml" />
+    <Content Include="Views\MyPage\NewTicket.cshtml" />
+    <Content Include="Views\MyPage\Ticket.cshtml" />
+    <Content Include="Views\Tickets\Index.cshtml" />
+    <Content Include="Views\Tickets\Details.cshtml" />
+    <Content Include="Views\Shared\AdminMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

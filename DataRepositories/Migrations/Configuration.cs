@@ -77,6 +77,21 @@ namespace DataRepositories.Migrations
                 context.Roles.Add(new DataModels.Role { Name = "Parent" });
                 context.Roles.Add(new DataModels.Role { Name = "Child" });
 
+                context.Roles.Add(new DataModels.Role { Name = "ItemSmith" });
+                context.Roles.Add(new DataModels.Role { Name = "ArmorSmith" });
+                context.Roles.Add(new DataModels.Role { Name = "WeaponSmith" });
+                context.Roles.Add(new DataModels.Role { Name = "BagSmith" });
+                context.Roles.Add(new DataModels.Role { Name = "ConsumableSmith" });
+
+                context.Roles.Add(new DataModels.Role { Name = "BookWriter" });
+                context.Roles.Add(new DataModels.Role { Name = "DungeonCreator" });
+                context.Roles.Add(new DataModels.Role { Name = "MonsterCreator" });
+                context.Roles.Add(new DataModels.Role { Name = "MarketRegulator" });
+
+                context.Roles.Add(new DataModels.Role { Name = "TicketMaster" });
+                context.Roles.Add(new DataModels.Role { Name = "Ticketer" });
+                context.Roles.Add(new DataModels.Role { Name = "ForumAdmin" });
+
                 var kingdom = context.Kingdoms.Add(new DataModels.Kingdom
                 {
                     Id = Guid.NewGuid(),

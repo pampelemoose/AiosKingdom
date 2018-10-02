@@ -1,0 +1,103 @@
+﻿@model Website.Models.MyPageModel
+
+@{
+    ViewBag.Title = "MyPage";
+}
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Account</h3>
+            </div>
+            <div class="col-md-12 card-group">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Username</h5>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Username</span>
+                                </div>
+                                <input type="text" class="form-control" value="@Model.User.Username" disabled>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            You can change your username anytime you want.
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-success btn-block" href="/MyPage/ChangeUsername">Change Username</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Password</h5>
+                    </div>
+                    <div class="card-body">
+                        You can change your password anytime you want.
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-info btn-block" href="/MyPage/ResetPassword">Change Password</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Email</h5>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Email</span>
+                                </div>
+                                <input type="email" class="form-control" value="@Model.User.Email" disabled>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            Your email can't be changed, if you don't have a choice, please open a ticket, we will get in touch with you asap.
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-danger btn-block" href="/MyPage/NewTicket">Open Ticket</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ak-dark-section mt-3 p-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Tickets</h3>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Created At</th>
+                            <th>Assignee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ticket in Model.Tickets.OrderByDescending(t => t.CreatedAt))
+                        {
+                            <tr onclick="location.href = '@(Url.Action("Ticket", "MyPage", new { id = ticket.Id }))'">
+                                <td>@ticket.Category</td>
+                                <td>@ticket.CreatedAt</td>
+                                <td>@(Guid.Empty.Equals(ticket.AssignedTo) ? "Unassigned" : ticket.AssignedToUsername)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

@@ -58,6 +58,7 @@ namespace DataRepositories
 
         public DbSet<DataModels.Website.Category> Categories { get; set; }
         public DbSet<DataModels.Website.Thread> Threads { get; set; }
+        public DbSet<DataModels.Website.Ticket> Tickets { get; set; }
         public DbSet<DataModels.Website.Comment> Comments { get; set; }
 
     }

@@ -1,0 +1,114 @@
+﻿@if (User.IsInRole("Admin"))
+{
+    <nav class="navbar navbar-expand-lg navbar-dark ak-nav">
+        <div class="container">
+            <a class="navbar-brand" href="#">Admin</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    @if (User.IsInRole("SuperAdmin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                               role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Users</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("List", "Index", "User", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                               role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Kingdoms</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Index", "Index", "Kingdoms", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                               role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">GameServers</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Create", "Create", "GameServers", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="item-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sections</a>
+                            <div class="dropdown-menu" aria-labelledby="item-dropdown">
+                                @Html.ActionLink("List", "Index", "Sections", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Create", "Create", "Sections", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                    }
+                    @if (User.IsInRole("ItemSmith, BookWriter, MonsterCreator, DungeonCreator"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                               role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Create</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @if (User.IsInRole("ItemSmith"))
+                                {
+                                    <h6 class="dropdown-header">Items</h6>
+                                    if (User.IsInRole("ArmorSmith"))
+                                    {
+                                        @Html.ActionLink("Armor", "Create", "Armors", null, new { @class = "dropdown-item" })
+                                    }
+                                    if (User.IsInRole("ConsumableSmith"))
+                                    {
+                                        @Html.ActionLink("Consumable", "Create", "Consumables", null, new { @class = "dropdown-item" })
+                                    }
+                                    if (User.IsInRole("BagSmith"))
+                                    {
+                                        @Html.ActionLink("Bag", "Create", "Bags", null, new { @class = "dropdown-item" })
+                                    }
+                                    if (User.IsInRole("WeaponSmith"))
+                                    {
+                                        @Html.ActionLink("Weapon", "Create", "Weapons", null, new { @class = "dropdown-item" })
+                                    }
+                                    <div class="dropdown-divider"></div>
+                                }
+                                @if (User.IsInRole("BookWriter"))
+                                {
+                                    <h6 class="dropdown-header">Skills</h6>
+                                    @Html.ActionLink("Book", "Create", "Books", null, new { @class = "dropdown-item" })
+                                    <div class="dropdown-divider"></div>
+                                }
+                                @if (User.IsInRole("MonsterCreator"))
+                                {
+                                    <h6 class="dropdown-header">Monsters</h6>
+                                    @Html.ActionLink("Monster", "Create", "Monsters", null, new { @class = "dropdown-item" })
+                                    <div class="dropdown-divider"></div>
+                                }
+                                @if (User.IsInRole("DungeonCreator"))
+                                {
+                                    <h6 class="dropdown-header">Dungeons</h6>
+                                    @Html.ActionLink("Dungeon", "Create", "Dungeons", null, new { @class = "dropdown-item" })
+                                }
+                            </div>
+                        </li>
+                    }
+                    @if (User.IsInRole("MarketRegulator"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="item-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Market</a>
+                            <div class="dropdown-menu" aria-labelledby="item-dropdown">
+                                @Html.ActionLink("List", "Index", "Market", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Create", "Create", "Market", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                    }
+                    @if (User.IsInRole("Ticketer"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                               role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tickets</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("List", "Index", "Tickets", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+}

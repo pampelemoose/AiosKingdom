@@ -16,12 +16,14 @@ namespace Website.Models
         public string LogPassword { get; set; }
         [Display(Name = "Remember Me")]
         public bool RememberMe { get; set; }
+
+        public bool IsModal { get; set; }
     }
 
     public class RegistrationView
     {
-        [Required(ErrorMessage = "User Name required")]
-        [Display(Name = "User Name")]
+        [Required(ErrorMessage = "Username required")]
+        [Display(Name = "Username")]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Email required")]
@@ -51,5 +53,43 @@ namespace Website.Models
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         public string Email { get; set; }
+    }
+
+    public class ResetPasswordView
+    {
+        [Required(ErrorMessage = "Old Password required")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Old Password")]
+        public string OldPassword { get; set; }
+
+        [Required(ErrorMessage = "New Password required")]
+        [DataType(DataType.Password)]
+        [Display(Name = "New Password")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Confirm New Password required")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm New Password")]
+        [Compare("Password", ErrorMessage = "Error : Confirm password does not match with password")]
+        public string ConfirmPassword { get; set; }
+    }
+
+    public class ChangeUsernameView
+    {
+        [Required(ErrorMessage = "New username Required")]
+        [Display(Name = "Username")]
+        public string Username { get; set; }
+
+        [Required(ErrorMessage = "Password required")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+    }
+
+    public class NewTicketView
+    {
+        [Required(ErrorMessage = "Content Required")]
+        [Display(Name = "Content")]
+        public string Content { get; set; }
     }
 }

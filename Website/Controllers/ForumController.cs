@@ -8,7 +8,7 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class ForumController : Controller
+    public class ForumController : AKBaseController
     {
         // GET: Forum
         public ActionResult Index()
@@ -18,11 +18,11 @@ namespace Website.Controllers
             return View(categories);
         }
 
+        [CustomAuthorize(Roles = "SuperAdmin")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(Models.CategoryModel model)
         {
-            var user = DataRepositories.UserRepository.GetByUsername(User.Identity.Name);
-
             if (ModelState.IsValid)
             {
                 if (DataRepositories.ForumRepository.CreateCategory(new DataModels.Website.Category
@@ -47,18 +47,19 @@ namespace Website.Controllers
             return View(category);
         }
 
+        [CustomAuthorize(Roles = "User")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Category(int id, Models.ThreadModel model)
         {
-            var user = DataRepositories.UserRepository.GetByUsername(User.Identity.Name);
-
             if (ModelState.IsValid)
             {
                 if (DataRepositories.ForumRepository.CreateThread(new DataModels.Website.Thread
                 {
                     Name = model.Name,
                     CreatedAt = DateTime.Now,
-                    CreatedBy = user.Id,
+                    CreatedBy = GetLoggedId(),
+                    CreatedByUsername = User.Identity.Name,
                     IsOpen = true,
                     IsActive = true
                 }, id))
@@ -80,17 +81,18 @@ namespace Website.Controllers
             return View(thread);
         }
 
+        [CustomAuthorize(Roles = "User")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Thread(int id, Models.CommentModel model)
         {
-            var user = DataRepositories.UserRepository.GetByUsername(User.Identity.Name);
-
             if (ModelState.IsValid)
             {
                 if (DataRepositories.ForumRepository.CreateComment(new DataModels.Website.Comment {
                     Content = model.Content,
                     CreatedAt = DateTime.Now,
-                    CreatedBy = user.Id
+                    CreatedBy = GetLoggedId(),
+                    CreatedByUsername = User.Identity.Name
                 }, id))
                 {
                     return RedirectToAction("Thread", new { id = id });
@@ -102,7 +104,7 @@ namespace Website.Controllers
             return View(thread);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "ForumAdmin")]
         public ActionResult DeleteThread(int id)
         {
             if (DataRepositories.ForumRepository.DeleteThread(id))
@@ -113,7 +115,7 @@ namespace Website.Controllers
             return RedirectToAction("Thread", new { id = id });
         }
 
-        [CustomAuthorize(Roles = "Admin")]
+        [CustomAuthorize(Roles = "ForumAdmin")]
         public ActionResult DeleteComment(int id)
         {
             if (DataRepositories.ForumRepository.DeleteComment(id))

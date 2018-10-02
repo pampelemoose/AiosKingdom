@@ -25,7 +25,7 @@ namespace Website.Controllers
             return View(monster);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MonsterCreator")]
         [HttpGet]
         public ActionResult Create()
         {
@@ -37,7 +37,7 @@ namespace Website.Controllers
             return View(monster);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MonsterCreator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.MonsterModel monsterModel)
@@ -127,14 +127,14 @@ namespace Website.Controllers
             return View(monsterModel);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MonsterCreator")]
         [HttpGet]
         public ActionResult AddTypePartial()
         {
             return PartialView("TypePartial");
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MonsterCreator")]
         [HttpGet]
         public ActionResult AddLootPartial()
         {
@@ -143,7 +143,7 @@ namespace Website.Controllers
             return PartialView("LootPartial", loot);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MonsterCreator")]
         [HttpGet]
         public ActionResult AddPhasePartial()
         {
@@ -152,7 +152,7 @@ namespace Website.Controllers
             return PartialView("PhasePartial", phase);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MonsterCreator")]
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
@@ -210,7 +210,7 @@ namespace Website.Controllers
             return RedirectToAction("Index");
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MonsterCreator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Models.MonsterModel monsterModel)

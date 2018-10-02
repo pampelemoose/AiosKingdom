@@ -1,0 +1,132 @@
+﻿@model DataModels.Website.Ticket
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<section class="p-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <span class="h2">@Model.Category</span> - <span class="h5"><a href="/Tickets">Tickets</a></span>
+            </div>
+            <div class="col-md-12">
+                @if (!Guid.Empty.Equals(Model.AssignedTo))
+                {
+                    <small>@Model.AssignedAt - <strong>@Model.AssignedToUsername</strong></small>
+                }
+                else
+                {
+                    <small><strong>Unassigned</strong></small>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (User.IsInRole("TicketMaster"))
+{
+    using (Html.BeginForm("AdministrateTicket", "Tickets", new { id = Model.Id }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(model => Model.Id)
+        @Html.HiddenFor(model => Model.CreatedAt)
+        @Html.HiddenFor(model => Model.CreatedBy)
+        @Html.HiddenFor(model => Model.CreatedByUsername)
+
+        <section class="ak-dark-section p-2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.AssignedTo, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.DropDownListFor(model => model.AssignedTo, new SelectList(DataRepositories.UserRepository.GetAll().Where(u => u.Roles.Contains("Ticketer")).ToList(), "Id", "Username"), new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.AssignedTo, "", new { @class = "text-danger" })
+                    </div>
+
+                    @*
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    @Html.LabelFor(model => model.IsOpen, htmlAttributes: new { @class = "input-group-text form-check-label" })
+                                </div>
+                                @Html.CheckBoxFor(model => model.IsOpen, new { @class = "form-check-input" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.IsOpen, "", new { @class = "text-danger" })
+                        </div>
+                    *@
+
+                    <div class="col-md-2 offset-md-4 text-center">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label id="open-ticket" class="btn @(Model.IsOpen ? "btn-success active" : "btn-secondary")">
+                                @Html.RadioButtonFor(model => model.IsOpen, "True") Open
+                            </label>
+                            <label id="close-ticket" class="btn @(!Model.IsOpen ? "btn-danger active" : "btn-secondary")">
+                                @Html.RadioButtonFor(model => model.IsOpen, "False") Closed
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 offset-md-10">
+                        <button type="submit" class="btn btn-primary btn-block mt-3">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+
+<section class="@(User.IsInRole("TicketMaster") ? "" : "ak-dark-section") p-2">
+    <div class="container">
+        <div class="row">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="col-md-12 card mt-2">
+                    <div class="card-body">
+                        @Html.Raw(comment.Content)
+                    </div>
+                    <div class="card-footer text-right">
+                        @comment.CreatedAt - @comment.CreatedByUsername
+                        @if (User.IsInRole("Ticketer") && User.Identity.Name == Model.AssignedToUsername)
+                        {
+                            <a href="/Tickets/DeleteComment/@comment.Id"><strong>|DELETE|</strong></a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@if (Model.IsOpen && User.IsInRole("Ticketer") && User.Identity.Name == Model.AssignedToUsername)
+{
+    Html.RenderPartial("CommentFormPartial", new Website.Models.CommentModel());
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#open-ticket").click(function () {
+                console.log(this);
+                $('#open-ticket').removeClass("btn-secondary");
+                $('#open-ticket').addClass("btn-success");
+                $('#close-ticket').removeClass("btn-danger");
+                $('#close-ticket').addClass("btn-secondary");
+            });
+
+            $("#close-ticket").click(function () {
+                console.log(this);
+                $('#close-ticket').removeClass("btn-secondary");
+                $('#close-ticket').addClass("btn-danger");
+                $('#open-ticket').removeClass("btn-success");
+                $('#open-ticket').addClass("btn-secondary");
+            });
+        });
+    </script>
+}

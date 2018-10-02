@@ -18,6 +18,12 @@ namespace Website.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View(new Models.LoginView { IsModal = false });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(Models.LoginView loginView)
@@ -47,7 +53,11 @@ namespace Website.Controllers
                     }
 
                     Response.StatusCode = (int)HttpStatusCode.OK;
-                    return Json(Url.Action("Index", "Home"));
+
+                    if (loginView.IsModal)
+                        return Json(Url.Action("Index", "Home"));
+
+                    return RedirectToAction("Index", "Home");
                 }
             }
 

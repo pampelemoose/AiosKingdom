@@ -18,7 +18,7 @@ namespace Website.Controllers
             return View(filter);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "ConsumableSmith")]
         [HttpGet]
         public ActionResult Create()
         {
@@ -29,7 +29,7 @@ namespace Website.Controllers
             return View(consumable);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "ConsumableSmith")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.ConsumableModel consumableModel)
@@ -74,7 +74,7 @@ namespace Website.Controllers
             return View(consumableModel);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "ConsumableSmith")]
         [HttpGet]
         public ActionResult AddEffectPartial()
         {
@@ -84,7 +84,7 @@ namespace Website.Controllers
             return PartialView("EffectPartial", effect);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "ConsumableSmith")]
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
@@ -113,7 +113,7 @@ namespace Website.Controllers
             return RedirectToAction("Index");
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "ConsumableSmith")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Models.ConsumableModel consumableModel)

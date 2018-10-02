@@ -18,7 +18,7 @@ namespace Website.Controllers
             return View(filter);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "WeaponSmith")]
         [HttpGet]
         public ActionResult Create()
         {
@@ -37,7 +37,7 @@ namespace Website.Controllers
             return View(weapon);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "WeaponSmith")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.WeaponModel weaponModel)
@@ -73,7 +73,7 @@ namespace Website.Controllers
             return View(weaponModel);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "WeaponSmith")]
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
@@ -116,7 +116,7 @@ namespace Website.Controllers
             return RedirectToAction("Index");
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "WeaponSmith")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Models.WeaponModel weaponModel)

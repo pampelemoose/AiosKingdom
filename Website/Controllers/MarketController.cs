@@ -9,7 +9,7 @@ namespace Website.Controllers
 {
     public class MarketController : AKBaseController
     {
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MarketRegulator")]
         public ActionResult Index(Models.Filters.MarketSlotFilter filter)
         {
             var slots = DataRepositories.MarketRepository.GetAll();
@@ -19,7 +19,7 @@ namespace Website.Controllers
             return View(filter);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MarketRegulator")]
         [HttpGet]
         public ActionResult Create()
         {
@@ -28,7 +28,7 @@ namespace Website.Controllers
             return View(slot);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MarketRegulator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.MarketSlotModel slot)
@@ -53,7 +53,7 @@ namespace Website.Controllers
             return View(slot);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MarketRegulator")]
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
@@ -73,7 +73,7 @@ namespace Website.Controllers
             return RedirectToAction("Index");
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "MarketRegulator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Models.MarketSlotModel slot)

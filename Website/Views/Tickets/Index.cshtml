@@ -1,0 +1,41 @@
+﻿@model List<DataModels.Website.Ticket>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Tickets</h3>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Created At</th>
+                            <th>Assigned At</th>
+                            <th>Assigned By</th>
+                            <th>Assignee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ticket in Model.OrderByDescending(t => t.CreatedAt))
+                        {
+                            <tr onclick="location.href = '@(Url.Action("Details", "Tickets", new { id = ticket.Id }))'">
+                                <td>@ticket.Category</td>
+                                <td>@ticket.CreatedAt</td>
+                                <td>@ticket.AssignedAt</td>
+                                <td>@ticket.AssignedByUsername</td>
+                                <td>@(Guid.Empty.Equals(ticket.AssignedTo) ? "Unassigned" : ticket.AssignedToUsername)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+

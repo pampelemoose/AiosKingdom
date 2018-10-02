@@ -26,7 +26,7 @@ namespace Website.Controllers
             return View(book);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "BookWriter")]
         [HttpGet]
         public ActionResult Create()
         {
@@ -37,7 +37,7 @@ namespace Website.Controllers
             return View(book);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "BookWriter")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.BookModel bookModel)
@@ -147,7 +147,7 @@ namespace Website.Controllers
             return View(bookModel);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "BookWriter")]
         [HttpGet]
         public ActionResult AddPagePartial()
         {
@@ -157,7 +157,7 @@ namespace Website.Controllers
             return PartialView("PagePartial", page);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "BookWriter")]
         [HttpGet]
         public ActionResult AddInscPartial(string id)
         {
@@ -169,7 +169,7 @@ namespace Website.Controllers
             return PartialView("InscPartial", insc);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "BookWriter")]
         [HttpGet]
         public ActionResult AddWeaponTypePartial(string id, string inscId, string typeExtension)
         {
@@ -183,7 +183,7 @@ namespace Website.Controllers
             return PartialView("WeaponTypePartial", type);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "BookWriter")]
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
@@ -259,7 +259,7 @@ namespace Website.Controllers
             return RedirectToAction("Index");
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "BookWriter")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Models.BookModel bookModel)

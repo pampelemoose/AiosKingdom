@@ -37,6 +37,7 @@ namespace Website.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(Models.UserModel userModel)
         {
             if (ModelState.IsValid)

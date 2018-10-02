@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using System.Web.UI;
 
 namespace Website.Controllers
@@ -39,6 +41,15 @@ namespace Website.Controllers
                 Title = title,
                 Message = message
             });
+        }
+
+        protected Guid GetLoggedId()
+        {
+            var authCookie = Request.Cookies.Get("AiosKingdom_Auth");
+            var auth = FormsAuthentication.Decrypt(authCookie.Value);
+            var model = JsonConvert.DeserializeObject<Authentication.CustomSerializeModel>(auth.UserData);
+
+            return model.Id;
         }
 
         protected string RenderPartialViewToString(Controller controller, string viewName, object model)

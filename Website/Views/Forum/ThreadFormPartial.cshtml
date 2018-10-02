@@ -8,6 +8,9 @@
 <!-- Modal -->
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
     <div class="modal fade" id="createThreadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

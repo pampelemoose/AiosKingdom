@@ -18,7 +18,7 @@ namespace Website.Controllers
             return View(filter);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "BagSmith")]
         [HttpGet]
         public ActionResult Create()
         {
@@ -36,7 +36,7 @@ namespace Website.Controllers
             return View(bag);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "BagSmith")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.BagModel bag)
@@ -68,7 +68,7 @@ namespace Website.Controllers
             return View(bag);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "BagSmith")]
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
@@ -108,7 +108,7 @@ namespace Website.Controllers
             return RedirectToAction("Index");
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "BagSmith")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Models.BagModel bag)

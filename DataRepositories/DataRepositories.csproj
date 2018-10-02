@@ -110,6 +110,26 @@
     <Compile Include="Migrations\201809270810147_CommentNoReplies.Designer.cs">
       <DependentUpon>201809270810147_CommentNoReplies.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809280757022_CommentUsername.cs" />
+    <Compile Include="Migrations\201809280757022_CommentUsername.Designer.cs">
+      <DependentUpon>201809280757022_CommentUsername.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809280758141_ThreadUsername.cs" />
+    <Compile Include="Migrations\201809280758141_ThreadUsername.Designer.cs">
+      <DependentUpon>201809280758141_ThreadUsername.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810010338049_Tickets.cs" />
+    <Compile Include="Migrations\201810010338049_Tickets.Designer.cs">
+      <DependentUpon>201810010338049_Tickets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810010718561_TicketsAssigneeNullable.cs" />
+    <Compile Include="Migrations\201810010718561_TicketsAssigneeNullable.Designer.cs">
+      <DependentUpon>201810010718561_TicketsAssigneeNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810010721099_TicketsAssigneeTimeNullable.cs" />
+    <Compile Include="Migrations\201810010721099_TicketsAssigneeTimeNullable.Designer.cs">
+      <DependentUpon>201810010721099_TicketsAssigneeTimeNullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -169,6 +189,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809270810147_CommentNoReplies.resx">
       <DependentUpon>201809270810147_CommentNoReplies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809280757022_CommentUsername.resx">
+      <DependentUpon>201809280757022_CommentUsername.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809280758141_ThreadUsername.resx">
+      <DependentUpon>201809280758141_ThreadUsername.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810010338049_Tickets.resx">
+      <DependentUpon>201810010338049_Tickets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810010718561_TicketsAssigneeNullable.resx">
+      <DependentUpon>201810010718561_TicketsAssigneeNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810010721099_TicketsAssigneeTimeNullable.resx">
+      <DependentUpon>201810010721099_TicketsAssigneeTimeNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

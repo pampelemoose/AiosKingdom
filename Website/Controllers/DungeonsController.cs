@@ -25,7 +25,7 @@ namespace Website.Controllers
             return View(dungeon);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "DungeonCreator")]
         [HttpGet]
         public ActionResult Create()
         {
@@ -36,7 +36,7 @@ namespace Website.Controllers
             return View(dungeon);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "DungeonCreator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.DungeonModel dungeonModel)
@@ -135,7 +135,7 @@ namespace Website.Controllers
             return View(dungeonModel);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "DungeonCreator")]
         [HttpGet]
         public ActionResult AddRoomPartial()
         {
@@ -146,7 +146,7 @@ namespace Website.Controllers
             return PartialView("RoomPartial", room);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "DungeonCreator")]
         [HttpGet]
         public ActionResult AddShopItemPartial(string id)
         {
@@ -156,7 +156,7 @@ namespace Website.Controllers
             return PartialView("ShopItemPartial", shopItem);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "DungeonCreator")]
         [HttpGet]
         public ActionResult AddEnemyPartial(string id)
         {
@@ -166,7 +166,7 @@ namespace Website.Controllers
             return PartialView("EnemyPartial", enemy);
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "DungeonCreator")]
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
@@ -229,7 +229,7 @@ namespace Website.Controllers
             return RedirectToAction("Index");
         }
 
-        [CustomAuthorize(Roles = "SuperAdmin")]
+        [CustomAuthorize(Roles = "DungeonCreator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Models.DungeonModel dungeonModel)

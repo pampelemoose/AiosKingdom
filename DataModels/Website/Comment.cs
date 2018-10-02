@@ -21,6 +21,7 @@ namespace DataModels.Website
         [Required]
         public Guid CreatedBy { get; set; }
 
-        public Thread Thread { get; set; }
+        [Required]
+        public string CreatedByUsername { get; set; }
     }
 }

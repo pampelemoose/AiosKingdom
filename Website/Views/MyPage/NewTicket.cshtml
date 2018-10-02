@@ -1,0 +1,43 @@
+﻿@model Website.Models.NewTicketView
+
+@{
+    ViewBag.Title = "NewTicket";
+}
+
+<section>
+    <div class="container">
+        <div class="col-md-10">
+            <span class="h2">New Ticket</span> - <span class="h5"><a href="/MyPage">MyPage</a></span>
+        </div>
+    </div>
+</section>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <section class="ak-dark-section mt-3 p-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <input class="form-control" value="Change Password Ticket" disabled="disabled" />
+                </div>
+
+                <div class="col-md-12 mt-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.TextAreaFor(model => model.Content, new { @class = "form-control", rows = "3" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6 offset-md-6">
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Send Ticket</button>
+                </div>
+            </div>
+        </div>
+    </section>
+}
