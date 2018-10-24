@@ -75,7 +75,7 @@ namespace Server.DispatchServer
                 var user = DataRepositories.UserRepository.GetByCredentials(username, password);
                 if (user != null)
                 {
-                    if (user.Roles?.FirstOrDefault(r => r.Name.Equals("SuperAdmin")) != null)
+                    if (user.Roles?.FirstOrDefault(r => r.Equals("SuperAdmin")) != null)
                     {
                         break;
                     }

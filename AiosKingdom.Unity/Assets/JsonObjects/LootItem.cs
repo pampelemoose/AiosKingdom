@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace JsonObjects
+{
+    public class LootItem
+    {
+        public Guid LootId { get; set; }
+        public string Type { get; set; }
+        public Guid ItemId { get; set; }
+        public int Quantity { get; set; }
+    }
+}

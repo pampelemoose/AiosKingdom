@@ -65,6 +65,8 @@ namespace Server.GameServer
             Log.Instance.Write(Log.Level.Infos, $"Starting TCPListener at address : {_config.Host}:{_config.Port} ...");
             Console.WriteLine($"Starting TCPListener at address : {_config.Host}:{_config.Port} ...");
 
+            DataManager.Instance.Initialize(_config);
+
             _listener = new TcpListener(IPAddress.Parse(_config.Host), _config.Port);
 
             _thread.Start();

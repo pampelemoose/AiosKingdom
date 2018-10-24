@@ -20,6 +20,17 @@ namespace DataRepositories
             }
         }
 
+        public static List<DataModels.Monsters.Monster> GetAllForVersion(Guid versionId)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Monsters
+                    .Include(a => a.Phases)
+                    .Where(b => b.VersionId.Equals(versionId))
+                    .ToList();
+            }
+        }
+
         public static DataModels.Monsters.Monster GetById(Guid id)
         {
             using (var context = new AiosKingdomContext())

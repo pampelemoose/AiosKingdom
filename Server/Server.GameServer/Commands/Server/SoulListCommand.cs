@@ -19,10 +19,21 @@ namespace Server.GameServer.Commands.Server
             var userId = ClientsManager.Instance.GetUserId(ret.ClientId);
             var souls = DataRepositories.SoulRepository.GetSoulsByAppUserId(userId);
 
+            var soulList = new List<Network.SoulInfos>();
+            foreach (var soul in souls)
+            {
+                soulList.Add(new Network.SoulInfos
+                {
+                    Id = soul.Id,
+                    Name = soul.Name,
+                    Level = soul.Level
+                });
+            }
+
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Server.SoulList,
-                Json = JsonConvert.SerializeObject(souls)
+                Json = JsonConvert.SerializeObject(soulList)
             };
             ret.Succeeded = true;
 

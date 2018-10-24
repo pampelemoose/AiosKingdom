@@ -1031,7 +1031,7 @@ namespace AiosKingdom
             SendRequest(Network.CommandCodes.Player.SellItem, new string[1] { slotId.ToString() });
         }
 
-        public void UseSpiritPills(DataModels.Soul.Stats statType, int quantity)
+        public void UseSpiritPills(Network.Stats statType, int quantity)
         {
             SendRequest(Network.CommandCodes.Player.UseSpiritPills, new string[2] { statType.ToString(), quantity.ToString() });
         }

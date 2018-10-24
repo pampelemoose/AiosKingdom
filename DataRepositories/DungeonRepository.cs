@@ -18,6 +18,14 @@ namespace DataRepositories
             }
         }
 
+        public static List<DataModels.Dungeons.Dungeon> GetAllForVersion(Guid versionId)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Dungeons.Where(b => b.VersionId.Equals(versionId)).ToList();
+            }
+        }
+
         public static DataModels.Dungeons.Dungeon GetById(Guid id)
         {
             using (var context = new AiosKingdomContext())

@@ -9,19 +9,17 @@ namespace Server.GameServer.Commands.Listing
 {
     public class BagCommand : ACommand
     {
-        public BagCommand(CommandArgs args) 
+        public BagCommand(CommandArgs args)
             : base(args)
         {
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var bags = DataRepositories.BagRepository.GetAll();
-
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Listing.Bag,
-                Json = JsonConvert.SerializeObject(bags)
+                Json = JsonConvert.SerializeObject(DataManager.Instance.Bags)
             };
             ret.Succeeded = true;
 

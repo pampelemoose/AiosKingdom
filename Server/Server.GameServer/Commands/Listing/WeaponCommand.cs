@@ -16,12 +16,10 @@ namespace Server.GameServer.Commands.Listing
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var weapons = DataRepositories.WeaponRepository.GetAll();
-
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Listing.Weapon,
-                Json = JsonConvert.SerializeObject(weapons)
+                Json = JsonConvert.SerializeObject(DataManager.Instance.Weapons)
             };
             ret.Succeeded = true;
 

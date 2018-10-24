@@ -9,19 +9,17 @@ namespace Server.GameServer.Commands.Listing
 {
     public class ArmorCommand : ACommand
     {
-        public ArmorCommand(CommandArgs args) 
+        public ArmorCommand(CommandArgs args)
             : base(args)
         {
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var armors = DataRepositories.ArmorRepository.GetAll();
-
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Listing.Armor,
-                Json = JsonConvert.SerializeObject(armors)
+                Json = JsonConvert.SerializeObject(DataManager.Instance.Armors)
             };
             ret.Succeeded = true;
 

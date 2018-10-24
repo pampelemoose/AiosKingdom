@@ -9,19 +9,17 @@ namespace Server.GameServer.Commands.Listing
 {
     public class BookCommand : ACommand
     {
-        public BookCommand(CommandArgs args) 
+        public BookCommand(CommandArgs args)
             : base(args)
         {
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var books = DataRepositories.BookRepository.GetAll();
-
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Listing.Book,
-                Json = JsonConvert.SerializeObject(books)
+                Json = JsonConvert.SerializeObject(DataManager.Instance.Books)
             };
             ret.Succeeded = true;
 

@@ -179,12 +179,6 @@
     <PackageReference Include="Xamarin.Forms" Version="3.1.0.637273" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.5" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AiosKingdom\AiosKingdom.csproj">
-      <Project>{5703B619-B765-4F4D-AC8B-BB9E348D901C}</Project>
-      <Name>AiosKingdom</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

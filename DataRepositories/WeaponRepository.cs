@@ -18,6 +18,14 @@ namespace DataRepositories
             }
         }
 
+        public static List<DataModels.Items.Weapon> GetAllForVersion(Guid versionId)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Weapons.Include(a => a.Stats).Where(b => b.VersionId.Equals(versionId)).ToList();
+            }
+        }
+
         public static DataModels.Items.Weapon GetById(Guid id)
         {
             using (var context = new AiosKingdomContext())

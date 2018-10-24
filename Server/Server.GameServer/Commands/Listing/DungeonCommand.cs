@@ -16,12 +16,10 @@ namespace Server.GameServer.Commands.Listing
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var dungeons = DataRepositories.DungeonRepository.GetAll();
-
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Listing.Dungeon,
-                Json = JsonConvert.SerializeObject(dungeons)
+                Json = JsonConvert.SerializeObject(DataManager.Instance.Dungeons)
             };
             ret.Succeeded = true;
 

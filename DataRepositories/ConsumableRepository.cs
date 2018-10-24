@@ -18,6 +18,14 @@ namespace DataRepositories
             }
         }
 
+        public static List<DataModels.Items.Consumable> GetAllForVersion(Guid versionId)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Consumables.Include(a => a.Effects).Where(b => b.VersionId.Equals(versionId)).ToList();
+            }
+        }
+
         public static DataModels.Items.Consumable GetById(Guid id)
         {
             using (var context = new AiosKingdomContext())
