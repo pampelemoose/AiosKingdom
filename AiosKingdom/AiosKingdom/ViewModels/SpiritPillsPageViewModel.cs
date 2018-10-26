@@ -99,8 +99,8 @@ namespace AiosKingdom.ViewModels
             NetworkManager.Instance.UseSpiritPills(_statType, _pillsAmount);
         }, () => { return _pillsAmount > 0; }));
 
-        private DataModels.Soul.Stats _statType = DataModels.Soul.Stats.Stamina;
-        public DataModels.Soul.Stats StatType
+        private Network.Stats _statType = Network.Stats.Stamina;
+        public Network.Stats StatType
         {
             get { return _statType; }
             set
@@ -114,42 +114,42 @@ namespace AiosKingdom.ViewModels
         public ICommand StaminaPillsAction =>
         _staminaPillsAction ?? (_staminaPillsAction = new Command(() =>
         {
-            StatType = DataModels.Soul.Stats.Stamina;
+            StatType = Network.Stats.Stamina;
         }));
 
         private Command _energyPillsAction;
         public ICommand EnergyPillsAction =>
         _energyPillsAction ?? (_energyPillsAction = new Command(() =>
         {
-            StatType = DataModels.Soul.Stats.Energy;
+            StatType = Network.Stats.Energy;
         }));
 
         private Command _strengthPillsAction;
         public ICommand StrengthPillsAction =>
         _strengthPillsAction ?? (_strengthPillsAction = new Command(() =>
         {
-            StatType = DataModels.Soul.Stats.Strength;
+            StatType = Network.Stats.Strength;
         }));
 
         private Command _agilityPillsAction;
         public ICommand AgilityPillsAction =>
         _agilityPillsAction ?? (_agilityPillsAction = new Command(() =>
         {
-            StatType = DataModels.Soul.Stats.Agility;
+            StatType = Network.Stats.Agility;
         }));
 
         private Command _intelligencePillsAction;
         public ICommand IntelligencePillsAction =>
         _intelligencePillsAction ?? (_intelligencePillsAction = new Command(() =>
         {
-            StatType = DataModels.Soul.Stats.Intelligence;
+            StatType = Network.Stats.Intelligence;
         }));
 
         private Command _wisdomPillsAction;
         public ICommand WisdomPillsAction =>
         _wisdomPillsAction ?? (_wisdomPillsAction = new Command(() =>
         {
-            StatType = DataModels.Soul.Stats.Wisdom;
+            StatType = Network.Stats.Wisdom;
         }));
 
         private bool _isInfoVisible;

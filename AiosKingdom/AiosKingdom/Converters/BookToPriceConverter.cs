@@ -10,9 +10,9 @@ namespace AiosKingdom.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is DataModels.Skills.Book)
+            if (value is Network.Skills.Book)
             {
-                var book = (DataModels.Skills.Book)value;
+                var book = (Network.Skills.Book)value;
 
                 if (book.Pages != null && book.Pages.Count > 0)
                 {

@@ -31,7 +31,8 @@ namespace Network
         {
             private const int _default = 100;
 
-            public const int BuyMarketItem = _default + 1;
+            public const int Market_PlaceOrder = _default + 1;
+            public const int Market_OrderProcessed = _default + 12;
             public const int EquipItem = _default + 2;
             public const int SellItem = _default + 11;
             public const int UseSpiritPills = _default + 3;

@@ -15,7 +15,7 @@ namespace AiosKingdom.Converters
             {
                 var enemy = (Network.AdventureState.EnemyState)value;
 
-                return DatasManager.Instance.Monsters.FirstOrDefault(e => e.MonsterId.Equals(enemy.MonsterId))?.Name;
+                return DatasManager.Instance.Monsters.FirstOrDefault(e => e.Id.Equals(enemy.MonsterId))?.Name;
             }
 
             return 0;

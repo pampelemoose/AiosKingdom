@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// TODO : test properly
+/// </summary>
 namespace Server.GameServer.Commands.Player
 {
     public class EquipItemCommand : ACommand
@@ -20,248 +23,249 @@ namespace Server.GameServer.Commands.Player
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var slotId = Guid.Parse(_args.Args[0]);
-            var datas = SoulManager.Instance.GetSoul(ret.ClientId);
+            //var datas = SoulManager.Instance.GetSoul(ret.ClientId);
+            var inventory = SoulManager.Instance.GetInventory(ret.ClientId);
+            var equipment = SoulManager.Instance.GetEquipment(ret.ClientId);
 
-            var itemSlot = datas.Inventory.FirstOrDefault(s => s.Id.Equals(slotId));
+            var itemSlot = inventory.FirstOrDefault(s => s.Id.Equals(slotId));
 
             if (itemSlot != null)
             {
                 switch (itemSlot.Type)
                 {
-                    case DataModels.Items.ItemType.Armor:
+                    case Network.Items.ItemType.Armor:
                         {
-                            var item = DataRepositories.ArmorRepository.GetById(itemSlot.ItemId);
-                            datas.Inventory.Remove(itemSlot);
+                            var item = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(itemSlot.ItemId));
+                            inventory.Remove(itemSlot);
                             switch (item.Part) // TODO : refacto, please, ugly
                             {
-                                case DataModels.Items.ArmorPart.Head:
+                                case Network.Items.ArmorPart.Head:
                                     {
-                                        if (Guid.Empty.Equals(datas.Equipment.Head))
+                                        if (Guid.Empty.Equals(equipment.Head))
                                         {
-                                            datas.Equipment.Head = item.ItemId;
+                                            equipment.Head = item.Id;
                                         }
                                         else
                                         {
-                                            Guid toSwap = datas.Equipment.Head;
-                                            datas.Equipment.Head = item.ItemId;
+                                            Guid toSwap = equipment.Head;
+                                            equipment.Head = item.Id;
                                             itemSlot.ItemId = toSwap;
-                                            datas.Inventory.Add(itemSlot);
+                                            inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
-                                case DataModels.Items.ArmorPart.Shoulder:
+                                case Network.Items.ArmorPart.Shoulder:
                                     {
-                                        if (Guid.Empty.Equals(datas.Equipment.Shoulder))
+                                        if (Guid.Empty.Equals(equipment.Shoulder))
                                         {
-                                            datas.Equipment.Shoulder = item.ItemId;
+                                            equipment.Shoulder = item.Id;
                                         }
                                         else
                                         {
-                                            Guid toSwap = datas.Equipment.Shoulder;
-                                            datas.Equipment.Shoulder = item.ItemId;
+                                            Guid toSwap = equipment.Shoulder;
+                                            equipment.Shoulder = item.Id;
                                             itemSlot.ItemId = toSwap;
-                                            datas.Inventory.Add(itemSlot);
+                                            inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
-                                case DataModels.Items.ArmorPart.Torso:
+                                case Network.Items.ArmorPart.Torso:
                                     {
-                                        if (Guid.Empty.Equals(datas.Equipment.Torso))
+                                        if (Guid.Empty.Equals(equipment.Torso))
                                         {
-                                            datas.Equipment.Torso = item.ItemId;
+                                            equipment.Torso = item.Id;
                                         }
                                         else
                                         {
-                                            Guid toSwap = datas.Equipment.Torso;
-                                            datas.Equipment.Torso = item.ItemId;
+                                            Guid toSwap = equipment.Torso;
+                                            equipment.Torso = item.Id;
                                             itemSlot.ItemId = toSwap;
-                                            datas.Inventory.Add(itemSlot);
+                                            inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
-                                case DataModels.Items.ArmorPart.Belt:
+                                case Network.Items.ArmorPart.Belt:
                                     {
-                                        if (Guid.Empty.Equals(datas.Equipment.Belt))
+                                        if (Guid.Empty.Equals(equipment.Belt))
                                         {
-                                            datas.Equipment.Belt = item.ItemId;
+                                            equipment.Belt = item.Id;
                                         }
                                         else
                                         {
-                                            Guid toSwap = datas.Equipment.Belt;
-                                            datas.Equipment.Belt = item.ItemId;
+                                            Guid toSwap = equipment.Belt;
+                                            equipment.Belt = item.Id;
                                             itemSlot.ItemId = toSwap;
-                                            datas.Inventory.Add(itemSlot);
+                                            inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
-                                case DataModels.Items.ArmorPart.Hand:
+                                case Network.Items.ArmorPart.Hand:
                                     {
-                                        if (Guid.Empty.Equals(datas.Equipment.Hand))
+                                        if (Guid.Empty.Equals(equipment.Hand))
                                         {
-                                            datas.Equipment.Hand = item.ItemId;
+                                            equipment.Hand = item.Id;
                                         }
                                         else
                                         {
-                                            Guid toSwap = datas.Equipment.Hand;
-                                            datas.Equipment.Hand = item.ItemId;
+                                            Guid toSwap = equipment.Hand;
+                                            equipment.Hand = item.Id;
                                             itemSlot.ItemId = toSwap;
-                                            datas.Inventory.Add(itemSlot);
+                                            inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
-                                case DataModels.Items.ArmorPart.Pants:
+                                case Network.Items.ArmorPart.Pants:
                                     {
-                                        if (Guid.Empty.Equals(datas.Equipment.Pants))
+                                        if (Guid.Empty.Equals(equipment.Pants))
                                         {
-                                            datas.Equipment.Pants = item.ItemId;
+                                            equipment.Pants = item.Id;
                                         }
                                         else
                                         {
-                                            Guid toSwap = datas.Equipment.Pants;
-                                            datas.Equipment.Pants = item.ItemId;
+                                            Guid toSwap = equipment.Pants;
+                                            equipment.Pants = item.Id;
                                             itemSlot.ItemId = toSwap;
-                                            datas.Inventory.Add(itemSlot);
+                                            inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
-                                case DataModels.Items.ArmorPart.Leg:
+                                case Network.Items.ArmorPart.Leg:
                                     {
-                                        if (Guid.Empty.Equals(datas.Equipment.Leg))
+                                        if (Guid.Empty.Equals(equipment.Leg))
                                         {
-                                            datas.Equipment.Leg = item.ItemId;
+                                            equipment.Leg = item.Id;
                                         }
                                         else
                                         {
-                                            Guid toSwap = datas.Equipment.Leg;
-                                            datas.Equipment.Leg = item.ItemId;
+                                            Guid toSwap = equipment.Leg;
+                                            equipment.Leg = item.Id;
                                             itemSlot.ItemId = toSwap;
-                                            datas.Inventory.Add(itemSlot);
+                                            inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
-                                case DataModels.Items.ArmorPart.Feet:
+                                case Network.Items.ArmorPart.Feet:
                                     {
-                                        if (Guid.Empty.Equals(datas.Equipment.Feet))
+                                        if (Guid.Empty.Equals(equipment.Feet))
                                         {
-                                            datas.Equipment.Feet = item.ItemId;
+                                            equipment.Feet = item.Id;
                                         }
                                         else
                                         {
-                                            Guid toSwap = datas.Equipment.Feet;
-                                            datas.Equipment.Feet = item.ItemId;
+                                            Guid toSwap = equipment.Feet;
+                                            equipment.Feet = item.Id;
                                             itemSlot.ItemId = toSwap;
-                                            datas.Inventory.Add(itemSlot);
+                                            inventory.Add(itemSlot);
                                         }
                                     }
                                     break;
                             }
                         }
                         break;
-                    case DataModels.Items.ItemType.Bag:
+                    case Network.Items.ItemType.Bag:
                         {
-                            var item = DataRepositories.BagRepository.GetById(itemSlot.ItemId);
-                            datas.Inventory.Remove(itemSlot);
-                            if (Guid.Empty.Equals(datas.Equipment.Bag))
+                            var item = DataManager.Instance.Bags.FirstOrDefault(b => b.Id.Equals(itemSlot.ItemId));
+                            inventory.Remove(itemSlot);
+                            if (Guid.Empty.Equals(equipment.Bag))
                             {
-                                datas.Equipment.Bag = item.ItemId;
+                                equipment.Bag = item.Id;
                             }
                             else
                             {
-                                var bag = DataRepositories.BagRepository.GetById(datas.Equipment.Bag);
+                                var bag = DataManager.Instance.Bags.FirstOrDefault(b => b.Id.Equals(equipment.Bag));
                                 if (bag != null)
                                 {
-                                    Guid toSwap = datas.Equipment.Bag;
-                                    datas.Equipment.Bag = item.ItemId;
+                                    Guid toSwap = equipment.Bag;
+                                    equipment.Bag = item.Id;
                                     itemSlot.ItemId = toSwap;
-                                    datas.Inventory.Add(itemSlot);
+                                    inventory.Add(itemSlot);
                                 }
                             }
                         }
                         break;
-                    case DataModels.Items.ItemType.Weapon:
+                    case Network.Items.ItemType.Weapon:
                         {
-                            var item = DataRepositories.WeaponRepository.GetById(itemSlot.ItemId);
-                            datas.Inventory.Remove(itemSlot);
+                            var item = DataManager.Instance.Weapons.FirstOrDefault(w => w.Id.Equals(itemSlot.ItemId));
+                            inventory.Remove(itemSlot);
                             switch (item.HandlingType)
                             {
-                                case DataModels.Items.HandlingType.OneHand:
+                                case Network.Items.HandlingType.OneHand:
                                     {
-                                        if (Guid.Empty.Equals(datas.Equipment.WeaponRight))
+                                        if (Guid.Empty.Equals(equipment.WeaponRight))
                                         {
-                                            datas.Equipment.WeaponRight = item.ItemId;
+                                            equipment.WeaponRight = item.Id;
                                         }
                                         else
                                         {
-                                            var rHand = DataRepositories.WeaponRepository.GetById(datas.Equipment.WeaponRight);
+                                            var rHand = DataManager.Instance.Weapons.FirstOrDefault(w => w.Id.Equals(equipment.WeaponRight));
                                             if (rHand != null)
                                             {
-                                                if (rHand.HandlingType == DataModels.Items.HandlingType.TwoHand)
+                                                if (rHand.HandlingType == Network.Items.HandlingType.TwoHand)
                                                 {
-                                                    Guid toSwap = datas.Equipment.WeaponRight;
-                                                    datas.Equipment.WeaponRight = item.ItemId;
+                                                    Guid toSwap = equipment.WeaponRight;
+                                                    equipment.WeaponRight = item.Id;
                                                     itemSlot.ItemId = toSwap;
-                                                    datas.Inventory.Add(itemSlot);
+                                                    inventory.Add(itemSlot);
                                                 }
                                                 else
                                                 {
-                                                    if (Guid.Empty.Equals(datas.Equipment.WeaponLeft))
+                                                    if (Guid.Empty.Equals(equipment.WeaponLeft))
                                                     {
-                                                        datas.Equipment.WeaponLeft = item.ItemId;
+                                                        equipment.WeaponLeft = item.Id;
                                                     }
                                                     else
                                                     {
-                                                        Guid toSwap = datas.Equipment.WeaponLeft;
-                                                        datas.Equipment.WeaponLeft = datas.Equipment.WeaponRight;
-                                                        datas.Equipment.WeaponRight = item.ItemId;
+                                                        Guid toSwap = equipment.WeaponLeft;
+                                                        equipment.WeaponLeft = equipment.WeaponRight;
+                                                        equipment.WeaponRight = item.Id;
                                                         itemSlot.ItemId = toSwap;
-                                                        datas.Inventory.Add(itemSlot);
+                                                        inventory.Add(itemSlot);
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                     break;
-                                case DataModels.Items.HandlingType.TwoHand:
+                                case Network.Items.HandlingType.TwoHand:
                                     {
-                                        if (Guid.Empty.Equals(datas.Equipment.WeaponRight) && Guid.Empty.Equals(datas.Equipment.WeaponLeft))
+                                        if (Guid.Empty.Equals(equipment.WeaponRight) && Guid.Empty.Equals(equipment.WeaponLeft))
                                         {
-                                            datas.Equipment.WeaponRight = item.ItemId;
+                                            equipment.WeaponRight = item.Id;
                                         }
                                         else
                                         {
-                                            Guid itemId = item.ItemId;
+                                            Guid itemId = item.Id;
 
                                             bool swaped = false;
-                                            if (!Guid.Empty.Equals(datas.Equipment.WeaponRight))
+                                            if (!Guid.Empty.Equals(equipment.WeaponRight))
                                             {
-                                                Guid toSwap = datas.Equipment.WeaponRight;
+                                                Guid toSwap = equipment.WeaponRight;
                                                 itemSlot.ItemId = toSwap;
-                                                datas.Inventory.Add(itemSlot);
+                                                inventory.Add(itemSlot);
                                                 swaped = true;
                                             }
-                                            if (!Guid.Empty.Equals(datas.Equipment.WeaponLeft))
+                                            if (!Guid.Empty.Equals(equipment.WeaponLeft))
                                             {
                                                 if (!swaped)
                                                 {
-                                                    Guid toSwap = datas.Equipment.WeaponLeft;
+                                                    Guid toSwap = equipment.WeaponLeft;
                                                     itemSlot.ItemId = toSwap;
-                                                    datas.Inventory.Add(itemSlot);
+                                                    inventory.Add(itemSlot);
                                                 }
                                                 else
                                                 {
-                                                    datas.Inventory.Add(new DataModels.InventorySlot
+                                                    inventory.Add(new Network.InventorySlot
                                                     {
-                                                        ItemId = datas.Equipment.WeaponLeft,
+                                                        ItemId = equipment.WeaponLeft,
                                                         Quantity = 1,
-                                                        SoulId = itemSlot.SoulId,
-                                                        Type = DataModels.Items.ItemType.Weapon,
+                                                        Type = Network.Items.ItemType.Weapon,
                                                         LootedAt = DateTime.Now
                                                     });
-                                                    datas.Equipment.WeaponLeft = Guid.Empty;
+                                                    equipment.WeaponLeft = Guid.Empty;
                                                 }
                                             }
 
-                                            datas.Equipment.WeaponRight = itemId;
+                                            equipment.WeaponRight = itemId;
                                         }
                                     }
                                     break;
@@ -269,20 +273,19 @@ namespace Server.GameServer.Commands.Player
                         }
                         break;
                 }
-                if (DataRepositories.SoulRepository.Update(datas))
-                {
-                    SoulManager.Instance.UpdateSoul(ret.ClientId, datas);
-                    SoulManager.Instance.UpdateCurrentDatas(ret.ClientId, _config);
-                    ret.ClientResponse = new Network.Message
-                    {
-                        Code = Network.CommandCodes.Player.EquipItem,
-                        Success = true,
-                        Json = "Item equiped."
-                    };
-                    ret.Succeeded = true;
 
-                    return ret;
-                }
+                SoulManager.Instance.UpdateEquipment(ret.ClientId, equipment);
+                SoulManager.Instance.UpdateInventory(ret.ClientId, inventory);
+                SoulManager.Instance.UpdateCurrentDatas(ret.ClientId, _config);
+                ret.ClientResponse = new Network.Message
+                {
+                    Code = Network.CommandCodes.Player.EquipItem,
+                    Success = true,
+                    Json = "Item equiped."
+                };
+                ret.Succeeded = true;
+
+                return ret;
             }
 
             ret.ClientResponse = new Network.Message

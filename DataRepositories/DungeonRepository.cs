@@ -22,7 +22,11 @@ namespace DataRepositories
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Dungeons.Where(b => b.VersionId.Equals(versionId)).ToList();
+                return context.Dungeons
+                    .Include(a => a.Rooms)
+                    .Include(a => a.Rooms.Select(r => r.ShopItems))
+                    .Include(a => a.Rooms.Select(r => r.Ennemies))
+                    .Where(b => b.VersionId.Equals(versionId)).ToList();
             }
         }
 

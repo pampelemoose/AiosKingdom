@@ -10,7 +10,7 @@ namespace AiosKingdom.ViewModels
     {
         public struct BuyableItem
         {
-            public DataModels.Items.ItemType Type { get; set; }
+            public Network.Items.ItemType Type { get; set; }
         }
 
         public ABuyItemViewModel(INavigation nav, int quantity = 1) 

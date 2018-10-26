@@ -16,26 +16,22 @@ namespace Server.GameServer.Commands.Dungeon
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var soul = SoulManager.Instance.GetSoul(_args.ClientId);
+            var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
+            var adventure = AdventureManager.Instance.GetAdventure(soulId);
 
-            if (soul != null)
+            if (adventure != null)
             {
-                var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
+                var result = adventure.PlayerRest();
 
-                if (adventure != null)
+                ret.ClientResponse = new Network.Message
                 {
-                    var result = adventure.PlayerRest();
+                    Code = Network.CommandCodes.Dungeon.PlayerRest,
+                    Success = true,
+                    Json = JsonConvert.SerializeObject(result)
+                };
+                ret.Succeeded = true;
 
-                    ret.ClientResponse = new Network.Message
-                    {
-                        Code = Network.CommandCodes.Dungeon.PlayerRest,
-                        Success = true,
-                        Json = JsonConvert.SerializeObject(result)
-                    };
-                    ret.Succeeded = true;
-
-                    return ret;
-                }
+                return ret;
             }
 
             ret.ClientResponse = new Network.Message

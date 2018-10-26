@@ -82,8 +82,6 @@ public class NetworkManager : MonoBehaviour
                         {
                             var fromJson = JsonConvert.DeserializeObject<JsonObjects.Message>(message);
 
-                            Debug.Log(message);
-
                             if (!ProcessDispatchMessage(fromJson))
                             {
                                 /*_message = buffer;
@@ -236,7 +234,7 @@ public class NetworkManager : MonoBehaviour
 
     public void Disconnect()
     {
-        if (_dispatch.Connected)
+        if (_isDispatchRunning && _dispatch.Connected)
         {
             _isDispatchRunning = false;
         }
@@ -414,8 +412,6 @@ public class NetworkManager : MonoBehaviour
                         {
                             var fromJson = JsonConvert.DeserializeObject<JsonObjects.Message>(message);
 
-                            Debug.Log(message);
-
                             if (!ProcessGameMessage(fromJson))
                             {
                                 /*_message = buffer;
@@ -424,17 +420,17 @@ public class NetworkManager : MonoBehaviour
                         }
                         catch
                         {
-                            _dispatchBuffer += message;
+                            _gameBuffer += message;
                         }
                     }
                 }
             }
 
             if (_game.Connected)
-                _dispatch.GetStream().Flush();
+                _game.GetStream().Flush();
 
-            _dispatch.Client.Close();
-            _dispatch.Close();
+            _game.Client.Close();
+            _game.Close();
         }
         catch (SocketException sockE)
         {
@@ -516,6 +512,11 @@ public class NetworkManager : MonoBehaviour
                 {
                     if (message.Success)
                     {
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ShowContentLoadingScreen());
+                        });
+
                         //MessagingCenter.Send(this, MessengerCodes.SoulConnected);
                         AskArmorList();
                         AskConsumableList();
@@ -547,31 +548,35 @@ public class NetworkManager : MonoBehaviour
             //    }
             //    break;
 
-            //// PLAYER
-            //case Network.CommandCodes.Player.CurrentSoulDatas:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            var soulDatas = JsonConvert.DeserializeObject<Network.SoulDatas>(message.Json);
-            //            DatasManager.Instance.Datas = soulDatas;
+            // PLAYER
+            case JsonObjects.CommandCodes.Player.CurrentSoulDatas:
+                {
+                    if (message.Success)
+                    {
+                        var soulDatas = JsonConvert.DeserializeObject<JsonObjects.SoulDatas>(message.Json);
+                        DatasManager.Instance.Datas = soulDatas;
 
-            //            if (soulDatas.TotalStamina == 0 && soulDatas.TotalEnergy == 0
-            //                && soulDatas.TotalStrength == 0 && soulDatas.TotalAgility == 0
-            //                && soulDatas.TotalIntelligence == 0 && soulDatas.TotalWisdom == 0)
-            //            {
-            //                Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
-            //                Application.Current.SavePropertiesAsync();
-            //                MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
-            //            }
+                        if (soulDatas.TotalStamina == 0 && soulDatas.TotalEnergy == 0
+                            && soulDatas.TotalStrength == 0 && soulDatas.TotalAgility == 0
+                            && soulDatas.TotalIntelligence == 0 && soulDatas.TotalWisdom == 0)
+                        {
+                            //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
+                            //Application.Current.SavePropertiesAsync();
+                            //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+                        }
 
-            //            MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Current Soul Datas", message.Json);
-            //        }
-            //    }
-            //    break;
+                        //MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.UpdatePlayerDatas());
+                        });
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Current Soul Datas", message.Json);
+                    }
+                }
+                break;
             //case Network.CommandCodes.Player.BuyMarketItem:
             //    {
             //        if (message.Success)
@@ -633,97 +638,137 @@ public class NetworkManager : MonoBehaviour
             //        MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
             //    }
             //    break;
-            //case Network.CommandCodes.Player.Currencies:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            var currencies = JsonConvert.DeserializeObject<Network.Currencies>(message.Json);
-            //            DatasManager.Instance.Currencies = currencies;
-            //        }
-            //        MessagingCenter.Send(this, MessengerCodes.CurrenciesUpdated);
-            //    }
-            //    break;
-            //case Network.CommandCodes.Player.Inventory:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            var inventory = JsonConvert.DeserializeObject<List<DataModels.InventorySlot>>(message.Json);
-            //            DatasManager.Instance.Inventory = inventory;
-            //        }
-            //        MessagingCenter.Send(this, MessengerCodes.InventoryUpdated);
-            //    }
-            //    break;
-            //case Network.CommandCodes.Player.Knowledges:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            var knowledges = JsonConvert.DeserializeObject<List<DataModels.Knowledge>>(message.Json);
+            case JsonObjects.CommandCodes.Player.Currencies:
+                {
+                    if (message.Success)
+                    {
+                        var currencies = JsonConvert.DeserializeObject<JsonObjects.Currencies>(message.Json);
+                        DatasManager.Instance.Currencies = currencies;
 
-            //            if (knowledges.Count == 0)
-            //            {
-            //                Application.Current.Properties["AiosKingdom_IsNewCharacter"] = true;
-            //                Application.Current.Properties["AiosKingdom_TutorialStep"] = 1;
-            //                Application.Current.SavePropertiesAsync();
-            //                MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
-            //            }
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.UpdateCurrencies());
+                        });
+                    }
+                    //MessagingCenter.Send(this, MessengerCodes.CurrenciesUpdated);
+                }
+                break;
+            case JsonObjects.CommandCodes.Player.Inventory:
+                {
+                    if (message.Success)
+                    {
+                        var inventory = JsonConvert.DeserializeObject<List<JsonObjects.InventorySlot>>(message.Json);
+                        DatasManager.Instance.Inventory = inventory;
+                    }
+                    //MessagingCenter.Send(this, MessengerCodes.InventoryUpdated);
+                }
+                break;
+            case JsonObjects.CommandCodes.Player.Knowledges:
+                {
+                    if (message.Success)
+                    {
+                        var knowledges = JsonConvert.DeserializeObject<List<JsonObjects.Knowledge>>(message.Json);
 
-            //            DatasManager.Instance.Knowledges = knowledges;
-            //        }
-            //        MessagingCenter.Send(this, MessengerCodes.KnowledgeUpdated);
-            //    }
-            //    break;
-            //case Network.CommandCodes.Player.Equipment:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            var equipment = JsonConvert.DeserializeObject<DataModels.Equipment>(message.Json);
-            //            DatasManager.Instance.Equipment = equipment;
-            //        }
-            //        MessagingCenter.Send(this, MessengerCodes.EquipmentUpdated);
-            //    }
-            //    break;
+                        if (knowledges.Count == 0)
+                        {
+                            //Application.Current.Properties["AiosKingdom_IsNewCharacter"] = true;
+                            //Application.Current.Properties["AiosKingdom_TutorialStep"] = 1;
+                            //Application.Current.SavePropertiesAsync();
+                            //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+                        }
+
+                        DatasManager.Instance.Knowledges = knowledges;
+                    }
+                    //MessagingCenter.Send(this, MessengerCodes.KnowledgeUpdated);
+                }
+                break;
+            case JsonObjects.CommandCodes.Player.Equipment:
+                {
+                    if (message.Success)
+                    {
+                        var equipment = JsonConvert.DeserializeObject<JsonObjects.Equipment>(message.Json);
+                        DatasManager.Instance.Equipment = equipment;
+                    }
+                    //MessagingCenter.Send(this, MessengerCodes.EquipmentUpdated);
+                }
+                break;
 
             // LISTING
             case JsonObjects.CommandCodes.Listing.Armor:
                 {
-                    //var armors = JsonConvert.DeserializeObject<List<DataModels.Items.Armor>>(message.Json);
-                    //DatasManager.Instance.Armors = armors;
+                    var armors = JsonConvert.DeserializeObject<List<JsonObjects.Items.Armor>>(message.Json);
+                    DatasManager.Instance.Armors = armors;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("armors"));
+                    });
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Consumable:
                 {
-                    //var consumable = JsonConvert.DeserializeObject<List<DataModels.Items.Consumable>>(message.Json);
-                    //DatasManager.Instance.Consumables = consumable;
+                    var consumable = JsonConvert.DeserializeObject<List<JsonObjects.Items.Consumable>>(message.Json);
+                    DatasManager.Instance.Consumables = consumable;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("consumables"));
+                    });
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Bag:
                 {
-                    //var bags = JsonConvert.DeserializeObject<List<DataModels.Items.Bag>>(message.Json);
-                    //DatasManager.Instance.Bags = bags;
+                    var bags = JsonConvert.DeserializeObject<List<JsonObjects.Items.Bag>>(message.Json);
+                    DatasManager.Instance.Bags = bags;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("bags"));
+                    });
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Weapon:
                 {
-                    //var weapons = JsonConvert.DeserializeObject<List<DataModels.Items.Weapon>>(message.Json);
-                    //DatasManager.Instance.Weapons = weapons;
+                    var weapons = JsonConvert.DeserializeObject<List<JsonObjects.Items.Weapon>>(message.Json);
+                    DatasManager.Instance.Weapons = weapons;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("weapons"));
+                    });
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Book:
                 {
-                    //var books = JsonConvert.DeserializeObject<List<DataModels.Skills.Book>>(message.Json);
-                    //DatasManager.Instance.Books = books;
+                    var books = JsonConvert.DeserializeObject<List<JsonObjects.Skills.Book>>(message.Json);
+                    DatasManager.Instance.Books = books;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("books"));
+                    });
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Monster:
                 {
-                    //var monsters = JsonConvert.DeserializeObject<List<DataModels.Monsters.Monster>>(message.Json);
-                    //DatasManager.Instance.Monsters = monsters;
+                    var monsters = JsonConvert.DeserializeObject<List<JsonObjects.Monsters.Monster>>(message.Json);
+                    DatasManager.Instance.Monsters = monsters;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("monsters"));
+                    });
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Dungeon:
                 {
-                    //var dungeons = JsonConvert.DeserializeObject<List<DataModels.Dungeons.Dungeon>>(message.Json);
-                    //DatasManager.Instance.Dungeons = dungeons;
+                    var dungeons = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Dungeon>>(message.Json);
+                    DatasManager.Instance.Dungeons = dungeons;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("adventures"));
+                    });
                     //MessagingCenter.Send(this, MessengerCodes.DungeonListUpdated);
                 }
                 break;

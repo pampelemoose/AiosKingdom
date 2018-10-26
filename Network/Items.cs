@@ -80,7 +80,7 @@ namespace Network.Items
         public int StatValue { get; set; }
     }
 
-    public class Armor
+    public abstract class AItem
     {
         public Guid Id { get; set; }
 
@@ -102,64 +102,25 @@ namespace Network.Items
         public int Space { get; set; }
 
         public int SellingPrice { get; set; }
+    }
 
+    public class Armor : AItem
+    {
         public ArmorPart Part { get; set; }
         public int ArmorValue { get; set; }
 
         public List<ItemStat> Stats { get; set; }
     }
 
-    public class Bag
+    public class Bag : AItem
     {
-        public Guid Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string ItemName
-        {
-            get { return $"[{Type}] {Name}"; }
-        }
-
-        public string Description { get; set; }
-        public string Image { get; set; }
-
-        public ItemType Type { get; set; }
-        public ItemQuality Quality { get; set; }
-
-        public int ItemLevel { get; set; }
-        public int UseLevelRequired { get; set; }
-        public int Space { get; set; }
-
-        public int SellingPrice { get; set; }
-
         public int SlotCount { get; set; }
 
         public List<ItemStat> Stats { get; set; }
     }
 
-    public class Weapon
+    public class Weapon : AItem
     {
-        public Guid Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string ItemName
-        {
-            get { return $"[{Type}] {Name}"; }
-        }
-
-        public string Description { get; set; }
-        public string Image { get; set; }
-
-        public ItemType Type { get; set; }
-        public ItemQuality Quality { get; set; }
-
-        public int ItemLevel { get; set; }
-        public int UseLevelRequired { get; set; }
-        public int Space { get; set; }
-
-        public int SellingPrice { get; set; }
-
         public HandlingType HandlingType { get; set; }
         public WeaponType WeaponType { get; set; }
         public int MinDamages { get; set; }
@@ -168,34 +129,16 @@ namespace Network.Items
         public List<ItemStat> Stats { get; set; }
     }
 
-    public class Consumable
+    public class Consumable : AItem
     {
-        public Guid Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string ItemName
-        {
-            get { return $"[{Type}] {Name}"; }
-        }
-
-        public string Description { get; set; }
-        public string Image { get; set; }
-
-        public ItemType Type { get; set; }
-        public ItemQuality Quality { get; set; }
-
-        public int ItemLevel { get; set; }
-        public int UseLevelRequired { get; set; }
-        public int Space { get; set; }
-
-        public int SellingPrice { get; set; }
-
         public List<ConsumableEffect> Effects { get; set; }
     }
 
     public class ConsumableEffect
     {
+        public Guid Id { get; set; }
+        public Guid ConsumableId { get; set; }
+
         public string Name { get; set; }
         public string Description { get; set; }
 

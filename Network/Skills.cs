@@ -79,6 +79,7 @@ namespace Network.Skills
     public class Inscription
     {
         public Guid Id { get; set; }
+        public Guid PageId { get; set; }
 
         public InscriptionType Type { get; set; }
 

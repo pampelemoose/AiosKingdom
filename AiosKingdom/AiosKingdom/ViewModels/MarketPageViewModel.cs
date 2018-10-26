@@ -12,7 +12,7 @@ namespace AiosKingdom.ViewModels
         public MarketPageViewModel(INavigation nav) 
             : base(nav)
         {
-            _filter = DataModels.Items.ItemType.Armor;
+            _filter = Network.Items.ItemType.Armor;
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.MarketUpdated, (sender) =>
             {
@@ -72,13 +72,13 @@ namespace AiosKingdom.ViewModels
             }
         }
 
-        private DataModels.Items.ItemType _filter;
+        private Network.Items.ItemType _filter;
         private Command _setFilterAction;
         public ICommand SetFilterAction =>
         _setFilterAction ?? (_setFilterAction = new Command((arg) =>
         {
             string filter = (string)arg;
-            DataModels.Items.ItemType newFilter;
+            Network.Items.ItemType newFilter;
 
             IsArmorPanelActive = false;
             IsWeaponPanelActive = false;
@@ -88,19 +88,19 @@ namespace AiosKingdom.ViewModels
             switch (filter)
             {
                 case "Armors":
-                    newFilter = DataModels.Items.ItemType.Armor;
+                    newFilter = Network.Items.ItemType.Armor;
                     IsArmorPanelActive = true;
                     break;
                 case "Consumables":
-                    newFilter = DataModels.Items.ItemType.Consumable;
+                    newFilter = Network.Items.ItemType.Consumable;
                     IsConsumablePanelActive = true;
                     break;
                 case "Weapons":
-                    newFilter = DataModels.Items.ItemType.Weapon;
+                    newFilter = Network.Items.ItemType.Weapon;
                     IsWeaponPanelActive = true;
                     break;
                 case "Bags":
-                    newFilter = DataModels.Items.ItemType.Bag;
+                    newFilter = Network.Items.ItemType.Bag;
                     IsBagPanelActive = true;
                     break;
                 default:
@@ -155,21 +155,21 @@ namespace AiosKingdom.ViewModels
 
             foreach (var slot in DatasManager.Instance.MarketItems?.Where(i => i.Type == _filter).ToList())
             {
-                DataModels.Items.AItem itm = null;
+                Network.Items.AItem itm = null;
 
                 switch (slot.Type)
                 {
-                    case DataModels.Items.ItemType.Armor:
-                        itm = DatasManager.Instance.Armors.FirstOrDefault(i => i.ItemId.Equals(slot.ItemId));
+                    case Network.Items.ItemType.Armor:
+                        itm = DatasManager.Instance.Armors.FirstOrDefault(i => i.Id.Equals(slot.ItemId));
                         break;
-                    case DataModels.Items.ItemType.Consumable:
-                        itm = DatasManager.Instance.Consumables.FirstOrDefault(i => i.ItemId.Equals(slot.ItemId));
+                    case Network.Items.ItemType.Consumable:
+                        itm = DatasManager.Instance.Consumables.FirstOrDefault(i => i.Id.Equals(slot.ItemId));
                         break;
-                    case DataModels.Items.ItemType.Bag:
-                        itm = DatasManager.Instance.Bags.FirstOrDefault(i => i.ItemId.Equals(slot.ItemId));
+                    case Network.Items.ItemType.Bag:
+                        itm = DatasManager.Instance.Bags.FirstOrDefault(i => i.Id.Equals(slot.ItemId));
                         break;
-                    case DataModels.Items.ItemType.Weapon:
-                        itm = DatasManager.Instance.Weapons.FirstOrDefault(i => i.ItemId.Equals(slot.ItemId));
+                    case Network.Items.ItemType.Weapon:
+                        itm = DatasManager.Instance.Weapons.FirstOrDefault(i => i.Id.Equals(slot.ItemId));
                         break;
                 }
 

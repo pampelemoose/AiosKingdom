@@ -14,7 +14,7 @@ namespace AiosKingdom.Converters
             if (value is Guid)
             {
                 var enemyId = (Guid)value;
-                var enemy = DatasManager.Instance.Monsters.FirstOrDefault(m => m.MonsterId.Equals(enemyId));
+                var enemy = DatasManager.Instance.Monsters.FirstOrDefault(m => m.Id.Equals(enemyId));
                 if (enemy != null)
                 {
                     if (!string.IsNullOrEmpty(enemy.Image))

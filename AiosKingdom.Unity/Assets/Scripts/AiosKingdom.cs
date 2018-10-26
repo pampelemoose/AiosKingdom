@@ -11,6 +11,8 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
         Account,
         ServerList,
         SoulList,
+        ContentLoadingScreen,
+        Home
     }
 
     private static bool _created = false;
@@ -24,6 +26,8 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
     public GameObject AccountForm;
     public GameObject ServerList;
     public GameObject SoulList;
+    public GameObject ContentLoadingScreen;
+    public GameObject Home;
 
     void Awake()
     {
@@ -31,7 +35,6 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
         {
             DontDestroyOnLoad(this.gameObject);
             _created = true;
-            Debug.Log("Awake: " + this.gameObject);
         }
     }
 
@@ -49,6 +52,21 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
             ShowAccountForm();
         }
     }
+
+    void OnApplicationQuit()
+    {
+        _network.DisconnectGame();
+        _network.Disconnect();
+    }
+
+    //void OnApplicationFocus(bool hasFocus)
+    //{
+    //    if (!hasFocus)
+    //    {
+    //        _network.DisconnectGame();
+    //        _network.Disconnect();
+    //    }
+    //}
 
     public void ShowAccountForm()
     {
@@ -90,6 +108,23 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
         LoadingScreen.Loading.Hide();
     }
 
+    public void ShowContentLoadingScreen()
+    {
+        ChangeView(Views.ContentLoadingScreen);
+
+        LoadingScreen.Loading.Show();
+    }
+
+    public void ShowHome()
+    {
+        ChangeView(Views.Home);
+
+        var script = _currentObject.GetComponent<Home>();
+        script.Network = _network;
+
+        LoadingScreen.Loading.Hide();
+    }
+
     private void ChangeView(Views viewType)
     {
         if (_currentView != viewType)
@@ -107,9 +142,46 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
                 case Views.SoulList:
                     _currentObject = Instantiate(SoulList, Ui.transform);
                     break;
+                case Views.ContentLoadingScreen:
+                    _currentObject = Instantiate(ContentLoadingScreen, Ui.transform);
+                    break;
+                case Views.Home:
+                    _currentObject = Instantiate(Home, Ui.transform);
+                    break;
             }
-            
+
             _currentView = viewType;
         }
     }
+
+    #region Network Callbacks
+
+    public void ContentLoaded(string name)
+    {
+        var script = _currentObject.GetComponent<ContentLoadingScreen>();
+        script.IsLoaded(name);
+
+        if (script.IsFinishedLoading)
+            ShowHome();
+    }
+
+    public void UpdatePlayerDatas()
+    {
+        if (_currentView == Views.Home)
+        {
+            var script = _currentObject.GetComponent<Home>();
+            script.UpdatePlayerDatas();
+        }
+    }
+
+    public void UpdateCurrencies()
+    {
+        if (_currentView == Views.Home)
+        {
+            var script = _currentObject.GetComponent<Home>();
+            script.UpdateCurrencies();
+        }
+    }
+
+    #endregion
 }

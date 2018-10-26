@@ -16,18 +16,19 @@ namespace Server.GameServer.Commands.Dungeon
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var soul = SoulManager.Instance.GetSoul(_args.ClientId);
+            var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
+            var knowledges = SoulManager.Instance.GetKnowledges(_args.ClientId);
             var knowledgeId = Guid.Parse(_args.Args[0]);
             var enemyId = Guid.Parse(_args.Args[1]);
 
-            var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
+            var adventure = AdventureManager.Instance.GetAdventure(soulId);
 
             if (adventure != null)
             {
-                var skillKnown = soul.Knowledge.FirstOrDefault(s => s.Id.Equals(knowledgeId));
+                var skillKnown = knowledges.FirstOrDefault(s => s.Id.Equals(knowledgeId));
                 if (skillKnown != null)
                 {
-                    var skill = DataRepositories.BookRepository.GetById(skillKnown.BookId).Pages.FirstOrDefault(p => p.Rank.Equals(skillKnown.Rank));
+                    var skill = DataManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(skillKnown.BookId)).Pages.FirstOrDefault(p => p.Rank.Equals(skillKnown.Rank));
                     if (skill != null)
                     {
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
@@ -39,7 +40,7 @@ namespace Server.GameServer.Commands.Dungeon
 
                             if (state.State.CurrentHealth <= 0)
                             {
-                                AdventureManager.Instance.PlayerDied(soul.Id);
+                                AdventureManager.Instance.PlayerDied(soulId);
 
                                 skillResult.Add(new Network.AdventureState.ActionResult
                                 {

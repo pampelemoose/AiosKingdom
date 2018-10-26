@@ -32,7 +32,7 @@ namespace AiosKingdom.ViewModels
             });
         }
 
-        public List<DataModels.Skills.Book> Books
+        public List<Network.Skills.Book> Books
         {
             get
             {
@@ -46,8 +46,8 @@ namespace AiosKingdom.ViewModels
 
         public bool BookIsSelected { get { return _selectedBook != null; } }
 
-        private DataModels.Skills.Book _selectedBook;
-        public DataModels.Skills.Book SelectedBook
+        private Network.Skills.Book _selectedBook;
+        public Network.Skills.Book SelectedBook
         {
             get { return _selectedBook; }
             set
@@ -67,8 +67,8 @@ namespace AiosKingdom.ViewModels
 
         public bool PageIsSelected { get { return _selectedPage != null; } }
 
-        private DataModels.Skills.Page _selectedPage;
-        public DataModels.Skills.Page SelectedPage
+        private Network.Skills.Page _selectedPage;
+        public Network.Skills.Page SelectedPage
         {
             get { return _selectedPage; }
             set
@@ -86,7 +86,7 @@ namespace AiosKingdom.ViewModels
             Subscribe_SkillLearned();
 
             IsBusy = true;
-            NetworkManager.Instance.LearnSkill(_selectedBook.BookId, 1);
+            NetworkManager.Instance.LearnSkill(_selectedBook.Id, 1);
         }, () =>
         {
             return DatasManager.Instance.Currencies?.Embers >= _selectedBook?.Pages[0].EmberCost;

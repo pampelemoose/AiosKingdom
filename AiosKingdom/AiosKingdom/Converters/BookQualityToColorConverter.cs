@@ -10,9 +10,9 @@ namespace AiosKingdom.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is DataModels.Skills.BookQuality)
+            if (value is Network.Skills.BookQuality)
             {
-                var quality = (DataModels.Skills.BookQuality)value;
+                var quality = (Network.Skills.BookQuality)value;
 
                 return Application.Current.Resources["BookQualityColor_" + quality.ToString()];
             }

@@ -10,16 +10,16 @@ namespace AiosKingdom.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is List<DataModels.Items.ConsumableEffect>)
+            if (value is List<Network.Items.ConsumableEffect>)
             {
-                var list = value as List<DataModels.Items.ConsumableEffect>;
+                var list = value as List<Network.Items.ConsumableEffect>;
                 var height = int.Parse((string)parameter);
                 return list.Count * height;
             }
 
-            if (value is List<DataModels.Items.ItemStat>)
+            if (value is List<Network.Items.ItemStat>)
             {
-                var list = value as List<DataModels.Items.ItemStat>;
+                var list = value as List<Network.Items.ItemStat>;
                 var height = int.Parse((string)parameter);
                 return list.Count * height;
             }

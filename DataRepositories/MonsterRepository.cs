@@ -15,7 +15,6 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 return context.Monsters
-                    .Include(a => a.Phases)
                     .ToList();
             }
         }
@@ -26,6 +25,7 @@ namespace DataRepositories
             {
                 return context.Monsters
                     .Include(a => a.Phases)
+                    .Include(a => a.Loots)
                     .Where(b => b.VersionId.Equals(versionId))
                     .ToList();
             }

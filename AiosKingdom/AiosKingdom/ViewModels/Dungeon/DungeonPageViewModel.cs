@@ -340,7 +340,7 @@ namespace AiosKingdom.ViewModels.Dungeon
             {
                 var skillInscTypes = _selectedSkill.Skill.Inscriptions.Select(i => i.Type).ToList();
 
-                if (skillInscTypes.Contains(DataModels.Skills.InscriptionType.Damages))
+                if (skillInscTypes.Contains(Network.Skills.InscriptionType.Damages))
                 {
                     return _selectedEnemy != null;
                 }

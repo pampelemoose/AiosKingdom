@@ -25,7 +25,8 @@ namespace JsonObjects.Monsters
                 var result = new List<MonsterType>();
                 foreach (var str in InternalTypes.Split(';'))
                 {
-                    result.Add((MonsterType)Enum.Parse(typeof(MonsterType), str));
+                    if (!string.IsNullOrEmpty(str))
+                        result.Add((MonsterType)Enum.Parse(typeof(MonsterType), str));
                 }
                 return result;
             }

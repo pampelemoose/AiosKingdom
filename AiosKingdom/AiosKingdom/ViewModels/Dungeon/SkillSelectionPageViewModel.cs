@@ -25,7 +25,7 @@ namespace AiosKingdom.ViewModels.Dungeon
                 var skills = new List<Models.Dungeon.SkillSelectionItemModel>();
                 foreach (var knowledge in knowledges)
                 {
-                    var book = DatasManager.Instance.Books.FirstOrDefault(b => b.BookId.Equals(knowledge.BookId));
+                    var book = DatasManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(knowledge.BookId));
 
                     if (book != null)
                     {

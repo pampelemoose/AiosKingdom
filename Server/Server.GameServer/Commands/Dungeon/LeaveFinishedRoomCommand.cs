@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// TODO : Changes here are quite heavy. Need to test thorougly
+/// </summary>
 namespace Server.GameServer.Commands.Dungeon
 {
     public class LeaveFinishedRoomCommand : ACommand
@@ -19,106 +22,118 @@ namespace Server.GameServer.Commands.Dungeon
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var soul = SoulManager.Instance.GetSoul(_args.ClientId);
-            var soulDatas = SoulManager.Instance.GetDatas(_args.ClientId);
-            var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
-            var kingdom = DataRepositories.KingdomRepository.GetById(_config.KingdomId);
+            var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
+            var adventure = AdventureManager.Instance.GetAdventure(soulId);
+
 
             if (adventure.IsCleared)
             {
+                var soulDatas = SoulManager.Instance.GetDatas(_args.ClientId);
+                var soulBaseDatas = SoulManager.Instance.GetBaseDatas(_args.ClientId);
+                var kingdom = DataRepositories.KingdomRepository.GetById(_config.KingdomId);
+                var currencies = SoulManager.Instance.GetCurrencies(_args.ClientId);
+                var inventory = SoulManager.Instance.GetInventory(_args.ClientId);
+
                 var adventureState = adventure.GetActualState();
-                var dungeon = DataRepositories.DungeonRepository.GetById(adventure.DungeonId);
+                var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(adventure.DungeonId));
 
                 if (adventureState.IsExit)
                 {
-                    if (soul.Level < kingdom.CurrentMaxLevel)
+                    if (soulDatas.Level < kingdom.CurrentMaxLevel)
                     {
-                        soul.CurrentExperience += adventureState.StackedExperience;
-                        soul.CurrentExperience += dungeon.ExperienceReward;
+                        soulBaseDatas.CurrentExperience += adventureState.StackedExperience;
+                        soulBaseDatas.CurrentExperience += dungeon.ExperienceReward;
                     }
 
-                    soul.Shards += adventureState.StackedShards;
-                    soul.Shards += dungeon.ShardReward;
+                    currencies.Shards += adventureState.StackedShards;
+                    currencies.Shards += dungeon.ShardReward;
 
                     foreach (var bag in adventureState.Bag)
                     {
-                        var type = (DataModels.Items.ItemType)Enum.Parse(typeof(DataModels.Items.ItemType), bag.Type);
+                        var type = (Network.Items.ItemType)Enum.Parse(typeof(Network.Items.ItemType), bag.Type);
 
                         switch (type)
                         {
-                            case DataModels.Items.ItemType.Armor:
-                            case DataModels.Items.ItemType.Bag:
-                            case DataModels.Items.ItemType.Weapon:
-                            case DataModels.Items.ItemType.Jewelry:
+                            case Network.Items.ItemType.Armor:
+                            case Network.Items.ItemType.Bag:
+                            case Network.Items.ItemType.Weapon:
+                            case Network.Items.ItemType.Jewelry:
                                 {
-                                    soul.Inventory.Add(new DataModels.InventorySlot
+                                    inventory.Add(new Network.InventorySlot
                                     {
                                         ItemId = bag.ItemId,
                                         Type = type,
                                         Quantity = bag.Quantity,
-                                        SoulId = soul.Id,
                                         LootedAt = DateTime.Now
                                     });
                                 }
                                 break;
-                            case DataModels.Items.ItemType.Consumable:
+                            case Network.Items.ItemType.Consumable:
                                 {
-                                    var exists = soul.Inventory.FirstOrDefault(i => i.ItemId.Equals(bag.ItemId));
+                                    var exists = inventory.FirstOrDefault(i => i.ItemId.Equals(bag.ItemId));
                                     if (exists != null)
                                     {
-                                        soul.Inventory.Remove(exists);
+                                        inventory.Remove(exists);
                                         exists.Quantity += bag.Quantity;
-                                        soul.Inventory.Add(exists);
-                                        DataRepositories.SoulRepository.Update(soul);
+                                        inventory.Add(exists);
+                                        //DataRepositories.SoulRepository.Update(soul);
                                     }
                                     else
                                     {
-                                        soul.Inventory.Add(new DataModels.InventorySlot
+                                        inventory.Add(new Network.InventorySlot
                                         {
                                             ItemId = bag.ItemId,
                                             Type = type,
                                             Quantity = bag.Quantity,
-                                            SoulId = soul.Id,
                                             LootedAt = DateTime.Now
                                         });
-                                        DataRepositories.SoulRepository.Update(soul);
+                                        //DataRepositories.SoulRepository.Update(soul);
                                     }
                                 }
                                 break;
                         }
                     }
+
+                    SoulManager.Instance.UpdateCurrencies(_args.ClientId, currencies);
+                    SoulManager.Instance.UpdateInventory(_args.ClientId, inventory);
                 }
-                
+
+                // Use Experience for LevelUps
                 int leveledUp = 0;
-                while (soul.CurrentExperience >= soulDatas.RequiredExperience)
+                while (soulDatas.CurrentExperience >= soulDatas.RequiredExperience)
                 {
-                    ++soul.Level;
+                    ++soulBaseDatas.Level;
 
-                    soul.Spirits += _config.SpiritsPerLevelUp;
-                    soul.Embers += _config.EmbersPerLevelUp;
+                    currencies.Spirits += _config.SpiritsPerLevelUp;
+                    currencies.Embers += _config.EmbersPerLevelUp;
 
-                    Log.Instance.Write(Log.Level.Infos, $"{soul.Name} Level up {soul.CurrentExperience}/{soulDatas.RequiredExperience} => ({soul.Level}).");
+                    Log.Instance.Write(Log.Level.Infos, $"{soulDatas.Name} Level up {soulDatas.CurrentExperience}/{soulDatas.RequiredExperience} => ({soulDatas.Level}).");
 
-                    soul.CurrentExperience -= soulDatas.RequiredExperience;
+                    soulBaseDatas.CurrentExperience -= soulDatas.RequiredExperience;
 
-                    SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
+                    //SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
+                    SoulManager.Instance.UpdateBaseDatas(_args.ClientId, soulBaseDatas);
+
                     SoulManager.Instance.UpdateCurrentDatas(_args.ClientId, _config);
                     soulDatas = SoulManager.Instance.GetDatas(_args.ClientId);
-                    Console.WriteLine($"{soul.Name} Level up({soul.Level}).");
+                    Console.WriteLine($"{soulDatas.Name} Level up({soulDatas.Level}).");
                     leveledUp++;
 
-                    if (soul.Level == kingdom.CurrentMaxLevel)
+                    // Check the Kingdom maxLevel count
+                    if (soulDatas.Level == kingdom.CurrentMaxLevel)
                     {
                         kingdom.CurrentMaxLevelCount++;
                         DataRepositories.KingdomRepository.Update(kingdom);
-                        soul.CurrentExperience = 0;
+                        soulBaseDatas.CurrentExperience = 0;
                         break;
                     }
                 }
 
-                SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
+                //SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
+                SoulManager.Instance.UpdateCurrencies(_args.ClientId, currencies);
+                SoulManager.Instance.UpdateBaseDatas(_args.ClientId, soulBaseDatas);
                 SoulManager.Instance.UpdateCurrentDatas(_args.ClientId, _config);
-                AdventureManager.Instance.ExitRoom(soul.Id);
+                AdventureManager.Instance.ExitRoom(soulId);
 
                 List<Network.AdventureState.ActionResult> json = new List<Network.AdventureState.ActionResult>();
                 json.Add(new Network.AdventureState.ActionResult

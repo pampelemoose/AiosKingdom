@@ -16,14 +16,14 @@ namespace Server.GameServer.Commands.Player
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var soul = SoulManager.Instance.GetSoul(ret.ClientId);
+            var equipment = SoulManager.Instance.GetEquipment(ret.ClientId);
 
-            if (soul != null)
+            if (equipment != null)
             {
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Player.Equipment,
-                    Json = JsonConvert.SerializeObject(soul.Equipment),
+                    Json = JsonConvert.SerializeObject(equipment),
                     Success = true
                 };
                 ret.Succeeded = true;

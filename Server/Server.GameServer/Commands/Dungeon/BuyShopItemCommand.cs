@@ -15,15 +15,15 @@ namespace Server.GameServer.Commands.Dungeon
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var soul = SoulManager.Instance.GetSoul(_args.ClientId);
+            var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
             var tempId = Guid.Parse(_args.Args[0]);
             var quantity = int.Parse(_args.Args[1]);
 
-            var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
+            var adventure = AdventureManager.Instance.GetAdventure(soulId);
 
             if (adventure != null)
             {
-                if (adventure.BuyShopItem(tempId, quantity, soul.Id, ret.ClientId))
+                if (adventure.BuyShopItem(tempId, quantity, soulId, ret.ClientId))
                 {
                     ret.ClientResponse = new Network.Message
                     {

@@ -19,9 +19,9 @@ public class SoulListItem : MonoBehaviour
 
         ConnectButton.onClick.AddListener(() =>
         {
-            //Network.AnnounceGameServerConnection(soul.Id);
+            LoadingScreen.Loading.Show();
 
-            Debug.Log("Connect to :" + soul.Name);
+            Network.ConnectSoul(soul.Id);
         });
     }
 }

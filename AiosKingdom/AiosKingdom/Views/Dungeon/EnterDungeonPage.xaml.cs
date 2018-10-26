@@ -12,7 +12,7 @@ namespace AiosKingdom.Views.Dungeon
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class EnterDungeonPage : ContentPage
 	{
-		public EnterDungeonPage(DataModels.Dungeons.Dungeon dungeon)
+		public EnterDungeonPage(Network.Adventures.Dungeon dungeon)
 		{
 			InitializeComponent();
 

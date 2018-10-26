@@ -38,14 +38,14 @@ namespace AiosKingdom.ViewModels
         {
             if (!_subscribed)
             {
-                MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, souls) =>
+                MessagingCenter.Subscribe<NetworkManager, List<Network.SoulInfos>>(this, MessengerCodes.SoulListReceived, (sender, souls) =>
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         ScreenManager.Instance.ChangePage(new NavigationPage(new Views.SoulListPage(new SoulListPageViewModel(souls))));
                         IsBusy = false;
                         _subscribed = false;
-                        MessagingCenter.Unsubscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived);
+                        MessagingCenter.Unsubscribe<NetworkManager, List<Network.SoulInfos>>(this, MessengerCodes.SoulListReceived);
                     });
                 });
                 _subscribed = true;

@@ -12,7 +12,7 @@ namespace AiosKingdom.Converters
         {
             if (value is string)
             {
-                var type = (DataModels.Dungeons.EnemyType)Enum.Parse(typeof(DataModels.Dungeons.EnemyType), (string)value);
+                var type = (Network.Adventures.EnemyType)Enum.Parse(typeof(Network.Adventures.EnemyType), (string)value);
 
                 return Application.Current.Resources["EnemyTypeColor_" + type.ToString()];
             }

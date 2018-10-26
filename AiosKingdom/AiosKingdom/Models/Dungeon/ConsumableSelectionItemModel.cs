@@ -8,6 +8,6 @@ namespace AiosKingdom.Models.Dungeon
     {
         public Guid SlotId { get; set; }
         public int Quantity { get; set; }
-        public DataModels.Items.Consumable Consumable { get; set; }
+        public Network.Items.Consumable Consumable { get; set; }
     }
 }

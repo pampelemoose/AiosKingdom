@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// TODO : test please.
+/// </summary>
 namespace Server.GameServer.Commands.Player
 {
     public class LearnSkillCommand : ACommand
@@ -19,11 +22,12 @@ namespace Server.GameServer.Commands.Player
             var bookId = Guid.Parse(_args.Args[0]);
             var rank = int.Parse(_args.Args[1]);
 
-            var datas = SoulManager.Instance.GetSoul(ret.ClientId);
+            var knowledges = SoulManager.Instance.GetKnowledges(ret.ClientId);
+            var currencies = SoulManager.Instance.GetCurrencies(ret.ClientId);
 
             if (rank == 1)
             {
-                var alreadyLearned = datas.Knowledge.FirstOrDefault(k => k.BookId.Equals(bookId) && k.Rank.Equals(rank));
+                var alreadyLearned = knowledges.FirstOrDefault(k => k.Id.Equals(bookId) && k.Rank.Equals(rank));
                 if (alreadyLearned != null)
                 {
                     ret.ClientResponse = new Network.Message
@@ -36,7 +40,7 @@ namespace Server.GameServer.Commands.Player
                     return ret;
                 }
 
-                var skill = DataRepositories.BookRepository.GetById(bookId).Pages.FirstOrDefault(p => p.Rank.Equals(rank));
+                var skill = DataManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(bookId)).Pages.FirstOrDefault(p => p.Rank.Equals(rank));
                 if (skill == null)
                 {
                     ret.ClientResponse = new Network.Message
@@ -49,7 +53,7 @@ namespace Server.GameServer.Commands.Player
                     return ret;
                 }
 
-                if (skill.EmberCost > datas.Embers)
+                if (skill.EmberCost > currencies.Embers)
                 {
                     ret.ClientResponse = new Network.Message
                     {
@@ -61,20 +65,18 @@ namespace Server.GameServer.Commands.Player
                     return ret;
                 }
 
-                datas.Embers -= skill.EmberCost;
+                currencies.Embers -= skill.EmberCost;
 
-                datas.Knowledge.Add(new DataModels.Knowledge
+                knowledges.Add(new Network.Knowledge
                 {
-                    SoulId = datas.Id,
+                    Id = Guid.NewGuid(),
                     BookId = bookId,
                     Rank = rank
                 });
-
-                DataRepositories.SoulRepository.Update(datas);
             }
             else
             {
-                var hasRank = datas.Knowledge.FirstOrDefault(k => k.BookId.Equals(bookId) && k.Rank.Equals(rank - 1));
+                var hasRank = knowledges.FirstOrDefault(k => k.Id.Equals(bookId) && k.Rank.Equals(rank - 1));
                 if (hasRank == null)
                 {
                     ret.ClientResponse = new Network.Message
@@ -87,7 +89,7 @@ namespace Server.GameServer.Commands.Player
                     return ret;
                 }
 
-                var skill = DataRepositories.BookRepository.GetById(bookId).Pages.FirstOrDefault(p => p.Rank.Equals(rank));
+                var skill = DataManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(bookId)).Pages.FirstOrDefault(p => p.Rank.Equals(rank));
                 if (skill == null)
                 {
                     ret.ClientResponse = new Network.Message
@@ -100,7 +102,7 @@ namespace Server.GameServer.Commands.Player
                     return ret;
                 }
 
-                if (skill.EmberCost > datas.Embers)
+                if (skill.EmberCost > currencies.Embers)
                 {
                     ret.ClientResponse = new Network.Message
                     {
@@ -112,16 +114,16 @@ namespace Server.GameServer.Commands.Player
                     return ret;
                 }
 
-                datas.Embers -= skill.EmberCost;
+                currencies.Embers -= skill.EmberCost;
 
-                datas.Knowledge.Remove(hasRank);
+                knowledges.Remove(hasRank);
                 hasRank.Rank = rank;
-                datas.Knowledge.Add(hasRank);
+                knowledges.Add(hasRank);
 
-                DataRepositories.SoulRepository.Update(datas);
             }
 
-            SoulManager.Instance.UpdateSoul(ret.ClientId, datas);
+            SoulManager.Instance.UpdateKnowledge(ret.ClientId, knowledges);
+            SoulManager.Instance.UpdateCurrencies(ret.ClientId, currencies);
 
             ret.ClientResponse = new Network.Message
             {

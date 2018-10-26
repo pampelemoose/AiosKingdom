@@ -23,18 +23,18 @@ namespace AiosKingdom.ViewModels
             NetworkManager.Instance.AskKnowledges();
         }
 
-        public List<DataModels.Dungeons.Dungeon> Dungeons
+        public List<Network.Adventures.Dungeon> Dungeons
         {
             get
             {
                 if (DatasManager.Instance.Datas == null || DatasManager.Instance.Dungeons == null)
-                    return new List<DataModels.Dungeons.Dungeon>();
+                    return new List<Network.Adventures.Dungeon>();
 
                 return DatasManager.Instance.Dungeons.Where(d => d.RequiredLevel <= DatasManager.Instance.Datas.Level && d.MaxLevelAuthorized >= DatasManager.Instance.Datas.Level).ToList();
             }
         }
 
-        public DataModels.Dungeons.Dungeon SelectedDungeon
+        public Network.Adventures.Dungeon SelectedDungeon
         {
             get { return null; }
             set

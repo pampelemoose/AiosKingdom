@@ -10,33 +10,33 @@ namespace AiosKingdom.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is DataModels.Items.Armor)
+            if (value is Network.Items.Armor)
             {
-                var dto = value as DataModels.Items.Armor;
+                var dto = value as Network.Items.Armor;
 
                 if (!string.IsNullOrEmpty(dto.Image))
                     return dto.Image;
             }
 
-            if (value is DataModels.Items.Consumable)
+            if (value is Network.Items.Consumable)
             {
-                var dto = value as DataModels.Items.Consumable;
+                var dto = value as Network.Items.Consumable;
 
                 if (!string.IsNullOrEmpty(dto.Image))
                     return dto.Image;
             }
 
-            if (value is DataModels.Items.Weapon)
+            if (value is Network.Items.Weapon)
             {
-                var dto = value as DataModels.Items.Weapon;
+                var dto = value as Network.Items.Weapon;
 
                 if (!string.IsNullOrEmpty(dto.Image))
                     return dto.Image;
             }
 
-            if (value is DataModels.Skills.Page)
+            if (value is Network.Skills.Page)
             {
-                var dto = value as DataModels.Skills.Page;
+                var dto = value as Network.Skills.Page;
 
                 if (!string.IsNullOrEmpty(dto.Image))
                     return dto.Image;

@@ -6,7 +6,7 @@ namespace AiosKingdom.Models
 {
     public class MarketItemModel
     {
-        public DataModels.MarketSlot Slot { get; set; }
-        public DataModels.Items.AItem Item { get; set; }
+        public Network.MarketSlot Slot { get; set; }
+        public Network.Items.AItem Item { get; set; }
     }
 }

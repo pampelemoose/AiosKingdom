@@ -11,29 +11,29 @@ namespace AiosKingdom.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is DataModels.Skills.Inscription && (parameter is string && ((string)parameter == "min" || (string)parameter == "max")))
+            if (value is Network.Skills.Inscription && (parameter is string && ((string)parameter == "min" || (string)parameter == "max")))
             {
-                var insc = (DataModels.Skills.Inscription)value;
+                var insc = (Network.Skills.Inscription)value;
                 int statVal = 0;
 
                 switch (insc.StatType)
                 {
-                    case DataModels.Soul.Stats.Stamina:
+                    case Network.Stats.Stamina:
                         statVal = DatasManager.Instance.Datas.TotalStamina;
                         break;
-                    case DataModels.Soul.Stats.Energy:
+                    case Network.Stats.Energy:
                         statVal = DatasManager.Instance.Datas.TotalEnergy;
                         break;
-                    case DataModels.Soul.Stats.Strength:
+                    case Network.Stats.Strength:
                         statVal = DatasManager.Instance.Datas.TotalStrength;
                         break;
-                    case DataModels.Soul.Stats.Agility:
+                    case Network.Stats.Agility:
                         statVal = DatasManager.Instance.Datas.TotalAgility;
                         break;
-                    case DataModels.Soul.Stats.Intelligence:
+                    case Network.Stats.Intelligence:
                         statVal = DatasManager.Instance.Datas.TotalIntelligence;
                         break;
-                    case DataModels.Soul.Stats.Wisdom:
+                    case Network.Stats.Wisdom:
                         statVal = DatasManager.Instance.Datas.TotalWisdom;
                         break;
                 }

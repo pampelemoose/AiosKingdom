@@ -17,7 +17,7 @@ namespace AiosKingdom.ViewModels
         private Models.MarketItemModel _item;
         public Models.MarketItemModel Item => _item;
 
-        public override bool IsConsumable => _item.Item.Type == DataModels.Items.ItemType.Consumable;
+        public override bool IsConsumable => _item.Item.Type == Network.Items.ItemType.Consumable;
 
         public override int Shards => _item.Slot.ShardPrice * _quantity;
         public override int Bits => _item.Slot.BitPrice * _quantity;
@@ -39,7 +39,11 @@ namespace AiosKingdom.ViewModels
         protected override void ExecuteBuyAction()
         {
             IsBusy = true;
-            NetworkManager.Instance.BuyMarketItem(_item.Slot.Id, _quantity, IsBitSelected);
+            NetworkManager.Instance.BuyMarketItem(
+                _item.Slot.Id, 
+                _quantity, 
+                (IsBitSelected ? _item.Slot.BitPrice : _item.Slot.ShardPrice) * _quantity,
+                IsBitSelected);
         }
     }
 }

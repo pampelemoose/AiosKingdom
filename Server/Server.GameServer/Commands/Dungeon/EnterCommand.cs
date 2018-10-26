@@ -16,16 +16,32 @@ namespace Server.GameServer.Commands.Dungeon
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var soul = SoulManager.Instance.GetSoul(_args.ClientId);
+            var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
+            var knowledges = SoulManager.Instance.GetKnowledges(_args.ClientId);
+            var inventory = SoulManager.Instance.GetInventory(_args.ClientId);
             var datas = SoulManager.Instance.GetDatas(_args.ClientId);
             var dungeonId = Guid.Parse(_args.Args[0]);
             var bagItems = JsonConvert.DeserializeObject<List<Network.AdventureState.BagItem>>(_args.Args[1]);
 
-            if (soul.Knowledge.Count > 0)
+            if (knowledges.Count > 0)
             {
-                var adventure = AdventureManager.Instance.OpenRoom(soul, datas, dungeonId, bagItems);
+                var adventure = AdventureManager.Instance.OpenRoom(soulId, datas, dungeonId, bagItems);
 
-                SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
+                foreach (var bagItem in bagItems)
+                {
+                    var exists = inventory.FirstOrDefault(i => i.Id.Equals(bagItem.InventoryId));
+                    if (exists != null)
+                    {
+                        inventory.Remove(exists);
+                        exists.Quantity -= bagItem.Quantity;
+                        if (exists.Quantity > 0)
+                        {
+                            inventory.Add(exists);
+                        }
+                    }
+                }
+
+                SoulManager.Instance.UpdateInventory(_args.ClientId, inventory);
 
                 if (adventure.RoomNumber == 0)
                 {

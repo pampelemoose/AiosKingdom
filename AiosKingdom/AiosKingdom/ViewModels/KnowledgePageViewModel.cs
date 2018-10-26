@@ -117,7 +117,7 @@ namespace AiosKingdom.ViewModels
 
             foreach (var slot in DatasManager.Instance.Knowledges.OrderBy(i => i.Rank).ToList())
             {
-                var book = DatasManager.Instance.Books.FirstOrDefault(b => b.BookId.Equals(slot.BookId));
+                var book = DatasManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(slot.BookId));
                 var isMaxRank = book.Pages.Exists(p => p.Rank.Equals(slot.Rank + 1));
 
                 _knowledges.Add(new Models.KnowledgeModel

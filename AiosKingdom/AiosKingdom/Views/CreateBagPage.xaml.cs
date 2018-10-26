@@ -12,7 +12,7 @@ namespace AiosKingdom.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CreateBagPage : ContentPage
 	{
-		public CreateBagPage(DataModels.Dungeons.Dungeon dungeon)
+		public CreateBagPage(Network.Adventures.Dungeon dungeon)
 		{
 			InitializeComponent();
 

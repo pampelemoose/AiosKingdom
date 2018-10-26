@@ -8,7 +8,7 @@ namespace AiosKingdom.Models.Dungeon
     {
         public Guid KnowledgeId { get; set; }
         public string BookName { get; set; }
-        public DataModels.Skills.Page Skill { get; set; }
+        public Network.Skills.Page Skill { get; set; }
         public bool CanSelect { get; set; }
     }
 }

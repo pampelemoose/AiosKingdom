@@ -174,22 +174,22 @@ namespace AiosKingdom.ViewModels
             }));
 
         public Network.Currencies Currencies => DatasManager.Instance.Currencies;
-        public DataModels.Equipment Equipment => DatasManager.Instance.Equipment;
+        public Network.Equipment Equipment => DatasManager.Instance.Equipment;
         public Network.SoulDatas Datas => DatasManager.Instance.Datas;
 
-        public DataModels.Items.Armor Head => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Head));
-        public DataModels.Items.Armor Shoulder => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Shoulder));
-        public DataModels.Items.Armor Torso => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Torso));
-        public DataModels.Items.Armor Belt => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Belt));
-        public DataModels.Items.Armor Hand => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Hand));
-        public DataModels.Items.Armor Leg => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Leg));
-        public DataModels.Items.Armor Pants => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Pants));
-        public DataModels.Items.Armor Feet => DatasManager.Instance.Armors?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Feet));
+        public Network.Items.Armor Head => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Head));
+        public Network.Items.Armor Shoulder => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Shoulder));
+        public Network.Items.Armor Torso => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Torso));
+        public Network.Items.Armor Belt => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Belt));
+        public Network.Items.Armor Hand => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Hand));
+        public Network.Items.Armor Leg => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Leg));
+        public Network.Items.Armor Pants => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Pants));
+        public Network.Items.Armor Feet => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Feet));
 
-        public DataModels.Items.Weapon WeaponRight => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.ItemId.Equals(Equipment.WeaponRight));
-        public DataModels.Items.Weapon WeaponLeft => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.ItemId.Equals(Equipment.WeaponLeft));
+        public Network.Items.Weapon WeaponRight => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.Id.Equals(Equipment?.WeaponRight));
+        public Network.Items.Weapon WeaponLeft => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.Id.Equals(Equipment?.WeaponLeft));
 
-        public DataModels.Items.Bag Bag => DatasManager.Instance.Bags?.FirstOrDefault(a => a.ItemId.Equals(Equipment.Bag));
+        public Network.Items.Bag Bag => DatasManager.Instance.Bags?.FirstOrDefault(a => a.Id.Equals(Equipment?.Bag));
 
         private bool _showArmorDetails;
         public bool ShowArmorDetails
@@ -224,14 +224,14 @@ namespace AiosKingdom.ViewModels
             }
         }
 
-        private DataModels.Items.AItem _selectedItem;
-        public DataModels.Items.AItem SelectedItem => _selectedItem;
+        private Network.Items.AItem _selectedItem;
+        public Network.Items.AItem SelectedItem => _selectedItem;
 
         private ICommand _showArmorAction;
         public ICommand ShowArmorAction =>
             _showArmorAction ?? (_showArmorAction = new Command((item) =>
             {
-                var armor = (DataModels.Items.Armor)item;
+                var armor = (Network.Items.Armor)item;
 
                 if (armor == null) return;
 
@@ -257,7 +257,7 @@ namespace AiosKingdom.ViewModels
         public ICommand ShowWeaponAction =>
             _showWeaponAction ?? (_showWeaponAction = new Command((item) =>
             {
-                var weapon = (DataModels.Items.Weapon)item;
+                var weapon = (Network.Items.Weapon)item;
 
                 if (weapon == null) return;
 
@@ -283,7 +283,7 @@ namespace AiosKingdom.ViewModels
         public ICommand ShowBagAction =>
             _showBagAction ?? (_showBagAction = new Command((item) =>
             {
-                var bag = (DataModels.Items.Bag)item;
+                var bag = (Network.Items.Bag)item;
 
                 if (bag == null) return;
 

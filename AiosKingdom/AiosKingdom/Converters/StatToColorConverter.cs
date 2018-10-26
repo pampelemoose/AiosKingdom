@@ -10,9 +10,9 @@ namespace AiosKingdom.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is DataModels.Soul.Stats)
+            if (value is Network.Stats)
             {
-                var stat = (DataModels.Soul.Stats)value;
+                var stat = (Network.Stats)value;
 
                 return Application.Current.Resources["StatColor_" + stat.ToString()];
             }

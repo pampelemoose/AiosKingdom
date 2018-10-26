@@ -131,7 +131,7 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            var appUser = JsonConvert.DeserializeObject<DataModels.AppUser>(message.Json);
+                            var appUser = JsonConvert.DeserializeObject<Network.NewAccount>(message.Json);
 
                             Application.Current.Properties["AiosKingdom_IdentifyingKey"] = appUser.Identifier.ToString();
                             Application.Current.SavePropertiesAsync();
@@ -187,7 +187,7 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            var appUser = JsonConvert.DeserializeObject<DataModels.AppUser>(message.Json);
+                            var appUser = JsonConvert.DeserializeObject<Network.NewAccount>(message.Json);
 
                             Application.Current.Properties["AiosKingdom_IdentifyingKey"] = appUser.Identifier.ToString();
                             Application.Current.SavePropertiesAsync();
@@ -522,7 +522,7 @@ namespace AiosKingdom
                     break;
                 case Network.CommandCodes.Server.SoulList:
                     {
-                        var souls = JsonConvert.DeserializeObject<List<DataModels.Soul>>(message.Json);
+                        var souls = JsonConvert.DeserializeObject<List<Network.SoulInfos>>(message.Json);
 
                         MessagingCenter.Send(this, MessengerCodes.SoulListReceived, souls);
                     }
@@ -586,7 +586,7 @@ namespace AiosKingdom
                         }
                     }
                     break;
-                case Network.CommandCodes.Player.BuyMarketItem:
+                case Network.CommandCodes.Player.Market_PlaceOrder:
                     {
                         if (message.Success)
                         {
@@ -661,7 +661,7 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            var inventory = JsonConvert.DeserializeObject<List<DataModels.InventorySlot>>(message.Json);
+                            var inventory = JsonConvert.DeserializeObject<List<Network.InventorySlot>>(message.Json);
                             DatasManager.Instance.Inventory = inventory;
                         }
                         MessagingCenter.Send(this, MessengerCodes.InventoryUpdated);
@@ -671,7 +671,7 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            var knowledges = JsonConvert.DeserializeObject<List<DataModels.Knowledge>>(message.Json);
+                            var knowledges = JsonConvert.DeserializeObject<List<Network.Knowledge>>(message.Json);
 
                             if (knowledges.Count == 0)
                             {
@@ -690,7 +690,7 @@ namespace AiosKingdom
                     {
                         if (message.Success)
                         {
-                            var equipment = JsonConvert.DeserializeObject<DataModels.Equipment>(message.Json);
+                            var equipment = JsonConvert.DeserializeObject<Network.Equipment>(message.Json);
                             DatasManager.Instance.Equipment = equipment;
                         }
                         MessagingCenter.Send(this, MessengerCodes.EquipmentUpdated);
@@ -700,50 +700,50 @@ namespace AiosKingdom
                 // LISTING
                 case Network.CommandCodes.Listing.Armor:
                     {
-                        var armors = JsonConvert.DeserializeObject<List<DataModels.Items.Armor>>(message.Json);
+                        var armors = JsonConvert.DeserializeObject<List<Network.Items.Armor>>(message.Json);
                         DatasManager.Instance.Armors = armors;
                     }
                     break;
                 case Network.CommandCodes.Listing.Consumable:
                     {
-                        var consumable = JsonConvert.DeserializeObject<List<DataModels.Items.Consumable>>(message.Json);
+                        var consumable = JsonConvert.DeserializeObject<List<Network.Items.Consumable>>(message.Json);
                         DatasManager.Instance.Consumables = consumable;
                     }
                     break;
                 case Network.CommandCodes.Listing.Bag:
                     {
-                        var bags = JsonConvert.DeserializeObject<List<DataModels.Items.Bag>>(message.Json);
+                        var bags = JsonConvert.DeserializeObject<List<Network.Items.Bag>>(message.Json);
                         DatasManager.Instance.Bags = bags;
                     }
                     break;
                 case Network.CommandCodes.Listing.Weapon:
                     {
-                        var weapons = JsonConvert.DeserializeObject<List<DataModels.Items.Weapon>>(message.Json);
+                        var weapons = JsonConvert.DeserializeObject<List<Network.Items.Weapon>>(message.Json);
                         DatasManager.Instance.Weapons = weapons;
                     }
                     break;
                 case Network.CommandCodes.Listing.Book:
                     {
-                        var books = JsonConvert.DeserializeObject<List<DataModels.Skills.Book>>(message.Json);
+                        var books = JsonConvert.DeserializeObject<List<Network.Skills.Book>>(message.Json);
                         DatasManager.Instance.Books = books;
                     }
                     break;
                 case Network.CommandCodes.Listing.Monster:
                     {
-                        var monsters = JsonConvert.DeserializeObject<List<DataModels.Monsters.Monster>>(message.Json);
+                        var monsters = JsonConvert.DeserializeObject<List<Network.Monsters.Monster>>(message.Json);
                         DatasManager.Instance.Monsters = monsters;
                     }
                     break;
                 case Network.CommandCodes.Listing.Dungeon:
                     {
-                        var dungeons = JsonConvert.DeserializeObject<List<DataModels.Dungeons.Dungeon>>(message.Json);
+                        var dungeons = JsonConvert.DeserializeObject<List<Network.Adventures.Dungeon>>(message.Json);
                         DatasManager.Instance.Dungeons = dungeons;
                         MessagingCenter.Send(this, MessengerCodes.DungeonListUpdated);
                     }
                     break;
                 case Network.CommandCodes.Listing.Market:
                     {
-                        var items = JsonConvert.DeserializeObject<List<DataModels.MarketSlot>>(message.Json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                        var items = JsonConvert.DeserializeObject<List<Network.MarketSlot>>(message.Json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                         DatasManager.Instance.MarketItems = items;
                         MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
                     }
@@ -1016,9 +1016,9 @@ namespace AiosKingdom
             SendRequest(Network.CommandCodes.Player.CurrentSoulDatas);
         }
 
-        public void BuyMarketItem(Guid slotId, int quantity, bool isBit)
+        public void BuyMarketItem(Guid slotId, int quantity, int price, bool isBit)
         {
-            SendRequest(Network.CommandCodes.Player.BuyMarketItem, new string[3] { slotId.ToString(), quantity.ToString(), isBit.ToString() });
+            SendRequest(Network.CommandCodes.Player.Market_PlaceOrder, new string[4] { slotId.ToString(), quantity.ToString(), price.ToString(), isBit.ToString() });
         }
 
         public void EquipItem(Guid slotId)

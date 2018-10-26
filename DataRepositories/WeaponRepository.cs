@@ -14,7 +14,7 @@ namespace DataRepositories
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Weapons.Include(a => a.Stats).ToList();
+                return context.Weapons.ToList();
             }
         }
 

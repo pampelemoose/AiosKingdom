@@ -16,7 +16,7 @@ namespace AiosKingdom.ViewModels.Dungeon
         private KeyValuePair<Guid, Network.AdventureState.ShopState> _item;
         public KeyValuePair<Guid, Network.AdventureState.ShopState> Item => _item;
 
-        public override bool IsConsumable => (DataModels.Items.ItemType)Enum.Parse(typeof(DataModels.Items.ItemType), _item.Value.Type) == DataModels.Items.ItemType.Consumable;
+        public override bool IsConsumable => (Network.Items.ItemType)Enum.Parse(typeof(Network.Items.ItemType), _item.Value.Type) == Network.Items.ItemType.Consumable;
 
         public override int Shards => _item.Value.ShardPrice * _quantity;
         public override int Bits => -1;

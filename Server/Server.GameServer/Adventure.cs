@@ -21,17 +21,17 @@ namespace Server.GameServer
             public int Wisdom { get; set; }
         }
 
-        private DataModels.Dungeons.Dungeon _dungeon;
+        private Network.Adventures.Dungeon _dungeon;
         private int _roomNumber;
 
         private Network.AdventureState _state;
         private Dictionary<Guid, EnemyStats> _enemiesStats;
         private Dictionary<Guid, Network.LootItem> _loots;
-        private List<DataModels.Skills.Inscription> _marks;
-        private List<DataModels.Items.ConsumableEffect> _effects;
-        private Dictionary<Guid, List<DataModels.Skills.Inscription>> _enemyMarks;
+        private List<Network.Skills.Inscription> _marks;
+        private List<Network.Items.ConsumableEffect> _effects;
+        private Dictionary<Guid, List<Network.Skills.Inscription>> _enemyMarks;
 
-        public Adventure(DataModels.Dungeons.Dungeon dungeon, Network.SoulDatas datas, List<Network.AdventureState.BagItem> bagItems, int roomNumber = 0)
+        public Adventure(Network.Adventures.Dungeon dungeon, Network.SoulDatas datas, List<Network.AdventureState.BagItem> bagItems, int roomNumber = 0)
         {
             _dungeon = dungeon;
             _roomNumber = roomNumber;
@@ -45,7 +45,7 @@ namespace Server.GameServer
             SetState();
         }
 
-        public Guid DungeonId => _dungeon.DungeonId;
+        public Guid DungeonId => _dungeon.Id;
         public int RoomNumber => _roomNumber;
 
         private bool _isCleared;
@@ -60,7 +60,7 @@ namespace Server.GameServer
             }
         }
 
-        public bool UseSkill(DataModels.Skills.Page skill, Guid enemyId, out List<Network.AdventureState.ActionResult> message)
+        public bool UseSkill(Network.Skills.Page skill, Guid enemyId, out List<Network.AdventureState.ActionResult> message)
         {
             // check if skill is in cooldown list
             if (_state.Cooldowns.FirstOrDefault(c => c.SkillId.Equals(skill.Id)) != null)
@@ -118,7 +118,7 @@ namespace Server.GameServer
             return true;
         }
 
-        public bool UseConsumable(Network.AdventureState.BagItem bagItem, DataModels.Items.Consumable consumable, Guid enemyId, out List<Network.AdventureState.ActionResult> message)
+        public bool UseConsumable(Network.AdventureState.BagItem bagItem, Network.Items.Consumable consumable, Guid enemyId, out List<Network.AdventureState.ActionResult> message)
         {
             message = TickTurn(); // TODO : Maybe create a step in between to execute turn related logic
 
@@ -172,7 +172,7 @@ namespace Server.GameServer
 
                 if (phase == null) return false;
 
-                var skill = DataRepositories.BookRepository.GetAll().SelectMany(b => b.Pages).FirstOrDefault(p => p.Id.Equals(phase.SkillId));
+                var skill = DataManager.Instance.Books.SelectMany(b => b.Pages).FirstOrDefault(p => p.Id.Equals(phase.SkillId));
 
                 if (skill == null) return false;
 
@@ -269,14 +269,14 @@ namespace Server.GameServer
                 {
                     currencies.Shards -= (shopItem.ShardPrice * quantity);
 
-                    var type = (DataModels.Items.ItemType)Enum.Parse(typeof(DataModels.Items.ItemType), shopItem.Type);
+                    var type = (Network.Items.ItemType)Enum.Parse(typeof(Network.Items.ItemType), shopItem.Type);
 
                     switch (type)
                     {
-                        case DataModels.Items.ItemType.Armor:
-                        case DataModels.Items.ItemType.Bag:
-                        case DataModels.Items.ItemType.Weapon:
-                        case DataModels.Items.ItemType.Jewelry:
+                        case Network.Items.ItemType.Armor:
+                        case Network.Items.ItemType.Bag:
+                        case Network.Items.ItemType.Weapon:
+                        case Network.Items.ItemType.Jewelry:
                             {
                                 _state.Bag.Add(new Network.AdventureState.BagItem
                                 {
@@ -286,7 +286,7 @@ namespace Server.GameServer
                                 });
                             }
                             break;
-                        case DataModels.Items.ItemType.Consumable:
+                        case Network.Items.ItemType.Consumable:
                             {
                                 var exists = _state.Bag.FirstOrDefault(b => b.ItemId.Equals(shopItem.ItemId));
                                 if (exists != null)
@@ -375,7 +375,7 @@ namespace Server.GameServer
         {
             if (_loots.ContainsKey(lootId))
             {
-                DataModels.Items.ItemType type = (DataModels.Items.ItemType)Enum.Parse(typeof(DataModels.Items.ItemType), _loots[lootId].Type);
+                Network.Items.ItemType type = (Network.Items.ItemType)Enum.Parse(typeof(Network.Items.ItemType), _loots[lootId].Type);
                 var exists = _state.Bag.FirstOrDefault(i => i.ItemId.Equals(_loots[lootId].ItemId));
                 if (exists != null)
                 {
@@ -556,7 +556,7 @@ namespace Server.GameServer
             return result;
         }
 
-        private Network.AdventureState.ActionResult ExecutePlayerInscription(DataModels.Skills.Inscription inscription, Guid enemyId = new Guid())
+        private Network.AdventureState.ActionResult ExecutePlayerInscription(Network.Skills.Inscription inscription, Guid enemyId = new Guid())
         {
             var enemy = Guid.Empty.Equals(enemyId) ? null : _state.Enemies[enemyId];
             Network.PlayerState state;
@@ -576,7 +576,7 @@ namespace Server.GameServer
             return result;
         }
 
-        private Network.AdventureState.ActionResult ExecuteEnemyInscription(DataModels.Skills.Inscription inscription, Guid enemyId)
+        private Network.AdventureState.ActionResult ExecuteEnemyInscription(Network.Skills.Inscription inscription, Guid enemyId)
         {
             var enemy = _state.Enemies[enemyId];
             Network.PlayerState state;
@@ -591,7 +591,7 @@ namespace Server.GameServer
             return result;
         }
 
-        private Network.AdventureState.ActionResult ExecutePlayerEffects(DataModels.Items.ConsumableEffect effect, Guid enemyId = new Guid())
+        private Network.AdventureState.ActionResult ExecutePlayerEffects(Network.Items.ConsumableEffect effect, Guid enemyId = new Guid())
         {
             var enemy = Guid.Empty.Equals(enemyId) ? null : _state.Enemies[enemyId];
             Network.PlayerState state;
@@ -622,20 +622,20 @@ namespace Server.GameServer
             _state.Effects = new List<Network.AdventureState.ModifierApplied>();
 
             _loots = new Dictionary<Guid, Network.LootItem>();
-            _marks = new List<DataModels.Skills.Inscription>();
-            _effects = new List<DataModels.Items.ConsumableEffect>();
-            _enemyMarks = new Dictionary<Guid, List<DataModels.Skills.Inscription>>();
+            _marks = new List<Network.Skills.Inscription>();
+            _effects = new List<Network.Items.ConsumableEffect>();
+            _enemyMarks = new Dictionary<Guid, List<Network.Skills.Inscription>>();
 
             var room = _dungeon.Rooms.FirstOrDefault(r => r.RoomNumber == _roomNumber);
 
-            _state.IsRestingArea = room.Type == DataModels.Dungeons.RoomType.Rest;
-            _state.IsFightArea = room.Type == DataModels.Dungeons.RoomType.Fight
-                || room.Type == DataModels.Dungeons.RoomType.Elite
-                || room.Type == DataModels.Dungeons.RoomType.Boss;
-            _state.IsShopArea = room.Type == DataModels.Dungeons.RoomType.Shop;
-            _state.IsEliteArea = room.Type == DataModels.Dungeons.RoomType.Elite;
-            _state.IsBossFight = room.Type == DataModels.Dungeons.RoomType.Boss;
-            _state.IsExit = room.Type == DataModels.Dungeons.RoomType.Exit;
+            _state.IsRestingArea = room.Type == Network.Adventures.RoomType.Rest;
+            _state.IsFightArea = room.Type == Network.Adventures.RoomType.Fight
+                || room.Type == Network.Adventures.RoomType.Elite
+                || room.Type == Network.Adventures.RoomType.Boss;
+            _state.IsShopArea = room.Type == Network.Adventures.RoomType.Shop;
+            _state.IsEliteArea = room.Type == Network.Adventures.RoomType.Elite;
+            _state.IsBossFight = room.Type == Network.Adventures.RoomType.Boss;
+            _state.IsExit = room.Type == Network.Adventures.RoomType.Exit;
 
             foreach (var enemy in room.Ennemies)
             {

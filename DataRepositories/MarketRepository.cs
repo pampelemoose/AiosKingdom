@@ -18,6 +18,14 @@ namespace DataRepositories
             }
         }
 
+        public static List<DataModels.MarketSlot> GetAllForServer(Guid serverId)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Market.Where(m => m.ServerId.Equals(serverId)).ToList();
+            }
+        }
+
         public static DataModels.MarketSlot GetById(Guid id)
         {
             using (var context = new AiosKingdomContext())

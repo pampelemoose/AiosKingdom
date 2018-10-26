@@ -22,9 +22,9 @@ namespace AiosKingdom.ViewModels.Dungeon
                 var consumables = new List<Models.Dungeon.ConsumableSelectionItemModel>();
                 foreach (var slot in consumableSlots)
                 {
-                    if (slot.Type != DataModels.Items.ItemType.Consumable.ToString()) continue;
+                    if (slot.Type != Network.Items.ItemType.Consumable.ToString()) continue;
 
-                    var item = DatasManager.Instance.Consumables.FirstOrDefault(b => b.ItemId.Equals(slot.ItemId));
+                    var item = DatasManager.Instance.Consumables.FirstOrDefault(b => b.Id.Equals(slot.ItemId));
 
                     if (item != null)
                     {

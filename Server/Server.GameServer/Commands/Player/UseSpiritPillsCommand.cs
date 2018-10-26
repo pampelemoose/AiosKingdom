@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// TODO : test
+/// </summary>
 namespace Server.GameServer.Commands.Player
 {
     public class UseSpiritPillsCommand : ACommand
@@ -19,53 +22,52 @@ namespace Server.GameServer.Commands.Player
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var soul = SoulManager.Instance.GetSoul(ret.ClientId);
-            DataModels.Soul.Stats statId = (DataModels.Soul.Stats)Enum.Parse(typeof(DataModels.Soul.Stats), _args.Args[0]);
+            var currencies = SoulManager.Instance.GetCurrencies(ret.ClientId);
+            var datas = SoulManager.Instance.GetBaseDatas(ret.ClientId);
+            Network.Stats statId = (Network.Stats)Enum.Parse(typeof(Network.Stats), _args.Args[0]);
             int amount = int.Parse(_args.Args[1]);
 
-            if (soul.Spirits >= amount && amount > 0)
+            if (currencies.Spirits >= amount && amount > 0)
             {
-                soul.Spirits -= amount;
+                currencies.Spirits -= amount;
                 switch (statId)
                 {
-                    case DataModels.Soul.Stats.Stamina:
-                        soul.Stamina += amount;
+                    case Network.Stats.Stamina:
+                        datas.Stamina += amount;
                         break;
-                    case DataModels.Soul.Stats.Energy:
-                        soul.Energy += amount;
+                    case Network.Stats.Energy:
+                        datas.Energy += amount;
                         break;
-                    case DataModels.Soul.Stats.Strength:
-                        soul.Strength += amount;
+                    case Network.Stats.Strength:
+                        datas.Strength += amount;
                         break;
-                    case DataModels.Soul.Stats.Agility:
-                        soul.Agility += amount;
+                    case Network.Stats.Agility:
+                        datas.Agility += amount;
                         break;
-                    case DataModels.Soul.Stats.Intelligence:
-                        soul.Intelligence += amount;
+                    case Network.Stats.Intelligence:
+                        datas.Intelligence += amount;
                         break;
-                    case DataModels.Soul.Stats.Wisdom:
-                        soul.Wisdom += amount;
+                    case Network.Stats.Wisdom:
+                        datas.Wisdom += amount;
                         break;
                     default:
-                        soul.Spirits += amount;
+                        currencies.Spirits += amount;
                         break;
                 }
 
-                if (DataRepositories.SoulRepository.Update(soul))
+                SoulManager.Instance.UpdateBaseDatas(ret.ClientId, datas);
+                SoulManager.Instance.UpdateCurrencies(ret.ClientId, currencies);
+                SoulManager.Instance.UpdateCurrentDatas(ret.ClientId, _config);
+
+                ret.ClientResponse = new Network.Message
                 {
-                    SoulManager.Instance.UpdateSoul(ret.ClientId, soul);
-                    SoulManager.Instance.UpdateCurrentDatas(ret.ClientId, _config);
+                    Code = Network.CommandCodes.Player.UseSpiritPills,
+                    Success = true,
+                    Json = $"Used {amount} pill{(amount > 0 ? "s" : "")} in {statId}."
+                };
+                ret.Succeeded = true;
 
-                    ret.ClientResponse = new Network.Message
-                    {
-                        Code = Network.CommandCodes.Player.UseSpiritPills,
-                        Success = true,
-                        Json = $"Used {amount} pill{(amount > 0 ? "s" : "")} in {statId}."
-                    };
-                    ret.Succeeded = true;
-
-                    return ret;
-                }
+                return ret;
             }
 
             ret.ClientResponse = new Network.Message

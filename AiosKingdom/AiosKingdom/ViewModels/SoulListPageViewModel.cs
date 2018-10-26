@@ -9,14 +9,14 @@ namespace AiosKingdom.ViewModels
 {
     public class SoulListPageViewModel : BaseViewModel
     {
-        public SoulListPageViewModel(List<DataModels.Soul> souls)
+        public SoulListPageViewModel(List<Network.SoulInfos> souls)
             : base(null)
         {
             Title = "Soul List";
 
             Souls = souls;
 
-            MessagingCenter.Subscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived, (sender, soulsUpdated) =>
+            MessagingCenter.Subscribe<NetworkManager, List<Network.SoulInfos>>(this, MessengerCodes.SoulListReceived, (sender, soulsUpdated) =>
             {
                 IsBusy = false;
                 Souls = soulsUpdated;
@@ -36,11 +36,11 @@ namespace AiosKingdom.ViewModels
 
         ~SoulListPageViewModel()
         {
-            MessagingCenter.Unsubscribe<NetworkManager, List<DataModels.Soul>>(this, MessengerCodes.SoulListReceived);
+            MessagingCenter.Unsubscribe<NetworkManager, List<Network.SoulInfos>>(this, MessengerCodes.SoulListReceived);
         }
 
-        private List<DataModels.Soul> _souls;
-        public List<DataModels.Soul> Souls
+        private List<Network.SoulInfos> _souls;
+        public List<Network.SoulInfos> Souls
         {
             get { return _souls; }
             set
@@ -50,8 +50,8 @@ namespace AiosKingdom.ViewModels
             }
         }
 
-        private DataModels.Soul _selectedSoul;
-        public DataModels.Soul SelectedSoul
+        private Network.SoulInfos _selectedSoul;
+        public Network.SoulInfos SelectedSoul
         {
             get { return null; }
             set

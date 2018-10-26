@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// TODO : test
+/// </summary>
 namespace Server.GameServer.Commands.Player
 {
     public class SellItemCommand : ACommand
@@ -15,10 +18,11 @@ namespace Server.GameServer.Commands.Player
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var soul = SoulManager.Instance.GetSoul(ret.ClientId);
+            var currencies = SoulManager.Instance.GetCurrencies(ret.ClientId);
+            var inventory = SoulManager.Instance.GetInventory(ret.ClientId);
             var inventorySlotId = Guid.Parse(_args.Args[0]);
 
-            var inventorySlot = soul.Inventory.FirstOrDefault(i => i.Id.Equals(inventorySlotId));
+            var inventorySlot = inventory.FirstOrDefault(i => i.Id.Equals(inventorySlotId));
 
             if (inventorySlot == null)
             {
@@ -32,68 +36,69 @@ namespace Server.GameServer.Commands.Player
                 return ret;
             }
 
-            soul.Inventory.Remove(inventorySlot);
+            inventory.Remove(inventorySlot);
             inventorySlot.Quantity--;
 
             if (inventorySlot.Quantity > 0)
             {
-                soul.Inventory.Add(inventorySlot);
+                inventory.Add(inventorySlot);
             }
 
 
             switch (inventorySlot.Type)
             {
-                case DataModels.Items.ItemType.Armor:
+                case Network.Items.ItemType.Armor:
                     {
-                        var exists = DataRepositories.ArmorRepository.GetById(inventorySlot.ItemId);
+                        var exists = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(inventorySlot.ItemId));
                         if (exists == null)
                         {
                             return objectNotFound(ret);
                         }
 
-                        soul.Shards += exists.SellingPrice;
+                        currencies.Shards += exists.SellingPrice;
                     }
                     break;
-                case DataModels.Items.ItemType.Bag:
+                case Network.Items.ItemType.Bag:
                     {
-                        var exists = DataRepositories.BagRepository.GetById(inventorySlot.ItemId);
+                        var exists = DataManager.Instance.Bags.FirstOrDefault(a => a.Id.Equals(inventorySlot.ItemId));
                         if (exists == null)
                         {
                             return objectNotFound(ret);
                         }
 
-                        soul.Shards += exists.SellingPrice;
+                        currencies.Shards += exists.SellingPrice;
                     }
                     break;
-                case DataModels.Items.ItemType.Weapon:
+                case Network.Items.ItemType.Weapon:
                     {
-                        var exists = DataRepositories.WeaponRepository.GetById(inventorySlot.ItemId);
+                        var exists = DataManager.Instance.Weapons.FirstOrDefault(a => a.Id.Equals(inventorySlot.ItemId));
                         if (exists == null)
                         {
                             return objectNotFound(ret);
                         }
 
-                        soul.Shards += exists.SellingPrice;
+                        currencies.Shards += exists.SellingPrice;
                     }
                     break;
-                case DataModels.Items.ItemType.Jewelry:
+                case Network.Items.ItemType.Jewelry:
                     {
                     }
                     break;
-                case DataModels.Items.ItemType.Consumable:
+                case Network.Items.ItemType.Consumable:
                     {
-                        var exists = DataRepositories.ConsumableRepository.GetById(inventorySlot.ItemId);
+                        var exists = DataManager.Instance.Consumables.FirstOrDefault(a => a.Id.Equals(inventorySlot.ItemId));
                         if (exists == null)
                         {
                             return objectNotFound(ret);
                         }
 
-                        soul.Shards += exists.SellingPrice;
+                        currencies.Shards += exists.SellingPrice;
                     }
                     break;
             }
 
-            SoulManager.Instance.UpdateSoul(ret.ClientId, soul);
+            SoulManager.Instance.UpdateInventory(ret.ClientId, inventory);
+            SoulManager.Instance.UpdateCurrencies(ret.ClientId, currencies);
 
             ret.ClientResponse = new Network.Message
             {

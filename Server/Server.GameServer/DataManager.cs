@@ -24,8 +24,12 @@ namespace Server.GameServer
         {
         }
 
+        private DataModels.Config _config;
+
         public void Initialize(DataModels.Config config)
         {
+            _config = config;
+
             LoadArmors();
             LoadBags();
             LoadConsumables();
@@ -51,7 +55,7 @@ namespace Server.GameServer
 
         private void LoadArmors()
         {
-            var armors = DataRepositories.ArmorRepository.GetAll();
+            var armors = DataRepositories.ArmorRepository.GetAllForVersion(_config.VersionId);
             var armorList = new List<Network.Items.Armor>();
             foreach (var armor in armors)
             {
@@ -158,7 +162,7 @@ namespace Server.GameServer
 
         private void LoadBags()
         {
-            var bags = DataRepositories.BagRepository.GetAll();
+            var bags = DataRepositories.BagRepository.GetAllForVersion(_config.VersionId);
             var bagList = new List<Network.Items.Bag>();
             foreach (var bag in bags)
             {
@@ -237,7 +241,7 @@ namespace Server.GameServer
 
         private void LoadConsumables()
         {
-            var consumables = DataRepositories.ConsumableRepository.GetAll();
+            var consumables = DataRepositories.ConsumableRepository.GetAllForVersion(_config.VersionId);
             var consumableList = new List<Network.Items.Consumable>();
             foreach (var consumable in consumables)
             {
@@ -279,6 +283,8 @@ namespace Server.GameServer
                 {
                     var eff = new Network.Items.ConsumableEffect
                     {
+                        Id = effect.Id,
+                        ConsumableId = effect.ConsumableId,
                         Name = effect.Name,
                         Description = effect.Description,
                         AffectTime = effect.AffectTime,
@@ -324,7 +330,7 @@ namespace Server.GameServer
 
         private void LoadWeapons()
         {
-            var weapons = DataRepositories.WeaponRepository.GetAll();
+            var weapons = DataRepositories.WeaponRepository.GetAllForVersion(_config.VersionId);
             var weaponList = new List<Network.Items.Weapon>();
             foreach (var weapon in weapons)
             {
@@ -460,7 +466,7 @@ namespace Server.GameServer
 
         private void LoadBooks()
         {
-            var books = DataRepositories.BookRepository.GetAll();
+            var books = DataRepositories.BookRepository.GetAllForVersion(_config.VersionId);
             var bookList = new List<Network.Skills.Book>();
             foreach (var book in books)
             {
@@ -509,6 +515,7 @@ namespace Server.GameServer
                         var ins = new Network.Skills.Inscription
                         {
                             Id = insc.Id,
+                            PageId = page.Id,
                             BaseValue = insc.BaseValue,
                             Ratio = insc.Ratio,
                             Duration = insc.Duration,
@@ -586,7 +593,7 @@ namespace Server.GameServer
 
         private void LoadDungeons()
         {
-            var dungeons = DataRepositories.DungeonRepository.GetAll();
+            var dungeons = DataRepositories.DungeonRepository.GetAllForVersion(_config.VersionId);
             var dungeonList = new List<Network.Adventures.Dungeon>();
 
             foreach (var dungeon in dungeons)
@@ -700,7 +707,7 @@ namespace Server.GameServer
 
         private void LoadMonsters()
         {
-            var monsters = DataRepositories.MonsterRepository.GetAll();
+            var monsters = DataRepositories.MonsterRepository.GetAllForVersion(_config.VersionId);
             var monsterList = new List<Network.Monsters.Monster>();
 
             foreach (var monster in monsters)
@@ -724,28 +731,29 @@ namespace Server.GameServer
                     WisdomPerLevel = monster.WisdomPerLevel
                 };
 
-                monst.Types = new List<Network.Monsters.MonsterType>();
+                var types = new List<Network.Monsters.MonsterType>();
                 foreach (var type in monster.Types)
                 {
                     switch (type)
                     {
                         case DataModels.Monsters.MonsterType.Animal:
-                            monst.Types.Add(Network.Monsters.MonsterType.Animal);
+                            types.Add(Network.Monsters.MonsterType.Animal);
                             break;
                         case DataModels.Monsters.MonsterType.Dragon:
-                            monst.Types.Add(Network.Monsters.MonsterType.Dragon);
+                            types.Add(Network.Monsters.MonsterType.Dragon);
                             break;
                         case DataModels.Monsters.MonsterType.Elementary:
-                            monst.Types.Add(Network.Monsters.MonsterType.Elementary);
+                            types.Add(Network.Monsters.MonsterType.Elementary);
                             break;
                         case DataModels.Monsters.MonsterType.Human:
-                            monst.Types.Add(Network.Monsters.MonsterType.Human);
+                            types.Add(Network.Monsters.MonsterType.Human);
                             break;
                         case DataModels.Monsters.MonsterType.Undead:
-                            monst.Types.Add(Network.Monsters.MonsterType.Undead);
+                            types.Add(Network.Monsters.MonsterType.Undead);
                             break;
                     }
                 }
+                monst.Types = types;
 
                 monst.Loots = new List<Network.Monsters.Loot>();
                 foreach (var loot in monster.Loots)

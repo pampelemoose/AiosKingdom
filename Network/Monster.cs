@@ -23,9 +23,13 @@ namespace Network.Monsters
             get
             {
                 var result = new List<MonsterType>();
-                foreach (var str in InternalTypes.Split(';'))
+                if (InternalTypes != null)
                 {
-                    result.Add((MonsterType)Enum.Parse(typeof(MonsterType), str));
+                    foreach (var str in InternalTypes.Split(';'))
+                    {
+                        if (!string.IsNullOrEmpty(str))
+                            result.Add((MonsterType)Enum.Parse(typeof(MonsterType), str));
+                    }
                 }
                 return result;
             }

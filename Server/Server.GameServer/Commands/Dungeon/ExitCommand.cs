@@ -16,9 +16,9 @@ namespace Server.GameServer.Commands.Dungeon
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var soul = SoulManager.Instance.GetSoul(_args.ClientId);
+            var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
 
-            AdventureManager.Instance.ExitRoom(soul.Id);
+            AdventureManager.Instance.ExitRoom(soulId);
 
             ret.ClientResponse = new Network.Message
             {

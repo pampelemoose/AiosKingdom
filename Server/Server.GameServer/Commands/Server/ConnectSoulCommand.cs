@@ -20,22 +20,19 @@ namespace Server.GameServer.Commands.Server
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var soulId = Guid.Parse(_args.Args[0]);
-            var soul = DataRepositories.SoulRepository.GetById(soulId);
-            if (soul != null)
-            {
-                if (SoulManager.Instance.ConnectSoul(ret.ClientId, soul))
-                {
-                    SoulManager.Instance.UpdateCurrentDatas(ret.ClientId, _config);
 
-                    ret.ClientResponse = new Network.Message
-                    {
-                        Code = Network.CommandCodes.Server.ConnectSoul,
-                        Success = true,
-                        Json = "Soul Connected"
-                    };
-                    ret.Succeeded = true;
-                    return ret;
-                }
+            if (SoulManager.Instance.ConnectSoul(ret.ClientId, soulId))
+            {
+                SoulManager.Instance.UpdateCurrentDatas(ret.ClientId, _config);
+
+                ret.ClientResponse = new Network.Message
+                {
+                    Code = Network.CommandCodes.Server.ConnectSoul,
+                    Success = true,
+                    Json = "Soul Connected"
+                };
+                ret.Succeeded = true;
+                return ret;
             }
 
             ret.ClientResponse = new Network.Message

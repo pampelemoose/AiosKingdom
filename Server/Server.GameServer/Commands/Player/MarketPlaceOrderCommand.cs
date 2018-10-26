@@ -5,31 +5,74 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// TODO : Heavy changes, to test
+/// </summary>
 namespace Server.GameServer.Commands.Player
 {
-    public class BuyMarketItemCommand : ACommand
+    public class MarketPlaceOrderCommand : ACommand
     {
-        public BuyMarketItemCommand(CommandArgs args)
+        public MarketPlaceOrderCommand(CommandArgs args)
             : base(args)
         {
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var soul = SoulManager.Instance.GetSoul(ret.ClientId);
+            var currency = SoulManager.Instance.GetCurrencies(ret.ClientId);
             var marketSlotId = Guid.Parse(_args.Args[0]);
             var quantity = int.Parse(_args.Args[1]);
-            var isBits = bool.Parse(_args.Args[2]);
+            var price = int.Parse(_args.Args[2]);
+            var isBits = bool.Parse(_args.Args[3]);
 
-            var marketItem = DataRepositories.MarketRepository.GetById(marketSlotId);
-
-            if (marketItem == null || (marketItem != null && (!IsQuantityEnought(marketItem.Quantity, quantity) || !IsCurrencyAvailable(soul, marketItem, quantity, isBits))))
+            if (!Market.Instance.CanBuy(marketSlotId, quantity, price, isBits))
             {
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Player.BuyMarketItem,
+                    Code = Network.CommandCodes.Player.Market_PlaceOrder,
                     Success = false,
-                    Json = !IsCurrencyAvailable(soul, marketItem, quantity, isBits) ? $"Not enought {(isBits ? "bits" : "shards")}" : "Item sold or not available anymore."
+                    Json = "Could not place order, Item may be sold or not available anymore, price is too low or currency not available."
+                };
+                ret.Succeeded = true;
+                return ret;
+            }
+
+            var order = new Market.Order
+            {
+                Buyer = ret.ClientId,
+                ItemId = marketSlotId,
+                Quantity = quantity,
+                Value = price,
+                isBits = isBits
+            };
+
+            if (isBits)
+                currency.Bits -= price;
+            else
+                currency.Shards -= price;
+
+            if (!Market.Instance.PlaceOrder(order))
+            {
+                ret.ClientResponse = new Network.Message
+                {
+                    Code = Network.CommandCodes.Player.Market_PlaceOrder,
+                    Success = false,
+                    Json = "Could not place order, Item may be sold or not available anymore, price is too low or currency not available."
+                };
+                ret.Succeeded = true;
+                return ret;
+            }
+
+            /*
+            var marketItem = DataRepositories.MarketRepository.GetById(marketSlotId);
+
+            if (marketItem == null || (marketItem != null && (!IsQuantityEnought(marketItem.Quantity, quantity) || !IsCurrencyAvailable(currency, marketItem, quantity, isBits))))
+            {
+                ret.ClientResponse = new Network.Message
+                {
+                    Code = Network.CommandCodes.Player.Market_PlaceOrder,
+                    Success = false,
+                    Json = !IsCurrencyAvailable(currency, marketItem, quantity, isBits) ? $"Not enought {(isBits ? "bits" : "shards")}" : "Item sold or not available anymore."
                 };
                 ret.Succeeded = true;
                 return ret;
@@ -42,23 +85,22 @@ namespace Server.GameServer.Commands.Player
 
             switch (marketItem.Type)
             {
-                case DataModels.Items.ItemType.Armor:
-                case DataModels.Items.ItemType.Bag:
-                case DataModels.Items.ItemType.Weapon:
-                case DataModels.Items.ItemType.Jewelry:
+                case Network.Items.ItemType.Armor:
+                case Network.Items.ItemType.Bag:
+                case Network.Items.ItemType.Weapon:
+                case Network.Items.ItemType.Jewelry:
                     {
-                        soul.Inventory.Add(new DataModels.InventorySlot
+                        soul.Inventory.Add(new Network.InventorySlot
                         {
                             ItemId = marketItem.ItemId,
                             Type = marketItem.Type,
                             Quantity = quantity,
-                            SoulId = soul.Id,
                             LootedAt = DateTime.Now
                         });
                         DataRepositories.SoulRepository.Update(soul);
                     }
                     break;
-                case DataModels.Items.ItemType.Consumable:
+                case Network.Items.ItemType.Consumable:
                     {
                         var exists = soul.Inventory.FirstOrDefault(i => i.ItemId.Equals(marketItem.ItemId));
                         if (exists != null)
@@ -70,12 +112,11 @@ namespace Server.GameServer.Commands.Player
                         }
                         else
                         {
-                            soul.Inventory.Add(new DataModels.InventorySlot
+                            soul.Inventory.Add(new Network.InventorySlot
                             {
                                 ItemId = marketItem.ItemId,
                                 Type = marketItem.Type,
                                 Quantity = quantity,
-                                SoulId = soul.Id,
                                 LootedAt = DateTime.Now
                             });
                             DataRepositories.SoulRepository.Update(soul);
@@ -98,13 +139,13 @@ namespace Server.GameServer.Commands.Player
                 }
             }
 
-            SoulManager.Instance.UpdateSoul(ret.ClientId, soul);
+            SoulManager.Instance.UpdateSoul(ret.ClientId, soul);*/
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Player.BuyMarketItem,
+                Code = Network.CommandCodes.Player.Market_PlaceOrder,
                 Success = true,
-                Json = $"Buy successful. Please check your inventory."
+                Json = $"Order placed, will be processed soon."
             };
             ret.Succeeded = true;
             return ret;
@@ -115,9 +156,9 @@ namespace Server.GameServer.Commands.Player
             return marketQuantity < 0 ? true : marketQuantity <= quantity;
         }
 
-        private bool IsCurrencyAvailable(DataModels.Soul datas, DataModels.MarketSlot slot, int quantity, bool isBits)
+        private bool IsCurrencyAvailable(Network.Currencies currency, Network.MarketSlot slot, int quantity, bool isBits)
         {
-            return isBits ? datas.Bits >= (slot.BitPrice * quantity) : datas.Shards >= (slot.ShardPrice * quantity);
+            return isBits ? currency.Bits >= (slot.BitPrice * quantity) : currency.Shards >= (slot.ShardPrice * quantity);
         }
     }
 }

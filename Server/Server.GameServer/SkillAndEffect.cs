@@ -9,7 +9,7 @@ namespace Server.GameServer
     public static class SkillAndEffect
     {
         public static Network.AdventureState.ActionResult ExecuteInscription(Network.PlayerState from, Network.PlayerState to, 
-            DataModels.Skills.Inscription inscription,
+            Network.Skills.Inscription inscription,
             out Network.PlayerState fromOut, out Network.PlayerState toOut)
         {
             fromOut = CopyState(from);
@@ -46,7 +46,7 @@ namespace Server.GameServer
 
             switch (inscription.Type)
             {
-                case DataModels.Skills.InscriptionType.Damages:
+                case Network.Skills.InscriptionType.Damages:
                     {
                         toOut.CurrentHealth -= amount;
                         Console.WriteLine($"{from} using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, from)})*{inscription.Ratio}) to {to}.");
@@ -54,7 +54,7 @@ namespace Server.GameServer
                         result.ResultType = Network.AdventureState.ActionResult.Type.Damage;
                     }
                     break;
-                case DataModels.Skills.InscriptionType.Heal:
+                case Network.Skills.InscriptionType.Heal:
                     {
                         fromOut.CurrentHealth += amount;
                         if (fromOut.CurrentHealth > fromOut.MaxHealth)
@@ -71,8 +71,8 @@ namespace Server.GameServer
             return result;
         }
 
-        public static Network.AdventureState.ActionResult ExecuteEffects(Network.PlayerState from, Network.PlayerState to, 
-            DataModels.Items.ConsumableEffect effect,
+        public static Network.AdventureState.ActionResult ExecuteEffects(Network.PlayerState from, Network.PlayerState to,
+            Network.Items.ConsumableEffect effect,
             out Network.PlayerState fromOut, out Network.PlayerState toOut)
         {
             fromOut = CopyState(from);
@@ -87,7 +87,7 @@ namespace Server.GameServer
 
             switch (effect.Type)
             {
-                case DataModels.Items.EffectType.RestoreHealth:
+                case Network.Items.EffectType.RestoreHealth:
                     {
                         fromOut.CurrentHealth += effect.AffectValue;
                         if (fromOut.CurrentHealth > fromOut.MaxHealth)
@@ -99,7 +99,7 @@ namespace Server.GameServer
                         result.ResultType = Network.AdventureState.ActionResult.Type.Heal;
                     }
                     break;
-                case DataModels.Items.EffectType.ResoreMana:
+                case Network.Items.EffectType.ResoreMana:
                     {
                         fromOut.CurrentMana += effect.AffectValue;
                         if (fromOut.CurrentMana > fromOut.MaxMana)
@@ -116,21 +116,21 @@ namespace Server.GameServer
             return result;
         }
 
-        public static int GetStatValue(DataModels.Soul.Stats stat, Network.PlayerState state)
+        public static int GetStatValue(Network.Stats stat, Network.PlayerState state)
         {
             switch (stat)
             {
-                case DataModels.Soul.Stats.Stamina:
+                case Network.Stats.Stamina:
                     return state.Stamina;
-                case DataModels.Soul.Stats.Energy:
+                case Network.Stats.Energy:
                     return state.Energy;
-                case DataModels.Soul.Stats.Strength:
+                case Network.Stats.Strength:
                     return state.Strength;
-                case DataModels.Soul.Stats.Agility:
+                case Network.Stats.Agility:
                     return state.Agility;
-                case DataModels.Soul.Stats.Intelligence:
+                case Network.Stats.Intelligence:
                     return state.Intelligence;
-                case DataModels.Soul.Stats.Wisdom:
+                case Network.Stats.Wisdom:
                     return state.Wisdom;
                 default:
                     return 0;

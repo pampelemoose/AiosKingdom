@@ -66,6 +66,7 @@ namespace Server.GameServer
             Console.WriteLine($"Starting TCPListener at address : {_config.Host}:{_config.Port} ...");
 
             DataManager.Instance.Initialize(_config);
+            Market.Instance.Initialize(_config);
 
             _listener = new TcpListener(IPAddress.Parse(_config.Host), _config.Port);
 
@@ -159,7 +160,7 @@ namespace Server.GameServer
         private void SetupPlayerDelegates()
         {
             _commandArgCount.Add(Network.CommandCodes.Player.CurrentSoulDatas, 0);
-            _commandArgCount.Add(Network.CommandCodes.Player.BuyMarketItem, 3);
+            _commandArgCount.Add(Network.CommandCodes.Player.Market_PlaceOrder, 4);
             _commandArgCount.Add(Network.CommandCodes.Player.EquipItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.SellItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.UseSpiritPills, 2);
@@ -171,7 +172,7 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Player.Equipment, 0);
 
             _delegates.Add(Network.CommandCodes.Player.CurrentSoulDatas, (args) => { return new Commands.Player.CurrentSoulDatasCommand(args); });
-            _delegates.Add(Network.CommandCodes.Player.BuyMarketItem, (args) => { return new Commands.Player.BuyMarketItemCommand(args); });
+            _delegates.Add(Network.CommandCodes.Player.Market_PlaceOrder, (args) => { return new Commands.Player.MarketPlaceOrderCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.EquipItem, (args) => { return new Commands.Player.EquipItemCommand(args, _config); });
             _delegates.Add(Network.CommandCodes.Player.SellItem, (args) => { return new Commands.Player.SellItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.UseSpiritPills, (args) => { return new Commands.Player.UseSpiritPillsCommand(args, _config); });
@@ -375,7 +376,6 @@ namespace Server.GameServer
             if (message.Code >= 0)
                 Log.Instance.Write(Log.Level.Infos, $"Sending[{message.Code}] to {socket.RemoteEndPoint} : {jsonObj}");
 
-            object tmpLock = new object();
             int offset = 0;
             int sent = 0;
 
@@ -521,8 +521,8 @@ namespace Server.GameServer
                 // PLAYER
                 case Network.CommandCodes.Player.CurrentSoulDatas:
                     break;
-                case Network.CommandCodes.Player.BuyMarketItem:
-                    retVal.Args = new string[3] { args[0], args[1], args[2] };
+                case Network.CommandCodes.Player.Market_PlaceOrder:
+                    retVal.Args = new string[4] { args[0], args[1], args[2], args[3] };
                     break;
                 case Network.CommandCodes.Player.EquipItem:
                     retVal.Args = new string[1] { args[0] };

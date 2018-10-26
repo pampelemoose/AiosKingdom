@@ -15,8 +15,6 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 return context.Books
-                    .Include(a => a.Pages)
-                    .Include(a => a.Pages.Select(i => i.Inscriptions))
                     .ToList();
             }
         }

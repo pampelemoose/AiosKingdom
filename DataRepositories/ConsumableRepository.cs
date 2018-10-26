@@ -14,7 +14,7 @@ namespace DataRepositories
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Consumables.Include(a => a.Effects).ToList();
+                return context.Consumables.ToList();
             }
         }
 

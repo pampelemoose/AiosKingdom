@@ -16,18 +16,18 @@ namespace Server.GameServer.Commands.Dungeon
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var soul = SoulManager.Instance.GetSoul(_args.ClientId);
+            var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
             var slotId = Guid.Parse(_args.Args[0]);
             var enemyId = Guid.Parse(_args.Args[1]);
 
-            var adventure = AdventureManager.Instance.GetAdventure(soul.Id);
+            var adventure = AdventureManager.Instance.GetAdventure(soulId);
 
             if (adventure != null)
             {
                 var slotKnown = adventure.GetActualState().Bag.FirstOrDefault(s => s.InventoryId.Equals(slotId));
                 if (slotKnown != null)
                 {
-                    var item = DataRepositories.ConsumableRepository.GetById(slotKnown.ItemId);
+                    var item = DataManager.Instance.Consumables.FirstOrDefault(c => c.Id.Equals(slotKnown.ItemId));
                     if (item != null)
                     {
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
@@ -39,7 +39,7 @@ namespace Server.GameServer.Commands.Dungeon
 
                             if (state.State.CurrentHealth <= 0)
                             {
-                                AdventureManager.Instance.PlayerDied(soul.Id);
+                                AdventureManager.Instance.PlayerDied(soulId);
 
                                 consumableResult.Add(new Network.AdventureState.ActionResult
                                 {
