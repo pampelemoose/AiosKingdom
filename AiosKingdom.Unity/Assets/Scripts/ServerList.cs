@@ -31,5 +31,7 @@ public class ServerList : MonoBehaviour
             script.Network = Network;
             script.SetDatas(server);
         }
+
+        StartCoroutine(UIHelper.SetScrollviewVerticalSize(List));
     }
 }

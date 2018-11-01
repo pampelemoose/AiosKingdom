@@ -609,21 +609,21 @@ public class NetworkManager : MonoBehaviour
             //        MessagingCenter.Send(this, MessengerCodes.ItemSold, message.Json);
             //    }
             //    break;
-            //case Network.CommandCodes.Player.UseSpiritPills:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            AskCurrencies();
-            //            AskSoulCurrentDatas();
+            case JsonObjects.CommandCodes.Player.UseSpiritPills:
+                {
+                    if (message.Success)
+                    {
+                        AskCurrencies();
+                        AskSoulCurrentDatas();
 
-            //            Application.Current.Properties["AiosKingdom_TutorialStep"] = 4;
-            //            Application.Current.SavePropertiesAsync();
-            //            MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
-            //        }
+                        //Application.Current.Properties["AiosKingdom_TutorialStep"] = 4;
+                        //Application.Current.SavePropertiesAsync();
+                        //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+                    }
 
-            //        MessagingCenter.Send(this, MessengerCodes.LearnSpiritPills, message.Json);
-            //    }
-            //    break;
+                    //MessagingCenter.Send(this, MessengerCodes.LearnSpiritPills, message.Json);
+                }
+                break;
             //case Network.CommandCodes.Player.LearnSkill:
             //    {
             //        if (message.Success)
@@ -659,6 +659,11 @@ public class NetworkManager : MonoBehaviour
                     {
                         var inventory = JsonConvert.DeserializeObject<List<JsonObjects.InventorySlot>>(message.Json);
                         DatasManager.Instance.Inventory = inventory;
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.UpdateInventory());
+                        });
                     }
                     //MessagingCenter.Send(this, MessengerCodes.InventoryUpdated);
                 }
@@ -678,6 +683,11 @@ public class NetworkManager : MonoBehaviour
                         }
 
                         DatasManager.Instance.Knowledges = knowledges;
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.UpdateKnowledges());
+                        });
                     }
                     //MessagingCenter.Send(this, MessengerCodes.KnowledgeUpdated);
                 }
@@ -688,6 +698,11 @@ public class NetworkManager : MonoBehaviour
                     {
                         var equipment = JsonConvert.DeserializeObject<JsonObjects.Equipment>(message.Json);
                         DatasManager.Instance.Equipment = equipment;
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.UpdateEquipment());
+                        });
                     }
                     //MessagingCenter.Send(this, MessengerCodes.EquipmentUpdated);
                 }
@@ -1062,10 +1077,10 @@ public class NetworkManager : MonoBehaviour
     //    SendRequest(Network.CommandCodes.Player.SellItem, new string[1] { slotId.ToString() });
     //}
 
-    //public void UseSpiritPills(DataModels.Soul.Stats statType, int quantity)
-    //{
-    //    SendRequest(Network.CommandCodes.Player.UseSpiritPills, new string[2] { statType.ToString(), quantity.ToString() });
-    //}
+    public void UseSpiritPills(JsonObjects.Stats statType, int quantity)
+    {
+        SendRequest(JsonObjects.CommandCodes.Player.UseSpiritPills, new string[2] { statType.ToString(), quantity.ToString() });
+    }
 
     //public void LearnSkill(Guid bookId, int rank)
     //{

@@ -8,11 +8,12 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
 {
     private enum Views
     {
+        None,
         Account,
         ServerList,
         SoulList,
         ContentLoadingScreen,
-        Home
+        Home,
     }
 
     private static bool _created = false;
@@ -20,7 +21,7 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
     private NetworkManager _network;
 
     public Canvas Ui;
-    private Views _currentView = Views.Account;
+    private Views _currentView = Views.None;
     private GameObject _currentObject;
 
     public GameObject AccountForm;
@@ -73,6 +74,8 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
         ChangeView(Views.Account);
 
         _currentObject.GetComponent<AccountForm>().Network = _network;
+
+        LoadingScreen.Loading.Hide();
     }
 
     public void ShowLogin(Guid safeKey)
@@ -120,6 +123,7 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
         ChangeView(Views.Home);
 
         var script = _currentObject.GetComponent<Home>();
+        script.Main = this;
         script.Network = _network;
 
         LoadingScreen.Loading.Hide();
@@ -180,6 +184,33 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
         {
             var script = _currentObject.GetComponent<Home>();
             script.UpdateCurrencies();
+        }
+    }
+
+    public void UpdateEquipment()
+    {
+        if (_currentView == Views.Home)
+        {
+            var script = _currentObject.GetComponent<Home>();
+            script.UpdateEquipment();
+        }
+    }
+
+    public void UpdateInventory()
+    {
+        if (_currentView == Views.Home)
+        {
+            var script = _currentObject.GetComponent<Home>();
+            script.UpdateInventory();
+        }
+    }
+
+    public void UpdateKnowledges()
+    {
+        if (_currentView == Views.Home)
+        {
+            var script = _currentObject.GetComponent<Home>();
+            script.UpdateKnowledges();
         }
     }
 

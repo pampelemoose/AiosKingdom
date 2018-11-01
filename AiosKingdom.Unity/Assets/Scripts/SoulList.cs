@@ -30,5 +30,7 @@ public class SoulList : MonoBehaviour
         var createItem = Instantiate(SoulListCreateItem, List.transform);
         var createScript = createItem.GetComponent<SoulListCreateItem>();
         createScript.Network = Network;
+
+        StartCoroutine(UIHelper.SetScrollviewHorizontalSize(List));
     }
 }

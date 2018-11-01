@@ -53,22 +53,26 @@ namespace Server.DispatchServer
             _errorFile.Close();
         }
 
+        private object _writeLock = new object();
         public void Write(Level level, string message)
         {
-            var stackTrace = new StackTrace(true);
-            var id = Guid.NewGuid();
-
-            if (level == Level.Error)
+            lock (_writeLock)
             {
-                foreach (var r in stackTrace.GetFrames())
-                {
-                    _errorFile.WriteLine($"[{DateTime.Now.ToLongTimeString()}][{level}][{id}]: Filename: {r.GetFileName()} Method: {r.GetMethod()} Line: {r.GetFileLineNumber()} Column: {r.GetFileColumnNumber()}");
-                }
-                _errorFile.Flush();
-            }
+                var stackTrace = new StackTrace(true);
+                var id = Guid.NewGuid();
 
-            _file.WriteLine($"[{DateTime.Now.ToLongTimeString()}][{level}][{id}]: {message}");
-            _file.Flush();
+                if (level == Level.Error)
+                {
+                    foreach (var r in stackTrace.GetFrames())
+                    {
+                        _errorFile.WriteLine($"[{DateTime.Now.ToLongTimeString()}][{level}][{id}]: Filename: {r.GetFileName()} Method: {r.GetMethod()} Line: {r.GetFileLineNumber()} Column: {r.GetFileColumnNumber()}");
+                    }
+                    _errorFile.Flush();
+                }
+
+                _file.WriteLine($"[{DateTime.Now.ToLongTimeString()}][{level}][{id}]: {message}");
+                _file.Flush();
+            }
         }
     }
 }
