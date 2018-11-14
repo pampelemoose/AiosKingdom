@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 public class Bookstore : MonoBehaviour
 {
-    public NetworkManager Network;
-
     public GameObject Content;
     public GameObject BookListItem;
 
@@ -21,14 +19,6 @@ public class Bookstore : MonoBehaviour
     [Space(10)]
     [Header("Book Details")]
     public GameObject BookDetails;
-    public Button CloseButton;
-    public Text Name;
-    public Text Quality;
-    public Text Description;
-    public Button PrevButton;
-    public Button NextButton;
-    public GameObject Inscriptions;
-    public GameObject InscriptionItem;
 
     private bool _isFilteredQuality = false;
     private JsonObjects.Skills.BookQuality _filterQuality;
@@ -36,9 +26,6 @@ public class Bookstore : MonoBehaviour
     private JsonObjects.Skills.InscriptionType _filterType;
     private bool _isFilteredStats = false;
     private JsonObjects.Stats _filterStat;
-
-    private JsonObjects.Skills.Book _currentBook;
-    private int _currentPage = 0;
 
     void Start()
     {
@@ -82,21 +69,6 @@ public class Bookstore : MonoBehaviour
             LoadBooks();
         });
 
-        CloseButton.onClick.AddListener(() =>
-        {
-            BookDetails.SetActive(false);
-        });
-
-        PrevButton.onClick.AddListener(() =>
-        {
-            ShowPage(_currentPage - 1);
-        });
-
-        NextButton.onClick.AddListener(() =>
-        {
-            ShowPage(_currentPage + 1);
-        });
-
         LoadBooks();
     }
 
@@ -133,57 +105,10 @@ public class Bookstore : MonoBehaviour
 
             script.ShowDetailsButton.onClick.AddListener(() =>
             {
-                ShowBookDetails(book);
+                BookDetails.GetComponent<BookDetails>().SetDatas(book);
             });
         }
 
         StartCoroutine(UIHelper.SetScrollviewVerticalSize(Content));
-    }
-
-    private void ShowBookDetails(JsonObjects.Skills.Book book)
-    {
-        _currentBook = book;
-        _currentPage = 0;
-
-        BookDetails.SetActive(true);
-
-        Name.text = book.Name;
-        Quality.text = book.Quality.ToString();
-
-        ShowPage(_currentPage);
-    }
-
-    private void ShowPage(int pageNumber)
-    {
-        _currentPage = pageNumber;
-        var page = _currentBook.Pages.OrderBy(p => p.Rank).ElementAt(_currentPage);
-        var inscriptions = page.Inscriptions.Skip(0).Take(4);
-
-        PrevButton.interactable = false;
-        NextButton.interactable = false;
-
-        if (_currentPage > 0)
-        {
-            PrevButton.interactable = true;
-        }
-
-        if (_currentPage < _currentBook.Pages.Count - 1)
-        {
-            NextButton.interactable = true;
-        }
-
-        Description.text = page.Description;
-
-        foreach (Transform child in Inscriptions.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        foreach (var insc in inscriptions)
-        {
-            var inscObj = Instantiate(InscriptionItem, Inscriptions.transform);
-            var script = inscObj.GetComponent<BookInscriptionItem>();
-            script.SetDatas(insc);
-        }
     }
 }

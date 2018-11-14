@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class AdventureListItem : MonoBehaviour
 {
-    public NetworkManager Network;
-
     public Text Name;
     public Text MinLevel;
     public Text MaxLevel;
@@ -21,7 +19,7 @@ public class AdventureListItem : MonoBehaviour
         //{
         //    LoadingScreen.Loading.Show();
 
-        //    Network.AnnounceGameServerConnection(infos.Id);
+        //    NetworkManager.This.AnnounceGameServerConnection(infos.Id);
         //});
     }
 }

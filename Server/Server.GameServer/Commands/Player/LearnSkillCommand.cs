@@ -76,7 +76,7 @@ namespace Server.GameServer.Commands.Player
             }
             else
             {
-                var hasRank = knowledges.FirstOrDefault(k => k.Id.Equals(bookId) && k.Rank.Equals(rank - 1));
+                var hasRank = knowledges.FirstOrDefault(k => k.BookId.Equals(bookId) && k.Rank.Equals(rank - 1));
                 if (hasRank == null)
                 {
                     ret.ClientResponse = new Network.Message

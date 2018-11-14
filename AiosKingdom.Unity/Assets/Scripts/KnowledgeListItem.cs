@@ -8,6 +8,7 @@ public class KnowledgeListItem : MonoBehaviour
     public Text Name;
     public Text Quality;
     public Text Rank;
+    public Button ShowDetailsButton;
 
     public void SetDatas(JsonObjects.Skills.Book book, int rank)
     {

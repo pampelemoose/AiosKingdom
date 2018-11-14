@@ -17,13 +17,11 @@ namespace Server.GameServer.Commands.Listing
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
-            var serverId = Guid.Parse(ConfigurationManager.AppSettings.Get("ConfigId"));
-            var items = DataRepositories.MarketRepository.GetAll().Where(i => i.ServerId.Equals(serverId)).ToList();
-
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Listing.Market,
-                Json = JsonConvert.SerializeObject(items, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })
+                //Json = JsonConvert.SerializeObject(items, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })
+                Json = JsonConvert.SerializeObject(Market.Instance.Items)
             };
             ret.Succeeded = true;
 

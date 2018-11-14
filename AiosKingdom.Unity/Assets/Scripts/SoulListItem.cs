@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class SoulListItem : MonoBehaviour
 {
-    public NetworkManager Network;
-
-    public Image Image;
     public Text Name;
     public Text Level;
     public Button ConnectButton;
@@ -19,9 +16,9 @@ public class SoulListItem : MonoBehaviour
 
         ConnectButton.onClick.AddListener(() =>
         {
-            LoadingScreen.Loading.Show();
+            UIManager.This.ShowLoading();
 
-            Network.ConnectSoul(soul.Id);
+            NetworkManager.This.ConnectSoul(soul.Id);
         });
     }
 }

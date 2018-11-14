@@ -25,6 +25,8 @@ public class ItemSlot : MonoBehaviour
     public GameObject StatUI;
     public GameObject LeftStats;
     public GameObject RightStats;
+    public GameObject Effects;
+    public GameObject EffectUI;
 
     public void InitializeAsArmor(JsonObjects.Items.Armor item)
     {
@@ -68,6 +70,24 @@ public class ItemSlot : MonoBehaviour
         InitStats(item.Stats);
     }
 
+    public void InitializeAsConsumable(JsonObjects.Items.Consumable item)
+    {
+        _type = JsonObjects.Items.ItemType.Weapon;
+        _item = item;
+
+        InitAitem(_item);
+
+        Type.text = "Consumable";
+        SpecificLabel.gameObject.SetActive(false);
+        SpecificValue.gameObject.SetActive(false);
+
+        LeftStats.SetActive(false);
+        RightStats.SetActive(false);
+        Effects.SetActive(true);
+
+        InitEffects(item.Effects);
+    }
+
     private void InitAitem(JsonObjects.Items.AItem item)
     {
         Name.text = item.Name;
@@ -87,6 +107,19 @@ public class ItemSlot : MonoBehaviour
 
             script.Label.text = stat.Type.ToString();
             script.Value.text = stat.StatValue.ToString();
+        }
+    }
+
+    private void InitEffects(List<JsonObjects.Items.ConsumableEffect> effects)
+    {
+        foreach (var effect in effects)
+        {
+            //var panel = RightStats.transform.childCount > 2 ? LeftStats : RightStats;
+            //var statObj = Instantiate(StatUI, panel.transform);
+            //var script = statObj.GetComponent<StatUI>();
+
+            //script.Label.text = stat.Type.ToString();
+            //script.Value.text = stat.StatValue.ToString();
         }
     }
 }

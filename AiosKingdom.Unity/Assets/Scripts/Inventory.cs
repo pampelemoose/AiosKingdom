@@ -6,45 +6,39 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    public AiosKingdom Main;
-    public NetworkManager Network;
-
     public Button Armors;
     public Button Weapons;
     public Button Bags;
     public Button Consumables;
 
     public GameObject Content;
-    public GameObject ArmorSlot;
-    public GameObject WeaponSlot;
-    public GameObject BagSlot;
-    public GameObject ConsumableSlot;
+    public GameObject ItemSlot;
 
     void Start()
     {
-        Network.AskInventory();
+        NetworkManager.This.AskInventory();
 
         Armors.onClick.AddListener(() =>
         {
-            LoadingScreen.Loading.Show();
+            UIManager.This.ShowLoading();
             LoadInventory(JsonObjects.Items.ItemType.Armor);
         });
 
         Weapons.onClick.AddListener(() =>
         {
-            LoadingScreen.Loading.Show();
+            UIManager.This.ShowLoading();
             LoadInventory(JsonObjects.Items.ItemType.Weapon);
         });
 
         Bags.onClick.AddListener(() =>
         {
-            LoadingScreen.Loading.Show();
+            UIManager.This.ShowLoading();
             LoadInventory(JsonObjects.Items.ItemType.Bag);
         });
 
         Consumables.onClick.AddListener(() =>
         {
-            LoadingScreen.Loading.Show();
+            UIManager.This.ShowLoading();
             LoadInventory(JsonObjects.Items.ItemType.Consumable);
         });
     }
@@ -53,7 +47,7 @@ public class Inventory : MonoBehaviour
     {
         foreach (Transform child in Content.transform)
         {
-            Destroy(child);
+            Destroy(child.gameObject);
         }
 
         Armors.interactable = true;
@@ -66,7 +60,7 @@ public class Inventory : MonoBehaviour
     {
         foreach (Transform child in Content.transform)
         {
-            Destroy(child);
+            Destroy(child.gameObject);
         }
 
         var slotList = DatasManager.Instance.Inventory.Where(s => s.Type == type).Select(s => s.ItemId).ToList();
@@ -78,7 +72,7 @@ public class Inventory : MonoBehaviour
 
                     foreach (var item in items)
                     {
-                        var armObj = Instantiate(ArmorSlot, Content.transform);
+                        var armObj = Instantiate(ItemSlot, Content.transform);
 
                         var script = armObj.GetComponent<ItemSlot>();
                         script.InitializeAsArmor(item);
@@ -91,7 +85,7 @@ public class Inventory : MonoBehaviour
 
                     foreach (var item in items)
                     {
-                        var armObj = Instantiate(WeaponSlot, Content.transform);
+                        var armObj = Instantiate(ItemSlot, Content.transform);
 
                         var script = armObj.GetComponent<ItemSlot>();
                         script.InitializeAsWeapon(item);
@@ -104,7 +98,7 @@ public class Inventory : MonoBehaviour
 
                     foreach (var item in items)
                     {
-                        var armObj = Instantiate(BagSlot, Content.transform);
+                        var armObj = Instantiate(ItemSlot, Content.transform);
 
                         var script = armObj.GetComponent<ItemSlot>();
                         script.InitializeAsBag(item);
@@ -117,10 +111,10 @@ public class Inventory : MonoBehaviour
 
                     foreach (var item in items)
                     {
-                        //var armObj = Instantiate(ConsumableSlot, Content.transform);
+                        var armObj = Instantiate(ItemSlot, Content.transform);
 
-                        //var script = armObj.GetComponent<ItemSlot>();
-                        //script.InitializeAsBag(item);
+                        var script = armObj.GetComponent<ItemSlot>();
+                        script.InitializeAsConsumable(item);
                     }
                 }
                 break;
@@ -128,6 +122,6 @@ public class Inventory : MonoBehaviour
 
         StartCoroutine(UIHelper.SetScrollviewVerticalSize(Content));
 
-        LoadingScreen.Loading.Hide();
+        UIManager.This.HideLoading();
     }
 }

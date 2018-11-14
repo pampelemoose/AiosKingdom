@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class SoulListCreateItem : MonoBehaviour
 {
-    public NetworkManager Network;
-
     public InputField NewSoulName;
     public Button CreateButton;
 
@@ -22,7 +20,7 @@ public class SoulListCreateItem : MonoBehaviour
 
         CreateButton.onClick.AddListener(() =>
         {
-            Network.CreateSoul(NewSoulName.text);
+            NetworkManager.This.CreateSoul(NewSoulName.text);
             CreateButton.interactable = false;
         });
     }

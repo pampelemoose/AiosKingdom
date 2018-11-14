@@ -102,7 +102,7 @@ namespace Server.GameServer
                 {
                     Id = marketSlot.Id,
                     ItemId = marketSlot.ItemId,
-                    SellerId = marketSlot.SellerId,
+                    SellerId = marketSlot.SellerId != null ? (Guid)marketSlot.SellerId : Guid.Empty,
                     BitPrice = marketSlot.BitPrice,
                     ShardPrice = marketSlot.ShardPrice,
                     Quantity = marketSlot.Quantity

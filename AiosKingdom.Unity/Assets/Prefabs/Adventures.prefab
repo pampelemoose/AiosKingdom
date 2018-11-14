@@ -137,6 +137,8 @@ GameObject:
   m_Component:
   - component: {fileID: 224616072905323152}
   - component: {fileID: 114271782932372734}
+  - component: {fileID: 222421616997647730}
+  - component: {fileID: 114413144737585150}
   m_Layer: 5
   m_Name: Adventures
   m_TagString: Untagged
@@ -285,8 +287,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3f5da7008be8ae4c9a2af429325b265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Main: {fileID: 0}
-  Network: {fileID: 0}
   Content: {fileID: 1363473093532298}
   AdventureListItem: {fileID: 1879146878551648, guid: 0308701d1a5accc4f8b3285825cacf2c,
     type: 2}
@@ -369,6 +369,33 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!114 &114413144737585150
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1787279909000690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -520,6 +547,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1989653512996156}
+--- !u!222 &222421616997647730
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1787279909000690}
 --- !u!222 &222679679781023688
 CanvasRenderer:
   m_ObjectHideFlags: 1

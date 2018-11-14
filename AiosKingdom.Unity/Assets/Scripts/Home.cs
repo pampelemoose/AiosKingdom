@@ -4,27 +4,27 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Home : MonoBehaviour
 {
-    public AiosKingdom Main;
-    public NetworkManager Network;
-
     [Header("TopBar")]
     public Text Level;
     public Text Name;
-    public Slider Experience;
-    public Button ShowSummaryButton;
-
-    [Space(10)]
-    [Header("Summary")]
-    public GameObject Summary;
+    public Text Experience;
 
     [Space(2)]
     [Header("General")]
+    public Text Health;
+    public Text Mana;
     public Text Armor;
     public Text ItemLevel;
+
+    [Space(2)]
+    [Header("Offensive")]
+    public Text MinDamages;
+    public Text MaxDamages;
 
     [Space(2)]
     [Header("Attributes")]
@@ -34,6 +34,7 @@ public class Home : MonoBehaviour
     public Text Agility;
     public Text Intelligence;
     public Text Wisdom;
+    public Button PointsAvailable;
 
     [Space(2)]
     [Header("Currencies")]
@@ -42,60 +43,58 @@ public class Home : MonoBehaviour
     public Text Bits;
     public Text Shards;
 
-    [Space(5)]
-    [Header("Equipments")]
-    public GameObject Equipment;
-    public GameObject ItemSlot;
-
     [Space(10)]
     [Header("Menus")]
-    public Button News;
-    public Button Adventures;
-    public Button Pvp;
+    public Button MainPage;
+    public Button Equipment;
     public Button Inventory;
     public Button Knowledges;
-    public Button Pills;
+    public Button Adventures;
+    public Button Pvp;
     public Button Bookstore;
     public Button Market;
 
     [Space(2)]
     [Header("Content")]
     public GameObject Content;
+    public GameObject PillsContent;
+    public GameObject EquipmentContent;
     public GameObject AdventuresContent;
     public GameObject InventoryContent;
     public GameObject KnowledgesContent;
-    public GameObject PillsContent;
     public GameObject BookstoreContent;
 
     void Start()
     {
-        Network.AskSoulCurrentDatas();
-        Network.AskCurrencies();
-        Network.AskEquipment();
-        Network.AskKnowledges();
+        NetworkManager.This.AskSoulCurrentDatas();
+        NetworkManager.This.AskCurrencies();
+        NetworkManager.This.AskEquipment();
+        NetworkManager.This.AskKnowledges();
 
-        ShowSummaryButton.onClick.AddListener(() =>
-        {
-            Summary.SetActive(!Summary.activeSelf);
-        });
-
-        News.onClick.AddListener(() =>
+        MainPage.onClick.AddListener(() =>
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                LoadingScreen.Loading.Show();
-
-                ShowNews();
+                foreach (Transform child in Content.transform)
+                {
+                    Destroy(child.gameObject);
+                }
             });
         });
 
-        Adventures.onClick.AddListener(() =>
+        PointsAvailable.onClick.AddListener(() =>
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                LoadingScreen.Loading.Show();
+                ShowPills();
+            });
+        });
 
-                ShowAdventures();
+        Equipment.onClick.AddListener(() =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                ShowEquipment();
             });
         });
 
@@ -115,11 +114,13 @@ public class Home : MonoBehaviour
             });
         });
 
-        Pills.onClick.AddListener(() =>
+        Adventures.onClick.AddListener(() =>
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                ShowPills();
+                UIManager.This.ShowLoading();
+
+                ShowAdventures();
             });
         });
 
@@ -130,11 +131,14 @@ public class Home : MonoBehaviour
                 ShowBookstore();
             });
         });
-    }
 
-    void Update()
-    {
-
+        Market.onClick.AddListener(() =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                SceneManager.LoadScene(2);
+            });
+        });
     }
 
     public void UpdatePlayerDatas()
@@ -142,26 +146,36 @@ public class Home : MonoBehaviour
         Level.text = DatasManager.Instance.Datas.Level.ToString();
         Name.text = DatasManager.Instance.Datas.Name;
 
-        Experience.maxValue = DatasManager.Instance.Datas.RequiredExperience;
-        Experience.value = DatasManager.Instance.Datas.CurrentExperience;
+        Experience.text = string.Format("[{0}/{1}]", DatasManager.Instance.Datas.CurrentExperience, DatasManager.Instance.Datas.RequiredExperience);
 
-        Armor.text = DatasManager.Instance.Datas.Armor.ToString();
-        ItemLevel.text = DatasManager.Instance.Datas.ItemLevel.ToString();
+        Health.text = string.Format("[{0}]", DatasManager.Instance.Datas.MaxHealth);
+        Mana.text = string.Format("[{0}]", DatasManager.Instance.Datas.MaxMana);
+        Armor.text = string.Format("[{0}]", DatasManager.Instance.Datas.Armor);
+        ItemLevel.text = string.Format("[{0}]", DatasManager.Instance.Datas.ItemLevel);
 
-        Stamina.text = DatasManager.Instance.Datas.TotalStamina.ToString();
-        Energy.text = DatasManager.Instance.Datas.TotalEnergy.ToString();
-        Strength.text = DatasManager.Instance.Datas.TotalStrength.ToString();
-        Agility.text = DatasManager.Instance.Datas.TotalAgility.ToString();
-        Intelligence.text = DatasManager.Instance.Datas.TotalIntelligence.ToString();
-        Wisdom.text = DatasManager.Instance.Datas.TotalWisdom.ToString();
+        Stamina.text = string.Format("[{0}]", DatasManager.Instance.Datas.TotalStamina);
+        Energy.text = string.Format("[{0}]", DatasManager.Instance.Datas.TotalEnergy);
+        Strength.text = string.Format("[{0}]", DatasManager.Instance.Datas.TotalStrength);
+        Agility.text = string.Format("[{0}]", DatasManager.Instance.Datas.TotalAgility);
+        Intelligence.text = string.Format("[{0}]", DatasManager.Instance.Datas.TotalIntelligence);
+        Wisdom.text = string.Format("[{0}]", DatasManager.Instance.Datas.TotalWisdom);
+
+        MinDamages.text = string.Format("[{0}]", DatasManager.Instance.Datas.MinDamages);
+        MaxDamages.text = string.Format("[{0}]", DatasManager.Instance.Datas.MaxDamages);
     }
 
     public void UpdateCurrencies()
     {
-        Spirits.text = DatasManager.Instance.Currencies.Spirits.ToString();
-        Embers.text = DatasManager.Instance.Currencies.Embers.ToString();
-        Bits.text = DatasManager.Instance.Currencies.Bits.ToString();
-        Shards.text = DatasManager.Instance.Currencies.Shards.ToString();
+        Spirits.text = string.Format("[{0}]", DatasManager.Instance.Currencies.Spirits);
+        Embers.text = string.Format("[{0}]", DatasManager.Instance.Currencies.Embers);
+        Bits.text = string.Format("[{0}]", DatasManager.Instance.Currencies.Bits);
+        Shards.text = string.Format("[{0}]", DatasManager.Instance.Currencies.Shards);
+
+        PointsAvailable.gameObject.SetActive(false);
+        if (DatasManager.Instance.Currencies.Spirits > 0)
+        {
+            PointsAvailable.gameObject.SetActive(true);
+        }
 
         var script = transform.GetComponentInChildren<Pills>();
 
@@ -173,80 +187,12 @@ public class Home : MonoBehaviour
 
     public void UpdateEquipment()
     {
-        foreach (Transform child in Equipment.transform)
-        {
-            Destroy(child);
-        }
+        var script = transform.GetComponentInChildren<Equipment>();
 
-        var equipment = DatasManager.Instance.Equipment;
-        if (!Guid.Empty.Equals(equipment.Head))
+        if (script != null)
         {
-            var newObj = Instantiate(ItemSlot, Equipment.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            script.InitializeAsArmor(DatasManager.Instance.Armors.FirstOrDefault(b => b.Id.Equals(equipment.Head)));
+            script.UpdateEquipment();
         }
-        if (!Guid.Empty.Equals(equipment.Shoulder))
-        {
-            var newObj = Instantiate(ItemSlot, Equipment.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            script.InitializeAsArmor(DatasManager.Instance.Armors.FirstOrDefault(b => b.Id.Equals(equipment.Shoulder)));
-        }
-        if (!Guid.Empty.Equals(equipment.Torso))
-        {
-            var newObj = Instantiate(ItemSlot, Equipment.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            script.InitializeAsArmor(DatasManager.Instance.Armors.FirstOrDefault(b => b.Id.Equals(equipment.Torso)));
-        }
-        if (!Guid.Empty.Equals(equipment.Belt))
-        {
-            var newObj = Instantiate(ItemSlot, Equipment.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            script.InitializeAsArmor(DatasManager.Instance.Armors.FirstOrDefault(b => b.Id.Equals(equipment.Belt)));
-        }
-        if (!Guid.Empty.Equals(equipment.Pants))
-        {
-            var newObj = Instantiate(ItemSlot, Equipment.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            script.InitializeAsArmor(DatasManager.Instance.Armors.FirstOrDefault(b => b.Id.Equals(equipment.Pants)));
-        }
-        if (!Guid.Empty.Equals(equipment.Leg))
-        {
-            var newObj = Instantiate(ItemSlot, Equipment.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            script.InitializeAsArmor(DatasManager.Instance.Armors.FirstOrDefault(b => b.Id.Equals(equipment.Leg)));
-        }
-        if (!Guid.Empty.Equals(equipment.Feet))
-        {
-            var newObj = Instantiate(ItemSlot, Equipment.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            script.InitializeAsArmor(DatasManager.Instance.Armors.FirstOrDefault(b => b.Id.Equals(equipment.Feet)));
-        }
-        if (!Guid.Empty.Equals(equipment.Hand))
-        {
-            var newObj = Instantiate(ItemSlot, Equipment.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            script.InitializeAsArmor(DatasManager.Instance.Armors.FirstOrDefault(b => b.Id.Equals(equipment.Hand)));
-        }
-        if (!Guid.Empty.Equals(equipment.WeaponLeft))
-        {
-            var newObj = Instantiate(ItemSlot, Equipment.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            script.InitializeAsWeapon(DatasManager.Instance.Weapons.FirstOrDefault(b => b.Id.Equals(equipment.WeaponLeft)));
-        }
-        if (!Guid.Empty.Equals(equipment.WeaponRight))
-        {
-            var newObj = Instantiate(ItemSlot, Equipment.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            script.InitializeAsWeapon(DatasManager.Instance.Weapons.FirstOrDefault(b => b.Id.Equals(equipment.WeaponRight)));
-        }
-        if (!Guid.Empty.Equals(equipment.Bag))
-        {
-            var bagObj = Instantiate(ItemSlot, Equipment.transform);
-            var script = bagObj.GetComponent<ItemSlot>();
-            script.InitializeAsBag(DatasManager.Instance.Bags.FirstOrDefault(b => b.Id.Equals(equipment.Bag)));
-        }
-
-        UIHelper.SetScrollviewVerticalSize(Equipment);
     }
 
     public void UpdateInventory()
@@ -269,14 +215,28 @@ public class Home : MonoBehaviour
         }
     }
 
-    private void ShowNews()
+    private void ShowPills()
     {
         foreach (Transform child in Content.transform)
         {
             Destroy(child.gameObject);
         }
 
-        LoadingScreen.Loading.Hide();
+        var advObj = Instantiate(PillsContent, Content.transform);
+        var script = advObj.GetComponent<Pills>();
+        script.UpdateCurrencies();
+    }
+
+    private void ShowEquipment()
+    {
+        foreach (Transform child in Content.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        var advObj = Instantiate(EquipmentContent, Content.transform);
+        var script = advObj.GetComponent<Equipment>();
+        script.UpdateEquipment();
     }
 
     private void ShowAdventures()
@@ -288,7 +248,6 @@ public class Home : MonoBehaviour
 
         var advObj = Instantiate(AdventuresContent, Content.transform);
         var script = advObj.GetComponent<Adventures>();
-        script.Network = Network;
     }
 
     private void ShowInventory()
@@ -300,7 +259,6 @@ public class Home : MonoBehaviour
 
         var advObj = Instantiate(InventoryContent, Content.transform);
         var script = advObj.GetComponent<Inventory>();
-        script.Network = Network;
     }
 
     private void ShowKnowledges()
@@ -312,19 +270,6 @@ public class Home : MonoBehaviour
 
         var advObj = Instantiate(KnowledgesContent, Content.transform);
         var script = advObj.GetComponent<Knowledges>();
-        script.Network = Network;
-    }
-
-    private void ShowPills()
-    {
-        foreach (Transform child in Content.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        var advObj = Instantiate(PillsContent, Content.transform);
-        var script = advObj.GetComponent<Pills>();
-        script.Network = Network;
     }
 
     private void ShowBookstore()
@@ -336,6 +281,5 @@ public class Home : MonoBehaviour
 
         var advObj = Instantiate(BookstoreContent, Content.transform);
         var script = advObj.GetComponent<Bookstore>();
-        script.Network = Network;
     }
 }

@@ -53,6 +53,8 @@ namespace Server.GameServer
 
         public List<Network.Monsters.Monster> Monsters { get; private set; }
 
+        public List<Network.MarketSlot> Market { get; private set; }
+
         private void LoadArmors()
         {
             var armors = DataRepositories.ArmorRepository.GetAllForVersion(_config.VersionId);

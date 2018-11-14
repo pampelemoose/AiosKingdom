@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class Adventures : MonoBehaviour
 {
-    public AiosKingdom Main;
-    public NetworkManager Network;
-
     public GameObject Content;
     public GameObject AdventureListItem;
 
@@ -21,7 +18,7 @@ public class Adventures : MonoBehaviour
     {
         foreach (Transform child in Content.transform)
         {
-            Destroy(child);
+            Destroy(child.gameObject);
         }
 
         foreach (var adventure in DatasManager.Instance.Dungeons)
@@ -29,12 +26,11 @@ public class Adventures : MonoBehaviour
             var advObj = Instantiate(AdventureListItem, Content.transform);
 
             var script = advObj.GetComponent<AdventureListItem>();
-            script.Network = Network;
             script.SetDatas(adventure);
         }
 
         StartCoroutine(UIHelper.SetScrollviewVerticalSize(Content));
 
-        LoadingScreen.Loading.Hide();
+        UIManager.This.HideLoading();
     }
 }

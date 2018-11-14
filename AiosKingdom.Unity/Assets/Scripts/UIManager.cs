@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
-public class AiosKingdom : MonoBehaviour, IEventSystemHandler
+public class UIManager : MonoBehaviour, IEventSystemHandler
 {
-    private enum Views
+    public static UIManager This { get; set; }
+
+    public enum Views
     {
         None,
         Account,
@@ -14,68 +17,38 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
         SoulList,
         ContentLoadingScreen,
         Home,
+        Market
     }
 
-    private static bool _created = false;
-
-    private NetworkManager _network;
-
-    public Canvas Ui;
+    public Views StartingView = Views.None;
     private Views _currentView = Views.None;
     private GameObject _currentObject;
+
+    public GameObject LoadingScreen;
+    private GameObject _loadingScreen;
 
     public GameObject AccountForm;
     public GameObject ServerList;
     public GameObject SoulList;
     public GameObject ContentLoadingScreen;
     public GameObject Home;
+    public GameObject Market;
 
     void Awake()
     {
-        if (!_created)
+        This = this;
+
+        if (StartingView != Views.None)
         {
-            DontDestroyOnLoad(this.gameObject);
-            _created = true;
+            ChangeView(StartingView);
         }
     }
-
-    void Start()
-    {
-        _network = this.GetComponent<NetworkManager>();
-
-        if (PlayerPrefs.HasKey("AiosKingdom_IdentifyingKey"))
-        {
-            LoadingScreen.Loading.Show();
-            _network.AskAuthentication(PlayerPrefs.GetString("AiosKingdom_IdentifyingKey"));
-        }
-        else
-        {
-            ShowAccountForm();
-        }
-    }
-
-    void OnApplicationQuit()
-    {
-        _network.DisconnectGame();
-        _network.Disconnect();
-    }
-
-    //void OnApplicationFocus(bool hasFocus)
-    //{
-    //    if (!hasFocus)
-    //    {
-    //        _network.DisconnectGame();
-    //        _network.Disconnect();
-    //    }
-    //}
 
     public void ShowAccountForm()
     {
         ChangeView(Views.Account);
 
-        _currentObject.GetComponent<AccountForm>().Network = _network;
-
-        LoadingScreen.Loading.Hide();
+        HideLoading();
     }
 
     public void ShowLogin(Guid safeKey)
@@ -83,21 +56,14 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
         _currentObject.GetComponent<AccountForm>().AccountCreated(safeKey);
     }
 
-    public void GetServerList()
-    {
-        LoadingScreen.Loading.Show();
-        _network.AskServerInfos();
-    }
-
     public void ShowServerList(List<JsonObjects.GameServerInfos> servers)
     {
         ChangeView(Views.ServerList);
 
         var script = _currentObject.GetComponent<ServerList>();
-        script.Network = _network;
         script.SetServers(servers);
 
-        LoadingScreen.Loading.Hide();
+        HideLoading();
     }
 
     public void ShowSoulList(List<JsonObjects.SoulInfos> souls)
@@ -105,28 +71,30 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
         ChangeView(Views.SoulList);
 
         var script = _currentObject.GetComponent<SoulList>();
-        script.Network = _network;
         script.SetSouls(souls);
 
-        LoadingScreen.Loading.Hide();
+        HideLoading();
     }
 
     public void ShowContentLoadingScreen()
     {
         ChangeView(Views.ContentLoadingScreen);
 
-        LoadingScreen.Loading.Show();
+        ShowLoading();
     }
 
     public void ShowHome()
     {
         ChangeView(Views.Home);
 
-        var script = _currentObject.GetComponent<Home>();
-        script.Main = this;
-        script.Network = _network;
+        HideLoading();
+    }
 
-        LoadingScreen.Loading.Hide();
+    public void ShowMarket()
+    {
+        ChangeView(Views.Market);
+
+        HideLoading();
     }
 
     private void ChangeView(Views viewType)
@@ -138,19 +106,22 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
             switch (viewType)
             {
                 case Views.Account:
-                    _currentObject = Instantiate(AccountForm, Ui.transform);
+                    _currentObject = Instantiate(AccountForm, transform);
                     break;
                 case Views.ServerList:
-                    _currentObject = Instantiate(ServerList, Ui.transform);
+                    _currentObject = Instantiate(ServerList, transform);
                     break;
                 case Views.SoulList:
-                    _currentObject = Instantiate(SoulList, Ui.transform);
+                    _currentObject = Instantiate(SoulList, transform);
                     break;
                 case Views.ContentLoadingScreen:
-                    _currentObject = Instantiate(ContentLoadingScreen, Ui.transform);
+                    _currentObject = Instantiate(ContentLoadingScreen, transform);
                     break;
                 case Views.Home:
-                    _currentObject = Instantiate(Home, Ui.transform);
+                    _currentObject = Instantiate(Home, transform);
+                    break;
+                case Views.Market:
+                    _currentObject = Instantiate(Market, transform);
                     break;
             }
 
@@ -166,7 +137,9 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
         script.IsLoaded(name);
 
         if (script.IsFinishedLoading)
-            ShowHome();
+        {
+            SceneManager.LoadScene(1);
+        }
     }
 
     public void UpdatePlayerDatas()
@@ -211,6 +184,38 @@ public class AiosKingdom : MonoBehaviour, IEventSystemHandler
         {
             var script = _currentObject.GetComponent<Home>();
             script.UpdateKnowledges();
+        }
+    }
+
+    public void UpdateMarket()
+    {
+        if (_currentView == Views.Market)
+        {
+            var script = _currentObject.GetComponent<Market>();
+            script.UpdateItems();
+        }
+    }
+
+    #endregion
+
+    #region Loading Screen
+
+    public void ShowLoading()
+    {
+        if (_loadingScreen == null)
+        {
+            _loadingScreen = Instantiate(LoadingScreen, transform);
+        }
+
+        _loadingScreen.transform.SetAsLastSibling();
+        _loadingScreen.SetActive(true);
+    }
+
+    public void HideLoading()
+    {
+        if (_loadingScreen != null)
+        {
+            _loadingScreen.SetActive(false);
         }
     }
 

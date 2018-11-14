@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class Pills : MonoBehaviour
 {
-    public NetworkManager Network;
-
     public Button Stamina;
     public Button Energy;
     public Button Strength;
@@ -21,6 +19,7 @@ public class Pills : MonoBehaviour
     public Button Buy;
 
     private int _quantity;
+    private Text _selectedText;
     private JsonObjects.Stats _currentStat;
 
     void Start()
@@ -28,31 +27,37 @@ public class Pills : MonoBehaviour
         Stamina.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Stamina);
+            SetSelectedButtonColor(Stamina.GetComponentInChildren<Text>(), new Color(1, 0, 0));
         });
 
         Energy.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Energy);
+            SetSelectedButtonColor(Energy.GetComponentInChildren<Text>(), new Color(0.9f, 1, 0));
         });
 
         Strength.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Strength);
+            SetSelectedButtonColor(Strength.GetComponentInChildren<Text>(), new Color(1, 0, 0.8f));
         });
 
         Agility.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Agility);
+            SetSelectedButtonColor(Agility.GetComponentInChildren<Text>(), new Color(0, 1, 0.3f));
         });
 
         Intelligence.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Intelligence);
+            SetSelectedButtonColor(Intelligence.GetComponentInChildren<Text>(), new Color(0, 0.5f, 1));
         });
 
         Wisdom.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Wisdom);
+            SetSelectedButtonColor(Wisdom.GetComponentInChildren<Text>(), new Color(0, 1, 1));
         });
 
         Minus.onClick.AddListener(() =>
@@ -67,10 +72,11 @@ public class Pills : MonoBehaviour
 
         Buy.onClick.AddListener(() =>
         {
-            Network.UseSpiritPills(_currentStat, _quantity);
+            NetworkManager.This.UseSpiritPills(_currentStat, _quantity);
         });
 
         SelectStat(JsonObjects.Stats.Stamina);
+        SetSelectedButtonColor(Stamina.GetComponentInChildren<Text>(), new Color(1, 0, 0));
     }
 
     public void UpdateCurrencies()
@@ -83,6 +89,17 @@ public class Pills : MonoBehaviour
         SetQuantity(0);
 
         _currentStat = stat;
+    }
+
+    private void SetSelectedButtonColor(Text selected, Color color)
+    {
+        if (_selectedText != null)
+        {
+            _selectedText.color = Color.white;
+        }
+
+        _selectedText = selected;
+        _selectedText.color = color;
     }
 
     private void SetQuantity(int quantity)

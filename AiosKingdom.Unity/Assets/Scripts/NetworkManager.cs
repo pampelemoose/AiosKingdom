@@ -11,6 +11,11 @@ using UnityEngine.Networking;
 
 public class NetworkManager : MonoBehaviour
 {
+    public static NetworkManager This { get; set; }
+
+    private static bool _created = false;
+
+
     private bool _isDispatchRunning;
     private TcpClient _dispatch;
     private Thread _dispatchThread;
@@ -28,6 +33,34 @@ public class NetworkManager : MonoBehaviour
     {
         ConnectToDispatchServer();
     }
+
+    void Awake()
+    {
+        if (!_created)
+        {
+            DontDestroyOnLoad(this.gameObject);
+            _created = true;
+        }
+
+        This = this;
+    }
+
+    void OnApplicationQuit()
+    {
+        DisconnectSoul();
+        AnnounceDisconnection();
+        DisconnectGame();
+        Disconnect();
+    }
+
+    //void OnApplicationFocus(bool hasFocus)
+    //{
+    //    if (!hasFocus)
+    //    {
+    //        _network.DisconnectGame();
+    //        _network.Disconnect();
+    //    }
+    //}
 
     #region Dispatch Functions
 
@@ -138,7 +171,7 @@ public class NetworkManager : MonoBehaviour
                         {
                             PlayerPrefs.SetString("AiosKingdom_IdentifyingKey", appUser.Identifier.ToString());
                             PlayerPrefs.Save();
-                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ShowLogin(appUser.SafeKey));
+                            UIManager.This.ShowLogin(appUser.SafeKey);
                         });
 
                         //MessagingCenter.Send(this, MessengerCodes.CreateNewAccount, appUser.SafeKey);
@@ -158,10 +191,7 @@ public class NetworkManager : MonoBehaviour
 
                         _dispatchAuthToken = authToken;
                         //MessagingCenter.Send(this, MessengerCodes.LoginSuccessful);
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.GetServerList());
-                        });
+                        AskServerInfos();
                     }
                     else
                     {
@@ -170,7 +200,7 @@ public class NetworkManager : MonoBehaviour
                         {
                             PlayerPrefs.DeleteKey("AiosKingdom_IdentifyingKey");
                             PlayerPrefs.Save();
-                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ShowAccountForm());
+                            UIManager.This.ShowAccountForm();
                         });
 
                         Debug.Log("Authenticate error : " + message.Json);
@@ -183,7 +213,7 @@ public class NetworkManager : MonoBehaviour
                     //MessagingCenter.Send(this, MessengerCodes.ServerListReceived, servers);
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ShowServerList(servers));
+                        UIManager.This.ShowServerList(servers);
                     });
                 }
                 break;
@@ -298,16 +328,16 @@ public class NetworkManager : MonoBehaviour
         SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
     }
 
-    //public void AnnounceDisconnection()
-    //{
-    //    var retMess = new Network.Message
-    //    {
-    //        Code = Network.CommandCodes.Client_AnnounceDisconnection,
-    //        Json = JsonConvert.SerializeObject(new string[0]),
-    //        Token = _dispatchAuthToken
-    //    };
-    //    SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
-    //}
+    public void AnnounceDisconnection()
+    {
+        var retMess = new JsonObjects.Message
+        {
+            Code = JsonObjects.CommandCodes.Client_AnnounceDisconnection,
+            Json = JsonConvert.SerializeObject(new string[0]),
+            Token = _dispatchAuthToken
+        };
+        SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
+    }
 
     private void SendJsonToDispatch(string json)
     {
@@ -504,7 +534,7 @@ public class NetworkManager : MonoBehaviour
                     //MessagingCenter.Send(this, MessengerCodes.SoulListReceived, souls);
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ShowSoulList(souls));
+                        UIManager.This.ShowSoulList(souls);
                     });
                 }
                 break;
@@ -514,7 +544,7 @@ public class NetworkManager : MonoBehaviour
                     {
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ShowContentLoadingScreen());
+                            UIManager.This.ShowContentLoadingScreen();
                         });
 
                         //MessagingCenter.Send(this, MessengerCodes.SoulConnected);
@@ -568,7 +598,7 @@ public class NetworkManager : MonoBehaviour
                         //MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.UpdatePlayerDatas());
+                            UIManager.This.UpdatePlayerDatas();
                         });
                     }
                     else
@@ -624,20 +654,20 @@ public class NetworkManager : MonoBehaviour
                     //MessagingCenter.Send(this, MessengerCodes.LearnSpiritPills, message.Json);
                 }
                 break;
-            //case Network.CommandCodes.Player.LearnSkill:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            AskCurrencies();
-            //            AskKnowledges();
+            case JsonObjects.CommandCodes.Player.LearnSkill:
+                {
+                    if (message.Success)
+                    {
+                        AskCurrencies();
+                        AskKnowledges();
 
-            //            Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
-            //            Application.Current.SavePropertiesAsync();
-            //            MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
-            //        }
-            //        MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
-            //    }
-            //    break;
+                        //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
+                        //Application.Current.SavePropertiesAsync();
+                        //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+                    }
+                    //MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
+                }
+                break;
             case JsonObjects.CommandCodes.Player.Currencies:
                 {
                     if (message.Success)
@@ -647,7 +677,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.UpdateCurrencies());
+                            UIManager.This.UpdateCurrencies();
                         });
                     }
                     //MessagingCenter.Send(this, MessengerCodes.CurrenciesUpdated);
@@ -662,7 +692,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.UpdateInventory());
+                            UIManager.This.UpdateInventory();
                         });
                     }
                     //MessagingCenter.Send(this, MessengerCodes.InventoryUpdated);
@@ -686,7 +716,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.UpdateKnowledges());
+                            UIManager.This.UpdateKnowledges();
                         });
                     }
                     //MessagingCenter.Send(this, MessengerCodes.KnowledgeUpdated);
@@ -701,7 +731,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.UpdateEquipment());
+                            UIManager.This.UpdateEquipment();
                         });
                     }
                     //MessagingCenter.Send(this, MessengerCodes.EquipmentUpdated);
@@ -716,7 +746,7 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("armors"));
+                        UIManager.This.ContentLoaded("armors");
                     });
                 }
                 break;
@@ -727,7 +757,7 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("consumables"));
+                        UIManager.This.ContentLoaded("consumables");
                     });
                 }
                 break;
@@ -738,7 +768,7 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("bags"));
+                        UIManager.This.ContentLoaded("bags");
                     });
                 }
                 break;
@@ -749,7 +779,7 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("weapons"));
+                        UIManager.This.ContentLoaded("weapons");
                     });
                 }
                 break;
@@ -760,7 +790,7 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("books"));
+                        UIManager.This.ContentLoaded("books");
                     });
                 }
                 break;
@@ -771,7 +801,7 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("monsters"));
+                        UIManager.This.ContentLoaded("monsters");
                     });
                 }
                 break;
@@ -782,15 +812,21 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ExecuteEvents.Execute<AiosKingdom>(this.GetComponent<AiosKingdom>().gameObject, null, (x, y) => x.ContentLoaded("adventures"));
+                        UIManager.This.ContentLoaded("adventures");
                     });
                     //MessagingCenter.Send(this, MessengerCodes.DungeonListUpdated);
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Market:
                 {
-                    //var items = JsonConvert.DeserializeObject<List<DataModels.MarketSlot>>(message.Json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                    //DatasManager.Instance.MarketItems = items;
+                    //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
+                    var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
+                    DatasManager.Instance.MarketItems = items;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        UIManager.This.UpdateMarket();
+                    });
                     //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
                 }
                 break;
@@ -1082,10 +1118,10 @@ public class NetworkManager : MonoBehaviour
         SendRequest(JsonObjects.CommandCodes.Player.UseSpiritPills, new string[2] { statType.ToString(), quantity.ToString() });
     }
 
-    //public void LearnSkill(Guid bookId, int rank)
-    //{
-    //    SendRequest(Network.CommandCodes.Player.LearnSkill, new string[2] { bookId.ToString(), rank.ToString() });
-    //}
+    public void LearnSkill(Guid bookId, int rank)
+    {
+        SendRequest(JsonObjects.CommandCodes.Player.LearnSkill, new string[2] { bookId.ToString(), rank.ToString() });
+    }
 
     public void AskCurrencies()
     {
