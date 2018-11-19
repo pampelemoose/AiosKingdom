@@ -20,54 +20,55 @@ public class Bookstore : MonoBehaviour
     [Header("Book Details")]
     public GameObject BookDetails;
 
-    private bool _isFilteredQuality = false;
-    private JsonObjects.Skills.BookQuality _filterQuality;
-    private bool _isFilteredTypes = false;
-    private JsonObjects.Skills.InscriptionType _filterType;
-    private bool _isFilteredStats = false;
-    private JsonObjects.Stats _filterStat;
+    private GameObject _bookDetails;
+    private JsonObjects.Skills.BookQuality? _filterQuality;
+    private JsonObjects.Skills.InscriptionType? _filterType;
+    private JsonObjects.Stats? _filterStat;
 
-    void Start()
+    void Awake()
     {
-        QualityDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Skills.BookQuality)).ToList());
-        TypesDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Skills.InscriptionType)).ToList());
-        StatsDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Stats)).ToList());
-
-        QualityDropdown.onValueChanged.AddListener((value) =>
+        if (_bookDetails == null)
         {
-            _isFilteredQuality = false;
-            if (value > 0)
+            _bookDetails = Instantiate(BookDetails, transform);
+
+            QualityDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Skills.BookQuality)).ToList());
+            TypesDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Skills.InscriptionType)).ToList());
+            StatsDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Stats)).ToList());
+
+            QualityDropdown.onValueChanged.AddListener((value) =>
             {
-                _isFilteredQuality = true;
-                _filterQuality = (JsonObjects.Skills.BookQuality)Enum.Parse(typeof(JsonObjects.Skills.BookQuality), QualityDropdown.options.ElementAt(value).text);
-            }
+                _filterQuality = null;
+                if (value > 0)
+                {
+                    _filterQuality = (JsonObjects.Skills.BookQuality)Enum.Parse(typeof(JsonObjects.Skills.BookQuality), QualityDropdown.options.ElementAt(value).text);
+                }
 
-            LoadBooks();
-        });
+                LoadBooks();
+            });
 
-        TypesDropdown.onValueChanged.AddListener((value) =>
-        {
-            _isFilteredTypes = false;
-            if (value > 0)
+            TypesDropdown.onValueChanged.AddListener((value) =>
             {
-                _isFilteredTypes = true;
-                _filterType = (JsonObjects.Skills.InscriptionType)Enum.Parse(typeof(JsonObjects.Skills.InscriptionType), TypesDropdown.options.ElementAt(value).text);
-            }
+                _filterType = null;
 
-            LoadBooks();
-        });
+                if (value > 0)
+                {
+                    _filterType = (JsonObjects.Skills.InscriptionType)Enum.Parse(typeof(JsonObjects.Skills.InscriptionType), TypesDropdown.options.ElementAt(value).text);
+                }
 
-        StatsDropdown.onValueChanged.AddListener((value) =>
-        {
-            _isFilteredStats = false;
-            if (value > 0)
+                LoadBooks();
+            });
+
+            StatsDropdown.onValueChanged.AddListener((value) =>
             {
-                _isFilteredStats = true;
-                _filterStat = (JsonObjects.Stats)Enum.Parse(typeof(JsonObjects.Stats), StatsDropdown.options.ElementAt(value).text);
-            }
+                _filterType = null;
+                if (value > 0)
+                {
+                    _filterStat = (JsonObjects.Stats)Enum.Parse(typeof(JsonObjects.Stats), StatsDropdown.options.ElementAt(value).text);
+                }
 
-            LoadBooks();
-        });
+                LoadBooks();
+            });
+        }
 
         LoadBooks();
     }
@@ -81,17 +82,17 @@ public class Bookstore : MonoBehaviour
 
         var books = DatasManager.Instance.Books;
 
-        if (_isFilteredQuality)
+        if (_filterQuality != null)
         {
             books = books.Where(b => b.Quality == _filterQuality).ToList();
         }
 
-        if (_isFilteredTypes)
+        if (_filterType != null)
         {
             books = books.Where(b => (b.Pages.SelectMany(p => p.Inscriptions).Where(i => i.Type == _filterType)).Any()).ToList();
         }
-        
-        if (_isFilteredStats)
+
+        if (_filterStat != null)
         {
             books = books.Where(b => (b.Pages.SelectMany(p => p.Inscriptions).Where(i => i.StatType == _filterStat)).Any()).ToList();
         }
@@ -105,7 +106,7 @@ public class Bookstore : MonoBehaviour
 
             script.ShowDetailsButton.onClick.AddListener(() =>
             {
-                BookDetails.GetComponent<BookDetails>().SetDatas(book);
+                _bookDetails.GetComponent<BookDetails>().SetDatas(book);
             });
         }
 

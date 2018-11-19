@@ -12,9 +12,15 @@ public class Knowledges : MonoBehaviour
     [Header("Knowledge Details")]
     public GameObject KnowledgeDetails;
 
-    // Use this for initialization
-    void Start()
+    private GameObject _knowledgeDetails;
+
+    void Awake()
     {
+        if (_knowledgeDetails == null)
+        {
+            _knowledgeDetails = Instantiate(KnowledgeDetails, transform);
+        }
+
         NetworkManager.This.AskKnowledges();
     }
 
@@ -36,10 +42,13 @@ public class Knowledges : MonoBehaviour
 
             script.ShowDetailsButton.onClick.AddListener(() =>
             {
-                KnowledgeDetails.GetComponent<KnowledgeDetails>().SetDatas(skill, knowledge.Rank);
+                _knowledgeDetails.GetComponent<KnowledgeDetails>().SetDatas(skill, knowledge.Rank);
             });
         }
 
-        StartCoroutine(UIHelper.SetScrollviewVerticalSize(Content));
+        if (gameObject.activeSelf)
+        {
+            StartCoroutine(UIHelper.SetScrollviewVerticalSize(Content));
+        }
     }
 }

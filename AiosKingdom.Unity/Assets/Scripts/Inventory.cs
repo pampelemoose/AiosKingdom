@@ -14,33 +14,38 @@ public class Inventory : MonoBehaviour
     public GameObject Content;
     public GameObject ItemSlot;
 
-    void Start()
+    private bool _init = false;
+
+    void Awake()
     {
+        if (!_init)
+        {
+            Armors.onClick.AddListener(() =>
+            {
+                UIManager.This.ShowLoading();
+                LoadInventory(JsonObjects.Items.ItemType.Armor);
+            });
+
+            Weapons.onClick.AddListener(() =>
+            {
+                UIManager.This.ShowLoading();
+                LoadInventory(JsonObjects.Items.ItemType.Weapon);
+            });
+
+            Bags.onClick.AddListener(() =>
+            {
+                UIManager.This.ShowLoading();
+                LoadInventory(JsonObjects.Items.ItemType.Bag);
+            });
+
+            Consumables.onClick.AddListener(() =>
+            {
+                UIManager.This.ShowLoading();
+                LoadInventory(JsonObjects.Items.ItemType.Consumable);
+            });
+        }
+
         NetworkManager.This.AskInventory();
-
-        Armors.onClick.AddListener(() =>
-        {
-            UIManager.This.ShowLoading();
-            LoadInventory(JsonObjects.Items.ItemType.Armor);
-        });
-
-        Weapons.onClick.AddListener(() =>
-        {
-            UIManager.This.ShowLoading();
-            LoadInventory(JsonObjects.Items.ItemType.Weapon);
-        });
-
-        Bags.onClick.AddListener(() =>
-        {
-            UIManager.This.ShowLoading();
-            LoadInventory(JsonObjects.Items.ItemType.Bag);
-        });
-
-        Consumables.onClick.AddListener(() =>
-        {
-            UIManager.This.ShowLoading();
-            LoadInventory(JsonObjects.Items.ItemType.Consumable);
-        });
     }
 
     public void UpdateItems()

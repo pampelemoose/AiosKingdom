@@ -45,7 +45,6 @@ public class Home : MonoBehaviour
 
     [Space(10)]
     [Header("Menus")]
-    public Button MainPage;
     public Button Equipment;
     public Button Inventory;
     public Button Knowledges;
@@ -54,16 +53,6 @@ public class Home : MonoBehaviour
     public Button Bookstore;
     public Button Market;
 
-    [Space(2)]
-    [Header("Content")]
-    public GameObject Content;
-    public GameObject PillsContent;
-    public GameObject EquipmentContent;
-    public GameObject AdventuresContent;
-    public GameObject InventoryContent;
-    public GameObject KnowledgesContent;
-    public GameObject BookstoreContent;
-
     void Start()
     {
         NetworkManager.This.AskSoulCurrentDatas();
@@ -71,22 +60,11 @@ public class Home : MonoBehaviour
         NetworkManager.This.AskEquipment();
         NetworkManager.This.AskKnowledges();
 
-        MainPage.onClick.AddListener(() =>
-        {
-            SceneLoom.Loom.QueueOnMainThread(() =>
-            {
-                foreach (Transform child in Content.transform)
-                {
-                    Destroy(child.gameObject);
-                }
-            });
-        });
-
         PointsAvailable.onClick.AddListener(() =>
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                ShowPills();
+                UIManager.This.ShowPills();
             });
         });
 
@@ -94,7 +72,7 @@ public class Home : MonoBehaviour
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                ShowEquipment();
+                UIManager.This.ShowEquipment();
             });
         });
 
@@ -102,7 +80,7 @@ public class Home : MonoBehaviour
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                ShowInventory();
+                UIManager.This.ShowInventory();
             });
         });
 
@@ -110,7 +88,7 @@ public class Home : MonoBehaviour
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                ShowKnowledges();
+                UIManager.This.ShowKnowledges();
             });
         });
 
@@ -118,9 +96,7 @@ public class Home : MonoBehaviour
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                UIManager.This.ShowLoading();
-
-                ShowAdventures();
+                UIManager.This.ShowAdventures();
             });
         });
 
@@ -128,7 +104,7 @@ public class Home : MonoBehaviour
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                ShowBookstore();
+                UIManager.This.ShowBookstore();
             });
         });
 
@@ -136,7 +112,7 @@ public class Home : MonoBehaviour
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                SceneManager.LoadScene(2);
+                UIManager.This.ShowMarket();
             });
         });
     }
@@ -146,7 +122,7 @@ public class Home : MonoBehaviour
         Level.text = DatasManager.Instance.Datas.Level.ToString();
         Name.text = DatasManager.Instance.Datas.Name;
 
-        Experience.text = string.Format("[{0}/{1}]", DatasManager.Instance.Datas.CurrentExperience, DatasManager.Instance.Datas.RequiredExperience);
+        Experience.text = string.Format("[{0} / {1}]", DatasManager.Instance.Datas.CurrentExperience, DatasManager.Instance.Datas.RequiredExperience);
 
         Health.text = string.Format("[{0}]", DatasManager.Instance.Datas.MaxHealth);
         Mana.text = string.Format("[{0}]", DatasManager.Instance.Datas.MaxMana);
@@ -183,103 +159,5 @@ public class Home : MonoBehaviour
         {
             script.UpdateCurrencies();
         }
-    }
-
-    public void UpdateEquipment()
-    {
-        var script = transform.GetComponentInChildren<Equipment>();
-
-        if (script != null)
-        {
-            script.UpdateEquipment();
-        }
-    }
-
-    public void UpdateInventory()
-    {
-        var script = transform.GetComponentInChildren<Inventory>();
-
-        if (script != null)
-        {
-            script.UpdateItems();
-        }
-    }
-
-    public void UpdateKnowledges()
-    {
-        var script = transform.GetComponentInChildren<Knowledges>();
-
-        if (script != null)
-        {
-            script.LoadKnowledges();
-        }
-    }
-
-    private void ShowPills()
-    {
-        foreach (Transform child in Content.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        var advObj = Instantiate(PillsContent, Content.transform);
-        var script = advObj.GetComponent<Pills>();
-        script.UpdateCurrencies();
-    }
-
-    private void ShowEquipment()
-    {
-        foreach (Transform child in Content.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        var advObj = Instantiate(EquipmentContent, Content.transform);
-        var script = advObj.GetComponent<Equipment>();
-        script.UpdateEquipment();
-    }
-
-    private void ShowAdventures()
-    {
-        foreach (Transform child in Content.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        var advObj = Instantiate(AdventuresContent, Content.transform);
-        var script = advObj.GetComponent<Adventures>();
-    }
-
-    private void ShowInventory()
-    {
-        foreach (Transform child in Content.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        var advObj = Instantiate(InventoryContent, Content.transform);
-        var script = advObj.GetComponent<Inventory>();
-    }
-
-    private void ShowKnowledges()
-    {
-        foreach (Transform child in Content.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        var advObj = Instantiate(KnowledgesContent, Content.transform);
-        var script = advObj.GetComponent<Knowledges>();
-    }
-
-    private void ShowBookstore()
-    {
-        foreach (Transform child in Content.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        var advObj = Instantiate(BookstoreContent, Content.transform);
-        var script = advObj.GetComponent<Bookstore>();
     }
 }

@@ -9,7 +9,7 @@ public class Adventures : MonoBehaviour
     public GameObject Content;
     public GameObject AdventureListItem;
 
-    void Start()
+    void Awake()
     {
         LoadAdventures();
     }
