@@ -56,7 +56,20 @@ namespace Server.GameServer.Commands.Dungeon
                         {
                             case Network.Items.ItemType.Armor:
                             case Network.Items.ItemType.Bag:
-                            case Network.Items.ItemType.Weapon:
+                            case Network.Items.ItemType.Axe:
+                            case Network.Items.ItemType.Book:
+                            case Network.Items.ItemType.Bow:
+                            case Network.Items.ItemType.Crossbow:
+                            case Network.Items.ItemType.Dagger:
+                            case Network.Items.ItemType.Fist:
+                            case Network.Items.ItemType.Gun:
+                            case Network.Items.ItemType.Mace:
+                            case Network.Items.ItemType.Polearm:
+                            case Network.Items.ItemType.Shield:
+                            case Network.Items.ItemType.Staff:
+                            case Network.Items.ItemType.Sword:
+                            case Network.Items.ItemType.Wand:
+                            case Network.Items.ItemType.Whip:
                             case Network.Items.ItemType.Jewelry:
                                 {
                                     inventory.Add(new Network.InventorySlot
@@ -68,6 +81,7 @@ namespace Server.GameServer.Commands.Dungeon
                                     });
                                 }
                                 break;
+                            case Network.Items.ItemType.Junk:
                             case Network.Items.ItemType.Consumable:
                                 {
                                     var exists = inventory.FirstOrDefault(i => i.ItemId.Equals(bag.ItemId));

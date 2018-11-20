@@ -135,24 +135,7 @@ namespace Server.GameServer
                         LootedAt = inventorySlot.LootedAt
                     };
 
-                    switch (inventorySlot.Type)
-                    {
-                        case DataModels.Items.ItemType.Armor:
-                            slot.Type = Network.Items.ItemType.Armor;
-                            break;
-                        case DataModels.Items.ItemType.Bag:
-                            slot.Type = Network.Items.ItemType.Bag;
-                            break;
-                        case DataModels.Items.ItemType.Consumable:
-                            slot.Type = Network.Items.ItemType.Consumable;
-                            break;
-                        case DataModels.Items.ItemType.Jewelry:
-                            slot.Type = Network.Items.ItemType.Jewelry;
-                            break;
-                        case DataModels.Items.ItemType.Weapon:
-                            slot.Type = Network.Items.ItemType.Weapon;
-                            break;
-                    }
+                    slot.Type = DataManager.ConvertItemType(inventorySlot.Type);
 
                     component.Inventory.Add(slot);
                 }
@@ -392,104 +375,104 @@ namespace Server.GameServer
 
             if (!Guid.Empty.Equals(equipment.Head))
             {
-                var item = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(equipment.Head));
+                var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(equipment.Head));
 
                 data.ItemLevel += item.ItemLevel;
-                data.Armor += item.ArmorValue;
+                data.Armor += item.ArmorValue != null ? (int)item.ArmorValue : 0;
                 AddStatValue(data, item.Stats);
             }
 
             if (!Guid.Empty.Equals(equipment.Shoulder))
             {
-                var item = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(equipment.Shoulder));
+                var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(equipment.Shoulder));
 
                 data.ItemLevel += item.ItemLevel;
-                data.Armor += item.ArmorValue;
+                data.Armor += item.ArmorValue != null ? (int)item.ArmorValue : 0;
                 AddStatValue(data, item.Stats);
             }
 
             if (!Guid.Empty.Equals(equipment.Torso))
             {
-                var item = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(equipment.Torso));
+                var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(equipment.Torso));
 
                 data.ItemLevel += item.ItemLevel;
-                data.Armor += item.ArmorValue;
+                data.Armor += item.ArmorValue != null ? (int)item.ArmorValue : 0;
                 AddStatValue(data, item.Stats);
             }
 
             if (!Guid.Empty.Equals(equipment.Belt))
             {
-                var item = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(equipment.Belt));
+                var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(equipment.Belt));
 
                 data.ItemLevel += item.ItemLevel;
-                data.Armor += item.ArmorValue;
+                data.Armor += item.ArmorValue != null ? (int)item.ArmorValue : 0;
                 AddStatValue(data, item.Stats);
             }
 
             if (!Guid.Empty.Equals(equipment.Hand))
             {
-                var item = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(equipment.Hand));
+                var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(equipment.Hand));
 
                 data.ItemLevel += item.ItemLevel;
-                data.Armor += item.ArmorValue;
+                data.Armor += item.ArmorValue != null ? (int)item.ArmorValue : 0;
                 AddStatValue(data, item.Stats);
             }
 
             if (!Guid.Empty.Equals(equipment.Leg))
             {
-                var item = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(equipment.Leg));
+                var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(equipment.Leg));
 
                 data.ItemLevel += item.ItemLevel;
-                data.Armor += item.ArmorValue;
+                data.Armor += item.ArmorValue != null ? (int)item.ArmorValue : 0;
                 AddStatValue(data, item.Stats);
             }
 
             if (!Guid.Empty.Equals(equipment.Pants))
             {
-                var item = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(equipment.Pants));
+                var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(equipment.Pants));
 
                 data.ItemLevel += item.ItemLevel;
-                data.Armor += item.ArmorValue;
+                data.Armor += item.ArmorValue != null ? (int)item.ArmorValue : 0;
                 AddStatValue(data, item.Stats);
             }
 
             if (!Guid.Empty.Equals(equipment.Feet))
             {
-                var item = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(equipment.Feet));
+                var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(equipment.Feet));
 
                 data.ItemLevel += item.ItemLevel;
-                data.Armor += item.ArmorValue;
+                data.Armor += item.ArmorValue != null ? (int)item.ArmorValue : 0;
                 AddStatValue(data, item.Stats);
             }
 
             if (!Guid.Empty.Equals(equipment.Bag))
             {
-                var item = DataManager.Instance.Bags.FirstOrDefault(a => a.Id.Equals(equipment.Bag));
+                var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(equipment.Bag));
 
                 data.ItemLevel += item.ItemLevel;
-                data.BagSpace = item.SlotCount;
+                data.BagSpace = item.SlotCount != null ? (int)item.SlotCount : 0;
                 AddStatValue(data, item.Stats);
             }
 
             if (!Guid.Empty.Equals(equipment.WeaponRight))
             {
-                var item = DataManager.Instance.Weapons.FirstOrDefault(a => a.Id.Equals(equipment.WeaponRight));
+                var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(equipment.WeaponRight));
 
                 data.ItemLevel += item.ItemLevel;
-                data.MinDamages += item.MinDamages;
-                data.MaxDamages += item.MaxDamages;
-                data.WeaponTypes.Add(item.WeaponType.ToString());
+                data.MinDamages += item.MinDamages != null ? (int)item.MinDamages : 0;
+                data.MaxDamages += item.MaxDamages != null ? (int)item.MaxDamages : 0;
+                data.WeaponTypes.Add(item.Slot.ToString());
                 AddStatValue(data, item.Stats);
             }
 
             if (!Guid.Empty.Equals(equipment.WeaponLeft))
             {
-                var item = DataManager.Instance.Weapons.FirstOrDefault(a => a.Id.Equals(equipment.WeaponLeft));
+                var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(equipment.WeaponLeft));
 
                 data.ItemLevel += item.ItemLevel;
-                data.MinDamages += item.MinDamages;
-                data.MaxDamages += item.MaxDamages;
-                data.WeaponTypes.Add(item.WeaponType.ToString());
+                data.MinDamages += item.MinDamages != null ? (int)item.MinDamages : 0;
+                data.MaxDamages += item.MaxDamages != null ? (int)item.MaxDamages : 0;
+                data.WeaponTypes.Add(item.Slot.ToString());
                 AddStatValue(data, item.Stats);
             }
         }

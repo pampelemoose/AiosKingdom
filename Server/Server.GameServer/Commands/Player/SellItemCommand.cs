@@ -45,57 +45,13 @@ namespace Server.GameServer.Commands.Player
             }
 
 
-            switch (inventorySlot.Type)
+            var exists = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(inventorySlot.ItemId));
+            if (exists == null)
             {
-                case Network.Items.ItemType.Armor:
-                    {
-                        var exists = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(inventorySlot.ItemId));
-                        if (exists == null)
-                        {
-                            return objectNotFound(ret);
-                        }
-
-                        currencies.Shards += exists.SellingPrice;
-                    }
-                    break;
-                case Network.Items.ItemType.Bag:
-                    {
-                        var exists = DataManager.Instance.Bags.FirstOrDefault(a => a.Id.Equals(inventorySlot.ItemId));
-                        if (exists == null)
-                        {
-                            return objectNotFound(ret);
-                        }
-
-                        currencies.Shards += exists.SellingPrice;
-                    }
-                    break;
-                case Network.Items.ItemType.Weapon:
-                    {
-                        var exists = DataManager.Instance.Weapons.FirstOrDefault(a => a.Id.Equals(inventorySlot.ItemId));
-                        if (exists == null)
-                        {
-                            return objectNotFound(ret);
-                        }
-
-                        currencies.Shards += exists.SellingPrice;
-                    }
-                    break;
-                case Network.Items.ItemType.Jewelry:
-                    {
-                    }
-                    break;
-                case Network.Items.ItemType.Consumable:
-                    {
-                        var exists = DataManager.Instance.Consumables.FirstOrDefault(a => a.Id.Equals(inventorySlot.ItemId));
-                        if (exists == null)
-                        {
-                            return objectNotFound(ret);
-                        }
-
-                        currencies.Shards += exists.SellingPrice;
-                    }
-                    break;
+                return objectNotFound(ret);
             }
+
+            currencies.Shards += exists.SellingPrice;
 
             SoulManager.Instance.UpdateInventory(ret.ClientId, inventory);
             SoulManager.Instance.UpdateCurrencies(ret.ClientId, currencies);

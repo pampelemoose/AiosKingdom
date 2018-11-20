@@ -1,50 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Validation;
 using System.Linq;
+using System.Data.Entity;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity.Validation;
 
 namespace DataRepositories
 {
-    public static class ArmorRepository
+    public static class ItemRepository
     {
-        public static List<DataModels.Items.Armor> GetAll()
+        public static List<DataModels.Items.Item> GetAll()
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Armors.ToList();
+                return context.Items.ToList();
             }
         }
 
-        public static List<DataModels.Items.Armor> GetAllForVersion(Guid versionId)
+        public static List<DataModels.Items.Item> GetAllForVersion(Guid versionId)
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Armors.Include(a => a.Stats).Where(b => b.VersionId.Equals(versionId)).ToList();
+                return context.Items
+                    .Include(a => a.Stats)
+                    .Include(a => a.Effects)
+                    .Where(b => b.VersionId.Equals(versionId)).ToList();
             }
         }
 
-        public static DataModels.Items.Armor GetById(Guid id)
+        public static DataModels.Items.Item GetById(Guid id)
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Armors.Include(a => a.Stats).FirstOrDefault(a => a.ItemId.Equals(id));
+                return context.Items
+                    .Include(a => a.Stats)
+                    .Include(a => a.Effects)
+                    .FirstOrDefault(a => a.ItemId.Equals(id));
             }
         }
 
-        public static bool Create(DataModels.Items.Armor armor)
+        public static bool Create(DataModels.Items.Item item)
         {
             using (var context = new AiosKingdomContext())
             {
-                if (context.Armors.FirstOrDefault(u => u.Name.Equals(armor.Name)) != null)
+                if (context.Items.FirstOrDefault(u => u.Name.Equals(item.Name)) != null)
                     return false;
 
-                if (armor.Id.Equals(Guid.Empty))
+                if (item.Id.Equals(Guid.Empty))
                     return false;
 
-                context.Armors.Add(armor);
+                context.Items.Add(item);
                 try
                 {
                     context.SaveChanges();
@@ -64,31 +70,38 @@ namespace DataRepositories
             }
         }
 
-        public static bool Update(DataModels.Items.Armor armor)
+        public static bool Update(DataModels.Items.Item item)
         {
             using (var context = new AiosKingdomContext())
             {
-                var online = context.Armors
+                var online = context.Items
                     .Include(s => s.Stats)
-                    .FirstOrDefault(u => u.Id.Equals(armor.Id));
+                    .Include(s => s.Effects)
+                    .FirstOrDefault(u => u.Id.Equals(item.Id));
 
                 if (online == null)
                     return false;
 
-                online.VersionId = armor.VersionId;
-                online.Name = armor.Name;
-                online.Description = armor.Description;
-                online.Image = armor.Image;
-                online.ItemLevel = armor.ItemLevel;
-                online.Quality = armor.Quality;
-                online.UseLevelRequired = armor.UseLevelRequired;
-                online.Space = armor.Space;
-                online.SellingPrice = armor.SellingPrice;
-                online.ArmorValue = armor.ArmorValue;
+                online.VersionId = item.VersionId;
+                online.Name = item.Name;
+                online.Description = item.Description;
+                online.ItemLevel = item.ItemLevel;
+                online.Quality = item.Quality;
+                online.UseLevelRequired = item.UseLevelRequired;
+                online.Space = item.Space;
+                online.SellingPrice = item.SellingPrice;
 
                 context.ItemStats.RemoveRange(online.Stats);
+                online.Stats = item.Stats;
 
-                online.Stats = armor.Stats;
+                context.ItemEffects.RemoveRange(online.Effects);
+                online.Effects = item.Effects;
+
+                online.ArmorValue = item.ArmorValue;
+                online.SlotCount = item.SlotCount;
+
+                online.MinDamages = item.MinDamages;
+                online.MaxDamages = item.MaxDamages;
 
                 try
                 {

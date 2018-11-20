@@ -30,22 +30,13 @@ namespace Server.GameServer
         {
             _config = config;
 
-            LoadArmors();
-            LoadBags();
-            LoadConsumables();
-            LoadWeapons();
-
+            LoadItems();
             LoadBooks();
-
             LoadDungeons();
-
             LoadMonsters();
         }
 
-        public List<Network.Items.Armor> Armors { get; private set; }
-        public List<Network.Items.Bag> Bags { get; private set; }
-        public List<Network.Items.Consumable> Consumables { get; private set; }
-        public List<Network.Items.Weapon> Weapons { get; private set; }
+        public List<Network.Items.Item> Items { get; private set; }
 
         public List<Network.Skills.Book> Books { get; private set; }
 
@@ -55,76 +46,85 @@ namespace Server.GameServer
 
         public List<Network.MarketSlot> Market { get; private set; }
 
-        private void LoadArmors()
+        private void LoadItems()
         {
-            var armors = DataRepositories.ArmorRepository.GetAllForVersion(_config.VersionId);
-            var armorList = new List<Network.Items.Armor>();
-            foreach (var armor in armors)
+            var items = DataRepositories.ItemRepository.GetAllForVersion(_config.VersionId);
+            var itemList = new List<Network.Items.Item>();
+            foreach (var item in items)
             {
-                var arm = new Network.Items.Armor
+                var itm = new Network.Items.Item
                 {
-                    Id = armor.ItemId,
-                    Name = armor.Name,
-                    Description = armor.Description,
-                    Image = armor.Image,
-                    ItemLevel = armor.ItemLevel,
-                    UseLevelRequired = armor.UseLevelRequired,
-                    SellingPrice = armor.SellingPrice,
-                    Space = armor.Space,
-                    ArmorValue = armor.ArmorValue,
+                    Id = item.ItemId,
+                    Name = item.Name,
+                    Description = item.Description,
+                    ItemLevel = item.ItemLevel,
+                    UseLevelRequired = item.UseLevelRequired,
+                    Space = item.Space,
+                    SellingPrice = item.SellingPrice,
+
+                    ArmorValue = item.ArmorValue,
+                    SlotCount = item.SlotCount,
+                    MinDamages = item.MinDamages,
+                    MaxDamages = item.MaxDamages,
                 };
 
-                arm.Type = Network.Items.ItemType.Armor;
-
-                switch (armor.Quality)
+                switch (item.Quality)
                 {
                     case DataModels.Items.ItemQuality.Common:
-                        arm.Quality = Network.Items.ItemQuality.Common;
+                        itm.Quality = Network.Items.ItemQuality.Common;
                         break;
                     case DataModels.Items.ItemQuality.Uncommon:
-                        arm.Quality = Network.Items.ItemQuality.Uncommon;
+                        itm.Quality = Network.Items.ItemQuality.Uncommon;
                         break;
                     case DataModels.Items.ItemQuality.Rare:
-                        arm.Quality = Network.Items.ItemQuality.Rare;
+                        itm.Quality = Network.Items.ItemQuality.Rare;
                         break;
                     case DataModels.Items.ItemQuality.Epic:
-                        arm.Quality = Network.Items.ItemQuality.Epic;
+                        itm.Quality = Network.Items.ItemQuality.Epic;
                         break;
                     case DataModels.Items.ItemQuality.Legendary:
-                        arm.Quality = Network.Items.ItemQuality.Legendary;
+                        itm.Quality = Network.Items.ItemQuality.Legendary;
                         break;
                 }
 
-                switch (armor.Part)
+                itm.Type = ConvertItemType(item.Type);
+
+                switch (item.Slot)
                 {
-                    case DataModels.Items.ArmorPart.Belt:
-                        arm.Part = Network.Items.ArmorPart.Belt;
+                    case DataModels.Items.ItemSlot.Belt:
+                        itm.Slot = Network.Items.ItemSlot.Belt;
                         break;
-                    case DataModels.Items.ArmorPart.Feet:
-                        arm.Part = Network.Items.ArmorPart.Feet;
+                    case DataModels.Items.ItemSlot.Feet:
+                        itm.Slot = Network.Items.ItemSlot.Feet;
                         break;
-                    case DataModels.Items.ArmorPart.Hand:
-                        arm.Part = Network.Items.ArmorPart.Hand;
+                    case DataModels.Items.ItemSlot.Hand:
+                        itm.Slot = Network.Items.ItemSlot.Hand;
                         break;
-                    case DataModels.Items.ArmorPart.Head:
-                        arm.Part = Network.Items.ArmorPart.Head;
+                    case DataModels.Items.ItemSlot.Head:
+                        itm.Slot = Network.Items.ItemSlot.Head;
                         break;
-                    case DataModels.Items.ArmorPart.Leg:
-                        arm.Part = Network.Items.ArmorPart.Leg;
+                    case DataModels.Items.ItemSlot.Leg:
+                        itm.Slot = Network.Items.ItemSlot.Leg;
                         break;
-                    case DataModels.Items.ArmorPart.Pants:
-                        arm.Part = Network.Items.ArmorPart.Pants;
+                    case DataModels.Items.ItemSlot.Pants:
+                        itm.Slot = Network.Items.ItemSlot.Pants;
                         break;
-                    case DataModels.Items.ArmorPart.Shoulder:
-                        arm.Part = Network.Items.ArmorPart.Shoulder;
+                    case DataModels.Items.ItemSlot.Shoulder:
+                        itm.Slot = Network.Items.ItemSlot.Shoulder;
                         break;
-                    case DataModels.Items.ArmorPart.Torso:
-                        arm.Part = Network.Items.ArmorPart.Torso;
+                    case DataModels.Items.ItemSlot.Torso:
+                        itm.Slot = Network.Items.ItemSlot.Torso;
+                        break;
+                    case DataModels.Items.ItemSlot.OneHand:
+                        itm.Slot = Network.Items.ItemSlot.OneHand;
+                        break;
+                    case DataModels.Items.ItemSlot.TwoHand:
+                        itm.Slot = Network.Items.ItemSlot.TwoHand;
                         break;
                 }
 
-                arm.Stats = new List<Network.Items.ItemStat>();
-                foreach (var stat in armor.Stats)
+                itm.Stats = new List<Network.Items.ItemStat>();
+                foreach (var stat in item.Stats)
                 {
                     var st = new Network.Items.ItemStat
                     {
@@ -153,140 +153,16 @@ namespace Server.GameServer
                             break;
                     }
 
-                    arm.Stats.Add(st);
+                    itm.Stats.Add(st);
                 }
 
-                armorList.Add(arm);
-            }
-
-            Armors = armorList;
-        }
-
-        private void LoadBags()
-        {
-            var bags = DataRepositories.BagRepository.GetAllForVersion(_config.VersionId);
-            var bagList = new List<Network.Items.Bag>();
-            foreach (var bag in bags)
-            {
-                var ba = new Network.Items.Bag
+                itm.Effects = new List<Network.Items.ItemEffect>();
+                foreach (var effect in item.Effects)
                 {
-                    Id = bag.ItemId,
-                    Name = bag.Name,
-                    Description = bag.Description,
-                    Image = bag.Image,
-                    ItemLevel = bag.ItemLevel,
-                    UseLevelRequired = bag.UseLevelRequired,
-                    SellingPrice = bag.SellingPrice,
-                    Space = bag.Space,
-                    SlotCount = bag.SlotCount
-                };
-
-                ba.Type = Network.Items.ItemType.Bag;
-
-                switch (bag.Quality)
-                {
-                    case DataModels.Items.ItemQuality.Common:
-                        ba.Quality = Network.Items.ItemQuality.Common;
-                        break;
-                    case DataModels.Items.ItemQuality.Uncommon:
-                        ba.Quality = Network.Items.ItemQuality.Uncommon;
-                        break;
-                    case DataModels.Items.ItemQuality.Rare:
-                        ba.Quality = Network.Items.ItemQuality.Rare;
-                        break;
-                    case DataModels.Items.ItemQuality.Epic:
-                        ba.Quality = Network.Items.ItemQuality.Epic;
-                        break;
-                    case DataModels.Items.ItemQuality.Legendary:
-                        ba.Quality = Network.Items.ItemQuality.Legendary;
-                        break;
-                }
-
-                ba.Stats = new List<Network.Items.ItemStat>();
-                foreach (var stat in bag.Stats)
-                {
-                    var st = new Network.Items.ItemStat
-                    {
-                        StatValue = stat.StatValue
-                    };
-
-                    switch (stat.Type)
-                    {
-                        case DataModels.Soul.Stats.Agility:
-                            st.Type = Network.Stats.Agility;
-                            break;
-                        case DataModels.Soul.Stats.Energy:
-                            st.Type = Network.Stats.Energy;
-                            break;
-                        case DataModels.Soul.Stats.Intelligence:
-                            st.Type = Network.Stats.Intelligence;
-                            break;
-                        case DataModels.Soul.Stats.Stamina:
-                            st.Type = Network.Stats.Stamina;
-                            break;
-                        case DataModels.Soul.Stats.Strength:
-                            st.Type = Network.Stats.Strength;
-                            break;
-                        case DataModels.Soul.Stats.Wisdom:
-                            st.Type = Network.Stats.Wisdom;
-                            break;
-                    }
-
-                    ba.Stats.Add(st);
-                }
-
-                bagList.Add(ba);
-            }
-
-            Bags = bagList;
-        }
-
-        private void LoadConsumables()
-        {
-            var consumables = DataRepositories.ConsumableRepository.GetAllForVersion(_config.VersionId);
-            var consumableList = new List<Network.Items.Consumable>();
-            foreach (var consumable in consumables)
-            {
-                var cons = new Network.Items.Consumable
-                {
-                    Id = consumable.ItemId,
-                    Name = consumable.Name,
-                    Description = consumable.Description,
-                    Image = consumable.Image,
-                    ItemLevel = consumable.ItemLevel,
-                    UseLevelRequired = consumable.UseLevelRequired,
-                    SellingPrice = consumable.SellingPrice,
-                    Space = consumable.Space
-                };
-
-                cons.Type = Network.Items.ItemType.Consumable;
-
-                switch (consumable.Quality)
-                {
-                    case DataModels.Items.ItemQuality.Common:
-                        cons.Quality = Network.Items.ItemQuality.Common;
-                        break;
-                    case DataModels.Items.ItemQuality.Uncommon:
-                        cons.Quality = Network.Items.ItemQuality.Uncommon;
-                        break;
-                    case DataModels.Items.ItemQuality.Rare:
-                        cons.Quality = Network.Items.ItemQuality.Rare;
-                        break;
-                    case DataModels.Items.ItemQuality.Epic:
-                        cons.Quality = Network.Items.ItemQuality.Epic;
-                        break;
-                    case DataModels.Items.ItemQuality.Legendary:
-                        cons.Quality = Network.Items.ItemQuality.Legendary;
-                        break;
-                }
-
-                cons.Effects = new List<Network.Items.ConsumableEffect>();
-                foreach (var effect in consumable.Effects)
-                {
-                    var eff = new Network.Items.ConsumableEffect
+                    var eff = new Network.Items.ItemEffect
                     {
                         Id = effect.Id,
-                        ConsumableId = effect.ConsumableId,
+                        ItemId = effect.ItemId,
                         Name = effect.Name,
                         Description = effect.Description,
                         AffectTime = effect.AffectTime,
@@ -321,149 +197,13 @@ namespace Server.GameServer
                             break;
                     }
 
-                    cons.Effects.Add(eff);
+                    itm.Effects.Add(eff);
                 }
 
-                consumableList.Add(cons);
+                itemList.Add(itm);
             }
 
-            Consumables = consumableList;
-        }
-
-        private void LoadWeapons()
-        {
-            var weapons = DataRepositories.WeaponRepository.GetAllForVersion(_config.VersionId);
-            var weaponList = new List<Network.Items.Weapon>();
-            foreach (var weapon in weapons)
-            {
-                var weap = new Network.Items.Weapon
-                {
-                    Id = weapon.ItemId,
-                    Name = weapon.Name,
-                    Description = weapon.Description,
-                    Image = weapon.Image,
-                    ItemLevel = weapon.ItemLevel,
-                    UseLevelRequired = weapon.UseLevelRequired,
-                    SellingPrice = weapon.SellingPrice,
-                    Space = weapon.Space,
-                    MinDamages = weapon.MinDamages,
-                    MaxDamages = weapon.MaxDamages
-                };
-
-                weap.Type = Network.Items.ItemType.Weapon;
-
-                switch (weapon.Quality)
-                {
-                    case DataModels.Items.ItemQuality.Common:
-                        weap.Quality = Network.Items.ItemQuality.Common;
-                        break;
-                    case DataModels.Items.ItemQuality.Uncommon:
-                        weap.Quality = Network.Items.ItemQuality.Uncommon;
-                        break;
-                    case DataModels.Items.ItemQuality.Rare:
-                        weap.Quality = Network.Items.ItemQuality.Rare;
-                        break;
-                    case DataModels.Items.ItemQuality.Epic:
-                        weap.Quality = Network.Items.ItemQuality.Epic;
-                        break;
-                    case DataModels.Items.ItemQuality.Legendary:
-                        weap.Quality = Network.Items.ItemQuality.Legendary;
-                        break;
-                }
-
-                switch (weapon.HandlingType)
-                {
-                    case DataModels.Items.HandlingType.OneHand:
-                        weap.HandlingType = Network.Items.HandlingType.OneHand;
-                        break;
-                    case DataModels.Items.HandlingType.TwoHand:
-                        weap.HandlingType = Network.Items.HandlingType.TwoHand;
-                        break;
-                }
-
-                switch (weapon.WeaponType)
-                {
-                    case DataModels.Items.WeaponType.Axe:
-                        weap.WeaponType = Network.Items.WeaponType.Axe;
-                        break;
-                    case DataModels.Items.WeaponType.Book:
-                        weap.WeaponType = Network.Items.WeaponType.Book;
-                        break;
-                    case DataModels.Items.WeaponType.Bow:
-                        weap.WeaponType = Network.Items.WeaponType.Bow;
-                        break;
-                    case DataModels.Items.WeaponType.Crossbow:
-                        weap.WeaponType = Network.Items.WeaponType.Crossbow;
-                        break;
-                    case DataModels.Items.WeaponType.Dagger:
-                        weap.WeaponType = Network.Items.WeaponType.Dagger;
-                        break;
-                    case DataModels.Items.WeaponType.Fist:
-                        weap.WeaponType = Network.Items.WeaponType.Fist;
-                        break;
-                    case DataModels.Items.WeaponType.Gun:
-                        weap.WeaponType = Network.Items.WeaponType.Gun;
-                        break;
-                    case DataModels.Items.WeaponType.Mace:
-                        weap.WeaponType = Network.Items.WeaponType.Mace;
-                        break;
-                    case DataModels.Items.WeaponType.Polearm:
-                        weap.WeaponType = Network.Items.WeaponType.Polearm;
-                        break;
-                    case DataModels.Items.WeaponType.Shield:
-                        weap.WeaponType = Network.Items.WeaponType.Shield;
-                        break;
-                    case DataModels.Items.WeaponType.Staff:
-                        weap.WeaponType = Network.Items.WeaponType.Staff;
-                        break;
-                    case DataModels.Items.WeaponType.Sword:
-                        weap.WeaponType = Network.Items.WeaponType.Sword;
-                        break;
-                    case DataModels.Items.WeaponType.Wand:
-                        weap.WeaponType = Network.Items.WeaponType.Wand;
-                        break;
-                    case DataModels.Items.WeaponType.Whip:
-                        weap.WeaponType = Network.Items.WeaponType.Whip;
-                        break;
-                }
-
-                weap.Stats = new List<Network.Items.ItemStat>();
-                foreach (var stat in weapon.Stats)
-                {
-                    var st = new Network.Items.ItemStat
-                    {
-                        StatValue = stat.StatValue
-                    };
-
-                    switch (stat.Type)
-                    {
-                        case DataModels.Soul.Stats.Agility:
-                            st.Type = Network.Stats.Agility;
-                            break;
-                        case DataModels.Soul.Stats.Energy:
-                            st.Type = Network.Stats.Energy;
-                            break;
-                        case DataModels.Soul.Stats.Intelligence:
-                            st.Type = Network.Stats.Intelligence;
-                            break;
-                        case DataModels.Soul.Stats.Stamina:
-                            st.Type = Network.Stats.Stamina;
-                            break;
-                        case DataModels.Soul.Stats.Strength:
-                            st.Type = Network.Stats.Strength;
-                            break;
-                        case DataModels.Soul.Stats.Wisdom:
-                            st.Type = Network.Stats.Wisdom;
-                            break;
-                    }
-
-                    weap.Stats.Add(st);
-                }
-
-                weaponList.Add(weap);
-            }
-
-            Weapons = weaponList;
+            Items = itemList;
         }
 
         private void LoadBooks()
@@ -595,7 +335,7 @@ namespace Server.GameServer
 
         private void LoadDungeons()
         {
-            var dungeons = DataRepositories.DungeonRepository.GetAllForVersion(_config.VersionId);
+            var dungeons = DataRepositories.AdventureRepository.GetAllForVersion(_config.VersionId);
             var dungeonList = new List<Network.Adventures.Dungeon>();
 
             foreach (var dungeon in dungeons)
@@ -628,24 +368,7 @@ namespace Server.GameServer
                             ShardPrice = shopItem.ShardPrice
                         };
 
-                        switch (shopItem.Type)
-                        {
-                            case DataModels.Items.ItemType.Armor:
-                                shopIt.Type = Network.Items.ItemType.Armor;
-                                break;
-                            case DataModels.Items.ItemType.Bag:
-                                shopIt.Type = Network.Items.ItemType.Bag;
-                                break;
-                            case DataModels.Items.ItemType.Consumable:
-                                shopIt.Type = Network.Items.ItemType.Consumable;
-                                break;
-                            case DataModels.Items.ItemType.Jewelry:
-                                shopIt.Type = Network.Items.ItemType.Jewelry;
-                                break;
-                            case DataModels.Items.ItemType.Weapon:
-                                shopIt.Type = Network.Items.ItemType.Weapon;
-                                break;
-                        }
+                        shopIt.Type = ConvertItemType(shopItem.Type);
 
                         roo.ShopItems.Add(shopIt);
                     }
@@ -660,43 +383,12 @@ namespace Server.GameServer
                             ShardReward = enemy.ShardReward
                         };
 
-                        switch (enemy.EnemyType)
-                        {
-                            case DataModels.Dungeons.EnemyType.Normal:
-                                enn.EnemyType = Network.Adventures.EnemyType.Normal;
-                                break;
-                            case DataModels.Dungeons.EnemyType.Elite:
-                                enn.EnemyType = Network.Adventures.EnemyType.Elite;
-                                break;
-                            case DataModels.Dungeons.EnemyType.Boss:
-                                enn.EnemyType = Network.Adventures.EnemyType.Boss;
-                                break;
-                        }
+                        enn.EnemyType = ConvertEnemyType(enemy.EnemyType);
 
                         roo.Ennemies.Add(enn);
                     }
 
-                    switch (room.Type)
-                    {
-                        case DataModels.Dungeons.RoomType.Boss:
-                            roo.Type = Network.Adventures.RoomType.Boss;
-                            break;
-                        case DataModels.Dungeons.RoomType.Elite:
-                            roo.Type = Network.Adventures.RoomType.Elite;
-                            break;
-                        case DataModels.Dungeons.RoomType.Exit:
-                            roo.Type = Network.Adventures.RoomType.Exit;
-                            break;
-                        case DataModels.Dungeons.RoomType.Fight:
-                            roo.Type = Network.Adventures.RoomType.Fight;
-                            break;
-                        case DataModels.Dungeons.RoomType.Rest:
-                            roo.Type = Network.Adventures.RoomType.Rest;
-                            break;
-                        case DataModels.Dungeons.RoomType.Shop:
-                            roo.Type = Network.Adventures.RoomType.Shop;
-                            break;
-                    }
+                    roo.Type = ConvertRoomType(room.Type);
 
                     dun.Rooms.Add(roo);
                 }
@@ -768,24 +460,7 @@ namespace Server.GameServer
                         Quantity = loot.Quantity
                     };
 
-                    switch (loot.Type)
-                    {
-                        case DataModels.Items.ItemType.Armor:
-                            loo.Type = Network.Items.ItemType.Armor;
-                            break;
-                        case DataModels.Items.ItemType.Bag:
-                            loo.Type = Network.Items.ItemType.Bag;
-                            break;
-                        case DataModels.Items.ItemType.Consumable:
-                            loo.Type = Network.Items.ItemType.Consumable;
-                            break;
-                        case DataModels.Items.ItemType.Jewelry:
-                            loo.Type = Network.Items.ItemType.Jewelry;
-                            break;
-                        case DataModels.Items.ItemType.Weapon:
-                            loo.Type = Network.Items.ItemType.Weapon;
-                            break;
-                    }
+                    loo.Type = ConvertItemType(loot.Type);
 
                     monst.Loots.Add(loo);
                 }
@@ -806,6 +481,83 @@ namespace Server.GameServer
             }
 
             Monsters = monsterList;
+        }
+
+        public static Network.Items.ItemType ConvertItemType(DataModels.Items.ItemType type)
+        {
+            switch (type)
+            {
+                case DataModels.Items.ItemType.Armor:
+                    return Network.Items.ItemType.Armor;
+                case DataModels.Items.ItemType.Axe:
+                    return Network.Items.ItemType.Axe;
+                case DataModels.Items.ItemType.Bag:
+                    return Network.Items.ItemType.Bag;
+                case DataModels.Items.ItemType.Book:
+                    return Network.Items.ItemType.Book;
+                case DataModels.Items.ItemType.Bow:
+                    return Network.Items.ItemType.Bow;
+                case DataModels.Items.ItemType.Consumable:
+                    return Network.Items.ItemType.Consumable;
+                case DataModels.Items.ItemType.Crossbow:
+                    return Network.Items.ItemType.Crossbow;
+                case DataModels.Items.ItemType.Dagger:
+                    return Network.Items.ItemType.Dagger;
+                case DataModels.Items.ItemType.Fist:
+                    return Network.Items.ItemType.Fist;
+                case DataModels.Items.ItemType.Gun:
+                    return Network.Items.ItemType.Gun;
+                case DataModels.Items.ItemType.Jewelry:
+                    return Network.Items.ItemType.Jewelry;
+                case DataModels.Items.ItemType.Junk:
+                    return Network.Items.ItemType.Junk;
+                case DataModels.Items.ItemType.Mace:
+                    return Network.Items.ItemType.Mace;
+                case DataModels.Items.ItemType.Polearm:
+                    return Network.Items.ItemType.Polearm;
+                case DataModels.Items.ItemType.Shield:
+                    return Network.Items.ItemType.Shield;
+                case DataModels.Items.ItemType.Staff:
+                    return Network.Items.ItemType.Staff;
+                case DataModels.Items.ItemType.Sword:
+                    return Network.Items.ItemType.Sword;
+                case DataModels.Items.ItemType.Wand:
+                    return Network.Items.ItemType.Wand;
+            }
+
+            return Network.Items.ItemType.Whip;
+        }
+
+        private Network.Adventures.EnemyType ConvertEnemyType(DataModels.Adventures.EnemyType type)
+        {
+            switch (type)
+            {
+                case DataModels.Adventures.EnemyType.Normal:
+                    return Network.Adventures.EnemyType.Normal;
+                case DataModels.Adventures.EnemyType.Elite:
+                    return Network.Adventures.EnemyType.Elite;
+            }
+
+            return Network.Adventures.EnemyType.Boss;
+        }
+
+        private Network.Adventures.RoomType ConvertRoomType(DataModels.Adventures.RoomType type)
+        {
+            switch (type)
+            {
+                case DataModels.Adventures.RoomType.Boss:
+                    return Network.Adventures.RoomType.Boss;
+                case DataModels.Adventures.RoomType.Elite:
+                    return Network.Adventures.RoomType.Elite;
+                case DataModels.Adventures.RoomType.Exit:
+                    return Network.Adventures.RoomType.Exit;
+                case DataModels.Adventures.RoomType.Fight:
+                    return Network.Adventures.RoomType.Fight;
+                case DataModels.Adventures.RoomType.Rest:
+                    return Network.Adventures.RoomType.Rest;   
+            }
+
+            return Network.Adventures.RoomType.Shop;
         }
     }
 }

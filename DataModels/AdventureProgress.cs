@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataModels
 {
-    public class DungeonProgress
+    public class AdventureProgress
     {
         [Key]
         public Guid Id { get; set; }

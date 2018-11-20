@@ -62,10 +62,8 @@
     <Compile Include="Commands\Dungeon\EnterRoomCommand.cs" />
     <Compile Include="Commands\Dungeon\LootDungeonItemCommand.cs" />
     <Compile Include="Commands\Dungeon\PlayerRestCommand.cs" />
-    <Compile Include="Commands\Listing\ArmorCommand.cs" />
-    <Compile Include="Commands\Listing\BagCommand.cs" />
+    <Compile Include="Commands\Listing\ItemCommand.cs" />
     <Compile Include="Commands\Listing\BookCommand.cs" />
-    <Compile Include="Commands\Listing\WeaponCommand.cs" />
     <Compile Include="Commands\Player\CurrenciesCommand.cs" />
     <Compile Include="Commands\Player\EquipmentCommand.cs" />
     <Compile Include="Commands\Player\InventoryCommand.cs" />
@@ -82,7 +80,6 @@
     <Compile Include="Commands\Server\DisconnectSoulCommand.cs" />
     <Compile Include="Commands\Server\SoulListCommand.cs" />
     <Compile Include="Commands\Player\UseSpiritPillsCommand.cs" />
-    <Compile Include="Commands\Listing\ConsumableCommand.cs" />
     <Compile Include="Commands\Dungeon\EnterCommand.cs" />
     <Compile Include="Commands\Dungeon\ExitCommand.cs" />
     <Compile Include="Commands\Dungeon\LeaveFinishedRoomCommand.cs" />

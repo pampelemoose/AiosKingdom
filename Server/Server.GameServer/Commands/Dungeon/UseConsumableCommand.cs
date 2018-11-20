@@ -27,7 +27,7 @@ namespace Server.GameServer.Commands.Dungeon
                 var slotKnown = adventure.GetActualState().Bag.FirstOrDefault(s => s.InventoryId.Equals(slotId));
                 if (slotKnown != null)
                 {
-                    var item = DataManager.Instance.Consumables.FirstOrDefault(c => c.Id.Equals(slotKnown.ItemId));
+                    var item = DataManager.Instance.Items.FirstOrDefault(c => c.Id.Equals(slotKnown.ItemId) && c.Type == Network.Items.ItemType.Consumable);
                     if (item != null)
                     {
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);

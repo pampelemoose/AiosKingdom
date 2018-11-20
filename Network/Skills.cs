@@ -91,17 +91,17 @@ namespace Network.Skills
         public bool IncludeWeaponDamages { get; set; }
 
         public string InternalWeaponTypes { get; set; }
-        public List<Items.WeaponType> WeaponTypes
+        public List<Items.ItemSlot> WeaponTypes
         {
             get
             {
-                var result = new List<Items.WeaponType>();
+                var result = new List<Items.ItemSlot>();
                 if (InternalWeaponTypes != null)
                 {
                     foreach (var str in InternalWeaponTypes.Split(';'))
                     {
                         if (!String.IsNullOrEmpty(str))
-                            result.Add((Items.WeaponType)Enum.Parse(typeof(Items.WeaponType), str));
+                            result.Add((Items.ItemSlot)Enum.Parse(typeof(Items.ItemSlot), str));
                     }
                 }
                 return result;
@@ -116,17 +116,17 @@ namespace Network.Skills
         public float WeaponDamagesRatio { get; set; }
 
         public string InternalPreferredWeaponTypes { get; set; }
-        public List<Items.WeaponType> PreferredWeaponTypes
+        public List<Items.ItemSlot> PreferredWeaponTypes
         {
             get
             {
-                var result = new List<Items.WeaponType>();
+                var result = new List<Items.ItemSlot>();
                 if (InternalPreferredWeaponTypes != null)
                 {
                     foreach (var str in InternalPreferredWeaponTypes.Split(';'))
                     {
                         if (!String.IsNullOrEmpty(str))
-                            result.Add((Items.WeaponType)Enum.Parse(typeof(Items.WeaponType), str));
+                            result.Add((Items.ItemSlot)Enum.Parse(typeof(Items.ItemSlot), str));
                     }
                 }
                 return result;

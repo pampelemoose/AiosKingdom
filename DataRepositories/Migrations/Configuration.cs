@@ -21,8 +21,6 @@ namespace DataRepositories.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
 
-            return;
-
             try
             {
                 context.Versions.RemoveRange(context.Versions);
@@ -36,12 +34,9 @@ namespace DataRepositories.Migrations
 
                 context.AppUsers.RemoveRange(context.AppUsers);
 
-                context.Bags.RemoveRange(context.Bags);
-                context.Armors.RemoveRange(context.Armors);
-                context.Weapons.RemoveRange(context.Weapons);
+                context.Items.RemoveRange(context.Items);
                 context.ItemStats.RemoveRange(context.ItemStats);
-                context.Consumables.RemoveRange(context.Consumables);
-                context.ConsumableEffects.RemoveRange(context.ConsumableEffects);
+                context.ItemEffects.RemoveRange(context.ItemEffects);
 
                 context.Books.RemoveRange(context.Books);
                 context.Pages.RemoveRange(context.Pages);
@@ -58,12 +53,12 @@ namespace DataRepositories.Migrations
                 context.Loots.RemoveRange(context.Loots);
                 context.Phases.RemoveRange(context.Phases);
 
-                context.Dungeons.RemoveRange(context.Dungeons);
+                context.Adventures.RemoveRange(context.Adventures);
                 context.Rooms.RemoveRange(context.Rooms);
                 context.ShopItems.RemoveRange(context.ShopItems);
                 context.Enemies.RemoveRange(context.Enemies);
 
-                context.DungeonProgresses.RemoveRange(context.DungeonProgresses);
+                context.AdventureProgresses.RemoveRange(context.AdventureProgresses);
 
                 context.SaveChanges();
 
@@ -116,7 +111,7 @@ namespace DataRepositories.Migrations
                     Roles = context.Roles.Select(r => r.Name).ToList()
                 });
 
-                var bag = context.Bags.Add(new DataModels.Items.Bag
+                var bag = context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Bag, null)
                 {
                     Id = Guid.NewGuid(),
                     VersionId = version.Id,
@@ -126,9 +121,9 @@ namespace DataRepositories.Migrations
                     ItemLevel = 1,
                     Quality = DataModels.Items.ItemQuality.Common,
                     UseLevelRequired = 1,
+                    SellingPrice = 1,
                     SlotCount = 10,
                     Space = 1,
-                    Image = ""
                 });
 
                 context.Configs.Add(new DataModels.Config

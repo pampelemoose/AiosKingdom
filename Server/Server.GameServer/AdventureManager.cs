@@ -76,7 +76,7 @@ namespace Server.GameServer
             if (_adventures.ContainsKey(soulId))
             {
                 var adventure = _adventures[soulId];
-                DataRepositories.DungeonRepository.SaveProgress(soulId, adventure.DungeonId, adventure.RoomNumber);
+                DataRepositories.AdventureRepository.SaveProgress(soulId, adventure.DungeonId, adventure.RoomNumber);
                 _adventures.Remove(soulId);
             }
         }

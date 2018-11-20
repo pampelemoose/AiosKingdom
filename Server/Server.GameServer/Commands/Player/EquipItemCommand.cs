@@ -35,11 +35,11 @@ namespace Server.GameServer.Commands.Player
                 {
                     case Network.Items.ItemType.Armor:
                         {
-                            var item = DataManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(itemSlot.ItemId));
+                            var item = DataManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(itemSlot.ItemId) && a.Type == Network.Items.ItemType.Armor);
                             inventory.Remove(itemSlot);
-                            switch (item.Part) // TODO : refacto, please, ugly
+                            switch (item.Slot) // TODO : refacto, please, ugly
                             {
-                                case Network.Items.ArmorPart.Head:
+                                case Network.Items.ItemSlot.Head:
                                     {
                                         if (Guid.Empty.Equals(equipment.Head))
                                         {
@@ -54,7 +54,7 @@ namespace Server.GameServer.Commands.Player
                                         }
                                     }
                                     break;
-                                case Network.Items.ArmorPart.Shoulder:
+                                case Network.Items.ItemSlot.Shoulder:
                                     {
                                         if (Guid.Empty.Equals(equipment.Shoulder))
                                         {
@@ -69,7 +69,7 @@ namespace Server.GameServer.Commands.Player
                                         }
                                     }
                                     break;
-                                case Network.Items.ArmorPart.Torso:
+                                case Network.Items.ItemSlot.Torso:
                                     {
                                         if (Guid.Empty.Equals(equipment.Torso))
                                         {
@@ -84,7 +84,7 @@ namespace Server.GameServer.Commands.Player
                                         }
                                     }
                                     break;
-                                case Network.Items.ArmorPart.Belt:
+                                case Network.Items.ItemSlot.Belt:
                                     {
                                         if (Guid.Empty.Equals(equipment.Belt))
                                         {
@@ -99,7 +99,7 @@ namespace Server.GameServer.Commands.Player
                                         }
                                     }
                                     break;
-                                case Network.Items.ArmorPart.Hand:
+                                case Network.Items.ItemSlot.Hand:
                                     {
                                         if (Guid.Empty.Equals(equipment.Hand))
                                         {
@@ -114,7 +114,7 @@ namespace Server.GameServer.Commands.Player
                                         }
                                     }
                                     break;
-                                case Network.Items.ArmorPart.Pants:
+                                case Network.Items.ItemSlot.Pants:
                                     {
                                         if (Guid.Empty.Equals(equipment.Pants))
                                         {
@@ -129,7 +129,7 @@ namespace Server.GameServer.Commands.Player
                                         }
                                     }
                                     break;
-                                case Network.Items.ArmorPart.Leg:
+                                case Network.Items.ItemSlot.Leg:
                                     {
                                         if (Guid.Empty.Equals(equipment.Leg))
                                         {
@@ -144,7 +144,7 @@ namespace Server.GameServer.Commands.Player
                                         }
                                     }
                                     break;
-                                case Network.Items.ArmorPart.Feet:
+                                case Network.Items.ItemSlot.Feet:
                                     {
                                         if (Guid.Empty.Equals(equipment.Feet))
                                         {
@@ -164,7 +164,7 @@ namespace Server.GameServer.Commands.Player
                         break;
                     case Network.Items.ItemType.Bag:
                         {
-                            var item = DataManager.Instance.Bags.FirstOrDefault(b => b.Id.Equals(itemSlot.ItemId));
+                            var item = DataManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(itemSlot.ItemId) && b.Type == Network.Items.ItemType.Bag);
                             inventory.Remove(itemSlot);
                             if (Guid.Empty.Equals(equipment.Bag))
                             {
@@ -172,7 +172,7 @@ namespace Server.GameServer.Commands.Player
                             }
                             else
                             {
-                                var bag = DataManager.Instance.Bags.FirstOrDefault(b => b.Id.Equals(equipment.Bag));
+                                var bag = DataManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.Bag));
                                 if (bag != null)
                                 {
                                     Guid toSwap = equipment.Bag;
@@ -183,13 +183,26 @@ namespace Server.GameServer.Commands.Player
                             }
                         }
                         break;
-                    case Network.Items.ItemType.Weapon:
+                    case Network.Items.ItemType.Axe:
+                    case Network.Items.ItemType.Book:
+                    case Network.Items.ItemType.Bow:
+                    case Network.Items.ItemType.Crossbow:
+                    case Network.Items.ItemType.Dagger:
+                    case Network.Items.ItemType.Fist:
+                    case Network.Items.ItemType.Gun:
+                    case Network.Items.ItemType.Mace:
+                    case Network.Items.ItemType.Polearm:
+                    case Network.Items.ItemType.Shield:
+                    case Network.Items.ItemType.Staff:
+                    case Network.Items.ItemType.Sword:
+                    case Network.Items.ItemType.Wand:
+                    case Network.Items.ItemType.Whip:
                         {
-                            var item = DataManager.Instance.Weapons.FirstOrDefault(w => w.Id.Equals(itemSlot.ItemId));
+                            var item = DataManager.Instance.Items.FirstOrDefault(w => w.Id.Equals(itemSlot.ItemId) && w.Type == itemSlot.Type);
                             inventory.Remove(itemSlot);
-                            switch (item.HandlingType)
+                            switch (item.Slot)
                             {
-                                case Network.Items.HandlingType.OneHand:
+                                case Network.Items.ItemSlot.OneHand:
                                     {
                                         if (Guid.Empty.Equals(equipment.WeaponRight))
                                         {
@@ -197,10 +210,10 @@ namespace Server.GameServer.Commands.Player
                                         }
                                         else
                                         {
-                                            var rHand = DataManager.Instance.Weapons.FirstOrDefault(w => w.Id.Equals(equipment.WeaponRight));
+                                            var rHand = DataManager.Instance.Items.FirstOrDefault(w => w.Id.Equals(equipment.WeaponRight));
                                             if (rHand != null)
                                             {
-                                                if (rHand.HandlingType == Network.Items.HandlingType.TwoHand)
+                                                if (rHand.Slot == Network.Items.ItemSlot.TwoHand)
                                                 {
                                                     Guid toSwap = equipment.WeaponRight;
                                                     equipment.WeaponRight = item.Id;
@@ -226,7 +239,7 @@ namespace Server.GameServer.Commands.Player
                                         }
                                     }
                                     break;
-                                case Network.Items.HandlingType.TwoHand:
+                                case Network.Items.ItemSlot.TwoHand:
                                     {
                                         if (Guid.Empty.Equals(equipment.WeaponRight) && Guid.Empty.Equals(equipment.WeaponLeft))
                                         {
@@ -254,11 +267,12 @@ namespace Server.GameServer.Commands.Player
                                                 }
                                                 else
                                                 {
+                                                    var lHand = DataManager.Instance.Items.FirstOrDefault(w => w.Id.Equals(equipment.WeaponLeft));
                                                     inventory.Add(new Network.InventorySlot
                                                     {
                                                         ItemId = equipment.WeaponLeft,
                                                         Quantity = 1,
-                                                        Type = Network.Items.ItemType.Weapon,
+                                                        Type = lHand.Type,
                                                         LootedAt = DateTime.Now
                                                     });
                                                     equipment.WeaponLeft = Guid.Empty;

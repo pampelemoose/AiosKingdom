@@ -28,7 +28,7 @@ namespace Server.GameServer
         private Dictionary<Guid, EnemyStats> _enemiesStats;
         private Dictionary<Guid, Network.LootItem> _loots;
         private List<Network.Skills.Inscription> _marks;
-        private List<Network.Items.ConsumableEffect> _effects;
+        private List<Network.Items.ItemEffect> _effects;
         private Dictionary<Guid, List<Network.Skills.Inscription>> _enemyMarks;
 
         public Adventure(Network.Adventures.Dungeon dungeon, Network.SoulDatas datas, List<Network.AdventureState.BagItem> bagItems, int roomNumber = 0)
@@ -118,7 +118,7 @@ namespace Server.GameServer
             return true;
         }
 
-        public bool UseConsumable(Network.AdventureState.BagItem bagItem, Network.Items.Consumable consumable, Guid enemyId, out List<Network.AdventureState.ActionResult> message)
+        public bool UseConsumable(Network.AdventureState.BagItem bagItem, Network.Items.Item consumable, Guid enemyId, out List<Network.AdventureState.ActionResult> message)
         {
             message = TickTurn(); // TODO : Maybe create a step in between to execute turn related logic
 
@@ -275,7 +275,20 @@ namespace Server.GameServer
                     {
                         case Network.Items.ItemType.Armor:
                         case Network.Items.ItemType.Bag:
-                        case Network.Items.ItemType.Weapon:
+                        case Network.Items.ItemType.Axe:
+                        case Network.Items.ItemType.Book:
+                        case Network.Items.ItemType.Bow:
+                        case Network.Items.ItemType.Crossbow:
+                        case Network.Items.ItemType.Dagger:
+                        case Network.Items.ItemType.Fist:
+                        case Network.Items.ItemType.Gun:
+                        case Network.Items.ItemType.Mace:
+                        case Network.Items.ItemType.Polearm:
+                        case Network.Items.ItemType.Shield:
+                        case Network.Items.ItemType.Staff:
+                        case Network.Items.ItemType.Sword:
+                        case Network.Items.ItemType.Wand:
+                        case Network.Items.ItemType.Whip:
                         case Network.Items.ItemType.Jewelry:
                             {
                                 _state.Bag.Add(new Network.AdventureState.BagItem
@@ -286,6 +299,7 @@ namespace Server.GameServer
                                 });
                             }
                             break;
+                        case Network.Items.ItemType.Junk:
                         case Network.Items.ItemType.Consumable:
                             {
                                 var exists = _state.Bag.FirstOrDefault(b => b.ItemId.Equals(shopItem.ItemId));
@@ -591,7 +605,7 @@ namespace Server.GameServer
             return result;
         }
 
-        private Network.AdventureState.ActionResult ExecutePlayerEffects(Network.Items.ConsumableEffect effect, Guid enemyId = new Guid())
+        private Network.AdventureState.ActionResult ExecutePlayerEffects(Network.Items.ItemEffect effect, Guid enemyId = new Guid())
         {
             var enemy = Guid.Empty.Equals(enemyId) ? null : _state.Enemies[enemyId];
             Network.PlayerState state;
@@ -623,7 +637,7 @@ namespace Server.GameServer
 
             _loots = new Dictionary<Guid, Network.LootItem>();
             _marks = new List<Network.Skills.Inscription>();
-            _effects = new List<Network.Items.ConsumableEffect>();
+            _effects = new List<Network.Items.ItemEffect>();
             _enemyMarks = new Dictionary<Guid, List<Network.Skills.Inscription>>();
 
             var room = _dungeon.Rooms.FirstOrDefault(r => r.RoomNumber == _roomNumber);

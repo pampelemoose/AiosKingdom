@@ -72,7 +72,7 @@ namespace Server.GameServer
         }
 
         public static Network.AdventureState.ActionResult ExecuteEffects(Network.PlayerState from, Network.PlayerState to,
-            Network.Items.ConsumableEffect effect,
+            Network.Items.ItemEffect effect,
             out Network.PlayerState fromOut, out Network.PlayerState toOut)
         {
             fromOut = CopyState(from);
@@ -81,7 +81,7 @@ namespace Server.GameServer
             Network.AdventureState.ActionResult result = new Network.AdventureState.ActionResult
             {
                 IsConsumable = true,
-                Id = effect.ConsumableId,
+                Id = effect.ItemId,
                 Amount = effect.AffectValue
             };
 

@@ -107,6 +107,6 @@ namespace DataModels.Monsters
         [Required]
         public List<Phase> Phases { get; set; }
 
-        public List<Dungeons.Room> Rooms { get; set; }
+        public List<Adventures.Room> Rooms { get; set; }
     }
 }

@@ -108,29 +108,57 @@ namespace Server.GameServer
                     Quantity = marketSlot.Quantity
                 };
 
-                switch (marketSlot.Type)
-                {
-                    case DataModels.Items.ItemType.Armor:
-                        slot.Type = Network.Items.ItemType.Armor;
-                        break;
-                    case DataModels.Items.ItemType.Bag:
-                        slot.Type = Network.Items.ItemType.Bag;
-                        break;
-                    case DataModels.Items.ItemType.Consumable:
-                        slot.Type = Network.Items.ItemType.Consumable;
-                        break;
-                    case DataModels.Items.ItemType.Jewelry:
-                        slot.Type = Network.Items.ItemType.Jewelry;
-                        break;
-                    case DataModels.Items.ItemType.Weapon:
-                        slot.Type = Network.Items.ItemType.Weapon;
-                        break;
-                }
+                slot.Type = ConvertItemType(marketSlot.Type);
 
                 marketList.Add(slot);
             }
 
             Items = marketList;
+        }
+
+        private Network.Items.ItemType ConvertItemType(DataModels.Items.ItemType type)
+        {
+            switch (type)
+            {
+                case DataModels.Items.ItemType.Armor:
+                    return Network.Items.ItemType.Armor;
+                case DataModels.Items.ItemType.Axe:
+                    return Network.Items.ItemType.Axe;
+                case DataModels.Items.ItemType.Bag:
+                    return Network.Items.ItemType.Bag;
+                case DataModels.Items.ItemType.Book:
+                    return Network.Items.ItemType.Book;
+                case DataModels.Items.ItemType.Bow:
+                    return Network.Items.ItemType.Bow;
+                case DataModels.Items.ItemType.Consumable:
+                    return Network.Items.ItemType.Consumable;
+                case DataModels.Items.ItemType.Crossbow:
+                    return Network.Items.ItemType.Crossbow;
+                case DataModels.Items.ItemType.Dagger:
+                    return Network.Items.ItemType.Dagger;
+                case DataModels.Items.ItemType.Fist:
+                    return Network.Items.ItemType.Fist;
+                case DataModels.Items.ItemType.Gun:
+                    return Network.Items.ItemType.Gun;
+                case DataModels.Items.ItemType.Jewelry:
+                    return Network.Items.ItemType.Jewelry;
+                case DataModels.Items.ItemType.Junk:
+                    return Network.Items.ItemType.Junk;
+                case DataModels.Items.ItemType.Mace:
+                    return Network.Items.ItemType.Mace;
+                case DataModels.Items.ItemType.Polearm:
+                    return Network.Items.ItemType.Polearm;
+                case DataModels.Items.ItemType.Shield:
+                    return Network.Items.ItemType.Shield;
+                case DataModels.Items.ItemType.Staff:
+                    return Network.Items.ItemType.Staff;
+                case DataModels.Items.ItemType.Sword:
+                    return Network.Items.ItemType.Sword;
+                case DataModels.Items.ItemType.Wand:
+                    return Network.Items.ItemType.Wand;
+            }
+
+            return Network.Items.ItemType.Whip;
         }
     }
 }

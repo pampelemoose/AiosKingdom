@@ -51,23 +51,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppUser.cs" />
-    <Compile Include="DungeonProgress.cs" />
-    <Compile Include="Dungeons\Enemy.cs" />
-    <Compile Include="Dungeons\ShopItem.cs" />
-    <Compile Include="Dungeons\Dungeon.cs" />
-    <Compile Include="Dungeons\Room.cs" />
+    <Compile Include="AdventureProgress.cs" />
+    <Compile Include="Adventures\Enemy.cs" />
+    <Compile Include="Adventures\ShopItem.cs" />
+    <Compile Include="Adventures\Adventure.cs" />
+    <Compile Include="Adventures\Room.cs" />
     <Compile Include="Equipment.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="AuthToken.cs" />
     <Compile Include="InventorySlot.cs" />
-    <Compile Include="Items\AEquipableItem.cs" />
-    <Compile Include="Items\AItem.cs" />
-    <Compile Include="Items\Armor.cs" />
-    <Compile Include="Items\Bag.cs" />
-    <Compile Include="Items\Consumable.cs" />
-    <Compile Include="Items\ConsumableEffect.cs" />
+    <Compile Include="Items\ItemEffect.cs" />
+    <Compile Include="Items\Item.cs" />
     <Compile Include="Items\ItemStat.cs" />
-    <Compile Include="Items\Weapon.cs" />
     <Compile Include="Kingdom.cs" />
     <Compile Include="Knowledge.cs" />
     <Compile Include="MarketSlot.cs" />

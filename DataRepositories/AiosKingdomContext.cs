@@ -24,12 +24,9 @@ namespace DataRepositories
 
         public DbSet<DataModels.AppUser> AppUsers { get; set; }
 
-        public DbSet<DataModels.Items.Bag> Bags { get; set; }
-        public DbSet<DataModels.Items.Armor> Armors { get; set; }
-        public DbSet<DataModels.Items.Weapon> Weapons { get; set; }
+        public DbSet<DataModels.Items.Item> Items { get; set; }
         public DbSet<DataModels.Items.ItemStat> ItemStats { get; set; }
-        public DbSet<DataModels.Items.Consumable> Consumables { get; set; }
-        public DbSet<DataModels.Items.ConsumableEffect> ConsumableEffects { get; set; }
+        public DbSet<DataModels.Items.ItemEffect> ItemEffects { get; set; }
 
         public DbSet<DataModels.Skills.Book> Books { get; set; }
         public DbSet<DataModels.Skills.Page> Pages { get; set; }
@@ -46,12 +43,12 @@ namespace DataRepositories
         public DbSet<DataModels.Monsters.Loot> Loots { get; set; }
         public DbSet<DataModels.Monsters.Phase> Phases { get; set; }
 
-        public DbSet<DataModels.Dungeons.Dungeon> Dungeons { get; set; }
-        public DbSet<DataModels.Dungeons.Room> Rooms { get; set; }
-        public DbSet<DataModels.Dungeons.ShopItem> ShopItems { get; set; }
-        public DbSet<DataModels.Dungeons.Enemy> Enemies { get; set; }
+        public DbSet<DataModels.Adventures.Adventure> Adventures { get; set; }
+        public DbSet<DataModels.Adventures.Room> Rooms { get; set; }
+        public DbSet<DataModels.Adventures.ShopItem> ShopItems { get; set; }
+        public DbSet<DataModels.Adventures.Enemy> Enemies { get; set; }
 
-        public DbSet<DataModels.DungeonProgress> DungeonProgresses { get; set; }
+        public DbSet<DataModels.AdventureProgress> AdventureProgresses { get; set; }
 
         public DbSet<DataModels.Website.Section> Sections { get; set; }
         public DbSet<DataModels.Website.Banner> Contents { get; set; }

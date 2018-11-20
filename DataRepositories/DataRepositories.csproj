@@ -48,87 +48,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppUserRepository.cs" />
-    <Compile Include="ArmorRepository.cs" />
-    <Compile Include="BagRepository.cs" />
     <Compile Include="BookRepository.cs" />
-    <Compile Include="ConsumableRepository.cs" />
     <Compile Include="AiosKingdomContext.cs" />
     <Compile Include="ConfigRepository.cs" />
-    <Compile Include="DungeonRepository.cs" />
+    <Compile Include="AdventureRepository.cs" />
     <Compile Include="ForumRepository.cs" />
+    <Compile Include="ItemRepository.cs" />
     <Compile Include="KingdomRepository.cs" />
     <Compile Include="MarketRepository.cs" />
-    <Compile Include="Migrations\201808100346479_InitialMigration.cs" />
-    <Compile Include="Migrations\201808100346479_InitialMigration.Designer.cs">
-      <DependentUpon>201808100346479_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808230259043_Item_SellingPrice.cs" />
-    <Compile Include="Migrations\201808230259043_Item_SellingPrice.Designer.cs">
-      <DependentUpon>201808230259043_Item_SellingPrice.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808230548187_Inscription_RemoveDesciption.cs" />
-    <Compile Include="Migrations\201808230548187_Inscription_RemoveDesciption.Designer.cs">
-      <DependentUpon>201808230548187_Inscription_RemoveDesciption.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808230737114_Kingdom_AddCurrentLevelCount.cs" />
-    <Compile Include="Migrations\201808230737114_Kingdom_AddCurrentLevelCount.Designer.cs">
-      <DependentUpon>201808230737114_Kingdom_AddCurrentLevelCount.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808240237236_Section_ContentType.cs" />
-    <Compile Include="Migrations\201808240237236_Section_ContentType.Designer.cs">
-      <DependentUpon>201808240237236_Section_ContentType.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808240243588_Banner_TextColor.cs" />
-    <Compile Include="Migrations\201808240243588_Banner_TextColor.Designer.cs">
-      <DependentUpon>201808240243588_Banner_TextColor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808240345134_Banner_Order.cs" />
-    <Compile Include="Migrations\201808240345134_Banner_Order.Designer.cs">
-      <DependentUpon>201808240345134_Banner_Order.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808270236238_Page_DescSiceChanged.cs" />
-    <Compile Include="Migrations\201808270236238_Page_DescSiceChanged.Designer.cs">
-      <DependentUpon>201808270236238_Page_DescSiceChanged.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808270635018_Monster_BaseHealth.cs" />
-    <Compile Include="Migrations\201808270635018_Monster_BaseHealth.Designer.cs">
-      <DependentUpon>201808270635018_Monster_BaseHealth.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809210321373_UserRolesUpdate.cs" />
-    <Compile Include="Migrations\201809210321373_UserRolesUpdate.Designer.cs">
-      <DependentUpon>201809210321373_UserRolesUpdate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809210556384_ForumInit.cs" />
-    <Compile Include="Migrations\201809210556384_ForumInit.Designer.cs">
-      <DependentUpon>201809210556384_ForumInit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809270550528_CategoryRoles.cs" />
-    <Compile Include="Migrations\201809270550528_CategoryRoles.Designer.cs">
-      <DependentUpon>201809270550528_CategoryRoles.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809270810147_CommentNoReplies.cs" />
-    <Compile Include="Migrations\201809270810147_CommentNoReplies.Designer.cs">
-      <DependentUpon>201809270810147_CommentNoReplies.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809280757022_CommentUsername.cs" />
-    <Compile Include="Migrations\201809280757022_CommentUsername.Designer.cs">
-      <DependentUpon>201809280757022_CommentUsername.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809280758141_ThreadUsername.cs" />
-    <Compile Include="Migrations\201809280758141_ThreadUsername.Designer.cs">
-      <DependentUpon>201809280758141_ThreadUsername.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201810010338049_Tickets.cs" />
-    <Compile Include="Migrations\201810010338049_Tickets.Designer.cs">
-      <DependentUpon>201810010338049_Tickets.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201810010718561_TicketsAssigneeNullable.cs" />
-    <Compile Include="Migrations\201810010718561_TicketsAssigneeNullable.Designer.cs">
-      <DependentUpon>201810010718561_TicketsAssigneeNullable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201810010721099_TicketsAssigneeTimeNullable.cs" />
-    <Compile Include="Migrations\201810010721099_TicketsAssigneeTimeNullable.Designer.cs">
-      <DependentUpon>201810010721099_TicketsAssigneeTimeNullable.cs</DependentUpon>
+    <Compile Include="Migrations\201811200538362_InitialMigration.cs" />
+    <Compile Include="Migrations\201811200538362_InitialMigration.Designer.cs">
+      <DependentUpon>201811200538362_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
@@ -138,7 +68,6 @@
     <Compile Include="AuthTokenRepository.cs" />
     <Compile Include="UserRepository.cs" />
     <Compile Include="VersionRepository.cs" />
-    <Compile Include="WeaponRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -151,59 +80,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201808100346479_InitialMigration.resx">
-      <DependentUpon>201808100346479_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808230259043_Item_SellingPrice.resx">
-      <DependentUpon>201808230259043_Item_SellingPrice.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808230548187_Inscription_RemoveDesciption.resx">
-      <DependentUpon>201808230548187_Inscription_RemoveDesciption.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808230737114_Kingdom_AddCurrentLevelCount.resx">
-      <DependentUpon>201808230737114_Kingdom_AddCurrentLevelCount.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808240237236_Section_ContentType.resx">
-      <DependentUpon>201808240237236_Section_ContentType.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808240243588_Banner_TextColor.resx">
-      <DependentUpon>201808240243588_Banner_TextColor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808240345134_Banner_Order.resx">
-      <DependentUpon>201808240345134_Banner_Order.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808270236238_Page_DescSiceChanged.resx">
-      <DependentUpon>201808270236238_Page_DescSiceChanged.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808270635018_Monster_BaseHealth.resx">
-      <DependentUpon>201808270635018_Monster_BaseHealth.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809210321373_UserRolesUpdate.resx">
-      <DependentUpon>201809210321373_UserRolesUpdate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809210556384_ForumInit.resx">
-      <DependentUpon>201809210556384_ForumInit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809270550528_CategoryRoles.resx">
-      <DependentUpon>201809270550528_CategoryRoles.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809270810147_CommentNoReplies.resx">
-      <DependentUpon>201809270810147_CommentNoReplies.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809280757022_CommentUsername.resx">
-      <DependentUpon>201809280757022_CommentUsername.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809280758141_ThreadUsername.resx">
-      <DependentUpon>201809280758141_ThreadUsername.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201810010338049_Tickets.resx">
-      <DependentUpon>201810010338049_Tickets.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201810010718561_TicketsAssigneeNullable.resx">
-      <DependentUpon>201810010718561_TicketsAssigneeNullable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201810010721099_TicketsAssigneeTimeNullable.resx">
-      <DependentUpon>201810010721099_TicketsAssigneeTimeNullable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201811200538362_InitialMigration.resx">
+      <DependentUpon>201811200538362_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

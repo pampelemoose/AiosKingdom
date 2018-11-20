@@ -5,16 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataModels.Dungeons
+namespace DataModels.Adventures
 {
-    public enum EnemyType
-    {
-        Normal = 0,
-        Elite = 1,
-        Boss = 2
-    }
-
-    public class Enemy
+    public class ShopItem
     {
         [Key]
         public Guid Id { get; set; }
@@ -23,15 +16,16 @@ namespace DataModels.Dungeons
         public Guid RoomId { get; set; }
 
         [Required]
-        public Guid MonsterId { get; set; }
+        public Guid ItemId { get; set; }
 
         [Required]
-        public EnemyType EnemyType { get; set; }
+        public Items.ItemType Type { get; set; }
 
         [Required]
-        public int Level { get; set; }
+        public int Quantity { get; set; }
 
         [Required]
-        public int ShardReward { get; set; }
+        [Range(1, 10000000)]
+        public int ShardPrice { get; set; }
     }
 }

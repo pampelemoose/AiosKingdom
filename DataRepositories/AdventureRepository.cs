@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 
 namespace DataRepositories
 {
-    public static class DungeonRepository
+    public static class AdventureRepository
     {
-        public static List<DataModels.Dungeons.Dungeon> GetAll()
+        public static List<DataModels.Adventures.Adventure> GetAll()
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Dungeons.ToList();
+                return context.Adventures.ToList();
             }
         }
 
-        public static List<DataModels.Dungeons.Dungeon> GetAllForVersion(Guid versionId)
+        public static List<DataModels.Adventures.Adventure> GetAllForVersion(Guid versionId)
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Dungeons
+                return context.Adventures
                     .Include(a => a.Rooms)
                     .Include(a => a.Rooms.Select(r => r.ShopItems))
                     .Include(a => a.Rooms.Select(r => r.Ennemies))
@@ -30,11 +30,11 @@ namespace DataRepositories
             }
         }
 
-        public static DataModels.Dungeons.Dungeon GetById(Guid id)
+        public static DataModels.Adventures.Adventure GetById(Guid id)
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Dungeons
+                return context.Adventures
                     .Include(a => a.Rooms)
                     .Include(a => a.Rooms.Select(r => r.ShopItems))
                     .Include(a => a.Rooms.Select(r => r.Ennemies))
@@ -42,17 +42,17 @@ namespace DataRepositories
             }
         }
 
-        public static bool Create(DataModels.Dungeons.Dungeon dungeon)
+        public static bool Create(DataModels.Adventures.Adventure dungeon)
         {
             using (var context = new AiosKingdomContext())
             {
-                if (context.Dungeons.FirstOrDefault(u => u.Name.Equals(dungeon.Name)) != null)
+                if (context.Adventures.FirstOrDefault(u => u.Name.Equals(dungeon.Name)) != null)
                     return false;
 
                 if (dungeon.Id.Equals(Guid.Empty))
                     return false;
 
-                context.Dungeons.Add(dungeon);
+                context.Adventures.Add(dungeon);
                 try
                 {
                     context.SaveChanges();
@@ -72,11 +72,11 @@ namespace DataRepositories
             }
         }
 
-        public static bool Update(DataModels.Dungeons.Dungeon dungeon)
+        public static bool Update(DataModels.Adventures.Adventure dungeon)
         {
             using (var context = new AiosKingdomContext())
             {
-                var online = context.Dungeons
+                var online = context.Adventures
                     .Include(a => a.Rooms)
                     .Include(a => a.Rooms.Select(r => r.ShopItems))
                     .Include(a => a.Rooms.Select(r => r.Ennemies))
@@ -94,7 +94,7 @@ namespace DataRepositories
 
                 // ROOMS
                 var oldRooms = online.Rooms;
-                online.Rooms = new List<DataModels.Dungeons.Room>();
+                online.Rooms = new List<DataModels.Adventures.Room>();
                 foreach (var room in dungeon.Rooms)
                 {
                     if (Guid.Empty.Equals(room.Id))
@@ -113,7 +113,7 @@ namespace DataRepositories
 
                         // SHOPITEMS
                         var oldShopItems = onlineRoom.ShopItems;
-                        onlineRoom.ShopItems = new List<DataModels.Dungeons.ShopItem>();
+                        onlineRoom.ShopItems = new List<DataModels.Adventures.ShopItem>();
                         foreach (var shopItem in room.ShopItems)
                         {
                             if (Guid.Empty.Equals(shopItem.Id))
@@ -140,7 +140,7 @@ namespace DataRepositories
 
                         // ENEMIES
                         var oldEnemies = onlineRoom.Ennemies;
-                        onlineRoom.Ennemies = new List<DataModels.Dungeons.Enemy>();
+                        onlineRoom.Ennemies = new List<DataModels.Adventures.Enemy>();
                         foreach (var enemy in room.Ennemies)
                         {
                             if (Guid.Empty.Equals(enemy.Id))
@@ -198,21 +198,21 @@ namespace DataRepositories
         {
             using (var context = new AiosKingdomContext())
             {
-                var progressExists = context.DungeonProgresses.FirstOrDefault(p => p.SoulId.Equals(soulId) && p.DungeonId.Equals(dungeonId));
+                var progressExists = context.AdventureProgresses.FirstOrDefault(p => p.SoulId.Equals(soulId) && p.DungeonId.Equals(dungeonId));
                 if (progressExists != null)
                 {
                     progressExists.CurrentRoom = currentRoom;
                 }
                 else
                 {
-                    var progress = new DataModels.DungeonProgress
+                    var progress = new DataModels.AdventureProgress
                     {
                         Id = Guid.NewGuid(),
                         SoulId = soulId,
                         DungeonId = dungeonId,
                         CurrentRoom = currentRoom
                     };
-                    context.DungeonProgresses.Add(progress);
+                    context.AdventureProgresses.Add(progress);
                 }
 
                 try

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DataModels.Dungeons
+namespace DataModels.Adventures
 {
-    public class Dungeon
+    public class Adventure
     {
         [Key]
         public Guid Id { get; set; }

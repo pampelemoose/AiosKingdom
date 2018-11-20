@@ -147,7 +147,7 @@ namespace DataRepositories
 
                 // PROGRESS
                 var oldPro = online.Progress;
-                online.Progress = new List<DataModels.DungeonProgress>();
+                online.Progress = new List<DataModels.AdventureProgress>();
                 foreach (var pro in soul.Progress)
                 {
                     if (Guid.Empty.Equals(pro.Id))
@@ -157,7 +157,7 @@ namespace DataRepositories
                     }
                     else
                     {
-                        var progress = context.DungeonProgresses.FirstOrDefault(i => i.Id.Equals(pro.Id));
+                        var progress = context.AdventureProgresses.FirstOrDefault(i => i.Id.Equals(pro.Id));
                         progress.CurrentRoom = pro.CurrentRoom;
                         online.Progress.Add(progress);
                         oldPro.Remove(oldPro.FirstOrDefault(o => o.Id.Equals(pro.Id)));
@@ -166,7 +166,7 @@ namespace DataRepositories
 
                 foreach (var toDel in oldPro)
                 {
-                    context.DungeonProgresses.Remove(toDel);
+                    context.AdventureProgresses.Remove(toDel);
                 }
 
                 online.CurrentExperience = soul.CurrentExperience;

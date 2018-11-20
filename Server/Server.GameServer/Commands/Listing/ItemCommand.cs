@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Server.GameServer.Commands.Listing
 {
-    public class ConsumableCommand : ACommand
+    public class ItemCommand : ACommand
     {
-        public ConsumableCommand(CommandArgs args)
+        public ItemCommand(CommandArgs args)
             : base(args)
         {
         }
@@ -18,8 +18,8 @@ namespace Server.GameServer.Commands.Listing
         {
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Listing.Consumable,
-                Json = JsonConvert.SerializeObject(DataManager.Instance.Consumables)
+                Code = Network.CommandCodes.Listing.Item,
+                Json = JsonConvert.SerializeObject(DataManager.Instance.Items)
             };
             ret.Succeeded = true;
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataModels.Dungeons
+namespace DataModels.Adventures
 {
     public enum RoomType
     {

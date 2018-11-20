@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DataModels.Items
 {
@@ -11,8 +12,27 @@ namespace DataModels.Items
         Consumable = 0,
         Bag = 1,
         Armor = 2,
-        Weapon = 3,
-        Jewelry = 4
+        Jewelry = 4,
+
+        Junk = 10,
+
+        Fist = 100,
+        Dagger,
+        Sword,
+        Axe,
+        Mace,
+
+        Polearm,
+        Staff,
+
+        Shield,
+
+        Wand,
+        Bow,
+        Gun,
+        Crossbow,
+        Book,
+        Whip
     }
 
     public enum ItemQuality
@@ -24,7 +44,22 @@ namespace DataModels.Items
         Legendary = 4
     }
 
-    public abstract class AItem
+    public enum ItemSlot
+    {
+        Head = 0,
+        Shoulder = 1,
+        Torso = 2,
+        Belt = 3,
+        Pants = 4,
+        Leg = 5,
+        Feet = 6,
+        Hand = 7,
+
+        OneHand = 10,
+        TwoHand = 11
+    }
+
+    public class Item
     {
         [Key]
         public Guid Id { get; set; }
@@ -35,63 +70,67 @@ namespace DataModels.Items
         public Guid ItemId { get; set; }
 
         [Required(ErrorMessage = "Name required"), MinLength(4), MaxLength(50)]
-        [Display(Name = "Name")]
         public string Name { get; set; }
 
-        [NotMapped]
-        public string ItemName
-        {
-            get { return $"[{Type}] {Name}"; }
-        }
-
         [Required(ErrorMessage = "Description required"), MinLength(4), MaxLength(200)]
-        [Display(Name = "Description")]
         public string Description { get; set; }
 
-        private string _image = "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";
-        [Display(Name = "Image")]
-        public string Image
-        {
-            get { return _image; }
-            set { _image = value; }
-        }
+        [Required(ErrorMessage = "Quality required")]
+        public ItemQuality Quality { get; set; }
 
         private ItemType _type;
         [Required(ErrorMessage = "Type required")]
-        [Display(Name = "Type")]
         public ItemType Type
         {
             get { return _type; }
             private set { _type = value; }
         }
 
-        [Required(ErrorMessage = "Quality required")]
-        [Display(Name = "Quality")]
-        public ItemQuality Quality { get; set; }
+        private ItemSlot? _slot;
+        public ItemSlot? Slot
+        {
+            get { return _slot; }
+            private set { _slot = value; }
+        }
 
         [Required(ErrorMessage = "ItemLevel required")]
-        [Display(Name = "Item Level")]
         [Range(1, 400, ErrorMessage = "ItemLevel should be higher than 0")]
         public int ItemLevel { get; set; }
 
         [Required(ErrorMessage = "UseLevelRequired required")]
-        [Display(Name = "Level Required")]
         [Range(1, 400)]
         public int UseLevelRequired { get; set; }
 
         [Required(ErrorMessage = "Space required")]
-        [Display(Name = "Space")]
         [Range(1, 400)]
         public int Space { get; set; }
 
         [Required(ErrorMessage = "SellingPrice required")]
-        [Display(Name = "SellingPrice")]
         [Range(1, 10000000)]
         public int SellingPrice { get; set; }
 
-        public AItem(ItemType type)
+        public List<ItemStat> Stats { get; set; }
+        public List<ItemEffect> Effects { get; set; }
+
+        [Range(1, 400)]
+        public int? ArmorValue { get; set; }
+
+        public int? SlotCount { get; set; }
+
+        [Range(1, 400)]
+        public int? MinDamages { get; set; }
+        [Range(1, 400)]
+        public int? MaxDamages { get; set; }
+
+        public Item()
+        {
+            _type = ItemType.Junk;
+        }
+
+        public Item(ItemType type, ItemSlot? slot)
         {
             _type = type;
+            _slot = slot;
         }
     }
 }
