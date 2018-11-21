@@ -110,7 +110,6 @@ namespace DataRepositories
                             .Include(i => i.Inscriptions)
                             .FirstOrDefault(i => i.Id.Equals(page.Id));
                         onlinePage.Description = page.Description;
-                        onlinePage.Image = page.Image;
                         onlinePage.Rank = page.Rank;
                         onlinePage.EmberCost = page.EmberCost;
                         onlinePage.ManaCost = page.ManaCost;

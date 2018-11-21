@@ -21,6 +21,8 @@ namespace DataRepositories.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
 
+            return;
+
             try
             {
                 context.Versions.RemoveRange(context.Versions);
@@ -73,13 +75,9 @@ namespace DataRepositories.Migrations
                 context.Roles.Add(new DataModels.Role { Name = "Child" });
 
                 context.Roles.Add(new DataModels.Role { Name = "ItemSmith" });
-                context.Roles.Add(new DataModels.Role { Name = "ArmorSmith" });
-                context.Roles.Add(new DataModels.Role { Name = "WeaponSmith" });
-                context.Roles.Add(new DataModels.Role { Name = "BagSmith" });
-                context.Roles.Add(new DataModels.Role { Name = "ConsumableSmith" });
 
                 context.Roles.Add(new DataModels.Role { Name = "BookWriter" });
-                context.Roles.Add(new DataModels.Role { Name = "DungeonCreator" });
+                context.Roles.Add(new DataModels.Role { Name = "AdventureCreator" });
                 context.Roles.Add(new DataModels.Role { Name = "MonsterCreator" });
                 context.Roles.Add(new DataModels.Role { Name = "MarketRegulator" });
 

@@ -54,14 +54,6 @@ namespace DataModels.Monsters
         [Required]
         public string Story { get; set; }
 
-        private string _image = "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";
-        [Display(Name = "Image")]
-        public string Image
-        {
-            get { return _image; }
-            set { _image = value; }
-        }
-
         [Required]
         [Range(1, 10000000)]
         public int BaseHealth { get; set; }

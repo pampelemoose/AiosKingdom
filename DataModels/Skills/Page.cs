@@ -16,13 +16,6 @@ namespace DataModels.Skills
         [Required, MaxLength(400)]
         public string Description { get; set; }
 
-        private string _image = "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";
-        public string Image
-        {
-            get { return _image; }
-            set { _image = value; }
-        }
-
         [Required]
         public int EmberCost { get; set; }
 
