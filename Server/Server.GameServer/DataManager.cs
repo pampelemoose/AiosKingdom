@@ -244,7 +244,6 @@ namespace Server.GameServer
                     {
                         Id = page.Id,
                         Description = page.Description,
-                        Image = page.Image,
                         Rank = page.Rank,
                         EmberCost = page.EmberCost,
                         ManaCost = page.ManaCost,
@@ -412,7 +411,6 @@ namespace Server.GameServer
                     Name = monster.Name,
                     Description = monster.Description,
                     Story = monster.Story,
-                    Image = monster.Image,
                     BaseHealth = monster.BaseHealth,
                     BaseExperience = monster.BaseExperience,
                     ExperiencePerLevelRatio = monster.ExperiencePerLevelRatio,
