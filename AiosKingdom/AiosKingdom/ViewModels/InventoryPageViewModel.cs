@@ -110,11 +110,11 @@ namespace AiosKingdom.ViewModels
 
         #endregion
 
-        private List<Models.InventoryItemModel<Network.Items.Armor>> _armors;
-        public List<Models.InventoryItemModel<Network.Items.Armor>> Armors => _armors;
+        private List<Models.InventoryItemModel> _armors;
+        public List<Models.InventoryItemModel> Armors => _armors;
 
-        private Models.InventoryItemModel<Network.Items.Armor> _selectedArmor;
-        public Models.InventoryItemModel<Network.Items.Armor> SelectedArmor
+        private Models.InventoryItemModel _selectedArmor;
+        public Models.InventoryItemModel SelectedArmor
         {
             get { return _selectedArmor; }
             set
@@ -148,11 +148,11 @@ namespace AiosKingdom.ViewModels
                 IsBusy = true;
             }, () => { return _armorSlotIsSelected && _selectedArmor?.Item.UseLevelRequired <= DatasManager.Instance.Datas.Level; }));
 
-        private List<Models.InventoryItemModel<Network.Items.Bag>> _bags;
-        public List<Models.InventoryItemModel<Network.Items.Bag>> Bags => _bags;
+        private List<Models.InventoryItemModel> _bags;
+        public List<Models.InventoryItemModel> Bags => _bags;
 
-        private Models.InventoryItemModel<Network.Items.Bag> _selectedBag;
-        public Models.InventoryItemModel<Network.Items.Bag> SelectedBag
+        private Models.InventoryItemModel _selectedBag;
+        public Models.InventoryItemModel SelectedBag
         {
             get { return _selectedBag; }
             set
@@ -176,11 +176,11 @@ namespace AiosKingdom.ViewModels
                 //NetworkManager.Instance.EquipItem(_selectedWeapon.Slot.Id);
             }, () => { return _bagSlotIsSelected && _selectedBag?.Item.UseLevelRequired <= DatasManager.Instance.Datas.Level; }));
 
-        private List<Models.InventoryItemModel<Network.Items.Consumable>> _consumables;
-        public List<Models.InventoryItemModel<Network.Items.Consumable>> Consumables => _consumables;
+        private List<Models.InventoryItemModel> _consumables;
+        public List<Models.InventoryItemModel> Consumables => _consumables;
 
-        private Models.InventoryItemModel<Network.Items.Consumable> _selectedConsumable;
-        public Models.InventoryItemModel<Network.Items.Consumable> SelectedConsumable
+        private Models.InventoryItemModel _selectedConsumable;
+        public Models.InventoryItemModel SelectedConsumable
         {
             get { return _selectedConsumable; }
             set
@@ -195,11 +195,11 @@ namespace AiosKingdom.ViewModels
         private bool _consumableSlotIsSelected;
         public bool ConsumableSlotIsSelected => _consumableSlotIsSelected;
 
-        private List<Models.InventoryItemModel<Network.Items.Weapon>> _weapons;
-        public List<Models.InventoryItemModel<Network.Items.Weapon>> Weapons => _weapons;
+        private List<Models.InventoryItemModel> _weapons;
+        public List<Models.InventoryItemModel> Weapons => _weapons;
 
-        private Models.InventoryItemModel<Network.Items.Weapon> _selectedWeapon;
-        public Models.InventoryItemModel<Network.Items.Weapon> SelectedWeapon
+        private Models.InventoryItemModel _selectedWeapon;
+        public Models.InventoryItemModel SelectedWeapon
         {
             get { return _selectedWeapon; }
             set
@@ -289,16 +289,16 @@ namespace AiosKingdom.ViewModels
 
         private void SetInventories()
         {
-            _armors = new List<Models.InventoryItemModel<Network.Items.Armor>>();
+            _armors = new List<Models.InventoryItemModel>();
             SelectedArmor = null;
 
-            _bags = new List<Models.InventoryItemModel<Network.Items.Bag>>();
+            _bags = new List<Models.InventoryItemModel>();
             SelectedBag = null;
 
-            _consumables = new List<Models.InventoryItemModel<Network.Items.Consumable>>();
+            _consumables = new List<Models.InventoryItemModel>();
             SelectedConsumable = null;
 
-            _weapons = new List<Models.InventoryItemModel<Network.Items.Weapon>>();
+            _weapons = new List<Models.InventoryItemModel>();
             SelectedWeapon = null;
 
             foreach (var slot in DatasManager.Instance.Inventory.OrderBy(i => i.LootedAt).ToList())
@@ -307,37 +307,39 @@ namespace AiosKingdom.ViewModels
                 {
                     case Network.Items.ItemType.Armor:
                         {
-                            _armors.Add(new Models.InventoryItemModel<Network.Items.Armor>
+                            _armors.Add(new Models.InventoryItemModel
                             {
                                 Slot = slot,
-                                Item = DatasManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(slot.ItemId))
+                                Item = DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(slot.ItemId))
                             });
                         }
                         break;
                     case Network.Items.ItemType.Bag:
                         {
-                            _bags.Add(new Models.InventoryItemModel<Network.Items.Bag>
+                            _bags.Add(new Models.InventoryItemModel
                             {
                                 Slot = slot,
-                                Item = DatasManager.Instance.Bags.FirstOrDefault(a => a.Id.Equals(slot.ItemId))
+                                Item = DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(slot.ItemId))
                             });
                         }
                         break;
                     case Network.Items.ItemType.Consumable:
                         {
-                            _consumables.Add(new Models.InventoryItemModel<Network.Items.Consumable>
+                            _consumables.Add(new Models.InventoryItemModel
                             {
                                 Slot = slot,
-                                Item = DatasManager.Instance.Consumables.FirstOrDefault(a => a.Id.Equals(slot.ItemId))
+                                Item = DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(slot.ItemId))
                             });
                         }
                         break;
-                    case Network.Items.ItemType.Weapon:
+                    case Network.Items.ItemType.Junk:
+                        break;
+                    default:
                         {
-                            _weapons.Add(new Models.InventoryItemModel<Network.Items.Weapon>
+                            _weapons.Add(new Models.InventoryItemModel
                             {
                                 Slot = slot,
-                                Item = DatasManager.Instance.Weapons.FirstOrDefault(a => a.Id.Equals(slot.ItemId))
+                                Item = DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(slot.ItemId))
                             });
                         }
                         break;

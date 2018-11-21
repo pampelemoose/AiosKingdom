@@ -177,19 +177,19 @@ namespace AiosKingdom.ViewModels
         public Network.Equipment Equipment => DatasManager.Instance.Equipment;
         public Network.SoulDatas Datas => DatasManager.Instance.Datas;
 
-        public Network.Items.Armor Head => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Head));
-        public Network.Items.Armor Shoulder => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Shoulder));
-        public Network.Items.Armor Torso => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Torso));
-        public Network.Items.Armor Belt => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Belt));
-        public Network.Items.Armor Hand => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Hand));
-        public Network.Items.Armor Leg => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Leg));
-        public Network.Items.Armor Pants => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Pants));
-        public Network.Items.Armor Feet => DatasManager.Instance.Armors?.FirstOrDefault(a => a.Id.Equals(Equipment?.Feet));
+        public Network.Items.Item Head => DatasManager.Instance.Items?.FirstOrDefault(a => a.Id.Equals(Equipment?.Head));
+        public Network.Items.Item Shoulder => DatasManager.Instance.Items?.FirstOrDefault(a => a.Id.Equals(Equipment?.Shoulder));
+        public Network.Items.Item Torso => DatasManager.Instance.Items?.FirstOrDefault(a => a.Id.Equals(Equipment?.Torso));
+        public Network.Items.Item Belt => DatasManager.Instance.Items?.FirstOrDefault(a => a.Id.Equals(Equipment?.Belt));
+        public Network.Items.Item Hand => DatasManager.Instance.Items?.FirstOrDefault(a => a.Id.Equals(Equipment?.Hand));
+        public Network.Items.Item Leg => DatasManager.Instance.Items?.FirstOrDefault(a => a.Id.Equals(Equipment?.Leg));
+        public Network.Items.Item Pants => DatasManager.Instance.Items?.FirstOrDefault(a => a.Id.Equals(Equipment?.Pants));
+        public Network.Items.Item Feet => DatasManager.Instance.Items?.FirstOrDefault(a => a.Id.Equals(Equipment?.Feet));
 
-        public Network.Items.Weapon WeaponRight => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.Id.Equals(Equipment?.WeaponRight));
-        public Network.Items.Weapon WeaponLeft => DatasManager.Instance.Weapons?.FirstOrDefault(a => a.Id.Equals(Equipment?.WeaponLeft));
+        public Network.Items.Item WeaponRight => DatasManager.Instance.Items?.FirstOrDefault(a => a.Id.Equals(Equipment?.WeaponRight));
+        public Network.Items.Item WeaponLeft => DatasManager.Instance.Items?.FirstOrDefault(a => a.Id.Equals(Equipment?.WeaponLeft));
 
-        public Network.Items.Bag Bag => DatasManager.Instance.Bags?.FirstOrDefault(a => a.Id.Equals(Equipment?.Bag));
+        public Network.Items.Item Bag => DatasManager.Instance.Items?.FirstOrDefault(a => a.Id.Equals(Equipment?.Bag));
 
         private bool _showArmorDetails;
         public bool ShowArmorDetails
@@ -224,14 +224,14 @@ namespace AiosKingdom.ViewModels
             }
         }
 
-        private Network.Items.AItem _selectedItem;
-        public Network.Items.AItem SelectedItem => _selectedItem;
+        private Network.Items.Item _selectedItem;
+        public Network.Items.Item SelectedItem => _selectedItem;
 
         private ICommand _showArmorAction;
         public ICommand ShowArmorAction =>
             _showArmorAction ?? (_showArmorAction = new Command((item) =>
             {
-                var armor = (Network.Items.Armor)item;
+                var armor = (Network.Items.Item)item;
 
                 if (armor == null) return;
 
@@ -257,7 +257,7 @@ namespace AiosKingdom.ViewModels
         public ICommand ShowWeaponAction =>
             _showWeaponAction ?? (_showWeaponAction = new Command((item) =>
             {
-                var weapon = (Network.Items.Weapon)item;
+                var weapon = (Network.Items.Item)item;
 
                 if (weapon == null) return;
 
@@ -283,7 +283,7 @@ namespace AiosKingdom.ViewModels
         public ICommand ShowBagAction =>
             _showBagAction ?? (_showBagAction = new Command((item) =>
             {
-                var bag = (Network.Items.Bag)item;
+                var bag = (Network.Items.Item)item;
 
                 if (bag == null) return;
 

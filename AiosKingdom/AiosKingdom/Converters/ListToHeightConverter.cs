@@ -10,9 +10,9 @@ namespace AiosKingdom.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is List<Network.Items.ConsumableEffect>)
+            if (value is List<Network.Items.ItemEffect>)
             {
-                var list = value as List<Network.Items.ConsumableEffect>;
+                var list = value as List<Network.Items.ItemEffect>;
                 var height = int.Parse((string)parameter);
                 return list.Count * height;
             }

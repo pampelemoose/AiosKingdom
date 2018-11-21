@@ -24,7 +24,7 @@ namespace AiosKingdom.ViewModels.Dungeon
                 {
                     if (slot.Type != Network.Items.ItemType.Consumable.ToString()) continue;
 
-                    var item = DatasManager.Instance.Consumables.FirstOrDefault(b => b.Id.Equals(slot.ItemId));
+                    var item = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(slot.ItemId));
 
                     if (item != null)
                     {

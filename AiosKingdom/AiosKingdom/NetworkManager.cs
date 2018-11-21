@@ -532,10 +532,7 @@ namespace AiosKingdom
                         if (message.Success)
                         {
                             MessagingCenter.Send(this, MessengerCodes.SoulConnected);
-                            AskArmorList();
-                            AskConsumableList();
-                            AskBagList();
-                            AskWeaponList();
+                            AskItemList();
                             AskBookList();
                             AskMonsterList();
                             AskDungeonList();
@@ -698,28 +695,10 @@ namespace AiosKingdom
                     break;
 
                 // LISTING
-                case Network.CommandCodes.Listing.Armor:
+                case Network.CommandCodes.Listing.Item:
                     {
-                        var armors = JsonConvert.DeserializeObject<List<Network.Items.Armor>>(message.Json);
-                        DatasManager.Instance.Armors = armors;
-                    }
-                    break;
-                case Network.CommandCodes.Listing.Consumable:
-                    {
-                        var consumable = JsonConvert.DeserializeObject<List<Network.Items.Consumable>>(message.Json);
-                        DatasManager.Instance.Consumables = consumable;
-                    }
-                    break;
-                case Network.CommandCodes.Listing.Bag:
-                    {
-                        var bags = JsonConvert.DeserializeObject<List<Network.Items.Bag>>(message.Json);
-                        DatasManager.Instance.Bags = bags;
-                    }
-                    break;
-                case Network.CommandCodes.Listing.Weapon:
-                    {
-                        var weapons = JsonConvert.DeserializeObject<List<Network.Items.Weapon>>(message.Json);
-                        DatasManager.Instance.Weapons = weapons;
+                        var items = JsonConvert.DeserializeObject<List<Network.Items.Item>>(message.Json);
+                        DatasManager.Instance.Items = items;
                     }
                     break;
                 case Network.CommandCodes.Listing.Book:
@@ -967,24 +946,9 @@ namespace AiosKingdom
 
         #region Listing Commands
 
-        public void AskArmorList()
+        public void AskItemList()
         {
-            SendRequest(Network.CommandCodes.Listing.Armor);
-        }
-
-        public void AskConsumableList()
-        {
-            SendRequest(Network.CommandCodes.Listing.Consumable);
-        }
-
-        public void AskBagList()
-        {
-            SendRequest(Network.CommandCodes.Listing.Bag);
-        }
-
-        public void AskWeaponList()
-        {
-            SendRequest(Network.CommandCodes.Listing.Weapon);
+            SendRequest(Network.CommandCodes.Listing.Item);
         }
 
         public void AskBookList()

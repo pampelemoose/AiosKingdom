@@ -18,7 +18,7 @@ namespace AiosKingdom.ViewModels
 
             _dungeon = dungeon;
 
-            _items = new List<Models.InventoryItemModel<Network.Items.Consumable>>();
+            _items = new List<Models.InventoryItemModel>();
 
             MessagingCenter.Subscribe<NetworkManager>(this, MessengerCodes.InventoryUpdated, (sender) =>
             {
@@ -36,17 +36,17 @@ namespace AiosKingdom.ViewModels
 
         private void SetInventory()
         {
-            _inventory = new List<Models.InventoryItemModel<Network.Items.Consumable>>();
+            _inventory = new List<Models.InventoryItemModel>();
             foreach (var slot in DatasManager.Instance.Inventory.OrderBy(i => i.LootedAt).ToList())
             {
                 switch (slot.Type)
                 {
                     case Network.Items.ItemType.Consumable:
                         {
-                            _inventory.Add(new Models.InventoryItemModel<Network.Items.Consumable>
+                            _inventory.Add(new Models.InventoryItemModel
                             {
                                 Slot = slot,
-                                Item = DatasManager.Instance.Consumables.FirstOrDefault(a => a.Id.Equals(slot.ItemId))
+                                Item = DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(slot.ItemId))
                             });
                         }
                         break;
@@ -63,11 +63,11 @@ namespace AiosKingdom.ViewModels
             }
         }
 
-        private List<Models.InventoryItemModel<Network.Items.Consumable>> _items;
-        public List<Models.InventoryItemModel<Network.Items.Consumable>> Items => _items;
+        private List<Models.InventoryItemModel> _items;
+        public List<Models.InventoryItemModel> Items => _items;
 
-        private Models.InventoryItemModel<Network.Items.Consumable> _selectedItem;
-        public Models.InventoryItemModel<Network.Items.Consumable> SelectedItem
+        private Models.InventoryItemModel _selectedItem;
+        public Models.InventoryItemModel SelectedItem
         {
             get { return _selectedItem; }
             set
@@ -128,11 +128,11 @@ namespace AiosKingdom.ViewModels
                 return (Quantity < _selectedInventory?.Slot.Quantity && Quantity < (DatasManager.Instance.Datas.BagSpace - Items.Select(i => i.Slot.Quantity).Sum()));
             }));
 
-        private List<Models.InventoryItemModel<Network.Items.Consumable>> _inventory;
-        public List<Models.InventoryItemModel<Network.Items.Consumable>> Inventory => _inventory;
+        private List<Models.InventoryItemModel> _inventory;
+        public List<Models.InventoryItemModel> Inventory => _inventory;
 
-        private Models.InventoryItemModel<Network.Items.Consumable> _selectedInventory;
-        public Models.InventoryItemModel<Network.Items.Consumable> SelectedInventory
+        private Models.InventoryItemModel _selectedInventory;
+        public Models.InventoryItemModel SelectedInventory
         {
             get { return _selectedInventory; }
             set
@@ -161,7 +161,7 @@ namespace AiosKingdom.ViewModels
                     _inventory.Add(_selectedInventory);
                 }
 
-                _items = new List<Models.InventoryItemModel<Network.Items.Consumable>>(_items);
+                _items = new List<Models.InventoryItemModel>(_items);
                 var inBag = _items.FirstOrDefault(i => i.Slot.Id.Equals(_selectedInventory.Slot.Id));
 
                 if (inBag != null)
@@ -172,7 +172,7 @@ namespace AiosKingdom.ViewModels
                 }
                 else
                 {
-                    _items.Add(new Models.InventoryItemModel<Network.Items.Consumable>
+                    _items.Add(new Models.InventoryItemModel
                     {
                         Slot = new Network.InventorySlot
                         {
@@ -186,7 +186,7 @@ namespace AiosKingdom.ViewModels
                     });
                 }
 
-                _inventory = new List<Models.InventoryItemModel<Network.Items.Consumable>>(_inventory);
+                _inventory = new List<Models.InventoryItemModel>(_inventory);
                 _selectedInventory = null;
                 NotifyPropertyChanged(nameof(SelectedInventory));
                 NotifyPropertyChanged(nameof(Items));
@@ -206,7 +206,7 @@ namespace AiosKingdom.ViewModels
                     _items.Add(_selectedItem);
                 }
 
-                _inventory = new List<Models.InventoryItemModel<Network.Items.Consumable>>(_inventory);
+                _inventory = new List<Models.InventoryItemModel>(_inventory);
                 var inInventory = _inventory.FirstOrDefault(i => i.Slot.Id.Equals(_selectedItem.Slot.Id));
 
                 if (inInventory != null)
@@ -217,7 +217,7 @@ namespace AiosKingdom.ViewModels
                 }
                 else
                 {
-                    _inventory.Add(new Models.InventoryItemModel<Network.Items.Consumable>
+                    _inventory.Add(new Models.InventoryItemModel
                     {
                         Slot = new Network.InventorySlot
                         {
@@ -236,7 +236,7 @@ namespace AiosKingdom.ViewModels
                     SelectedItem = null;
                 }
 
-                _items = new List<Models.InventoryItemModel<Network.Items.Consumable>>(_items);
+                _items = new List<Models.InventoryItemModel>(_items);
                 NotifyPropertyChanged(nameof(Items));
                 NotifyPropertyChanged(nameof(Inventory));
                 NotifyPropertyChanged(nameof(Slots));

@@ -31,10 +31,7 @@ namespace AiosKingdom
         public List<Network.Knowledge> Knowledges { get; set; }
         public Network.Equipment Equipment { get; set; }
 
-        public List<Network.Items.Armor> Armors { get; set; }
-        public List<Network.Items.Consumable> Consumables { get; set; }
-        public List<Network.Items.Bag> Bags { get; set; }
-        public List<Network.Items.Weapon> Weapons { get; set; }
+        public List<Network.Items.Item> Items { get; set; }
 
         public List<Network.MarketSlot> MarketItems { get; set; }
 

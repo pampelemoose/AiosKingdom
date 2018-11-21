@@ -20,13 +20,15 @@ namespace AiosKingdom.Converters
                 switch (type)
                 {
                     case Network.Items.ItemType.Armor:
-                        return DatasManager.Instance.Armors.FirstOrDefault(a => a.Id.Equals(loot.ItemId))?.Name;
+                        return DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(loot.ItemId))?.Name;
                     case Network.Items.ItemType.Bag:
-                        return DatasManager.Instance.Bags.FirstOrDefault(a => a.Id.Equals(loot.ItemId))?.Name;
+                        return DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(loot.ItemId))?.Name;
                     case Network.Items.ItemType.Consumable:
-                        return DatasManager.Instance.Consumables.FirstOrDefault(a => a.Id.Equals(loot.ItemId))?.Name;
-                    case Network.Items.ItemType.Weapon:
-                        return DatasManager.Instance.Weapons.FirstOrDefault(a => a.Id.Equals(loot.ItemId))?.Name;
+                        return DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(loot.ItemId))?.Name;
+                    case Network.Items.ItemType.Junk:
+                        break;
+                    default:
+                        return DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(loot.ItemId))?.Name;
                 }
             }
 

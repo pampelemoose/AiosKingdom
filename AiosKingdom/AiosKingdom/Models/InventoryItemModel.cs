@@ -4,9 +4,9 @@ using System.Text;
 
 namespace AiosKingdom.Models
 {
-    public class InventoryItemModel<T> where T : Network.Items.AItem
+    public class InventoryItemModel : Network.Items.Item
     {
         public Network.InventorySlot Slot { get; set; }
-        public T Item { get; set; }
+        public Network.Items.Item Item { get; set; }
     }
 }
