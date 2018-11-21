@@ -12,7 +12,7 @@ public class EffectDetails : MonoBehaviour
     public Text EffectTime;
     public Button Close;
 
-    public void SetDatas(JsonObjects.Items.ConsumableEffect effect)
+    public void SetDatas(JsonObjects.Items.ItemEffect effect)
     {
         gameObject.SetActive(true);
 

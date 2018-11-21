@@ -9,25 +9,25 @@ public class ItemSlot : MonoBehaviour
     public Text Name;
     public Button Action;
 
-    public void InitializeAsArmor(JsonObjects.Items.Armor item)
+    public void InitializeAsArmor(JsonObjects.Items.Item item)
     {
         Name.text = item.Name;
-        Slot.text = item.Part.ToString();
+        Slot.text = item.Slot.ToString();
     }
 
-    public void InitializeAsBag(JsonObjects.Items.Bag item)
+    public void InitializeAsBag(JsonObjects.Items.Item item)
     {
         Name.text = item.Name;
         Slot.text = "Bag";
     }
 
-    public void InitializeAsWeapon(JsonObjects.Items.Weapon item)
+    public void InitializeAsWeapon(JsonObjects.Items.Item item)
     {
         Name.text = item.Name;
-        Slot.text = item.HandlingType.ToString();
+        Slot.text = item.Slot.ToString();
     }
 
-    public void InitializeAsConsumable(JsonObjects.Items.Consumable item)
+    public void InitializeAsConsumable(JsonObjects.Items.Item item)
     {
         Name.text = item.Name;
         Slot.text = "Cons.";

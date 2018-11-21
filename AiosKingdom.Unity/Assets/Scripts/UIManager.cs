@@ -235,8 +235,11 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
 
     public void UpdateCurrencies()
     {
-        var script = Home.GetComponent<Home>();
-        script.UpdateCurrencies();
+        var homeScript = Home.GetComponent<Home>();
+        homeScript.UpdateCurrencies();
+
+        var pillsScript = Pills.GetComponent<Pills>();
+        pillsScript.UpdateCurrencies();
     }
 
     public void UpdateEquipment()

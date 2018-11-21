@@ -28,8 +28,8 @@ public class Inventory : MonoBehaviour
 
             Weapons.onClick.AddListener(() =>
             {
-                UIManager.This.ShowLoading();
-                LoadInventory(JsonObjects.Items.ItemType.Weapon);
+                //UIManager.This.ShowLoading();
+                //LoadInventory(JsonObjects.Items.ItemType.Weapon);
             });
 
             Bags.onClick.AddListener(() =>
@@ -73,7 +73,7 @@ public class Inventory : MonoBehaviour
         {
             case JsonObjects.Items.ItemType.Armor:
                 {
-                    var items = DatasManager.Instance.Armors.Where(a => slotList.Contains(a.Id)).ToList();
+                    var items = DatasManager.Instance.Items.Where(a => slotList.Contains(a.Id)).ToList();
 
                     foreach (var item in items)
                     {
@@ -84,22 +84,22 @@ public class Inventory : MonoBehaviour
                     }
                 }
                 break;
-            case JsonObjects.Items.ItemType.Weapon:
-                {
-                    var items = DatasManager.Instance.Weapons.Where(a => slotList.Contains(a.Id)).ToList();
+            //case JsonObjects.Items.ItemType.Weapon:
+            //    {
+            //        var items = DatasManager.Instance.Items.Where(a => slotList.Contains(a.Id)).ToList();
 
-                    foreach (var item in items)
-                    {
-                        var armObj = Instantiate(ItemSlot, Content.transform);
+            //        foreach (var item in items)
+            //        {
+            //            var armObj = Instantiate(ItemSlot, Content.transform);
 
-                        var script = armObj.GetComponent<ItemSlot>();
-                        script.InitializeAsWeapon(item);
-                    }
-                }
-                break;
+            //            var script = armObj.GetComponent<ItemSlot>();
+            //            script.InitializeAsWeapon(item);
+            //        }
+            //    }
+            //    break;
             case JsonObjects.Items.ItemType.Bag:
                 {
-                    var items = DatasManager.Instance.Bags.Where(a => slotList.Contains(a.Id)).ToList();
+                    var items = DatasManager.Instance.Items.Where(a => slotList.Contains(a.Id)).ToList();
 
                     foreach (var item in items)
                     {
@@ -112,7 +112,7 @@ public class Inventory : MonoBehaviour
                 break;
             case JsonObjects.Items.ItemType.Consumable:
                 {
-                    var items = DatasManager.Instance.Consumables.Where(a => slotList.Contains(a.Id)).ToList();
+                    var items = DatasManager.Instance.Items.Where(a => slotList.Contains(a.Id)).ToList();
 
                     foreach (var item in items)
                     {

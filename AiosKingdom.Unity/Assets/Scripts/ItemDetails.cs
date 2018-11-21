@@ -26,33 +26,33 @@ public class ItemDetails : MonoBehaviour
     private int _currentPage = 1;
 
     private List<JsonObjects.Items.ItemStat> _stats;
-    private List<JsonObjects.Items.ConsumableEffect> _effects;
+    private List<JsonObjects.Items.ItemEffect> _effects;
 
-    public void ShowArmorDetails(JsonObjects.Items.Armor armor)
+    public void ShowArmorDetails(JsonObjects.Items.Item armor)
     {
         InitAitem(armor);
 
         SpecialLabel.text = " * Armor        :";
         SpecialValue.text = string.Format("[{0}]", armor.ArmorValue);
 
-        Type.text = string.Format("Armor - {0}", armor.Part);
+        Type.text = string.Format("Armor - {0}", armor.Slot);
 
         InitStats(armor.Stats);
     }
 
-    public void ShowWeaponsDetails(JsonObjects.Items.Weapon weapon)
+    public void ShowWeaponsDetails(JsonObjects.Items.Item weapon)
     {
         InitAitem(weapon);
 
         SpecialLabel.text = " * Damages      :";
         SpecialValue.text = string.Format("[{0} - {1}]", weapon.MinDamages, weapon.MaxDamages);
 
-        Type.text = string.Format("{0} - {1}", weapon.HandlingType, weapon.WeaponType);
+        Type.text = string.Format("{0} - {1}", weapon.Slot, weapon.Type);
 
         InitStats(weapon.Stats);
     }
 
-    public void ShowBagDetails(JsonObjects.Items.Bag bag)
+    public void ShowBagDetails(JsonObjects.Items.Item bag)
     {
         InitAitem(bag);
 
@@ -64,7 +64,7 @@ public class ItemDetails : MonoBehaviour
         InitStats(bag.Stats);
     }
 
-    public void ShowConsumableDetails(JsonObjects.Items.Consumable consumable)
+    public void ShowConsumableDetails(JsonObjects.Items.Item consumable)
     {
         InitAitem(consumable);
 
@@ -76,9 +76,10 @@ public class ItemDetails : MonoBehaviour
         InitEffects(consumable.Effects);
     }
 
-    private void InitAitem(JsonObjects.Items.AItem item)
+    private void InitAitem(JsonObjects.Items.Item item)
     {
         gameObject.SetActive(true);
+        transform.SetAsLastSibling();
 
         Name.text = item.Name;
         Quality.text = item.Quality.ToString();
@@ -139,7 +140,7 @@ public class ItemDetails : MonoBehaviour
         _pagination.SetIndicator(_currentPage, (_stats.Count / ItemPerPage) + (_stats.Count % ItemPerPage > 0 ? 1 : 0));
     }
 
-    private void InitEffects(List<JsonObjects.Items.ConsumableEffect> effects)
+    private void InitEffects(List<JsonObjects.Items.ItemEffect> effects)
     {
         _stats = null;
         _effects = effects;

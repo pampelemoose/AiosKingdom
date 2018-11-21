@@ -548,13 +548,10 @@ public class NetworkManager : MonoBehaviour
                         });
 
                         //MessagingCenter.Send(this, MessengerCodes.SoulConnected);
-                        AskArmorList();
-                        AskConsumableList();
-                        AskBagList();
-                        AskWeaponList();
+                        AskItemList();
                         AskBookList();
                         AskMonsterList();
-                        AskDungeonList();
+                        AskAdventureList();
                     }
                     else
                     {
@@ -739,47 +736,14 @@ public class NetworkManager : MonoBehaviour
                 break;
 
             // LISTING
-            case JsonObjects.CommandCodes.Listing.Armor:
+            case JsonObjects.CommandCodes.Listing.Item:
                 {
-                    var armors = JsonConvert.DeserializeObject<List<JsonObjects.Items.Armor>>(message.Json);
-                    DatasManager.Instance.Armors = armors;
+                    var items = JsonConvert.DeserializeObject<List<JsonObjects.Items.Item>>(message.Json);
+                    DatasManager.Instance.Items = items;
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        UIManager.This.ContentLoaded("armors");
-                    });
-                }
-                break;
-            case JsonObjects.CommandCodes.Listing.Consumable:
-                {
-                    var consumable = JsonConvert.DeserializeObject<List<JsonObjects.Items.Consumable>>(message.Json);
-                    DatasManager.Instance.Consumables = consumable;
-
-                    SceneLoom.Loom.QueueOnMainThread(() =>
-                    {
-                        UIManager.This.ContentLoaded("consumables");
-                    });
-                }
-                break;
-            case JsonObjects.CommandCodes.Listing.Bag:
-                {
-                    var bags = JsonConvert.DeserializeObject<List<JsonObjects.Items.Bag>>(message.Json);
-                    DatasManager.Instance.Bags = bags;
-
-                    SceneLoom.Loom.QueueOnMainThread(() =>
-                    {
-                        UIManager.This.ContentLoaded("bags");
-                    });
-                }
-                break;
-            case JsonObjects.CommandCodes.Listing.Weapon:
-                {
-                    var weapons = JsonConvert.DeserializeObject<List<JsonObjects.Items.Weapon>>(message.Json);
-                    DatasManager.Instance.Weapons = weapons;
-
-                    SceneLoom.Loom.QueueOnMainThread(() =>
-                    {
-                        UIManager.This.ContentLoaded("weapons");
+                        UIManager.This.ContentLoaded("items");
                     });
                 }
                 break;
@@ -1049,24 +1013,9 @@ public class NetworkManager : MonoBehaviour
 
     #region Listing Commands
 
-    public void AskArmorList()
+    public void AskItemList()
     {
-        SendRequest(JsonObjects.CommandCodes.Listing.Armor);
-    }
-
-    public void AskConsumableList()
-    {
-        SendRequest(JsonObjects.CommandCodes.Listing.Consumable);
-    }
-
-    public void AskBagList()
-    {
-        SendRequest(JsonObjects.CommandCodes.Listing.Bag);
-    }
-
-    public void AskWeaponList()
-    {
-        SendRequest(JsonObjects.CommandCodes.Listing.Weapon);
+        SendRequest(JsonObjects.CommandCodes.Listing.Item);
     }
 
     public void AskBookList()
@@ -1079,7 +1028,7 @@ public class NetworkManager : MonoBehaviour
         SendRequest(JsonObjects.CommandCodes.Listing.Monster);
     }
 
-    public void AskDungeonList()
+    public void AskAdventureList()
     {
         SendRequest(JsonObjects.CommandCodes.Listing.Dungeon);
     }

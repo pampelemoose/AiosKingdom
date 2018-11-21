@@ -6,17 +6,11 @@ using UnityEngine.UI;
 public class ContentLoadingScreen : MonoBehaviour
 {
     public Image Armors;
-    public Image Consumables;
-    public Image Bags;
-    public Image Weapons;
     public Image Books;
     public Image Monsters;
     public Image Adventures;
 
     private bool _armorsLoaded = false;
-    private bool _consumablesLoaded = false;
-    private bool _bagsLoaded = false;
-    private bool _weaponsLoaded = false;
     private bool _booksLoaded = false;
     private bool _monstersLoaded = false;
     private bool _adventuresLoaded = false;
@@ -27,21 +21,9 @@ public class ContentLoadingScreen : MonoBehaviour
 
         switch (name)
         {
-            case "armors":
+            case "items":
                 Armors.color = color;
                 _armorsLoaded = true;
-                break;
-            case "consumables":
-                Consumables.color = color;
-                _consumablesLoaded = true;
-                break;
-            case "bags":
-                Bags.color = color;
-                _bagsLoaded = true;
-                break;
-            case "weapons":
-                Weapons.color = color;
-                _weaponsLoaded = true;
                 break;
             case "books":
                 Books.color = color;
@@ -62,8 +44,7 @@ public class ContentLoadingScreen : MonoBehaviour
     {
         get
         {
-            return _armorsLoaded && _consumablesLoaded && _bagsLoaded && _weaponsLoaded
-                && _booksLoaded && _monstersLoaded && _adventuresLoaded;
+            return _armorsLoaded && _booksLoaded && _monstersLoaded && _adventuresLoaded;
         }
     }
 }

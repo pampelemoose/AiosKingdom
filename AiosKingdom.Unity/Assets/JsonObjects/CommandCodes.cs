@@ -50,14 +50,11 @@ namespace JsonObjects
         {
             private const int _default = 30;
 
-            public const int Armor = _default + 1;
-            public const int Consumable = _default + 2;
-            public const int Bag = _default + 3;
+            public const int Item = _default + 1;
             public const int Book = _default + 4;
             public const int Monster = _default + 5;
             public const int Dungeon = _default + 6;
             public const int Market = _default + 7;
-            public const int Weapon = _default + 8;
         }
 
         public static class Dungeon

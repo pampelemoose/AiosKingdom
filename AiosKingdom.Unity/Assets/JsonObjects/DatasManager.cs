@@ -30,10 +30,7 @@ public class DatasManager
     public List<JsonObjects.Knowledge> Knowledges { get; set; }
     public JsonObjects.Equipment Equipment { get; set; }
 
-    public List<JsonObjects.Items.Armor> Armors { get; set; }
-    public List<JsonObjects.Items.Consumable> Consumables { get; set; }
-    public List<JsonObjects.Items.Bag> Bags { get; set; }
-    public List<JsonObjects.Items.Weapon> Weapons { get; set; }
+    public List<JsonObjects.Items.Item> Items { get; set; }
 
     public List<JsonObjects.MarketSlot> MarketItems { get; set; }
 

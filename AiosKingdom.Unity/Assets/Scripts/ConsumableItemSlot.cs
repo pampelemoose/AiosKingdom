@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ConsumableItemSlot : MonoBehaviour
 {
     private JsonObjects.Items.ItemType _type;
-    private JsonObjects.Items.AItem _item;
+    private JsonObjects.Items.Item _item;
 
     [Header("Main")]
     public Text Name;
@@ -18,7 +18,7 @@ public class ConsumableItemSlot : MonoBehaviour
     public Text ItemLevel;
     public Text RequiredLevel;
 
-    public void Initialize(JsonObjects.Items.Consumable item)
+    public void Initialize(JsonObjects.Items.Item item)
     {
         _type = JsonObjects.Items.ItemType.Consumable;
         _item = item;
@@ -29,7 +29,7 @@ public class ConsumableItemSlot : MonoBehaviour
         rectTrans.sizeDelta = new Vector2(rectTrans.sizeDelta.x, 300);
     }
 
-    private void InitAitem(JsonObjects.Items.AItem item)
+    private void InitAitem(JsonObjects.Items.Item item)
     {
         Name.text = item.Name;
         Quality.text = item.Quality.ToString();
