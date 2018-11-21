@@ -64,6 +64,10 @@
     <Compile Include="Migrations\201811200623480_ImageRemoved.Designer.cs">
       <DependentUpon>201811200623480_ImageRemoved.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811210537387_MarketAndInventoryTypeRemoved.cs" />
+    <Compile Include="Migrations\201811210537387_MarketAndInventoryTypeRemoved.Designer.cs">
+      <DependentUpon>201811210537387_MarketAndInventoryTypeRemoved.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,6 +93,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811200623480_ImageRemoved.resx">
       <DependentUpon>201811200623480_ImageRemoved.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811210537387_MarketAndInventoryTypeRemoved.resx">
+      <DependentUpon>201811210537387_MarketAndInventoryTypeRemoved.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

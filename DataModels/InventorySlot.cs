@@ -15,9 +15,6 @@ namespace DataModels
         public Guid SoulId { get; set; }
 
         [Required]
-        public Items.ItemType Type { get; set; }
-
-        [Required]
         public Guid ItemId { get; set; }
 
         private int _quantity = 1;

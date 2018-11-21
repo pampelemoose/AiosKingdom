@@ -16,8 +16,6 @@ namespace DataModels
         [Required]
         public Guid ServerId { get; set; }
 
-        public Items.ItemType Type { get; set; }
-
         [Required]
         public Guid ItemId { get; set; }
 

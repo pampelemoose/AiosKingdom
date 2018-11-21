@@ -75,7 +75,6 @@ namespace Server.GameServer.Commands.Dungeon
                                     inventory.Add(new Network.InventorySlot
                                     {
                                         ItemId = bag.ItemId,
-                                        Type = type,
                                         Quantity = bag.Quantity,
                                         LootedAt = DateTime.Now
                                     });
@@ -97,7 +96,6 @@ namespace Server.GameServer.Commands.Dungeon
                                         inventory.Add(new Network.InventorySlot
                                         {
                                             ItemId = bag.ItemId,
-                                            Type = type,
                                             Quantity = bag.Quantity,
                                             LootedAt = DateTime.Now
                                         });

@@ -8,7 +8,6 @@ namespace Network
     {
         public Guid Id { get; set; }
 
-        public Items.ItemType Type { get; set; }
         public Guid ItemId { get; set; }
 
         public Guid SellerId { get; set; }

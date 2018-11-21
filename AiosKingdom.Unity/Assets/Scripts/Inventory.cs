@@ -68,13 +68,13 @@ public class Inventory : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        var slotList = DatasManager.Instance.Inventory.Where(s => s.Type == type).Select(s => s.ItemId).ToList();
+        var slotList = DatasManager.Instance.Inventory.Select(s => s.ItemId).ToList();
+        var items = DatasManager.Instance.Items.Where(a => slotList.Contains(a.Id) && a.Type == type).ToList();
+
         switch (type)
         {
             case JsonObjects.Items.ItemType.Armor:
                 {
-                    var items = DatasManager.Instance.Items.Where(a => slotList.Contains(a.Id)).ToList();
-
                     foreach (var item in items)
                     {
                         var armObj = Instantiate(ItemSlot, Content.transform);
@@ -99,8 +99,6 @@ public class Inventory : MonoBehaviour
             //    break;
             case JsonObjects.Items.ItemType.Bag:
                 {
-                    var items = DatasManager.Instance.Items.Where(a => slotList.Contains(a.Id)).ToList();
-
                     foreach (var item in items)
                     {
                         var armObj = Instantiate(ItemSlot, Content.transform);
@@ -112,8 +110,6 @@ public class Inventory : MonoBehaviour
                 break;
             case JsonObjects.Items.ItemType.Consumable:
                 {
-                    var items = DatasManager.Instance.Items.Where(a => slotList.Contains(a.Id)).ToList();
-
                     foreach (var item in items)
                     {
                         var armObj = Instantiate(ItemSlot, Content.transform);

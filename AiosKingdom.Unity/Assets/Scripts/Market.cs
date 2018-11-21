@@ -159,33 +159,34 @@ public class Market : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        var marketList = new List<JsonObjects.MarketSlot>();
-        marketList.AddRange(_slots);
+        var marketList = DatasManager.Instance.MarketItems.ToList();
+        var marketListIds = marketList.Select(s => s.ItemId).ToList();
+        var items = DatasManager.Instance.Items.Where(a => marketListIds.Contains(a.Id)).ToList();
 
         if (_itemType != null)
         {
-            marketList = marketList.Where(m => m.Type == _itemType).ToList();
+            items = items.Where(m => m.Type == _itemType).ToList();
         }
         else
         {
-            marketList = marketList.Skip((_currentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
+            items = items.Skip((_currentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
         }
 
-        foreach (var slot in marketList)
+        foreach (var item in items)
         {
-            switch (slot.Type)
+            var slot = marketList.FirstOrDefault(m => m.ItemId.Equals(item.Id));
+            switch (item.Type)
             {
                 case JsonObjects.Items.ItemType.Armor:
-                    var armor = DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(slot.ItemId));
-                    if (_itemSlot == null || (_itemSlot != null && armor.Slot != _itemSlot))
+                    if (_itemSlot == null || (_itemSlot != null && item.Slot != _itemSlot))
                     {
                         var itemObj = Instantiate(ItemListItem, Items.transform);
                         var itemScript = itemObj.GetComponent<ItemSlot>();
-                        itemScript.InitializeAsArmor(armor);
+                        itemScript.InitializeAsArmor(item);
 
                         itemScript.Action.onClick.AddListener(() =>
                         {
-                            ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(armor);
+                            ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(item);
                             BindItemToBuyBox(slot);
                         });
                     }
@@ -204,9 +205,8 @@ public class Market : MonoBehaviour
                 case JsonObjects.Items.ItemType.Sword:
                 case JsonObjects.Items.ItemType.Wand:
                 case JsonObjects.Items.ItemType.Whip:
-                    var weapon = DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(slot.ItemId));
                     bool canAdd = true;
-                    if (_itemSlot != null && weapon.Slot != _itemSlot)
+                    if (_itemSlot == null || (_itemSlot != null && item.Slot != _itemSlot))
                     {
                         canAdd = false;
                     }
@@ -214,11 +214,11 @@ public class Market : MonoBehaviour
                     {
                         var itemObj = Instantiate(ItemListItem, Items.transform);
                         var itemScript = itemObj.GetComponent<ItemSlot>();
-                        itemScript.InitializeAsWeapon(weapon);
+                        itemScript.InitializeAsWeapon(item);
 
                         itemScript.Action.onClick.AddListener(() =>
                         {
-                            ItemDetails.GetComponent<ItemDetails>().ShowWeaponsDetails(weapon);
+                            ItemDetails.GetComponent<ItemDetails>().ShowWeaponsDetails(item);
                             BindItemToBuyBox(slot);
                         });
                     }
@@ -227,27 +227,25 @@ public class Market : MonoBehaviour
                     {
                         var itemObj = Instantiate(ItemListItem, Items.transform);
                         var itemScript = itemObj.GetComponent<ItemSlot>();
-                        var bag = DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(slot.ItemId));
-                        itemScript.InitializeAsBag(bag);
+                        itemScript.InitializeAsBag(item);
 
                         itemScript.Action.onClick.AddListener(() =>
                         {
-                            ItemDetails.GetComponent<ItemDetails>().ShowBagDetails(bag);
+                            ItemDetails.GetComponent<ItemDetails>().ShowBagDetails(item);
                             BindItemToBuyBox(slot);
                         });
                     }
                     break;
                 case JsonObjects.Items.ItemType.Consumable:
-                    var consumable = DatasManager.Instance.Items.FirstOrDefault(a => a.Id.Equals(slot.ItemId));
-                    if (_effectType == null || (_effectType != null && consumable.Effects.Where(e => e.Type == _effectType).Any()))
+                    if (_effectType == null || (_effectType != null && item.Effects.Where(e => e.Type == _effectType).Any()))
                     {
                         var itemObj = Instantiate(ItemListItem, Items.transform);
                         var itemScript = itemObj.GetComponent<ItemSlot>();
-                        itemScript.InitializeAsConsumable(consumable);
+                        itemScript.InitializeAsConsumable(item);
 
                         itemScript.Action.onClick.AddListener(() =>
                         {
-                            ItemDetails.GetComponent<ItemDetails>().ShowConsumableDetails(consumable);
+                            ItemDetails.GetComponent<ItemDetails>().ShowConsumableDetails(item);
                             BindItemToBuyBox(slot);
                         });
                     }

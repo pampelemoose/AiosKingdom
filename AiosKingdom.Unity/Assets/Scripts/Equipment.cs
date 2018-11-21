@@ -19,94 +19,33 @@ public class Equipment : MonoBehaviour
         }
 
         var equipment = DatasManager.Instance.Equipment;
-        if (!Guid.Empty.Equals(equipment.Head))
+        var equipmentSlots = new List<JsonObjects.Items.ItemSlot>
         {
-            var newObj = Instantiate(ItemSlot, Content.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            var head = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.Head));
-            script.InitializeAsArmor(head);
-            script.Action.onClick.AddListener(() =>
-            {
-                ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(head);
-            });
-        }
-        if (!Guid.Empty.Equals(equipment.Shoulder))
+            JsonObjects.Items.ItemSlot.Belt,
+            JsonObjects.Items.ItemSlot.Feet,
+            JsonObjects.Items.ItemSlot.Hand,
+            JsonObjects.Items.ItemSlot.Head,
+            JsonObjects.Items.ItemSlot.Leg,
+            JsonObjects.Items.ItemSlot.Pants,
+            JsonObjects.Items.ItemSlot.Torso,
+        };
+
+        foreach (var slot in equipmentSlots)
         {
-            var newObj = Instantiate(ItemSlot, Content.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            var shoulder = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.Shoulder));
-            script.InitializeAsArmor(shoulder);
-            script.Action.onClick.AddListener(() =>
+            var armorId = equipment.GetArmorBySlot(slot);
+            if (!Guid.Empty.Equals(armorId))
             {
-                ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(shoulder);
-            });
+                var newObj = Instantiate(ItemSlot, Content.transform);
+                var script = newObj.GetComponent<ItemSlot>();
+                var head = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(armorId));
+                script.InitializeAsArmor(head);
+                script.Action.onClick.AddListener(() =>
+                {
+                    ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(head);
+                });
+            }
         }
-        if (!Guid.Empty.Equals(equipment.Torso))
-        {
-            var newObj = Instantiate(ItemSlot, Content.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            var torso = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.Torso));
-            script.InitializeAsArmor(torso);
-            script.Action.onClick.AddListener(() =>
-            {
-                ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(torso);
-            });
-        }
-        if (!Guid.Empty.Equals(equipment.Belt))
-        {
-            var newObj = Instantiate(ItemSlot, Content.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            var belt = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.Belt));
-            script.InitializeAsArmor(belt);
-            script.Action.onClick.AddListener(() =>
-            {
-                ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(belt);
-            });
-        }
-        if (!Guid.Empty.Equals(equipment.Pants))
-        {
-            var newObj = Instantiate(ItemSlot, Content.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            var pants = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.Pants));
-            script.InitializeAsArmor(pants);
-            script.Action.onClick.AddListener(() =>
-            {
-                ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(pants);
-            });
-        }
-        if (!Guid.Empty.Equals(equipment.Leg))
-        {
-            var newObj = Instantiate(ItemSlot, Content.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            var leg = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.Leg));
-            script.InitializeAsArmor(leg);
-            script.Action.onClick.AddListener(() =>
-            {
-                ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(leg);
-            });
-        }
-        if (!Guid.Empty.Equals(equipment.Feet))
-        {
-            var newObj = Instantiate(ItemSlot, Content.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            var feet = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.Feet));
-            script.InitializeAsArmor(feet);
-            script.Action.onClick.AddListener(() =>
-            {
-                ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(feet);
-            });
-        }
-        if (!Guid.Empty.Equals(equipment.Hand))
-        {
-            var newObj = Instantiate(ItemSlot, Content.transform);
-            var script = newObj.GetComponent<ItemSlot>();
-            var hand = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.Hand));
-            script.InitializeAsArmor(hand);
-            script.Action.onClick.AddListener(() =>
-            {
-                ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(hand);
-            });
-        }
+        
         if (!Guid.Empty.Equals(equipment.WeaponLeft))
         {
             var newObj = Instantiate(ItemSlot, Content.transform);

@@ -57,13 +57,35 @@ namespace JsonObjects
 
         public Guid WeaponRight { get; set; }
         public Guid WeaponLeft { get; set; }
+
+        public Guid GetArmorBySlot(Items.ItemSlot slot)
+        {
+            switch (slot)
+            {
+                case Items.ItemSlot.Belt:
+                    return Belt;
+                case Items.ItemSlot.Feet:
+                    return Feet;
+                case Items.ItemSlot.Hand:
+                    return Hand;
+                case Items.ItemSlot.Head:
+                    return Head;
+                case Items.ItemSlot.Leg:
+                    return Leg;
+                case Items.ItemSlot.Pants:
+                    return Pants;
+                case Items.ItemSlot.Torso:
+                    return Torso;
+            }
+
+            return Guid.Empty;
+        }
     }
 
     public class InventorySlot
     {
         public Guid Id { get; set; }
 
-        public Items.ItemType Type { get; set; }
         public Guid ItemId { get; set; }
         public int Quantity { get; set; }
         public DateTime LootedAt { get; set; }
