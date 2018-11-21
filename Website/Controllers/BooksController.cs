@@ -110,7 +110,6 @@ namespace Website.Controllers
                         Id = pageId,
                         BookId = bookId,
                         Description = pageModel.Description,
-                        Image = pageModel.Image,
                         Rank = pageModel.Rank,
                         EmberCost = pageModel.StatCost,
                         ManaCost = pageModel.ManaCost,
@@ -129,9 +128,9 @@ namespace Website.Controllers
                             Ratio = inscModel.Ratio,
                             Duration = inscModel.Duration,
                             IncludeWeaponDamages = inscModel.IncludeWeaponDamages,
-                            WeaponTypes = inscModel.WeaponTypes?.Select(wt => (DataModels.Items.WeaponType)wt.Type).ToList(),
+                            WeaponTypes = inscModel.WeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
                             WeaponDamagesRatio = inscModel.WeaponDamagesRatio,
-                            PreferredWeaponTypes = inscModel.PreferredWeaponTypes?.Select(wt => (DataModels.Items.WeaponType)wt.Type).ToList(),
+                            PreferredWeaponTypes = inscModel.PreferredWeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
                             PreferredWeaponDamagesRatio = inscModel.PreferredWeaponDamagesRatio
                         };
                         page.Inscriptions.Add(insc);
@@ -206,7 +205,6 @@ namespace Website.Controllers
                     {
                         Id = page.Id,
                         Description = page.Description,
-                        Image = page.Image,
                         Rank = page.Rank,
                         StatCost = page.EmberCost,
                         ManaCost = page.ManaCost,
@@ -359,7 +357,6 @@ namespace Website.Controllers
                     {
                         Id = pageModel.Id,
                         Description = pageModel.Description,
-                        Image = pageModel.Image,
                         Rank = pageModel.Rank,
                         EmberCost = pageModel.StatCost,
                         ManaCost = pageModel.ManaCost,
@@ -377,9 +374,9 @@ namespace Website.Controllers
                             Ratio = inscModel.Ratio,
                             Duration = inscModel.Duration,
                             IncludeWeaponDamages = inscModel.IncludeWeaponDamages,
-                            WeaponTypes = inscModel.WeaponTypes?.Select(wt => (DataModels.Items.WeaponType)wt.Type).ToList(),
+                            WeaponTypes = inscModel.WeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
                             WeaponDamagesRatio = inscModel.WeaponDamagesRatio,
-                            PreferredWeaponTypes = inscModel.PreferredWeaponTypes?.Select(wt => (DataModels.Items.WeaponType)wt.Type).ToList(),
+                            PreferredWeaponTypes = inscModel.PreferredWeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
                             PreferredWeaponDamagesRatio = inscModel.PreferredWeaponDamagesRatio
                         };
                         page.Inscriptions.Add(insc);

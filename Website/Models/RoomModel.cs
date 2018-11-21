@@ -11,7 +11,7 @@ namespace Website.Models
         public Guid Id { get; set; }
 
         [Display(Name = "Type")]
-        public DataModels.Dungeons.RoomType Type { get; set; }
+        public DataModels.Adventures.RoomType Type { get; set; }
 
         [Required(ErrorMessage = "RoomNumber required")]
         [Display(Name = "RoomNumber")]

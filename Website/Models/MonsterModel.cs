@@ -29,14 +29,6 @@ namespace Website.Models
         [Display(Name = "Story")]
         public string Story { get; set; }
 
-        private string _image = "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";
-        [Display(Name = "Image")]
-        public string Image
-        {
-            get { return _image; }
-            set { _image = value; }
-        }
-
         [Required(ErrorMessage = "BaseHealth required")]
         [Display(Name = "BaseHealth")]
         [Range(1, 10000000, ErrorMessage = "BaseHealth should be higher than 0")]

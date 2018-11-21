@@ -29,14 +29,8 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="item-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Items</a>
-                            <div class="dropdown-menu" aria-labelledby="item-dropdown">
-                                @Html.ActionLink("Armors", "Index", "Armors", null, new { @class = "dropdown-item" })
-                                @Html.ActionLink("Consumables", "Index", "Consumables", null, new { @class = "dropdown-item" })
-                                @Html.ActionLink("Bags", "Index", "Bags", null, new { @class = "dropdown-item" })
-                                @Html.ActionLink("Weapons", "Index", "Weapons", null, new { @class = "dropdown-item" })
-                            </div>
+                        <li class="nav-item">
+                            @Html.ActionLink("Items", "Index", "Items", null, new { @class = "nav-link" })
                         </li>
                         <li class="nav-item">
                             @Html.ActionLink("Books", "Index", "Books", null, new { @class = "nav-link" })
@@ -73,7 +67,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link" href="#" id="navbarDropdown"
                                    role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register</a>
-                                <div id="registration_panel" class="dropdown-menu dropdown-menu-right account-dropdown-menu ak-dark-section" aria-labelledby="navbarDropdown">
+                                <div id="registration_panel" class="dropdown-menu dropdown-menu-right account-dropdown-menu" aria-labelledby="navbarDropdown">
                                     @Html.Partial("RegistrationPartial", new Website.Models.RegistrationView())
                                 </div>
                             </li>

@@ -43,7 +43,7 @@
     <section class="bg-info p-2">
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             @Html.LabelFor(model => model.RequiredLevel, htmlAttributes: new { @class = "input-group-text" })
@@ -53,7 +53,7 @@
                     @Html.ValidationMessageFor(model => model.RequiredLevel, "", new { @class = "text-danger" })
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             @Html.LabelFor(model => model.MaxLevelAuthorized, htmlAttributes: new { @class = "input-group-text" })
@@ -63,7 +63,7 @@
                     @Html.ValidationMessageFor(model => model.MaxLevelAuthorized, "", new { @class = "text-danger" })
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-6 mt-1">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             @Html.LabelFor(model => model.ExperienceReward, htmlAttributes: new { @class = "input-group-text" })
@@ -73,7 +73,7 @@
                     @Html.ValidationMessageFor(model => model.ExperienceReward, "", new { @class = "text-danger" })
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-6 mt-1">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             @Html.LabelFor(model => model.ShardReward, htmlAttributes: new { @class = "input-group-text" })
@@ -94,7 +94,7 @@
                     <h2>@Html.LabelFor(model => model.Rooms, htmlAttributes: new { @class = "control-label" })</h2>
                 </div>
                 <div class="col-md-2">
-                    <input class="btn btn-primary btn-block" type="button" id="addRoomToDungeon" value="Add Room" />
+                    <input class="btn btn-block" type="button" id="addRoomToDungeon" value="<Add Room>" />
                 </div>
             </div>
             <div class="row mt-2" id="roomList">
@@ -111,7 +111,7 @@
 
     <section>
         <div class="container">
-            <input type="submit" value="Create" class="btn btn-success btn-block" />
+            <input type="submit" value="<Create>" class="btn btn-block" />
         </div>
     </section>
 }
@@ -121,7 +121,7 @@
         $(document).ready(function () {
             $("#addRoomToDungeon").click(function () {
                 $.ajax({
-                    url: "/Dungeons/AddRoomPartial",
+                    url: "/Adventures/AddRoomPartial",
                     cache: false,
                     type: "GET",
                     success: function (data) {
@@ -135,7 +135,7 @@
         function addShopItemToRoom(room) {
             var elem = document.getElementById('room-card-' + room.id);
             $.ajax({
-                url: "/Dungeons/AddShopItemPartial",
+                url: "/Adventures/AddShopItemPartial",
                 cache: false,
                 type: "GET",
                 data: {
@@ -151,7 +151,7 @@
         function addEnnemyToRoom(ennemy) {
             var elem = document.getElementById('room-card-' + ennemy.id);
             $.ajax({
-                url: "/Dungeons/AddEnemyPartial",
+                url: "/Adventures/AddEnemyPartial",
                 cache: false,
                 type: "GET",
                 data: {

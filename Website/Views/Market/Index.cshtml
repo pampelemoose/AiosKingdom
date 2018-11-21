@@ -63,23 +63,12 @@
             @foreach (var slot in Model.Slots)
             {
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-                    <div class="card text-center mt-3">
+                    <div class="card card-dark text-center mt-3">
                         <div class="card-header">
-                            @switch (slot.Type)
-                            {
-                                case DataModels.Items.ItemType.Armor:
-                                    @DataRepositories.ArmorRepository.GetById(slot.ItemId).ItemName
-                                    break;
-                                case DataModels.Items.ItemType.Bag:
-                                    @DataRepositories.BagRepository.GetById(slot.ItemId).ItemName
-                                    break;
-                                case DataModels.Items.ItemType.Consumable:
-                                    @DataRepositories.ConsumableRepository.GetById(slot.ItemId).ItemName
-                                    break;
-                                case DataModels.Items.ItemType.Weapon:
-                                    @DataRepositories.WeaponRepository.GetById(slot.ItemId).ItemName
-                                    break;
+                            @{ 
+                                var item = DataRepositories.ItemRepository.GetById(slot.ItemId);
                             }
+                            @item.Type - @item.Name
                         </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -104,7 +93,7 @@
                         @if (User.IsInRole("SuperAdmin"))
                         {
                             <div class="card-footer">
-                                @Html.ActionLink("Edit", "Edit", new { id = slot.Id }, new { @class = "btn btn-block btn-primary" })
+                                @Html.ActionLink("<Edit>", "Edit", new { id = slot.Id }, new { @class = "btn btn-block" })
                             </div>
                         }
                     </div>

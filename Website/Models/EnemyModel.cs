@@ -13,7 +13,7 @@ namespace Website.Models
         public string RoomId { get; set; }
 
         [Required]
-        public DataModels.Dungeons.EnemyType EnemyType { get; set; }
+        public DataModels.Adventures.EnemyType EnemyType { get; set; }
 
         [Required]
         public Guid MonsterId { get; set; }

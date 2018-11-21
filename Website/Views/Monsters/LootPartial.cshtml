@@ -3,10 +3,10 @@
 <div class="col-md-12 mt-2">
     @using (Html.BeginCollectionItem("Loots"))
     {
-        <div class="card bg-info">
+        <div class="card card-dark">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="input-group input-group-sm">
                             <div class="input-group-prepend">
                                 @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "input-group-text" })
@@ -15,7 +15,7 @@
                         </div>
                         @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12 mt-1">
                         <div class="input-group input-group-sm">
                             <div class="input-group-prepend">
                                 @Html.LabelFor(model => model.DropRate, htmlAttributes: new { @class = "input-group-text" })
@@ -38,7 +38,7 @@
                             <div class="input-group-prepend">
                                 @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "input-group-text" })
                             </div>
-                            @Html.DropDownListFor(model => model.SelectedItem, new SelectList(Model.Items, "ItemId", "ItemName"), new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.SelectedItem, new SelectList(Model.Items, "ItemId", "Name"), new { @class = "form-control" })
                         </div>
                         @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
                     </div>

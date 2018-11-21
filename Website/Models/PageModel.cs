@@ -14,14 +14,6 @@ namespace Website.Models
         [Display(Name = "Description")]
         public string Description { get; set; }
 
-        private string _image = "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";
-        [Display(Name = "Image")]
-        public string Image
-        {
-            get { return _image; }
-            set { _image = value; }
-        }
-
         [Required(ErrorMessage = "StatCost required")]
         [Display(Name = "StatCost")]
         [Range(1, 10000, ErrorMessage = "StatCost should be higher than 0")]

@@ -18,14 +18,6 @@ namespace Website.Models
         [Display(Name = "Name")]
         public string Name { get; set; }
 
-        /*private string _image = "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";
-        [Display(Name = "Image")]
-        public string Image
-        {
-            get { return _image; }
-            set { _image = value; }
-        }*/
-
         [Required(ErrorMessage = "RequiredLevel required")]
         [Display(Name = "RequiredLevel")]
         [Range(1, 10000, ErrorMessage = "RequiredLevel should be higher than 0")]

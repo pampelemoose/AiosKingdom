@@ -8,7 +8,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h2>Monsters</h2>
+                <h2>Kingdoms</h2>
             </div>
             @*
                 <div class="col-md-6">
@@ -55,37 +55,29 @@
                     @*
                         <tr onclick="location.href = '@(Url.Action("Details", "Monsters", new { id = monster.MonsterId }))'">
                     *@
-                <tr @(kingdom.CurrentMaxLevelCount >= kingdom.MaxLevelCountForGap ? "class=table-danger" : "")>
-                    <td>
-                        <h3 class="mt-0">@kingdom.Name</h3>
-                    </td>
-                    <td>
-                        <div class="text-center">
+                    <tr @(kingdom.CurrentMaxLevelCount >= kingdom.MaxLevelCountForGap ? "class=table-danger" : "")>
+                        <td>
+                            @kingdom.Name
+                        </td>
+                        <td>
                             @kingdom.LevelGap
-                        </div>
-                    </td>
-                    <td>
-                        <div class="text-center">
+                        </td>
+                        <td>
                             @kingdom.CurrentMaxLevel
-                        </div>
-                    </td>
-                    <td>
-                        <div class="text-center">
+                        </td>
+                        <td>
                             @kingdom.MaxLevelCountForGap
-                        </div>
-                    </td>
-                    <td>
-                        <div class="text-center">
+                        </td>
+                        <td>
                             @kingdom.CurrentMaxLevelCount
-                        </div>
-                    </td>
-                    <td>
-                        @if (kingdom.CurrentMaxLevelCount >= kingdom.MaxLevelCountForGap)
-                        {
-                            @Html.ActionLink("Raise", "Raise", new { id = kingdom.Id }, new { @class = "btn btn-block btn-primary" })
-                        }
-                    </td>
-                </tr>
+                        </td>
+                        <td>
+                            @if (kingdom.CurrentMaxLevelCount >= kingdom.MaxLevelCountForGap)
+                            {
+                                @Html.ActionLink("Raise", "Raise", new { id = kingdom.Id }, new { @class = "btn btn-block btn-primary" })
+                            }
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

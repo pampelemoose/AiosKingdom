@@ -11,6 +11,6 @@ namespace Website.Models
         public string InscId { get; set; }
         public string TypeExtension { get; set; }
 
-        public DataModels.Items.WeaponType? Type { get; set; }
+        public DataModels.Items.ItemType? Type { get; set; }
     }
 }

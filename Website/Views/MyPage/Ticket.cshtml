@@ -24,12 +24,12 @@
     </div>
 </section>
 
-<section class="ak-dark-section p-2">
+<section class="p-2">
     <div class="container">
         <div class="row">
             @foreach (var comment in Model.Comments)
             {
-                <div class="col-md-12 card mt-2">
+                <div class="col-md-12 card card-dark mt-2">
                     <div class="card-body">
                         @Html.Raw(comment.Content)
                     </div>

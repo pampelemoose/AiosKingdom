@@ -161,16 +161,14 @@
     <Compile Include="Authentication\CustomSerializeModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AKBaseController.cs" />
-    <Compile Include="Controllers\ArmorsController.cs" />
-    <Compile Include="Controllers\BagsController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
-    <Compile Include="Controllers\ConsumablesController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
-    <Compile Include="Controllers\DungeonsController.cs" />
+    <Compile Include="Controllers\AdventuresController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\GameServersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\KingdomsController.cs" />
     <Compile Include="Controllers\MarketController.cs" />
     <Compile Include="Controllers\MonstersController.cs" />
@@ -178,7 +176,6 @@
     <Compile Include="Controllers\SectionsController.cs" />
     <Compile Include="Controllers\TicketsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Controllers\WeaponsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -188,19 +185,13 @@
     <Compile Include="Models\CommentModel.cs" />
     <Compile Include="Models\DungeonModel.cs" />
     <Compile Include="Models\EnemyModel.cs" />
-    <Compile Include="Models\Filters\AItemFilterModel.cs" />
-    <Compile Include="Models\Filters\ArmorFilter.cs" />
-    <Compile Include="Models\ArmorModel.cs" />
-    <Compile Include="Models\Filters\BagFilter.cs" />
-    <Compile Include="Models\BagModel.cs" />
     <Compile Include="Models\Filters\BookFilter.cs" />
     <Compile Include="Models\BookModel.cs" />
-    <Compile Include="Models\Filters\ConsumableFilter.cs" />
-    <Compile Include="Models\ConsumableModel.cs" />
     <Compile Include="Models\Filters\DungeonFilter.cs" />
-    <Compile Include="Models\Filters\WeaponFilter.cs" />
+    <Compile Include="Models\Filters\ItemFilter.cs" />
     <Compile Include="Models\InscriptionModel.cs" />
     <Compile Include="Models\InscWeaponTypeModel.cs" />
+    <Compile Include="Models\ItemModel.cs" />
     <Compile Include="Models\LootModel.cs" />
     <Compile Include="Models\Filters\MarketSlotFilter.cs" />
     <Compile Include="Models\MarketSlotModel.cs" />
@@ -214,7 +205,6 @@
     <Compile Include="Models\ShopItemModel.cs" />
     <Compile Include="Models\ThreadModel.cs" />
     <Compile Include="Models\UserModel.cs" />
-    <Compile Include="Models\WeaponModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -257,6 +247,8 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Content\press_start_p2-webfont.woff" />
+    <Content Include="Content\press_start_p2-webfont.woff2" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.0.0-vsdoc.js" />
     <Content Include="Scripts\jquery-3.0.0.js" />
@@ -333,16 +325,16 @@
     <Content Include="Views\Shared\LoginPartial.cshtml" />
     <Content Include="Views\Shared\MyAccountPartial.cshtml" />
     <Content Include="Views\Content\SectionPartial.cshtml" />
-    <Content Include="Views\Dungeons\Index.cshtml" />
-    <Content Include="Views\Dungeons\Create.cshtml" />
-    <Content Include="Views\Dungeons\RoomPartial.cshtml" />
-    <Content Include="Views\Dungeons\ShopItemPartial.cshtml" />
-    <Content Include="Views\Dungeons\EnemyPartial.cshtml" />
+    <Content Include="Views\Adventures\Index.cshtml" />
+    <Content Include="Views\Adventures\Create.cshtml" />
+    <Content Include="Views\Adventures\RoomPartial.cshtml" />
+    <Content Include="Views\Adventures\ShopItemPartial.cshtml" />
+    <Content Include="Views\Adventures\EnemyPartial.cshtml" />
     <Content Include="Views\Weapons\Index.cshtml" />
     <Content Include="Views\Weapons\Create.cshtml" />
     <Content Include="Views\Books\WeaponTypePartial.cshtml" />
     <Content Include="Views\Books\Details.cshtml" />
-    <Content Include="Views\Dungeons\Details.cshtml" />
+    <Content Include="Views\Adventures\Details.cshtml" />
     <Content Include="Views\Weapons\Edit.cshtml" />
     <Content Include="Views\Market\Edit.cshtml" />
     <Content Include="Views\Bags\Edit.cshtml" />
@@ -350,7 +342,7 @@
     <Content Include="Views\Books\Edit.cshtml" />
     <Content Include="Views\Consumables\Edit.cshtml" />
     <Content Include="Views\Monsters\Edit.cshtml" />
-    <Content Include="Views\Dungeons\Edit.cshtml" />
+    <Content Include="Views\Adventures\Edit.cshtml" />
     <Content Include="Views\Kingdoms\Index.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Sections\Index.cshtml" />
@@ -376,6 +368,10 @@
     <Content Include="Views\Tickets\Index.cshtml" />
     <Content Include="Views\Tickets\Details.cshtml" />
     <Content Include="Views\Shared\AdminMenu.cshtml" />
+    <Content Include="Views\Items\Create.cshtml" />
+    <Content Include="Views\Items\Edit.cshtml" />
+    <Content Include="Views\Items\Index.cshtml" />
+    <Content Include="Views\Items\EffectPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

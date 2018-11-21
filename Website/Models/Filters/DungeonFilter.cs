@@ -21,9 +21,9 @@ namespace Website.Models.Filters
         [Display(Name = "MaxLevel")]
         public int MaxLevel { get; set; }
 
-        public List<DataModels.Dungeons.Dungeon> Dungeons { get; set; }
+        public List<DataModels.Adventures.Adventure> Dungeons { get; set; }
 
-        public List<DataModels.Dungeons.Dungeon> FilterList(List<DataModels.Dungeons.Dungeon> list)
+        public List<DataModels.Adventures.Adventure> FilterList(List<DataModels.Adventures.Adventure> list)
         {
             if (!Guid.Empty.Equals(SelectedVersion))
             {

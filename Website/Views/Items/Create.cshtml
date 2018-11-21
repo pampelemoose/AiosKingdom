@@ -1,4 +1,4 @@
-﻿@model Website.Models.ArmorModel
+﻿@model Website.Models.ItemModel
 
 @{
     ViewBag.Title = "Create";
@@ -59,55 +59,16 @@
     <section class="bg-dark text-muted p-3">
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "input-group-text" })
+                            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "input-group-text" })
                         </div>
-                        @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
+                        @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control" })
                     </div>
-                    @Html.ValidationMessageFor(model => model.Quality, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-3">
-                    <div class="input-group input-group-sm">
-                        <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.ItemLevel, htmlAttributes: new { @class = "input-group-text" })
-                        </div>
-                        @Html.EditorFor(model => model.ItemLevel, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.ItemLevel, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group input-group-sm">
-                        <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.UseLevelRequired, htmlAttributes: new { @class = "input-group-text" })
-                        </div>
-                        @Html.EditorFor(model => model.UseLevelRequired, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.UseLevelRequired, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group input-group-sm">
-                        <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.Space, htmlAttributes: new { @class = "input-group-text" })
-                        </div>
-                        @Html.EditorFor(model => model.Space, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Space, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group input-group-sm">
-                        <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.SellingPrice, htmlAttributes: new { @class = "input-group-text" })
-                        </div>
-                        @Html.EditorFor(model => model.SellingPrice, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.SellingPrice, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="row mt-1">
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             @Html.LabelFor(model => model.Slot, htmlAttributes: new { @class = "input-group-text" })
@@ -117,7 +78,59 @@
                     @Html.ValidationMessageFor(model => model.Slot, "", new { @class = "text-danger" })
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Quality, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ItemLevel, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ItemLevel, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ItemLevel, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.UseLevelRequired, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.UseLevelRequired, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.UseLevelRequired, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Space, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Space, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Space, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.SellingPrice, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.SellingPrice, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.SellingPrice, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="p-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             @Html.LabelFor(model => model.ArmorValue, htmlAttributes: new { @class = "input-group-text" })
@@ -126,11 +139,39 @@
                     </div>
                     @Html.ValidationMessageFor(model => model.ArmorValue, "", new { @class = "text-danger" })
                 </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.SlotCount, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.SlotCount, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.SlotCount, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.MinDamages, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.MinDamages, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.MinDamages, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.MaxDamages, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.MaxDamages, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.MaxDamages, "", new { @class = "text-danger" })
+                </div>
+                
             </div>
         </div>
     </section>
 
-    <section class="p-3">
+    <section class="bg-dark text-muted p-3">
         <div class="container">
 
             <div class="row">
@@ -153,9 +194,50 @@
         </div>
     </section>
 
-    <section class="bg-dark text-muted mt-2">
+    <section class="p-3">
         <div class="container">
-            <input type="submit" value="Create" class="btn btn-success btn-block" />
+            <div class="row">
+                <div class="col-md-10">
+                    @Html.LabelFor(model => model.Effects, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-block" type="button" id="addEffectToCons" value="<Add Effect>" />
+                </div>
+            </div>
+
+            <div class="row mt-2" id="effectList">
+                @if (Model != null && Model.Effects != null)
+                {
+                    for (var i = 0; i < Model.Effects.Count; i++)
+                    {
+                        Html.RenderPartial("EffectPartial", Model.Effects[i]);
+                    }
+                }
+            </div>
         </div>
     </section>
+
+    <section class="mt-2">
+        <div class="container">
+            <input type="submit" value="<Create>" class="btn btn-block" />
+        </div>
+    </section>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#addEffectToCons").click(function () {
+                $.ajax({
+                    url: "/Items/AddEffectPartial",
+                    cache: false,
+                    type: "GET",
+                    success: function (data) {
+                        $('#effectList').append(data);
+                        $('#effectList').fadeIn('fast');
+                    }
+                });
+            });
+        });
+    </script>
 }

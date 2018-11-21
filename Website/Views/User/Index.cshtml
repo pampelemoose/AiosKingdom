@@ -61,6 +61,8 @@
                         <th scope="col">Email</th>
                         <th scope="col">ActivationCode</th>
                         <th scope="col">IsActivated</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,10 +73,10 @@
                             <td>@user.ActivationCode</td>
                             <td>@user.IsActivated</td>
                             <td>
-                                <div>
-                                    @Html.ActionLink("Edit", "Edit", new { id = user.Id }, new { @class = "btn btn-block btn-primary" })
-                                    <button type="button" class="btn btn-danger">X</button>
-                                </div>
+                                @Html.ActionLink("<Edit>", "Edit", new { id = user.Id }, new { @class = "btn btn-block" })
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-block">@Html.Label("<Delete>")</button>
                             </td>
                         </tr>
                     }

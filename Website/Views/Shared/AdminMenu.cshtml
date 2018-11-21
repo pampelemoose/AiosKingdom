@@ -49,22 +49,7 @@
                                 @if (User.IsInRole("ItemSmith"))
                                 {
                                     <h6 class="dropdown-header">Items</h6>
-                                    if (User.IsInRole("ArmorSmith"))
-                                    {
-                                        @Html.ActionLink("Armor", "Create", "Armors", null, new { @class = "dropdown-item" })
-                                    }
-                                    if (User.IsInRole("ConsumableSmith"))
-                                    {
-                                        @Html.ActionLink("Consumable", "Create", "Consumables", null, new { @class = "dropdown-item" })
-                                    }
-                                    if (User.IsInRole("BagSmith"))
-                                    {
-                                        @Html.ActionLink("Bag", "Create", "Bags", null, new { @class = "dropdown-item" })
-                                    }
-                                    if (User.IsInRole("WeaponSmith"))
-                                    {
-                                        @Html.ActionLink("Weapon", "Create", "Weapons", null, new { @class = "dropdown-item" })
-                                    }
+                                    @Html.ActionLink("Item", "Create", "Items", null, new { @class = "dropdown-item" })
                                     <div class="dropdown-divider"></div>
                                 }
                                 @if (User.IsInRole("BookWriter"))
@@ -79,10 +64,10 @@
                                     @Html.ActionLink("Monster", "Create", "Monsters", null, new { @class = "dropdown-item" })
                                     <div class="dropdown-divider"></div>
                                 }
-                                @if (User.IsInRole("DungeonCreator"))
+                                @if (User.IsInRole("AdventureCreator"))
                                 {
-                                    <h6 class="dropdown-header">Dungeons</h6>
-                                    @Html.ActionLink("Dungeon", "Create", "Dungeons", null, new { @class = "dropdown-item" })
+                                    <h6 class="dropdown-header">Adventures</h6>
+                                    @Html.ActionLink("Adventures", "Create", "Adventures", null, new { @class = "dropdown-item" })
                                 }
                             </div>
                         </li>

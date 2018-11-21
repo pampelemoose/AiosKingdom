@@ -9,7 +9,7 @@
     {
         @Html.HiddenFor(model => Model.Id)
 
-        <div class="card">
+        <div class="card card-dark">
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs pull-right" id="room-tab-list-@roomId" role="tablist">
                     <li class="nav-item">
@@ -31,7 +31,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="room-@roomId" role="tabpanel" aria-labelledby="room-tab-@roomId">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "input-group-text" })
@@ -40,7 +40,7 @@
                                 </div>
                                 @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12 mt-1">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "input-group-text" })
@@ -54,7 +54,7 @@
                     <div class="tab-pane fade" id="shop-items-@roomId" role="tabpanel" aria-labelledby="shop-items-tab-@roomId">
                         <div class="row mt-1">
                             <div class="offset-md-8 col-md-4">
-                                <input class="btn btn-primary btn-block" type="button" onclick="addShopItemToRoom(this)" value="Add ShopItem" id="@roomId" />
+                                <input class="btn btn-block" type="button" onclick="addShopItemToRoom(this)" value="<Add ShopItem>" id="@roomId" />
                             </div>
                         </div>
 
@@ -71,7 +71,7 @@
                     <div class="tab-pane fade" id="ennemies-@roomId" role="tabpanel" aria-labelledby="ennemies-tab-@roomId">
                         <div class="row mt-1">
                             <div class="offset-md-8 col-md-4">
-                                <input class="btn btn-primary btn-block" type="button" onclick="addEnnemyToRoom(this)" value="Add Ennemy" id="@roomId" />
+                                <input class="btn btn-block" type="button" onclick="addEnnemyToRoom(this)" value="<Add Ennemy>" id="@roomId" />
                             </div>
                         </div>
                         <div class="row mt-1" id="enemy_list_@roomId">

@@ -36,10 +36,10 @@
         @Html.HiddenFor(model => Model.CreatedBy)
         @Html.HiddenFor(model => Model.CreatedByUsername)
 
-        <section class="ak-dark-section p-2">
+        <section class="p-2">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 @Html.LabelFor(model => model.AssignedTo, htmlAttributes: new { @class = "input-group-text" })
@@ -62,7 +62,7 @@
                         </div>
                     *@
 
-                    <div class="col-md-2 offset-md-4 text-center">
+                    <div class="col-md-2 offset-md-2 text-center">
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                             <label id="open-ticket" class="btn @(Model.IsOpen ? "btn-success active" : "btn-secondary")">
                                 @Html.RadioButtonFor(model => model.IsOpen, "True") Open
@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="col-md-2 offset-md-10">
-                        <button type="submit" class="btn btn-primary btn-block mt-3">Submit</button>
+                        <button type="submit" class="btn btn-block mt-3">@Html.Label("<Submit>")</button>
                     </div>
                 </div>
             </div>
@@ -82,12 +82,12 @@
     }
 }
 
-<section class="@(User.IsInRole("TicketMaster") ? "" : "ak-dark-section") p-2">
+<section class="p-2">
     <div class="container">
         <div class="row">
             @foreach (var comment in Model.Comments)
             {
-                <div class="col-md-12 card mt-2">
+                <div class="col-md-12 card card-dark mt-2">
                     <div class="card-body">
                         @Html.Raw(comment.Content)
                     </div>

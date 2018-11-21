@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Website.Models
 {
-    public class ArmorModel
+    public class ItemModel
     {
         public Guid Id { get; set; }
 
@@ -22,17 +22,16 @@ namespace Website.Models
         [Display(Name = "Description")]
         public string Description { get; set; }
 
-        private string _image = "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg";
-        [Display(Name = "Image")]
-        public string Image
-        {
-            get { return _image; }
-            set { _image = value; }
-        }
-
         [Required(ErrorMessage = "Quality required")]
         [Display(Name = "Quality")]
         public DataModels.Items.ItemQuality Quality { get; set; }
+
+        [Required(ErrorMessage = "Type required")]
+        [Display(Name = "Type")]
+        public DataModels.Items.ItemType Type { get; set; }
+
+        [Display(Name = "Slot")]
+        public DataModels.Items.ItemSlot? Slot { get; set; }
 
         [Required(ErrorMessage = "ItemLevel required")]
         [Display(Name = "Item Level")]
@@ -54,16 +53,55 @@ namespace Website.Models
         [Range(1, 10000000)]
         public int SellingPrice { get; set; }
 
-        [Required(ErrorMessage = "Part required")]
-        [Display(Name = "Part")]
-        public DataModels.Items.ArmorPart Part { get; set; }
-
-        [Required(ErrorMessage = "ArmorValue required")]
         [Display(Name = "Armor Value")]
         [Range(1, 400)]
-        public int ArmorValue { get; set; }
+        public int? ArmorValue { get; set; }
+
+        [Display(Name = "Slot Count")]
+        [Range(1, 400)]
+        public int? SlotCount { get; set; }
+
+        [Display(Name = "MinDamages")]
+        [Range(1, 400)]
+        public int? MinDamages { get; set; }
+
+        [Display(Name = "MaxDamages")]
+        [Range(1, 400)]
+        public int? MaxDamages { get; set; }
 
         [Display(Name = "Stats")]
         public List<DataModels.Items.ItemStat> Stats { get; set; }
+
+        [Display(Name = "Effects")]
+        public List<DataModels.Items.ItemEffect> Effects { get; set; }
+
+        public ItemModel()
+        {
+            SetupLists();
+        }
+
+        public void SetupLists()
+        {
+            if (Stats == null)
+            {
+                Stats = new List<DataModels.Items.ItemStat>();
+            }
+
+            if (Effects == null)
+            {
+                Effects = new List<DataModels.Items.ItemEffect>();
+            }
+
+            foreach (DataModels.Soul.Stats en in Enum.GetValues(typeof(DataModels.Soul.Stats)))
+            {
+                if (!Stats.Any(s => s.Type == en))
+                {
+                    Stats.Add(new DataModels.Items.ItemStat
+                    {
+                        Type = en
+                    });
+                }
+            }
+        }
     }
 }

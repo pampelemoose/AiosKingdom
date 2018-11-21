@@ -18,35 +18,11 @@ namespace Website.Models
 
         public Guid SelectedItem { get; set; }
         [Display(Name = "Item")]
-        public List<DataModels.Items.AItem> Items
+        public List<DataModels.Items.Item> Items
         {
             get
             {
-                var items = new List<DataModels.Items.AItem>();
-
-                var consumables = DataRepositories.ConsumableRepository.GetAll();
-                foreach (var cons in consumables)
-                {
-                    items.Add(cons);
-                }
-
-                var armors = DataRepositories.ArmorRepository.GetAll();
-                foreach (var arm in armors)
-                {
-                    items.Add(arm);
-                }
-
-                var bags = DataRepositories.BagRepository.GetAll();
-                foreach (var bag in bags)
-                {
-                    items.Add(bag);
-                }
-
-                var weapons = DataRepositories.WeaponRepository.GetAll();
-                foreach (var weapon in weapons)
-                {
-                    items.Add(weapon);
-                }
+                var items = DataRepositories.ItemRepository.GetAll().ToList();
 
                 return items;
             }
