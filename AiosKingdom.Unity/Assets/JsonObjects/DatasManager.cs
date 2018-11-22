@@ -33,6 +33,7 @@ public class DatasManager
     public List<JsonObjects.Items.Item> Items { get; set; }
 
     public List<JsonObjects.MarketSlot> MarketItems { get; set; }
+    public List<JsonObjects.MarketSlot> SpecialMarketItems { get; set; }
 
     public List<JsonObjects.Skills.Book> Books { get; set; }
 

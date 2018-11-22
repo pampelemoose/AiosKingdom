@@ -39,11 +39,10 @@ namespace Website.Controllers
                 {
                     Id = Guid.NewGuid(),
                     ServerId = slot.SelectedServer,
-                    Type = slot.Type,
                     ItemId = slot.SelectedItem,
+                    IsSpecial = true,
                     Quantity = slot.Quantity,
-                    ShardPrice = slot.ShardPrice,
-                    BitPrice = slot.BitPrice
+                    Price = slot.Price
                 }))
                 {
                     return RedirectToAction("Index");
@@ -65,8 +64,7 @@ namespace Website.Controllers
                 {
                     Id = slot.Id,
                     Quantity = slot.Quantity,
-                    ShardPrice = slot.ShardPrice,
-                    BitPrice = slot.BitPrice
+                    Price = slot.Price
                 });
             }
 
@@ -84,8 +82,7 @@ namespace Website.Controllers
                 {
                     Id = slot.Id,
                     Quantity = slot.Quantity,
-                    ShardPrice = slot.ShardPrice,
-                    BitPrice = slot.BitPrice
+                    Price = slot.Price
                 }))
                 {
                     return RedirectToAction("Index");

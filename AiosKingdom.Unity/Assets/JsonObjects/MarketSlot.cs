@@ -10,9 +10,11 @@ namespace JsonObjects
 
         public Guid ItemId { get; set; }
 
-        public Guid SellerId { get; set; }
+        public Guid? SellerId { get; set; }
+
+        public bool IsSpecial { get; set; }
+
         public int Quantity { get; set; }
-        public int ShardPrice { get; set; }
-        public int BitPrice { get; set; }
+        public int Price { get; set; }
     }
 }

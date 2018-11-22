@@ -11,8 +11,8 @@ namespace Website.Models.Filters
         [Display(Name = "Server")]
         public Guid SelectedServer { get; set; }
 
-        [Display(Name = "Type")]
-        public DataModels.Items.ItemType? Type { get; set; }
+        [Display(Name = "Is Special")]
+        public bool? IsSpecial { get; set; }
 
         public List<DataModels.MarketSlot> Slots { get; set; }
 
@@ -23,9 +23,9 @@ namespace Website.Models.Filters
                 list = list.Where(a => a.ServerId.Equals(SelectedServer)).ToList();
             }
 
-            if (Type != null)
+            if (IsSpecial != null)
             {
-                list = list.Where(a => a.Type.Equals(Type)).ToList();
+                list = list.Where(a => a.IsSpecial == IsSpecial).ToList();
             }
 
             return list;

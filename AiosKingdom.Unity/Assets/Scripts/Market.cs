@@ -12,9 +12,7 @@ public class Market : MonoBehaviour
 
     public Text FirstFilterLabel;
     public Dropdown FirstFilterDropdown;
-
-    public Text SecondFilterLabel;
-    public Dropdown SecondFilterDropdown;
+    public Button Specials;
 
     [Space(10)]
     [Header("Content")]
@@ -29,9 +27,9 @@ public class Market : MonoBehaviour
     [Space(10)]
     [Header("BuyBox")]
     public GameObject BuyBox;
-    public Text ShardPrice;
-    public Text BitPrice;
+    public Text Price;
     public Button BuyItemButton;
+    public Button CloseBuyBox;
 
     private JsonObjects.Items.ItemType? _itemType;
     private JsonObjects.Items.ItemSlot? _itemSlot;
@@ -58,7 +56,20 @@ public class Market : MonoBehaviour
 
                 SetupFilters();
 
-                UpdateItems();
+                ResetItems();
+            });
+
+            Specials.onClick.AddListener(() =>
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    NetworkManager.This.AskSpecialMarketItems();
+                });
+            });
+
+            CloseBuyBox.onClick.AddListener(() =>
+            {
+                BuyBox.SetActive(false);
             });
 
             _init = true;
@@ -73,15 +84,41 @@ public class Market : MonoBehaviour
         FirstFilterDropdown.onValueChanged.RemoveAllListeners();
         FirstFilterDropdown.gameObject.SetActive(false);
 
-        SecondFilterLabel.gameObject.SetActive(false);
-        SecondFilterDropdown.onValueChanged.RemoveAllListeners();
-        SecondFilterDropdown.gameObject.SetActive(false);
-
         if (_itemType != null)
         {
             switch (_itemType)
             {
                 case JsonObjects.Items.ItemType.Armor:
+                    {
+                        FirstFilterLabel.gameObject.SetActive(true);
+                        FirstFilterDropdown.gameObject.SetActive(true);
+
+                        FirstFilterLabel.text = "Slot";
+                        FirstFilterDropdown.ClearOptions();
+                        FirstFilterDropdown.AddOptions(new List<string> {
+                            "All",
+                            JsonObjects.Items.ItemSlot.Belt.ToString(),
+                            JsonObjects.Items.ItemSlot.Feet.ToString(),
+                            JsonObjects.Items.ItemSlot.Hand.ToString(),
+                            JsonObjects.Items.ItemSlot.Head.ToString(),
+                            JsonObjects.Items.ItemSlot.Leg.ToString(),
+                            JsonObjects.Items.ItemSlot.Pants.ToString(),
+                            JsonObjects.Items.ItemSlot.Shoulder.ToString(),
+                            JsonObjects.Items.ItemSlot.Torso.ToString()
+                        });
+
+                        FirstFilterDropdown.onValueChanged.AddListener((value) =>
+                        {
+                            _itemSlot = null;
+                            if (value > 0)
+                            {
+                                _itemSlot = (JsonObjects.Items.ItemSlot)Enum.Parse(typeof(JsonObjects.Items.ItemSlot), FirstFilterDropdown.options.ElementAt(value).text);
+                            }
+
+                            ResetItems();
+                        });
+                    }
+                    break;
                 case JsonObjects.Items.ItemType.Axe:
                 case JsonObjects.Items.ItemType.Book:
                 case JsonObjects.Items.ItemType.Bow:
@@ -102,8 +139,11 @@ public class Market : MonoBehaviour
 
                         FirstFilterLabel.text = "Slot";
                         FirstFilterDropdown.ClearOptions();
-                        FirstFilterDropdown.AddOptions(new List<string> { "All" });
-                        FirstFilterDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Items.ItemSlot)).ToList());
+                        FirstFilterDropdown.AddOptions(new List<string> {
+                            "All",
+                            JsonObjects.Items.ItemSlot.OneHand.ToString(),
+                            JsonObjects.Items.ItemSlot.TwoHand.ToString(),
+                        });
 
                         FirstFilterDropdown.onValueChanged.AddListener((value) =>
                         {
@@ -113,7 +153,7 @@ public class Market : MonoBehaviour
                                 _itemSlot = (JsonObjects.Items.ItemSlot)Enum.Parse(typeof(JsonObjects.Items.ItemSlot), FirstFilterDropdown.options.ElementAt(value).text);
                             }
 
-                            UpdateItems();
+                            ResetItems();
                         });
                     }
                     break;
@@ -135,7 +175,7 @@ public class Market : MonoBehaviour
                                 _effectType = (JsonObjects.Items.EffectType)Enum.Parse(typeof(JsonObjects.Items.EffectType), FirstFilterDropdown.options.ElementAt(value).text);
                             }
 
-                            UpdateItems();
+                            ResetItems();
                         });
                     }
                     break;
@@ -147,6 +187,18 @@ public class Market : MonoBehaviour
     {
         _slots = DatasManager.Instance.MarketItems;
 
+        ResetItems();
+    }
+
+    public void UpdateSpecialItems()
+    {
+        _slots = DatasManager.Instance.SpecialMarketItems;
+
+        ResetItems();
+    }
+
+    private void ResetItems()
+    {
         SetupPagination();
 
         SetItems();
@@ -159,7 +211,7 @@ public class Market : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        var marketList = DatasManager.Instance.MarketItems.ToList();
+        var marketList = _slots.ToList();
         var marketListIds = marketList.Select(s => s.ItemId).ToList();
         var items = DatasManager.Instance.Items.Where(a => marketListIds.Contains(a.Id)).ToList();
 
@@ -178,19 +230,6 @@ public class Market : MonoBehaviour
             switch (item.Type)
             {
                 case JsonObjects.Items.ItemType.Armor:
-                    if (_itemSlot == null || (_itemSlot != null && item.Slot != _itemSlot))
-                    {
-                        var itemObj = Instantiate(ItemListItem, Items.transform);
-                        var itemScript = itemObj.GetComponent<ItemSlot>();
-                        itemScript.InitializeAsArmor(item);
-
-                        itemScript.Action.onClick.AddListener(() =>
-                        {
-                            ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(item);
-                            BindItemToBuyBox(slot);
-                        });
-                    }
-                    break;
                 case JsonObjects.Items.ItemType.Axe:
                 case JsonObjects.Items.ItemType.Book:
                 case JsonObjects.Items.ItemType.Bow:
@@ -205,33 +244,20 @@ public class Market : MonoBehaviour
                 case JsonObjects.Items.ItemType.Sword:
                 case JsonObjects.Items.ItemType.Wand:
                 case JsonObjects.Items.ItemType.Whip:
-                    bool canAdd = true;
-                    if (_itemSlot == null || (_itemSlot != null && item.Slot != _itemSlot))
-                    {
-                        canAdd = false;
-                    }
-                    if (canAdd)
-                    {
-                        var itemObj = Instantiate(ItemListItem, Items.transform);
-                        var itemScript = itemObj.GetComponent<ItemSlot>();
-                        itemScript.InitializeAsWeapon(item);
-
-                        itemScript.Action.onClick.AddListener(() =>
-                        {
-                            ItemDetails.GetComponent<ItemDetails>().ShowWeaponsDetails(item);
-                            BindItemToBuyBox(slot);
-                        });
-                    }
-                    break;
                 case JsonObjects.Items.ItemType.Bag:
+                    if (_itemSlot == null || (_itemSlot != null && item.Slot == _itemSlot))
                     {
                         var itemObj = Instantiate(ItemListItem, Items.transform);
-                        var itemScript = itemObj.GetComponent<ItemSlot>();
-                        itemScript.InitializeAsBag(item);
+                        var itemScript = itemObj.GetComponent<MarketListItem>();
+                        itemScript.Initialize(item, slot);
 
                         itemScript.Action.onClick.AddListener(() =>
                         {
-                            ItemDetails.GetComponent<ItemDetails>().ShowBagDetails(item);
+                            ItemDetails.GetComponent<ItemDetails>().ShowDetails(item);
+                        });
+
+                        itemScript.Buy.onClick.AddListener(() =>
+                        {
                             BindItemToBuyBox(slot);
                         });
                     }
@@ -240,12 +266,16 @@ public class Market : MonoBehaviour
                     if (_effectType == null || (_effectType != null && item.Effects.Where(e => e.Type == _effectType).Any()))
                     {
                         var itemObj = Instantiate(ItemListItem, Items.transform);
-                        var itemScript = itemObj.GetComponent<ItemSlot>();
-                        itemScript.InitializeAsConsumable(item);
+                        var itemScript = itemObj.GetComponent<MarketListItem>();
+                        itemScript.Initialize(item, slot);
 
                         itemScript.Action.onClick.AddListener(() =>
                         {
-                            ItemDetails.GetComponent<ItemDetails>().ShowConsumableDetails(item);
+                            ItemDetails.GetComponent<ItemDetails>().ShowDetails(item);
+                        });
+
+                        itemScript.Buy.onClick.AddListener(() =>
+                        {
                             BindItemToBuyBox(slot);
                         });
                     }
@@ -259,11 +289,16 @@ public class Market : MonoBehaviour
     private void BindItemToBuyBox(JsonObjects.MarketSlot slot)
     {
         BuyBox.SetActive(true);
-        ShardPrice.text = string.Format("[{0}]", slot.ShardPrice);
-        BitPrice.text = string.Format("[{0}]", slot.BitPrice);
+        Price.text = string.Format("[{0}]", slot.Price);
+        BuyItemButton.onClick.RemoveAllListeners();
         BuyItemButton.onClick.AddListener(() =>
         {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                NetworkManager.This.OrderMarketItem(slot.Id);
+            });
 
+            BuyBox.SetActive(false);
         });
     }
 

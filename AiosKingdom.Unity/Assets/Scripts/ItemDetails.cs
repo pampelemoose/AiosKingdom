@@ -28,52 +28,53 @@ public class ItemDetails : MonoBehaviour
     private List<JsonObjects.Items.ItemStat> _stats;
     private List<JsonObjects.Items.ItemEffect> _effects;
 
-    public void ShowArmorDetails(JsonObjects.Items.Item armor)
+    public void ShowDetails(JsonObjects.Items.Item item)
     {
-        InitAitem(armor);
+        InitAitem(item);
 
-        SpecialLabel.text = " * Armor        :";
-        SpecialValue.text = string.Format("[{0}]", armor.ArmorValue);
+        switch (item.Type)
+        {
+            case JsonObjects.Items.ItemType.Armor:
+                {
+                    SpecialLabel.text = " * Armor        :";
+                    SpecialValue.text = string.Format("[{0}]", item.ArmorValue);
 
-        Type.text = string.Format("Armor - {0}", armor.Slot);
+                    Type.text = string.Format("Armor - {0}", item.Slot);
 
-        InitStats(armor.Stats);
-    }
+                    InitStats(item.Stats);
+                }
+                break;
+            case JsonObjects.Items.ItemType.Bag:
+                {
+                    SpecialLabel.text = " * Slots        :";
+                    SpecialValue.text = string.Format("[{0}]", item.SlotCount);
 
-    public void ShowWeaponsDetails(JsonObjects.Items.Item weapon)
-    {
-        InitAitem(weapon);
+                    Type.text = "Bag";
 
-        SpecialLabel.text = " * Damages      :";
-        SpecialValue.text = string.Format("[{0} - {1}]", weapon.MinDamages, weapon.MaxDamages);
+                    InitStats(item.Stats);
+                }
+                break;
+            case JsonObjects.Items.ItemType.Consumable:
+                {
+                    SpecialLabel.gameObject.SetActive(false);
+                    SpecialValue.gameObject.SetActive(false);
 
-        Type.text = string.Format("{0} - {1}", weapon.Slot, weapon.Type);
+                    Type.text = "Cons.";
 
-        InitStats(weapon.Stats);
-    }
+                    InitEffects(item.Effects);
+                }
+                break;
+            default:
+                {
+                    SpecialLabel.text = " * Damages      :";
+                    SpecialValue.text = string.Format("[{0} - {1}]", item.MinDamages, item.MaxDamages);
 
-    public void ShowBagDetails(JsonObjects.Items.Item bag)
-    {
-        InitAitem(bag);
+                    Type.text = string.Format("{0} - {1}", item.Slot, item.Type);
 
-        SpecialLabel.text = " * Slots        :";
-        SpecialValue.text = string.Format("[{0}]", bag.SlotCount);
-
-        Type.text = "Bag";
-
-        InitStats(bag.Stats);
-    }
-
-    public void ShowConsumableDetails(JsonObjects.Items.Item consumable)
-    {
-        InitAitem(consumable);
-
-        SpecialLabel.gameObject.SetActive(false);
-        SpecialValue.gameObject.SetActive(false);
-
-        Type.text = "Cons.";
-
-        InitEffects(consumable.Effects);
+                    InitStats(item.Stats);
+                }
+                break;
+        }
     }
 
     private void InitAitem(JsonObjects.Items.Item item)

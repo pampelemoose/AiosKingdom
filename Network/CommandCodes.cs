@@ -51,10 +51,11 @@ namespace Network
             private const int _default = 30;
 
             public const int Item = _default + 1;
-            public const int Book = _default + 4;
-            public const int Monster = _default + 5;
-            public const int Dungeon = _default + 6;
-            public const int Market = _default + 7;
+            public const int Book = _default + 2;
+            public const int Monster = _default + 3;
+            public const int Dungeon = _default + 4;
+            public const int Market = _default + 5;
+            public const int SpecialsMarket = _default + 6;
         }
 
         public static class Dungeon

@@ -27,19 +27,10 @@
                     </div>
                     @Html.ValidationMessageFor(model => model.SelectedServer, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-6">
-                    <div class="input-group input-group-sm">
-                        <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "input-group-text" })
-                        </div>
-                        @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control" })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
-                </div>
             </div>
 
             <div class="row mt-1">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "input-group-text" })
@@ -48,7 +39,7 @@
                     </div>
                     @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mt-1">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "input-group-text" })
@@ -57,26 +48,14 @@
                     </div>
                     @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
                 </div>
-            </div>
-
-            <div class="row mt-1">
-                <div class="col-md-6">
+                <div class="col-md-6 mt-1">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.ShardPrice, htmlAttributes: new { @class = "input-group-text" })
+                            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "input-group-text" })
                         </div>
-                        @Html.EditorFor(model => model.ShardPrice, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
-                    @Html.ValidationMessageFor(model => model.ShardPrice, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group input-group-sm">
-                        <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.BitPrice, htmlAttributes: new { @class = "input-group-text" })
-                        </div>
-                        @Html.EditorFor(model => model.BitPrice, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.BitPrice, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
                 </div>
             </div>
 

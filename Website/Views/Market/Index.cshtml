@@ -42,9 +42,9 @@
                 <div class="col-md-3">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "input-group-text" })
+                            @Html.LabelFor(model => model.IsSpecial, htmlAttributes: new { @class = "input-group-text" })
                         </div>
-                        @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control" })
+                        @Html.EditorFor(model => model.IsSpecial, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 </div>
             </div>
@@ -73,24 +73,24 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <div class="row">
+                                    <div class="col-8">Is Special</div>
+                                    <div class="col-4">@slot.IsSpecial</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
                                     <div class="col-8">Quantity</div>
                                     <div class="col-4">@slot.Quantity</div>
                                 </div>
                             </li>
                             <li class="list-group-item">
                                 <div class="row">
-                                    <div class="col-8">Shard Price</div>
-                                    <div class="col-4">@slot.ShardPrice</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-8">Bit Price</div>
-                                    <div class="col-4">@slot.BitPrice</div>
+                                    <div class="col-8">Price</div>
+                                    <div class="col-4">@slot.Price</div>
                                 </div>
                             </li>
                         </ul>
-                        @if (User.IsInRole("SuperAdmin"))
+                        @if (User.IsInRole("SuperAdmin") && slot.IsSpecial)
                         {
                             <div class="card-footer">
                                 @Html.ActionLink("<Edit>", "Edit", new { id = slot.Id }, new { @class = "btn btn-block" })

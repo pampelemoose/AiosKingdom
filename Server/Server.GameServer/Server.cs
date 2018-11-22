@@ -27,10 +27,15 @@ namespace Server.GameServer
         private Object _commandManagerLock = new Object();
         private Object _responsesLock = new Object();
 
+        private Thread _marketThread;
+
         public Server()
         {
             ThreadStart del = new ThreadStart(Run);
             _thread = new Thread(del);
+
+            ThreadStart mar = new ThreadStart(RunMarket);
+            _marketThread = new Thread(mar);
 
             _flushCommands = new System.Timers.Timer(10);
             _flushCommands.Elapsed += (sender, e) =>
@@ -66,11 +71,11 @@ namespace Server.GameServer
             Console.WriteLine($"Starting TCPListener at address : {_config.Host}:{_config.Port} ...");
 
             DataManager.Instance.Initialize(_config);
-            Market.Instance.Initialize(_config);
 
             _listener = new TcpListener(IPAddress.Parse(_config.Host), _config.Port);
 
             _thread.Start();
+            _marketThread.Start();
 
             _isRunning = true;
         }
@@ -143,18 +148,20 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Listing.Monster, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Dungeon, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Market, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.SpecialsMarket, 0);
 
             _delegates.Add(Network.CommandCodes.Listing.Item, (args) => { return new Commands.Listing.ItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Book, (args) => { return new Commands.Listing.BookCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Monster, (args) => { return new Commands.Listing.MonsterCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Dungeon, (args) => { return new Commands.Listing.DungeonCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Market, (args) => { return new Commands.Listing.MarketCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.SpecialsMarket, (args) => { return new Commands.Listing.SpecialMarketCommand(args); });
         }
 
         private void SetupPlayerDelegates()
         {
             _commandArgCount.Add(Network.CommandCodes.Player.CurrentSoulDatas, 0);
-            _commandArgCount.Add(Network.CommandCodes.Player.Market_PlaceOrder, 4);
+            _commandArgCount.Add(Network.CommandCodes.Player.Market_PlaceOrder, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.EquipItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.SellItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.UseSpiritPills, 2);
@@ -516,7 +523,7 @@ namespace Server.GameServer
                 case Network.CommandCodes.Player.CurrentSoulDatas:
                     break;
                 case Network.CommandCodes.Player.Market_PlaceOrder:
-                    retVal.Args = new string[4] { args[0], args[1], args[2], args[3] };
+                    retVal.Args = new string[1] { args[0] };
                     break;
                 case Network.CommandCodes.Player.EquipItem:
                     retVal.Args = new string[1] { args[0] };
@@ -549,6 +556,8 @@ namespace Server.GameServer
                 case Network.CommandCodes.Listing.Dungeon:
                     break;
                 case Network.CommandCodes.Listing.Market:
+                    break;
+                case Network.CommandCodes.Listing.SpecialsMarket:
                     break;
 
                 // DUNGEON
@@ -591,6 +600,24 @@ namespace Server.GameServer
             }
 
             return retVal;
+        }
+
+        private void RunMarket()
+        {
+            Market.Instance.Initialize(_config);
+
+            while (_isRunning)
+            {
+                if (Market.Instance.OrderCount > 0)
+                {
+                    lock(_responsesLock)
+                    {
+                        _responses.Add(Market.Instance.ProcessOrder());
+                    }
+                }
+            }
+
+            _marketThread.Abort();
         }
     }
 }

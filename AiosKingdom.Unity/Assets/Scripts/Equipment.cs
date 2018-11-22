@@ -38,7 +38,7 @@ public class Equipment : MonoBehaviour
                 var newObj = Instantiate(ItemSlot, Content.transform);
                 var script = newObj.GetComponent<ItemSlot>();
                 var head = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(armorId));
-                script.InitializeAsArmor(head);
+                script.Initialize(head);
                 script.Action.onClick.AddListener(() =>
                 {
                     ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(head);
@@ -51,7 +51,7 @@ public class Equipment : MonoBehaviour
             var newObj = Instantiate(ItemSlot, Content.transform);
             var script = newObj.GetComponent<ItemSlot>();
             var leftHand = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.WeaponLeft));
-            script.InitializeAsWeapon(leftHand);
+            script.Initialize(leftHand);
             script.Action.onClick.AddListener(() =>
             {
                 ItemDetails.GetComponent<ItemDetails>().ShowWeaponsDetails(leftHand);
@@ -62,7 +62,7 @@ public class Equipment : MonoBehaviour
             var newObj = Instantiate(ItemSlot, Content.transform);
             var script = newObj.GetComponent<ItemSlot>();
             var rightHand = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.WeaponRight));
-            script.InitializeAsWeapon(rightHand);
+            script.Initialize(rightHand);
             script.Action.onClick.AddListener(() =>
             {
                 ItemDetails.GetComponent<ItemDetails>().ShowWeaponsDetails(rightHand);
@@ -73,7 +73,7 @@ public class Equipment : MonoBehaviour
             var bagObj = Instantiate(ItemSlot, Content.transform);
             var script = bagObj.GetComponent<ItemSlot>();
             var bag = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.Bag));
-            script.InitializeAsBag(bag);
+            script.Initialize(bag);
             script.Action.onClick.AddListener(() =>
             {
                 ItemDetails.GetComponent<ItemDetails>().ShowBagDetails(bag);

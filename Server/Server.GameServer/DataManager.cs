@@ -37,15 +37,12 @@ namespace Server.GameServer
         }
 
         public List<Network.Items.Item> Items { get; private set; }
-
         public List<Network.Skills.Book> Books { get; private set; }
-
         public List<Network.Adventures.Dungeon> Dungeons { get; private set; }
-
         public List<Network.Monsters.Monster> Monsters { get; private set; }
-
         public List<Network.MarketSlot> Market { get; private set; }
 
+        #region Loaders
         private void LoadItems()
         {
             var items = DataRepositories.ItemRepository.GetAllForVersion(_config.VersionId);
@@ -481,7 +478,7 @@ namespace Server.GameServer
             Monsters = monsterList;
         }
 
-        public static Network.Items.ItemType ConvertItemType(DataModels.Items.ItemType type)
+        private Network.Items.ItemType ConvertItemType(DataModels.Items.ItemType type)
         {
             switch (type)
             {
@@ -557,5 +554,6 @@ namespace Server.GameServer
 
             return Network.Adventures.RoomType.Shop;
         }
+        #endregion
     }
 }

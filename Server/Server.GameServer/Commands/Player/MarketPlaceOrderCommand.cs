@@ -19,13 +19,11 @@ namespace Server.GameServer.Commands.Player
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
+            var soulId = SoulManager.Instance.GetSoulId(ret.ClientId);
             var currency = SoulManager.Instance.GetCurrencies(ret.ClientId);
             var marketSlotId = Guid.Parse(_args.Args[0]);
-            var quantity = int.Parse(_args.Args[1]);
-            var price = int.Parse(_args.Args[2]);
-            var isBits = bool.Parse(_args.Args[3]);
 
-            if (!Market.Instance.CanBuy(marketSlotId, quantity, price, isBits))
+            if (!Market.Instance.CanBuy(marketSlotId, currency))
             {
                 ret.ClientResponse = new Network.Message
                 {
@@ -39,19 +37,12 @@ namespace Server.GameServer.Commands.Player
 
             var order = new Market.Order
             {
-                Buyer = ret.ClientId,
-                ItemId = marketSlotId,
-                Quantity = quantity,
-                Value = price,
-                isBits = isBits
+                ClientId = ret.ClientId,
+                Buyer = soulId,
+                MarketSlotId = marketSlotId
             };
 
-            if (isBits)
-                currency.Bits -= price;
-            else
-                currency.Shards -= price;
-
-            if (!Market.Instance.PlaceOrder(order))
+            if (!Market.Instance.PlaceOrder(order, currency, ret.ClientId))
             {
                 ret.ClientResponse = new Network.Message
                 {
@@ -158,7 +149,7 @@ namespace Server.GameServer.Commands.Player
 
         private bool IsCurrencyAvailable(Network.Currencies currency, Network.MarketSlot slot, int quantity, bool isBits)
         {
-            return isBits ? currency.Bits >= (slot.BitPrice * quantity) : currency.Shards >= (slot.ShardPrice * quantity);
+            return isBits ? currency.Bits >= (slot.Price * quantity) : currency.Shards >= (slot.Price * quantity);
         }
     }
 }

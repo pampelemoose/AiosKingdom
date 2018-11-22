@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,16 +23,16 @@ namespace Server.GameServer
 
         public struct Order
         {
+            public Guid ClientId { get; set; }
             public Guid Buyer { get; set; }
-            public Guid ItemId { get; set; }
-            public int Quantity { get; set; }
-            public int Value { get; set; }
-            public bool isBits { get; set; }
+            public Guid MarketSlotId { get; set; }
+            public int Price { get; set; }
         }
 
         public List<Network.MarketSlot> Items { get; private set; }
+        public List<Network.MarketSlot> Specials { get; private set; }
 
-        private object _orderListLock;
+        private Object _orderListLock = new Object();
         private List<Order> _orders;
 
         private Market()
@@ -48,26 +49,60 @@ namespace Server.GameServer
             _orders = new List<Order>();
 
             LoadMarket();
+            LoadSpecialMarket();
 
             Console.WriteLine($"Market Initialized. Ready to take Orders");
             Log.Instance.Write(Log.Level.Infos, $"Market Initialized. Ready to take Orders");
         }
 
-        public bool CanBuy(Guid itemId, int quantity, int price, bool isBits = true)
+        public bool CanBuy(Guid itemId, Network.Currencies currency)
         {
+            var item = Items.FirstOrDefault(i => i.Id.Equals(itemId));
+            if (item != null)
+            {
+                if (currency.Shards >= item.Price)
+                    return true;
+                return false;
+            }
+            var special = Specials.FirstOrDefault(i => i.Id.Equals(itemId));
+            if (special != null)
+            {
+                if (currency.Bits >= special.Price)
+                    return true;
+            }
             return false;
         }
 
-        public bool PlaceOrder(Order order)
+        public bool PlaceOrder(Order order, Network.Currencies currency, Guid clientId)
         {
             lock (_orderListLock)
             {
-                _orders.Add(order);
+                bool canAdd = false;
+                var item = Items.FirstOrDefault(i => i.Id.Equals(order.MarketSlotId));
+                if (item != null)
+                {
+                    order.Price = item.Price;
+                    currency.Shards -= order.Price;
+                    canAdd = true;
+                }
+                var special = Specials.FirstOrDefault(i => i.Id.Equals(order.MarketSlotId));
+                if (special != null)
+                {
+                    order.Price = special.Price;
+                    currency.Bits -= order.Price;
+                    canAdd = true;
+                }
 
-                Log.Instance.Write(Log.Level.Infos, $"Order placed for {order.ItemId}, {order.Quantity} for {order.Value}, by {order.Buyer}");
+                if (canAdd)
+                {
+                    SoulManager.Instance.UpdateCurrencies(clientId, currency);
+                    _orders.Add(order);
+                    return true;
+                }
+                Log.Instance.Write(Log.Level.Infos, $"Order placed for {order.MarketSlotId}, by {order.Buyer}");
             }
 
-            return true;
+            return false;
         }
 
         public int OrderCount
@@ -83,12 +118,73 @@ namespace Server.GameServer
 
         public Commands.CommandResult ProcessOrder()
         {
-            var order = _orders.Take(1);
-
-            return new Commands.CommandResult
+            lock (_orderListLock)
             {
-                Succeeded = false
-            };
+                var order = _orders.First();
+                _orders.Remove(order);
+
+                int quantity = 0;
+                bool isSpecial = false;
+                bool processed = false;
+                var inventory = SoulManager.Instance.GetInventory(order.ClientId);
+                var item = Items.FirstOrDefault(i => i.Id.Equals(order.MarketSlotId));
+                if (item != null)
+                {
+                    InventoryManager.AddItemToInventory(order.ClientId, item.ItemId, item.Quantity);
+                    quantity = item.Quantity;
+                    processed = true;
+                }
+                var special = Specials.FirstOrDefault(i => i.Id.Equals(order.MarketSlotId));
+                if (special != null)
+                {
+                    InventoryManager.AddItemToInventory(order.ClientId, special.ItemId, special.Quantity);
+                    quantity = special.Quantity;
+                    isSpecial = true;
+                    processed = true;
+                }
+
+                if (processed)
+                {
+                    return new Commands.CommandResult
+                    {
+                        ClientId = order.ClientId,
+                        ClientResponse = new Network.Message
+                        {
+                            Code = Network.CommandCodes.Player.Market_OrderProcessed,
+                            Success = true,
+                            Json = JsonConvert.SerializeObject(new Network.MarketOrderProcessed
+                            {
+                                ItemId = order.MarketSlotId,
+                                Quantity = quantity
+                            })
+                        },
+                        Succeeded = true
+                    };
+                }
+
+                var currency = SoulManager.Instance.GetCurrencies(order.MarketSlotId);
+                if (isSpecial)
+                {
+                    currency.Bits += order.Price;
+                }
+                else
+                {
+                    currency.Shards += order.Price;
+                }
+                SoulManager.Instance.UpdateCurrencies(order.ClientId, currency);
+
+                return new Commands.CommandResult
+                {
+                    ClientId = order.ClientId,
+                    ClientResponse = new Network.Message
+                    {
+                        Code = Network.CommandCodes.Player.Market_OrderProcessed,
+                        Success = false,
+                        Json = "Could not process order."
+                    },
+                    Succeeded = true
+                };
+            }
         }
 
         private void LoadMarket()
@@ -102,9 +198,9 @@ namespace Server.GameServer
                 {
                     Id = marketSlot.Id,
                     ItemId = marketSlot.ItemId,
-                    SellerId = marketSlot.SellerId != null ? (Guid)marketSlot.SellerId : Guid.Empty,
-                    BitPrice = marketSlot.BitPrice,
-                    ShardPrice = marketSlot.ShardPrice,
+                    SellerId = marketSlot.SellerId,
+                    IsSpecial = marketSlot.IsSpecial,
+                    Price = marketSlot.Price,
                     Quantity = marketSlot.Quantity
                 };
 
@@ -112,6 +208,29 @@ namespace Server.GameServer
             }
 
             Items = marketList;
+        }
+
+        private void LoadSpecialMarket()
+        {
+            var market = DataRepositories.MarketRepository.GetAllForServer(_config.Id, true);
+            var marketList = new List<Network.MarketSlot>();
+
+            foreach (var marketSlot in market)
+            {
+                var slot = new Network.MarketSlot
+                {
+                    Id = marketSlot.Id,
+                    ItemId = marketSlot.ItemId,
+                    SellerId = marketSlot.SellerId,
+                    IsSpecial = marketSlot.IsSpecial,
+                    Price = marketSlot.Price,
+                    Quantity = marketSlot.Quantity
+                };
+
+                marketList.Add(slot);
+            }
+
+            Specials = marketList;
         }
     }
 }

@@ -55,6 +55,7 @@
     <Compile Include="ForumRepository.cs" />
     <Compile Include="ItemRepository.cs" />
     <Compile Include="KingdomRepository.cs" />
+    <Compile Include="MarketHistoryRepository.cs" />
     <Compile Include="MarketRepository.cs" />
     <Compile Include="Migrations\201811200538362_InitialMigration.cs" />
     <Compile Include="Migrations\201811200538362_InitialMigration.Designer.cs">
@@ -67,6 +68,14 @@
     <Compile Include="Migrations\201811210537387_MarketAndInventoryTypeRemoved.cs" />
     <Compile Include="Migrations\201811210537387_MarketAndInventoryTypeRemoved.Designer.cs">
       <DependentUpon>201811210537387_MarketAndInventoryTypeRemoved.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811210954378_MarketLogicUpdate_HistoryAndEndTime.cs" />
+    <Compile Include="Migrations\201811210954378_MarketLogicUpdate_HistoryAndEndTime.Designer.cs">
+      <DependentUpon>201811210954378_MarketLogicUpdate_HistoryAndEndTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811220228258_MarketEndAt_Removed.cs" />
+    <Compile Include="Migrations\201811220228258_MarketEndAt_Removed.Designer.cs">
+      <DependentUpon>201811220228258_MarketEndAt_Removed.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterRepository.cs" />
@@ -96,6 +105,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811210537387_MarketAndInventoryTypeRemoved.resx">
       <DependentUpon>201811210537387_MarketAndInventoryTypeRemoved.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811210954378_MarketLogicUpdate_HistoryAndEndTime.resx">
+      <DependentUpon>201811210954378_MarketLogicUpdate_HistoryAndEndTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811220228258_MarketEndAt_Removed.resx">
+      <DependentUpon>201811220228258_MarketEndAt_Removed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

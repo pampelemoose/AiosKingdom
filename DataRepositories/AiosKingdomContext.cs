@@ -38,6 +38,7 @@ namespace DataRepositories
         public DbSet<DataModels.Knowledge> Knowledges { get; set; }
 
         public DbSet<DataModels.MarketSlot> Market { get; set; }
+        public DbSet<DataModels.MarketHistory> MarketHistory { get; set; }
 
         public DbSet<DataModels.Monsters.Monster> Monsters { get; set; }
         public DbSet<DataModels.Monsters.Loot> Loots { get; set; }
@@ -57,6 +58,5 @@ namespace DataRepositories
         public DbSet<DataModels.Website.Thread> Threads { get; set; }
         public DbSet<DataModels.Website.Ticket> Tickets { get; set; }
         public DbSet<DataModels.Website.Comment> Comments { get; set; }
-
     }
 }

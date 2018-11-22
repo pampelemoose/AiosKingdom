@@ -23,6 +23,9 @@ namespace DataModels
         [ForeignKey("SellerId")]
         public Soul Seller { get; set; }
 
+        [Required]
+        public bool IsSpecial { get; set; }
+
         private int _quantity = -1;
         public int Quantity
         {
@@ -30,18 +33,11 @@ namespace DataModels
             set { _quantity = value; }
         }
 
-        private int _shardPrice = 0;
-        public int ShardPrice
+        private int _price = 0;
+        public int Price
         {
-            get { return _shardPrice; }
-            set { _shardPrice = value; }
-        }
-
-        private int _bitPrice = 0;
-        public int BitPrice
-        {
-            get { return _bitPrice; }
-            set { _bitPrice = value; }
+            get { return _price; }
+            set { _price = value; }
         }
     }
 }

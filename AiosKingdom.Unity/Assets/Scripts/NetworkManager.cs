@@ -604,17 +604,27 @@ public class NetworkManager : MonoBehaviour
                     }
                 }
                 break;
-            //case Network.CommandCodes.Player.BuyMarketItem:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            AskCurrencies();
-            //            AskInventory();
-            //            AskMarketItems();
-            //        }
-            //        MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
-            //    }
-            //    break;
+            case JsonObjects.CommandCodes.Player.Market_PlaceOrder:
+                {
+                    if (message.Success)
+                    {
+                        AskCurrencies();
+                        AskMarketItems();
+                    }
+                    //MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
+                }
+                break;
+            case JsonObjects.CommandCodes.Player.Market_OrderProcessed:
+                {
+                    if (message.Success)
+                    {
+                        Debug.Log(JsonConvert.DeserializeObject<JsonObjects.MarketOrderProcessed>(message.Json));
+
+                        AskInventory();
+                    }
+                    //MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
+                }
+                break;
             //case Network.CommandCodes.Player.EquipItem:
             //    {
             //        if (message.Success)
@@ -790,6 +800,19 @@ public class NetworkManager : MonoBehaviour
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
                         UIManager.This.UpdateMarket();
+                    });
+                    //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
+                }
+                break;
+            case JsonObjects.CommandCodes.Listing.SpecialsMarket:
+                {
+                    //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
+                    var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
+                    DatasManager.Instance.SpecialMarketItems = items;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        UIManager.This.UpdateSpecialMarket();
                     });
                     //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
                 }
@@ -1038,6 +1061,11 @@ public class NetworkManager : MonoBehaviour
         SendRequest(JsonObjects.CommandCodes.Listing.Market);
     }
 
+    public void AskSpecialMarketItems()
+    {
+        SendRequest(JsonObjects.CommandCodes.Listing.SpecialsMarket);
+    }
+
     #endregion
 
     #region Player Commands 
@@ -1047,10 +1075,10 @@ public class NetworkManager : MonoBehaviour
         SendRequest(JsonObjects.CommandCodes.Player.CurrentSoulDatas);
     }
 
-    //public void BuyMarketItem(Guid slotId, int quantity, bool isBit)
-    //{
-    //    SendRequest(Network.CommandCodes.Player.BuyMarketItem, new string[3] { slotId.ToString(), quantity.ToString(), isBit.ToString() });
-    //}
+    public void OrderMarketItem(Guid slotId)
+    {
+        SendRequest(JsonObjects.CommandCodes.Player.Market_PlaceOrder, new string[1] { slotId.ToString() });
+    }
 
     //public void EquipItem(Guid slotId)
     //{

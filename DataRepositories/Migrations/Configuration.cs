@@ -50,6 +50,7 @@ namespace DataRepositories.Migrations
                 context.Knowledges.RemoveRange(context.Knowledges);
 
                 context.Market.RemoveRange(context.Market);
+                context.MarketHistory.RemoveRange(context.MarketHistory);
 
                 context.Monsters.RemoveRange(context.Monsters);
                 context.Loots.RemoveRange(context.Loots);

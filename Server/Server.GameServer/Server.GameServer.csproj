@@ -64,6 +64,7 @@
     <Compile Include="Commands\Dungeon\PlayerRestCommand.cs" />
     <Compile Include="Commands\Listing\ItemCommand.cs" />
     <Compile Include="Commands\Listing\BookCommand.cs" />
+    <Compile Include="Commands\Listing\SpecialMarketCommand.cs" />
     <Compile Include="Commands\Player\CurrenciesCommand.cs" />
     <Compile Include="Commands\Player\EquipmentCommand.cs" />
     <Compile Include="Commands\Player\InventoryCommand.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Commands\Listing\MonsterCommand.cs" />
     <Compile Include="Commands\PingCommand.cs" />
     <Compile Include="DataManager.cs" />
+    <Compile Include="InventoryManager.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Market.cs" />
     <Compile Include="Program.cs" />

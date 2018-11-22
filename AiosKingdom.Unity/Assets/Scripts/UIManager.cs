@@ -87,8 +87,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public void ShowContentLoadingScreen()
     {
         ChangeView(Views.ContentLoadingScreen);
-
-        ShowLoading();
     }
 
     public void ShowHome()
@@ -223,6 +221,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
 
         if (script.IsFinishedLoading)
         {
+            ShowLoading();
             ShowHome();
         }
     }
@@ -264,6 +263,12 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         var script = Market.GetComponent<Market>();
         script.UpdateItems();
+    }
+
+    public void UpdateSpecialMarket()
+    {
+        var script = Market.GetComponent<Market>();
+        script.UpdateSpecialItems();
     }
 
     #endregion
