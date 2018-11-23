@@ -27,7 +27,7 @@
                 <div class="col-md-3">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="card">
+                            <div class="card card-dark">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
                                         <div class="row">
@@ -54,7 +54,6 @@
                                         </div>
                                     </li>
                                 </ul>
-                                <img class="card-img-bottom" src="@page.Image">
                             </div>
                         </div>
                     </div>
@@ -72,7 +71,7 @@
                             foreach (var insc in page.Inscriptions)
                             {
                                 <div class="col-md-4">
-                                    <div class="card">
+                                    <div class="card card-dark">
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item">
                                                 <div class="row">
@@ -188,7 +187,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.BookId }, new { @class = "btn btn-block btn-primary" })
+                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.BookId }, new { @class = "btn btn-block" })
                 </div>
             </div>
         </div>

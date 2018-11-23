@@ -56,8 +56,6 @@ namespace Website.Controllers
 
             if (ModelState.IsValid)
             {
-                bookModel.Pages.RemoveAll(p => p.Inscriptions.Count == 0);
-
                 if (bookModel.Pages.Count == 0 || bookModel.Pages?.Select(p => p.Inscriptions.Count).Sum() == 0)
                 {
                     Alert(AlertMessage.AlertType.Danger, $"You need at least one page and one inscription per page.");
@@ -151,6 +149,7 @@ namespace Website.Controllers
         public ActionResult AddPagePartial()
         {
             var page = new Models.PageModel();
+            page.Id = Guid.NewGuid();
             page.Inscriptions = new List<Models.InscriptionModel>();
 
             return PartialView("PagePartial", page);
@@ -307,8 +306,6 @@ namespace Website.Controllers
 
             if (ModelState.IsValid)
             {
-                bookModel.Pages.RemoveAll(p => p.Inscriptions.Count == 0);
-
                 if (bookModel.Pages.Count == 0 || bookModel.Pages?.Select(p => p.Inscriptions.Count).Sum() == 0)
                 {
                     Alert(AlertMessage.AlertType.Danger, $"You need at least one page and one inscription per page.");

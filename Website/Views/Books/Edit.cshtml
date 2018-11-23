@@ -21,17 +21,7 @@
             <input type="hidden" name="Id" value="@Model.Id" />
 
             <div class="row">
-                <div class="col-md-3">
-                    <div class="input-group input-group-sm">
-                        <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.SelectedVersion, htmlAttributes: new { @class = "input-group-text" })
-                        </div>
-                        @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(DataRepositories.VersionRepository.GetAll(), "Id", null), new { @class = "form-control" })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.SelectedVersion, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "input-group-text" })
@@ -41,7 +31,17 @@
                     @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.SelectedVersion, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(DataRepositories.VersionRepository.GetAll(), "Id", null), new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.SelectedVersion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6 mt-1">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "input-group-text" })
@@ -54,7 +54,7 @@
         </div>
     </section>
 
-    <section class="bg-info p-3">
+    <section class="p-3">
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
@@ -67,7 +67,7 @@
                         </div>
                         @Html.EditorFor(model => model.NewPages, new { htmlAttributes = new { @class = "form-control" } })
                         <div class="input-group-append">
-                            <input type="submit" value="+" class="btn btn-primary btn-block" />
+                            <input type="submit" value="<Add>" class="btn btn-block" />
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                         <div id="page-card-@pageId" class="col-md-6 mb-2">
                             @Html.HiddenFor(model => model.Pages[i].Id)
 
-                            <div class="card">
+                            <div class="card card-dark">
                                 <div class="card-header">
                                     <ul class="nav nav-tabs card-header-tabs pull-right" id="page-tab-list-@pageId" role="tablist">
                                         <li class="nav-item">
@@ -106,23 +106,6 @@
                                                         @Html.TextAreaFor(model => model.Pages[i].Description, new { @class = "form-control" })
                                                     </div>
                                                     @Html.ValidationMessageFor(model => model.Pages[i].Description, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="row mt-1">
-                                                <div class="col-md-10">
-                                                    <div class="input-group input-group-sm">
-                                                        <div class="input-group-prepend">
-                                                            @Html.LabelFor(model => Model.Pages[i].Image, htmlAttributes: new { @class = "input-group-text" })
-                                                        </div>
-                                                        @Html.EditorFor(model => Model.Pages[i].Image, new { htmlAttributes = new { @class = "form-control image-url-setter" } })
-                                                        <div class="input-group-append">
-                                                            <input type="button" value="Update" class="btn btn-info" onclick="UpdateImage(this)" />
-                                                        </div>
-                                                    </div>
-                                                    @Html.ValidationMessageFor(model => Model.Pages[i].Image, "", new { @class = "text-danger" })
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <img class="img-fluid img-thumbnail image-viewer" src="@Model.Pages[i].Image" />
                                                 </div>
                                             </div>
                                             <div class="row mt-1">
@@ -173,7 +156,7 @@
                                                         </div>
                                                         @Html.EditorFor(model => Model.Pages[i].NewInsc, new { htmlAttributes = new { @class = "form-control" } })
                                                         <div class="input-group-append">
-                                                            <input type="submit" value="+" class="btn btn-primary btn-block" />
+                                                            <input type="submit" value="<Add>" class="btn btn-block" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -187,7 +170,7 @@
                                                             <div id="insc-card-@inscId" class="col-md-12 mt-2">
                                                                 @Html.HiddenFor(model => Model.Pages[i].Inscriptions[j].Id)
 
-                                                                <div class="card bg-info">
+                                                                <div class="card card-dark">
                                                                     <div class="card-body">
                                                                         <div class="row">
                                                                             <div class="col-md-12">
@@ -256,11 +239,11 @@
                                                                                     <h5>@Html.LabelFor(model => Model.Pages[i].Inscriptions[j].WeaponTypes, htmlAttributes: new { @class = "control-label" })</h5>
                                                                                 </div>
                                                                                 <div class="col-md-4">
-                                                                                    <input class="btn btn-primary btn-block" type="button" onclick="addWeaponTypeToInsc('@i', '@j', this)" value="Add Type" id="@inscId" />
+                                                                                    <input class="btn btn-block" type="button" onclick="addWeaponTypeToInsc('@i', '@j', this)" value="<Add Type>" id="@inscId" />
                                                                                 </div>
                                                                             </div>
                                                                         </li>
-                                                                        <li class="list-group-item bg-info">
+                                                                        <li class="list-group-item">
                                                                             <div class="row">
                                                                                 <div class="col-md-12">
                                                                                     <div class="input-group input-group-sm">
@@ -292,7 +275,7 @@
                                                                                 </div>
                                                                                 <div class="col-md-4">
 
-                                                                                    <input class="btn btn-primary btn-block" type="button" onclick="addPrefferedWeaponTypeToInsc('@i', '@j', this)" value="Add Type" id="@inscId" />
+                                                                                    <input class="btn btn-block" type="button" onclick="addPrefferedWeaponTypeToInsc('@i', '@j', this)" value="<Add Type>" id="@inscId" />
                                                                                 </div>
                                                                             </div>
                                                                         </li>
@@ -351,7 +334,7 @@
 
     <section class="mt-2">
         <div class="container">
-            <input type="submit" value="Edit" class="btn btn-success btn-block" />
+            <input type="submit" value="<Edit>" class="btn btn-block" />
         </div>
     </section>
 }

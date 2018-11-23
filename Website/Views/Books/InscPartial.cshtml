@@ -8,6 +8,7 @@
     @using (Html.BeginCollectionItem($"Pages[{Model.PageId}].Inscriptions"))
     {
         @Html.HiddenFor(model => Model.Id)
+        @Html.HiddenFor(model => Model.PageId)
 
         <div class="card card-dark">
             <div class="card-body">
