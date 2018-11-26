@@ -1,4 +1,4 @@
-﻿@model DataModels.Dungeons.Dungeon
+﻿@model DataModels.Adventures.Adventure
 
 @{
     ViewBag.Title = "Details";
@@ -44,32 +44,10 @@
                     @foreach (var shopItem in room.ShopItems)
                     {
                         <div class="col-md-3">
-                            <div class="card bg-info">
+                            <div class="card card-dark">
                                 <div class="card-header text-dark">
                                     <h5>
-                                        @switch (shopItem.Type)
-                                        {
-                                            case DataModels.Items.ItemType.Armor:
-                                                {
-                                                    @DataRepositories.ArmorRepository.GetById(shopItem.ItemId).ItemName
-                                                }
-                                                break;
-                                            case DataModels.Items.ItemType.Consumable:
-                                                {
-                                                    @DataRepositories.ConsumableRepository.GetById(shopItem.ItemId).ItemName
-                                                }
-                                                break;
-                                            case DataModels.Items.ItemType.Bag:
-                                                {
-                                                    @DataRepositories.BagRepository.GetById(shopItem.ItemId).ItemName
-                                                }
-                                                break;
-                                            case DataModels.Items.ItemType.Weapon:
-                                                {
-                                                    @DataRepositories.WeaponRepository.GetById(shopItem.ItemId).ItemName
-                                                }
-                                                break;
-                                        }
+                                        @DataRepositories.ItemRepository.GetById(shopItem.ItemId).Name
                                     </h5>
                                 </div>
                                 <ul class="list-group list-group-flush">
@@ -101,7 +79,7 @@
                     @foreach (var ennemy in room.Ennemies)
                     {
                         <div class="col-md-3">
-                            <div class="card bg-success">
+                            <div class="card card-dark">
                                 <div class="card-header text-dark">
                                     <a href="/Monsters/Details/@ennemy.MonsterId">
                                         <h5>@DataRepositories.MonsterRepository.GetById(ennemy.MonsterId).Name</h5>
@@ -142,7 +120,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.DungeonId }, new { @class = "btn btn-block btn-primary" })
+                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.DungeonId }, new { @class = "btn btn-block" })
                 </div>
             </div>
         </div>

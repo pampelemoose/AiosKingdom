@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Server.GameServer
 {
@@ -56,6 +57,10 @@ namespace Server.GameServer
 
         private Dictionary<Guid, SoulComponents> _components;
 
+        private Timer _dbSaverTimer;
+
+        private Object _componentLock = new object();
+
         private SoulManager()
         {
             _souls = new Dictionary<Guid, DataModels.Soul>();
@@ -65,6 +70,21 @@ namespace Server.GameServer
             _soulDatas = new Dictionary<Guid, Network.SoulDatas>();
 
             _components = new Dictionary<Guid, SoulComponents>();
+
+            _dbSaverTimer = new Timer(5 * 60 * 1000);
+            _dbSaverTimer.AutoReset = true;
+            _dbSaverTimer.Enabled = true;
+            _dbSaverTimer.Elapsed += (sender, e) =>
+            {
+                Log.Instance.Write(Log.Level.Infos, "Updating DB from current game state.");
+                lock (_componentLock)
+                {
+                    foreach (var id in _ids)
+                    {
+                        UpdateDatabase(id.Key);
+                    }
+                }
+            };
         }
 
         //public bool ConnectSoul(Guid token, DataModels.Soul soul)
@@ -144,13 +164,17 @@ namespace Server.GameServer
                     {
                         Id = knowledgeSlot.Id,
                         BookId = knowledgeSlot.BookId,
-                        Rank = knowledgeSlot.Rank
+                        Rank = knowledgeSlot.Rank,
+                        IsNew = false
                     };
 
                     component.Knowledge.Add(knowledge);
                 }
 
-                _components.Add(token, component);
+                lock (_componentLock)
+                {
+                    _components.Add(token, component);
+                }
                 return true;
             }
 
@@ -162,21 +186,88 @@ namespace Server.GameServer
             Log.Instance.Write(Log.Level.Infos, $"SoulManager().DisconnectSoul({token})");
             if (_ids.ContainsKey(token))
             {
-                var soul = DataRepositories.SoulRepository.GetById(_ids[token]);
+                UpdateDatabase(token);
+
                 _ids.Remove(token);
-
-                var timePlayed = DateTime.Now - _soulTime[token];
                 _soulTime.Remove(token);
-
                 _soulDatas.Remove(token);
-
-                soul.TimePlayed += (float)timePlayed.TotalSeconds;
-                DataRepositories.SoulRepository.Update(soul);
+                lock (_componentLock)
+                {
+                    _components.Remove(token);
+                }
 
                 return true;
             }
 
             return false;
+        }
+
+        private void UpdateDatabase(Guid token)
+        {
+            var soul = DataRepositories.SoulRepository.GetById(_ids[token]);
+            var components = _components[token];
+
+            // GENERAL
+            soul.Level = components.Datas.Level;
+            soul.CurrentExperience = components.Datas.CurrentExperience;
+            // STATS
+            soul.Stamina = components.Datas.Stamina;
+            soul.Energy = components.Datas.Energy;
+            soul.Strength = components.Datas.Strength;
+            soul.Agility = components.Datas.Agility;
+            soul.Intelligence = components.Datas.Intelligence;
+            soul.Wisdom = components.Datas.Wisdom;
+            // EQUIPMENT
+            soul.Equipment.Bag = components.Equipment.Bag;
+            soul.Equipment.Belt = components.Equipment.Belt;
+            soul.Equipment.Feet = components.Equipment.Feet;
+            soul.Equipment.Hand = components.Equipment.Hand;
+            soul.Equipment.Head = components.Equipment.Head;
+            soul.Equipment.Leg = components.Equipment.Leg;
+            soul.Equipment.Pants = components.Equipment.Pants;
+            soul.Equipment.Shoulder = components.Equipment.Shoulder;
+            soul.Equipment.Torso = components.Equipment.Torso;
+            soul.Equipment.WeaponLeft = components.Equipment.WeaponLeft;
+            soul.Equipment.WeaponRight = components.Equipment.WeaponRight;
+            // INVENTORY
+            soul.Inventory = new List<DataModels.InventorySlot>();
+            foreach (var inventorySlot in components.Inventory)
+            {
+                var slot = new DataModels.InventorySlot
+                {
+                    Id = inventorySlot.Id,
+                    ItemId = inventorySlot.ItemId,
+                    Quantity = inventorySlot.Quantity,
+                    LootedAt = inventorySlot.LootedAt,
+                    SoulId = soul.Id
+                };
+
+                soul.Inventory.Add(slot);
+            }
+            // KNOWLEDGE
+            soul.Knowledge = new List<DataModels.Knowledge>();
+            foreach (var knowledgeSlot in components.Knowledge)
+            {
+                var knowledge = new DataModels.Knowledge
+                {
+                    Id = knowledgeSlot.IsNew ? Guid.Empty : knowledgeSlot.Id,
+                    BookId = knowledgeSlot.BookId,
+                    Rank = knowledgeSlot.Rank,
+                    SoulId = soul.Id
+                };
+
+                soul.Knowledge.Add(knowledge);
+            }
+            // CURRENCIES
+            soul.Spirits = components.Currency.Spirits;
+            soul.Embers = components.Currency.Embers;
+            soul.Shards = components.Currency.Shards;
+            soul.Bits = components.Currency.Bits;
+
+            var timePlayed = DateTime.Now - _soulTime[token];
+            soul.TimePlayed += (float)timePlayed.TotalSeconds;
+
+            DataRepositories.SoulRepository.Update(soul);
         }
 
         public void UpdateCurrentDatas(Guid token, DataModels.Config config)
@@ -197,17 +288,6 @@ namespace Server.GameServer
             }
         }
 
-        [Obsolete("Do not use Soul anymore, only update db when disconnected or every 5 mins", true)]
-        public DataModels.Soul GetSoul(Guid token)
-        {
-            if (_ids.ContainsKey(token))
-            {
-                return _souls[token];
-            }
-
-            return null;
-        }
-
         public Guid GetSoulId(Guid token)
         {
             if (_ids.ContainsKey(token))
@@ -218,16 +298,6 @@ namespace Server.GameServer
             return Guid.Empty;
         }
 
-        [Obsolete("Do not use Soul anymore, only update db when disconnected or every 5 mins", true)]
-        public void UpdateSoul(Guid token, DataModels.Soul soul)
-        {
-            Log.Instance.Write(Log.Level.Infos, $"SoulManager().UpdateSoul({token}, {soul})");
-            if (_ids.ContainsKey(token))
-            {
-                _souls[token] = soul;
-            }
-        }
-
         public void UpdateBaseDatas(Guid token, SoulBaseDatas datas)
         {
             if (_ids.ContainsKey(token))
@@ -236,7 +306,10 @@ namespace Server.GameServer
 
                 component.Datas = datas;
 
-                _components[token] = component;
+                lock (_componentLock)
+                {
+                    _components[token] = component;
+                }
             }
         }
 
@@ -248,7 +321,10 @@ namespace Server.GameServer
 
                 component.Currency = currencies;
 
-                _components[token] = component;
+                lock (_componentLock)
+                {
+                    _components[token] = component;
+                }
             }
         }
 
@@ -260,7 +336,10 @@ namespace Server.GameServer
 
                 component.Equipment = equipment;
 
-                _components[token] = component;
+                lock (_componentLock)
+                {
+                    _components[token] = component;
+                }
             }
         }
 
@@ -272,7 +351,10 @@ namespace Server.GameServer
 
                 component.Inventory = inventory;
 
-                _components[token] = component;
+                lock (_componentLock)
+                {
+                    _components[token] = component;
+                }
             }
         }
 
@@ -284,7 +366,10 @@ namespace Server.GameServer
 
                 component.Knowledge = knowledges;
 
-                _components[token] = component;
+                lock (_componentLock)
+                {
+                    _components[token] = component;
+                }
             }
         }
 

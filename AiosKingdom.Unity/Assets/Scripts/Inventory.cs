@@ -214,8 +214,8 @@ public class Inventory : MonoBehaviour
                     if (_itemSlot == null || (_itemSlot != null && item.Slot == _itemSlot))
                     {
                         var itemObj = Instantiate(ItemListItem, Items.transform);
-                        var itemScript = itemObj.GetComponent<ItemSlot>();
-                        itemScript.Initialize(item);
+                        var itemScript = itemObj.GetComponent<InventoryListItem>();
+                        itemScript.Initialize(item, slot);
 
                         itemScript.Action.onClick.AddListener(() =>
                         {
@@ -227,8 +227,8 @@ public class Inventory : MonoBehaviour
                     if (_effectType == null || (_effectType != null && item.Effects.Where(e => e.Type == _effectType).Any()))
                     {
                         var itemObj = Instantiate(ItemListItem, Items.transform);
-                        var itemScript = itemObj.GetComponent<ItemSlot>();
-                        itemScript.Initialize(item);
+                        var itemScript = itemObj.GetComponent<InventoryListItem>();
+                        itemScript.Initialize(item, slot);
 
                         itemScript.Action.onClick.AddListener(() =>
                         {

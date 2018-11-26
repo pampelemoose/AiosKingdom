@@ -124,5 +124,6 @@ namespace Network
         public Guid Id { get; set; }
         public Guid BookId { get; set; }
         public int Rank { get; set; }
+        public bool IsNew { get; set; }
     }
 }

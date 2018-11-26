@@ -625,17 +625,17 @@ public class NetworkManager : MonoBehaviour
                     //MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
                 }
                 break;
-            //case Network.CommandCodes.Player.EquipItem:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            AskInventory();
-            //            AskEquipment();
-            //            AskSoulCurrentDatas();
-            //        }
-            //        MessagingCenter.Send(this, MessengerCodes.ItemEquiped, message.Json);
-            //    }
-            //    break;
+            case JsonObjects.CommandCodes.Player.EquipItem:
+                {
+                    if (message.Success)
+                    {
+                        AskInventory();
+                        AskEquipment();
+                        AskSoulCurrentDatas();
+                    }
+                    //MessagingCenter.Send(this, MessengerCodes.ItemEquiped, message.Json);
+                }
+                break;
             //case Network.CommandCodes.Player.SellItem:
             //    {
             //        if (message.Success)
@@ -1080,10 +1080,10 @@ public class NetworkManager : MonoBehaviour
         SendRequest(JsonObjects.CommandCodes.Player.Market_PlaceOrder, new string[1] { slotId.ToString() });
     }
 
-    //public void EquipItem(Guid slotId)
-    //{
-    //    SendRequest(Network.CommandCodes.Player.EquipItem, new string[1] { slotId.ToString() });
-    //}
+    public void EquipItem(Guid slotId)
+    {
+        SendRequest(JsonObjects.CommandCodes.Player.EquipItem, new string[1] { slotId.ToString() });
+    }
 
     //public void SellItem(Guid slotId)
     //{

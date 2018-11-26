@@ -93,6 +93,8 @@ namespace DataRepositories
                 online.Equipment.Leg = soul.Equipment.Leg;
                 online.Equipment.Feet = soul.Equipment.Feet;
 
+                online.Equipment.Bag = soul.Equipment.Bag;
+
                 online.Equipment.WeaponRight = soul.Equipment.WeaponRight;
                 online.Equipment.WeaponLeft = soul.Equipment.WeaponLeft;
 

@@ -69,27 +69,6 @@
             </div>
         </div>
     </section>
-    <section class="bg-dark text-muted p-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-10">
-                    <div class="input-group input-group-sm">
-                        <div class="input-group-prepend">
-                            @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "input-group-text" })
-                        </div>
-                        @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control image-url-setter" } })
-                        <div class="input-group-append">
-                            <input type="button" value="Update" class="btn btn-info update-image-viewer" />
-                        </div>
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2">
-                    <img class="img-fluid img-thumbnail image-viewer" src="@Model.Image" />
-                </div>
-            </div>
-        </div>
-    </section>
     <section class="p-2">
         <div class="container">
             <div class="row">
@@ -194,11 +173,11 @@
             </div>
         </div>
     </section>
-    <section class="bg-dark text-muted p-3">
+    <section class="p-3">
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="card">
+                    <div class="card card-dark">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6">
@@ -223,7 +202,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card">
+                    <div class="card card-dark">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6">
@@ -249,7 +228,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card">
+                    <div class="card card-dark">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6">
@@ -279,7 +258,7 @@
 
     <section class="p-2">
         <div class="container">
-            <input type="submit" value="Edit" class="btn btn-success btn-block" />
+            <input type="submit" value="<Edit>" class="btn btn-block" />
         </div>
     </section>
 }

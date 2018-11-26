@@ -8,7 +8,6 @@
     <div class="container">
         <div class="row">
             <div class="media">
-                <img class="mr-3" src="@Model.Image" height="128" width="128" />
                 <div class="media-body">
                     <h5 class="mt-0">@Model.Name</h5>
                     <p class="lead">@Model.Description</p>
@@ -28,7 +27,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <div class="card card-body">
+                <div class="card card-dark card-body">
                     <table class="table">
                         <thead class="table-borderless">
                             <tr>
@@ -43,29 +42,7 @@
                                 <tr>
                                     <td>@loot.DropRate</td>
                                     <td>
-                                        @switch (loot.Type)
-                                        {
-                                            case DataModels.Items.ItemType.Armor:
-                                                {
-                                                    @DataRepositories.ArmorRepository.GetById(loot.ItemId).ItemName
-                                                }
-                                                break;
-                                            case DataModels.Items.ItemType.Consumable:
-                                                {
-                                                    @DataRepositories.ConsumableRepository.GetById(loot.ItemId).ItemName
-                                                }
-                                                break;
-                                            case DataModels.Items.ItemType.Bag:
-                                                {
-                                                    @DataRepositories.BagRepository.GetById(loot.ItemId).ItemName
-                                                }
-                                                break;
-                                            case DataModels.Items.ItemType.Weapon:
-                                                {
-                                                    @DataRepositories.WeaponRepository.GetById(loot.ItemId).ItemName
-                                                }
-                                                break;
-                                        }
+                                        @DataRepositories.ItemRepository.GetById(loot.ItemId).Name
                                     </td>
                                     <td>@loot.Quantity</td>
                                 </tr>
@@ -75,7 +52,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card card-body">
+                <div class="card card-dark card-body">
                     <div class="row">
                         <div class="col-md-10">
                             @Html.LabelFor(model => model.BaseHealth, new { @class = "font-weight-bold" })
@@ -109,7 +86,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card card-body mt-2">
+                <div class="card card-dark card-body mt-2">
                     <div class="row">
                         <table class="table col-md-12">
                             <thead class="table-borderless">
@@ -141,10 +118,10 @@
         <div class="row">
             @foreach (var phase in Model.Phases)
             {
-                var skill = DataRepositories.BookRepository.GetAll().SelectMany(b => b.Pages).FirstOrDefault(i => i.Id.Equals(phase.SkillId));
+                var skill = DataRepositories.BookRepository.GetAllForVersion(Model.VersionId).SelectMany(b => b.Pages).FirstOrDefault(i => i.Id.Equals(phase.SkillId));
 
                 <div class="col-md-6">
-                    <div class="card">
+                    <div class="card card-dark">
                         <div class="card-header">
                             <h4>@skill.Description</h4>
                         </div>
@@ -261,7 +238,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.MonsterId }, new { @class = "btn btn-block btn-primary" })
+                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.MonsterId }, new { @class = "btn btn-block" })
                 </div>
             </div>
         </div>

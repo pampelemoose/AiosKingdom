@@ -10,6 +10,7 @@ namespace Website.Models
     {
         public class SkillChoice
         {
+            public Guid VersionId { get; set; }
             public string Name { get; set; }
             public Guid PageId { get; set; }
             public int Rank { get; set; }
@@ -21,6 +22,8 @@ namespace Website.Models
         }
 
         public Guid Id { get; set; }
+
+        public Guid SelectedVersion { get; set; }
 
         [Required]
         public Guid SelectedSkill { get; set; }
@@ -37,6 +40,7 @@ namespace Website.Models
                     {
                         pages.Add(new SkillChoice
                         {
+                            VersionId = book.VersionId,
                             Name = book.Name,
                             PageId = page.Id,
                             Rank = page.Rank

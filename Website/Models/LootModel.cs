@@ -11,7 +11,7 @@ namespace Website.Models
         public Guid Id { get; set; }
 
         [Required]
-        [Range(0, 100)]
+        [Range(0.00001, 100)]
         public double DropRate { get; set; }
 
         [Display(Name = "Type")]

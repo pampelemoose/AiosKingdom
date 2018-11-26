@@ -71,7 +71,8 @@ namespace Server.GameServer.Commands.Player
                 {
                     Id = Guid.NewGuid(),
                     BookId = bookId,
-                    Rank = rank
+                    Rank = rank,
+                    IsNew = true
                 });
             }
             else

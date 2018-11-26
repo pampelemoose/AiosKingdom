@@ -289,10 +289,14 @@
             });
 
             $("#addPhaseToMonster").click(function () {
+                var version = document.getElementById('SelectedVersion');
                 $.ajax({
                     url: "/Monsters/AddPhasePartial",
                     cache: false,
                     type: "GET",
+                    data: {
+                        'version': $(version).val()
+                    },
                     success: function (data) {
                         $('#phaseList').append(data);
                         $('#phaseList').fadeIn('fast');

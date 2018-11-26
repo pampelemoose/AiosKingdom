@@ -144,9 +144,10 @@ namespace Website.Controllers
 
         [CustomAuthorize(Roles = "MonsterCreator")]
         [HttpGet]
-        public ActionResult AddPhasePartial()
+        public ActionResult AddPhasePartial(string version)
         {
             var phase = new Models.PhaseModel();
+            phase.SelectedVersion = Guid.Parse(version);
 
             return PartialView("PhasePartial", phase);
         }
@@ -197,6 +198,7 @@ namespace Website.Controllers
                 {
                     model.Phases.Add(new Models.PhaseModel
                     {
+                        SelectedVersion = model.SelectedVersion,
                         Id = phase.Id,
                         SelectedSkill = phase.SkillId
                     });
@@ -225,8 +227,6 @@ namespace Website.Controllers
             if (ModelState.IsValid)
             {
                 monsterModel.Types = monsterModel.Types.Distinct().ToList();
-                monsterModel.Loots.RemoveAll(l => l.DropRate == 0 || l.Quantity == 0 || Guid.Empty.Equals(l.SelectedItem));
-                monsterModel.Phases.RemoveAll(p => Guid.Empty.Equals(p.SelectedSkill));
 
                 if (monsterModel.Types.Count > 0 && monsterModel.Phases.Count > 0)
                 {

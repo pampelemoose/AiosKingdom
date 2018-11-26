@@ -9,7 +9,7 @@
                     <div class="input-group-prepend">
                         @Html.LabelFor(model => model.Skills, htmlAttributes: new { @class = "input-group-text" })
                     </div>
-                    @Html.DropDownListFor(model => model.SelectedSkill, new SelectList(Model.Skills, "PageId", "PhaseName"), new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.SelectedSkill, new SelectList(Model.Skills.Where(s => s.VersionId.Equals(Model.SelectedVersion)), "PageId", "PhaseName"), new { @class = "form-control" })
                 </div>
                 @Html.ValidationMessageFor(model => model.Skills, "", new { @class = "text-danger" })
             </div>

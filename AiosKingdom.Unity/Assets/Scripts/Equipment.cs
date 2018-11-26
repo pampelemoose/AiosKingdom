@@ -41,7 +41,7 @@ public class Equipment : MonoBehaviour
                 script.Initialize(head);
                 script.Action.onClick.AddListener(() =>
                 {
-                    ItemDetails.GetComponent<ItemDetails>().ShowArmorDetails(head);
+                    ItemDetails.GetComponent<ItemDetails>().ShowDetails(head);
                 });
             }
         }
@@ -54,7 +54,7 @@ public class Equipment : MonoBehaviour
             script.Initialize(leftHand);
             script.Action.onClick.AddListener(() =>
             {
-                ItemDetails.GetComponent<ItemDetails>().ShowWeaponsDetails(leftHand);
+                ItemDetails.GetComponent<ItemDetails>().ShowDetails(leftHand);
             });
         }
         if (!Guid.Empty.Equals(equipment.WeaponRight))
@@ -65,7 +65,7 @@ public class Equipment : MonoBehaviour
             script.Initialize(rightHand);
             script.Action.onClick.AddListener(() =>
             {
-                ItemDetails.GetComponent<ItemDetails>().ShowWeaponsDetails(rightHand);
+                ItemDetails.GetComponent<ItemDetails>().ShowDetails(rightHand);
             });
         }
         if (!Guid.Empty.Equals(equipment.Bag))
@@ -76,7 +76,7 @@ public class Equipment : MonoBehaviour
             script.Initialize(bag);
             script.Action.onClick.AddListener(() =>
             {
-                ItemDetails.GetComponent<ItemDetails>().ShowBagDetails(bag);
+                ItemDetails.GetComponent<ItemDetails>().ShowDetails(bag);
             });
         }
     }

@@ -123,6 +123,15 @@ namespace Server.GameServer
                 var order = _orders.First();
                 _orders.Remove(order);
 
+                var history = new DataModels.MarketHistory
+                {
+                    Type = DataModels.TransactionType.Buy,
+                    MarketId = order.MarketSlotId,
+                    BuyerId = order.Buyer,
+                    Price = order.Price,
+                    BoughtAt = DateTime.Now
+                };
+
                 int quantity = 0;
                 bool isSpecial = false;
                 bool processed = false;
@@ -132,6 +141,10 @@ namespace Server.GameServer
                 {
                     InventoryManager.AddItemToInventory(order.ClientId, item.ItemId, item.Quantity);
                     quantity = item.Quantity;
+                    Items.Remove(item);
+                    history.ItemId = item.ItemId;
+                    history.Quantity = item.Quantity;
+                    history.SellerId = item.SellerId;
                     processed = true;
                 }
                 var special = Specials.FirstOrDefault(i => i.Id.Equals(order.MarketSlotId));
@@ -140,11 +153,16 @@ namespace Server.GameServer
                     InventoryManager.AddItemToInventory(order.ClientId, special.ItemId, special.Quantity);
                     quantity = special.Quantity;
                     isSpecial = true;
+                    history.ItemId = special.ItemId;
+                    history.Quantity = special.Quantity;
+                    history.ToServer = true;
                     processed = true;
                 }
 
                 if (processed)
                 {
+                    DataRepositories.MarketHistoryRepository.Create(history);
+
                     return new Commands.CommandResult
                     {
                         ClientId = order.ClientId,
