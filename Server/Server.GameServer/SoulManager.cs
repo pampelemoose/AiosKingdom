@@ -186,6 +186,8 @@ namespace Server.GameServer
             Log.Instance.Write(Log.Level.Infos, $"SoulManager().DisconnectSoul({token})");
             if (_ids.ContainsKey(token))
             {
+                AdventureManager.Instance.ExitRoom(_ids[token]);
+
                 UpdateDatabase(token);
 
                 _ids.Remove(token);

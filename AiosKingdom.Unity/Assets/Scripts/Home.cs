@@ -59,6 +59,7 @@ public class Home : MonoBehaviour
         NetworkManager.This.AskCurrencies();
         NetworkManager.This.AskEquipment();
         NetworkManager.This.AskKnowledges();
+        NetworkManager.This.AskInventory();
 
         PointsAvailable.onClick.AddListener(() =>
         {

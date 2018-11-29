@@ -21,7 +21,7 @@ namespace Server.GameServer
             public int Wisdom { get; set; }
         }
 
-        private Network.Adventures.Dungeon _dungeon;
+        private Network.Adventures.Adventure _dungeon;
         private int _roomNumber;
 
         private Network.AdventureState _state;
@@ -31,7 +31,7 @@ namespace Server.GameServer
         private List<Network.Items.ItemEffect> _effects;
         private Dictionary<Guid, List<Network.Skills.Inscription>> _enemyMarks;
 
-        public Adventure(Network.Adventures.Dungeon dungeon, Network.SoulDatas datas, List<Network.AdventureState.BagItem> bagItems, int roomNumber = 0)
+        public Adventure(Network.Adventures.Adventure dungeon, Network.SoulDatas datas, List<Network.AdventureState.BagItem> bagItems, int roomNumber = 0)
         {
             _dungeon = dungeon;
             _roomNumber = roomNumber;
@@ -269,57 +269,20 @@ namespace Server.GameServer
                 {
                     currencies.Shards -= (shopItem.ShardPrice * quantity);
 
-                    var type = (Network.Items.ItemType)Enum.Parse(typeof(Network.Items.ItemType), shopItem.Type);
-
-                    switch (type)
+                    var exists = _state.Bag.FirstOrDefault(b => b.ItemId.Equals(shopItem.ItemId));
+                    if (exists != null)
                     {
-                        case Network.Items.ItemType.Armor:
-                        case Network.Items.ItemType.Bag:
-                        case Network.Items.ItemType.Axe:
-                        case Network.Items.ItemType.Book:
-                        case Network.Items.ItemType.Bow:
-                        case Network.Items.ItemType.Crossbow:
-                        case Network.Items.ItemType.Dagger:
-                        case Network.Items.ItemType.Fist:
-                        case Network.Items.ItemType.Gun:
-                        case Network.Items.ItemType.Mace:
-                        case Network.Items.ItemType.Polearm:
-                        case Network.Items.ItemType.Shield:
-                        case Network.Items.ItemType.Staff:
-                        case Network.Items.ItemType.Sword:
-                        case Network.Items.ItemType.Wand:
-                        case Network.Items.ItemType.Whip:
-                        case Network.Items.ItemType.Jewelry:
-                            {
-                                _state.Bag.Add(new Network.AdventureState.BagItem
-                                {
-                                    ItemId = shopItem.ItemId,
-                                    Type = shopItem.Type,
-                                    Quantity = shopItem.Quantity
-                                });
-                            }
-                            break;
-                        case Network.Items.ItemType.Junk:
-                        case Network.Items.ItemType.Consumable:
-                            {
-                                var exists = _state.Bag.FirstOrDefault(b => b.ItemId.Equals(shopItem.ItemId));
-                                if (exists != null)
-                                {
-                                    _state.Bag.Remove(exists);
-                                    exists.Quantity += shopItem.Quantity;
-                                    _state.Bag.Add(exists);
-                                }
-                                else
-                                {
-                                    _state.Bag.Add(new Network.AdventureState.BagItem
-                                    {
-                                        ItemId = shopItem.ItemId,
-                                        Type = shopItem.Type,
-                                        Quantity = shopItem.Quantity
-                                    });
-                                }
-                            }
-                            break;
+                        _state.Bag.Remove(exists);
+                        exists.Quantity += shopItem.Quantity;
+                        _state.Bag.Add(exists);
+                    }
+                    else
+                    {
+                        _state.Bag.Add(new Network.AdventureState.BagItem
+                        {
+                            ItemId = shopItem.ItemId,
+                            Quantity = shopItem.Quantity
+                        });
                     }
 
                     if (shopItem.Quantity > 0)
@@ -389,7 +352,6 @@ namespace Server.GameServer
         {
             if (_loots.ContainsKey(lootId))
             {
-                Network.Items.ItemType type = (Network.Items.ItemType)Enum.Parse(typeof(Network.Items.ItemType), _loots[lootId].Type);
                 var exists = _state.Bag.FirstOrDefault(i => i.ItemId.Equals(_loots[lootId].ItemId));
                 if (exists != null)
                 {
@@ -403,7 +365,6 @@ namespace Server.GameServer
                     {
                         InventoryId = Guid.NewGuid(),
                         ItemId = _loots[lootId].ItemId,
-                        Type = type.ToString(),
                         Quantity = 1
                     });
                 }
@@ -686,7 +647,6 @@ namespace Server.GameServer
 
                 _state.Shops.Add(tempId, new Network.AdventureState.ShopState
                 {
-                    Type = item.Type.ToString(),
                     ItemId = item.ItemId,
                     Quantity = item.Quantity,
                     ShardPrice = item.ShardPrice

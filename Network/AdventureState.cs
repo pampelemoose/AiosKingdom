@@ -19,9 +19,7 @@ namespace Network
 
         public struct ShopState
         {
-            public string Type { get; set; }
             public Guid ItemId { get; set; }
-
             public int Quantity { get; set; }
             public int ShardPrice { get; set; }
         }
@@ -42,10 +40,7 @@ namespace Network
         public class BagItem
         {
             public Guid InventoryId { get; set; }
-
-            public string Type { get; set; }
             public Guid ItemId { get; set; }
-
             public int Quantity { get; set; }
         }
 

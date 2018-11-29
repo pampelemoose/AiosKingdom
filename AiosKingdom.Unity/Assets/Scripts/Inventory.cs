@@ -17,17 +17,19 @@ public class Inventory : MonoBehaviour
     public GameObject Items;
     public GameObject ItemListItem;
     public GameObject ItemDetails;
+
+    [Space(10)]
+    [Header("Pagination")]
     public GameObject PaginationBox;
+    public GameObject PaginationPrefab;
     public int ItemPerPage = 5;
 
-    public GameObject PaginationPrefab;
 
     private JsonObjects.Items.ItemType? _itemType;
     private JsonObjects.Items.ItemSlot? _itemSlot;
     private JsonObjects.Items.EffectType? _effectType;
 
     private Pagination _pagination;
-    private int _currentPage = 1;
     private List<JsonObjects.InventorySlot> _inventory;
 
     private bool _init = false;
@@ -165,7 +167,12 @@ public class Inventory : MonoBehaviour
     {
         _inventory = DatasManager.Instance.Inventory;
 
-        SetupPagination();
+        if (_pagination == null)
+        {
+            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            _pagination = pagination.GetComponent<Pagination>();
+        }
+        _pagination.Setup(ItemPerPage, _inventory.Count, SetItems);
 
         SetItems();
     }
@@ -187,7 +194,7 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            items = items.Skip((_currentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
+            items = items.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
         }
 
         foreach (var item in items)
@@ -239,45 +246,6 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        _pagination.SetIndicator(_currentPage, (_inventory.Count / ItemPerPage) + (_inventory.Count % ItemPerPage > 0 ? 1 : 0));
-    }
-
-    private void SetupPagination()
-    {
-        if (_pagination == null)
-        {
-            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
-            _pagination = pagination.GetComponent<Pagination>();
-
-            _pagination.Prev.onClick.AddListener(() =>
-            {
-                if (_currentPage - 1 == 1)
-                {
-                    _pagination.Prev.gameObject.SetActive(false);
-                }
-
-                _pagination.Next.gameObject.SetActive(true);
-                --_currentPage;
-
-                SetItems();
-            });
-
-            _pagination.Next.onClick.AddListener(() =>
-            {
-                if ((_inventory.Count - ((_currentPage + 1) * ItemPerPage)) <= 0)
-                {
-                    _pagination.Next.gameObject.SetActive(false);
-                }
-
-                _pagination.Prev.gameObject.SetActive(true);
-                ++_currentPage;
-
-                SetItems();
-            });
-        }
-
-        _currentPage = 1;
-        _pagination.Prev.gameObject.SetActive(false);
-        _pagination.Next.gameObject.SetActive(_inventory.Count > ItemPerPage);
+        _pagination.SetIndicator((_inventory.Count / ItemPerPage) + (_inventory.Count % ItemPerPage > 0 ? 1 : 0));
     }
 }

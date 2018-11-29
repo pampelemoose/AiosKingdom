@@ -23,7 +23,8 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         Knowledges,
         Bookstore,
         Inventory,
-        Adventures
+        AdventureSelection,
+        Adventure
     }
 
     private Views _currentView = Views.None;
@@ -41,11 +42,12 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public GameObject Market;
     public GameObject Pills;
     public GameObject Equipment;
-    public GameObject Adventures;
+    public GameObject AdventureSelection;
     public GameObject Inventory;
     public GameObject Knowledges;
     public GameObject Bookstore;
 
+    public GameObject Adventure;
 
     void Awake()
     {
@@ -152,9 +154,18 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
 
     public void ShowAdventures()
     {
-        ChangeView(Views.Adventures, true);
+        ChangeView(Views.AdventureSelection, true);
         
-        var script = _currentPage.GetComponent<Adventures>();
+        var script = _currentPage.GetComponent<AdventureSelection>();
+
+        HideLoading();
+    }
+
+    public void StartAdventure()
+    {
+        ChangeView(Views.Adventure, true);
+
+        var script = _currentPage.GetComponent<Adventure>();
 
         HideLoading();
     }
@@ -197,11 +208,14 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
                 case Views.Inventory:
                     _currentPage = Inventory;
                     break;
-                case Views.Adventures:
-                    _currentPage = Adventures;
-                    break;
                 case Views.Market:
                     _currentPage = Market;
+                    break;
+                case Views.AdventureSelection:
+                    _currentPage = AdventureSelection;
+                    break;
+                case Views.Adventure:
+                    _currentPage = Adventure;
                     break;
             }
 
@@ -269,6 +283,12 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         var script = Market.GetComponent<Market>();
         script.UpdateSpecialItems();
+    }
+
+    public void UpdateAdventure()
+    {
+        var script = Market.GetComponent<Adventure>();
+        script.UpdateCurrentState();
     }
 
     #endregion

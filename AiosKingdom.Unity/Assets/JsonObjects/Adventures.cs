@@ -21,7 +21,7 @@ namespace JsonObjects.Adventures
         Boss = 2
     }
 
-    public class Dungeon
+    public class Adventure
     {
         public Guid Id { get; set; }
 

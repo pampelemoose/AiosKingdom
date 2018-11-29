@@ -13,15 +13,18 @@ public class ServerList : MonoBehaviour
     public GameObject PaginationPrefab;
 
     private Pagination _pagination;
-    private int _currentPage = 1;
-
     private List<JsonObjects.GameServerInfos> _servers;
 
     public void SetServers(List<JsonObjects.GameServerInfos> servers)
     {
         _servers = servers;
 
-        SetupPagination();
+        if (_pagination == null)
+        {
+            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            _pagination = pagination.GetComponent<Pagination>();
+        }
+        _pagination.Setup(ItemPerPage, _servers.Count, SetServerList);
 
         SetServerList();
     }
@@ -33,7 +36,7 @@ public class ServerList : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        var paginatedServers = _servers.Skip((_currentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
+        var paginatedServers = _servers.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
 
         foreach (var server in paginatedServers)
         {
@@ -43,45 +46,6 @@ public class ServerList : MonoBehaviour
             script.SetDatas(server);
         }
 
-        _pagination.SetIndicator(_currentPage, (_servers.Count / ItemPerPage) + (_servers.Count % ItemPerPage > 0 ? 1 : 0));
-    }
-
-    private void SetupPagination()
-    {
-        if (_pagination == null)
-        {
-            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
-            _pagination = pagination.GetComponent<Pagination>();
-
-            _pagination.Prev.onClick.AddListener(() =>
-            {
-                if (_currentPage - 1 == 1)
-                {
-                    _pagination.Prev.gameObject.SetActive(false);
-                }
-
-                _pagination.Next.gameObject.SetActive(true);
-                --_currentPage;
-
-                SetServerList();
-            });
-            
-            _pagination.Next.onClick.AddListener(() =>
-            {
-                if ((_servers.Count - ((_currentPage + 1) * ItemPerPage)) <= 0)
-                {
-                    _pagination.Next.gameObject.SetActive(false);
-                }
-
-                _pagination.Prev.gameObject.SetActive(true);
-                ++_currentPage;
-
-                SetServerList();
-            });
-        }
-
-        _currentPage = 1;
-        _pagination.Prev.gameObject.SetActive(false);
-        _pagination.Next.gameObject.SetActive(_servers.Count > ItemPerPage);
+        _pagination.SetIndicator((_servers.Count / ItemPerPage) + (_servers.Count % ItemPerPage > 0 ? 1 : 0));
     }
 }

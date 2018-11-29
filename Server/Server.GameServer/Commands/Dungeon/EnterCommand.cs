@@ -27,6 +27,19 @@ namespace Server.GameServer.Commands.Dungeon
             {
                 var adventure = AdventureManager.Instance.OpenRoom(soulId, datas, dungeonId, bagItems);
 
+                if (adventure == null)
+                {
+                    ret.ClientResponse = new Network.Message
+                    {
+                        Code = Network.CommandCodes.Dungeon.Enter,
+                        Success = false,
+                        Json = "Couldn't enter because you didn't leave properly last time."
+                    };
+                    ret.Succeeded = true;
+
+                    return ret;
+                }
+
                 foreach (var bagItem in bagItems)
                 {
                     var exists = inventory.FirstOrDefault(i => i.Id.Equals(bagItem.InventoryId));

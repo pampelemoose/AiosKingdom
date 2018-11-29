@@ -38,7 +38,7 @@ namespace Server.GameServer
 
         public List<Network.Items.Item> Items { get; private set; }
         public List<Network.Skills.Book> Books { get; private set; }
-        public List<Network.Adventures.Dungeon> Dungeons { get; private set; }
+        public List<Network.Adventures.Adventure> Dungeons { get; private set; }
         public List<Network.Monsters.Monster> Monsters { get; private set; }
         public List<Network.MarketSlot> Market { get; private set; }
 
@@ -332,11 +332,11 @@ namespace Server.GameServer
         private void LoadDungeons()
         {
             var dungeons = DataRepositories.AdventureRepository.GetAllForVersion(_config.VersionId);
-            var dungeonList = new List<Network.Adventures.Dungeon>();
+            var dungeonList = new List<Network.Adventures.Adventure>();
 
             foreach (var dungeon in dungeons)
             {
-                var dun = new Network.Adventures.Dungeon
+                var dun = new Network.Adventures.Adventure
                 {
                     Id = dungeon.DungeonId,
                     Name = dungeon.Name,

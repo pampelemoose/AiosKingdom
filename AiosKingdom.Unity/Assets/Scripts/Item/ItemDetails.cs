@@ -23,7 +23,6 @@ public class ItemDetails : MonoBehaviour
     public int ItemPerPage = 5;
 
     private Pagination _pagination;
-    private int _currentPage = 1;
 
     private List<JsonObjects.Items.ItemStat> _stats;
     private List<JsonObjects.Items.ItemEffect> _effects;
@@ -113,7 +112,12 @@ public class ItemDetails : MonoBehaviour
         _stats = stats;
         _effects = null;
 
-        SetupPagination();
+        if (_pagination == null)
+        {
+            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            _pagination = pagination.GetComponent<Pagination>();
+        }
+        _pagination.Setup(ItemPerPage, (_stats != null ? _stats.Count : 0), SetStats);
 
         SetStats();
     }
@@ -125,7 +129,7 @@ public class ItemDetails : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        var paginatedStats = _stats.Skip((_currentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
+        var paginatedStats = _stats.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
 
         foreach (var stat in paginatedStats)
         {
@@ -138,7 +142,7 @@ public class ItemDetails : MonoBehaviour
             script.Value.color = _statColors[stat.Type];
         }
 
-        _pagination.SetIndicator(_currentPage, (_stats.Count / ItemPerPage) + (_stats.Count % ItemPerPage > 0 ? 1 : 0));
+        _pagination.SetIndicator((_stats.Count / ItemPerPage) + (_stats.Count % ItemPerPage > 0 ? 1 : 0));
     }
 
     private void InitEffects(List<JsonObjects.Items.ItemEffect> effects)
@@ -146,7 +150,12 @@ public class ItemDetails : MonoBehaviour
         _stats = null;
         _effects = effects;
 
-        SetupPagination();
+        if (_pagination == null)
+        {
+            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            _pagination = pagination.GetComponent<Pagination>();
+        }
+        _pagination.Setup(ItemPerPage, (_effects != null ? _effects.Count : 0), SetEffects);
 
         SetEffects();
     }
@@ -158,7 +167,7 @@ public class ItemDetails : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        var paginatedEffects = _effects.Skip((_currentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
+        var paginatedEffects = _effects.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
 
         foreach (var effect in paginatedEffects)
         {
@@ -172,70 +181,6 @@ public class ItemDetails : MonoBehaviour
             });
         }
 
-        _pagination.SetIndicator(_currentPage, (_effects.Count / ItemPerPage) + (_effects.Count % ItemPerPage > 0 ? 1 : 0));
-    }
-
-    private void SetupPagination()
-    {
-        if (_pagination == null)
-        {
-            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
-            _pagination = pagination.GetComponent<Pagination>();
-
-            _pagination.Prev.onClick.AddListener(() =>
-            {
-                if (_currentPage - 1 == 1)
-                {
-                    _pagination.Prev.gameObject.SetActive(false);
-                }
-
-                _pagination.Next.gameObject.SetActive(true);
-                --_currentPage;
-
-                if (_stats != null)
-                {
-                    SetStats();
-                }
-                else
-                {
-                    SetEffects();
-                }
-            });
-
-            _pagination.Next.onClick.AddListener(() =>
-            {
-                if (_stats != null && (_stats.Count - ((_currentPage + 1) * ItemPerPage)) <= 0)
-                {
-                    _pagination.Next.gameObject.SetActive(false);
-                }
-                else if (_effects != null && (_effects.Count - ((_currentPage + 1) * ItemPerPage)) <= 0)
-                {
-                    _pagination.Next.gameObject.SetActive(false);
-                }
-
-                _pagination.Prev.gameObject.SetActive(true);
-                ++_currentPage;
-
-                if (_stats != null)
-                {
-                    SetStats();
-                }
-                else
-                {
-                    SetEffects();
-                }
-            });
-        }
-
-        _currentPage = 1;
-        _pagination.Prev.gameObject.SetActive(false);
-        if (_stats != null)
-        {
-            _pagination.Next.gameObject.SetActive(_stats.Count > ItemPerPage);
-        }
-        else
-        {
-            _pagination.Next.gameObject.SetActive(_effects.Count > ItemPerPage);
-        }
+        _pagination.SetIndicator((_effects.Count / ItemPerPage) + (_effects.Count % ItemPerPage > 0 ? 1 : 0));
     }
 }

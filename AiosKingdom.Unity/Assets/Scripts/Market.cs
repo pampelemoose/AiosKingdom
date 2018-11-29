@@ -36,7 +36,6 @@ public class Market : MonoBehaviour
     private JsonObjects.Items.EffectType? _effectType;
 
     private Pagination _pagination;
-    private int _currentPage = 1;
     private List<JsonObjects.MarketSlot> _slots;
 
     private bool _init = false;
@@ -199,7 +198,12 @@ public class Market : MonoBehaviour
 
     private void ResetItems()
     {
-        SetupPagination();
+        if (_pagination == null)
+        {
+            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            _pagination = pagination.GetComponent<Pagination>();
+        }
+        _pagination.Setup(ItemPerPage, _slots.Count, SetItems);
 
         SetItems();
     }
@@ -221,7 +225,7 @@ public class Market : MonoBehaviour
         }
         else
         {
-            items = items.Skip((_currentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
+            items = items.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
         }
 
         foreach (var item in items)
@@ -283,7 +287,7 @@ public class Market : MonoBehaviour
             }
         }
 
-        _pagination.SetIndicator(_currentPage, (_slots.Count / ItemPerPage) + (_slots.Count % ItemPerPage > 0 ? 1 : 0));
+        _pagination.SetIndicator((_slots.Count / ItemPerPage) + (_slots.Count % ItemPerPage > 0 ? 1 : 0));
     }
 
     private void BindItemToBuyBox(JsonObjects.MarketSlot slot)
@@ -300,44 +304,5 @@ public class Market : MonoBehaviour
 
             BuyBox.SetActive(false);
         });
-    }
-
-    private void SetupPagination()
-    {
-        if (_pagination == null)
-        {
-            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
-            _pagination = pagination.GetComponent<Pagination>();
-
-            _pagination.Prev.onClick.AddListener(() =>
-            {
-                if (_currentPage - 1 == 1)
-                {
-                    _pagination.Prev.gameObject.SetActive(false);
-                }
-
-                _pagination.Next.gameObject.SetActive(true);
-                --_currentPage;
-
-                SetItems();
-            });
-
-            _pagination.Next.onClick.AddListener(() =>
-            {
-                if ((_slots.Count - ((_currentPage + 1) * ItemPerPage)) <= 0)
-                {
-                    _pagination.Next.gameObject.SetActive(false);
-                }
-
-                _pagination.Prev.gameObject.SetActive(true);
-                ++_currentPage;
-
-                SetItems();
-            });
-        }
-
-        _currentPage = 1;
-        _pagination.Prev.gameObject.SetActive(false);
-        _pagination.Next.gameObject.SetActive(_slots.Count > ItemPerPage);
     }
 }

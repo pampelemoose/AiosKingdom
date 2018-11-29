@@ -781,7 +781,7 @@ public class NetworkManager : MonoBehaviour
                 break;
             case JsonObjects.CommandCodes.Listing.Dungeon:
                 {
-                    var dungeons = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Dungeon>>(message.Json);
+                    var dungeons = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Adventure>>(message.Json);
                     DatasManager.Instance.Dungeons = dungeons;
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
@@ -818,19 +818,28 @@ public class NetworkManager : MonoBehaviour
                 }
                 break;
 
-            //// DUNGEON
-            //case Network.CommandCodes.Dungeon.Enter:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            MessagingCenter.Send(this, MessengerCodes.EnterDungeon);
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Enter Dungeon", message.Json);
-            //        }
-            //    }
-            //    break;
+            // DUNGEON
+            case JsonObjects.CommandCodes.Dungeon.Enter:
+                {
+                    if (message.Success)
+                    {
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.StartAdventure();
+                        });
+                        //MessagingCenter.Send(this, MessengerCodes.EnterDungeon);
+                    }
+                    else
+                    {
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.HideLoading();
+                        });
+                        //ScreenManager.Instance.AlertScreen("Enter Dungeon", message.Json);
+                    }
+                    Debug.Log(message.Json);
+                }
+                break;
             //case Network.CommandCodes.Dungeon.EnterRoom:
             //    {
             //        if (message.Success)
@@ -843,35 +852,35 @@ public class NetworkManager : MonoBehaviour
             //        }
             //    }
             //    break;
-            //case Network.CommandCodes.Dungeon.Exit:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            AskCurrencies();
-            //            AskInventory();
-            //            AskSoulCurrentDatas();
-            //            MessagingCenter.Send(this, MessengerCodes.ExitedDungeon);
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Exit Room", message.Json);
-            //        }
-            //    }
-            //    break;
-            //case Network.CommandCodes.Dungeon.UpdateRoom:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            var adventure = JsonConvert.DeserializeObject<Network.AdventureState>(message.Json);
-            //            DatasManager.Instance.Adventure = adventure;
-            //            MessagingCenter.Send(this, MessengerCodes.DungeonUpdated);
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Update Room", message.Json);
-            //        }
-            //    }
-            //    break;
+            case JsonObjects.CommandCodes.Dungeon.Exit:
+                {
+                    if (message.Success)
+                    {
+                        AskCurrencies();
+                        AskInventory();
+                        AskSoulCurrentDatas();
+                        //MessagingCenter.Send(this, MessengerCodes.ExitedDungeon);
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Exit Room", message.Json);
+                    }
+                }
+                break;
+            case JsonObjects.CommandCodes.Dungeon.UpdateRoom:
+                {
+                    if (message.Success)
+                    {
+                        var adventure = JsonConvert.DeserializeObject<JsonObjects.AdventureState>(message.Json);
+                        DatasManager.Instance.Adventure = adventure;
+                        //MessagingCenter.Send(this, MessengerCodes.DungeonUpdated);
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Update Room", message.Json);
+                    }
+                }
+                break;
             //case Network.CommandCodes.Dungeon.UseSkill:
             //    {
             //        if (message.Success)
@@ -1122,22 +1131,22 @@ public class NetworkManager : MonoBehaviour
 
     #endregion
 
-    //#region Dungeon Commands
+    #region Dungeon Commands
 
-    //public void EnterDungeon(Guid dungeonId, List<Network.AdventureState.BagItem> items)
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.Enter, new string[2] { dungeonId.ToString(), JsonConvert.SerializeObject(items) });
-    //}
+    public void EnterDungeon(Guid dungeonId, List<JsonObjects.AdventureState.BagItem> items)
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.Enter, new string[2] { dungeonId.ToString(), JsonConvert.SerializeObject(items) });
+    }
 
     //public void OpenDungeonRoom()
     //{
     //    SendRequest(Network.CommandCodes.Dungeon.EnterRoom);
     //}
 
-    //public void UpdateDungeonRoom()
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.UpdateRoom);
-    //}
+    public void UpdateDungeonRoom()
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.UpdateRoom);
+    }
 
     //public void EnemyTurn()
     //{
@@ -1174,10 +1183,10 @@ public class NetworkManager : MonoBehaviour
     //    SendRequest(Network.CommandCodes.Dungeon.LootItem, new string[1] { lootId.ToString() });
     //}
 
-    //public void ExitDungeon()
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.Exit);
-    //}
+    public void ExitDungeon()
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.Exit);
+    }
 
     //public void LeaveFinishedRoom()
     //{
@@ -1197,7 +1206,7 @@ public class NetworkManager : MonoBehaviour
     //    AskSoulCurrentDatas();
     //}
 
-    //#endregion
+    #endregion
 
     private void SendRequest(int code, string[] args = null)
     {
