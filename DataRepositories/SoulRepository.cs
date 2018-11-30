@@ -27,7 +27,7 @@ namespace DataRepositories
                     .Include(s => s.Equipment)
                     .Include(s => s.Inventory)
                     .Include(s => s.Knowledge)
-                    .Include(s => s.Progress)
+                    .Include(s => s.AdventureLocks)
                     .FirstOrDefault(s => s.Id.Equals(id));
             }
         }
@@ -75,7 +75,7 @@ namespace DataRepositories
                     .Include(s => s.Equipment)
                     .Include(s => s.Inventory)
                     .Include(s => s.Knowledge)
-                    .Include(s => s.Progress)
+                    .Include(s => s.AdventureLocks)
                     .FirstOrDefault(s => s.Id.Equals(soul.Id));
 
                 if (online == null) return false;
@@ -148,27 +148,27 @@ namespace DataRepositories
                 }
 
                 // PROGRESS
-                var oldPro = online.Progress;
-                online.Progress = new List<DataModels.AdventureProgress>();
-                foreach (var pro in soul.Progress)
+                var oldLocks = online.AdventureLocks;
+                online.AdventureLocks = new List<DataModels.AdventureUnlocked>();
+                foreach (var pro in soul.AdventureLocks)
                 {
                     if (Guid.Empty.Equals(pro.Id))
                     {
                         pro.Id = Guid.NewGuid();
-                        online.Progress.Add(pro);
+                        online.AdventureLocks.Add(pro);
                     }
                     else
                     {
-                        var progress = context.AdventureProgresses.FirstOrDefault(i => i.Id.Equals(pro.Id));
-                        progress.CurrentRoom = pro.CurrentRoom;
-                        online.Progress.Add(progress);
-                        oldPro.Remove(oldPro.FirstOrDefault(o => o.Id.Equals(pro.Id)));
+                        var progress = context.AdventureUnlocked.FirstOrDefault(i => i.Id.Equals(pro.Id));
+                        // TODO : Any changes to the objects here.
+                        online.AdventureLocks.Add(progress);
+                        oldLocks.Remove(oldLocks.FirstOrDefault(o => o.Id.Equals(pro.Id)));
                     }
                 }
 
-                foreach (var toDel in oldPro)
+                foreach (var toDel in oldLocks)
                 {
-                    context.AdventureProgresses.Remove(toDel);
+                    context.AdventureUnlocked.Remove(toDel);
                 }
 
                 online.CurrentExperience = soul.CurrentExperience;

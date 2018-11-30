@@ -37,6 +37,7 @@ public class BagSetup : MonoBehaviour
         }
         _pagination.Setup(5, 0, SetItems);
 
+        AddItemButton.onClick.RemoveAllListeners();
         AddItemButton.onClick.AddListener(() =>
         {
             BagItemSelection.SetActive(true);
@@ -53,8 +54,11 @@ public class BagSetup : MonoBehaviour
 
         BagSlot.text = string.Format("[{0} / {1}]", _currentBagSlotCount, _bagSize);
 
+        EnterDungeonButton.onClick.RemoveAllListeners();
         EnterDungeonButton.onClick.AddListener(() =>
         {
+            gameObject.SetActive(false);
+
             UIManager.This.ShowLoading();
 
             NetworkManager.This.EnterDungeon(adventure.Id, _bag);

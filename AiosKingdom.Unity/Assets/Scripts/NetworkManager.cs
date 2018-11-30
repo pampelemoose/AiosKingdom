@@ -859,6 +859,11 @@ public class NetworkManager : MonoBehaviour
                         AskCurrencies();
                         AskInventory();
                         AskSoulCurrentDatas();
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.ShowHome();
+                        });
                         //MessagingCenter.Send(this, MessengerCodes.ExitedDungeon);
                     }
                     else
@@ -873,6 +878,11 @@ public class NetworkManager : MonoBehaviour
                     {
                         var adventure = JsonConvert.DeserializeObject<JsonObjects.AdventureState>(message.Json);
                         DatasManager.Instance.Adventure = adventure;
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.UpdateAdventure();
+                        });
                         //MessagingCenter.Send(this, MessengerCodes.DungeonUpdated);
                     }
                     else

@@ -85,4 +85,76 @@ namespace Website.Models
         [Display(Name = "Phases")]
         public List<PhaseModel> Phases { get; set; }
     }
+
+    public class LootModel
+    {
+        public Guid Id { get; set; }
+
+        [Required]
+        [Range(0.00001, 100)]
+        public double DropRate { get; set; }
+
+        public Guid SelectedItem { get; set; }
+        [Display(Name = "Item")]
+        public List<DataModels.Items.Item> Items
+        {
+            get
+            {
+                var items = DataRepositories.ItemRepository.GetAll().ToList();
+
+                return items;
+            }
+        }
+
+        [Required]
+        [Range(1, 10000)]
+        public int Quantity { get; set; }
+    }
+
+    public class PhaseModel
+    {
+        public class SkillChoice
+        {
+            public Guid VersionId { get; set; }
+            public string Name { get; set; }
+            public Guid PageId { get; set; }
+            public int Rank { get; set; }
+
+            public string PhaseName
+            {
+                get { return $"{Name} (Rank {Rank})"; }
+            }
+        }
+
+        public Guid Id { get; set; }
+
+        public Guid SelectedVersion { get; set; }
+
+        [Required]
+        public Guid SelectedSkill { get; set; }
+        [Display(Name = "Skill")]
+        public List<SkillChoice> Skills
+        {
+            get
+            {
+                var pages = new List<SkillChoice>();
+
+                foreach (var book in DataRepositories.BookRepository.GetAll())
+                {
+                    foreach (var page in book.Pages)
+                    {
+                        pages.Add(new SkillChoice
+                        {
+                            VersionId = book.VersionId,
+                            Name = book.Name,
+                            PageId = page.Id,
+                            Rank = page.Rank
+                        });
+                    }
+                }
+
+                return pages;
+            }
+        }
+    }
 }

@@ -18,7 +18,6 @@ namespace DataModels.Website
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public int SectionId { get; set; }
 
         public string Image { get; set; }
@@ -26,7 +25,6 @@ namespace DataModels.Website
         public ImageSide ImageSide { get; set; }
 
         private string _backgroundColor = "#000000";
-        [MinLength(7), MaxLength(9)]
         public string BackgroundColor
         {
             get { return _backgroundColor; }
@@ -37,7 +35,6 @@ namespace DataModels.Website
         }
 
         private string _textColor = "#FFFFFF";
-        [MinLength(7), MaxLength(9)]
         public string TextColor
         {
             get { return _textColor; }
@@ -47,13 +44,8 @@ namespace DataModels.Website
             }
         }
 
-        [Required]
         public string Content { get; set; }
-
-        [Required]
         public int Order { get; set; }
-
-        [Required]
         public bool Active { get; set; }
     }
 }

@@ -18,21 +18,13 @@ namespace DataModels.Website
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public string Action { get; set; }
-
-        [Required]
         public string Controller { get; set; }
-
-        [Required]
         public int Order { get; set; }
 
         public List<Banner> Contents { get; set; }
 
-        [Required]
         public bool Before { get; set; }
-
-        [Required]
         public ContentType Type { get; set; }
     }
 }

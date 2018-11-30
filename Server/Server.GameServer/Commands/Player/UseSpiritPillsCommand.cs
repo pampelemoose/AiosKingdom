@@ -12,9 +12,9 @@ namespace Server.GameServer.Commands.Player
 {
     public class UseSpiritPillsCommand : ACommand
     {
-        private DataModels.Config _config;
+        private DataModels.Town _config;
 
-        public UseSpiritPillsCommand(CommandArgs args, DataModels.Config config)
+        public UseSpiritPillsCommand(CommandArgs args, DataModels.Town config)
             : base(args)
         {
             _config = config;

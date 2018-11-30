@@ -24,6 +24,7 @@ public class EffectDetails : MonoBehaviour
         EffectValue.text = string.Format("[{0}]", effect.AffectValue);
         EffectTime.text = string.Format("[{0}]", effect.AffectTime);
 
+        Close.onClick.RemoveAllListeners();
         Close.onClick.AddListener(() =>
         {
             gameObject.SetActive(false);

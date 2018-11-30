@@ -126,4 +126,11 @@ namespace Network
         public int Rank { get; set; }
         public bool IsNew { get; set; }
     }
+
+    public class AdventureUnlocked
+    {
+        public Guid Id { get; set; }
+        public Guid AdventureId { get; set; }
+        public DateTime? UnlockedAt { get; set; }
+    }
 }

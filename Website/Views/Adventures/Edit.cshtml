@@ -1,4 +1,4 @@
-﻿@model Website.Models.DungeonModel
+﻿@model Website.Models.AdventureModel
 
 @{
     ViewBag.Title = "Edit";
@@ -18,6 +18,7 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
             <input type="hidden" name="Id" value="@Model.Id" />
+            <input type="hidden" name="AdventureId" value="@Model.AdventureId" />
 
             <div class="row">
                 <div class="col-md-3">

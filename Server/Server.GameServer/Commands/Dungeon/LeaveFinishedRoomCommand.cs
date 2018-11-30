@@ -12,9 +12,9 @@ namespace Server.GameServer.Commands.Dungeon
 {
     public class LeaveFinishedRoomCommand : ACommand
     {
-        private DataModels.Config _config;
+        private DataModels.Town _config;
 
-        public LeaveFinishedRoomCommand(CommandArgs args, DataModels.Config config)
+        public LeaveFinishedRoomCommand(CommandArgs args, DataModels.Town config)
             : base(args)
         {
             _config = config;
@@ -25,7 +25,6 @@ namespace Server.GameServer.Commands.Dungeon
             var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
             var adventure = AdventureManager.Instance.GetAdventure(soulId);
 
-
             if (adventure.IsCleared)
             {
                 var soulDatas = SoulManager.Instance.GetDatas(_args.ClientId);
@@ -35,8 +34,9 @@ namespace Server.GameServer.Commands.Dungeon
                 var inventory = SoulManager.Instance.GetInventory(_args.ClientId);
 
                 var adventureState = adventure.GetActualState();
-                var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(adventure.DungeonId));
+                var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(adventure.AdventureId));
 
+                // We get exp and loots and everything only if we exit finished adventure.
                 if (adventureState.IsExit)
                 {
                     if (soulDatas.Level < kingdom.CurrentMaxLevel)
@@ -70,73 +70,87 @@ namespace Server.GameServer.Commands.Dungeon
 
                     SoulManager.Instance.UpdateCurrencies(_args.ClientId, currencies);
                     SoulManager.Instance.UpdateInventory(_args.ClientId, inventory);
-                }
 
-                // Use Experience for LevelUps
-                int leveledUp = 0;
-                while (soulDatas.CurrentExperience >= soulDatas.RequiredExperience)
-                {
-                    ++soulBaseDatas.Level;
+                    // Use Experience for LevelUps
+                    int leveledUp = 0;
+                    while (soulDatas.CurrentExperience >= soulDatas.RequiredExperience)
+                    {
+                        ++soulBaseDatas.Level;
 
-                    currencies.Spirits += _config.SpiritsPerLevelUp;
-                    currencies.Embers += _config.EmbersPerLevelUp;
+                        currencies.Spirits += _config.SpiritsPerLevelUp;
+                        currencies.Embers += _config.EmbersPerLevelUp;
 
-                    Log.Instance.Write(Log.Level.Infos, $"{soulDatas.Name} Level up {soulDatas.CurrentExperience}/{soulDatas.RequiredExperience} => ({soulDatas.Level}).");
+                        Log.Instance.Write(Log.Level.Infos, $"{soulDatas.Name} Level up {soulDatas.CurrentExperience}/{soulDatas.RequiredExperience} => ({soulDatas.Level}).");
 
-                    soulBaseDatas.CurrentExperience -= soulDatas.RequiredExperience;
+                        soulBaseDatas.CurrentExperience -= soulDatas.RequiredExperience;
+
+                        //SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
+                        SoulManager.Instance.UpdateBaseDatas(_args.ClientId, soulBaseDatas);
+
+                        SoulManager.Instance.UpdateCurrentDatas(_args.ClientId, _config);
+                        soulDatas = SoulManager.Instance.GetDatas(_args.ClientId);
+                        Console.WriteLine($"{soulDatas.Name} Level up({soulDatas.Level}).");
+                        leveledUp++;
+
+                        // Check the Kingdom maxLevel count
+                        if (soulDatas.Level == kingdom.CurrentMaxLevel)
+                        {
+                            kingdom.CurrentMaxLevelCount++;
+                            DataRepositories.KingdomRepository.Update(kingdom);
+                            soulBaseDatas.CurrentExperience = 0;
+                            break;
+                        }
+                    }
+
+                    var locks = SoulManager.Instance.GetAdventureLocks(_args.ClientId);
+                    if (locks == null) locks = new List<Network.AdventureUnlocked>();
+                    if (!locks.Any(l => l.AdventureId.Equals(adventure.AdventureId)))
+                    {
+                        locks.Add(new Network.AdventureUnlocked
+                        {
+                            AdventureId = adventure.AdventureId,
+                            UnlockedAt = DateTime.Now
+                        });
+                        SoulManager.Instance.UpdateAdventureLocks(_args.ClientId, locks);
+                    }
 
                     //SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
+                    SoulManager.Instance.UpdateCurrencies(_args.ClientId, currencies);
                     SoulManager.Instance.UpdateBaseDatas(_args.ClientId, soulBaseDatas);
-
                     SoulManager.Instance.UpdateCurrentDatas(_args.ClientId, _config);
-                    soulDatas = SoulManager.Instance.GetDatas(_args.ClientId);
-                    Console.WriteLine($"{soulDatas.Name} Level up({soulDatas.Level}).");
-                    leveledUp++;
 
-                    // Check the Kingdom maxLevel count
-                    if (soulDatas.Level == kingdom.CurrentMaxLevel)
-                    {
-                        kingdom.CurrentMaxLevelCount++;
-                        DataRepositories.KingdomRepository.Update(kingdom);
-                        soulBaseDatas.CurrentExperience = 0;
-                        break;
-                    }
-                }
+                    AdventureManager.Instance.ExitRoom(soulId);
 
-                //SoulManager.Instance.UpdateSoul(_args.ClientId, soul);
-                SoulManager.Instance.UpdateCurrencies(_args.ClientId, currencies);
-                SoulManager.Instance.UpdateBaseDatas(_args.ClientId, soulBaseDatas);
-                SoulManager.Instance.UpdateCurrentDatas(_args.ClientId, _config);
-                AdventureManager.Instance.ExitRoom(soulId);
-
-                List<Network.AdventureState.ActionResult> json = new List<Network.AdventureState.ActionResult>();
-                json.Add(new Network.AdventureState.ActionResult
-                {
-                    ResultType = Network.AdventureState.ActionResult.Type.EarnExperience,
-                    Amount = adventureState.StackedExperience + adventureState.ExperienceReward
-                });
-                json.Add(new Network.AdventureState.ActionResult
-                {
-                    ResultType = Network.AdventureState.ActionResult.Type.EarnShards,
-                    Amount = adventureState.StackedShards + adventureState.ShardReward
-                });
-                if (leveledUp > 0)
-                {
+                    List<Network.AdventureState.ActionResult> json = new List<Network.AdventureState.ActionResult>();
                     json.Add(new Network.AdventureState.ActionResult
                     {
-                        ResultType = Network.AdventureState.ActionResult.Type.LevelUp,
-                        Amount = leveledUp
+                        ResultType = Network.AdventureState.ActionResult.Type.EarnExperience,
+                        Amount = adventureState.StackedExperience + adventureState.ExperienceReward
                     });
-                }
-                ret.ClientResponse = new Network.Message
-                {
-                    Code = Network.CommandCodes.Dungeon.LeaveFinishedRoom,
-                    Success = true,
-                    Json = JsonConvert.SerializeObject(json)
-                };
-                ret.Succeeded = true;
+                    json.Add(new Network.AdventureState.ActionResult
+                    {
+                        ResultType = Network.AdventureState.ActionResult.Type.EarnShards,
+                        Amount = adventureState.StackedShards + adventureState.ShardReward
+                    });
+                    if (leveledUp > 0)
+                    {
+                        json.Add(new Network.AdventureState.ActionResult
+                        {
+                            ResultType = Network.AdventureState.ActionResult.Type.LevelUp,
+                            Amount = leveledUp
+                        });
+                    }
 
-                return ret;
+                    ret.ClientResponse = new Network.Message
+                    {
+                        Code = Network.CommandCodes.Dungeon.LeaveFinishedRoom,
+                        Success = true,
+                        Json = JsonConvert.SerializeObject(json)
+                    };
+                    ret.Succeeded = true;
+
+                    return ret;
+                }
             }
 
             ret.ClientResponse = new Network.Message

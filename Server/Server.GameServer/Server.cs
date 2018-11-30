@@ -22,7 +22,7 @@ namespace Server.GameServer
         private Dictionary<int, int> _commandArgCount;
         private List<Commands.CommandResult> _responses;
 
-        private DataModels.Config _config;
+        private DataModels.Town _town;
 
         private Object _commandManagerLock = new Object();
         private Object _responsesLock = new Object();
@@ -54,25 +54,25 @@ namespace Server.GameServer
 
         public void Start()
         {
-            var configId = Guid.Parse(ConfigurationManager.AppSettings.Get("ConfigId"));
-            _config = DataRepositories.ConfigRepository.GetById(configId);
+            var townId = Guid.Parse(ConfigurationManager.AppSettings.Get("TownId"));
+            _town = DataRepositories.TownRepository.GetById(townId);
 
-            if (_config == null || (_config != null && _config.Online))
+            if (_town == null || (_town != null && _town.Online))
             {
-                Log.Instance.Write(Log.Level.Error, $"Config id {configId} isn't pointing to any config or is not offline.");
+                Log.Instance.Write(Log.Level.Error, $"Town id {townId} isn't pointing to any config or is not offline.");
                 Console.WriteLine("Wrong Config Id or Server already running... Specify a valid GameServer Id present in DB and a server isnt already running.");
                 return;
             }
 
-            _config.Online = true;
-            DataRepositories.ConfigRepository.Update(_config);
+            _town.Online = true;
+            DataRepositories.TownRepository.Update(_town);
 
-            Log.Instance.Write(Log.Level.Infos, $"Starting TCPListener at address : {_config.Host}:{_config.Port} ...");
-            Console.WriteLine($"Starting TCPListener at address : {_config.Host}:{_config.Port} ...");
+            Log.Instance.Write(Log.Level.Infos, $"Starting TCPListener at address : {_town.Host}:{_town.Port} ...");
+            Console.WriteLine($"Starting TCPListener at address : {_town.Host}:{_town.Port} ...");
 
-            DataManager.Instance.Initialize(_config);
+            DataManager.Instance.Initialize(_town);
 
-            _listener = new TcpListener(IPAddress.Parse(_config.Host), _config.Port);
+            _listener = new TcpListener(IPAddress.Parse(_town.Host), _town.Port);
 
             _thread.Start();
             _marketThread.Start();
@@ -84,8 +84,8 @@ namespace Server.GameServer
         {
             _isRunning = false;
 
-            _config.Online = false;
-            DataRepositories.ConfigRepository.Update(_config);
+            _town.Online = false;
+            DataRepositories.TownRepository.Update(_town);
         }
 
         public void SendMessageToAll(int code, string message)
@@ -136,8 +136,8 @@ namespace Server.GameServer
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.Server.AuthenticateCommand(args); });
             _delegates.Add(Network.CommandCodes.Server.SoulList, (args) => { return new Commands.Server.SoulListCommand(args); });
-            _delegates.Add(Network.CommandCodes.Server.CreateSoul, (args) => { return new Commands.Server.CreateSoulCommand(args, _config); });
-            _delegates.Add(Network.CommandCodes.Server.ConnectSoul, (args) => { return new Commands.Server.ConnectSoulCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Server.CreateSoul, (args) => { return new Commands.Server.CreateSoulCommand(args, _town); });
+            _delegates.Add(Network.CommandCodes.Server.ConnectSoul, (args) => { return new Commands.Server.ConnectSoulCommand(args, _town); });
             _delegates.Add(Network.CommandCodes.Server.DisconnectSoul, (args) => { return new Commands.Server.DisconnectSoulCommand(args); });
         }
 
@@ -171,18 +171,20 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Player.Inventory, 0);
             _commandArgCount.Add(Network.CommandCodes.Player.Knowledges, 0);
             _commandArgCount.Add(Network.CommandCodes.Player.Equipment, 0);
+            _commandArgCount.Add(Network.CommandCodes.Player.AdventureUnlocked, 0);
 
             _delegates.Add(Network.CommandCodes.Player.CurrentSoulDatas, (args) => { return new Commands.Player.CurrentSoulDatasCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.Market_PlaceOrder, (args) => { return new Commands.Player.MarketPlaceOrderCommand(args); });
-            _delegates.Add(Network.CommandCodes.Player.EquipItem, (args) => { return new Commands.Player.EquipItemCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Player.EquipItem, (args) => { return new Commands.Player.EquipItemCommand(args, _town); });
             _delegates.Add(Network.CommandCodes.Player.SellItem, (args) => { return new Commands.Player.SellItemCommand(args); });
-            _delegates.Add(Network.CommandCodes.Player.UseSpiritPills, (args) => { return new Commands.Player.UseSpiritPillsCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Player.UseSpiritPills, (args) => { return new Commands.Player.UseSpiritPillsCommand(args, _town); });
             _delegates.Add(Network.CommandCodes.Player.LearnSkill, (args) => { return new Commands.Player.LearnSkillCommand(args); });
 
             _delegates.Add(Network.CommandCodes.Player.Currencies, (args) => { return new Commands.Player.CurrenciesCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.Inventory, (args) => { return new Commands.Player.InventoryCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.Knowledges, (args) => { return new Commands.Player.KnowledgeCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.Equipment, (args) => { return new Commands.Player.EquipmentCommand(args); });
+            _delegates.Add(Network.CommandCodes.Player.AdventureUnlocked, (args) => { return new Commands.Player.AdventureUnlockedCommand(args); });
         }
 
         private void SetupDungeonDelegates()
@@ -210,7 +212,7 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Dungeon.UseConsumable, (args) => { return new Commands.Dungeon.UseConsumableCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.GetLoots, (args) => { return new Commands.Dungeon.GetLootsCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.LootItem, (args) => { return new Commands.Dungeon.LootDungeonItemCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, (args) => { return new Commands.Dungeon.LeaveFinishedRoomCommand(args, _config); });
+            _delegates.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, (args) => { return new Commands.Dungeon.LeaveFinishedRoomCommand(args, _town); });
             _delegates.Add(Network.CommandCodes.Dungeon.DoNothingTurn, (args) => { return new Commands.Dungeon.DoNothingTurnCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.BuyShopItem, (args) => { return new Commands.Dungeon.BuyShopItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.PlayerRest, (args) => { return new Commands.Dungeon.PlayerRestCommand(args); });
@@ -545,6 +547,8 @@ namespace Server.GameServer
                     break;
                 case Network.CommandCodes.Player.Equipment:
                     break;
+                case Network.CommandCodes.Player.AdventureUnlocked:
+                    break;
 
                 // LISTING
                 case Network.CommandCodes.Listing.Item:
@@ -604,7 +608,7 @@ namespace Server.GameServer
 
         private void RunMarket()
         {
-            Market.Instance.Initialize(_config);
+            Market.Instance.Initialize(_town);
 
             while (_isRunning)
             {

@@ -38,7 +38,7 @@ namespace Website.Controllers
                 if (DataRepositories.MarketRepository.Create(new DataModels.MarketSlot
                 {
                     Id = Guid.NewGuid(),
-                    ServerId = slot.SelectedServer,
+                    TownId = slot.SelectedServer,
                     ItemId = slot.SelectedItem,
                     IsSpecial = true,
                     Quantity = slot.Quantity,

@@ -18,6 +18,7 @@ public class SoulListCreateItem : MonoBehaviour
                 CreateButton.interactable = true;
         });
 
+        CreateButton.onClick.RemoveAllListeners();
         CreateButton.onClick.AddListener(() =>
         {
             NetworkManager.This.CreateSoul(NewSoulName.text);

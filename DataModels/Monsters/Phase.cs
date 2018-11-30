@@ -12,10 +12,8 @@ namespace DataModels.Monsters
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public Guid MonsterId { get; set; }
 
-        [Required]
-        public Guid SkillId { get; set; }
+        public Guid PageId { get; set; }
     }
 }

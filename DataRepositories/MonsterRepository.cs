@@ -115,7 +115,6 @@ namespace DataRepositories
                         var loo = context.Loots.FirstOrDefault(i => i.Id.Equals(item.Id));
                         loo.Quantity = item.Quantity;
                         loo.ItemId = item.ItemId;
-                        loo.Type = item.Type;
                         loo.DropRate = item.DropRate;
                         online.Loots.Add(loo);
                         oldLoots.Remove(oldLoots.FirstOrDefault(o => o.Id.Equals(item.Id)));
@@ -140,7 +139,7 @@ namespace DataRepositories
                     else
                     {
                         var pha = context.Phases.FirstOrDefault(i => i.Id.Equals(phase.Id));
-                        pha.SkillId = phase.SkillId;
+                        pha.PageId = phase.PageId;
                         online.Phases.Add(pha);
                         oldPhases.Remove(oldPhases.FirstOrDefault(o => o.Id.Equals(phase.Id)));
                     }

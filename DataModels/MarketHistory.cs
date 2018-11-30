@@ -20,25 +20,17 @@ namespace DataModels
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required]
         public TransactionType Type { get; set; }
-        [Required]
         public bool ToServer { get; set; }
 
-        [Required]
         public Guid BuyerId { get; set; }
         public Guid? SellerId { get; set; }
 
-        [Required]
         public Guid MarketId { get; set; }
-        [Required]
         public Guid ItemId { get; set; }
-        [Required]
         public int Quantity { get; set; }
-        [Required]
         public int Price { get; set; }
 
-        [Required]
         public DateTime BoughtAt { get; set; }
     }
 }

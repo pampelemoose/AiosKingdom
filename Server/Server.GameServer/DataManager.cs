@@ -24,15 +24,15 @@ namespace Server.GameServer
         {
         }
 
-        private DataModels.Config _config;
+        private DataModels.Town _config;
 
-        public void Initialize(DataModels.Config config)
+        public void Initialize(DataModels.Town config)
         {
             _config = config;
 
             LoadItems();
             LoadBooks();
-            LoadDungeons();
+            LoadAdventures();
             LoadMonsters();
         }
 
@@ -329,25 +329,25 @@ namespace Server.GameServer
             Books = bookList;
         }
 
-        private void LoadDungeons()
+        private void LoadAdventures()
         {
-            var dungeons = DataRepositories.AdventureRepository.GetAllForVersion(_config.VersionId);
-            var dungeonList = new List<Network.Adventures.Adventure>();
+            var adventures = DataRepositories.AdventureRepository.GetAllForVersion(_config.VersionId);
+            var adventureList = new List<Network.Adventures.Adventure>();
 
-            foreach (var dungeon in dungeons)
+            foreach (var adventure in adventures)
             {
-                var dun = new Network.Adventures.Adventure
+                var adv = new Network.Adventures.Adventure
                 {
-                    Id = dungeon.DungeonId,
-                    Name = dungeon.Name,
-                    RequiredLevel = dungeon.RequiredLevel,
-                    MaxLevelAuthorized = dungeon.MaxLevelAuthorized,
-                    ExperienceReward = dungeon.ExperienceReward,
-                    ShardReward = dungeon.ShardReward
+                    Id = adventure.AdventureId,
+                    Name = adventure.Name,
+                    RequiredLevel = adventure.RequiredLevel,
+                    MaxLevelAuthorized = adventure.MaxLevelAuthorized,
+                    ExperienceReward = adventure.ExperienceReward,
+                    ShardReward = adventure.ShardReward
                 };
 
-                dun.Rooms = new List<Network.Adventures.Room>();
-                foreach (var room in dungeon.Rooms)
+                adv.Rooms = new List<Network.Adventures.Room>();
+                foreach (var room in adventure.Rooms)
                 {
                     var roo = new Network.Adventures.Room
                     {
@@ -361,7 +361,7 @@ namespace Server.GameServer
                         {
                             ItemId = shopItem.ItemId,
                             Quantity = shopItem.Quantity,
-                            ShardPrice = shopItem.ShardPrice
+                            ShardPrice = shopItem.Price
                         };
 
                         shopIt.Type = ConvertItemType(shopItem.Type);
@@ -386,13 +386,22 @@ namespace Server.GameServer
 
                     roo.Type = ConvertRoomType(room.Type);
 
-                    dun.Rooms.Add(roo);
+                    adv.Rooms.Add(roo);
                 }
 
-                dungeonList.Add(dun);
+                adv.Locks = new List<Network.Adventures.Lock>();
+                foreach (var unlock in adventure.Locks)
+                {
+                    adv.Locks.Add(new Network.Adventures.Lock
+                    {
+                        LockedId = unlock.LockedId
+                    });
+                }
+
+                adventureList.Add(adv);
             }
 
-            Dungeons = dungeonList;
+            Dungeons = adventureList;
         }
 
         private void LoadMonsters()
@@ -455,8 +464,6 @@ namespace Server.GameServer
                         Quantity = loot.Quantity
                     };
 
-                    loo.Type = ConvertItemType(loot.Type);
-
                     monst.Loots.Add(loo);
                 }
 
@@ -466,7 +473,7 @@ namespace Server.GameServer
                     var pha = new Network.Monsters.Phase
                     {
                         Id = phase.Id,
-                        SkillId = phase.SkillId
+                        SkillId = phase.PageId
                     };
 
                     monst.Phases.Add(pha);

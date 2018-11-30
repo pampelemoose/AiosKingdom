@@ -162,7 +162,7 @@
     <Compile Include="Controllers\AdventuresController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
-    <Compile Include="Controllers\GameServersController.cs" />
+    <Compile Include="Controllers\TownsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\KingdomsController.cs" />
@@ -179,26 +179,18 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\CommentModel.cs" />
-    <Compile Include="Models\DungeonModel.cs" />
-    <Compile Include="Models\EnemyModel.cs" />
+    <Compile Include="Models\AdventureModel.cs" />
     <Compile Include="Models\Filters\BookFilter.cs" />
     <Compile Include="Models\BookModel.cs" />
     <Compile Include="Models\Filters\DungeonFilter.cs" />
     <Compile Include="Models\Filters\ItemFilter.cs" />
-    <Compile Include="Models\InscriptionModel.cs" />
-    <Compile Include="Models\InscWeaponTypeModel.cs" />
     <Compile Include="Models\ItemModel.cs" />
-    <Compile Include="Models\LootModel.cs" />
     <Compile Include="Models\Filters\MarketSlotFilter.cs" />
     <Compile Include="Models\MarketSlotModel.cs" />
     <Compile Include="Models\Filters\MonsterFilter.cs" />
     <Compile Include="Models\MonsterModel.cs" />
     <Compile Include="Models\MyPageModel.cs" />
-    <Compile Include="Models\PageModel.cs" />
-    <Compile Include="Models\PhaseModel.cs" />
     <Compile Include="Models\Filters\UserFilter.cs" />
-    <Compile Include="Models\RoomModel.cs" />
-    <Compile Include="Models\ShopItemModel.cs" />
     <Compile Include="Models\ThreadModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -389,8 +381,8 @@
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Account\ActivationAccount.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
-    <Content Include="Views\GameServers\Index.cshtml" />
-    <Content Include="Views\GameServers\Create.cshtml" />
+    <Content Include="Views\Towns\Index.cshtml" />
+    <Content Include="Views\Towns\Create.cshtml" />
     <Content Include="Views\Market\Index.cshtml" />
     <Content Include="Views\Market\Create.cshtml" />
     <Content Include="Views\Books\Index.cshtml" />
@@ -461,6 +453,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Adventures\LockPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

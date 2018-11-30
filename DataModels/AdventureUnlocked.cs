@@ -7,18 +7,14 @@ using System.Threading.Tasks;
 
 namespace DataModels
 {
-    public class AdventureProgress
+    public class AdventureUnlocked
     {
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public Guid SoulId { get; set; }
+        public Guid AdventureId { get; set; }
 
-        [Required]
-        public Guid DungeonId { get; set; }
-
-        [Required]
-        public int CurrentRoom { get; set; }
-    } 
+        public DateTime? UnlockedAt { get; set; }
+    }
 }

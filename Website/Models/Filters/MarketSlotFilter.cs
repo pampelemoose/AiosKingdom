@@ -20,7 +20,7 @@ namespace Website.Models.Filters
         {
             if (!Guid.Empty.Equals(SelectedServer))
             {
-                list = list.Where(a => a.ServerId.Equals(SelectedServer)).ToList();
+                list = list.Where(a => a.TownId.Equals(SelectedServer)).ToList();
             }
 
             if (IsSpecial != null)

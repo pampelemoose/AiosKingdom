@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DataModels.Skills
@@ -20,14 +21,10 @@ namespace DataModels.Skills
         public Guid Id { get; set; }
 
         public Guid VersionId { get; set; }
-
-        [Required]
+        [Index(IsUnique = true)]
         public Guid BookId { get; set; }
 
-        [Required, MaxLength(50)]
         public string Name { get; set; }
-
-        [Required]
         public BookQuality Quality { get; set; }
 
         public List<Page> Pages { get; set; }

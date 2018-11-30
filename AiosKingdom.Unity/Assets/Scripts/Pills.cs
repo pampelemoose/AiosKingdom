@@ -24,52 +24,61 @@ public class Pills : MonoBehaviour
 
     void Start()
     {
+        Stamina.onClick.RemoveAllListeners();
         Stamina.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Stamina);
             SetSelectedButtonColor(Stamina.GetComponentInChildren<Text>(), new Color(1, 0, 0));
         });
 
+        Energy.onClick.RemoveAllListeners();
         Energy.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Energy);
             SetSelectedButtonColor(Energy.GetComponentInChildren<Text>(), new Color(0.9f, 1, 0));
         });
 
+        Strength.onClick.RemoveAllListeners();
         Strength.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Strength);
             SetSelectedButtonColor(Strength.GetComponentInChildren<Text>(), new Color(1, 0, 0.8f));
         });
 
+        Agility.onClick.RemoveAllListeners();
         Agility.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Agility);
             SetSelectedButtonColor(Agility.GetComponentInChildren<Text>(), new Color(0, 1, 0.3f));
         });
 
+        Intelligence.onClick.RemoveAllListeners();
         Intelligence.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Intelligence);
             SetSelectedButtonColor(Intelligence.GetComponentInChildren<Text>(), new Color(0, 0.5f, 1));
         });
 
+        Wisdom.onClick.RemoveAllListeners();
         Wisdom.onClick.AddListener(() =>
         {
             SelectStat(JsonObjects.Stats.Wisdom);
             SetSelectedButtonColor(Wisdom.GetComponentInChildren<Text>(), new Color(0, 1, 1));
         });
 
+        Minus.onClick.RemoveAllListeners();
         Minus.onClick.AddListener(() =>
         {
             SetQuantity(_quantity - 1);
         });
 
+        Plus.onClick.RemoveAllListeners();
         Plus.onClick.AddListener(() =>
         {
             SetQuantity(_quantity + 1);
         });
 
+        Buy.onClick.RemoveAllListeners();
         Buy.onClick.AddListener(() =>
         {
             NetworkManager.This.UseSpiritPills(_currentStat, _quantity);

@@ -51,25 +51,12 @@ namespace DataModels.Skills
 
         public Guid PageId { get; set; }
 
-        [Required]
         public InscriptionType Type { get; set; }
-
-        [Required]
-        [Range(0, 10000, ErrorMessage = "BaseValue should be >= 0.")]
         public int BaseValue { get; set; }
-
-        [Required]
         public Soul.Stats StatType { get; set; }
-
-        [Required]
-        [Range(0, 10000, ErrorMessage = "Ratio should be >= 0")]
         public float Ratio { get; set; }
-
-        [Required]
-        [Range(0, 10000, ErrorMessage = "Duration should be >= 0")]
         public int Duration { get; set; }
 
-        [Required]
         public bool IncludeWeaponDamages { get; set; }
 
         public string InternalWeaponTypes { get; set; }
@@ -95,7 +82,6 @@ namespace DataModels.Skills
             }
         }
 
-        [Required]
         public float WeaponDamagesRatio { get; set; }
 
         public string InternalPreferredWeaponTypes { get; set; }
@@ -121,7 +107,6 @@ namespace DataModels.Skills
             }
         }
 
-        [Required]
         public float PreferredWeaponDamagesRatio { get; set; }
 
     }

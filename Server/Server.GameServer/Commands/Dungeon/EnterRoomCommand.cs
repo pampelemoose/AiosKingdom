@@ -22,7 +22,7 @@ namespace Server.GameServer.Commands.Dungeon
 
             if (adventure != null)
             {
-                var dungeonId = adventure.DungeonId;
+                var dungeonId = adventure.AdventureId;
 
                 AdventureManager.Instance.OpenRoom(soulId, datas, dungeonId);
 

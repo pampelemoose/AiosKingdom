@@ -12,13 +12,8 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public Guid SoulId { get; set; }
-
-        [Required]
         public Guid BookId { get; set; }
-
-        [Required]
         public int Rank { get; set; }
     }
 }

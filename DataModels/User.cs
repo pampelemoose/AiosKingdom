@@ -11,16 +11,12 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
-        [Required, MinLength(4), ConcurrencyCheck]
         public string Username { get; set; }
-
-        [Required]
         public string Password { get; set; }
 
-        [Required, EmailAddress, ConcurrencyCheck]
+        [EmailAddress, ConcurrencyCheck]
         public string Email { get; set; }
 
-        [Required]
         public string InternalRoles { get; set; }
         public List<String> Roles
         {
@@ -35,7 +31,6 @@ namespace DataModels
             }
         }
 
-        [Required]
         public Guid ActivationCode { get; set; }
 
         public bool IsActivated { get; set; }

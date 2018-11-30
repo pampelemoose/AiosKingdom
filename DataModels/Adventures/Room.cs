@@ -22,14 +22,9 @@ namespace DataModels.Adventures
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
-        public Guid DungeonId { get; set; }
+        public Guid AdventureId { get; set; }
 
-        [Required]
         public RoomType Type { get; set; }
-
-        [Required]
-        [Range(0, 1000)]
         public int RoomNumber { get; set; }
 
         public List<ShopItem> ShopItems { get; set; }

@@ -60,7 +60,7 @@
                                     <li class="list-group-item">
                                         <div class="row">
                                             <div class="col-md-8">Shard Price</div>
-                                            <div class="col-md-4">@shopItem.ShardPrice</div>
+                                            <div class="col-md-4">@shopItem.Price</div>
                                         </div>
                                     </li>
                                 </ul>
@@ -120,7 +120,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.DungeonId }, new { @class = "btn btn-block" })
+                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.AdventureId }, new { @class = "btn btn-block" })
                 </div>
             </div>
         </div>

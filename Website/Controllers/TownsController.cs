@@ -7,11 +7,11 @@ using Website.Authentication;
 
 namespace Website.Controllers
 {
-    public class GameServersController : AKBaseController
+    public class TownsController : AKBaseController
     {
         public ActionResult Index()
         {
-            var servers = DataRepositories.ConfigRepository.GetAll();
+            var servers = DataRepositories.TownRepository.GetAll();
 
             return View(servers);
         }
@@ -26,13 +26,13 @@ namespace Website.Controllers
         [CustomAuthorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(DataModels.Config server)
+        public ActionResult Create(DataModels.Town server)
         {
             if (ModelState.IsValid)
             {
                 server.Id = Guid.NewGuid();
 
-                if (DataRepositories.ConfigRepository.Create(server))
+                if (DataRepositories.TownRepository.Create(server))
                 {
                     return RedirectToAction("Index");
                 }

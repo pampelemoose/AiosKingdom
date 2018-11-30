@@ -16,7 +16,7 @@ namespace DataRepositories
         public DbSet<DataModels.Version> Versions { get; set; }
 
         public DbSet<DataModels.Kingdom> Kingdoms { get; set; }
-        public DbSet<DataModels.Config> Configs { get; set; }
+        public DbSet<DataModels.Town> Towns { get; set; }
         public DbSet<DataModels.AuthToken> Tokens { get; set; }
 
         public DbSet<DataModels.User> Users { get; set; }
@@ -46,10 +46,11 @@ namespace DataRepositories
 
         public DbSet<DataModels.Adventures.Adventure> Adventures { get; set; }
         public DbSet<DataModels.Adventures.Room> Rooms { get; set; }
+        public DbSet<DataModels.Adventures.Lock> Locks { get; set; }
         public DbSet<DataModels.Adventures.ShopItem> ShopItems { get; set; }
         public DbSet<DataModels.Adventures.Enemy> Enemies { get; set; }
 
-        public DbSet<DataModels.AdventureProgress> AdventureProgresses { get; set; }
+        public DbSet<DataModels.AdventureUnlocked> AdventureUnlocked { get; set; }
 
         public DbSet<DataModels.Website.Section> Sections { get; set; }
         public DbSet<DataModels.Website.Banner> Contents { get; set; }

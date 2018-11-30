@@ -17,17 +17,12 @@ namespace DataModels.Website
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public Topic Category { get; set; }
 
         public List<Comment> Comments { get; set; }
 
-        [Required]
         public DateTime CreatedAt { get; set; }
-
-        [Required]
         public Guid CreatedBy { get; set; }
-        [Required]
         public string CreatedByUsername { get; set; }
 
         public DateTime? AssignedAt { get; set; }
@@ -37,10 +32,7 @@ namespace DataModels.Website
         public Guid AssignedTo { get; set; }
         public string AssignedToUsername { get; set; }
 
-        [Required]
         public bool IsOpen { get; set; }
-
-        [Required]
         public bool IsActive { get; set; }
     }
 }

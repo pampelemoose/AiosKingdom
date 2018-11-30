@@ -29,21 +29,21 @@ namespace Website.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            var dungeon = new Models.DungeonModel();
-
-            dungeon.Rooms = new List<Models.RoomModel>();
-
-            return View(dungeon);
+            return View(new Models.AdventureModel());
         }
 
         [CustomAuthorize(Roles = "AdventureCreator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Models.DungeonModel dungeonModel)
+        public ActionResult Create(Models.AdventureModel dungeonModel)
         {
             if (dungeonModel.Rooms == null)
             {
                 dungeonModel.Rooms = new List<Models.RoomModel>();
+            }
+            if (dungeonModel.Locks == null)
+            {
+                dungeonModel.Locks = new List<Models.LockModel>();
             }
             foreach (var room in dungeonModel.Rooms)
             {
@@ -67,18 +67,19 @@ namespace Website.Controllers
 
                 if (dungeonModel.Rooms.Count > 0)
                 {
-                    var dungeonId = Guid.NewGuid();
+                    var adventureId = Guid.NewGuid();
                     var dungeon = new DataModels.Adventures.Adventure
                     {
                         Id = Guid.NewGuid(),
                         VersionId = dungeonModel.SelectedVersion,
-                        DungeonId = dungeonId,
+                        AdventureId = adventureId,
                         Name = dungeonModel.Name,
                         RequiredLevel = dungeonModel.RequiredLevel,
                         MaxLevelAuthorized = dungeonModel.MaxLevelAuthorized,
                         Rooms = new List<DataModels.Adventures.Room>(),
                         ExperienceReward = dungeonModel.ExperienceReward,
-                        ShardReward = dungeonModel.ShardReward
+                        ShardReward = dungeonModel.ShardReward,
+                        Locks = new List<DataModels.Adventures.Lock>()
                     };
 
                     foreach (var roomModel in dungeonModel.Rooms)
@@ -87,7 +88,7 @@ namespace Website.Controllers
                         var room = new DataModels.Adventures.Room
                         {
                             Id = roomId,
-                            DungeonId = dungeonId,
+                            AdventureId = adventureId,
                             Type = roomModel.Type,
                             RoomNumber = roomModel.RoomNumber,
                             ShopItems = new List<DataModels.Adventures.ShopItem>(),
@@ -103,7 +104,7 @@ namespace Website.Controllers
                                 ItemId = shopItemModel.SelectedItem,
                                 Type = shopItemModel.Items.FirstOrDefault(i => i.ItemId.Equals(shopItemModel.SelectedItem)).Type,
                                 Quantity = shopItemModel.Quantity,
-                                ShardPrice = shopItemModel.ShardPrice
+                                Price = shopItemModel.ShardPrice
                             };
                             room.ShopItems.Add(shopItem);
                         }
@@ -125,6 +126,17 @@ namespace Website.Controllers
                         dungeon.Rooms.Add(room);
                     }
 
+                    foreach (var lockModel in dungeonModel.Locks)
+                    {
+                        var locked = new DataModels.Adventures.Lock
+                        {
+                            Id = Guid.NewGuid(),
+                            AdventureId = adventureId,
+                            LockedId = lockModel.LockedId
+                        };
+                        dungeon.Locks.Add(locked);
+                    }
+
                     if (DataRepositories.AdventureRepository.Create(dungeon))
                     {
                         return RedirectToAction("Index");
@@ -144,6 +156,15 @@ namespace Website.Controllers
             room.Enemies = new List<Models.EnemyModel>();
 
             return PartialView("RoomPartial", room);
+        }
+
+        [CustomAuthorize(Roles = "AdventureCreator")]
+        [HttpGet]
+        public ActionResult AddLockPartial()
+        {
+            var locked = new Models.LockModel();
+
+            return PartialView("LockPartial", locked);
         }
 
         [CustomAuthorize(Roles = "AdventureCreator")]
@@ -170,23 +191,25 @@ namespace Website.Controllers
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
-            var dungeon = DataRepositories.AdventureRepository.GetById(id);
+            var adventure = DataRepositories.AdventureRepository.GetById(id);
 
-            if (dungeon != null)
+            if (adventure != null)
             {
-                var model = new Models.DungeonModel
+                var model = new Models.AdventureModel
                 {
-                    Id = dungeon.Id,
-                    SelectedVersion = dungeon.VersionId,
-                    Name = dungeon.Name,
-                    RequiredLevel = dungeon.RequiredLevel,
-                    MaxLevelAuthorized = dungeon.MaxLevelAuthorized,
-                    ExperienceReward = dungeon.ExperienceReward,
-                    ShardReward = dungeon.ShardReward,
-                    Rooms = new List<Models.RoomModel>()
+                    Id = adventure.Id,
+                    AdventureId = adventure.AdventureId,
+                    SelectedVersion = adventure.VersionId,
+                    Name = adventure.Name,
+                    RequiredLevel = adventure.RequiredLevel,
+                    MaxLevelAuthorized = adventure.MaxLevelAuthorized,
+                    ExperienceReward = adventure.ExperienceReward,
+                    ShardReward = adventure.ShardReward,
+                    Rooms = new List<Models.RoomModel>(),
+                    Locks = new List<Models.LockModel>()
                 };
                 
-                foreach (var room in dungeon.Rooms)
+                foreach (var room in adventure.Rooms)
                 {
                     var roomModel = new Models.RoomModel
                     {
@@ -204,7 +227,7 @@ namespace Website.Controllers
                             Id = shopItem.Id,
                             SelectedItem = shopItem.ItemId,
                             Quantity = shopItem.Quantity,
-                            ShardPrice = shopItem.ShardPrice
+                            ShardPrice = shopItem.Price
                         });
                     }
 
@@ -223,6 +246,14 @@ namespace Website.Controllers
                     model.Rooms.Add(roomModel);
                 }
 
+                foreach (var locked in adventure.Locks)
+                {
+                    model.Locks.Add(new Models.LockModel
+                    {
+                        LockedId = locked.LockedId
+                    });
+                }
+
                 return View(model);
             }
 
@@ -232,10 +263,10 @@ namespace Website.Controllers
         [CustomAuthorize(Roles = "AdventureCreator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Models.DungeonModel dungeonModel)
+        public ActionResult Edit(Models.AdventureModel adventureModel)
         {
             bool newItems = false;
-            foreach (var room in dungeonModel.Rooms)
+            foreach (var room in adventureModel.Rooms)
             {
                 if (room.NewItems > 0)
                 {
@@ -265,25 +296,29 @@ namespace Website.Controllers
                     newItems = true;
                 }
             }
-            if (dungeonModel.NewRooms > 0)
+            if (adventureModel.NewRooms > 0)
             {
-                while (dungeonModel.NewRooms > 0)
+                while (adventureModel.NewRooms > 0)
                 {
-                    dungeonModel.Rooms.Add(new Models.RoomModel());
-                    dungeonModel.NewRooms--;
+                    adventureModel.Rooms.Add(new Models.RoomModel());
+                    adventureModel.NewRooms--;
                 }
 
                 newItems = true;
             }
 
             if (newItems)
-                return View(dungeonModel);
+                return View(adventureModel);
 
-            if (dungeonModel.Rooms == null)
+            if (adventureModel.Rooms == null)
             {
-                dungeonModel.Rooms = new List<Models.RoomModel>();
+                adventureModel.Rooms = new List<Models.RoomModel>();
             }
-            foreach (var room in dungeonModel.Rooms)
+            if (adventureModel.Locks == null)
+            {
+                adventureModel.Locks = new List<Models.LockModel>();
+            }
+            foreach (var room in adventureModel.Rooms)
             {
                 if (room.ShopItems == null)
                     room.ShopItems = new List<Models.ShopItemModel>();
@@ -294,30 +329,31 @@ namespace Website.Controllers
 
             if (ModelState.IsValid)
             {
-                dungeonModel.Rooms?.RemoveAll(r => r.Enemies.Count == 0 && r.ShopItems.Count == 0
+                adventureModel.Rooms?.RemoveAll(r => r.Enemies.Count == 0 && r.ShopItems.Count == 0
                 && r.Type != DataModels.Adventures.RoomType.Exit && r.Type != DataModels.Adventures.RoomType.Rest);
 
-                if (dungeonModel.Rooms?.FirstOrDefault(r => r.Type == DataModels.Adventures.RoomType.Exit) == null)
+                if (adventureModel.Rooms?.FirstOrDefault(r => r.Type == DataModels.Adventures.RoomType.Exit) == null)
                 {
                     Alert(AlertMessage.AlertType.Danger, $"No exit room in the dungeon. You must add an exit as the last room you want the player to leave.", "Exit needed !");
-                    return View(dungeonModel);
+                    return View(adventureModel);
                 }
 
-                if (dungeonModel.Rooms.Count > 0)
+                if (adventureModel.Rooms.Count > 0)
                 {
-                    var dungeon = new DataModels.Adventures.Adventure
+                    var adventure = new DataModels.Adventures.Adventure
                     {
-                        Id = dungeonModel.Id,
-                        VersionId = dungeonModel.SelectedVersion,
-                        Name = dungeonModel.Name,
-                        RequiredLevel = dungeonModel.RequiredLevel,
-                        MaxLevelAuthorized = dungeonModel.MaxLevelAuthorized,
+                        Id = adventureModel.Id,
+                        VersionId = adventureModel.SelectedVersion,
+                        Name = adventureModel.Name,
+                        RequiredLevel = adventureModel.RequiredLevel,
+                        MaxLevelAuthorized = adventureModel.MaxLevelAuthorized,
                         Rooms = new List<DataModels.Adventures.Room>(),
-                        ExperienceReward = dungeonModel.ExperienceReward,
-                        ShardReward = dungeonModel.ShardReward
+                        ExperienceReward = adventureModel.ExperienceReward,
+                        ShardReward = adventureModel.ShardReward,
+                        Locks = new List<DataModels.Adventures.Lock>()
                     };
 
-                    foreach (var roomModel in dungeonModel.Rooms)
+                    foreach (var roomModel in adventureModel.Rooms)
                     {
                         var room = new DataModels.Adventures.Room
                         {
@@ -336,7 +372,7 @@ namespace Website.Controllers
                                 ItemId = shopItemModel.SelectedItem,
                                 Type = shopItemModel.Items.FirstOrDefault(i => i.ItemId.Equals(shopItemModel.SelectedItem)).Type,
                                 Quantity = shopItemModel.Quantity,
-                                ShardPrice = shopItemModel.ShardPrice
+                                Price = shopItemModel.ShardPrice
                             };
                             room.ShopItems.Add(shopItem);
                         }
@@ -354,17 +390,28 @@ namespace Website.Controllers
                             room.Ennemies.Add(enemy);
                         }
 
-                        dungeon.Rooms.Add(room);
+                        adventure.Rooms.Add(room);
                     }
 
-                    if (DataRepositories.AdventureRepository.Update(dungeon))
+                    foreach (var lockModel in adventureModel.Locks)
+                    {
+                        var locked = new DataModels.Adventures.Lock
+                        {
+                            Id = Guid.NewGuid(),
+                            AdventureId = adventureModel.AdventureId,
+                            LockedId = lockModel.LockedId
+                        };
+                        adventure.Locks.Add(locked);
+                    }
+
+                    if (DataRepositories.AdventureRepository.Update(adventure))
                     {
                         return RedirectToAction("Index");
                     }
                 }
             }
 
-            return View(dungeonModel);
+            return View(adventureModel);
         }
     }
 }

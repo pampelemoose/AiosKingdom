@@ -13,17 +13,13 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
-        public Guid ServerId { get; set; }
-
-        [Required]
+        public Guid TownId { get; set; }
         public Guid ItemId { get; set; }
 
         public Guid? SellerId { get; set; }
         [ForeignKey("SellerId")]
         public Soul Seller { get; set; }
 
-        [Required]
         public bool IsSpecial { get; set; }
 
         private int _quantity = -1;

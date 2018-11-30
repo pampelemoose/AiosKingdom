@@ -1,4 +1,4 @@
-﻿@model Website.Models.DungeonModel
+﻿@model Website.Models.AdventureModel
 
 @{
     ViewBag.Title = "Create";
@@ -109,6 +109,28 @@
         </div>
     </section>
 
+    <section class="p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10">
+                    <h2>@Html.LabelFor(model => model.Locks, htmlAttributes: new { @class = "control-label" })</h2>
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-block" type="button" id="addLockToDungeon" value="<Add Lock>" />
+                </div>
+            </div>
+            <div class="row mt-2" id="lockList">
+                @if (Model != null && Model.Locks != null)
+                {
+                    for (var i = 0; i < Model.Locks.Count; i++)
+                    {
+                        Html.RenderPartial("lockPartial", Model.Locks[i]);
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
     <section>
         <div class="container">
             <input type="submit" value="<Create>" class="btn btn-block" />
@@ -127,6 +149,18 @@
                     success: function (data) {
                         $('#roomList').append(data);
                         $('#roomList').fadeIn('fast');
+                    }
+                });
+            });
+
+            $("#addLockToDungeon").click(function () {
+                $.ajax({
+                    url: "/Adventures/AddLockPartial",
+                    cache: false,
+                    type: "GET",
+                    success: function (data) {
+                        $('#lockList').append(data);
+                        $('#lockList').fadeIn('fast');
                     }
                 });
             });

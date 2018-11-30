@@ -5,17 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataModels.Monsters
+namespace DataModels.Adventures
 {
-    public class Loot
+    public class Lock
     {
         [Key]
         public Guid Id { get; set; }
 
-        public Guid MonsterId { get; set; }
-
-        public Guid ItemId { get; set; }
-        public double DropRate { get; set; }
-        public int Quantity { get; set; }
+        public Guid AdventureId { get; set; }
+        public Guid LockedId { get; set; }
     }
 }

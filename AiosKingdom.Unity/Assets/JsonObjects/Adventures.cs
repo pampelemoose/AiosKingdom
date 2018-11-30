@@ -33,6 +33,8 @@ namespace JsonObjects.Adventures
 
         public int ExperienceReward { get; set; }
         public int ShardReward { get; set; }
+
+        public List<Lock> Locks { get; set; }
     }
 
     public class Room
@@ -43,6 +45,11 @@ namespace JsonObjects.Adventures
 
         public List<ShopItem> ShopItems { get; set; }
         public List<Enemy> Ennemies { get; set; }
+    }
+
+    public class Lock
+    {
+        public Guid LockedId { get; set; }
     }
 
     public class ShopItem

@@ -9,6 +9,15 @@
                     <div class="col-md-12">
                         <div class="input-group input-group-sm">
                             <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.DropDownListFor(model => model.SelectedItem, new SelectList(Model.Items, "ItemId", "Name"), new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
                                 @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "input-group-text" })
                             </div>
                             @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
@@ -23,24 +32,6 @@
                             @Html.EditorFor(model => model.DropRate, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
                         @Html.ValidationMessageFor(model => model.DropRate, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-12 mt-1">
-                        <div class="input-group input-group-sm">
-                            <div class="input-group-prepend">
-                                @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "input-group-text" })
-                            </div>
-                            @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control item-list-changer" })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-12 mt-1">
-                        <div class="input-group input-group-sm">
-                            <div class="input-group-prepend">
-                                @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "input-group-text" })
-                            </div>
-                            @Html.DropDownListFor(model => model.SelectedItem, new SelectList(Model.Items, "ItemId", "Name"), new { @class = "form-control" })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>

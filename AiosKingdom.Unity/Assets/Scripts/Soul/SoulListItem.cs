@@ -14,6 +14,7 @@ public class SoulListItem : MonoBehaviour
         Name.text = soul.Name;
         Level.text = soul.Level.ToString();
 
+        ConnectButton.onClick.RemoveAllListeners();
         ConnectButton.onClick.AddListener(() =>
         {
             UIManager.This.ShowLoading();

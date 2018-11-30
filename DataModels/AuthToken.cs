@@ -10,13 +10,8 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public Guid Token { get; set; }
-
-        [Required]
         public Guid UserId { get; set; }
-
-        [Required]
         public DateTime CreatedAt { get; set; }
     }
 }

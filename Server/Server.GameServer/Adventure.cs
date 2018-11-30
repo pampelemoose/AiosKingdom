@@ -21,7 +21,7 @@ namespace Server.GameServer
             public int Wisdom { get; set; }
         }
 
-        private Network.Adventures.Adventure _dungeon;
+        private Network.Adventures.Adventure _adventure;
         private int _roomNumber;
 
         private Network.AdventureState _state;
@@ -31,9 +31,9 @@ namespace Server.GameServer
         private List<Network.Items.ItemEffect> _effects;
         private Dictionary<Guid, List<Network.Skills.Inscription>> _enemyMarks;
 
-        public Adventure(Network.Adventures.Adventure dungeon, Network.SoulDatas datas, List<Network.AdventureState.BagItem> bagItems, int roomNumber = 0)
+        public Adventure(Network.Adventures.Adventure adventure, Network.SoulDatas datas, List<Network.AdventureState.BagItem> bagItems, int roomNumber = 0)
         {
-            _dungeon = dungeon;
+            _adventure = adventure;
             _roomNumber = roomNumber;
 
             _state = new Network.AdventureState();
@@ -45,7 +45,7 @@ namespace Server.GameServer
             SetState();
         }
 
-        public Guid DungeonId => _dungeon.Id;
+        public Guid AdventureId => _adventure.Id;
         public int RoomNumber => _roomNumber;
 
         private bool _isCleared;
@@ -172,7 +172,7 @@ namespace Server.GameServer
 
                 if (phase == null) return false;
 
-                var skill = DataManager.Instance.Books.SelectMany(b => b.Pages).FirstOrDefault(p => p.Id.Equals(phase.SkillId));
+                var skill = DataManager.Instance.Books.SelectMany(b => b.Pages).FirstOrDefault(p => p.Id.Equals(phase.PageId));
 
                 if (skill == null) return false;
 
@@ -232,7 +232,6 @@ namespace Server.GameServer
                             _loots.Add(id, new Network.LootItem
                             {
                                 LootId = id,
-                                Type = loot.Type.ToString(),
                                 ItemId = loot.ItemId,
                                 Quantity = loot.Quantity
                             });
@@ -586,6 +585,10 @@ namespace Server.GameServer
 
         private void SetState()
         {
+            _state.Name = _adventure.Name;
+            _state.CurrentRoom = _roomNumber + 1;
+            _state.TotalRoomCount = _adventure.Rooms.Count;
+
             _enemiesStats = new Dictionary<Guid, EnemyStats>();
 
             _state.Enemies = new Dictionary<Guid, Network.AdventureState.EnemyState>();
@@ -601,7 +604,7 @@ namespace Server.GameServer
             _effects = new List<Network.Items.ItemEffect>();
             _enemyMarks = new Dictionary<Guid, List<Network.Skills.Inscription>>();
 
-            var room = _dungeon.Rooms.FirstOrDefault(r => r.RoomNumber == _roomNumber);
+            var room = _adventure.Rooms.FirstOrDefault(r => r.RoomNumber == _roomNumber);
 
             _state.IsRestingArea = room.Type == Network.Adventures.RoomType.Rest;
             _state.IsFightArea = room.Type == Network.Adventures.RoomType.Fight
@@ -653,8 +656,8 @@ namespace Server.GameServer
                 });
             }
 
-            _state.ExperienceReward = _dungeon.ExperienceReward;
-            _state.ShardReward = _dungeon.ShardReward;
+            _state.ExperienceReward = _adventure.ExperienceReward;
+            _state.ShardReward = _adventure.ShardReward;
         }
     }
 }

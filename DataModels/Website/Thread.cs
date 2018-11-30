@@ -12,27 +12,15 @@ namespace DataModels.Website
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
         public List<Comment> Comments { get; set; }
 
-        [Required]
         public DateTime CreatedAt { get; set; }
-
-        [Required]
         public Guid CreatedBy { get; set; }
-
-        [Required]
         public string CreatedByUsername { get; set; }
-
-        [Required]
         public bool IsAnnoucment { get; set; }
-
-        [Required]
         public bool IsOpen { get; set; }
-
-        [Required]
         public bool IsActive { get; set; }
 
         public Category Category { get; set; }

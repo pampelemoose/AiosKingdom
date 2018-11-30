@@ -68,6 +68,10 @@ namespace JsonObjects
             public double Amount { get; set; }
         }
 
+        public string Name { get; set; }
+        public int CurrentRoom { get; set; }
+        public int TotalRoomCount { get; set; }
+
         public Dictionary<Guid, EnemyState> Enemies { get; set; }
         public Dictionary<Guid, ShopState> Shops { get; set; }
 

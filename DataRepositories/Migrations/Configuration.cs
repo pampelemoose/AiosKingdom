@@ -21,13 +21,11 @@ namespace DataRepositories.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
 
-            return;
-
             try
             {
                 context.Versions.RemoveRange(context.Versions);
                 context.Kingdoms.RemoveRange(context.Kingdoms);
-                context.Configs.RemoveRange(context.Configs);
+                context.Towns.RemoveRange(context.Towns);
                 context.Tokens.RemoveRange(context.Tokens);
 
 
@@ -61,7 +59,7 @@ namespace DataRepositories.Migrations
                 context.ShopItems.RemoveRange(context.ShopItems);
                 context.Enemies.RemoveRange(context.Enemies);
 
-                context.AdventureProgresses.RemoveRange(context.AdventureProgresses);
+                context.AdventureUnlocked.RemoveRange(context.AdventureUnlocked);
 
                 context.SaveChanges();
 
@@ -125,7 +123,7 @@ namespace DataRepositories.Migrations
                     Space = 1,
                 });
 
-                context.Configs.Add(new DataModels.Config
+                context.Towns.Add(new DataModels.Town
                 {
                     Id = Guid.NewGuid(),
                     VersionId = version.Id,
@@ -134,7 +132,7 @@ namespace DataRepositories.Migrations
                     Port = 4242,
 
                     KingdomId = kingdom.Id,
-                    Name = "Server 1",
+                    Name = "Churros",
                     Difficulty = DataModels.ServerDifficulty.Easy,
                     Online = false,
 
@@ -159,8 +157,6 @@ namespace DataRepositories.Migrations
                 });
 
                 context.SaveChanges();
-
-
             }
             catch (DbEntityValidationException e)
             {

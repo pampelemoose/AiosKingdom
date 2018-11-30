@@ -118,7 +118,7 @@
         <div class="row">
             @foreach (var phase in Model.Phases)
             {
-                var skill = DataRepositories.BookRepository.GetAllForVersion(Model.VersionId).SelectMany(b => b.Pages).FirstOrDefault(i => i.Id.Equals(phase.SkillId));
+                var skill = DataRepositories.BookRepository.GetAllForVersion(Model.VersionId).SelectMany(b => b.Pages).FirstOrDefault(i => i.Id.Equals(phase.PageId));
 
                 <div class="col-md-6">
                     <div class="card card-dark">

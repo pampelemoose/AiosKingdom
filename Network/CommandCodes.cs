@@ -44,6 +44,7 @@ namespace Network
             public const int Inventory = _default + 8;
             public const int Knowledges = _default + 9;
             public const int Equipment = _default + 10;
+            public const int AdventureUnlocked = _default + 13;
         }
 
         public static class Listing

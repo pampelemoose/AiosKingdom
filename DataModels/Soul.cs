@@ -21,17 +21,10 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
-        public Guid ServerId { get; set; }
-        [ForeignKey("ServerId")]
-        public Config Server { get; set; }
-
+        public Guid TownId { get; set; }
         public Guid AppUserId { get; set; }
-        [ForeignKey("AppUserId")]
-        public AppUser AppUser { get; set; }
 
-        [MaxLength(25)]
         public string Name { get; set; }
-
         public float TimePlayed { get; set; }
 
         private int _level = 1;
@@ -60,13 +53,13 @@ namespace DataModels
         public int Shards { get; set; } // GameTime Coins
         public int Bits { get; set; } // Basic Coins
 
-        public Guid EquipmentId { get; set; }
-        [ForeignKey("EquipmentId")]
+        //public Guid EquipmentId { get; set; }
+        //[ForeignKey("EquipmentId")]
         public Equipment Equipment { get; set; }
 
         public List<InventorySlot> Inventory { get; set; }
         public List<Knowledge> Knowledge { get; set; }
 
-        public List<AdventureProgress> Progress { get; set; }
+        public List<AdventureUnlocked> AdventureLocks { get; set; }
     }
 }

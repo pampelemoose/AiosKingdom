@@ -33,17 +33,20 @@ public class InventoryListItem : MonoBehaviour
                 break;
         }
 
+        More.onClick.RemoveAllListeners();
         More.onClick.AddListener(() =>
         {
             MoreBox.SetActive(!MoreBox.activeSelf);
         });
 
+        Sell.onClick.RemoveAllListeners();
         Sell.onClick.AddListener(() =>
         {
             Debug.Log("Sell Item TODO");
         });
 
         Equip.gameObject.SetActive(IsEquipable(item));
+        Equip.onClick.RemoveAllListeners();
         Equip.onClick.AddListener(() =>
         {
             SceneLoom.Loom.QueueOnMainThread(() =>

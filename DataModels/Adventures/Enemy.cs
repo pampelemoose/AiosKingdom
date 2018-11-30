@@ -19,19 +19,11 @@ namespace DataModels.Adventures
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public Guid RoomId { get; set; }
-
-        [Required]
         public Guid MonsterId { get; set; }
 
-        [Required]
         public EnemyType EnemyType { get; set; }
-
-        [Required]
         public int Level { get; set; }
-
-        [Required]
         public int ShardReward { get; set; }
     }
 }

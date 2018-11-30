@@ -12,9 +12,9 @@ namespace Server.GameServer.Commands.Player
 {
     public class EquipItemCommand : ACommand
     {
-        private DataModels.Config _config;
+        private DataModels.Town _config;
 
-        public EquipItemCommand(CommandArgs args, DataModels.Config config)
+        public EquipItemCommand(CommandArgs args, DataModels.Town config)
             : base(args)
         {
             _config = config;

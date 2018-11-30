@@ -18,7 +18,7 @@ namespace Server.DispatchServer.Commands
         {
             var id = Guid.Parse(_args.Args[0]);
             var userId = ClientsManager.Instance.GetUserId(ret.ClientId);
-            var server = DataRepositories.ConfigRepository.GetById(id);
+            var server = DataRepositories.TownRepository.GetById(id);
 
             if (server != null && server.SlotAvailable < server.SlotLimit)
             {

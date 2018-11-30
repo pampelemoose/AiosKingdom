@@ -50,14 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adventures\Lock.cs" />
+    <Compile Include="AdventureUnlocked.cs" />
     <Compile Include="AppUser.cs" />
-    <Compile Include="AdventureProgress.cs" />
     <Compile Include="Adventures\Enemy.cs" />
     <Compile Include="Adventures\ShopItem.cs" />
     <Compile Include="Adventures\Adventure.cs" />
     <Compile Include="Adventures\Room.cs" />
     <Compile Include="Equipment.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="Town.cs" />
     <Compile Include="AuthToken.cs" />
     <Compile Include="InventorySlot.cs" />
     <Compile Include="Items\ItemEffect.cs" />

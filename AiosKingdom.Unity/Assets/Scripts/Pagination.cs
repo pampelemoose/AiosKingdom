@@ -15,6 +15,7 @@ public class Pagination : MonoBehaviour
 
     public void Setup(int itemPerPage, int itemCount, Action setItems)
     {
+        Prev.onClick.RemoveAllListeners();
         Prev.onClick.AddListener(() =>
         {
             if (_currentPage - 1 == 1)
@@ -28,6 +29,7 @@ public class Pagination : MonoBehaviour
             setItems();
         });
 
+        Next.onClick.RemoveAllListeners();
         Next.onClick.AddListener(() =>
         {
             if ((itemCount - ((_currentPage + 1) * itemPerPage)) <= 0)

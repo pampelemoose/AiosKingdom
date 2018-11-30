@@ -40,9 +40,9 @@ namespace Server.GameServer
 
         }
 
-        private DataModels.Config _config;
+        private DataModels.Town _config;
 
-        public void Initialize(DataModels.Config config)
+        public void Initialize(DataModels.Town config)
         {
             _config = config;
 
@@ -207,7 +207,7 @@ namespace Server.GameServer
 
         private void LoadMarket()
         {
-            var market = DataRepositories.MarketRepository.GetAllForServer(_config.Id);
+            var market = DataRepositories.MarketRepository.GetAllForTown(_config.Id);
             var marketList = new List<Network.MarketSlot>();
 
             foreach (var marketSlot in market)
@@ -230,7 +230,7 @@ namespace Server.GameServer
 
         private void LoadSpecialMarket()
         {
-            var market = DataRepositories.MarketRepository.GetAllForServer(_config.Id, true);
+            var market = DataRepositories.MarketRepository.GetAllForTown(_config.Id, true);
             var marketList = new List<Network.MarketSlot>();
 
             foreach (var marketSlot in market)

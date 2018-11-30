@@ -33,6 +33,8 @@ namespace Server.GameServer
 
             public List<Network.InventorySlot> Inventory { get; set; }
             public List<Network.Knowledge> Knowledge { get; set; }
+
+            public List<Network.AdventureUnlocked> AdventureLocks { get; set; }
         }
 
         private static SoulManager _instance;
@@ -142,7 +144,9 @@ namespace Server.GameServer
                     },
 
                     Inventory = new List<Network.InventorySlot>(),
-                    Knowledge = new List<Network.Knowledge>()
+                    Knowledge = new List<Network.Knowledge>(),
+
+                    AdventureLocks = new List<Network.AdventureUnlocked>()
                 };
 
                 foreach (var inventorySlot in soul.Inventory)
@@ -169,6 +173,18 @@ namespace Server.GameServer
                     };
 
                     component.Knowledge.Add(knowledge);
+                }
+
+                foreach (var adventureLock in soul.AdventureLocks)
+                {
+                    var advLock = new Network.AdventureUnlocked
+                    {
+                        Id = adventureLock.Id,
+                        AdventureId = adventureLock.AdventureId,
+                        UnlockedAt = adventureLock.UnlockedAt
+                    };
+
+                    component.AdventureLocks.Add(advLock);
                 }
 
                 lock (_componentLock)
@@ -265,6 +281,20 @@ namespace Server.GameServer
             soul.Embers = components.Currency.Embers;
             soul.Shards = components.Currency.Shards;
             soul.Bits = components.Currency.Bits;
+            // ADVENTURELOCKS
+            soul.AdventureLocks = new List<DataModels.AdventureUnlocked>();
+            foreach (var advLockSlot in components.AdventureLocks)
+            {
+                var advLock = new DataModels.AdventureUnlocked
+                {
+                    Id = advLockSlot.Id,
+                    SoulId = soul.Id,
+                    AdventureId = advLockSlot.AdventureId,
+                    UnlockedAt = advLockSlot.UnlockedAt
+                };
+
+                soul.AdventureLocks.Add(advLock);
+            }
 
             var timePlayed = DateTime.Now - _soulTime[token];
             soul.TimePlayed += (float)timePlayed.TotalSeconds;
@@ -272,7 +302,7 @@ namespace Server.GameServer
             DataRepositories.SoulRepository.Update(soul);
         }
 
-        public void UpdateCurrentDatas(Guid token, DataModels.Config config)
+        public void UpdateCurrentDatas(Guid token, DataModels.Town config)
         {
             Log.Instance.Write(Log.Level.Infos, $"SoulManager().UpdateCurrentDatas({token})");
             if (_ids.ContainsKey(token))
@@ -375,6 +405,21 @@ namespace Server.GameServer
             }
         }
 
+        public void UpdateAdventureLocks(Guid token, List<Network.AdventureUnlocked> locks)
+        {
+            if (_ids.ContainsKey(token))
+            {
+                var component = _components[token];
+
+                component.AdventureLocks = locks;
+
+                lock (_componentLock)
+                {
+                    _components[token] = component;
+                }
+            }
+        }
+
         public Network.SoulDatas GetDatas(Guid token)
         {
             if (_ids.ContainsKey(token))
@@ -430,6 +475,16 @@ namespace Server.GameServer
             if (_ids.ContainsKey(token))
             {
                 return _components[token].Knowledge;
+            }
+
+            return null;
+        }
+
+        public List<Network.AdventureUnlocked> GetAdventureLocks(Guid token)
+        {
+            if (_ids.ContainsKey(token))
+            {
+                return _components[token].AdventureLocks;
             }
 
             return null;
@@ -513,7 +568,7 @@ namespace Server.GameServer
             }
         }
 
-        private int GetRequiredExperienceToLevelUp(Guid token, DataModels.Config config)
+        private int GetRequiredExperienceToLevelUp(Guid token, DataModels.Town config)
         {
             var soul = _components[token];
             var datas = _soulDatas[token];
@@ -528,7 +583,7 @@ namespace Server.GameServer
             return calculated;
         }
 
-        private int GetMaxHealth(Guid token, DataModels.Config config)
+        private int GetMaxHealth(Guid token, DataModels.Town config)
         {
             var soul = _components[token];
             var datas = _soulDatas[token];
@@ -539,7 +594,7 @@ namespace Server.GameServer
             return health;
         }
 
-        private int GetMaxMana(Guid token, DataModels.Config config)
+        private int GetMaxMana(Guid token, DataModels.Town config)
         {
             var soul = _components[token];
             var datas = _soulDatas[token];

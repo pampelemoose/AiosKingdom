@@ -18,6 +18,7 @@ public class ServerListItem : MonoBehaviour
         ServerSoulCount.text = infos.SoulCount.ToString();
         ServerSlotCount.text = (infos.SlotsLimit - infos.SlotsAvailable).ToString("0");
 
+        ConnectButton.onClick.RemoveAllListeners();
         ConnectButton.onClick.AddListener(() =>
         {
             UIManager.This.ShowLoading();

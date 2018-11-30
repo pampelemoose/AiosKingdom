@@ -41,12 +41,30 @@ namespace Server.GameServer
             return null;
         }
 
+        public bool IsUnlocked(Guid dungeonId, List<Network.AdventureUnlocked> unlocks)
+        {
+            var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(dungeonId));
+            if (dungeon.Locks.Count > 0)
+            {
+                foreach (var locks in dungeon.Locks)
+                {
+                    if (!unlocks.Any(u => u.AdventureId.Equals(locks.LockedId)))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            return true;
+        }
+
         public Adventure OpenRoom(Guid soulId, Network.SoulDatas datas, Guid dungeonId, List<Network.AdventureState.BagItem> bagItems = null)
         {
             Log.Instance.Write(Log.Level.Infos, $"AdventureManager().OpenRoom({soulId}, {dungeonId})");
             var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(dungeonId));
 
-            if (_adventures.ContainsKey(soulId) && _adventures[soulId].DungeonId.Equals(dungeonId))
+            if (_adventures.ContainsKey(soulId) && _adventures[soulId].AdventureId.Equals(dungeonId))
             {
                 var adventure = _adventures[soulId];
 
@@ -76,7 +94,7 @@ namespace Server.GameServer
             if (_adventures.ContainsKey(soulId))
             {
                 var adventure = _adventures[soulId];
-                DataRepositories.AdventureRepository.SaveProgress(soulId, adventure.DungeonId, adventure.RoomNumber);
+                //DataRepositories.AdventureRepository.SaveProgress(soulId, adventure.DungeonId, adventure.RoomNumber);
                 _adventures.Remove(soulId);
             }
         }

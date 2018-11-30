@@ -9,6 +9,7 @@ public class Page : MonoBehaviour
 
     void Start()
     {
+        Close.onClick.RemoveAllListeners();
         Close.onClick.AddListener(() =>
         {
             gameObject.SetActive(false);

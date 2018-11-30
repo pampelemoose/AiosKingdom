@@ -10,9 +10,9 @@ namespace Server.GameServer.Commands.Server
 {
     public class CreateSoulCommand : ACommand
     {
-        private DataModels.Config _config;
+        private DataModels.Town _config;
 
-        public CreateSoulCommand(CommandArgs args, DataModels.Config config)
+        public CreateSoulCommand(CommandArgs args, DataModels.Town config)
             : base(args)
         {
             _config = config;
@@ -26,7 +26,7 @@ namespace Server.GameServer.Commands.Server
             var soul = new DataModels.Soul
             {
                 Id = Guid.NewGuid(),
-                ServerId = Guid.Parse(ConfigurationManager.AppSettings.Get("ConfigId")),
+                TownId = Guid.Parse(ConfigurationManager.AppSettings.Get("TownId")),
                 Name = soulName,
                 AppUserId = userId,
                 Level = 1,

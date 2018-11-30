@@ -97,4 +97,11 @@ namespace JsonObjects
         public Guid BookId { get; set; }
         public int Rank { get; set; }
     }
+
+    public class AdventureUnlocked
+    {
+        public Guid Id { get; set; }
+        public Guid AdventureId { get; set; }
+        public DateTime? UnlockedAt { get; set; }
+    }
 }

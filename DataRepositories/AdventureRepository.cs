@@ -24,6 +24,7 @@ namespace DataRepositories
             {
                 return context.Adventures
                     .Include(a => a.Rooms)
+                    .Include(a => a.Locks)
                     .Include(a => a.Rooms.Select(r => r.ShopItems))
                     .Include(a => a.Rooms.Select(r => r.Ennemies))
                     .Where(b => b.VersionId.Equals(versionId)).ToList();
@@ -36,9 +37,10 @@ namespace DataRepositories
             {
                 return context.Adventures
                     .Include(a => a.Rooms)
+                    .Include(a => a.Locks)
                     .Include(a => a.Rooms.Select(r => r.ShopItems))
                     .Include(a => a.Rooms.Select(r => r.Ennemies))
-                    .FirstOrDefault(a => a.DungeonId.Equals(id));
+                    .FirstOrDefault(a => a.AdventureId.Equals(id));
             }
         }
 
@@ -72,30 +74,31 @@ namespace DataRepositories
             }
         }
 
-        public static bool Update(DataModels.Adventures.Adventure dungeon)
+        public static bool Update(DataModels.Adventures.Adventure adventure)
         {
             using (var context = new AiosKingdomContext())
             {
                 var online = context.Adventures
                     .Include(a => a.Rooms)
+                    .Include(a => a.Locks)
                     .Include(a => a.Rooms.Select(r => r.ShopItems))
                     .Include(a => a.Rooms.Select(r => r.Ennemies))
-                    .FirstOrDefault(a => a.Id.Equals(dungeon.Id));
+                    .FirstOrDefault(a => a.Id.Equals(adventure.Id));
 
                 if (online == null)
                     return false;
 
-                online.VersionId = dungeon.VersionId;
-                online.Name = dungeon.Name;
-                online.RequiredLevel = dungeon.RequiredLevel;
-                online.MaxLevelAuthorized = dungeon.MaxLevelAuthorized;
-                online.ExperienceReward = dungeon.ExperienceReward;
-                online.ShardReward = dungeon.ShardReward;
+                online.VersionId = adventure.VersionId;
+                online.Name = adventure.Name;
+                online.RequiredLevel = adventure.RequiredLevel;
+                online.MaxLevelAuthorized = adventure.MaxLevelAuthorized;
+                online.ExperienceReward = adventure.ExperienceReward;
+                online.ShardReward = adventure.ShardReward;
 
                 // ROOMS
                 var oldRooms = online.Rooms;
                 online.Rooms = new List<DataModels.Adventures.Room>();
-                foreach (var room in dungeon.Rooms)
+                foreach (var room in adventure.Rooms)
                 {
                     if (Guid.Empty.Equals(room.Id))
                     {
@@ -127,7 +130,7 @@ namespace DataRepositories
                                 onlineShopItem.ItemId = shopItem.ItemId;
                                 onlineShopItem.Type = shopItem.Type;
                                 onlineShopItem.Quantity = shopItem.Quantity;
-                                onlineShopItem.ShardPrice = shopItem.ShardPrice;
+                                onlineShopItem.Price = shopItem.Price;
                                 onlineRoom.ShopItems.Add(onlineShopItem);
                                 oldShopItems.Remove(oldShopItems.FirstOrDefault(o => o.Id.Equals(shopItem.Id)));
                             }
@@ -175,44 +178,27 @@ namespace DataRepositories
                     context.Rooms.Remove(toDel);
                 }
 
-                try
+                // LOCKS
+                var oldLocks = online.Locks;
+                online.Locks = new List<DataModels.Adventures.Lock>();
+                foreach (var lockItem in adventure.Locks)
                 {
-                    context.SaveChanges();
-                }
-                catch (DbEntityValidationException e)
-                {
-                    foreach (var error in e.EntityValidationErrors)
+                    if (Guid.Empty.Equals(lockItem.Id))
                     {
-                        foreach (var mess in error.ValidationErrors)
-                        {
-                            Console.WriteLine(mess.ErrorMessage);
-                        }
+                        lockItem.Id = Guid.NewGuid();
+                        online.Locks.Add(lockItem);
                     }
-                    return false;
-                }
-                return true;
-            }
-        }
-
-        public static bool SaveProgress(Guid soulId, Guid dungeonId, int currentRoom)
-        {
-            using (var context = new AiosKingdomContext())
-            {
-                var progressExists = context.AdventureProgresses.FirstOrDefault(p => p.SoulId.Equals(soulId) && p.DungeonId.Equals(dungeonId));
-                if (progressExists != null)
-                {
-                    progressExists.CurrentRoom = currentRoom;
-                }
-                else
-                {
-                    var progress = new DataModels.AdventureProgress
+                    else
                     {
-                        Id = Guid.NewGuid(),
-                        SoulId = soulId,
-                        DungeonId = dungeonId,
-                        CurrentRoom = currentRoom
-                    };
-                    context.AdventureProgresses.Add(progress);
+                        var onlineLock = context.Locks.FirstOrDefault(i => i.Id.Equals(lockItem.Id));
+                        onlineLock.LockedId = lockItem.LockedId;
+                        oldLocks.Remove(oldLocks.FirstOrDefault(o => o.Id.Equals(lockItem.Id)));
+                    }
+                }
+
+                foreach (var toDel in oldLocks)
+                {
+                    context.Locks.Remove(toDel);
                 }
 
                 try

@@ -18,11 +18,11 @@ namespace DataRepositories
             }
         }
 
-        public static List<DataModels.MarketSlot> GetAllForServer(Guid serverId, bool special = false)
+        public static List<DataModels.MarketSlot> GetAllForTown(Guid townId, bool special = false)
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.Market.Where(m => m.ServerId.Equals(serverId) && m.IsSpecial == special).ToList();
+                return context.Market.Where(m => m.TownId.Equals(townId) && m.IsSpecial == special).ToList();
             }
         }
 

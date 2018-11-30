@@ -12,13 +12,8 @@ namespace DataModels
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public Guid Identifier { get; set; }
-
-        [Required]
         public Guid SafeKey { get; set; }
-
-        [Required]
         public Guid PublicKey { get; set; }
 
         private int _soulSlots = 1;

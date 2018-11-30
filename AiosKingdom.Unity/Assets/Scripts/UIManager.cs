@@ -166,6 +166,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         ChangeView(Views.Adventure, true);
 
         var script = _currentPage.GetComponent<Adventure>();
+        script.Initialize();
 
         HideLoading();
     }
@@ -287,7 +288,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
 
     public void UpdateAdventure()
     {
-        var script = Market.GetComponent<Adventure>();
+        var script = Adventure.GetComponent<Adventure>();
         script.UpdateCurrentState();
     }
 

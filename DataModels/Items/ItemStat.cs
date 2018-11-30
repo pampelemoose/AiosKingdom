@@ -13,10 +13,7 @@ namespace DataModels.Items
 
         public Guid ItemId { get; set; }
 
-        [Required]
         public Soul.Stats Type { get; set; }
-
-        [Required]
         public int StatValue { get; set; }
     }
 }

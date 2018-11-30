@@ -17,14 +17,14 @@ namespace Server.DispatchServer.Commands
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var id = ClientsManager.Instance.GetUserId(ret.ClientId);
-            var servers = DataRepositories.ConfigRepository.GetAll();
+            var servers = DataRepositories.TownRepository.GetAll();
             var slots = DataRepositories.AppUserRepository.GetByIdentifier(id).Souls;
             var infos = new List<Network.GameServerInfos>();
 
             foreach (var server in servers)
             {
                 int soulCount = 0;
-                var soulOnServer = slots.Where(s => s.ServerId.Equals(server.Id)).ToList();
+                var soulOnServer = slots.Where(s => s.TownId.Equals(server.Id)).ToList();
                 if (soulOnServer != null)
                 {
                     soulCount = soulOnServer.Count;

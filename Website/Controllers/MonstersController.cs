@@ -93,7 +93,6 @@ namespace Website.Controllers
                         {
                             Id = Guid.NewGuid(),
                             MonsterId = monsterId,
-                            Type = lootModel.Type,
                             ItemId = lootModel.SelectedItem,
                             DropRate = lootModel.DropRate,
                             Quantity = lootModel.Quantity
@@ -107,7 +106,7 @@ namespace Website.Controllers
                         {
                             Id = Guid.NewGuid(),
                             MonsterId = monsterId,
-                            SkillId = phaseModel.SelectedSkill
+                            PageId = phaseModel.SelectedSkill
                         };
                         monster.Phases.Add(phase);
                     }
@@ -187,7 +186,6 @@ namespace Website.Controllers
                     model.Loots.Add(new Models.LootModel
                     {
                         Id = loot.Id,
-                        Type = loot.Type,
                         SelectedItem = loot.ItemId,
                         Quantity = loot.Quantity,
                         DropRate = loot.DropRate
@@ -200,7 +198,7 @@ namespace Website.Controllers
                     {
                         SelectedVersion = model.SelectedVersion,
                         Id = phase.Id,
-                        SelectedSkill = phase.SkillId
+                        SelectedSkill = phase.PageId
                     });
                 }
 
@@ -257,7 +255,6 @@ namespace Website.Controllers
                         var loot = new DataModels.Monsters.Loot
                         {
                             Id = lootModel.Id,
-                            Type = lootModel.Type,
                             ItemId = lootModel.SelectedItem,
                             DropRate = lootModel.DropRate,
                             Quantity = lootModel.Quantity
@@ -270,7 +267,7 @@ namespace Website.Controllers
                         var phase = new DataModels.Monsters.Phase
                         {
                             Id = phaseModel.Id,
-                            SkillId = phaseModel.SelectedSkill
+                            PageId = phaseModel.SelectedSkill
                         };
                         monster.Phases.Add(phase);
                     }

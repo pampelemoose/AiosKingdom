@@ -20,11 +20,25 @@ namespace Server.GameServer.Commands.Dungeon
             var knowledges = SoulManager.Instance.GetKnowledges(_args.ClientId);
             var inventory = SoulManager.Instance.GetInventory(_args.ClientId);
             var datas = SoulManager.Instance.GetDatas(_args.ClientId);
+            var unlocks = SoulManager.Instance.GetAdventureLocks(_args.ClientId);
             var dungeonId = Guid.Parse(_args.Args[0]);
             var bagItems = JsonConvert.DeserializeObject<List<Network.AdventureState.BagItem>>(_args.Args[1]);
 
             if (knowledges.Count > 0)
             {
+                if (!AdventureManager.Instance.IsUnlocked(dungeonId, unlocks))
+                {
+                    ret.ClientResponse = new Network.Message
+                    {
+                        Code = Network.CommandCodes.Dungeon.Enter,
+                        Success = false,
+                        Json = "Couldn't enter because you didn't unlock this adventure yet."
+                    };
+                    ret.Succeeded = true;
+
+                    return ret;
+                }
+
                 var adventure = AdventureManager.Instance.OpenRoom(soulId, datas, dungeonId, bagItems);
 
                 if (adventure == null)
