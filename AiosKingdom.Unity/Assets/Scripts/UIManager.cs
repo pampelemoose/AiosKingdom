@@ -292,6 +292,30 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         script.UpdateCurrentState();
     }
 
+    public void AdventureLogResults(List<JsonObjects.AdventureState.ActionResult> actionResults)
+    {
+        var script = Adventure.GetComponent<Adventure>();
+        script.LogResults(actionResults);
+    }
+
+    public void AdventureTriggerEnemyTurn()
+    {
+        var script = Adventure.GetComponent<Adventure>();
+        script.TriggerEnemyTurn();
+    }
+
+    public void AdventureShowLoots(List<JsonObjects.LootItem> loots)
+    {
+        var script = Adventure.GetComponent<Adventure>();
+        script.ShowLoots(loots);
+    }
+
+    public void AdventureShowEndResults(List<JsonObjects.AdventureState.ActionResult> actionResults)
+    {
+        var script = Adventure.GetComponent<Adventure>();
+        script.ShowEndResults(actionResults);
+    }
+
     #endregion
 
     #region Loading Screen

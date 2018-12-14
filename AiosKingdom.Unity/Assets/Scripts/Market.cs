@@ -20,9 +20,8 @@ public class Market : MonoBehaviour
     public GameObject ItemListItem;
     public GameObject ItemDetails;
     public GameObject PaginationBox;
-    public int ItemPerPage = 5;
-
     public GameObject PaginationPrefab;
+    public int ItemPerPage = 5;
 
     [Space(10)]
     [Header("BuyBox")]

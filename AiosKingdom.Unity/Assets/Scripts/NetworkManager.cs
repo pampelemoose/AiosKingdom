@@ -840,18 +840,18 @@ public class NetworkManager : MonoBehaviour
                     Debug.Log(message.Json);
                 }
                 break;
-            //case Network.CommandCodes.Dungeon.EnterRoom:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            UpdateDungeonRoom();
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Enter Room", message.Json);
-            //        }
-            //    }
-            //    break;
+            case JsonObjects.CommandCodes.Dungeon.EnterRoom:
+                {
+                    if (message.Success)
+                    {
+                        UpdateDungeonRoom();
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Enter Room", message.Json);
+                    }
+                }
+                break;
             case JsonObjects.CommandCodes.Dungeon.Exit:
                 {
                     if (message.Success)
@@ -891,21 +891,27 @@ public class NetworkManager : MonoBehaviour
                     }
                 }
                 break;
-            //case Network.CommandCodes.Dungeon.UseSkill:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            UpdateDungeonRoom();
+            case JsonObjects.CommandCodes.Dungeon.UseSkill:
+                {
+                    if (message.Success)
+                    {
+                        UpdateDungeonRoom();
 
-            //            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
-            //            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Skill", message.Json);
-            //        }
-            //    }
-            //    break;
+                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.AdventureLogResults(arList);
+                            UIManager.This.AdventureTriggerEnemyTurn();
+                        });
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Skill", message.Json);
+                    }
+                }
+                break;
             //case Network.CommandCodes.Dungeon.UseConsumable:
             //    {
             //        if (message.Success)
@@ -922,103 +928,134 @@ public class NetworkManager : MonoBehaviour
             //        }
             //    }
             //    break;
-            //case Network.CommandCodes.Dungeon.EnemyTurn:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            UpdateDungeonRoom();
+            case JsonObjects.CommandCodes.Dungeon.EnemyTurn:
+                {
+                    if (message.Success)
+                    {
+                        UpdateDungeonRoom();
 
-            //            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
-            //            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Turn", message.Json);
-            //        }
-            //        MessagingCenter.Send(this, MessengerCodes.EnemyTurnEnded);
-            //    }
-            //    break;
-            //case Network.CommandCodes.Dungeon.DoNothingTurn:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            UpdateDungeonRoom();
+                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
 
-            //            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
-            //            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Turn", message.Json);
-            //        }
-            //    }
-            //    break;
-            //case Network.CommandCodes.Dungeon.GetLoots:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            var loots = JsonConvert.DeserializeObject<List<Network.LootItem>>(message.Json);
-            //            MessagingCenter.Send(this, MessengerCodes.DungeonLootsReceived, loots);
-            //        }
-            //    }
-            //    break;
-            //case Network.CommandCodes.Dungeon.LootItem:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            GetDungeonRoomLoots();
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Looting", message.Json);
-            //        }
-            //    }
-            //    break;
-            //case Network.CommandCodes.Dungeon.LeaveFinishedRoom:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
-            //            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Dungeon", message.Json);
-            //        }
-            //    }
-            //    break;
-            //case Network.CommandCodes.Dungeon.BuyShopItem:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            AskCurrencies();
-            //            AskInventory();
-            //            UpdateDungeonRoom();
-            //        }
-            //        MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
-            //    }
-            //    break;
-            //case Network.CommandCodes.Dungeon.PlayerDied:
-            //    {
-            //        var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
-            //        MessagingCenter.Send(this, MessengerCodes.PlayerDied, arList);
-            //    }
-            //    break;
-            //case Network.CommandCodes.Dungeon.PlayerRest:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            OpenDungeonRoom();
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.AdventureLogResults(arList);
+                        });
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Turn", message.Json);
+                    }
+                    //MessagingCenter.Send(this, MessengerCodes.EnemyTurnEnded);
+                }
+                break;
+            case JsonObjects.CommandCodes.Dungeon.DoNothingTurn:
+                {
+                    if (message.Success)
+                    {
+                        UpdateDungeonRoom();
 
-            //            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
-            //            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Resting", message.Json);
-            //        }
-            //    }
-            //    break;
+                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.AdventureLogResults(arList);
+                            UIManager.This.AdventureTriggerEnemyTurn();
+                        });
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Turn", message.Json);
+                    }
+                }
+                break;
+            case JsonObjects.CommandCodes.Dungeon.GetLoots:
+                {
+                    if (message.Success)
+                    {
+                        var loots = JsonConvert.DeserializeObject<List<JsonObjects.LootItem>>(message.Json);
+                        //MessagingCenter.Send(this, MessengerCodes.DungeonLootsReceived, loots);
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.AdventureShowLoots(loots);
+                        });
+                    }
+                }
+                break;
+            case JsonObjects.CommandCodes.Dungeon.LootItem:
+                {
+                    if (message.Success)
+                    {
+                        GetDungeonRoomLoots();
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Looting", message.Json);
+                    }
+                }
+                break;
+            case JsonObjects.CommandCodes.Dungeon.LeaveFinishedRoom:
+                {
+                    if (message.Success)
+                    {
+                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.AdventureShowEndResults(arList);
+                        });
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Dungeon", message.Json);
+                    }
+                }
+                break;
+            case JsonObjects.CommandCodes.Dungeon.BuyShopItem:
+                {
+                    if (message.Success)
+                    {
+                        AskCurrencies();
+                        AskInventory();
+                        UpdateDungeonRoom();
+                    }
+                    //MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
+                }
+                break;
+            case JsonObjects.CommandCodes.Dungeon.PlayerDied:
+                {
+                    var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+                    //MessagingCenter.Send(this, MessengerCodes.PlayerDied, arList);
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        UIManager.This.AdventureShowEndResults(arList);
+                    });
+                }
+                break;
+            case JsonObjects.CommandCodes.Dungeon.PlayerRest:
+                {
+                    if (message.Success)
+                    {
+                        OpenDungeonRoom();
+
+                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.AdventureLogResults(arList);
+                        });
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Resting", message.Json);
+                    }
+                }
+                break;
 
             default:
                 return false;
@@ -1148,73 +1185,73 @@ public class NetworkManager : MonoBehaviour
         SendRequest(JsonObjects.CommandCodes.Dungeon.Enter, new string[2] { dungeonId.ToString(), JsonConvert.SerializeObject(items) });
     }
 
-    //public void OpenDungeonRoom()
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.EnterRoom);
-    //}
+    public void OpenDungeonRoom()
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.EnterRoom);
+    }
 
     public void UpdateDungeonRoom()
     {
         SendRequest(JsonObjects.CommandCodes.Dungeon.UpdateRoom);
     }
 
-    //public void EnemyTurn()
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.EnemyTurn);
-    //}
+    public void EnemyTurn()
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.EnemyTurn);
+    }
 
-    //public void DoNothingTurn()
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.DoNothingTurn);
-    //}
+    public void DoNothingTurn()
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.DoNothingTurn);
+    }
 
-    //public void BuyShopItem(Guid tempId, int quantity)
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.BuyShopItem, new string[2] { tempId.ToString(), quantity.ToString() });
-    //}
+    public void BuyShopItem(Guid tempId, int quantity)
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.BuyShopItem, new string[2] { tempId.ToString(), quantity.ToString() });
+    }
 
-    //public void DungeonUseSkill(Guid knowledgeId, Guid enemyId)
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.UseSkill, new string[2] { knowledgeId.ToString(), enemyId.ToString() });
-    //}
+    public void AdventureUseSkill(Guid knowledgeId, Guid enemyId)
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.UseSkill, new string[2] { knowledgeId.ToString(), enemyId.ToString() });
+    }
 
     //public void DungeonUseConsumable(Guid slotId, Guid enemyId)
     //{
     //    SendRequest(Network.CommandCodes.Dungeon.UseConsumable, new string[2] { slotId.ToString(), enemyId.ToString() });
     //}
 
-    //public void GetDungeonRoomLoots()
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.GetLoots);
-    //}
+    public void GetDungeonRoomLoots()
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.GetLoots);
+    }
 
-    //public void LootDungeonItem(Guid lootId)
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.LootItem, new string[1] { lootId.ToString() });
-    //}
+    public void LootDungeonItem(Guid lootId)
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.LootItem, new string[1] { lootId.ToString() });
+    }
 
     public void ExitDungeon()
     {
         SendRequest(JsonObjects.CommandCodes.Dungeon.Exit);
     }
 
-    //public void LeaveFinishedRoom()
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.LeaveFinishedRoom);
-    //}
+    public void LeaveFinishedRoom()
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.LeaveFinishedRoom);
+    }
 
-    //public void PlayerRest()
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.PlayerRest);
-    //}
+    public void PlayerRest()
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.PlayerRest);
+    }
 
-    //public void DungeonLeft()
-    //{
-    //    MessagingCenter.Send(this, MessengerCodes.SoulConnected);
-    //    AskCurrencies();
-    //    AskInventory();
-    //    AskSoulCurrentDatas();
-    //}
+    public void DungeonLeft()
+    {
+        //MessagingCenter.Send(this, MessengerCodes.SoulConnected);
+        AskCurrencies();
+        AskInventory();
+        AskSoulCurrentDatas();
+    }
 
     #endregion
 

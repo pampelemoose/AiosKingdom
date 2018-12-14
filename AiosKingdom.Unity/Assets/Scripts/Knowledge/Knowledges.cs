@@ -12,6 +12,13 @@ public class Knowledges : MonoBehaviour
     [Header("Knowledge Details")]
     public GameObject KnowledgeDetails;
 
+    public GameObject PaginationBox;
+    public GameObject PaginationPrefab;
+    public int ItemPerPage = 5;
+
+    private Pagination _pagination;
+    private List<JsonObjects.Knowledge> _knowledges;
+
     private GameObject _knowledgeDetails;
 
     void Awake()
@@ -26,12 +33,28 @@ public class Knowledges : MonoBehaviour
 
     public void LoadKnowledges()
     {
+        _knowledges = DatasManager.Instance.Knowledges;
+
+        if (_pagination == null)
+        {
+            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            _pagination = pagination.GetComponent<Pagination>();
+        }
+        _pagination.Setup(ItemPerPage, _knowledges.Count, SetKnowledges);
+
+        SetKnowledges();
+    }
+
+    private void SetKnowledges()
+    {
         foreach (Transform child in Content.transform)
         {
             Destroy(child.gameObject);
         }
 
-        foreach (var knowledge in DatasManager.Instance.Knowledges)
+        var knowledges = _knowledges.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
+
+        foreach (var knowledge in knowledges)
         {
             var skill = DatasManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(knowledge.BookId));
 
@@ -46,9 +69,6 @@ public class Knowledges : MonoBehaviour
             });
         }
 
-        if (gameObject.activeSelf)
-        {
-            StartCoroutine(UIHelper.SetScrollviewVerticalSize(Content));
-        }
+        _pagination.SetIndicator((_knowledges.Count / ItemPerPage) + (_knowledges.Count % ItemPerPage > 0 ? 1 : 0));
     }
 }

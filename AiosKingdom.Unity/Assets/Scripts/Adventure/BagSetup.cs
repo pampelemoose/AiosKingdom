@@ -69,7 +69,7 @@ public class BagSetup : MonoBehaviour
 
     private void AddItem(JsonObjects.Items.Item item, int quantity)
     {
-        if (_currentBagSlotCount + quantity < _bagSize)
+        if (_currentBagSlotCount + (quantity * item.Space) < _bagSize)
         {
             var itemSelector = BagItemSelection.GetComponent<BagItemSelection>();
             var inventorySlot = itemSelector.Inventory.FirstOrDefault(i => i.ItemId.Equals(item.Id));
@@ -92,7 +92,7 @@ public class BagSetup : MonoBehaviour
 
             _bag.Add(exists);
 
-            _currentBagSlotCount += quantity;
+            _currentBagSlotCount += (quantity * item.Space);
 
             SetItems();
         }

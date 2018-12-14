@@ -20,6 +20,13 @@ public class Bookstore : MonoBehaviour
     [Header("Book Details")]
     public GameObject BookDetails;
 
+    public GameObject PaginationBox;
+    public GameObject PaginationPrefab;
+    public int ItemPerPage = 5;
+
+    private Pagination _pagination;
+    private List<JsonObjects.Skills.Book> _books;
+
     private GameObject _bookDetails;
     private JsonObjects.Skills.BookQuality? _filterQuality;
     private JsonObjects.Skills.InscriptionType? _filterType;
@@ -43,7 +50,7 @@ public class Bookstore : MonoBehaviour
                     _filterQuality = (JsonObjects.Skills.BookQuality)Enum.Parse(typeof(JsonObjects.Skills.BookQuality), QualityDropdown.options.ElementAt(value).text);
                 }
 
-                LoadBooks();
+                SetBooks();
             });
 
             TypesDropdown.onValueChanged.AddListener((value) =>
@@ -55,7 +62,7 @@ public class Bookstore : MonoBehaviour
                     _filterType = (JsonObjects.Skills.InscriptionType)Enum.Parse(typeof(JsonObjects.Skills.InscriptionType), TypesDropdown.options.ElementAt(value).text);
                 }
 
-                LoadBooks();
+                SetBooks();
             });
 
             StatsDropdown.onValueChanged.AddListener((value) =>
@@ -66,7 +73,7 @@ public class Bookstore : MonoBehaviour
                     _filterStat = (JsonObjects.Stats)Enum.Parse(typeof(JsonObjects.Stats), StatsDropdown.options.ElementAt(value).text);
                 }
 
-                LoadBooks();
+                SetBooks();
             });
         }
 
@@ -75,12 +82,26 @@ public class Bookstore : MonoBehaviour
 
     public void LoadBooks()
     {
+        _books = DatasManager.Instance.Books;
+
+        if (_pagination == null)
+        {
+            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            _pagination = pagination.GetComponent<Pagination>();
+        }
+        _pagination.Setup(ItemPerPage, _books.Count, SetBooks);
+
+        SetBooks();
+    }
+
+    private void SetBooks()
+    {
         foreach (Transform child in Content.transform)
         {
             Destroy(child.gameObject);
         }
 
-        var books = DatasManager.Instance.Books;
+        var books = _books;
 
         if (_filterQuality != null)
         {
@@ -97,6 +118,8 @@ public class Bookstore : MonoBehaviour
             books = books.Where(b => (b.Pages.SelectMany(p => p.Inscriptions).Where(i => i.StatType == _filterStat)).Any()).ToList();
         }
 
+        books = _books.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
+
         foreach (var book in books)
         {
             var bookObj = Instantiate(BookListItem, Content.transform);
@@ -110,6 +133,6 @@ public class Bookstore : MonoBehaviour
             });
         }
 
-        StartCoroutine(UIHelper.SetScrollviewVerticalSize(Content));
+        _pagination.SetIndicator((_books.Count / ItemPerPage) + (_books.Count % ItemPerPage > 0 ? 1 : 0));
     }
 }
