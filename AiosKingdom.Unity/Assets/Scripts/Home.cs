@@ -13,6 +13,7 @@ public class Home : MonoBehaviour
     public Text Level;
     public Text Name;
     public Text Experience;
+    public Button Settings;
 
     [Space(2)]
     [Header("General")]
@@ -60,6 +61,14 @@ public class Home : MonoBehaviour
         NetworkManager.This.AskEquipment();
         NetworkManager.This.AskKnowledges();
         NetworkManager.This.AskInventory();
+
+        Settings.onClick.AddListener(() =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.ShowSettings();
+            });
+        });
 
         PointsAvailable.onClick.AddListener(() =>
         {

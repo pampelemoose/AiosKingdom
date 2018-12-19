@@ -2806,6 +2806,7 @@ MonoBehaviour:
   Level: {fileID: 114393651739679024}
   Name: {fileID: 114035978862865242}
   Experience: {fileID: 114776927797462696}
+  Settings: {fileID: 114539098523215472}
   Health: {fileID: 114614088009293590}
   Mana: {fileID: 114169549460024444}
   Armor: {fileID: 114831647319124254}
@@ -2823,7 +2824,6 @@ MonoBehaviour:
   Embers: {fileID: 114756391623438280}
   Bits: {fileID: 114452888163192718}
   Shards: {fileID: 114778209713750300}
-  MainPage: {fileID: 114327476103388404}
   Equipment: {fileID: 114914878376370234}
   Inventory: {fileID: 114113934388556382}
   Knowledges: {fileID: 114354077718962198}
@@ -2831,19 +2831,6 @@ MonoBehaviour:
   Pvp: {fileID: 114416059542748092}
   Bookstore: {fileID: 114993360767805090}
   Market: {fileID: 114029733119616002}
-  Content: {fileID: 1534927179847626}
-  PillsContent: {fileID: 1532613039406292, guid: 46341316da39889418dff3acb963f416,
-    type: 2}
-  EquipmentContent: {fileID: 1050499068105398, guid: 4c0cb9bacc610544087628fa35d5a266,
-    type: 2}
-  AdventuresContent: {fileID: 1787279909000690, guid: 24c8dcfe5efc47749b83964f29f3020c,
-    type: 2}
-  InventoryContent: {fileID: 1483968192379508, guid: 266cbe3172d74054bba7686e132fd38b,
-    type: 2}
-  KnowledgesContent: {fileID: 1110788457065798, guid: c98313c57ee01464fba32c5b2a68a6f6,
-    type: 2}
-  BookstoreContent: {fileID: 1784448531363746, guid: c57007863d1d09743bf0aa7a068207f7,
-    type: 2}
 --- !u!114 &114429397339360756
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5763,7 +5750,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.53271}
   m_AnchorMax: {x: 1, y: 0.63}
-  m_AnchoredPosition: {x: 0, y: 9.313226e-10}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0.0000000018626451}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224519873093464188

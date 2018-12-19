@@ -286,23 +286,6 @@ namespace Server.GameServer
                     }
                 }
 
-                foreach (var disc in disconnectedClients)
-                {
-                    var socket = ClientsManager.Instance.Clients[disc];
-
-                    if (SoulManager.Instance.DisconnectSoul(disc))
-                    {
-                        Console.WriteLine($"{disc} Soul disconnected.");
-                    }
-
-                    if (ClientsManager.Instance.RemoveClient(disc))
-                    {
-                        Log.Instance.Write(Log.Level.Warning, $"Client [{socket.RemoteEndPoint}] closed");
-                        socket.Shutdown(SocketShutdown.Both);
-                        socket.Close();
-                    }
-                }
-
                 lock (_responsesLock)
                 {
                     while (_responses.Count > 0)
@@ -324,6 +307,23 @@ namespace Server.GameServer
                                 ClientsManager.Instance.DisconnectClient(response.ClientId);
                             }
                         }
+                    }
+                }
+
+                foreach (var disc in disconnectedClients)
+                {
+                    var socket = ClientsManager.Instance.Clients[disc];
+
+                    if (SoulManager.Instance.DisconnectSoul(disc))
+                    {
+                        Console.WriteLine($"{disc} Soul disconnected.");
+                    }
+
+                    if (ClientsManager.Instance.RemoveClient(disc))
+                    {
+                        Log.Instance.Write(Log.Level.Warning, $"Client [{socket.RemoteEndPoint}] closed");
+                        socket.Shutdown(SocketShutdown.Both);
+                        socket.Close();
                     }
                 }
             }

@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public enum Views
     {
         None,
+        Settings,
         Account,
         ServerList,
         SoulList,
@@ -34,6 +35,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     private GameObject _loadingScreen;
 
     [Header("Content Objects")]
+    public GameObject Settings;
     public GameObject AccountForm;
     public GameObject ServerList;
     public GameObject SoulList;
@@ -52,6 +54,13 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     void Awake()
     {
         This = this;
+    }
+
+    public void ShowSettings()
+    {
+        ChangeView(Views.Settings);
+
+        HideLoading();
     }
 
     public void ShowAccountForm()
@@ -179,6 +188,9 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
 
             switch (viewType)
             {
+                case Views.Settings:
+                    _currentPage = Settings;
+                    break;
                 case Views.Account:
                     _currentPage = AccountForm;
                     break;

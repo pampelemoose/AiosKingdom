@@ -181,19 +181,6 @@ namespace Server.DispatchServer
                     }
                 }
 
-                foreach (var disc in disconnectedClients)
-                {
-                    var socket = ClientsManager.Instance.Clients[disc];
-
-                    if (ClientsManager.Instance.RemoveClient(disc))
-                    {
-                        Log.Instance.Write(Log.Level.Warning, $"Client [{socket.RemoteEndPoint}] closed");
-                        Console.WriteLine($"Client [{socket.RemoteEndPoint}] closed");
-                        socket.Shutdown(SocketShutdown.Both);
-                        socket.Close();
-                    }
-                }
-
                 lock (_responsesLock)
                 {
                     while (_responses.Count > 0)
@@ -215,6 +202,19 @@ namespace Server.DispatchServer
                                 ClientsManager.Instance.DisconnectClient(response.ClientId);
                             }
                         }
+                    }
+                }
+
+                foreach (var disc in disconnectedClients)
+                {
+                    var socket = ClientsManager.Instance.Clients[disc];
+
+                    if (ClientsManager.Instance.RemoveClient(disc))
+                    {
+                        Log.Instance.Write(Log.Level.Warning, $"Client [{socket.RemoteEndPoint}] closed");
+                        Console.WriteLine($"Client [{socket.RemoteEndPoint}] closed");
+                        socket.Shutdown(SocketShutdown.Both);
+                        socket.Close();
                     }
                 }
             }

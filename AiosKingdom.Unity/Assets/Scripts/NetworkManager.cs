@@ -115,6 +115,9 @@ public class NetworkManager : MonoBehaviour
                         {
                             var fromJson = JsonConvert.DeserializeObject<JsonObjects.Message>(message);
 
+                            // TODO : REMOVE
+                            Debug.Log(message);
+
                             if (!ProcessDispatchMessage(fromJson))
                             {
                                 /*_message = buffer;
@@ -232,11 +235,6 @@ public class NetworkManager : MonoBehaviour
                     }
                 }
                 break;
-            //case JsonObjects.CommandCodes.Client_AnnounceDisconnection:
-            //    {
-            //        MessagingCenter.Send(this, MessengerCodes.Disconnected, "You disconnected !");
-            //    }
-            //    break;
             //case JsonObjects.CommandCodes.Client_RetrieveAccount:
             //    {
             //        if (message.Success)
@@ -442,6 +440,9 @@ public class NetworkManager : MonoBehaviour
                         {
                             var fromJson = JsonConvert.DeserializeObject<JsonObjects.Message>(message);
 
+                            // TODO : REMOVE
+                            Debug.Log(message);
+
                             if (!ProcessGameMessage(fromJson))
                             {
                                 /*_message = buffer;
@@ -560,20 +561,6 @@ public class NetworkManager : MonoBehaviour
                     }
                 }
                 break;
-            //case Network.CommandCodes.Server.DisconnectSoul:
-            //    {
-            //        // TODO : What if not success ? Is there a case ?
-            //        if (message.Success)
-            //        {
-            //            if (_isDispatchRunning)
-            //            {
-            //                AskServerInfos();
-
-            //                MessagingCenter.Send(this, MessengerCodes.GameServerDisconnected, "Disconnected.");
-            //            }
-            //        }
-            //    }
-            //    break;
 
             // PLAYER
             case JsonObjects.CommandCodes.Player.CurrentSoulDatas:
