@@ -179,7 +179,7 @@ namespace Server.GameServer
                 foreach (var inscription in skill.Inscriptions)
                 {
                     var res = ExecuteEnemyInscription(inscription, enemyKeys);
-                    var inside = message.FirstOrDefault(m => m.IsConsumable == false && m.TargetId.Equals(res.TargetId) && m.Id.Equals(res.Id));
+                    var inside = message.FirstOrDefault(m => m.IsConsumable == false && m.FromId.Equals(res.FromId) && m.Id.Equals(res.Id));
                     if (inside != null)
                     {
                         message.Remove(inside);
@@ -498,11 +498,11 @@ namespace Server.GameServer
                 result.Add(res);
             }
 
-            foreach (var mod in _state.Effects)
+            foreach (var eff in _state.Effects)
             {
-                var effect = _effects.FirstOrDefault(i => i.Id.Equals(mod.Id));
+                var effect = _effects.FirstOrDefault(i => i.Id.Equals(eff.Id));
 
-                var res = ExecutePlayerEffects(effect, mod.EnemyId);
+                var res = ExecutePlayerEffects(effect, eff.EnemyId);
                 var inside = result.FirstOrDefault(m => m.IsConsumable == false && m.Id.Equals(res.Id));
                 if (inside != null)
                 {
@@ -517,7 +517,7 @@ namespace Server.GameServer
                 foreach (var buff in enemyMarks.Value)
                 {
                     var res = ExecuteEnemyInscription(buff, enemyMarks.Key);
-                    var inside = result.FirstOrDefault(m => m.IsConsumable == false && m.TargetId.Equals(res.TargetId) && m.Id.Equals(res.Id));
+                    var inside = result.FirstOrDefault(m => m.IsConsumable == false && m.FromId.Equals(res.FromId) && m.Id.Equals(res.Id));
                     if (inside != null)
                     {
                         result.Remove(inside);
@@ -538,7 +538,7 @@ namespace Server.GameServer
 
             var result = SkillAndEffect.ExecuteInscription(_state.State, enemy?.State, inscription, out state, out enemyNewState);
 
-            result.TargetId = enemy.MonsterId;
+            result.ToId = enemy.MonsterId;
 
             _state.State = state;
             if (enemy != null)
@@ -557,6 +557,8 @@ namespace Server.GameServer
             Network.PlayerState enemyNewState;
 
             var result = SkillAndEffect.ExecuteInscription(enemy.State, _state.State, inscription, out enemyNewState, out state);
+
+            result.FromId = enemy.MonsterId;
 
             _state.State = state;
             enemy.State = enemyNewState;

@@ -912,22 +912,28 @@ public class NetworkManager : MonoBehaviour
                     }
                 }
                 break;
-            //case Network.CommandCodes.Dungeon.UseConsumable:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            AskInventory();
-            //            UpdateDungeonRoom();
+            case JsonObjects.CommandCodes.Dungeon.UseConsumable:
+                {
+                    if (message.Success)
+                    {
+                        AskInventory();
+                        UpdateDungeonRoom();
 
-            //            var arList = JsonConvert.DeserializeObject<List<Network.AdventureState.ActionResult>>(message.Json);
-            //            MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Consumable", message.Json);
-            //        }
-            //    }
-            //    break;
+                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.AdventureLogResults(arList);
+                            UIManager.This.AdventureTriggerEnemyTurn();
+                        });
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Consumable", message.Json);
+                    }
+                }
+                break;
             case JsonObjects.CommandCodes.Dungeon.EnemyTurn:
                 {
                     if (message.Success)
@@ -1215,10 +1221,10 @@ public class NetworkManager : MonoBehaviour
         SendRequest(JsonObjects.CommandCodes.Dungeon.UseSkill, new string[2] { knowledgeId.ToString(), enemyId.ToString() });
     }
 
-    //public void DungeonUseConsumable(Guid slotId, Guid enemyId)
-    //{
-    //    SendRequest(Network.CommandCodes.Dungeon.UseConsumable, new string[2] { slotId.ToString(), enemyId.ToString() });
-    //}
+    public void AdventureUseConsumable(Guid slotId, Guid enemyId)
+    {
+        SendRequest(JsonObjects.CommandCodes.Dungeon.UseConsumable, new string[2] { slotId.ToString(), enemyId.ToString() });
+    }
 
     public void GetDungeonRoomLoots()
     {

@@ -30,9 +30,13 @@ public class Adventure : MonoBehaviour
     public GameObject LootsHeader;
     public GameObject ShopHeader;
     public GameObject SkillsHeader;
+    public GameObject ConsumablesHeader;
 
     [Header("Items")]
     public GameObject ItemDetailPanel;
+
+    [Header("Knowledges")]
+    public GameObject KnowledgeDetailPanel;
 
     [Header("Loots")]
     public GameObject LootItemSlot;
@@ -43,6 +47,10 @@ public class Adventure : MonoBehaviour
     [Header("Combat")]
     public GameObject EnemyListItem;
     public GameObject KnowledgeListItem;
+    public GameObject ConsumableListItem;
+
+    [Header("Rest")]
+    public GameObject RestInfos;
 
     [Header("Stats")]
     public Text Health;
@@ -61,6 +69,9 @@ public class Adventure : MonoBehaviour
     public Text EnemyDamages;
     public Text EnemyPhase;
 
+    [Header("Logs")]
+    public GameObject LogBox;
+
     [Header("Results")]
     public GameObject ResultPrefab;
     public GameObject EndResultBox;
@@ -75,13 +86,13 @@ public class Adventure : MonoBehaviour
     private Dictionary<Guid, JsonObjects.AdventureState.EnemyState> _enemies;
     private Dictionary<Guid, JsonObjects.AdventureState.ShopState> _shopItems;
     private List<JsonObjects.Knowledge> _knowledges;
+    private List<JsonObjects.AdventureState.BagItem> _bag;
     private List<JsonObjects.LootItem> _loots;
 
     private Guid _selectedEnemy;
     private GameObject _selectedEnemyObj;
 
     private bool _showActionPanel = true;
-    private Stack<JsonObjects.AdventureState.ActionResult> _logs;
 
     void Awake()
     {
@@ -95,7 +106,7 @@ public class Adventure : MonoBehaviour
         LogsButton.onClick.RemoveAllListeners();
         LogsButton.onClick.AddListener(() =>
         {
-            //gameObject.SetActive(false);
+            LogBox.GetComponent<LogBox>().ShowLogs();
         });
 
         StatsButton.onClick.RemoveAllListeners();
@@ -119,7 +130,13 @@ public class Adventure : MonoBehaviour
         ConsumableButton.onClick.RemoveAllListeners();
         ConsumableButton.onClick.AddListener(() =>
         {
+            SetHeaders("consumables");
 
+            _bag = DatasManager.Instance.Adventure.Bag;
+
+            _pagination.Setup(ItemPerPage, _bag.Count, SetConsumables);
+
+            SetConsumables();
         });
 
         WaitButton.onClick.RemoveAllListeners();
@@ -141,6 +158,7 @@ public class Adventure : MonoBehaviour
         FinishButton.onClick.RemoveAllListeners();
         FinishButton.onClick.AddListener(() =>
         {
+            _showActionPanel = true;
             NetworkManager.This.LeaveFinishedRoom();
         });
 
@@ -157,8 +175,6 @@ public class Adventure : MonoBehaviour
             var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
-
-        _logs = new Stack<JsonObjects.AdventureState.ActionResult>();
     }
 
     public void Initialize()
@@ -174,6 +190,7 @@ public class Adventure : MonoBehaviour
         Room.text = string.Format("[{0}/{1}]", adventure.CurrentRoom, adventure.TotalRoomCount);
 
         ResetActions();
+        RestInfos.SetActive(false);
         EnemyBox.SetActive(false);
         EndResultBox.SetActive(false);
         if (adventure.IsFightArea)
@@ -207,11 +224,23 @@ public class Adventure : MonoBehaviour
         {
             SetHeaders("none");
 
+            foreach (Transform child in List.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            RestInfos.SetActive(true);
+
             NetworkManager.This.PlayerRest();
         }
         else if (adventure.IsExit)
         {
             SetHeaders("none");
+
+            foreach (Transform child in List.transform)
+            {
+                Destroy(child.gameObject);
+            }
 
             FinishButton.gameObject.SetActive(true);
         }
@@ -226,13 +255,16 @@ public class Adventure : MonoBehaviour
         Intelligence.text = string.Format("[{0}]", adventure.State.Intelligence);
         Wisdom.text = string.Format("[{0}]", adventure.State.Wisdom);
 
-        Damages.text = string.Format("[{0}-{1}]", adventure.State.MinDamages, adventure.State.MaxDamages);
+        Damages.text = string.Format("[{0}/{1}]", adventure.State.MinDamages, adventure.State.MaxDamages);
     }
 
     private void SetHeaders(string toShow)
     {
         EnemiesHeader.SetActive(false);
         LootsHeader.SetActive(false);
+        ShopHeader.SetActive(false);
+        SkillsHeader.SetActive(false);
+        ConsumablesHeader.SetActive(false);
 
         switch (toShow)
         {
@@ -240,11 +272,16 @@ public class Adventure : MonoBehaviour
                 EnemiesHeader.SetActive(true);
                 break;
             case "shop":
+                ShopHeader.SetActive(true);
                 break;
             case "loots":
                 LootsHeader.SetActive(true);
                 break;
             case "skills":
+                SkillsHeader.SetActive(true);
+                break;
+            case "consumables":
+                ConsumablesHeader.SetActive(true);
                 break;
         }
     }
@@ -263,7 +300,10 @@ public class Adventure : MonoBehaviour
     private void ShowCombatActions()
     {
         AttackButton.gameObject.SetActive(true);
-        ConsumableButton.gameObject.SetActive(true);
+
+        if (DatasManager.Instance.Adventure.Bag.Count > 0)
+            ConsumableButton.gameObject.SetActive(true);
+
         WaitButton.gameObject.SetActive(true);
     }
 
@@ -284,9 +324,11 @@ public class Adventure : MonoBehaviour
 
     public void LogResults(List<JsonObjects.AdventureState.ActionResult> actionResults)
     {
+        var log = LogBox.GetComponent<LogBox>();
+
         foreach (var result in actionResults)
         {
-            _logs.Push(result);
+            log.AddLogs(result);
         }
     }
 
@@ -456,10 +498,12 @@ public class Adventure : MonoBehaviour
 
         foreach (var knowledge in knowledges)
         {
+            var skill = DatasManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(knowledge.BookId));
+
             var knowledgeObj = Instantiate(KnowledgeListItem, List.transform);
             var script = knowledgeObj.GetComponent<SkillSelectionListItem>();
             script.SetDatas(knowledge);
-            script.Action.onClick.AddListener(() =>
+            script.Use.onClick.AddListener(() =>
             {
                 _showActionPanel = false;
 
@@ -467,8 +511,44 @@ public class Adventure : MonoBehaviour
 
                 NetworkManager.This.AdventureUseSkill(knowledge.Id, _selectedEnemy);
             });
+            script.Action.onClick.AddListener(() =>
+            {
+                KnowledgeDetailPanel.GetComponent<KnowledgeDetails>().ShowDetails(skill, knowledge.Rank);
+            });
         }
 
         _pagination.SetIndicator((_knowledges.Count / ItemPerPage) + (_knowledges.Count % ItemPerPage > 0 ? 1 : 0));
+    }
+
+    private void SetConsumables()
+    {
+        foreach (Transform child in List.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        var bagItems = _bag.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
+
+        foreach (var bagItem in bagItems)
+        {
+            var item = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(bagItem.ItemId));
+            var consumableItemObj = Instantiate(ConsumableListItem, List.transform);
+            var script = consumableItemObj.GetComponent<ConsumableListItem>();
+            script.SetDatas(bagItem);
+            script.Use.onClick.AddListener(() =>
+            {
+                _showActionPanel = false;
+
+                ResetActions();
+
+                NetworkManager.This.AdventureUseConsumable(bagItem.InventoryId, _selectedEnemy);
+            });
+            script.Action.onClick.AddListener(() =>
+            {
+                ItemDetailPanel.GetComponent<ItemDetails>().ShowDetails(item);
+            });
+        }
+
+        _pagination.SetIndicator((_bag.Count / ItemPerPage) + (_bag.Count % ItemPerPage > 0 ? 1 : 0));
     }
 }

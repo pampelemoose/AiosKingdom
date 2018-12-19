@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class ContentLoadingScreen : MonoBehaviour
 {
-    public Image Armors;
-    public Image Books;
-    public Image Monsters;
-    public Image Adventures;
+    public GameObject Items;
+    public GameObject Books;
+    public GameObject Monsters;
+    public GameObject Adventures;
 
-    private bool _armorsLoaded = false;
+    private bool _itemsLoaded = false;
     private bool _booksLoaded = false;
     private bool _monstersLoaded = false;
     private bool _adventuresLoaded = false;
@@ -22,19 +22,19 @@ public class ContentLoadingScreen : MonoBehaviour
         switch (name)
         {
             case "items":
-                Armors.color = color;
-                _armorsLoaded = true;
+                Items.SetActive(true);
+                _itemsLoaded = true;
                 break;
             case "books":
-                Books.color = color;
+                Books.SetActive(true);
                 _booksLoaded = true;
                 break;
             case "monsters":
-                Monsters.color = color;
+                Monsters.SetActive(true);
                 _monstersLoaded = true;
                 break;
             case "adventures":
-                Adventures.color = color;
+                Adventures.SetActive(true);
                 _adventuresLoaded = true;
                 break;
         }
@@ -44,7 +44,7 @@ public class ContentLoadingScreen : MonoBehaviour
     {
         get
         {
-            return _armorsLoaded && _booksLoaded && _monstersLoaded && _adventuresLoaded;
+            return _itemsLoaded && _booksLoaded && _monstersLoaded && _adventuresLoaded;
         }
     }
 }

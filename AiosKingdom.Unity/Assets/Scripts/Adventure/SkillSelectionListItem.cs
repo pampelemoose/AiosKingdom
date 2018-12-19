@@ -8,6 +8,7 @@ public class SkillSelectionListItem : MonoBehaviour
 {
     public Text Name;
     public Text ManaCost;
+    public Button Use;
     public Button Action;
 
     public void SetDatas(JsonObjects.Knowledge knowledge)

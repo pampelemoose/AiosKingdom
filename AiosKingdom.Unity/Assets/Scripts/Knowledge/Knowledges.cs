@@ -65,7 +65,7 @@ public class Knowledges : MonoBehaviour
 
             script.ShowDetailsButton.onClick.AddListener(() =>
             {
-                _knowledgeDetails.GetComponent<KnowledgeDetails>().SetDatas(skill, knowledge.Rank);
+                _knowledgeDetails.GetComponent<KnowledgeDetails>().ShowDetails(skill, knowledge.Rank);
             });
         }
 

@@ -61,10 +61,13 @@ namespace JsonObjects
                 PlayerDeath
             }
 
-            public Guid TargetId { get; set; }
-            public bool IsConsumable { get; set; }
+            public Guid FromId { get; set; }
+            public Guid ToId { get; set; }
+
             public Type ResultType { get; set; }
             public Guid Id { get; set; }
+            public bool IsConsumable { get; set; }
+
             public double Amount { get; set; }
         }
 

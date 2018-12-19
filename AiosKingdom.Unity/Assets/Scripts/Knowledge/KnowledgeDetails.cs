@@ -30,12 +30,13 @@ public class KnowledgeDetails : MonoBehaviour
         });
     }
 
-    public void SetDatas(JsonObjects.Skills.Book book, int rank)
+    public void ShowDetails(JsonObjects.Skills.Book book, int rank)
     {
         _currentBook = book;
         _rank = rank;
 
         gameObject.SetActive(true);
+        transform.SetAsLastSibling();
 
         Name.text = book.Name;
         Quality.text = book.Quality.ToString();
