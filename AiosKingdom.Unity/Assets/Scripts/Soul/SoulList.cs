@@ -49,7 +49,7 @@ public class SoulList : MonoBehaviour
         }
 
         var createItem = Instantiate(SoulListCreateItemPrefab, List.transform);
-        var createScript = createItem.GetComponent<SoulListCreateItem>();
+        //var createScript = createItem.GetComponent<SoulListCreateItem>();
 
         _pagination.SetIndicator((_souls.Count / ItemPerPage) + (_souls.Count % ItemPerPage > 0 ? 1 : 0));
     }

@@ -40,7 +40,7 @@ namespace Server.DispatchServer.Commands
                 Json = "Failed to retrieve account.",
                 Success = false
             };
-            ret.Succeeded = false;
+            ret.Succeeded = true;
 
             return ret;
         }

@@ -17,8 +17,6 @@ public class ContentLoadingScreen : MonoBehaviour
 
     public void IsLoaded(string name)
     {
-        Color color = new Color(152, 4, 184, 255);
-
         switch (name)
         {
             case "items":

@@ -44,7 +44,7 @@ namespace Server.DispatchServer.Commands
                 Code = Network.CommandCodes.Client_CreateAccount,
                 Success = false
             };
-            ret.Succeeded = false;
+            ret.Succeeded = true;
 
             return ret;
         }

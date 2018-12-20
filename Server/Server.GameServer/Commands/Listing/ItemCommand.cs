@@ -19,7 +19,8 @@ namespace Server.GameServer.Commands.Listing
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Listing.Item,
-                Json = JsonConvert.SerializeObject(DataManager.Instance.Items)
+                Json = JsonConvert.SerializeObject(DataManager.Instance.Items),
+                Success = true
             };
             ret.Succeeded = true;
 

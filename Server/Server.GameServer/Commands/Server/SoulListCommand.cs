@@ -33,7 +33,8 @@ namespace Server.GameServer.Commands.Server
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Server.SoulList,
-                Json = JsonConvert.SerializeObject(soulList)
+                Json = JsonConvert.SerializeObject(soulList),
+                Success = true
             };
             ret.Succeeded = true;
 

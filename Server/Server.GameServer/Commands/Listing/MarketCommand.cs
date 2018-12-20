@@ -21,7 +21,8 @@ namespace Server.GameServer.Commands.Listing
             {
                 Code = Network.CommandCodes.Listing.Market,
                 //Json = JsonConvert.SerializeObject(items, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })
-                Json = JsonConvert.SerializeObject(Market.Instance.Items)
+                Json = JsonConvert.SerializeObject(Market.Instance.Items),
+                Success = true
             };
             ret.Succeeded = true;
 

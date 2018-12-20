@@ -28,6 +28,9 @@ namespace Server.DispatchServer
         private Object _commandManagerLock = new Object();
         private Object _responsesLock = new Object();
 
+        private Dictionary<IPAddress, int> _failedCounts;
+        private List<IPAddress> _blockedIps;
+
         public Server()
         {
             ThreadStart del = new ThreadStart(Run);
@@ -48,6 +51,9 @@ namespace Server.DispatchServer
             _commandArgCount = new Dictionary<int, int>();
             _delegates = new Dictionary<int, Func<Commands.CommandArgs, Commands.ACommand>>();
             _responses = new List<Commands.CommandResult>();
+
+            _failedCounts = new Dictionary<IPAddress, int>();
+            _blockedIps = new List<IPAddress>();
 
             SetupClientDelegates();
         }
@@ -124,14 +130,18 @@ namespace Server.DispatchServer
                 if (_listener.Pending())
                 {
                     Socket newClient = _listener.AcceptSocket();
+                    var endPoint = newClient.RemoteEndPoint as IPEndPoint;
 
-                    var clientId = Guid.NewGuid();
-                    ClientsManager.Instance.AddClient(clientId, newClient);
+                    if (!_blockedIps.Contains(endPoint.Address))
+                    {
+                        var clientId = Guid.NewGuid();
+                        ClientsManager.Instance.AddClient(clientId, newClient);
 
-                    // TODO : Pinger not used in this server anymore ?
-                    //AddPingerToClient(clientId);
+                        // TODO : Pinger not used in this server anymore ?
+                        //AddPingerToClient(clientId);
 
-                    Log.Instance.Write(Log.Level.Infos, $"New client [{newClient.RemoteEndPoint}] given id ({clientId})");
+                        Log.Instance.Write(Log.Level.Infos, $"New client [{newClient.RemoteEndPoint}] given id ({clientId})");
+                    }
                 }
 
                 List<Guid> disconnectedClients = ClientsManager.Instance.DisconnectedClientList;
@@ -298,6 +308,24 @@ namespace Server.DispatchServer
 
                     if (!ret.Succeeded)
                     {
+                        var socket = ClientsManager.Instance.Clients[ret.ClientId];
+                        var endPoint = socket.RemoteEndPoint as IPEndPoint;
+
+                        if (!_failedCounts.ContainsKey(endPoint.Address))
+                        {
+                            _failedCounts.Add(endPoint.Address, 0);
+                        }
+
+                        _failedCounts[endPoint.Address] += 1;
+
+                        if (_failedCounts[endPoint.Address] > 100)
+                        {
+                            ClientsManager.Instance.DisconnectClient(ret.ClientId);
+                            _blockedIps.Add(endPoint.Address);
+
+                            Log.Instance.Write(Log.Level.Warning, $"{ret.ClientId} [{endPoint.Address}] blocked until next flush.");
+                        }
+
                         Log.Instance.Write(Log.Level.Warning, $"Couldn't execute command[{ret.ClientResponse.Code}] for {ret.ClientId}");
                         Console.WriteLine("[ERROR] - Command failed to execute.");
                         return;

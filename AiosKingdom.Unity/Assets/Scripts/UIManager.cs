@@ -79,7 +79,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         ChangeView(Views.ServerList);
 
-        var script = _currentPage.GetComponent<ServerList>();
+        var script = ServerList.GetComponent<ServerList>();
         script.SetServers(servers);
 
         HideLoading();
@@ -89,7 +89,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         ChangeView(Views.SoulList);
 
-        var script = _currentPage.GetComponent<SoulList>();
+        var script = SoulList.GetComponent<SoulList>();
         script.SetSouls(souls);
 
         HideLoading();
@@ -118,7 +118,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         ChangeView(Views.Pills, true);
 
-        var script = _currentPage.GetComponent<Pills>();
+        var script = Pills.GetComponent<Pills>();
         script.UpdateCurrencies();
 
         HideLoading();
@@ -128,7 +128,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         ChangeView(Views.Equipment, true);
         
-        var script = _currentPage.GetComponent<Equipment>();
+        var script = Equipment.GetComponent<Equipment>();
         script.UpdateEquipment();
 
         HideLoading();
@@ -138,7 +138,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         ChangeView(Views.Knowledges, true);
 
-        var script = _currentPage.GetComponent<Knowledges>();
+        //var script = _currentPage.GetComponent<Knowledges>();
 
         HideLoading();
     }
@@ -147,7 +147,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         ChangeView(Views.Bookstore, true);
 
-        var script = _currentPage.GetComponent<Bookstore>();
+        //var script = _currentPage.GetComponent<Bookstore>();
 
         HideLoading();
     }
@@ -156,7 +156,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         ChangeView(Views.Inventory, true);
 
-        var script = _currentPage.GetComponent<Inventory>();
+        //var script = _currentPage.GetComponent<Inventory>();
 
         HideLoading();
     }
@@ -165,7 +165,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         ChangeView(Views.AdventureSelection, true);
         
-        var script = _currentPage.GetComponent<AdventureSelection>();
+        //var script = _currentPage.GetComponent<AdventureSelection>();
 
         HideLoading();
     }
@@ -174,7 +174,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         ChangeView(Views.Adventure, true);
 
-        var script = _currentPage.GetComponent<Adventure>();
+        var script = Adventure.GetComponent<Adventure>();
         script.Initialize();
 
         HideLoading();
@@ -186,56 +186,65 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         {
             if (_currentPage != null && !push) _currentPage.SetActive(false);
 
+            GameObject newPage = null;
+
             switch (viewType)
             {
                 case Views.Settings:
-                    _currentPage = Settings;
+                    newPage = Settings;
                     break;
                 case Views.Account:
-                    _currentPage = AccountForm;
+                    newPage = AccountForm;
                     break;
                 case Views.ServerList:
-                    _currentPage = ServerList;
+                    newPage = ServerList;
                     break;
                 case Views.SoulList:
-                    _currentPage = SoulList;
+                    newPage = SoulList;
                     break;
                 case Views.ContentLoadingScreen:
-                    _currentPage = ContentLoadingScreen;
+                    newPage = ContentLoadingScreen;
                     break;
                 case Views.Home:
-                    _currentPage = Home;
+                    newPage = Home;
                     break;
                 case Views.Pills:
-                    _currentPage = Pills;
+                    newPage = Pills;
                     break;
                 case Views.Equipment:
-                    _currentPage = Equipment;
+                    newPage = Equipment;
                     break;
                 case Views.Knowledges:
-                    _currentPage = Knowledges;
+                    newPage = Knowledges;
                     break;
                 case Views.Bookstore:
-                    _currentPage = Bookstore;
+                    newPage = Bookstore;
                     break;
                 case Views.Inventory:
-                    _currentPage = Inventory;
+                    newPage = Inventory;
                     break;
                 case Views.Market:
-                    _currentPage = Market;
+                    newPage = Market;
                     break;
                 case Views.AdventureSelection:
-                    _currentPage = AdventureSelection;
+                    newPage = AdventureSelection;
                     break;
                 case Views.Adventure:
-                    _currentPage = Adventure;
+                    newPage = Adventure;
                     break;
             }
 
-            _currentPage.SetActive(true);
-            _currentPage.transform.SetAsLastSibling();
+            if (newPage != null)
+            {
+                newPage.SetActive(true);
+                newPage.transform.SetAsLastSibling();
 
-            if (!push) _currentView = viewType;
+                if (!push)
+                {
+                    _currentView = viewType;
+                    _currentPage = newPage;
+                }
+            }
         }
     }
 

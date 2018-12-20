@@ -115,9 +115,6 @@ public class NetworkManager : MonoBehaviour
                         {
                             var fromJson = JsonConvert.DeserializeObject<JsonObjects.Message>(message);
 
-                            // TODO : REMOVE
-                            Debug.Log(message);
-
                             if (!ProcessDispatchMessage(fromJson))
                             {
                                 /*_message = buffer;
@@ -235,22 +232,26 @@ public class NetworkManager : MonoBehaviour
                     }
                 }
                 break;
-            //case JsonObjects.CommandCodes.Client_RetrieveAccount:
-            //    {
-            //        if (message.Success)
-            //        {
-            //            var appUser = JsonConvert.DeserializeObject<DataModels.AppUser>(message.Json);
+            case JsonObjects.CommandCodes.Client_RetrieveAccount:
+                {
+                    if (message.Success)
+                    {
+                        var appUser = JsonConvert.DeserializeObject<JsonObjects.NewAccount>(message.Json);
 
-            //            Application.Current.Properties["AiosKingdom_IdentifyingKey"] = appUser.Identifier.ToString();
-            //            Application.Current.SavePropertiesAsync();
-            //            MessagingCenter.Send(this, MessengerCodes.RetrievedAccount);
-            //        }
-            //        else
-            //        {
-            //            ScreenManager.Instance.AlertScreen("Failed", message.Json);
-            //        }
-            //    }
-            //    break;
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            PlayerPrefs.SetString("AiosKingdom_IdentifyingKey", appUser.Identifier.ToString());
+                            PlayerPrefs.Save();
+                            AskAuthentication(appUser.Identifier.ToString());
+                        });
+                        //MessagingCenter.Send(this, MessengerCodes.RetrievedAccount);
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Failed", message.Json);
+                    }
+                }
+                break;
             default:
                 return false;
         }
@@ -279,16 +280,16 @@ public class NetworkManager : MonoBehaviour
         SendJsonToDispatch(JsonUtility.ToJson(retMess));
     }
 
-    //public void AskOldAccount(string publicKey)
-    //{
-    //    var args = new string[1] { publicKey };
-    //    var retMess = new Network.Message
-    //    {
-    //        Code = Network.CommandCodes.Client_RetrieveAccount,
-    //        Json = JsonConvert.SerializeObject(args)
-    //    };
-    //    SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
-    //}
+    public void AskOldAccount(string publicKey)
+    {
+        var args = new string[1] { publicKey };
+        var retMess = new JsonObjects.Message
+        {
+            Code = JsonObjects.CommandCodes.Client_RetrieveAccount,
+            Json = JsonConvert.SerializeObject(args)
+        };
+        SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
+    }
 
     public void AskAuthentication(string identifier)
     {
@@ -439,9 +440,6 @@ public class NetworkManager : MonoBehaviour
                         try
                         {
                             var fromJson = JsonConvert.DeserializeObject<JsonObjects.Message>(message);
-
-                            // TODO : REMOVE
-                            Debug.Log(message);
 
                             if (!ProcessGameMessage(fromJson))
                             {

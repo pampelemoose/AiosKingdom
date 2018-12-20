@@ -27,22 +27,30 @@ public class AccountForm : MonoBehaviour
 
         RetrieveAccountButton.onClick.AddListener(() =>
         {
-            NetworkManager.This.AskNewAccount();
+            UIManager.This.ShowLoading();
+
+            NetworkManager.This.AskOldAccount(TokenInput.text);
         });
 
         CreateAccountButton.onClick.AddListener(() =>
         {
+            UIManager.This.ShowLoading();
+
             NetworkManager.This.AskNewAccount();
         });
 
         LoginButton.onClick.AddListener(() =>
         {
+            UIManager.This.ShowLoading();
+
             NetworkManager.This.AskAuthentication(PlayerPrefs.GetString("AiosKingdom_IdentifyingKey"));
         });
     }
 
     public void AccountCreated(Guid safeKey)
     {
+        UIManager.This.HideLoading();
+
         Token.SetActive(false);
         CreateAccountButton.gameObject.SetActive(false);
 

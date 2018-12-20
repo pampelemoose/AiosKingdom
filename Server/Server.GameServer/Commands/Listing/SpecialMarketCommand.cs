@@ -20,7 +20,8 @@ namespace Server.GameServer.Commands.Listing
             {
                 Code = Network.CommandCodes.Listing.SpecialsMarket,
                 //Json = JsonConvert.SerializeObject(items, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })
-                Json = JsonConvert.SerializeObject(Market.Instance.Specials)
+                Json = JsonConvert.SerializeObject(Market.Instance.Specials),
+                Success = true
             };
             ret.Succeeded = true;
 

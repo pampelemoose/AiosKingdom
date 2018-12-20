@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -29,6 +30,9 @@ namespace Server.GameServer
 
         private Thread _marketThread;
 
+        private Dictionary<IPAddress, int> _failedCounts;
+        private List<IPAddress> _blockedIps;
+
         public Server()
         {
             ThreadStart del = new ThreadStart(Run);
@@ -48,6 +52,9 @@ namespace Server.GameServer
             _commandManager = new CommandManager();
 
             _responses = new List<Commands.CommandResult>();
+
+            _failedCounts = new Dictionary<IPAddress, int>();
+            _blockedIps = new List<IPAddress>();
 
             SetupDelegates();
         }
@@ -230,14 +237,18 @@ namespace Server.GameServer
                 if (_listener.Pending() && !_refuseNewConnection)
                 {
                     Socket newClient = _listener.AcceptSocket();
+                    var endPoint = newClient.RemoteEndPoint as IPEndPoint;
 
-                    var clientId = Guid.NewGuid();
-                    ClientsManager.Instance.AddClient(clientId, newClient);
+                    if (!_blockedIps.Contains(endPoint.Address))
+                    {
+                        var clientId = Guid.NewGuid();
+                        ClientsManager.Instance.AddClient(clientId, newClient);
 
-                    // TODO : Pinger only in PVP, or check that players are both still live
-                    //AddPingerToClient(clientId);
+                        // TODO : Pinger only in PVP, or check that players are both still live
+                        //AddPingerToClient(clientId);
 
-                    Log.Instance.Write(Log.Level.Infos, $"New client [{newClient.RemoteEndPoint}] given id ({clientId})");
+                        Log.Instance.Write(Log.Level.Infos, $"New client [{newClient.RemoteEndPoint}] given id ({clientId})");
+                    }
                 }
 
                 List<Guid> disconnectedClients = ClientsManager.Instance.DisconnectedClientList;
@@ -412,6 +423,24 @@ namespace Server.GameServer
 
                     if (!ret.Succeeded)
                     {
+                        var socket = ClientsManager.Instance.Clients[ret.ClientId];
+                        var endPoint = socket.RemoteEndPoint as IPEndPoint;
+
+                        if (!_failedCounts.ContainsKey(endPoint.Address))
+                        {
+                            _failedCounts.Add(endPoint.Address, 0);
+                        }
+
+                        _failedCounts[endPoint.Address] += 1;
+
+                        if (_failedCounts[endPoint.Address] > 100)
+                        {
+                            ClientsManager.Instance.DisconnectClient(ret.ClientId);
+                            _blockedIps.Add(endPoint.Address);
+
+                            Log.Instance.Write(Log.Level.Warning, $"{ret.ClientId} [{endPoint.Address}] blocked until next flush.");
+                        }
+
                         Log.Instance.Write(Log.Level.Warning, $"Couldn't execute command[{ret.ClientResponse.Code}] for {ret.ClientId}");
                         Console.WriteLine("[ERROR] - Command failed to execute.");
                         return;

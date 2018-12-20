@@ -46,7 +46,8 @@ namespace Server.DispatchServer.Commands
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Client_ServerList,
-                Json = JsonConvert.SerializeObject(infos.ToList())
+                Json = JsonConvert.SerializeObject(infos.ToList()),
+                Success = true
             };
             ret.Succeeded = true;
 
