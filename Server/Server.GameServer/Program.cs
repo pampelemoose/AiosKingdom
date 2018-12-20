@@ -8,6 +8,8 @@ namespace Server.GameServer
     {
         static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
             var sb = new StringBuilder();
             sb.AppendLine("================================================================================");
             sb.AppendLine("                                 GAME SERVER                                    ");
@@ -40,6 +42,13 @@ namespace Server.GameServer
             }
 
             Console.ReadLine();
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var exc = e.ExceptionObject as Exception;
+
+            Log.Instance.Write(Log.Level.Error, $"Unhandled exception from {exc.Source} : {exc.Message} ({exc.StackTrace}).");
         }
     }
 }

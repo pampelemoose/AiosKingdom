@@ -171,21 +171,29 @@ namespace Server.DispatchServer
                             if (string.IsNullOrEmpty(message))
                                 continue;
 
-                            var json = JsonConvert.DeserializeObject<Network.Message>(message);
-                            var commandArgs = ToCommandArgs(client.Key, json);
-
-                            if (commandArgs.IsValid)
+                            try
                             {
-                                if (commandArgs.CommandCode >= 0)
-                                    Log.Instance.Write(Log.Level.Infos, $"Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
+                                var json = JsonConvert.DeserializeObject<Network.Message>(message);
+                                var commandArgs = ToCommandArgs(client.Key, json);
 
-                                ClientsManager.Instance.Ping(commandArgs.ClientId);
+                                if (commandArgs.IsValid)
+                                {
+                                    if (commandArgs.CommandCode >= 0)
+                                        Log.Instance.Write(Log.Level.Infos, $"Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
 
-                                AddCommand(commandArgs);
+                                    ClientsManager.Instance.Ping(commandArgs.ClientId);
+
+                                    AddCommand(commandArgs);
+                                }
+                                else
+                                {
+                                    Log.Instance.Write(Log.Level.Warning, $"Wrong command Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
+                                }
                             }
-                            else
+                            catch (JsonReaderException jsonReaderException)
                             {
-                                Log.Instance.Write(Log.Level.Warning, $"Wrong command Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
+                                Log.Instance.Write(Log.Level.Error, $"Received {message} but exception : {jsonReaderException.Message}");
+                                AddIpWarning(client.Key);
                             }
                         }
                     }
@@ -308,23 +316,7 @@ namespace Server.DispatchServer
 
                     if (!ret.Succeeded)
                     {
-                        var socket = ClientsManager.Instance.Clients[ret.ClientId];
-                        var endPoint = socket.RemoteEndPoint as IPEndPoint;
-
-                        if (!_failedCounts.ContainsKey(endPoint.Address))
-                        {
-                            _failedCounts.Add(endPoint.Address, 0);
-                        }
-
-                        _failedCounts[endPoint.Address] += 1;
-
-                        if (_failedCounts[endPoint.Address] > 100)
-                        {
-                            ClientsManager.Instance.DisconnectClient(ret.ClientId);
-                            _blockedIps.Add(endPoint.Address);
-
-                            Log.Instance.Write(Log.Level.Warning, $"{ret.ClientId} [{endPoint.Address}] blocked until next flush.");
-                        }
+                        AddIpWarning(ret.ClientId);
 
                         Log.Instance.Write(Log.Level.Warning, $"Couldn't execute command[{ret.ClientResponse.Code}] for {ret.ClientId}");
                         Console.WriteLine("[ERROR] - Command failed to execute.");
@@ -443,6 +435,27 @@ namespace Server.DispatchServer
             }
 
             return retVal;
+        }
+
+        private void AddIpWarning(Guid clientId)
+        {
+            var socket = ClientsManager.Instance.Clients[clientId];
+            var endPoint = socket.RemoteEndPoint as IPEndPoint;
+
+            if (!_failedCounts.ContainsKey(endPoint.Address))
+            {
+                _failedCounts.Add(endPoint.Address, 0);
+            }
+
+            _failedCounts[endPoint.Address] += 1;
+
+            if (_failedCounts[endPoint.Address] > 100)
+            {
+                ClientsManager.Instance.DisconnectClient(clientId);
+                _blockedIps.Add(endPoint.Address);
+
+                Log.Instance.Write(Log.Level.Warning, $"{clientId} [{endPoint.Address}] blocked until next flush.");
+            }
         }
     }
 }
