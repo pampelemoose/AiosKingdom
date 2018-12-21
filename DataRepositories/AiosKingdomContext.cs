@@ -9,7 +9,7 @@ namespace DataRepositories
     {
         // User ID=sa;Password=Test1337
         public AiosKingdomContext()
-            : base("Data Source=.;Initial Catalog=AiosKingdom;Trusted_Connection=True;")
+            : base()
         {
         }
 
