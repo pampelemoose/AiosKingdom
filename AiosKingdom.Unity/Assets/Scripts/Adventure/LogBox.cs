@@ -14,7 +14,12 @@ public class LogBox : MonoBehaviour
     public int ItemPerPage = 5;
 
     private Pagination _pagination;
-    private Stack<JsonObjects.AdventureState.ActionResult> _logs;
+    private Stack<JsonObjects.AdventureState.ActionResult> _logs = new Stack<JsonObjects.AdventureState.ActionResult>();
+
+    public void ClearLogs()
+    {
+        _logs.Clear();
+    }
 
     public void ShowLogs()
     {
@@ -33,8 +38,6 @@ public class LogBox : MonoBehaviour
 
     public void AddLogs(JsonObjects.AdventureState.ActionResult result)
     {
-        if (_logs == null) _logs = new Stack<JsonObjects.AdventureState.ActionResult>();
-
         _logs.Push(result);
     }
 

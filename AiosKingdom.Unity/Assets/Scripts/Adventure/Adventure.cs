@@ -180,6 +180,7 @@ public class Adventure : MonoBehaviour
     public void Initialize()
     {
         NetworkManager.This.UpdateDungeonRoom();
+        LogBox.GetComponent<LogBox>().ClearLogs();
     }
 
     public void UpdateCurrentState()
