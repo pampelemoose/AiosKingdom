@@ -8,40 +8,31 @@ namespace DataModels.Skills
 {
     public enum InscriptionType
     {
-        Damages = 0,
-        Heal = 1,
+        PhysicDamages = 0,
+        MagicDamages = 1,
 
-        StatBuff = 2,
-        StatDebuff = 3,
+        SelfHeal = 2,
+        TargetHeal = 3,
 
-        Stunned = 4,
-        Charmed = 5,
-        Confused = 6,
+        StatBuff = 4,
+        StatDebuff = 5,
+
+        Stunt = 6,
+        Charm = 7,
+        Confuse = 8,
+
+        Unstunt = 10,
+        Uncharm = 11,
+        Unconfuse = 12,
 
         // ADVANCED IDEAS
         Burn = 15,
-        Frozen = 16
-    }
+        Freeze = 16,
 
-    public enum ElementType
-    {
-        Neutral = 0,
+        Unburn = 17,
+        Unfreeze = 18,
 
-        Fire = 1,
-        Water = 2,
-        Wind = 3,
-        Earth = 4,
-        Lightning = 5,
-
-        // ADVANCED IDEAS
-        Light = 6,
-        Shadow = 7,
-
-        Ice = 8,
-        Magma = 9,
-
-        Life = 10,
-        Death = 11
+        Multistrike = 20
     }
 
     public class Inscription
@@ -49,7 +40,7 @@ namespace DataModels.Skills
         [Key]
         public Guid Id { get; set; }
 
-        public Guid PageId { get; set; }
+        public Guid BookId { get; set; }
 
         public InscriptionType Type { get; set; }
         public int BaseValue { get; set; }

@@ -72,7 +72,7 @@ namespace Website.Controllers
                     {
                         Id = Guid.NewGuid(),
                         VersionId = dungeonModel.SelectedVersion,
-                        AdventureId = adventureId,
+                        Vid = adventureId,
                         Name = dungeonModel.Name,
                         RequiredLevel = dungeonModel.RequiredLevel,
                         MaxLevelAuthorized = dungeonModel.MaxLevelAuthorized,
@@ -101,8 +101,8 @@ namespace Website.Controllers
                             {
                                 Id = Guid.NewGuid(),
                                 RoomId = roomId,
-                                ItemId = shopItemModel.SelectedItem,
-                                Type = shopItemModel.Items.FirstOrDefault(i => i.ItemId.Equals(shopItemModel.SelectedItem)).Type,
+                                ItemVid = shopItemModel.SelectedItem,
+                                Type = shopItemModel.Items.FirstOrDefault(i => i.Vid.Equals(shopItemModel.SelectedItem)).Type,
                                 Quantity = shopItemModel.Quantity,
                                 Price = shopItemModel.ShardPrice
                             };
@@ -116,7 +116,7 @@ namespace Website.Controllers
                                 Id = Guid.NewGuid(),
                                 RoomId = roomId,
                                 EnemyType = enemyModel.EnemyType,
-                                MonsterId = enemyModel.MonsterId,
+                                MonsterVid = enemyModel.MonsterId,
                                 Level = enemyModel.Level,
                                 ShardReward = enemyModel.ShardReward
                             };
@@ -198,7 +198,7 @@ namespace Website.Controllers
                 var model = new Models.AdventureModel
                 {
                     Id = adventure.Id,
-                    AdventureId = adventure.AdventureId,
+                    AdventureId = adventure.Vid,
                     SelectedVersion = adventure.VersionId,
                     Name = adventure.Name,
                     RequiredLevel = adventure.RequiredLevel,
@@ -225,7 +225,7 @@ namespace Website.Controllers
                         roomModel.ShopItems.Add(new Models.ShopItemModel
                         {
                             Id = shopItem.Id,
-                            SelectedItem = shopItem.ItemId,
+                            SelectedItem = shopItem.ItemVid,
                             Quantity = shopItem.Quantity,
                             ShardPrice = shopItem.Price
                         });
@@ -237,7 +237,7 @@ namespace Website.Controllers
                         {
                             Id = ennemy.Id,
                             EnemyType = ennemy.EnemyType,
-                            MonsterId = ennemy.MonsterId,
+                            MonsterId = ennemy.MonsterVid,
                             Level = ennemy.Level,
                             ShardReward = ennemy.ShardReward
                         });
@@ -369,8 +369,8 @@ namespace Website.Controllers
                             var shopItem = new DataModels.Adventures.ShopItem
                             {
                                 Id = shopItemModel.Id,
-                                ItemId = shopItemModel.SelectedItem,
-                                Type = shopItemModel.Items.FirstOrDefault(i => i.ItemId.Equals(shopItemModel.SelectedItem)).Type,
+                                ItemVid = shopItemModel.SelectedItem,
+                                Type = shopItemModel.Items.FirstOrDefault(i => i.Vid.Equals(shopItemModel.SelectedItem)).Type,
                                 Quantity = shopItemModel.Quantity,
                                 Price = shopItemModel.ShardPrice
                             };
@@ -383,7 +383,7 @@ namespace Website.Controllers
                             {
                                 Id = enemyModel.Id,
                                 EnemyType = enemyModel.EnemyType,
-                                MonsterId = enemyModel.MonsterId,
+                                MonsterVid = enemyModel.MonsterId,
                                 Level = enemyModel.Level,
                                 ShardReward = enemyModel.ShardReward
                             };

@@ -12,7 +12,7 @@ namespace DataModels
         public Guid Id { get; set; }
 
         public Guid SoulId { get; set; }
-        public Guid ItemId { get; set; }
+        public Guid ItemVid { get; set; }
 
         private int _quantity = 1;
         public int Quantity

@@ -14,6 +14,6 @@ namespace DataModels.Monsters
 
         public Guid MonsterId { get; set; }
 
-        public Guid PageId { get; set; }
+        public Guid BookVid { get; set; }
     }
 }

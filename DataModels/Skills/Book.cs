@@ -15,18 +15,20 @@ namespace DataModels.Skills
         TierOne = 4
     }
 
-    public class Book
+    public class Book : AVersionized
     {
         [Key]
         public Guid Id { get; set; }
 
-        public Guid VersionId { get; set; }
-        [Index(IsUnique = true)]
-        public Guid BookId { get; set; }
-
         public string Name { get; set; }
+        public string Description { get; set; }
         public BookQuality Quality { get; set; }
 
-        public List<Page> Pages { get; set; }
+        public int EmberCost { get; set; }
+        public int ManaCost { get; set; }
+        public int Cooldown { get; set; }
+
+        public List<Inscription> Inscriptions { get; set; }
+        public List<Talent> Talents { get; set; }
     }
 }

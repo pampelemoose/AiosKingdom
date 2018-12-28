@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace DataModels
 {
-    public class AdventureUnlocked
+    public class TalentUnlocked
     {
         [Key]
         public Guid Id { get; set; }
 
         public Guid SoulId { get; set; }
-        public Guid AdventureVid { get; set; }
+        public Guid KnowledgeId { get; set; }
+        public Guid TalentId { get; set; }
 
         public DateTime? UnlockedAt { get; set; }
     }

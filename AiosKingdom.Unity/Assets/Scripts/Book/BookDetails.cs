@@ -65,13 +65,12 @@ public class BookDetails : MonoBehaviour
     private void ShowPage(int pageNumber)
     {
         _currentPage = pageNumber;
-        var page = _currentBook.Pages.OrderBy(p => p.Rank).ElementAt(_currentPage);
-        var inscriptions = page.Inscriptions.OrderBy(i => i.Type).OrderByDescending(i => i.BaseValue).Skip(0).Take(8);
+        var inscriptions = _currentBook.Inscriptions.OrderBy(i => i.Type).OrderByDescending(i => i.BaseValue).Skip(0).Take(8);
 
         if (_currentPage == 0)
         {
-            EmberPrice.text = page.EmberCost.ToString();
-            BuyButton.gameObject.SetActive(page.EmberCost <= DatasManager.Instance.Currencies.Embers);
+            EmberPrice.text = _currentBook.EmberCost.ToString();
+            BuyButton.gameObject.SetActive(_currentBook.EmberCost <= DatasManager.Instance.Currencies.Embers);
         }
 
         PrevButton.gameObject.SetActive(false);
@@ -82,12 +81,7 @@ public class BookDetails : MonoBehaviour
             PrevButton.gameObject.SetActive(true);
         }
 
-        if (_currentPage < _currentBook.Pages.Count - 1)
-        {
-            NextButton.gameObject.SetActive(true);
-        }
-
-        Description.text = page.Description;
+        Description.text = _currentBook.Description;
 
         foreach (Transform child in Inscriptions.transform)
         {

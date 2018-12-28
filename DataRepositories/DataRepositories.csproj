@@ -50,9 +50,9 @@
     <Compile Include="AppUserRepository.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="AiosKingdomContext.cs" />
-    <Compile Include="Migrations\201811300622030_InitialMigration.cs" />
-    <Compile Include="Migrations\201811300622030_InitialMigration.Designer.cs">
-      <DependentUpon>201811300622030_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201812280320246_InitialMigration.cs" />
+    <Compile Include="Migrations\201812280320246_InitialMigration.Designer.cs">
+      <DependentUpon>201812280320246_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="TownRepository.cs" />
     <Compile Include="AdventureRepository.cs" />
@@ -81,8 +81,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201811300622030_InitialMigration.resx">
-      <DependentUpon>201811300622030_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201812280320246_InitialMigration.resx">
+      <DependentUpon>201812280320246_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

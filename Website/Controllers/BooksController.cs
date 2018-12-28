@@ -23,6 +23,8 @@ namespace Website.Controllers
         {
             var book = DataRepositories.BookRepository.GetById(id);
 
+            book.Talents = book.Talents.OrderBy(t => t.Branch).ThenBy(t => t.Leaf).ToList();
+
             return View(book);
         }
 
@@ -32,7 +34,8 @@ namespace Website.Controllers
         {
             var book = new Models.BookModel();
 
-            book.Pages = new List<Models.PageModel>();
+            book.Inscriptions = new List<Models.InscriptionModel>();
+            book.Talents = new List<Models.TalentModel>();
 
             return View(book);
         }
@@ -42,28 +45,21 @@ namespace Website.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Models.BookModel bookModel)
         {
-            if (bookModel.Pages == null)
+            if (bookModel.Inscriptions == null)
             {
-                bookModel.Pages = new List<Models.PageModel>();
-            }
-            foreach (var page in bookModel.Pages)
-            {
-                if (page.Inscriptions == null)
-                {
-                    page.Inscriptions = new List<Models.InscriptionModel>();
-                }
+                bookModel.Inscriptions = new List<Models.InscriptionModel>();
             }
 
             if (ModelState.IsValid)
             {
-                if (bookModel.Pages.Count == 0 || bookModel.Pages?.Select(p => p.Inscriptions.Count).Sum() == 0)
+                if (bookModel.Inscriptions.Count == 0)
                 {
-                    Alert(AlertMessage.AlertType.Danger, $"You need at least one page and one inscription per page.");
+                    Alert(AlertMessage.AlertType.Danger, $"You need at least one Inscription and one Talent.");
                     return View(bookModel);
                 }
 
                 bool hasErrors = false;
-                foreach (var insc in bookModel.Pages.SelectMany(p => p.Inscriptions))
+                foreach (var insc in bookModel.Inscriptions)
                 {
                     if (insc.WeaponTypes != null)
                         insc.WeaponTypes = insc.WeaponTypes.Where(wt => wt.Type != null).Distinct().ToList();
@@ -95,45 +91,34 @@ namespace Website.Controllers
                 {
                     Id = Guid.NewGuid(),
                     VersionId = bookModel.SelectedVersion,
-                    BookId = bookId,
+                    Vid = bookId,
                     Quality = bookModel.Quality,
                     Name = bookModel.Name,
-                    Pages = new List<DataModels.Skills.Page>()
+                    Description = bookModel.Description,
+                    EmberCost = bookModel.StatCost,
+                    ManaCost = bookModel.ManaCost,
+                    Cooldown = bookModel.Cooldown,
+                    Inscriptions = new List<DataModels.Skills.Inscription>(),
+                    Talents = new List<DataModels.Skills.Talent>()
                 };
-                foreach (var pageModel in bookModel.Pages)
+                foreach (var inscModel in bookModel.Inscriptions)
                 {
-                    var pageId = Guid.NewGuid();
-                    var page = new DataModels.Skills.Page
+                    var insc = new DataModels.Skills.Inscription
                     {
-                        Id = pageId,
+                        Id = Guid.NewGuid(),
                         BookId = bookId,
-                        Description = pageModel.Description,
-                        Rank = pageModel.Rank,
-                        EmberCost = pageModel.StatCost,
-                        ManaCost = pageModel.ManaCost,
-                        Cooldown = pageModel.Cooldown,
-                        Inscriptions = new List<DataModels.Skills.Inscription>()
+                        Type = inscModel.Type,
+                        BaseValue = inscModel.BaseValue,
+                        StatType = inscModel.StatType,
+                        Ratio = inscModel.Ratio,
+                        Duration = inscModel.Duration,
+                        IncludeWeaponDamages = inscModel.IncludeWeaponDamages,
+                        WeaponTypes = inscModel.WeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
+                        WeaponDamagesRatio = inscModel.WeaponDamagesRatio,
+                        PreferredWeaponTypes = inscModel.PreferredWeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
+                        PreferredWeaponDamagesRatio = inscModel.PreferredWeaponDamagesRatio
                     };
-                    foreach (var inscModel in pageModel.Inscriptions)
-                    {
-                        var insc = new DataModels.Skills.Inscription
-                        {
-                            Id = Guid.NewGuid(),
-                            PageId = pageId,
-                            Type = inscModel.Type,
-                            BaseValue = inscModel.BaseValue,
-                            StatType = inscModel.StatType,
-                            Ratio = inscModel.Ratio,
-                            Duration = inscModel.Duration,
-                            IncludeWeaponDamages = inscModel.IncludeWeaponDamages,
-                            WeaponTypes = inscModel.WeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
-                            WeaponDamagesRatio = inscModel.WeaponDamagesRatio,
-                            PreferredWeaponTypes = inscModel.PreferredWeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
-                            PreferredWeaponDamagesRatio = inscModel.PreferredWeaponDamagesRatio
-                        };
-                        page.Inscriptions.Add(insc);
-                    }
-                    book.Pages.Add(page);
+                    book.Inscriptions.Add(insc);
                 }
                 if (DataRepositories.BookRepository.Create(book))
                 {
@@ -146,34 +131,19 @@ namespace Website.Controllers
 
         [CustomAuthorize(Roles = "BookWriter")]
         [HttpGet]
-        public ActionResult AddPagePartial()
+        public ActionResult AddInscPartial()
         {
-            var page = new Models.PageModel();
-            page.Id = Guid.NewGuid();
-            page.Inscriptions = new List<Models.InscriptionModel>();
-
-            return PartialView("PagePartial", page);
-        }
-
-        [CustomAuthorize(Roles = "BookWriter")]
-        [HttpGet]
-        public ActionResult AddInscPartial(string id)
-        {
-            var insc = new Models.InscriptionModel
-            {
-                PageId = id
-            };
+            var insc = new Models.InscriptionModel();
 
             return PartialView("InscPartial", insc);
         }
 
         [CustomAuthorize(Roles = "BookWriter")]
         [HttpGet]
-        public ActionResult AddWeaponTypePartial(string id, string inscId, string typeExtension)
+        public ActionResult AddWeaponTypePartial(string inscId, string typeExtension)
         {
             var type = new Models.InscWeaponTypeModel
             {
-                PageId = id,
                 InscId = inscId,
                 TypeExtension = typeExtension
             };
@@ -195,60 +165,77 @@ namespace Website.Controllers
                     SelectedVersion = book.VersionId,
                     Name = book.Name,
                     Quality = book.Quality,
-                    Pages = new List<Models.PageModel>()
+                    Description = book.Description,
+                    StatCost = book.EmberCost,
+                    ManaCost = book.ManaCost,
+                    Cooldown = book.Cooldown,
+                    Inscriptions = new List<Models.InscriptionModel>(),
+                    Talents = new List<Models.TalentModel>()
                 };
 
-                foreach (var page in book.Pages)
+                foreach (var insc in book.Inscriptions)
                 {
-                    var pageModel = new Models.PageModel
+                    var inscModel = new Models.InscriptionModel
                     {
-                        Id = page.Id,
-                        Description = page.Description,
-                        Rank = page.Rank,
-                        StatCost = page.EmberCost,
-                        ManaCost = page.ManaCost,
-                        Cooldown = page.Cooldown,
-                        Inscriptions = new List<Models.InscriptionModel>()
+                        Id = insc.Id,
+                        Type = insc.Type,
+                        BaseValue = insc.BaseValue,
+                        StatType = insc.StatType,
+                        Ratio = insc.Ratio,
+                        Duration = insc.Duration,
+                        IncludeWeaponDamages = insc.IncludeWeaponDamages,
+                        WeaponTypes = new List<Models.InscWeaponTypeModel>(),
+                        WeaponDamagesRatio = insc.WeaponDamagesRatio,
+                        PreferredWeaponTypes = new List<Models.InscWeaponTypeModel>(),
+                        PreferredWeaponDamagesRatio = insc.PreferredWeaponDamagesRatio,
                     };
 
-                    foreach (var insc in page.Inscriptions)
+                    foreach (var type in insc.WeaponTypes)
                     {
-                        var inscModel = new Models.InscriptionModel
+                        inscModel.WeaponTypes.Add(new Models.InscWeaponTypeModel
                         {
-                            Id = insc.Id,
-                            Type = insc.Type,
-                            BaseValue = insc.BaseValue,
-                            StatType = insc.StatType,
-                            Ratio = insc.Ratio,
-                            Duration = insc.Duration,
-                            IncludeWeaponDamages = insc.IncludeWeaponDamages,
-                            WeaponTypes = new List<Models.InscWeaponTypeModel>(),
-                            WeaponDamagesRatio = insc.WeaponDamagesRatio,
-                            PreferredWeaponTypes = new List<Models.InscWeaponTypeModel>(),
-                            PreferredWeaponDamagesRatio = insc.PreferredWeaponDamagesRatio,
-                        };
-
-                        foreach (var type in insc.WeaponTypes)
-                        {
-                            inscModel.WeaponTypes.Add(new Models.InscWeaponTypeModel
-                            {
-                                Type = type
-                            });
-                        }
-
-                        foreach (var type in insc.PreferredWeaponTypes)
-                        {
-                            inscModel.PreferredWeaponTypes.Add(new Models.InscWeaponTypeModel
-                            {
-                                Type = type
-                            });
-                        }
-
-                        pageModel.Inscriptions.Add(inscModel);
+                            Type = type
+                        });
                     }
 
-                    model.Pages.Add(pageModel);
+                    foreach (var type in insc.PreferredWeaponTypes)
+                    {
+                        inscModel.PreferredWeaponTypes.Add(new Models.InscWeaponTypeModel
+                        {
+                            Type = type
+                        });
+                    }
+
+                    model.Inscriptions.Add(inscModel);
                 }
+
+                foreach (var talent in book.Talents)
+                {
+                    var tal = new Models.TalentModel
+                    {
+                        Id = talent.Id,
+                        Branch = talent.Branch,
+                        Leaf = talent.Leaf,
+                        TalentPointsRequired = talent.TalentPointsRequired,
+                        TargetInscription = talent.TargetInscription,
+                        Inscriptions = book.Inscriptions,
+                        Unlocks = new List<Models.TalentUnlockTypeModel>(),
+                        Type = talent.Type,
+                        Value = talent.Value
+                    };
+
+                    foreach (var unlock in talent.Unlocks)
+                    {
+                        tal.Unlocks.Add(new Models.TalentUnlockTypeModel
+                        {
+                            Type = unlock
+                        });
+                    }
+
+                    model.Talents.Add(tal);
+                }
+
+                model.Talents = model.Talents.OrderBy(t => t.Branch).ThenBy(t => t.Leaf).ToList();
 
                 return View(model);
             }
@@ -262,28 +249,15 @@ namespace Website.Controllers
         public ActionResult Edit(Models.BookModel bookModel)
         {
             bool newItems = false;
-            foreach (var page in bookModel.Pages)
+            if (bookModel.NewInsc > 0)
             {
-                if (page.NewInsc > 0)
+                while (bookModel.NewInsc > 0)
                 {
-                    while (page.NewInsc > 0)
-                    {
-                        if (page.Inscriptions == null)
-                            page.Inscriptions = new List<Models.InscriptionModel>();
+                    if (bookModel.Inscriptions == null)
+                        bookModel.Inscriptions = new List<Models.InscriptionModel>();
 
-                        page.Inscriptions.Add(new Models.InscriptionModel());
-                        page.NewInsc--;
-                    }
-
-                    newItems = true;
-                }
-            }
-            if (bookModel.NewPages > 0)
-            {
-                while (bookModel.NewPages > 0)
-                {
-                    bookModel.Pages.Add(new Models.PageModel());
-                    bookModel.NewPages--;
+                    bookModel.Inscriptions.Add(new Models.InscriptionModel());
+                    bookModel.NewInsc--;
                 }
 
                 newItems = true;
@@ -292,28 +266,21 @@ namespace Website.Controllers
             if (newItems)
                 return View(bookModel);
 
-            if (bookModel.Pages == null)
+            if (bookModel.Inscriptions == null)
             {
-                bookModel.Pages = new List<Models.PageModel>();
-            }
-            foreach (var page in bookModel.Pages)
-            {
-                if (page.Inscriptions == null)
-                {
-                    page.Inscriptions = new List<Models.InscriptionModel>();
-                }
+                bookModel.Inscriptions = new List<Models.InscriptionModel>();
             }
 
             if (ModelState.IsValid)
             {
-                if (bookModel.Pages.Count == 0 || bookModel.Pages?.Select(p => p.Inscriptions.Count).Sum() == 0)
+                if (bookModel.Inscriptions.Count == 0)
                 {
-                    Alert(AlertMessage.AlertType.Danger, $"You need at least one page and one inscription per page.");
+                    Alert(AlertMessage.AlertType.Danger, $"You need at least one inscription.");
                     return View(bookModel);
                 }
 
                 bool hasErrors = false;
-                foreach (var insc in bookModel.Pages.SelectMany(p => p.Inscriptions))
+                foreach (var insc in bookModel.Inscriptions)
                 {
                     if (insc.WeaponTypes != null)
                         insc.WeaponTypes = insc.WeaponTypes.Where(wt => wt.Type != null).Distinct().ToList();
@@ -346,40 +313,49 @@ namespace Website.Controllers
                     VersionId = bookModel.SelectedVersion,
                     Quality = bookModel.Quality,
                     Name = bookModel.Name,
-                    Pages = new List<DataModels.Skills.Page>()
+                    Description = bookModel.Description,
+                    EmberCost = bookModel.StatCost,
+                    ManaCost = bookModel.ManaCost,
+                    Cooldown = bookModel.Cooldown,
+                    Inscriptions = new List<DataModels.Skills.Inscription>(),
+                    Talents = new List<DataModels.Skills.Talent>()
                 };
-                foreach (var pageModel in bookModel.Pages)
+
+                foreach (var inscModel in bookModel.Inscriptions)
                 {
-                    var page = new DataModels.Skills.Page
+                    var insc = new DataModels.Skills.Inscription
                     {
-                        Id = pageModel.Id,
-                        Description = pageModel.Description,
-                        Rank = pageModel.Rank,
-                        EmberCost = pageModel.StatCost,
-                        ManaCost = pageModel.ManaCost,
-                        Cooldown = pageModel.Cooldown,
-                        Inscriptions = new List<DataModels.Skills.Inscription>()
+                        Id = inscModel.Id,
+                        Type = inscModel.Type,
+                        BaseValue = inscModel.BaseValue,
+                        StatType = inscModel.StatType,
+                        Ratio = inscModel.Ratio,
+                        Duration = inscModel.Duration,
+                        IncludeWeaponDamages = inscModel.IncludeWeaponDamages,
+                        WeaponTypes = inscModel.WeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
+                        WeaponDamagesRatio = inscModel.WeaponDamagesRatio,
+                        PreferredWeaponTypes = inscModel.PreferredWeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
+                        PreferredWeaponDamagesRatio = inscModel.PreferredWeaponDamagesRatio
                     };
-                    foreach (var inscModel in pageModel.Inscriptions)
-                    {
-                        var insc = new DataModels.Skills.Inscription
-                        {
-                            Id = inscModel.Id,
-                            Type = inscModel.Type,
-                            BaseValue = inscModel.BaseValue,
-                            StatType = inscModel.StatType,
-                            Ratio = inscModel.Ratio,
-                            Duration = inscModel.Duration,
-                            IncludeWeaponDamages = inscModel.IncludeWeaponDamages,
-                            WeaponTypes = inscModel.WeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
-                            WeaponDamagesRatio = inscModel.WeaponDamagesRatio,
-                            PreferredWeaponTypes = inscModel.PreferredWeaponTypes?.Select(wt => (DataModels.Items.ItemType)wt.Type).ToList(),
-                            PreferredWeaponDamagesRatio = inscModel.PreferredWeaponDamagesRatio
-                        };
-                        page.Inscriptions.Add(insc);
-                    }
-                    book.Pages.Add(page);
+                    book.Inscriptions.Add(insc);
                 }
+
+                foreach (var talentModel in bookModel.Talents)
+                {
+                    var tal = new DataModels.Skills.Talent
+                    {
+                        Id = talentModel.Id,
+                        Branch = talentModel.Branch,
+                        Leaf = talentModel.Leaf,
+                        Unlocks = talentModel.Unlocks?.Select(wt => (DataModels.Skills.TalentUnlock)wt.Type).ToList(),
+                        TalentPointsRequired = talentModel.TalentPointsRequired,
+                        TargetInscription = talentModel.TargetInscription,
+                        Type = talentModel.Type,
+                        Value = talentModel.Value
+                    };
+                    book.Talents.Add(tal);
+                }
+
                 if (DataRepositories.BookRepository.Update(book))
                 {
                     return RedirectToAction("Index");

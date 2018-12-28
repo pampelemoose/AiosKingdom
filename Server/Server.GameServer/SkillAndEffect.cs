@@ -23,7 +23,7 @@ namespace Server.GameServer
                 // TODO : Find a way for this.
                 // TargetId = enemy.MonsterId,
                 IsConsumable = false,
-                Id = inscription.PageId,
+                Id = inscription.BookId,
                 Amount = amount
             };
 
@@ -46,15 +46,15 @@ namespace Server.GameServer
 
             switch (inscription.Type)
             {
-                case Network.Skills.InscriptionType.Damages:
+                case Network.Skills.InscriptionType.PhysicDamages:
                     {
                         toOut.CurrentHealth -= amount;
                         Console.WriteLine($"{from} using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, from)})*{inscription.Ratio}) to {to}.");
 
-                        result.ResultType = Network.AdventureState.ActionResult.Type.Damage;
+                        result.ResultType = Network.AdventureState.ActionResult.Type.PhysicDamage;
                     }
                     break;
-                case Network.Skills.InscriptionType.Heal:
+                case Network.Skills.InscriptionType.SelfHeal:
                     {
                         fromOut.CurrentHealth += amount;
                         if (fromOut.CurrentHealth > fromOut.MaxHealth)
@@ -63,7 +63,7 @@ namespace Server.GameServer
                         }
                         Console.WriteLine($"{from} using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, from)})*{inscription.Ratio}) on himself .");
 
-                        result.ResultType = Network.AdventureState.ActionResult.Type.Heal;
+                        result.ResultType = Network.AdventureState.ActionResult.Type.SelfHeal;
                     }
                     break;
             }
@@ -96,7 +96,7 @@ namespace Server.GameServer
                         }
                         Console.WriteLine($"Using consumable doing ({effect.Type}).({effect.AffectValue}) on yourself .");
 
-                        result.ResultType = Network.AdventureState.ActionResult.Type.Heal;
+                        result.ResultType = Network.AdventureState.ActionResult.Type.SelfHeal;
                     }
                     break;
                 case Network.Items.EffectType.ResoreMana:

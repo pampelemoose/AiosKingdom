@@ -142,11 +142,22 @@
                 <div class="col-md-6">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ArmorValue, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ArmorValue, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ArmorValue, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
                             @Html.LabelFor(model => model.SlotCount, htmlAttributes: new { @class = "input-group-text" })
                         </div>
                         @Html.EditorFor(model => model.SlotCount, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.SlotCount, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
                 </div>
                 <div class="col-md-6 mt-1">
                     <div class="input-group input-group-sm">
@@ -166,7 +177,7 @@
                     </div>
                     @Html.ValidationMessageFor(model => model.MaxDamages, "", new { @class = "text-danger" })
                 </div>
-                
+
             </div>
         </div>
     </section>

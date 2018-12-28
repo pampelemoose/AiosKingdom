@@ -17,14 +17,10 @@ namespace DataModels.Monsters
         Dragon
     }
 
-    public class Monster
+    public class Monster : AVersionized
     {
         [Key]
         public Guid Id { get; set; }
-
-        public Guid VersionId { get; set; }
-        [Index(IsUnique = true)]
-        public Guid MonsterId { get; set; }
 
         public string InternalTypes { get; set; }
         public List<MonsterType> Types

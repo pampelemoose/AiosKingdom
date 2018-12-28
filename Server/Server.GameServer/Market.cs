@@ -142,7 +142,7 @@ namespace Server.GameServer
                     InventoryManager.AddItemToInventory(order.ClientId, item.ItemId, item.Quantity);
                     quantity = item.Quantity;
                     Items.Remove(item);
-                    history.ItemId = item.ItemId;
+                    history.ItemVid = item.ItemId;
                     history.Quantity = item.Quantity;
                     history.SellerId = item.SellerId;
                     processed = true;
@@ -153,7 +153,7 @@ namespace Server.GameServer
                     InventoryManager.AddItemToInventory(order.ClientId, special.ItemId, special.Quantity);
                     quantity = special.Quantity;
                     isSpecial = true;
-                    history.ItemId = special.ItemId;
+                    history.ItemVid = special.ItemId;
                     history.Quantity = special.Quantity;
                     history.ToServer = true;
                     processed = true;
@@ -215,7 +215,7 @@ namespace Server.GameServer
                 var slot = new Network.MarketSlot
                 {
                     Id = marketSlot.Id,
-                    ItemId = marketSlot.ItemId,
+                    ItemId = marketSlot.ItemVid,
                     SellerId = marketSlot.SellerId,
                     IsSpecial = marketSlot.IsSpecial,
                     Price = marketSlot.Price,
@@ -238,7 +238,7 @@ namespace Server.GameServer
                 var slot = new Network.MarketSlot
                 {
                     Id = marketSlot.Id,
-                    ItemId = marketSlot.ItemId,
+                    ItemId = marketSlot.ItemVid,
                     SellerId = marketSlot.SellerId,
                     IsSpecial = marketSlot.IsSpecial,
                     Price = marketSlot.Price,

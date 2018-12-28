@@ -154,7 +154,7 @@ namespace Server.GameServer
                     var slot = new Network.InventorySlot
                     {
                         Id = inventorySlot.Id,
-                        ItemId = inventorySlot.ItemId,
+                        ItemId = inventorySlot.ItemVid,
                         Quantity = inventorySlot.Quantity,
                         LootedAt = inventorySlot.LootedAt
                     };
@@ -167,10 +167,24 @@ namespace Server.GameServer
                     var knowledge = new Network.Knowledge
                     {
                         Id = knowledgeSlot.Id,
-                        BookId = knowledgeSlot.BookId,
-                        Rank = knowledgeSlot.Rank,
-                        IsNew = false
+                        BookId = knowledgeSlot.BookVid,
+                        IsNew = false,
+                        TalentPoints = knowledgeSlot.TalentPoints,
+                        Talents = new List<Network.TalentUnlocked>()
                     };
+
+                    foreach (var talentSlot in knowledgeSlot.Talents)
+                    {
+                        var talent = new Network.TalentUnlocked
+                        {
+                            Id = talentSlot.Id,
+                            KnowledgeId = talentSlot.KnowledgeId,
+                            TalentId = talentSlot.TalentId,
+                            UnlockedAt = talentSlot.UnlockedAt
+                        };
+
+                        knowledge.Talents.Add(talent);
+                    }
 
                     component.Knowledge.Add(knowledge);
                 }
@@ -180,7 +194,7 @@ namespace Server.GameServer
                     var advLock = new Network.AdventureUnlocked
                     {
                         Id = adventureLock.Id,
-                        AdventureId = adventureLock.AdventureId,
+                        AdventureId = adventureLock.AdventureVid,
                         UnlockedAt = adventureLock.UnlockedAt
                     };
 
@@ -254,7 +268,7 @@ namespace Server.GameServer
                 var slot = new DataModels.InventorySlot
                 {
                     Id = inventorySlot.Id,
-                    ItemId = inventorySlot.ItemId,
+                    ItemVid = inventorySlot.ItemId,
                     Quantity = inventorySlot.Quantity,
                     LootedAt = inventorySlot.LootedAt,
                     SoulId = soul.Id
@@ -269,10 +283,24 @@ namespace Server.GameServer
                 var knowledge = new DataModels.Knowledge
                 {
                     Id = knowledgeSlot.IsNew ? Guid.Empty : knowledgeSlot.Id,
-                    BookId = knowledgeSlot.BookId,
-                    Rank = knowledgeSlot.Rank,
-                    SoulId = soul.Id
+                    BookVid = knowledgeSlot.BookId,
+                    SoulId = soul.Id,
+                    TalentPoints = knowledgeSlot.TalentPoints,
+                    Talents = new List<DataModels.TalentUnlocked>()
                 };
+
+                foreach (var talentSlot in knowledgeSlot.Talents)
+                {
+                    var talent = new DataModels.TalentUnlocked
+                    {
+                        Id = talentSlot.Id,
+                        SoulId = soul.Id,
+                        TalentId = talentSlot.TalentId,
+                        UnlockedAt = talentSlot.UnlockedAt
+                    };
+
+                    knowledge.Talents.Add(talent);
+                }
 
                 soul.Knowledge.Add(knowledge);
             }
@@ -289,7 +317,7 @@ namespace Server.GameServer
                 {
                     Id = advLockSlot.Id,
                     SoulId = soul.Id,
-                    AdventureId = advLockSlot.AdventureId,
+                    AdventureVid = advLockSlot.AdventureId,
                     UnlockedAt = advLockSlot.UnlockedAt
                 };
 

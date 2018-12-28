@@ -9,11 +9,8 @@ namespace Network
         public class EnemyState
         {
             public Guid MonsterId { get; set; }
-
             public string EnemyType { get; set; }
-
             public PlayerState State { get; set; }
-
             public int NextPhase { get; set; }
         }
 
@@ -24,7 +21,7 @@ namespace Network
             public int ShardPrice { get; set; }
         }
 
-        public class SkillCooldowns
+        public class SkillCooldown
         {
             public Guid SkillId { get; set; }
             public int Left { get; set; }
@@ -48,8 +45,11 @@ namespace Network
         {
             public enum Type
             {
-                Damage,
-                Heal,
+                PhysicDamage,
+                MagicDamage,
+
+                SelfHeal,
+                TargetHeal,
 
                 ReceiveMana,
                 ConsumedMana,
@@ -78,7 +78,7 @@ namespace Network
         public Dictionary<Guid, EnemyState> Enemies { get; set; }
         public Dictionary<Guid, ShopState> Shops { get; set; }
 
-        public List<SkillCooldowns> Cooldowns { get; set; }
+        public List<SkillCooldown> Cooldowns { get; set; }
 
         public List<ModifierApplied> Marks { get; set; }
         public List<ModifierApplied> Effects { get; set; }

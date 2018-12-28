@@ -15,40 +15,55 @@ namespace Network.Skills
 
     public enum InscriptionType
     {
-        Damages = 0,
-        Heal = 1,
+        PhysicDamages = 0,
+        MagicDamages = 1,
 
-        StatBuff = 2,
-        StatDebuff = 3,
+        SelfHeal = 2,
+        TargetHeal = 3,
 
-        Stunned = 4,
-        Charmed = 5,
-        Confused = 6,
+        StatBuff = 4,
+        StatDebuff = 5,
+
+        Stunt = 6,
+        Charm = 7,
+        Confuse = 8,
+
+        Unstunt = 10,
+        Uncharm = 11,
+        Unconfuse = 12,
 
         // ADVANCED IDEAS
         Burn = 15,
-        Frozen = 16
+        Freeze = 16,
+
+        Unburn = 17,
+        Unfreeze = 18,
+
+        Multistrike = 20
     }
 
-    public enum ElementType
+    public enum TalentUnlock
     {
-        Neutral = 0,
+        None,
+        Left,
+        Next,
+        Right
+    }
 
-        Fire = 1,
-        Water = 2,
-        Wind = 3,
-        Earth = 4,
-        Lightning = 5,
+    public enum TalentType
+    {
+        Cooldown,
+        ManaCost,
+        BaseValue,
+        Ratio,
+        Duration,
 
-        // ADVANCED IDEAS
-        Light = 6,
-        Shadow = 7,
-
-        Ice = 8,
-        Magma = 9,
-
-        Life = 10,
-        Death = 11
+        AddStaminaRatio,
+        AddEnergyRatio,
+        AddStrengthRatio,
+        AddAgilityRatio,
+        AddIntelligenceRatio,
+        AddWisdomRatio
     }
 
     public class Book
@@ -56,30 +71,60 @@ namespace Network.Skills
         public Guid Id { get; set; }
 
         public string Name { get; set; }
+        public string Description { get; set; }
         public BookQuality Quality { get; set; }
 
-        public List<Page> Pages { get; set; }
-    }
-
-    public class Page
-    {
-        public Guid Id { get; set; }
-
-        public string Description { get; set; }
-        public string Image { get; set; }
-
         public int EmberCost { get; set; }
-        public int Rank { get; set; }
         public int ManaCost { get; set; }
         public int Cooldown { get; set; }
 
         public List<Inscription> Inscriptions { get; set; }
+        public List<Talent> Talents { get; set; }
+    }
+
+    public class Talent
+    {
+        public Guid Id { get; set; }
+        public Guid BookId { get; set; }
+
+        public int Branch { get; set; }
+        public int Leaf { get; set; }
+
+        public string InternalUnlocks { get; set; }
+        public List<TalentUnlock> Unlocks
+        {
+            get
+            {
+                var result = new List<TalentUnlock>();
+                if (InternalUnlocks != null)
+                {
+                    foreach (var str in InternalUnlocks.Split(';'))
+                    {
+                        if (!String.IsNullOrEmpty(str))
+                            result.Add((TalentUnlock)Enum.Parse(typeof(TalentUnlock), str));
+                    }
+                }
+                return result;
+            }
+            set
+            {
+                if (value != null)
+                    InternalUnlocks = String.Join(";", value);
+            }
+        }
+
+        public Guid TargetInscription { get; set; }
+
+        public int TalentPointsRequired { get; set; }
+
+        public TalentType Type { get; set; }
+        public double Value { get; set; }
     }
 
     public class Inscription
     {
         public Guid Id { get; set; }
-        public Guid PageId { get; set; }
+        public Guid BookId { get; set; }
 
         public InscriptionType Type { get; set; }
 

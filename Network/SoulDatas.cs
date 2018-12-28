@@ -123,14 +123,25 @@ namespace Network
     {
         public Guid Id { get; set; }
         public Guid BookId { get; set; }
-        public int Rank { get; set; }
         public bool IsNew { get; set; }
+        public int TalentPoints { get; set; }
+        public List<TalentUnlocked> Talents { get; set; }
     }
 
     public class AdventureUnlocked
     {
         public Guid Id { get; set; }
         public Guid AdventureId { get; set; }
+        public DateTime? UnlockedAt { get; set; }
+    }
+
+    public class TalentUnlocked
+    {
+        public Guid Id { get; set; }
+
+        public Guid KnowledgeId { get; set; }
+        public Guid TalentId { get; set; }
+
         public DateTime? UnlockedAt { get; set; }
     }
 }

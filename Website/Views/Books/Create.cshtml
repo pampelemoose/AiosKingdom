@@ -28,6 +28,16 @@
                     @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                 </div>
 
+                <div class="col-md-12 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+
                 <div class="col-md-6 mt-1">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
@@ -50,24 +60,58 @@
             </div>
         </div>
     </section>
+    <section class="bg-dark text-muted p-3">
+        <div class="container">
+            <div class="row mt-1">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.StatCost, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.StatCost, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.StatCost, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ManaCost, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ManaCost, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ManaCost, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Cooldown, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Cooldown, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Cooldown, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="p-3">
         <div class="container">
             <div class="row">
                 <div class="col-md-10">
-                    <h2>@Html.LabelFor(model => model.Pages, htmlAttributes: new { @class = "control-label" })</h2>
+                    <h2>@Html.LabelFor(model => model.Inscriptions, htmlAttributes: new { @class = "control-label" })</h2>
                 </div>
                 <div class="col-md-2">
-                    <input class="btn btn-block" type="button" id="addPageToBook" value="<Add Page>" />
+                    <input class="btn btn-block" type="button" onclick="addInscToBook()" value="<Add Inscription>" />
                 </div>
             </div>
 
-            <div class="row mt-2" id="pageList">
-                @if (Model != null && Model.Pages != null)
+            <div class="row mt-2" id="inscList">
+                @if (Model != null && Model.Inscriptions != null)
                 {
-                    for (var i = 0; i < Model.Pages.Count; i++)
+                    for (var i = 0; i < Model.Inscriptions.Count; i++)
                     {
-                        Html.RenderPartial("PagePartial", Model.Pages[i]);
+
+                        Html.RenderPartial("InscPartial", Model.Inscriptions[i]);
                     }
                 }
             </div>
@@ -83,45 +127,26 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            $("#addPageToBook").click(function () {
-                $.ajax({
-                    url: "/Books/AddPagePartial",
-                    cache: false,
-                    type: "GET",
-                    success: function (data) {
-                        $('#pageList').append(data);
-                        $('#pageList').fadeIn('fast');
-                    }
-                });
-            });
-        });
-
-        function addInscToPage(page) {
-            var elem = document.getElementById('page-card-' + page.id);
+        function addInscToBook() {
             $.ajax({
                 url: "/Books/AddInscPartial",
                 cache: false,
                 type: "GET",
-                data: {
-                    "id": $(elem).children("input[name='Pages.index']").val()
-                },
                 success: function (data) {
-                    $('#inscList_' + page.id).append(data);
-                    $('#inscList_' + page.id).fadeIn('fast');
+                    $('#inscList').append(data);
+                    $('#inscList').fadeIn('fast');
                 }
             });
         }
 
-        function addWeaponTypeToInsc(page, insc) {
+        function addWeaponTypeToInsc(insc) {
             var elem = document.getElementById('insc-card-' + insc.id);
             $.ajax({
                 url: "/Books/AddWeaponTypePartial",
                 cache: false,
                 type: "GET",
                 data: {
-                    "id": page,
-                    "inscId": $(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val(),
+                    "inscId": $(elem).children("input[name='Inscriptions.index']").val(),
                     "typeExtension": "WeaponTypes"
                 },
                 success: function (data) {
@@ -131,15 +156,14 @@
             });
         }
 
-        function addPrefferedWeaponTypeToInsc(page, insc) {
+        function addPrefferedWeaponTypeToInsc(insc) {
             var elem = document.getElementById('insc-card-' + insc.id);
             $.ajax({
                 url: "/Books/AddWeaponTypePartial",
                 cache: false,
                 type: "GET",
                 data: {
-                    "id": page,
-                    "inscId": $(elem).children("input[name='Pages[" + page + "].Inscriptions.index']").val(),
+                    "inscId": $(elem).children("input[name='Inscriptions.index']").val(),
                     "typeExtension": "PreferredWeaponTypes"
                 },
                 success: function (data) {

@@ -27,6 +27,7 @@ namespace DataRepositories
                     .Include(s => s.Equipment)
                     .Include(s => s.Inventory)
                     .Include(s => s.Knowledge)
+                    .Include(a => a.Knowledge.Select(i => i.Talents))
                     .Include(s => s.AdventureLocks)
                     .FirstOrDefault(s => s.Id.Equals(id));
             }
@@ -75,6 +76,7 @@ namespace DataRepositories
                     .Include(s => s.Equipment)
                     .Include(s => s.Inventory)
                     .Include(s => s.Knowledge)
+                    .Include(a => a.Knowledge.Select(i => i.Talents))
                     .Include(s => s.AdventureLocks)
                     .FirstOrDefault(s => s.Id.Equals(soul.Id));
 
@@ -112,7 +114,7 @@ namespace DataRepositories
                     {
                         var inv = context.Inventories.FirstOrDefault(i => i.Id.Equals(item.Id));
                         inv.Quantity = item.Quantity;
-                        inv.ItemId = item.ItemId;
+                        inv.ItemVid = item.ItemVid;
                         online.Inventory.Add(inv);
                         oldInv.Remove(oldInv.FirstOrDefault(o => o.Id.Equals(item.Id)));
                     }
@@ -131,12 +133,43 @@ namespace DataRepositories
                     if (Guid.Empty.Equals(kno.Id))
                     {
                         kno.Id = Guid.NewGuid();
+
+                        foreach (var talent in kno.Talents)
+                        {
+                            talent.Id = Guid.NewGuid();
+                        }
+
                         online.Knowledge.Add(kno);
                     }
                     else
                     {
                         var know = context.Knowledges.FirstOrDefault(i => i.Id.Equals(kno.Id));
-                        know.Rank = kno.Rank;
+                        know.TalentPoints = kno.TalentPoints;
+
+                        // TALENTS
+                        var oldTalents = know.Talents;
+                        know.Talents = new List<DataModels.TalentUnlocked>();
+                        foreach (var tal in kno.Talents)
+                        {
+                            if (Guid.Empty.Equals(tal.Id))
+                            {
+                                tal.Id = Guid.NewGuid();
+                                tal.KnowledgeId = kno.Id;
+                                know.Talents.Add(tal);
+                            }
+                            else
+                            {
+                                var onlineTalent = context.TalentUnlocked.FirstOrDefault(i => i.Id.Equals(tal.Id));
+                                know.Talents.Add(onlineTalent);
+                                oldTalents.Remove(oldTalents.FirstOrDefault(o => o.Id.Equals(tal.Id)));
+                            }
+                        }
+
+                        foreach (var toDel in oldTalents)
+                        {
+                            context.TalentUnlocked.Remove(toDel);
+                        }
+
                         online.Knowledge.Add(know);
                         oldKno.Remove(oldKno.FirstOrDefault(o => o.Id.Equals(kno.Id)));
                     }

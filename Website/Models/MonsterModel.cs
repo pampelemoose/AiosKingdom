@@ -118,12 +118,6 @@ namespace Website.Models
             public Guid VersionId { get; set; }
             public string Name { get; set; }
             public Guid PageId { get; set; }
-            public int Rank { get; set; }
-
-            public string PhaseName
-            {
-                get { return $"{Name} (Rank {Rank})"; }
-            }
         }
 
         public Guid Id { get; set; }
@@ -137,23 +131,19 @@ namespace Website.Models
         {
             get
             {
-                var pages = new List<SkillChoice>();
+                var books = new List<SkillChoice>();
 
                 foreach (var book in DataRepositories.BookRepository.GetAll())
                 {
-                    foreach (var page in book.Pages)
+                    books.Add(new SkillChoice
                     {
-                        pages.Add(new SkillChoice
-                        {
-                            VersionId = book.VersionId,
-                            Name = book.Name,
-                            PageId = page.Id,
-                            Rank = page.Rank
-                        });
-                    }
+                        VersionId = book.VersionId,
+                        Name = book.Name,
+                        PageId = book.Id,
+                    });
                 }
 
-                return pages;
+                return books;
             }
         }
     }

@@ -514,7 +514,7 @@ public class Adventure : MonoBehaviour
             });
             script.Action.onClick.AddListener(() =>
             {
-                KnowledgeDetailPanel.GetComponent<KnowledgeDetails>().ShowDetails(skill, knowledge.Rank);
+                KnowledgeDetailPanel.GetComponent<KnowledgeDetails>().ShowDetails(skill, 1);
             });
         }
 

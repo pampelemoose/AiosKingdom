@@ -51,67 +51,27 @@ public class KnowledgeDetails : MonoBehaviour
             gameObject.SetActive(false);
         });
 
-        UpgradeBox.SetActive(_currentBook.Pages.FirstOrDefault(p => p.Rank == rank + 1) != null);
+        UpgradeBox.SetActive(false);
     }
 
     private void ShowPage(int rank)
     {
-        var page = _currentBook.Pages.FirstOrDefault(p => p.Rank == rank);
-        var nextPage = _currentBook.Pages.FirstOrDefault(p => p.Rank == rank + 1);
-        var inscriptions = page.Inscriptions.OrderBy(i => i.Type).OrderByDescending(i => i.BaseValue).Skip(0).Take(8);
+        var inscriptions = _currentBook.Inscriptions.OrderBy(i => i.Type).OrderByDescending(i => i.BaseValue).Skip(0).Take(8);
 
         UpgradeButton.gameObject.SetActive(false);
 
-        if (nextPage != null)
-        {
-            EmberPrice.text = nextPage.EmberCost.ToString();
-            UpgradeButton.gameObject.SetActive(nextPage.EmberCost <= DatasManager.Instance.Currencies.Embers);
-        }
-
-        Description.text = page.Description;
+        Description.text = _currentBook.Description;
 
         foreach (Transform child in Inscriptions.transform)
         {
             Destroy(child.gameObject);
         }
 
-        if (nextPage == null)
+        foreach (var insc in inscriptions)
         {
-            foreach (var insc in inscriptions)
-            {
-                var inscObj = Instantiate(InscriptionItem, Inscriptions.transform);
-                var script = inscObj.GetComponent<BookInscriptionItem>();
-                script.SetDatas(insc);
-            }
-        }
-        else
-        {
-            List<JsonObjects.Skills.Inscription> nextInscs = new List<JsonObjects.Skills.Inscription>();
-            nextInscs.AddRange(nextPage.Inscriptions);
-            foreach (var insc in inscriptions)
-            {
-                var nextInsc = nextInscs.FirstOrDefault(i => i.Type == insc.Type && i.StatType == insc.StatType);
-                if (nextInsc == null)
-                {
-                    var inscObj = Instantiate(InscriptionItem, Inscriptions.transform);
-                    var script = inscObj.GetComponent<BookInscriptionItem>();
-                    script.SetDatas(insc);
-                }
-                else
-                {
-                    var inscObj = Instantiate(InscriptionUpgradableItem, Inscriptions.transform);
-                    var script = inscObj.GetComponent<KnowledgeInscriptionUpgradableItem>();
-                    script.SetDatas(insc, nextInsc);
-                    nextInscs.Remove(nextInsc);
-                }
-            }
-
-            foreach (var insc in nextInscs)
-            {
-                var inscObj = Instantiate(InscriptionUpgradableItem, Inscriptions.transform);
-                var script = inscObj.GetComponent<KnowledgeInscriptionUpgradableItem>();
-                script.SetDatas(new JsonObjects.Skills.Inscription(), insc);
-            }
+            var inscObj = Instantiate(InscriptionItem, Inscriptions.transform);
+            var script = inscObj.GetComponent<BookInscriptionItem>();
+            script.SetDatas(insc);
         }
     }
 }

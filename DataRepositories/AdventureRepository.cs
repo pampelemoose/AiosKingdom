@@ -40,7 +40,7 @@ namespace DataRepositories
                     .Include(a => a.Locks)
                     .Include(a => a.Rooms.Select(r => r.ShopItems))
                     .Include(a => a.Rooms.Select(r => r.Ennemies))
-                    .FirstOrDefault(a => a.AdventureId.Equals(id));
+                    .FirstOrDefault(a => a.Vid.Equals(id));
             }
         }
 
@@ -127,7 +127,7 @@ namespace DataRepositories
                             else
                             {
                                 var onlineShopItem = context.ShopItems.FirstOrDefault(i => i.Id.Equals(shopItem.Id));
-                                onlineShopItem.ItemId = shopItem.ItemId;
+                                onlineShopItem.ItemVid = shopItem.ItemVid;
                                 onlineShopItem.Type = shopItem.Type;
                                 onlineShopItem.Quantity = shopItem.Quantity;
                                 onlineShopItem.Price = shopItem.Price;
@@ -155,7 +155,7 @@ namespace DataRepositories
                             {
                                 var onlineEnemy = context.Enemies.FirstOrDefault(i => i.Id.Equals(enemy.Id));
                                 onlineEnemy.EnemyType = enemy.EnemyType;
-                                onlineEnemy.MonsterId = enemy.MonsterId;
+                                onlineEnemy.MonsterVid = enemy.MonsterVid;
                                 onlineEnemy.Level = enemy.Level;
                                 onlineEnemy.ShardReward = enemy.ShardReward;
                                 onlineRoom.Ennemies.Add(onlineEnemy);

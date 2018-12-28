@@ -60,7 +60,7 @@ namespace Server.GameServer
             }
         }
 
-        public bool UseSkill(Network.Skills.Page skill, Guid enemyId, out List<Network.AdventureState.ActionResult> message)
+        public bool UseSkill(Network.Skills.Book skill, Guid enemyId, out List<Network.AdventureState.ActionResult> message)
         {
             // check if skill is in cooldown list
             if (_state.Cooldowns.FirstOrDefault(c => c.SkillId.Equals(skill.Id)) != null)
@@ -96,7 +96,7 @@ namespace Server.GameServer
 
                 if (skill.Cooldown > 0)
                 {
-                    _state.Cooldowns.Add(new Network.AdventureState.SkillCooldowns
+                    _state.Cooldowns.Add(new Network.AdventureState.SkillCooldown
                     {
                         SkillId = skill.Id,
                         Left = skill.Cooldown - 1
@@ -172,7 +172,7 @@ namespace Server.GameServer
 
                 if (phase == null) return false;
 
-                var skill = DataManager.Instance.Books.SelectMany(b => b.Pages).FirstOrDefault(p => p.Id.Equals(phase.PageId));
+                var skill = DataManager.Instance.Books.FirstOrDefault(p => p.Id.Equals(phase.BookVid));
 
                 if (skill == null) return false;
 
@@ -220,7 +220,7 @@ namespace Server.GameServer
 
                     foreach (var loot in monster.Loots)
                     {
-                        var lootExists = _loots.Values.FirstOrDefault(l => l.ItemId.Equals(loot.ItemId));
+                        var lootExists = _loots.Values.FirstOrDefault(l => l.ItemId.Equals(loot.ItemVid));
                         if (lootExists != null)
                         {
                             lootExists.Quantity += loot.Quantity;
@@ -232,7 +232,7 @@ namespace Server.GameServer
                             _loots.Add(id, new Network.LootItem
                             {
                                 LootId = id,
-                                ItemId = loot.ItemId,
+                                ItemId = loot.ItemVid,
                                 Quantity = loot.Quantity
                             });
                         }
@@ -313,7 +313,7 @@ namespace Server.GameServer
 
             messages.Add(new Network.AdventureState.ActionResult
             {
-                ResultType = Network.AdventureState.ActionResult.Type.Heal,
+                ResultType = Network.AdventureState.ActionResult.Type.SelfHeal,
                 Amount = toHeal
             });
 
@@ -427,7 +427,7 @@ namespace Server.GameServer
                 _state.Enemies[key] = enemy;
             }
 
-            var newCooldowns = new List<Network.AdventureState.SkillCooldowns>();
+            var newCooldowns = new List<Network.AdventureState.SkillCooldown>();
             for (int i = 0; i < _state.Cooldowns.Count; ++i)
             {
                 var cooldown = _state.Cooldowns.FirstOrDefault();
@@ -596,7 +596,7 @@ namespace Server.GameServer
             _state.Enemies = new Dictionary<Guid, Network.AdventureState.EnemyState>();
             _state.Shops = new Dictionary<Guid, Network.AdventureState.ShopState>();
 
-            _state.Cooldowns = new List<Network.AdventureState.SkillCooldowns>();
+            _state.Cooldowns = new List<Network.AdventureState.SkillCooldown>();
 
             _state.Marks = new List<Network.AdventureState.ModifierApplied>();
             _state.Effects = new List<Network.AdventureState.ModifierApplied>();

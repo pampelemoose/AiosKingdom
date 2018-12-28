@@ -13,7 +13,10 @@ namespace DataModels
         public Guid Id { get; set; }
 
         public Guid SoulId { get; set; }
-        public Guid BookId { get; set; }
-        public int Rank { get; set; }
+        public Guid BookVid { get; set; }
+
+        public int TalentPoints { get; set; }
+
+        public List<TalentUnlocked> Talents { get; set; }
     }
 }

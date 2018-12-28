@@ -15,7 +15,8 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 return context.Books
-                    .Include(a => a.Pages)
+                    .Include(a => a.Inscriptions)
+                    .Include(a => a.Talents)
                     .ToList();
             }
         }
@@ -25,8 +26,8 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 return context.Books
-                    .Include(a => a.Pages)
-                    .Include(a => a.Pages.Select(i => i.Inscriptions))
+                    .Include(a => a.Inscriptions)
+                    .Include(a => a.Talents)
                     .Where(b => b.VersionId.Equals(versionId))
                     .ToList();
             }
@@ -37,9 +38,9 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 return context.Books
-                    .Include(a => a.Pages)
-                    .Include(a => a.Pages.Select(i => i.Inscriptions))
-                    .FirstOrDefault(a => a.BookId.Equals(id));
+                    .Include(a => a.Inscriptions)
+                    .Include(a => a.Talents)
+                    .FirstOrDefault(a => a.Vid.Equals(id));
             }
         }
 
@@ -78,8 +79,8 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 var online = context.Books
-                    .Include(p => p.Pages)
-                    .Include(a => a.Pages.Select(i => i.Inscriptions))
+                    .Include(p => p.Inscriptions)
+                    .Include(a => a.Talents)
                     .FirstOrDefault(u => u.Id.Equals(book.Id));
 
                 if (online == null)
@@ -87,76 +88,73 @@ namespace DataRepositories
 
                 online.VersionId = book.VersionId;
                 online.Name = book.Name;
+                online.Description = book.Description;
                 online.Quality = book.Quality;
+                online.EmberCost = book.EmberCost;
+                online.ManaCost = book.ManaCost;
+                online.Cooldown = book.Cooldown;
 
-                // PAGES
-                var oldPages = online.Pages;
-                online.Pages = new List<DataModels.Skills.Page>();
-                foreach (var page in book.Pages)
+                // INSCRIPTIONS
+                var oldInsc = online.Inscriptions;
+                online.Inscriptions = new List<DataModels.Skills.Inscription>();
+                foreach (var insc in book.Inscriptions)
                 {
-                    if (Guid.Empty.Equals(page.Id))
+                    if (Guid.Empty.Equals(insc.Id))
                     {
-                        page.Id = Guid.NewGuid();
-
-                        foreach (var insc in page.Inscriptions)
-                        {
-                            insc.Id = Guid.NewGuid();
-                        }
-
-                        online.Pages.Add(page);
+                        insc.Id = Guid.NewGuid();
+                        online.Inscriptions.Add(insc);
                     }
                     else
                     {
-                        var onlinePage = context.Pages
-                            .Include(i => i.Inscriptions)
-                            .FirstOrDefault(i => i.Id.Equals(page.Id));
-                        onlinePage.Description = page.Description;
-                        onlinePage.Rank = page.Rank;
-                        onlinePage.EmberCost = page.EmberCost;
-                        onlinePage.ManaCost = page.ManaCost;
-                        onlinePage.Cooldown = page.Cooldown;
-
-                        // INSCRIPTIONS
-                        var oldInsc = onlinePage.Inscriptions;
-                        onlinePage.Inscriptions = new List<DataModels.Skills.Inscription>();
-                        foreach (var insc in page.Inscriptions)
-                        {
-                            if (Guid.Empty.Equals(insc.Id))
-                            {
-                                insc.Id = Guid.NewGuid();
-                                onlinePage.Inscriptions.Add(insc);
-                            }
-                            else
-                            {
-                                var onlineInsc = context.Inscriptions.FirstOrDefault(i => i.Id.Equals(insc.Id));
-                                onlineInsc.Type = insc.Type;
-                                onlineInsc.BaseValue = insc.BaseValue;
-                                onlineInsc.StatType = insc.StatType;
-                                onlineInsc.Ratio = insc.Ratio;
-                                onlineInsc.Duration = insc.Duration;
-                                onlineInsc.IncludeWeaponDamages = insc.IncludeWeaponDamages;
-                                onlineInsc.WeaponTypes = insc.WeaponTypes;
-                                onlineInsc.WeaponDamagesRatio = insc.WeaponDamagesRatio;
-                                onlineInsc.PreferredWeaponTypes = insc.PreferredWeaponTypes;
-                                onlineInsc.PreferredWeaponDamagesRatio = insc.PreferredWeaponDamagesRatio;
-                                onlinePage.Inscriptions.Add(onlineInsc);
-                                oldInsc.Remove(oldInsc.FirstOrDefault(o => o.Id.Equals(insc.Id)));
-                            }
-                        }
-
-                        foreach (var toDel in oldInsc)
-                        {
-                            context.Inscriptions.Remove(toDel);
-                        }
-
-                        online.Pages.Add(onlinePage);
-                        oldPages.Remove(oldPages.FirstOrDefault(o => o.Id.Equals(page.Id)));
+                        var onlineInsc = context.Inscriptions.FirstOrDefault(i => i.Id.Equals(insc.Id));
+                        onlineInsc.Type = insc.Type;
+                        onlineInsc.BaseValue = insc.BaseValue;
+                        onlineInsc.StatType = insc.StatType;
+                        onlineInsc.Ratio = insc.Ratio;
+                        onlineInsc.Duration = insc.Duration;
+                        onlineInsc.IncludeWeaponDamages = insc.IncludeWeaponDamages;
+                        onlineInsc.WeaponTypes = insc.WeaponTypes;
+                        onlineInsc.WeaponDamagesRatio = insc.WeaponDamagesRatio;
+                        onlineInsc.PreferredWeaponTypes = insc.PreferredWeaponTypes;
+                        onlineInsc.PreferredWeaponDamagesRatio = insc.PreferredWeaponDamagesRatio;
+                        online.Inscriptions.Add(onlineInsc);
+                        oldInsc.Remove(oldInsc.FirstOrDefault(o => o.Id.Equals(insc.Id)));
                     }
                 }
 
-                foreach (var toDel in oldPages)
+                foreach (var toDel in oldInsc)
                 {
-                    context.Pages.Remove(toDel);
+                    context.Inscriptions.Remove(toDel);
+                }
+
+                // TALENTS
+                var oldTalent = online.Talents;
+                online.Talents = new List<DataModels.Skills.Talent>();
+                foreach (var tal in book.Talents)
+                {
+                    if (Guid.Empty.Equals(tal.Id))
+                    {
+                        tal.Id = Guid.NewGuid();
+                        online.Talents.Add(tal);
+                    }
+                    else
+                    {
+                        var onlineTal = context.Talents.FirstOrDefault(i => i.Id.Equals(tal.Id));
+                        onlineTal.Branch = tal.Branch;
+                        onlineTal.Leaf = tal.Leaf;
+                        onlineTal.Unlocks = tal.Unlocks;
+                        onlineTal.TargetInscription = tal.TargetInscription;
+                        onlineTal.TalentPointsRequired = tal.TalentPointsRequired;
+                        onlineTal.Type = tal.Type;
+                        onlineTal.Value = tal.Value;
+                        online.Talents.Add(onlineTal);
+                        oldTalent.Remove(oldTalent.FirstOrDefault(o => o.Id.Equals(tal.Id)));
+                    }
+                }
+
+                foreach (var toDel in oldTalent)
+                {
+                    context.Talents.Remove(toDel);
                 }
 
                 try

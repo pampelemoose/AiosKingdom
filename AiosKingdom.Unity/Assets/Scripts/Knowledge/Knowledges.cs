@@ -61,11 +61,11 @@ public class Knowledges : MonoBehaviour
             var knowObj = Instantiate(KnowledgeListItem, Content.transform);
             var script = knowObj.GetComponent<KnowledgeListItem>();
 
-            script.SetDatas(skill, knowledge.Rank);
+            script.SetDatas(skill, 1);
 
             script.ShowDetailsButton.onClick.AddListener(() =>
             {
-                _knowledgeDetails.GetComponent<KnowledgeDetails>().ShowDetails(skill, knowledge.Rank);
+                _knowledgeDetails.GetComponent<KnowledgeDetails>().ShowDetails(skill, 1);
             });
         }
 

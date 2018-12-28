@@ -15,7 +15,7 @@ public class SkillSelectionListItem : MonoBehaviour
     {
         var book = DatasManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(knowledge.BookId));
 
-        Name.text = string.Format("{0} (Rank {1})", book.Name, knowledge.Rank);
-        ManaCost.text = string.Format("[{0}]", book.Pages.FirstOrDefault(p => p.Rank == knowledge.Rank).ManaCost);
+        Name.text = string.Format("{0}", book.Name);
+        ManaCost.text = string.Format("[{0}]", book.ManaCost);
     }
 }

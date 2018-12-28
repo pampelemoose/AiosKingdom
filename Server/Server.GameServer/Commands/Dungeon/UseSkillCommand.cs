@@ -28,7 +28,7 @@ namespace Server.GameServer.Commands.Dungeon
                 var skillKnown = knowledges.FirstOrDefault(s => s.Id.Equals(knowledgeId));
                 if (skillKnown != null)
                 {
-                    var skill = DataManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(skillKnown.BookId)).Pages.FirstOrDefault(p => p.Rank.Equals(skillKnown.Rank));
+                    var skill = DataManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(skillKnown.BookId));
                     if (skill != null)
                     {
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);

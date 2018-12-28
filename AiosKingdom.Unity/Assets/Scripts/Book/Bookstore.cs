@@ -110,12 +110,12 @@ public class Bookstore : MonoBehaviour
 
         if (_filterType != null)
         {
-            books = books.Where(b => (b.Pages.SelectMany(p => p.Inscriptions).Where(i => i.Type == _filterType)).Any()).ToList();
+            books = books.Where(b => (b.Inscriptions.Where(i => i.Type == _filterType)).Any()).ToList();
         }
 
         if (_filterStat != null)
         {
-            books = books.Where(b => (b.Pages.SelectMany(p => p.Inscriptions).Where(i => i.StatType == _filterStat)).Any()).ToList();
+            books = books.Where(b => (b.Inscriptions.Where(i => i.StatType == _filterStat)).Any()).ToList();
         }
 
         books = _books.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();

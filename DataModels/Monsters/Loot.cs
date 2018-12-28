@@ -14,7 +14,7 @@ namespace DataModels.Monsters
 
         public Guid MonsterId { get; set; }
 
-        public Guid ItemId { get; set; }
+        public Guid ItemVid { get; set; }
         public double DropRate { get; set; }
         public int Quantity { get; set; }
     }

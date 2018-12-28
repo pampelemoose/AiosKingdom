@@ -13,7 +13,7 @@ namespace DataModels.Adventures
         public Guid Id { get; set; }
 
         public Guid RoomId { get; set; }
-        public Guid ItemId { get; set; }
+        public Guid ItemVid { get; set; }
 
         public Items.ItemType Type { get; set; }
         public int Quantity { get; set; }

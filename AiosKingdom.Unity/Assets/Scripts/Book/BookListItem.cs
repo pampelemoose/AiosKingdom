@@ -16,6 +16,5 @@ public class BookListItem : MonoBehaviour
     {
         Name.text = book.Name;
         Quality.text = book.Quality.ToString();
-        Rank.text = book.Pages.Select(p => p.Rank).Max().ToString();
     }
 }

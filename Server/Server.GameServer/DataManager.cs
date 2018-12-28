@@ -51,7 +51,7 @@ namespace Server.GameServer
             {
                 var itm = new Network.Items.Item
                 {
-                    Id = item.ItemId,
+                    Id = item.Vid,
                     Name = item.Name,
                     Description = item.Description,
                     ItemLevel = item.ItemLevel,
@@ -60,6 +60,7 @@ namespace Server.GameServer
                     SellingPrice = item.SellingPrice,
 
                     ArmorValue = item.ArmorValue,
+                    MagicArmorValue = item.MagicArmorValue,
                     SlotCount = item.SlotCount,
                     MinDamages = item.MinDamages,
                     MaxDamages = item.MaxDamages,
@@ -211,8 +212,12 @@ namespace Server.GameServer
             {
                 var bok = new Network.Skills.Book
                 {
-                    Id = book.BookId,
-                    Name = book.Name
+                    Id = book.Vid,
+                    Name = book.Name,
+                    Description = book.Description,
+                    EmberCost = book.EmberCost,
+                    ManaCost = book.ManaCost,
+                    Cooldown = book.Cooldown
                 };
 
                 switch (book.Quality)
@@ -234,93 +239,154 @@ namespace Server.GameServer
                         break;
                 }
 
-                bok.Pages = new List<Network.Skills.Page>();
-                foreach (var page in book.Pages)
+                bok.Inscriptions = new List<Network.Skills.Inscription>();
+                foreach (var insc in book.Inscriptions)
                 {
-                    var pag = new Network.Skills.Page
+                    var ins = new Network.Skills.Inscription
                     {
-                        Id = page.Id,
-                        Description = page.Description,
-                        Rank = page.Rank,
-                        EmberCost = page.EmberCost,
-                        ManaCost = page.ManaCost,
-                        Cooldown = page.Cooldown
+                        Id = insc.Id,
+                        BaseValue = insc.BaseValue,
+                        Ratio = insc.Ratio,
+                        Duration = insc.Duration,
+                        IncludeWeaponDamages = insc.IncludeWeaponDamages,
+                        InternalWeaponTypes = insc.InternalWeaponTypes,
+                        WeaponDamagesRatio = insc.WeaponDamagesRatio,
+                        InternalPreferredWeaponTypes = insc.InternalPreferredWeaponTypes,
+                        PreferredWeaponDamagesRatio = insc.PreferredWeaponDamagesRatio
                     };
 
-                    pag.Inscriptions = new List<Network.Skills.Inscription>();
-                    foreach (var insc in page.Inscriptions)
+                    switch (insc.Type)
                     {
-                        var ins = new Network.Skills.Inscription
-                        {
-                            Id = insc.Id,
-                            PageId = page.Id,
-                            BaseValue = insc.BaseValue,
-                            Ratio = insc.Ratio,
-                            Duration = insc.Duration,
-                            IncludeWeaponDamages = insc.IncludeWeaponDamages,
-                            InternalWeaponTypes = insc.InternalWeaponTypes,
-                            WeaponDamagesRatio = insc.WeaponDamagesRatio,
-                            InternalPreferredWeaponTypes = insc.InternalPreferredWeaponTypes,
-                            PreferredWeaponDamagesRatio = insc.PreferredWeaponDamagesRatio
-                        };
-
-                        switch (insc.Type)
-                        {
-                            case DataModels.Skills.InscriptionType.Burn:
-                                ins.Type = Network.Skills.InscriptionType.Burn;
-                                break;
-                            case DataModels.Skills.InscriptionType.Charmed:
-                                ins.Type = Network.Skills.InscriptionType.Charmed;
-                                break;
-                            case DataModels.Skills.InscriptionType.Confused:
-                                ins.Type = Network.Skills.InscriptionType.Confused;
-                                break;
-                            case DataModels.Skills.InscriptionType.Damages:
-                                ins.Type = Network.Skills.InscriptionType.Damages;
-                                break;
-                            case DataModels.Skills.InscriptionType.Frozen:
-                                ins.Type = Network.Skills.InscriptionType.Frozen;
-                                break;
-                            case DataModels.Skills.InscriptionType.Heal:
-                                ins.Type = Network.Skills.InscriptionType.Heal;
-                                break;
-                            case DataModels.Skills.InscriptionType.StatBuff:
-                                ins.Type = Network.Skills.InscriptionType.StatBuff;
-                                break;
-                            case DataModels.Skills.InscriptionType.StatDebuff:
-                                ins.Type = Network.Skills.InscriptionType.StatDebuff;
-                                break;
-                            case DataModels.Skills.InscriptionType.Stunned:
-                                ins.Type = Network.Skills.InscriptionType.Stunned;
-                                break;
-                        }
-
-                        switch (insc.StatType)
-                        {
-                            case DataModels.Soul.Stats.Agility:
-                                ins.StatType = Network.Stats.Agility;
-                                break;
-                            case DataModels.Soul.Stats.Energy:
-                                ins.StatType = Network.Stats.Energy;
-                                break;
-                            case DataModels.Soul.Stats.Intelligence:
-                                ins.StatType = Network.Stats.Intelligence;
-                                break;
-                            case DataModels.Soul.Stats.Stamina:
-                                ins.StatType = Network.Stats.Stamina;
-                                break;
-                            case DataModels.Soul.Stats.Strength:
-                                ins.StatType = Network.Stats.Strength;
-                                break;
-                            case DataModels.Soul.Stats.Wisdom:
-                                ins.StatType = Network.Stats.Wisdom;
-                                break;
-                        }
-
-                        pag.Inscriptions.Add(ins);
+                        case DataModels.Skills.InscriptionType.Burn:
+                            ins.Type = Network.Skills.InscriptionType.Burn;
+                            break;
+                        case DataModels.Skills.InscriptionType.Charm:
+                            ins.Type = Network.Skills.InscriptionType.Charm;
+                            break;
+                        case DataModels.Skills.InscriptionType.Confuse:
+                            ins.Type = Network.Skills.InscriptionType.Confuse;
+                            break;
+                        case DataModels.Skills.InscriptionType.PhysicDamages:
+                            ins.Type = Network.Skills.InscriptionType.PhysicDamages;
+                            break;
+                        case DataModels.Skills.InscriptionType.MagicDamages:
+                            ins.Type = Network.Skills.InscriptionType.MagicDamages;
+                            break;
+                        case DataModels.Skills.InscriptionType.Freeze:
+                            ins.Type = Network.Skills.InscriptionType.Freeze;
+                            break;
+                        case DataModels.Skills.InscriptionType.SelfHeal:
+                            ins.Type = Network.Skills.InscriptionType.SelfHeal;
+                            break;
+                        case DataModels.Skills.InscriptionType.TargetHeal:
+                            ins.Type = Network.Skills.InscriptionType.TargetHeal;
+                            break;
+                        case DataModels.Skills.InscriptionType.StatBuff:
+                            ins.Type = Network.Skills.InscriptionType.StatBuff;
+                            break;
+                        case DataModels.Skills.InscriptionType.StatDebuff:
+                            ins.Type = Network.Skills.InscriptionType.StatDebuff;
+                            break;
+                        case DataModels.Skills.InscriptionType.Stunt:
+                            ins.Type = Network.Skills.InscriptionType.Stunt;
+                            break;
+                        case DataModels.Skills.InscriptionType.Multistrike:
+                            ins.Type = Network.Skills.InscriptionType.Multistrike;
+                            break;
+                        case DataModels.Skills.InscriptionType.Unburn:
+                            ins.Type = Network.Skills.InscriptionType.Unburn;
+                            break;
+                        case DataModels.Skills.InscriptionType.Unfreeze:
+                            ins.Type = Network.Skills.InscriptionType.Unfreeze;
+                            break;
+                        case DataModels.Skills.InscriptionType.Uncharm:
+                            ins.Type = Network.Skills.InscriptionType.Uncharm;
+                            break;
+                        case DataModels.Skills.InscriptionType.Unconfuse:
+                            ins.Type = Network.Skills.InscriptionType.Unconfuse;
+                            break;
+                        case DataModels.Skills.InscriptionType.Unstunt:
+                            ins.Type = Network.Skills.InscriptionType.Unstunt;
+                            break;
                     }
 
-                    bok.Pages.Add(pag);
+                    switch (insc.StatType)
+                    {
+                        case DataModels.Soul.Stats.Agility:
+                            ins.StatType = Network.Stats.Agility;
+                            break;
+                        case DataModels.Soul.Stats.Energy:
+                            ins.StatType = Network.Stats.Energy;
+                            break;
+                        case DataModels.Soul.Stats.Intelligence:
+                            ins.StatType = Network.Stats.Intelligence;
+                            break;
+                        case DataModels.Soul.Stats.Stamina:
+                            ins.StatType = Network.Stats.Stamina;
+                            break;
+                        case DataModels.Soul.Stats.Strength:
+                            ins.StatType = Network.Stats.Strength;
+                            break;
+                        case DataModels.Soul.Stats.Wisdom:
+                            ins.StatType = Network.Stats.Wisdom;
+                            break;
+                    }
+
+                    bok.Inscriptions.Add(ins);
+                }
+
+                bok.Talents = new List<Network.Skills.Talent>();
+                foreach (var talent in book.Talents)
+                {
+                    var tal = new Network.Skills.Talent
+                    {
+                        Id = talent.Id,
+                        Branch = talent.Branch,
+                        Leaf = talent.Leaf,
+                        InternalUnlocks = talent.InternalUnlocks,
+                        TargetInscription = talent.TargetInscription,
+                        TalentPointsRequired = talent.TalentPointsRequired,
+                        Value = talent.Value
+                    };
+
+                    switch (talent.Type)
+                    {
+                        case DataModels.Skills.TalentType.AddAgilityRatio:
+                            tal.Type = Network.Skills.TalentType.AddAgilityRatio;
+                            break;
+                        case DataModels.Skills.TalentType.AddEnergyRatio:
+                            tal.Type = Network.Skills.TalentType.AddEnergyRatio;
+                            break;
+                        case DataModels.Skills.TalentType.AddIntelligenceRatio:
+                            tal.Type = Network.Skills.TalentType.AddIntelligenceRatio;
+                            break;
+                        case DataModels.Skills.TalentType.AddStaminaRatio:
+                            tal.Type = Network.Skills.TalentType.AddStaminaRatio;
+                            break;
+                        case DataModels.Skills.TalentType.AddStrengthRatio:
+                            tal.Type = Network.Skills.TalentType.AddStrengthRatio;
+                            break;
+                        case DataModels.Skills.TalentType.AddWisdomRatio:
+                            tal.Type = Network.Skills.TalentType.AddWisdomRatio;
+                            break;
+                        case DataModels.Skills.TalentType.BaseValue:
+                            tal.Type = Network.Skills.TalentType.BaseValue;
+                            break;
+                        case DataModels.Skills.TalentType.Cooldown:
+                            tal.Type = Network.Skills.TalentType.Cooldown;
+                            break;
+                        case DataModels.Skills.TalentType.Duration:
+                            tal.Type = Network.Skills.TalentType.Duration;
+                            break;
+                        case DataModels.Skills.TalentType.ManaCost:
+                            tal.Type = Network.Skills.TalentType.ManaCost;
+                            break;
+                        case DataModels.Skills.TalentType.Ratio:
+                            tal.Type = Network.Skills.TalentType.Ratio;
+                            break;
+                    }
+
+                    bok.Talents.Add(tal);
                 }
 
                 bookList.Add(bok);
@@ -338,7 +404,7 @@ namespace Server.GameServer
             {
                 var adv = new Network.Adventures.Adventure
                 {
-                    Id = adventure.AdventureId,
+                    Id = adventure.Vid,
                     Name = adventure.Name,
                     RequiredLevel = adventure.RequiredLevel,
                     MaxLevelAuthorized = adventure.MaxLevelAuthorized,
@@ -359,7 +425,7 @@ namespace Server.GameServer
                     {
                         var shopIt = new Network.Adventures.ShopItem
                         {
-                            ItemId = shopItem.ItemId,
+                            ItemId = shopItem.ItemVid,
                             Quantity = shopItem.Quantity,
                             ShardPrice = shopItem.Price
                         };
@@ -374,7 +440,7 @@ namespace Server.GameServer
                     {
                         var enn = new Network.Adventures.Enemy
                         {
-                            MonsterId = enemy.MonsterId,
+                            MonsterId = enemy.MonsterVid,
                             Level = enemy.Level,
                             ShardReward = enemy.ShardReward
                         };
@@ -413,7 +479,7 @@ namespace Server.GameServer
             {
                 var monst = new Network.Monsters.Monster
                 {
-                    Id = monster.MonsterId,
+                    Id = monster.Vid,
                     Name = monster.Name,
                     Description = monster.Description,
                     Story = monster.Story,
@@ -459,7 +525,7 @@ namespace Server.GameServer
                     var loo = new Network.Monsters.Loot
                     {
                         Id = loot.Id,
-                        ItemId = loot.ItemId,
+                        ItemId = loot.ItemVid,
                         DropRate = loot.DropRate,
                         Quantity = loot.Quantity
                     };
@@ -473,7 +539,7 @@ namespace Server.GameServer
                     var pha = new Network.Monsters.Phase
                     {
                         Id = phase.Id,
-                        SkillId = phase.PageId
+                        SkillId = phase.BookVid
                     };
 
                     monst.Phases.Add(pha);

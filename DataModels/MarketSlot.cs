@@ -14,7 +14,7 @@ namespace DataModels
         public Guid Id { get; set; }
 
         public Guid TownId { get; set; }
-        public Guid ItemId { get; set; }
+        public Guid ItemVid { get; set; }
 
         public Guid? SellerId { get; set; }
         [ForeignKey("SellerId")]

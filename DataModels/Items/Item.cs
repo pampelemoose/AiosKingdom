@@ -60,14 +60,10 @@ namespace DataModels.Items
         TwoHand = 11
     }
 
-    public class Item
+    public class Item : AVersionized
     {
         [Key]
         public Guid Id { get; set; }
-
-        public Guid VersionId { get; set; }
-        [Index(IsUnique = true)]
-        public Guid ItemId { get; set; }
 
         public string Name { get; set; }
         public string Description { get; set; }
@@ -97,6 +93,7 @@ namespace DataModels.Items
         public List<ItemEffect> Effects { get; set; }
 
         public int? ArmorValue { get; set; }
+        public int? MagicArmorValue { get; set; }
         public int? SlotCount { get; set; }
         public int? MinDamages { get; set; }
         public int? MaxDamages { get; set; }

@@ -68,7 +68,7 @@ namespace Website.Controllers
                     {
                         Id = Guid.NewGuid(),
                         VersionId = monsterModel.SelectedVersion,
-                        MonsterId = monsterId,
+                        Vid = monsterId,
                         Name = monsterModel.Name,
                         Description = monsterModel.Description,
                         Story = monsterModel.Story,
@@ -93,7 +93,7 @@ namespace Website.Controllers
                         {
                             Id = Guid.NewGuid(),
                             MonsterId = monsterId,
-                            ItemId = lootModel.SelectedItem,
+                            ItemVid = lootModel.SelectedItem,
                             DropRate = lootModel.DropRate,
                             Quantity = lootModel.Quantity
                         };
@@ -106,7 +106,7 @@ namespace Website.Controllers
                         {
                             Id = Guid.NewGuid(),
                             MonsterId = monsterId,
-                            PageId = phaseModel.SelectedSkill
+                            BookVid = phaseModel.SelectedSkill
                         };
                         monster.Phases.Add(phase);
                     }
@@ -186,7 +186,7 @@ namespace Website.Controllers
                     model.Loots.Add(new Models.LootModel
                     {
                         Id = loot.Id,
-                        SelectedItem = loot.ItemId,
+                        SelectedItem = loot.ItemVid,
                         Quantity = loot.Quantity,
                         DropRate = loot.DropRate
                     });
@@ -198,7 +198,7 @@ namespace Website.Controllers
                     {
                         SelectedVersion = model.SelectedVersion,
                         Id = phase.Id,
-                        SelectedSkill = phase.PageId
+                        SelectedSkill = phase.BookVid
                     });
                 }
 
@@ -255,7 +255,7 @@ namespace Website.Controllers
                         var loot = new DataModels.Monsters.Loot
                         {
                             Id = lootModel.Id,
-                            ItemId = lootModel.SelectedItem,
+                            ItemVid = lootModel.SelectedItem,
                             DropRate = lootModel.DropRate,
                             Quantity = lootModel.Quantity
                         };
@@ -267,7 +267,7 @@ namespace Website.Controllers
                         var phase = new DataModels.Monsters.Phase
                         {
                             Id = phaseModel.Id,
-                            PageId = phaseModel.SelectedSkill
+                            BookVid = phaseModel.SelectedSkill
                         };
                         monster.Phases.Add(phase);
                     }

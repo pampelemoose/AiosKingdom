@@ -4,11 +4,10 @@
     var inscId = Guid.NewGuid();
 }
 
-<div id="insc-card-@inscId" class="col-md-12 mt-2">
-    @using (Html.BeginCollectionItem($"Pages[{Model.PageId}].Inscriptions"))
+<div id="insc-card-@inscId" class="col-md-6 mt-2">
+    @using (Html.BeginCollectionItem($"Inscriptions"))
     {
         @Html.HiddenFor(model => Model.Id)
-        @Html.HiddenFor(model => Model.PageId)
 
         <div class="card card-dark">
             <div class="card-body">
@@ -79,7 +78,7 @@
                             <h5>@Html.LabelFor(model => model.WeaponTypes, htmlAttributes: new { @class = "control-label" })</h5>
                         </div>
                         <div class="col-md-4">
-                            <input class="btn btn-block" type="button" onclick="addWeaponTypeToInsc('@Model.PageId', this)" value="<Add Type>" id="@inscId" />
+                            <input class="btn btn-block" type="button" onclick="addWeaponTypeToInsc(this)" value="<Add Type>" id="@inscId" />
                         </div>
                     </div>
                 </li>
@@ -111,7 +110,7 @@
                             <h5>@Html.LabelFor(model => model.PreferredWeaponTypes, htmlAttributes: new { @class = "control-label" })</h5>
                         </div>
                         <div class="col-md-4">
-                            <input class="btn btn-block" type="button" onclick="addPrefferedWeaponTypeToInsc('@Model.PageId', this)" value="<Add Type>" id="@inscId" />
+                            <input class="btn btn-block" type="button" onclick="addPrefferedWeaponTypeToInsc(this)" value="<Add Type>" id="@inscId" />
                         </div>
                     </div>
                 </li>

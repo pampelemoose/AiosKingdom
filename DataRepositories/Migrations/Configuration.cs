@@ -39,7 +39,7 @@ namespace DataRepositories.Migrations
                 context.ItemEffects.RemoveRange(context.ItemEffects);
 
                 context.Books.RemoveRange(context.Books);
-                context.Pages.RemoveRange(context.Pages);
+                context.Talents.RemoveRange(context.Talents);
                 context.Inscriptions.RemoveRange(context.Inscriptions);
 
                 context.Souls.RemoveRange(context.Souls);
@@ -112,7 +112,7 @@ namespace DataRepositories.Migrations
                 {
                     Id = Guid.NewGuid(),
                     VersionId = version.Id,
-                    ItemId = Guid.NewGuid(),
+                    Vid = Guid.NewGuid(),
                     Name = "Small Pouch",
                     Description = "This is the default bag.",
                     ItemLevel = 1,
@@ -125,7 +125,7 @@ namespace DataRepositories.Migrations
 
                 context.Towns.Add(new DataModels.Town
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("22c85f7f-79fe-47dc-b116-fcf09bc507dd"),
                     VersionId = version.Id,
 
                     Host = "127.0.0.1",
@@ -153,7 +153,7 @@ namespace DataRepositories.Migrations
                     SpiritsPerLevelUp = 10,
                     EmbersPerLevelUp = 1,
 
-                    DefaultBagId = bag.ItemId
+                    DefaultBagId = bag.Vid
                 });
 
                 context.SaveChanges();

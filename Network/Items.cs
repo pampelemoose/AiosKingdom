@@ -108,6 +108,7 @@ namespace Network.Items
         public List<ItemEffect> Effects { get; set; }
 
         public int? ArmorValue { get; set; }
+        public int? MagicArmorValue { get; set; }
 
         public int? SlotCount { get; set; }
 

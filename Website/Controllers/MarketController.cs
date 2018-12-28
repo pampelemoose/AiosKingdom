@@ -39,7 +39,7 @@ namespace Website.Controllers
                 {
                     Id = Guid.NewGuid(),
                     TownId = slot.SelectedServer,
-                    ItemId = slot.SelectedItem,
+                    ItemVid = slot.SelectedItem,
                     IsSpecial = true,
                     Quantity = slot.Quantity,
                     Price = slot.Price

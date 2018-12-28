@@ -86,7 +86,7 @@ namespace Website.Controllers
                 {
                     Id = Guid.NewGuid(),
                     VersionId = itemModel.SelectedVersion,
-                    ItemId = Guid.NewGuid(),
+                    Vid = Guid.NewGuid(),
                     Name = itemModel.Name,
                     Description = itemModel.Description,
                     ItemLevel = itemModel.ItemLevel,

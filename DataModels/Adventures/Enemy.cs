@@ -20,7 +20,7 @@ namespace DataModels.Adventures
         public Guid Id { get; set; }
 
         public Guid RoomId { get; set; }
-        public Guid MonsterId { get; set; }
+        public Guid MonsterVid { get; set; }
 
         public EnemyType EnemyType { get; set; }
         public int Level { get; set; }

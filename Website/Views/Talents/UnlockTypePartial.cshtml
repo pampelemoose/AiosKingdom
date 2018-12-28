@@ -1,8 +1,8 @@
-﻿@model Website.Models.InscWeaponTypeModel
+﻿@model Website.Models.TalentUnlockTypeModel
 
 <div class="col-md-12 mt-1">
     <div class="row">
-        @using (Html.BeginCollectionItem($"Inscriptions[{Model.InscId}].{Model.TypeExtension}"))
+        @using (Html.BeginCollectionItem($"Talents[{Model.TalentId}].Unlocks"))
         {
             <div class="col-md-11">
                 <div class="input-group input-group-sm">

@@ -13,183 +13,207 @@
             <div class="col-md-3">
                 <strong class="@Model.Quality.ToString().ToLower()-text">@Model.Quality</strong>
             </div>
+            <div class="col-md-4 mt-1">
+                <div class="row">
+                    <div class="col-8">StatCost</div>
+                    <div class="col-4"><strong>@Model.EmberCost</strong></div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-1">
+                <div class="row">
+                    <div class="col-8">ManaCost</div>
+                    <div class="col-4"><strong>@Model.ManaCost</strong></div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-1">
+                <div class="row">
+                    <div class="col-8">Cooldown</div>
+                    <div class="col-4"><strong>@Model.Cooldown</strong></div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
-@foreach (var pageIt in Model.Pages.OrderBy(p => p.Rank).Select((value, index) => new { index, value }))
-{
-    var page = pageIt.value;
 
-    <section class="p-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card card-dark">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                        <div class="row">
-                                            <div class="col-8">Rank</div>
-                                            <div class="col-4"><strong>@page.Rank</strong></div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="row">
-                                            <div class="col-8">StatCost</div>
-                                            <div class="col-4"><strong>@page.EmberCost</strong></div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="row">
-                                            <div class="col-8">ManaCost</div>
-                                            <div class="col-4"><strong>@page.ManaCost</strong></div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="row">
-                                            <div class="col-8">Cooldown</div>
-                                            <div class="col-4"><strong>@page.Cooldown</strong></div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-9">
-                    <div class="row">
-                        <div class="col-md-12 text-center font-weight-bold p-2">
-                            @page.Description
-                        </div>
-                    </div>
-                    <div class="row">
+<section class="p-2">
+    <div class="container">
+        <table class="table">
+            <thead class="table-borderless">
+                <tr>
+                    <th>Type</th>
+                    <th>BaseValue</th>
+                    <th>StatType</th>
+                    <th>Ratio</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
 
-                        @if (page.Inscriptions != null)
+                @foreach (var insc in Model.Inscriptions)
+                {
+                    <tr>
+                        <td>@insc.Type</td>
+                        <td>@insc.BaseValue</td>
+                        <td>@insc.StatType</td>
+                        <td>@insc.Ratio</td>
+                        <td>@insc.Duration</td>
+                    </tr>
+                    if (insc.IncludeWeaponDamages)
+                    {
+                        <tr>
+
+                            <td><strong>Weapon Types</strong></td>
+                            <td>Damage Ratio</td>
+                            <td>@insc.WeaponDamagesRatio</td>
+                            <td colspan="2">
+                                @foreach (var type in insc.WeaponTypes)
+                                {
+                                    <span>@type</span>
+                                }
+                            </td>
+
+                        </tr>
+                        if (insc.PreferredWeaponTypes.Count > 0)
                         {
-                            foreach (var insc in page.Inscriptions)
-                            {
-                                <div class="col-md-4">
-                                    <div class="card card-dark">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-6 font-weight-bold">
-                                                        Type
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        @insc.Type
-                                                    </div>
-                                                </div>
-                                            </li>
+                            <tr>
+                                <td><strong>Pref Weapon Types</strong></td>
+                                <td>Damage Ratio</td>
+                                <td>@insc.PreferredWeaponDamagesRatio</td>
+                                <td colspan="2">
+                                    @foreach (var type in insc.PreferredWeaponTypes)
+                                    {
+                                        <span>@type</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
 
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-8 font-weight-bold">
-                                                        BaseValue
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        @insc.BaseValue
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-6 font-weight-bold">
-                                                        StatType
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        @insc.StatType
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-8 font-weight-bold">
-                                                        Ratio
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        @insc.Ratio
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-8 font-weight-bold">
-                                                        Duration
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        @insc.Duration
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            @if (@insc.IncludeWeaponDamages)
-                                            {
-                                                <li class="list-group-item">
-                                                    <div class="row">
-                                                        <div class="col-md-12 text-center">
-                                                            <strong>Weapon Types</strong>
-                                                        </div>
-
-                                                        <div class="col-md-8">Damage Ratio</div>
-                                                        <div class="col-md-4">@insc.WeaponDamagesRatio</div>
-
-                                                        @foreach (var type in insc.WeaponTypes)
-                                                        {
-                                                            <div class="col-md-12 text-center">
-                                                                @type
-                                                            </div>
-                                                        }
-
-                                                    </div>
-                                                </li>
-
-                                                if (insc.PreferredWeaponTypes.Count > 0)
-                                                {
-                                                    <li class="list-group-item">
-                                                        <div class="row">
-                                                            <div class="col-md-12 text-center">
-                                                                <strong>Pref Weapon Types</strong>
-                                                            </div>
-                                                            <div class="col-md-8">Preff Damage Ratio</div>
-                                                            <div class="col-md-4">@insc.PreferredWeaponDamagesRatio</div>
-                                                            @foreach (var type in insc.PreferredWeaponTypes)
-                                                            {
-                                                                <div class="col-md-12 text-center">
-                                                                    @type
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                    </li>
-                                                }
-                                            }
-                                        </ul>
-                                    </div>
-                                </div>
-                            }
+<section class="p-2">
+    <div class="container">
+        @for (int i = 0; i < 30; ++i)
+        {
+            <div class="row">
+                @for (int j = 0; j < 12; ++j)
+                {
+                    <div class="col-md-1 test text-center">
+                        @if (Model.Talents.Any(t => t.Branch == j && t.Leaf == i))
+                        {
+                            @Html.Raw('+');
                         }
                     </div>
-                </div>
+                }
             </div>
-        </div>
+            <div class="row">
+                @for (int j = 0; j < 12; ++j)
+                {
+                <div class="col-md-1 test text-center">
+                    @{
+                        var talent = Model.Talents.FirstOrDefault(t => t.Branch == j && t.Leaf == i);
+                    }
+                    @if (talent != null)
+                    {
+                        if (talent.Unlocks.Any(u => u == DataModels.Skills.TalentUnlock.Left))
+                        {
+                            @Html.Raw("/");
+                        }
+                        else
+                        {
+                            @Html.Raw(".");
+                        }
+                        if (talent.Unlocks.Any(u => u == DataModels.Skills.TalentUnlock.Next))
+                        {
+                            @Html.Raw('|');
+                        }
+                        else
+                        {
+                            @Html.Raw(".");
+                        }
+                        if (talent.Unlocks.Any(u => u == DataModels.Skills.TalentUnlock.Right))
+                        {
+                            @Html.Raw("\\");
+                        }
+                        else
+                        {
+                            @Html.Raw(".");
+                        }
+                    }
+                </div>
+                }
+            </div>
+        }
+    </div>
+</section>
 
-    </section>
-}
+<section class="p-2">
+    <div class="container">
+        <table class="table">
+            <thead class="table-borderless">
+                <tr>
+                    <th>Branch</th>
+                    <th>Leaf</th>
+                    <th>TalentPointsRequired</th>
+                    <th>TargetInscription</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                    <th>Unlocks</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var talent in Model.Talents)
+                {
+                    <tr>
+                        <td>@talent.Branch</td>
+                        <td>@talent.Leaf</td>
+                        <td>@talent.TalentPointsRequired</td>
+                        <td>@Model.Inscriptions.FirstOrDefault(i => i.Id.Equals(talent.TargetInscription)).Type</td>
+                        <td>@talent.Type</td>
+                        <td>@talent.Value</td>
+                        <td>
+                            @foreach (var unlock in talent.Unlocks)
+                            {
+                                <span>@unlock</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
 
 @if (User.IsInRole("SuperAdmin"))
 {
-    <section class="@(Model.Pages.Count % 2 == 0 ? "bg-dark" : "") p-2">
+    <section class="@(Model.Inscriptions.Count % 2 == 0 ? "bg-dark" : "") p-2">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.BookId }, new { @class = "btn btn-block" })
+                <div class="col-md-6">
+                    @if (Model.Talents.Count > 0)
+                    {
+                        @Html.ActionLink("<Talents>", "Edit", "Talents", new { id = Model.Vid }, new { @class = "btn btn-block" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("<Talents>", "Create", "Talents", new { id = Model.Vid }, new { @class = "btn btn-block" })
+                    }
+                </div>
+                <div class="col-md-6">
+                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.Vid }, new { @class = "btn btn-block" })
                 </div>
             </div>
         </div>
     </section>
 }
+
+<style>
+    .test {
+        color: red;
+    }
+</style>

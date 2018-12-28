@@ -29,7 +29,7 @@ namespace DataRepositories
         public DbSet<DataModels.Items.ItemEffect> ItemEffects { get; set; }
 
         public DbSet<DataModels.Skills.Book> Books { get; set; }
-        public DbSet<DataModels.Skills.Page> Pages { get; set; }
+        public DbSet<DataModels.Skills.Talent> Talents { get; set; }
         public DbSet<DataModels.Skills.Inscription> Inscriptions { get; set; }
 
         public DbSet<DataModels.Soul> Souls { get; set; }
@@ -51,6 +51,7 @@ namespace DataRepositories
         public DbSet<DataModels.Adventures.Enemy> Enemies { get; set; }
 
         public DbSet<DataModels.AdventureUnlocked> AdventureUnlocked { get; set; }
+        public DbSet<DataModels.TalentUnlocked> TalentUnlocked { get; set; }
 
         public DbSet<DataModels.Website.Section> Sections { get; set; }
         public DbSet<DataModels.Website.Banner> Contents { get; set; }

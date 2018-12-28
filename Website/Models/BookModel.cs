@@ -20,35 +20,18 @@ namespace Website.Models
         [Display(Name = "Name")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Quality required")]
-        [Display(Name = "Quality")]
-        public DataModels.Skills.BookQuality Quality { get; set; }
-
-        [Display(Name = "New Pages")]
-        [Range(0, 1000000)]
-        public int NewPages { get; set; }
-
-        [Display(Name = "Pages")]
-        public List<PageModel> Pages { get; set; }
-    }
-
-    public class PageModel
-    {
-        public Guid Id { get; set; }
-
         [Required(ErrorMessage = "Description required"), MinLength(4), MaxLength(200)]
         [Display(Name = "Description")]
         public string Description { get; set; }
+
+        [Required(ErrorMessage = "Quality required")]
+        [Display(Name = "Quality")]
+        public DataModels.Skills.BookQuality Quality { get; set; }
 
         [Required(ErrorMessage = "StatCost required")]
         [Display(Name = "StatCost")]
         [Range(1, 10000, ErrorMessage = "StatCost should be higher than 0")]
         public int StatCost { get; set; }
-
-        [Required(ErrorMessage = "Rank required")]
-        [Display(Name = "Rank")]
-        [Range(1, 400)]
-        public int Rank { get; set; }
 
         [Required(ErrorMessage = "ManaCost required")]
         [Display(Name = "ManaCost")]
@@ -64,14 +47,17 @@ namespace Website.Models
         [Range(0, 1000000)]
         public int NewInsc { get; set; }
 
+        [Display(Name = "Inscriptions")]
         public List<InscriptionModel> Inscriptions { get; set; }
+
+        [Display(Name = "Talents")]
+        public List<TalentModel> Talents { get; set; }
     }
 
     public class InscriptionModel
     {
         public Guid Id { get; set; }
-
-        public string PageId { get; set; }
+        public string BookId { get; set; }
 
         [Required]
         public InscriptionType Type { get; set; }
@@ -100,10 +86,52 @@ namespace Website.Models
 
     public class InscWeaponTypeModel
     {
-        public string PageId { get; set; }
         public string InscId { get; set; }
         public string TypeExtension { get; set; }
 
         public DataModels.Items.ItemType? Type { get; set; }
+    }
+
+    public class TalentModel
+    {
+        public Guid Id { get; set; }
+
+        [Required]
+        [Range(0, 11, ErrorMessage = "Branch should be between 0 and 11.")]
+        public int Branch { get; set; }
+
+        [Required]
+        [Range(0, 29, ErrorMessage = "Leaf should be between 0 and 29.")]
+        public int Leaf { get; set; }
+
+        public List<TalentUnlockTypeModel> Unlocks { get; set; }
+
+        [Required]
+        public Guid TargetInscription { get; set; }
+
+        public List<DataModels.Skills.Inscription> Inscriptions { get; set; }
+
+        [Required]
+        [Range(1, 10000000, ErrorMessage = "TalentPointsRequired should be at least > 0")]
+        public int TalentPointsRequired { get; set; }
+
+        [Required]
+        public TalentType Type { get; set; }
+
+        [Required]
+        [Range(0.00001, 100000000, ErrorMessage = "Duration should be > 0")]
+        public double Value { get; set; }
+    }
+
+    public class TalentUnlockTypeModel
+    {
+        public string TalentId { get; set; }
+
+        private DataModels.Skills.TalentUnlock _type = TalentUnlock.None;
+        public DataModels.Skills.TalentUnlock Type
+        {
+            get { return _type; }
+            set { _type = value; }
+        }
     }
 }

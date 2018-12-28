@@ -38,7 +38,7 @@ namespace DataRepositories
                 return context.Monsters
                     .Include(a => a.Loots)
                     .Include(a => a.Phases)
-                    .FirstOrDefault(a => a.MonsterId.Equals(id));
+                    .FirstOrDefault(a => a.Vid.Equals(id));
             }
         }
 
@@ -114,7 +114,7 @@ namespace DataRepositories
                     {
                         var loo = context.Loots.FirstOrDefault(i => i.Id.Equals(item.Id));
                         loo.Quantity = item.Quantity;
-                        loo.ItemId = item.ItemId;
+                        loo.ItemVid = item.ItemVid;
                         loo.DropRate = item.DropRate;
                         online.Loots.Add(loo);
                         oldLoots.Remove(oldLoots.FirstOrDefault(o => o.Id.Equals(item.Id)));
@@ -139,7 +139,7 @@ namespace DataRepositories
                     else
                     {
                         var pha = context.Phases.FirstOrDefault(i => i.Id.Equals(phase.Id));
-                        pha.PageId = phase.PageId;
+                        pha.BookVid = phase.BookVid;
                         online.Phases.Add(pha);
                         oldPhases.Remove(oldPhases.FirstOrDefault(o => o.Id.Equals(phase.Id)));
                     }

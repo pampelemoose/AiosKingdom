@@ -9,11 +9,8 @@ namespace JsonObjects
         public class EnemyState
         {
             public Guid MonsterId { get; set; }
-
             public string EnemyType { get; set; }
-
             public PlayerState State { get; set; }
-
             public int NextPhase { get; set; }
         }
 
@@ -48,8 +45,11 @@ namespace JsonObjects
         {
             public enum Type
             {
-                Damage,
-                Heal,
+                PhysicDamage,
+                MagicDamage,
+
+                SelfHeal,
+                TargetHeal,
 
                 ReceiveMana,
                 ConsumedMana,
