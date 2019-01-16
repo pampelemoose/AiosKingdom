@@ -7,13 +7,13 @@ public class KnowledgeListItem : MonoBehaviour
 {
     public Text Name;
     public Text Quality;
-    public Text Rank;
+    public Text TalentPoints;
     public Button ShowDetailsButton;
 
-    public void SetDatas(JsonObjects.Skills.Book book, int rank)
+    public void SetDatas(JsonObjects.Skills.Book book, int talentPoints)
     {
         Name.text = book.Name;
         Quality.text = book.Quality.ToString();
-        Rank.text = rank.ToString();
+        TalentPoints.text = talentPoints.ToString();
     }
 }

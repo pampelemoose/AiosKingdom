@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Knowledges : MonoBehaviour
 {
+    public Button Talents;
+    public Talents TalentsPanel;
+
     public GameObject Content;
     public GameObject KnowledgeListItem;
 
     [Space(10)]
     [Header("Knowledge Details")]
-    public GameObject KnowledgeDetails;
+    public KnowledgeDetails KnowledgeDetails;
 
     public GameObject PaginationBox;
     public GameObject PaginationPrefab;
@@ -19,14 +23,14 @@ public class Knowledges : MonoBehaviour
     private Pagination _pagination;
     private List<JsonObjects.Knowledge> _knowledges;
 
-    private GameObject _knowledgeDetails;
-
     void Awake()
     {
-        if (_knowledgeDetails == null)
+        Talents.onClick.RemoveAllListeners();
+        Talents.onClick.AddListener(() =>
         {
-            _knowledgeDetails = Instantiate(KnowledgeDetails, transform);
-        }
+            UIManager.This.ShowLoading();
+            TalentsPanel.ShowTalents();
+        });
 
         NetworkManager.This.AskKnowledges();
     }
@@ -61,11 +65,11 @@ public class Knowledges : MonoBehaviour
             var knowObj = Instantiate(KnowledgeListItem, Content.transform);
             var script = knowObj.GetComponent<KnowledgeListItem>();
 
-            script.SetDatas(skill, 1);
+            script.SetDatas(skill, knowledge.TalentPoints);
 
             script.ShowDetailsButton.onClick.AddListener(() =>
             {
-                _knowledgeDetails.GetComponent<KnowledgeDetails>().ShowDetails(skill, 1);
+                KnowledgeDetails.ShowDetails(skill, knowledge);
             });
         }
 

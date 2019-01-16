@@ -32,7 +32,7 @@
                         <thead class="table-borderless">
                             <tr>
                                 <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().DropRate)</th>
-                                <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().ItemId)</th>
+                                <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().ItemVid)</th>
                                 <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().Quantity)</th>
                             </tr>
                         </thead>
@@ -42,7 +42,7 @@
                                 <tr>
                                     <td>@loot.DropRate</td>
                                     <td>
-                                        @DataRepositories.ItemRepository.GetById(loot.ItemId).Name
+                                        @DataRepositories.ItemRepository.GetById(loot.ItemVid).Name
                                     </td>
                                     <td>@loot.Quantity</td>
                                 </tr>
@@ -118,7 +118,7 @@
         <div class="row">
             @foreach (var phase in Model.Phases)
             {
-                var skill = DataRepositories.BookRepository.GetAllForVersion(Model.VersionId).SelectMany(b => b.Pages).FirstOrDefault(i => i.Id.Equals(phase.PageId));
+                var skill = DataRepositories.BookRepository.GetAllForVersion(Model.VersionId).FirstOrDefault(i => i.Vid.Equals(phase.BookVid));
 
                 <div class="col-md-6">
                     <div class="card card-dark">
@@ -238,7 +238,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.MonsterId }, new { @class = "btn btn-block" })
+                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.Vid }, new { @class = "btn btn-block" })
                 </div>
             </div>
         </div>

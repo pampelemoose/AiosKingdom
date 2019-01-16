@@ -33,10 +33,10 @@ public class Adventure : MonoBehaviour
     public GameObject ConsumablesHeader;
 
     [Header("Items")]
-    public GameObject ItemDetailPanel;
+    public ItemDetails ItemDetailPanel;
 
     [Header("Knowledges")]
-    public GameObject KnowledgeDetailPanel;
+    public KnowledgeDetails KnowledgeDetailPanel;
 
     [Header("Loots")]
     public GameObject LootItemSlot;
@@ -70,7 +70,7 @@ public class Adventure : MonoBehaviour
     public Text EnemyPhase;
 
     [Header("Logs")]
-    public GameObject LogBox;
+    public LogBox LogBox;
 
     [Header("Results")]
     public GameObject ResultPrefab;
@@ -85,7 +85,7 @@ public class Adventure : MonoBehaviour
     private Pagination _pagination;
     private Dictionary<Guid, JsonObjects.AdventureState.EnemyState> _enemies;
     private Dictionary<Guid, JsonObjects.AdventureState.ShopState> _shopItems;
-    private List<JsonObjects.Knowledge> _knowledges;
+    private List<JsonObjects.Skills.BuiltSkill> _skills;
     private List<JsonObjects.AdventureState.BagItem> _bag;
     private List<JsonObjects.LootItem> _loots;
 
@@ -106,7 +106,7 @@ public class Adventure : MonoBehaviour
         LogsButton.onClick.RemoveAllListeners();
         LogsButton.onClick.AddListener(() =>
         {
-            LogBox.GetComponent<LogBox>().ShowLogs();
+            LogBox.ShowLogs();
         });
 
         StatsButton.onClick.RemoveAllListeners();
@@ -120,9 +120,9 @@ public class Adventure : MonoBehaviour
         {
             SetHeaders("skills");
 
-            _knowledges = DatasManager.Instance.Knowledges;
+            _skills = DatasManager.Instance.Adventure.State.Skills;
 
-            _pagination.Setup(ItemPerPage, _knowledges.Count, SetSkills);
+            _pagination.Setup(ItemPerPage, _skills.Count, SetSkills);
 
             SetSkills();
         });
@@ -175,12 +175,9 @@ public class Adventure : MonoBehaviour
             var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
-    }
 
-    public void Initialize()
-    {
         NetworkManager.This.UpdateDungeonRoom();
-        LogBox.GetComponent<LogBox>().ClearLogs();
+        LogBox.ClearLogs();
     }
 
     public void UpdateCurrentState()
@@ -325,11 +322,9 @@ public class Adventure : MonoBehaviour
 
     public void LogResults(List<JsonObjects.AdventureState.ActionResult> actionResults)
     {
-        var log = LogBox.GetComponent<LogBox>();
-
         foreach (var result in actionResults)
         {
-            log.AddLogs(result);
+            LogBox.AddLogs(result);
         }
     }
 
@@ -369,7 +364,7 @@ public class Adventure : MonoBehaviour
             });
             script.Action.onClick.AddListener(() =>
             {
-                ItemDetailPanel.GetComponent<ItemDetails>().ShowDetails(item);
+                ItemDetailPanel.ShowDetails(item);
             });
         }
 
@@ -481,7 +476,7 @@ public class Adventure : MonoBehaviour
             });
             script.Action.onClick.AddListener(() =>
             {
-                ItemDetailPanel.GetComponent<ItemDetails>().ShowDetails(item);
+                ItemDetailPanel.ShowDetails(item);
             });
         }
 
@@ -495,30 +490,28 @@ public class Adventure : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        var knowledges = _knowledges.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
+        var skills = _skills.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
 
-        foreach (var knowledge in knowledges)
+        foreach (var skill in skills)
         {
-            var skill = DatasManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(knowledge.BookId));
-
             var knowledgeObj = Instantiate(KnowledgeListItem, List.transform);
             var script = knowledgeObj.GetComponent<SkillSelectionListItem>();
-            script.SetDatas(knowledge);
+            script.SetDatas(skill);
             script.Use.onClick.AddListener(() =>
             {
                 _showActionPanel = false;
 
                 ResetActions();
 
-                NetworkManager.This.AdventureUseSkill(knowledge.Id, _selectedEnemy);
+                NetworkManager.This.AdventureUseSkill(skill.Id, _selectedEnemy);
             });
             script.Action.onClick.AddListener(() =>
             {
-                KnowledgeDetailPanel.GetComponent<KnowledgeDetails>().ShowDetails(skill, 1);
+                KnowledgeDetailPanel.ShowBuiltDetails(skill);
             });
         }
 
-        _pagination.SetIndicator((_knowledges.Count / ItemPerPage) + (_knowledges.Count % ItemPerPage > 0 ? 1 : 0));
+        _pagination.SetIndicator((_skills.Count / ItemPerPage) + (_skills.Count % ItemPerPage > 0 ? 1 : 0));
     }
 
     private void SetConsumables()
@@ -546,7 +539,7 @@ public class Adventure : MonoBehaviour
             });
             script.Action.onClick.AddListener(() =>
             {
-                ItemDetailPanel.GetComponent<ItemDetails>().ShowDetails(item);
+                ItemDetailPanel.ShowDetails(item);
             });
         }
 

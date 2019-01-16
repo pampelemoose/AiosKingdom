@@ -47,7 +47,7 @@
                             <div class="card card-dark">
                                 <div class="card-header text-dark">
                                     <h5>
-                                        @DataRepositories.ItemRepository.GetById(shopItem.ItemId).Name
+                                        @DataRepositories.ItemRepository.GetById(shopItem.ItemVid).Name
                                     </h5>
                                 </div>
                                 <ul class="list-group list-group-flush">
@@ -81,8 +81,8 @@
                         <div class="col-md-3">
                             <div class="card card-dark">
                                 <div class="card-header text-dark">
-                                    <a href="/Monsters/Details/@ennemy.MonsterId">
-                                        <h5>@DataRepositories.MonsterRepository.GetById(ennemy.MonsterId).Name</h5>
+                                    <a href="/Monsters/Details/@ennemy.MonsterVid">
+                                        <h5>@ennemy.MonsterVid</h5>
                                     </a>
                                 </div>
                                 <ul class="list-group list-group-flush">
@@ -120,7 +120,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.AdventureId }, new { @class = "btn btn-block" })
+                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.Id }, new { @class = "btn btn-block" })
                 </div>
             </div>
         </div>

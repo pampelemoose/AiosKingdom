@@ -18,56 +18,53 @@ namespace Server.GameServer.Commands.Dungeon
         {
             var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
             var knowledges = SoulManager.Instance.GetKnowledges(_args.ClientId);
-            var knowledgeId = Guid.Parse(_args.Args[0]);
+            var skillId = Guid.Parse(_args.Args[0]);
             var enemyId = Guid.Parse(_args.Args[1]);
 
             var adventure = AdventureManager.Instance.GetAdventure(soulId);
 
             if (adventure != null)
             {
-                var skillKnown = knowledges.FirstOrDefault(s => s.Id.Equals(knowledgeId));
+                var state = adventure.GetActualState();
+                var skillKnown = state.State.Skills.FirstOrDefault(s => s.Id.Equals(skillId));
                 if (skillKnown != null)
                 {
-                    var skill = DataManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(skillKnown.BookId));
-                    if (skill != null)
+                    var datas = SoulManager.Instance.GetDatas(ret.ClientId);
+
+                    List<Network.ActionResult> skillResult;
+                    if (adventure.UseSkill(skillKnown, enemyId, out skillResult))
                     {
-                        var datas = SoulManager.Instance.GetDatas(ret.ClientId);
+                        state = adventure.GetActualState();
 
-                        List<Network.AdventureState.ActionResult> skillResult;
-                        if (adventure.UseSkill(skill, enemyId, out skillResult))
+                        if (state.State.CurrentHealth <= 0)
                         {
-                            var state = adventure.GetActualState();
+                            AdventureManager.Instance.PlayerDied(soulId);
 
-                            if (state.State.CurrentHealth <= 0)
+                            skillResult.Add(new Network.ActionResult
                             {
-                                AdventureManager.Instance.PlayerDied(soulId);
+                                ResultType = Network.ActionResult.Type.PlayerDeath
+                            });
 
-                                skillResult.Add(new Network.AdventureState.ActionResult
-                                {
-                                    ResultType = Network.AdventureState.ActionResult.Type.PlayerDeath
-                                });
-
-                                ret.ClientResponse = new Network.Message
-                                {
-                                    Code = Network.CommandCodes.Dungeon.PlayerDied,
-                                    Success = true,
-                                    Json = JsonConvert.SerializeObject(skillResult)
-                                };
-                                ret.Succeeded = true;
-                            }
-                            else
+                            ret.ClientResponse = new Network.Message
                             {
-                                ret.ClientResponse = new Network.Message
-                                {
-                                    Code = Network.CommandCodes.Dungeon.UseSkill,
-                                    Success = true,
-                                    Json = JsonConvert.SerializeObject(skillResult)
-                                };
-                                ret.Succeeded = true;
-                            }
-
-                            return ret;
+                                Code = Network.CommandCodes.Dungeon.PlayerDied,
+                                Success = true,
+                                Json = JsonConvert.SerializeObject(skillResult)
+                            };
+                            ret.Succeeded = true;
                         }
+                        else
+                        {
+                            ret.ClientResponse = new Network.Message
+                            {
+                                Code = Network.CommandCodes.Dungeon.UseSkill,
+                                Success = true,
+                                Json = JsonConvert.SerializeObject(skillResult)
+                            };
+                            ret.Succeeded = true;
+                        }
+
+                        return ret;
                     }
                 }
             }

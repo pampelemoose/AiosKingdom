@@ -15,6 +15,16 @@ public class NetworkManager : MonoBehaviour
 
     private static bool _created = false;
 
+    [Header("Callbacks")]
+    public ContentLoadingScreen ContentLoadingScreen;
+    public Home Home;
+    public Pills Pills;
+    public Inventory Inventory;
+    public Knowledges Knowledges;
+    public Equipment Equipment;
+    public Market Market;
+    public Adventure Adventure;
+    public Talents Talents;
 
     private bool _isDispatchRunning;
     private TcpClient _dispatch;
@@ -548,9 +558,6 @@ public class NetworkManager : MonoBehaviour
 
                         //MessagingCenter.Send(this, MessengerCodes.SoulConnected);
                         AskItemList();
-                        AskBookList();
-                        AskMonsterList();
-                        AskAdventureList();
                     }
                     else
                     {
@@ -580,7 +587,7 @@ public class NetworkManager : MonoBehaviour
                         //MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.UpdatePlayerDatas();
+                            Home.UpdatePlayerDatas();
                         });
                     }
                     else
@@ -660,6 +667,24 @@ public class NetworkManager : MonoBehaviour
                     //MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
                 }
                 break;
+            case JsonObjects.CommandCodes.Player.LearnTalent:
+                {
+                    if (message.Success)
+                    {
+                        AskKnowledges();
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.HideLoading();
+                        });
+
+                        //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
+                        //Application.Current.SavePropertiesAsync();
+                        //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+                    }
+                    //MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
+                }
+                break;
             case JsonObjects.CommandCodes.Player.Currencies:
                 {
                     if (message.Success)
@@ -669,7 +694,8 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.UpdateCurrencies();
+                            Home.UpdateCurrencies();
+                            Pills.UpdateCurrencies();
                         });
                     }
                     //MessagingCenter.Send(this, MessengerCodes.CurrenciesUpdated);
@@ -684,7 +710,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.UpdateInventory();
+                            Inventory.UpdateItems();
                         });
                     }
                     //MessagingCenter.Send(this, MessengerCodes.InventoryUpdated);
@@ -708,7 +734,8 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.UpdateKnowledges();
+                            Knowledges.LoadKnowledges();
+                            Talents.LoadTalents();
                         });
                     }
                     //MessagingCenter.Send(this, MessengerCodes.KnowledgeUpdated);
@@ -723,7 +750,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.UpdateEquipment();
+                            Equipment.UpdateEquipment();
                         });
                     }
                     //MessagingCenter.Send(this, MessengerCodes.EquipmentUpdated);
@@ -738,7 +765,8 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        UIManager.This.ContentLoaded("items");
+                        ContentLoadingScreen.IsLoaded("items");
+                        AskBookList();
                     });
                 }
                 break;
@@ -749,7 +777,8 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        UIManager.This.ContentLoaded("books");
+                        ContentLoadingScreen.IsLoaded("books");
+                        AskMonsterList();
                     });
                 }
                 break;
@@ -760,7 +789,8 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        UIManager.This.ContentLoaded("monsters");
+                        ContentLoadingScreen.IsLoaded("monsters");
+                        AskAdventureList();
                     });
                 }
                 break;
@@ -771,7 +801,9 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        UIManager.This.ContentLoaded("adventures");
+                        ContentLoadingScreen.IsLoaded("adventures");
+                        UIManager.This.ShowLoading();
+                        UIManager.This.ShowHome();
                     });
                     //MessagingCenter.Send(this, MessengerCodes.DungeonListUpdated);
                 }
@@ -784,7 +816,7 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        UIManager.This.UpdateMarket();
+                        Market.UpdateItems();
                     });
                     //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
                 }
@@ -797,7 +829,7 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        UIManager.This.UpdateSpecialMarket();
+                        Market.UpdateSpecialItems();
                     });
                     //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
                 }
@@ -866,7 +898,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.UpdateAdventure();
+                            Adventure.UpdateCurrentState();
                         });
                         //MessagingCenter.Send(this, MessengerCodes.DungeonUpdated);
                     }
@@ -887,8 +919,8 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.AdventureLogResults(arList);
-                            UIManager.This.AdventureTriggerEnemyTurn();
+                            Adventure.LogResults(arList);
+                            Adventure.TriggerEnemyTurn();
                         });
                     }
                     else
@@ -909,8 +941,8 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.AdventureLogResults(arList);
-                            UIManager.This.AdventureTriggerEnemyTurn();
+                            Adventure.LogResults(arList);
+                            Adventure.TriggerEnemyTurn();
                         });
                     }
                     else
@@ -930,7 +962,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.AdventureLogResults(arList);
+                            Adventure.LogResults(arList);
                         });
                     }
                     else
@@ -951,8 +983,8 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.AdventureLogResults(arList);
-                            UIManager.This.AdventureTriggerEnemyTurn();
+                            Adventure.LogResults(arList);
+                            Adventure.TriggerEnemyTurn();
                         });
                     }
                     else
@@ -970,7 +1002,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.AdventureShowLoots(loots);
+                            Adventure.ShowLoots(loots);
                         });
                     }
                 }
@@ -996,7 +1028,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.AdventureShowEndResults(arList);
+                            Adventure.ShowEndResults(arList);
                         });
                     }
                     else
@@ -1023,7 +1055,7 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        UIManager.This.AdventureShowEndResults(arList);
+                        Adventure.ShowEndResults(arList);
                     });
                 }
                 break;
@@ -1038,7 +1070,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.AdventureLogResults(arList);
+                            Adventure.LogResults(arList);
                         });
                     }
                     else
@@ -1142,9 +1174,14 @@ public class NetworkManager : MonoBehaviour
         SendRequest(JsonObjects.CommandCodes.Player.UseSpiritPills, new string[2] { statType.ToString(), quantity.ToString() });
     }
 
-    public void LearnSkill(Guid bookId, int rank)
+    public void LearnSkill(Guid bookId)
     {
-        SendRequest(JsonObjects.CommandCodes.Player.LearnSkill, new string[2] { bookId.ToString(), rank.ToString() });
+        SendRequest(JsonObjects.CommandCodes.Player.LearnSkill, new string[1] { bookId.ToString() });
+    }
+
+    public void LearnTalent(Guid talentId)
+    {
+        SendRequest(JsonObjects.CommandCodes.Player.LearnTalent, new string[1] { talentId.ToString() });
     }
 
     public void AskCurrencies()

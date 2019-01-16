@@ -10,7 +10,7 @@ public class AdventureSelection : MonoBehaviour
     public GameObject Content;
     public GameObject AdventureListItem;
 
-    public GameObject BagSetup;
+    public BagSetup BagSetup;
 
     [Space(10)]
     [Header("Pagination")]
@@ -52,9 +52,7 @@ public class AdventureSelection : MonoBehaviour
             script.SetDatas(adventure);
             script.Action.onClick.AddListener(() =>
             {
-                BagSetup.SetActive(true);
-                BagSetup.transform.SetAsLastSibling();
-                BagSetup.GetComponent<BagSetup>().SetDatas(adventure);
+                BagSetup.SetDatas(adventure);
             });
         }
 

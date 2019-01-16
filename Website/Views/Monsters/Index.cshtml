@@ -61,7 +61,7 @@
             <tbody>
                 @foreach (var monster in Model.Monsters)
                 {
-                    <tr onclick="location.href = '@(Url.Action("Details", "Monsters", new { id = monster.MonsterId }))'">
+                    <tr onclick="location.href = '@(Url.Action("Details", "Monsters", new { id = monster.Id }))'">
                         <td>
                             <h3 class="mt-0">@monster.Name</h3>
                         </td>

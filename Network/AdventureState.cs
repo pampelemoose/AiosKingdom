@@ -41,36 +41,6 @@ namespace Network
             public int Quantity { get; set; }
         }
 
-        public class ActionResult
-        {
-            public enum Type
-            {
-                PhysicDamage,
-                MagicDamage,
-
-                SelfHeal,
-                TargetHeal,
-
-                ReceiveMana,
-                ConsumedMana,
-
-                EarnExperience,
-                EarnShards,
-                LevelUp,
-                EnemyDeath,
-                PlayerDeath
-            }
-
-            public Guid FromId { get; set; }
-            public Guid ToId { get; set; }
-
-            public Type ResultType { get; set; }
-            public Guid Id { get; set; }
-            public bool IsConsumable { get; set; }
-
-            public double Amount { get; set; }
-        }
-
         public string Name { get; set; }
         public int CurrentRoom { get; set; }
         public int TotalRoomCount { get; set; }

@@ -117,7 +117,7 @@ namespace Website.Models
         {
             public Guid VersionId { get; set; }
             public string Name { get; set; }
-            public Guid PageId { get; set; }
+            public Guid SkillId { get; set; }
         }
 
         public Guid Id { get; set; }
@@ -139,7 +139,7 @@ namespace Website.Models
                     {
                         VersionId = book.VersionId,
                         Name = book.Name,
-                        PageId = book.Id,
+                        SkillId = book.Vid,
                     });
                 }
 

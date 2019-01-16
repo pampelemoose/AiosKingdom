@@ -39,7 +39,7 @@ namespace Server.GameServer.Commands.Dungeon
                     return ret;
                 }
 
-                var adventure = AdventureManager.Instance.OpenRoom(soulId, datas, dungeonId, bagItems);
+                var adventure = AdventureManager.Instance.Start(soulId, datas, dungeonId, knowledges, bagItems);
 
                 if (adventure == null)
                 {
@@ -72,7 +72,7 @@ namespace Server.GameServer.Commands.Dungeon
 
                 if (adventure.RoomNumber == 0)
                 {
-                    adventure.SetPlayerState(SoulManager.Instance.GetDatas(_args.ClientId));
+                    adventure.SetPlayerState(SoulManager.Instance.GetDatas(_args.ClientId), SoulManager.Instance.GetKnowledges(_args.ClientId));
                 }
 
                 ret.ClientResponse = new Network.Message

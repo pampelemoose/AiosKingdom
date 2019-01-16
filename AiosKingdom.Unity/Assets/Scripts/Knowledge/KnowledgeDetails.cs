@@ -6,61 +6,30 @@ using UnityEngine.UI;
 
 public class KnowledgeDetails : MonoBehaviour
 {
-    public Button CloseButton;
     public Text Name;
     public Text Quality;
-    public Text Rank;
+    public Text TalentPoints;
     public Text Description;
     public GameObject Inscriptions;
     public GameObject InscriptionItem;
     public GameObject InscriptionUpgradableItem;
 
-    public GameObject UpgradeBox;
-    public Text EmberPrice;
-    public Button UpgradeButton;
-
-    private JsonObjects.Skills.Book _currentBook;
-    private int _rank;
-
-    void Start()
+    public void ShowDetails(JsonObjects.Skills.Book book, JsonObjects.Knowledge knowledge)
     {
-        CloseButton.onClick.AddListener(() =>
-        {
-            gameObject.SetActive(false);
-        });
-    }
-
-    public void ShowDetails(JsonObjects.Skills.Book book, int rank)
-    {
-        _currentBook = book;
-        _rank = rank;
-
         gameObject.SetActive(true);
         transform.SetAsLastSibling();
 
         Name.text = book.Name;
+        Description.text = book.Description;
         Quality.text = book.Quality.ToString();
-        Rank.text = rank.ToString();
+        TalentPoints.text = knowledge.TalentPoints.ToString();
 
-        ShowPage(rank);
-
-        UpgradeButton.onClick.RemoveAllListeners();
-        UpgradeButton.onClick.AddListener(() =>
-        {
-            NetworkManager.This.LearnSkill(_currentBook.Id, _rank + 1);
-            gameObject.SetActive(false);
-        });
-
-        UpgradeBox.SetActive(false);
+        ShowInscriptions(book);
     }
 
-    private void ShowPage(int rank)
+    private void ShowInscriptions(JsonObjects.Skills.Book book)
     {
-        var inscriptions = _currentBook.Inscriptions.OrderBy(i => i.Type).OrderByDescending(i => i.BaseValue).Skip(0).Take(8);
-
-        UpgradeButton.gameObject.SetActive(false);
-
-        Description.text = _currentBook.Description;
+        var inscriptions = book.Inscriptions.OrderBy(i => i.Type).OrderByDescending(i => i.BaseValue).Skip(0).Take(8);
 
         foreach (Transform child in Inscriptions.transform)
         {
@@ -72,6 +41,36 @@ public class KnowledgeDetails : MonoBehaviour
             var inscObj = Instantiate(InscriptionItem, Inscriptions.transform);
             var script = inscObj.GetComponent<BookInscriptionItem>();
             script.SetDatas(insc);
+        }
+    }
+
+    public void ShowBuiltDetails(JsonObjects.Skills.BuiltSkill skill)
+    {
+        gameObject.SetActive(true);
+        transform.SetAsLastSibling();
+
+        Name.text = skill.Name;
+        Description.text = skill.Description;
+        Quality.text = skill.Quality.ToString();
+        TalentPoints.text = "";
+
+        ShowBuiltInscriptions(skill);
+    }
+
+    private void ShowBuiltInscriptions(JsonObjects.Skills.BuiltSkill book)
+    {
+        var inscriptions = book.Inscriptions.OrderBy(i => i.Type).OrderByDescending(i => i.BaseMinValue).Skip(0).Take(8);
+
+        foreach (Transform child in Inscriptions.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (var insc in inscriptions)
+        {
+            var inscObj = Instantiate(InscriptionItem, Inscriptions.transform);
+            var script = inscObj.GetComponent<BookInscriptionItem>();
+            script.SetBuiltDatas(insc);
         }
     }
 }

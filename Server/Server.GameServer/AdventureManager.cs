@@ -59,7 +59,26 @@ namespace Server.GameServer
             return true;
         }
 
-        public Adventure OpenRoom(Guid soulId, Network.SoulDatas datas, Guid dungeonId, List<Network.AdventureState.BagItem> bagItems = null)
+        public Adventure Start(Guid soulId, Network.SoulDatas datas, Guid dungeonId, List<Network.Knowledge> knowledges, List<Network.AdventureState.BagItem> bagItems = null)
+        {
+            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().OpenRoom({soulId}, {dungeonId})");
+            var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(dungeonId));
+
+            if (!_adventures.ContainsKey(soulId) || 
+                (_adventures.ContainsKey(soulId) && !_adventures[soulId].AdventureId.Equals(dungeonId)))
+            {
+                if (datas.Level > dungeon.MaxLevelAuthorized) return null;
+
+                var adventure = new Adventure(dungeon, datas, knowledges, bagItems);
+                _adventures.Add(soulId, adventure);
+
+                return adventure;
+            }
+
+            return null;
+        }
+
+        public Adventure OpenRoom(Guid soulId, Guid dungeonId)
         {
             Log.Instance.Write(Log.Level.Infos, $"AdventureManager().OpenRoom({soulId}, {dungeonId})");
             var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(dungeonId));
@@ -74,15 +93,6 @@ namespace Server.GameServer
                     _adventures[soulId] = adventure;
                     return adventure;
                 }
-            }
-            else
-            {
-                if (datas.Level > dungeon.MaxLevelAuthorized) return null;
-
-                var adventure = new Adventure(dungeon, datas, bagItems);
-                _adventures.Add(soulId, adventure);
-
-                return adventure;
             }
 
             return null;

@@ -8,50 +8,34 @@ namespace Server.GameServer
 {
     public static class SkillAndEffect
     {
-        public static Network.AdventureState.ActionResult ExecuteInscription(Network.PlayerState from, Network.PlayerState to, 
-            Network.Skills.Inscription inscription,
+        public static Network.ActionResult ExecuteInscription(Network.PlayerState from, Network.PlayerState to, 
+            Network.Skills.BuiltInscription inscription,
             out Network.PlayerState fromOut, out Network.PlayerState toOut)
         {
             fromOut = CopyState(from);
             toOut = CopyState(to);
 
             Random rand = new Random();
-            double amount = inscription.BaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, from));
+            double randBaseValue = rand.Next(inscription.BaseMinValue, inscription.BaseMaxValue + 1);
+            double amount = randBaseValue + (inscription.Ratio * GetStatValue(inscription.StatType, from));
 
-            Network.AdventureState.ActionResult result = new Network.AdventureState.ActionResult
+            Network.ActionResult result = new Network.ActionResult
             {
                 // TODO : Find a way for this.
                 // TargetId = enemy.MonsterId,
                 IsConsumable = false,
-                Id = inscription.BookId,
+                Id = inscription.Id,
                 Amount = amount
             };
-
-            if (inscription.IncludeWeaponDamages)
-            {
-                if (inscription.WeaponTypes.Where(w => from.WeaponTypes.Contains(w.ToString())).Count() > 0)
-                {
-                    int wpDmg = rand.Next(from.MinDamages, from.MaxDamages + 1);
-                    Console.WriteLine($"IncludeWeaponType += {wpDmg} * {inscription.WeaponDamagesRatio}");
-                    amount += (wpDmg * inscription.WeaponDamagesRatio);
-                }
-
-                if (inscription.PreferredWeaponTypes.Where(w => from.WeaponTypes.Contains(w.ToString())).Count() > 0)
-                {
-                    int wpDmg = rand.Next(from.MinDamages, from.MaxDamages + 1);
-                    Console.WriteLine($"IncludePreferredWeaponType += {wpDmg} * {inscription.PreferredWeaponDamagesRatio}");
-                    amount += (wpDmg * inscription.PreferredWeaponDamagesRatio);
-                }
-            }
 
             switch (inscription.Type)
             {
                 case Network.Skills.InscriptionType.PhysicDamages:
                     {
-                        toOut.CurrentHealth -= amount;
-                        Console.WriteLine($"{from} using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, from)})*{inscription.Ratio}) to {to}.");
+                        toOut.CurrentHealth -= amount - toOut.Armor;
+                        Console.WriteLine($"{from} using skill doing ({inscription.Type}).({randBaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, from)})*{inscription.Ratio}) to {to}.");
 
-                        result.ResultType = Network.AdventureState.ActionResult.Type.PhysicDamage;
+                        result.ResultType = Network.ActionResult.Type.PhysicDamage;
                     }
                     break;
                 case Network.Skills.InscriptionType.SelfHeal:
@@ -61,9 +45,9 @@ namespace Server.GameServer
                         {
                             fromOut.CurrentHealth = fromOut.MaxHealth;
                         }
-                        Console.WriteLine($"{from} using skill doing ({inscription.Type}).({inscription.BaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, from)})*{inscription.Ratio}) on himself .");
+                        Console.WriteLine($"{from} using skill doing ({inscription.Type}).({randBaseValue}+{inscription.StatType}({GetStatValue(inscription.StatType, from)})*{inscription.Ratio}) on himself .");
 
-                        result.ResultType = Network.AdventureState.ActionResult.Type.SelfHeal;
+                        result.ResultType = Network.ActionResult.Type.SelfHeal;
                     }
                     break;
             }
@@ -71,14 +55,14 @@ namespace Server.GameServer
             return result;
         }
 
-        public static Network.AdventureState.ActionResult ExecuteEffects(Network.PlayerState from, Network.PlayerState to,
+        public static Network.ActionResult ExecuteEffects(Network.PlayerState from, Network.PlayerState to,
             Network.Items.ItemEffect effect,
             out Network.PlayerState fromOut, out Network.PlayerState toOut)
         {
             fromOut = CopyState(from);
             toOut = CopyState(to);
 
-            Network.AdventureState.ActionResult result = new Network.AdventureState.ActionResult
+            Network.ActionResult result = new Network.ActionResult
             {
                 IsConsumable = true,
                 Id = effect.ItemId,
@@ -96,7 +80,7 @@ namespace Server.GameServer
                         }
                         Console.WriteLine($"Using consumable doing ({effect.Type}).({effect.AffectValue}) on yourself .");
 
-                        result.ResultType = Network.AdventureState.ActionResult.Type.SelfHeal;
+                        result.ResultType = Network.ActionResult.Type.SelfHeal;
                     }
                     break;
                 case Network.Items.EffectType.ResoreMana:
@@ -108,7 +92,7 @@ namespace Server.GameServer
                         }
                         Console.WriteLine($"Using consumable doing ({effect.Type}).({effect.AffectValue}) on yourself .");
 
-                        result.ResultType = Network.AdventureState.ActionResult.Type.ReceiveMana;
+                        result.ResultType = Network.ActionResult.Type.ReceiveMana;
                     }
                     break;
             }
@@ -157,9 +141,14 @@ namespace Server.GameServer
                 Intelligence = state.Intelligence,
                 Wisdom = state.Wisdom,
 
+                Armor = state.Armor,
+                MagicArmor = state.MagicArmor,
+
                 WeaponTypes = state.WeaponTypes,
                 MinDamages = state.MinDamages,
-                MaxDamages = state.MaxDamages
+                MaxDamages = state.MaxDamages,
+
+                Skills = state.Skills.ToList(),
             };
         }
     }

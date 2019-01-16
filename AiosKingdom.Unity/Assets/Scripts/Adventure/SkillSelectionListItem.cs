@@ -11,11 +11,9 @@ public class SkillSelectionListItem : MonoBehaviour
     public Button Use;
     public Button Action;
 
-    public void SetDatas(JsonObjects.Knowledge knowledge)
+    public void SetDatas(JsonObjects.Skills.BuiltSkill skill)
     {
-        var book = DatasManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(knowledge.BookId));
-
-        Name.text = string.Format("{0}", book.Name);
-        ManaCost.text = string.Format("[{0}]", book.ManaCost);
+        Name.text = string.Format("{0}", skill.Name);
+        ManaCost.text = string.Format("[{0}]", skill.ManaCost);
     }
 }

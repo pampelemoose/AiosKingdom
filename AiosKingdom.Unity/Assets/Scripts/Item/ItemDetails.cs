@@ -16,7 +16,7 @@ public class ItemDetails : MonoBehaviour
     public GameObject Stats;
     public GameObject StatUI;
     public GameObject EffectUI;
-    public GameObject EffectDetailPanel;
+    public EffectDetails EffectDetailPanel;
 
     public GameObject PaginationBox;
     public GameObject PaginationPrefab;
@@ -177,7 +177,7 @@ public class ItemDetails : MonoBehaviour
             script.Label.text = string.Format(" * {0}", effect.Name);
             script.More.onClick.AddListener(() =>
             {
-                EffectDetailPanel.GetComponent<EffectDetails>().SetDatas(effect);
+                EffectDetailPanel.SetDatas(effect);
             });
         }
 

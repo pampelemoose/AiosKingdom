@@ -34,6 +34,7 @@ namespace JsonObjects
 
         public int ItemLevel { get; set; }
         public int Armor { get; set; }
+        public int MagicArmor { get; set; }
 
         public List<string> WeaponTypes { get; set; }
         public int MinDamages { get; set; }
@@ -114,6 +115,7 @@ namespace JsonObjects
         public Guid KnowledgeId { get; set; }
         public Guid TalentId { get; set; }
 
+        public bool IsNew { get; set; }
         public DateTime? UnlockedAt { get; set; }
     }
 }

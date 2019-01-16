@@ -36,7 +36,7 @@ namespace DataRepositories
                 return context.Items
                     .Include(a => a.Stats)
                     .Include(a => a.Effects)
-                    .FirstOrDefault(a => a.Vid.Equals(id));
+                    .FirstOrDefault(a => a.Id.Equals(id));
             }
         }
 

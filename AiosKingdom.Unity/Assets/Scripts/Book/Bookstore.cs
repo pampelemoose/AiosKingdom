@@ -18,7 +18,7 @@ public class Bookstore : MonoBehaviour
 
     [Space(10)]
     [Header("Book Details")]
-    public GameObject BookDetails;
+    public BookDetails BookDetails;
 
     public GameObject PaginationBox;
     public GameObject PaginationPrefab;
@@ -27,55 +27,49 @@ public class Bookstore : MonoBehaviour
     private Pagination _pagination;
     private List<JsonObjects.Skills.Book> _books;
 
-    private GameObject _bookDetails;
     private JsonObjects.Skills.BookQuality? _filterQuality;
     private JsonObjects.Skills.InscriptionType? _filterType;
     private JsonObjects.Stats? _filterStat;
 
-    void Awake()
+    void Start()
     {
-        if (_bookDetails == null)
+        QualityDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Skills.BookQuality)).ToList());
+        TypesDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Skills.InscriptionType)).ToList());
+        StatsDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Stats)).ToList());
+
+        QualityDropdown.onValueChanged.AddListener((value) =>
         {
-            _bookDetails = Instantiate(BookDetails, transform);
-
-            QualityDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Skills.BookQuality)).ToList());
-            TypesDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Skills.InscriptionType)).ToList());
-            StatsDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Stats)).ToList());
-
-            QualityDropdown.onValueChanged.AddListener((value) =>
+            _filterQuality = null;
+            if (value > 0)
             {
-                _filterQuality = null;
-                if (value > 0)
-                {
-                    _filterQuality = (JsonObjects.Skills.BookQuality)Enum.Parse(typeof(JsonObjects.Skills.BookQuality), QualityDropdown.options.ElementAt(value).text);
-                }
+                _filterQuality = (JsonObjects.Skills.BookQuality)Enum.Parse(typeof(JsonObjects.Skills.BookQuality), QualityDropdown.options.ElementAt(value).text);
+            }
 
-                SetBooks();
-            });
+            SetBooks();
+        });
 
-            TypesDropdown.onValueChanged.AddListener((value) =>
+        TypesDropdown.onValueChanged.AddListener((value) =>
+        {
+            _filterType = null;
+
+            if (value > 0)
             {
-                _filterType = null;
+                _filterType = (JsonObjects.Skills.InscriptionType)Enum.Parse(typeof(JsonObjects.Skills.InscriptionType), TypesDropdown.options.ElementAt(value).text);
+            }
 
-                if (value > 0)
-                {
-                    _filterType = (JsonObjects.Skills.InscriptionType)Enum.Parse(typeof(JsonObjects.Skills.InscriptionType), TypesDropdown.options.ElementAt(value).text);
-                }
+            SetBooks();
+        });
 
-                SetBooks();
-            });
-
-            StatsDropdown.onValueChanged.AddListener((value) =>
+        StatsDropdown.onValueChanged.AddListener((value) =>
+        {
+            _filterType = null;
+            if (value > 0)
             {
-                _filterType = null;
-                if (value > 0)
-                {
-                    _filterStat = (JsonObjects.Stats)Enum.Parse(typeof(JsonObjects.Stats), StatsDropdown.options.ElementAt(value).text);
-                }
+                _filterStat = (JsonObjects.Stats)Enum.Parse(typeof(JsonObjects.Stats), StatsDropdown.options.ElementAt(value).text);
+            }
 
-                SetBooks();
-            });
-        }
+            SetBooks();
+        });
 
         LoadBooks();
     }
@@ -129,7 +123,7 @@ public class Bookstore : MonoBehaviour
 
             script.ShowDetailsButton.onClick.AddListener(() =>
             {
-                _bookDetails.GetComponent<BookDetails>().SetDatas(book);
+                BookDetails.SetDatas(book);
             });
         }
 

@@ -38,7 +38,7 @@ namespace DataRepositories
                 return context.Monsters
                     .Include(a => a.Loots)
                     .Include(a => a.Phases)
-                    .FirstOrDefault(a => a.Vid.Equals(id));
+                    .FirstOrDefault(a => a.Id.Equals(id));
             }
         }
 

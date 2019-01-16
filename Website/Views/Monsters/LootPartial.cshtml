@@ -11,7 +11,7 @@
                             <div class="input-group-prepend">
                                 @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "input-group-text" })
                             </div>
-                            @Html.DropDownListFor(model => model.SelectedItem, new SelectList(Model.Items, "ItemId", "Name"), new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.SelectedItem, new SelectList(Model.Items, "Vid", "Name"), new { @class = "form-control" })
                         </div>
                         @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
                     </div>

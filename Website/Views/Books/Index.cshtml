@@ -71,7 +71,7 @@
             <tbody>
                 @foreach (var book in Model.Books)
                 {
-                    <tr onclick="location.href = '@(Url.Action("Details", "Books", new { id = book.Vid }))'">
+                    <tr onclick="location.href = '@(Url.Action("Details", "Books", new { id = book.Id }))'">
                         <td class="@book.Quality.ToString().ToLower()">
                             <h3 class="mt-0">@book.Name</h3>
                         </td>

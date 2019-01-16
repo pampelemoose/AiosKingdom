@@ -169,6 +169,32 @@ namespace JsonObjects.Skills
         }
 
         public float PreferredWeaponDamagesRatio { get; set; }
+    }
 
+    public class BuiltSkill
+    {
+        public Guid Id { get; set; }
+
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public BookQuality Quality { get; set; }
+
+        public int ManaCost { get; set; }
+        public int Cooldown { get; set; }
+
+        public List<BuiltInscription> Inscriptions { get; set; }
+    }
+
+    public class BuiltInscription
+    {
+        public Guid Id { get; set; }
+
+        public InscriptionType Type { get; set; }
+
+        public int BaseMinValue { get; set; }
+        public int BaseMaxValue { get; set; }
+        public Stats StatType { get; set; }
+        public float Ratio { get; set; }
+        public int Duration { get; set; }
     }
 }

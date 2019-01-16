@@ -172,7 +172,8 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Player.EquipItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.SellItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.UseSpiritPills, 2);
-            _commandArgCount.Add(Network.CommandCodes.Player.LearnSkill, 2);
+            _commandArgCount.Add(Network.CommandCodes.Player.LearnSkill, 1);
+            _commandArgCount.Add(Network.CommandCodes.Player.LearnTalent, 1);
 
             _commandArgCount.Add(Network.CommandCodes.Player.Currencies, 0);
             _commandArgCount.Add(Network.CommandCodes.Player.Inventory, 0);
@@ -186,6 +187,7 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Player.SellItem, (args) => { return new Commands.Player.SellItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.UseSpiritPills, (args) => { return new Commands.Player.UseSpiritPillsCommand(args, _town); });
             _delegates.Add(Network.CommandCodes.Player.LearnSkill, (args) => { return new Commands.Player.LearnSkillCommand(args); });
+            _delegates.Add(Network.CommandCodes.Player.LearnTalent, (args) => { return new Commands.Player.LearnTalentCommand(args); });
 
             _delegates.Add(Network.CommandCodes.Player.Currencies, (args) => { return new Commands.Player.CurrenciesCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.Inventory, (args) => { return new Commands.Player.InventoryCommand(args); });
@@ -558,7 +560,10 @@ namespace Server.GameServer
                     retVal.Args = new string[2] { args[0], args[1] };
                     break;
                 case Network.CommandCodes.Player.LearnSkill:
-                    retVal.Args = new string[2] { args[0], args[1] };
+                    retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Player.LearnTalent:
+                    retVal.Args = new string[1] { args[0] };
                     break;
                 case Network.CommandCodes.Player.Currencies:
                     break;

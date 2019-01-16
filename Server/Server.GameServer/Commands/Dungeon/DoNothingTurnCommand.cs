@@ -21,7 +21,7 @@ namespace Server.GameServer.Commands.Dungeon
 
             if (adventure != null)
             {
-                List<Network.AdventureState.ActionResult> message;
+                List<Network.ActionResult> message;
                 if (adventure.DoNothingTurn(out message))
                 {
                     var state = adventure.GetActualState();
@@ -30,9 +30,9 @@ namespace Server.GameServer.Commands.Dungeon
                     {
                         AdventureManager.Instance.PlayerDied(soulId);
 
-                        message.Add(new Network.AdventureState.ActionResult
+                        message.Add(new Network.ActionResult
                         {
-                            ResultType = Network.AdventureState.ActionResult.Type.PlayerDeath
+                            ResultType = Network.ActionResult.Type.PlayerDeath
                         });
 
                         ret.ClientResponse = new Network.Message

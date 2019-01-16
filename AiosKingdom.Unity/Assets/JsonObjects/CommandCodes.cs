@@ -37,6 +37,7 @@ namespace JsonObjects
             public const int SellItem = _default + 11;
             public const int UseSpiritPills = _default + 3;
             public const int LearnSkill = _default + 4;
+            public const int LearnTalent = _default + 14;
 
             public const int CurrentSoulDatas = _default + 6;
 

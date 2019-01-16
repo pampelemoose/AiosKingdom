@@ -180,6 +180,7 @@ namespace Server.GameServer
                             Id = talentSlot.Id,
                             KnowledgeId = talentSlot.KnowledgeId,
                             TalentId = talentSlot.TalentId,
+                            IsNew = false,
                             UnlockedAt = talentSlot.UnlockedAt
                         };
 
@@ -293,7 +294,7 @@ namespace Server.GameServer
                 {
                     var talent = new DataModels.TalentUnlocked
                     {
-                        Id = talentSlot.Id,
+                        Id = talentSlot.IsNew ? Guid.Empty : talentSlot.Id,
                         SoulId = soul.Id,
                         TalentId = talentSlot.TalentId,
                         UnlockedAt = talentSlot.UnlockedAt

@@ -32,7 +32,7 @@ namespace Server.GameServer.Commands.Dungeon
                     {
                         var datas = SoulManager.Instance.GetDatas(ret.ClientId);
 
-                        List<Network.AdventureState.ActionResult> consumableResult;
+                        List<Network.ActionResult> consumableResult;
                         if (adventure.UseConsumable(slotKnown, item, enemyId, out consumableResult))
                         {
                             var state = adventure.GetActualState();
@@ -41,9 +41,9 @@ namespace Server.GameServer.Commands.Dungeon
                             {
                                 AdventureManager.Instance.PlayerDied(soulId);
 
-                                consumableResult.Add(new Network.AdventureState.ActionResult
+                                consumableResult.Add(new Network.ActionResult
                                 {
-                                    ResultType = Network.AdventureState.ActionResult.Type.PlayerDeath
+                                    ResultType = Network.ActionResult.Type.PlayerDeath
                                 });
 
                                 ret.ClientResponse = new Network.Message

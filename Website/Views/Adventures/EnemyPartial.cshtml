@@ -14,7 +14,7 @@
                             <div class="input-group-prepend">
                                 @Html.LabelFor(model => model.MonsterId, htmlAttributes: new { @class = "input-group-text" })
                             </div>
-                            @Html.DropDownListFor(model => model.MonsterId, new SelectList(DataRepositories.MonsterRepository.GetAll(), "MonsterId", "Name"), new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.MonsterId, new SelectList(DataRepositories.MonsterRepository.GetAll(), "Vid", "Name"), new { @class = "form-control" })
                         </div>
                         @Html.ValidationMessageFor(model => model.MonsterId, "", new { @class = "text-danger" })
                     </div>

@@ -18,7 +18,9 @@ public class Market : MonoBehaviour
     [Header("Content")]
     public GameObject Items;
     public GameObject ItemListItem;
-    public GameObject ItemDetails;
+    public ItemDetails ItemDetails;
+
+    [Header("Pagination")]
     public GameObject PaginationBox;
     public GameObject PaginationPrefab;
     public int ItemPerPage = 5;
@@ -256,7 +258,7 @@ public class Market : MonoBehaviour
 
                         itemScript.Action.onClick.AddListener(() =>
                         {
-                            ItemDetails.GetComponent<ItemDetails>().ShowDetails(item);
+                            ItemDetails.ShowDetails(item);
                         });
 
                         itemScript.Buy.onClick.AddListener(() =>
@@ -274,7 +276,7 @@ public class Market : MonoBehaviour
 
                         itemScript.Action.onClick.AddListener(() =>
                         {
-                            ItemDetails.GetComponent<ItemDetails>().ShowDetails(item);
+                            ItemDetails.ShowDetails(item);
                         });
 
                         itemScript.Buy.onClick.AddListener(() =>

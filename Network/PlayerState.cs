@@ -22,9 +22,14 @@ namespace Network
         public int Intelligence { get; set; }
         public int Wisdom { get; set; }
 
+        public int Armor { get; set; }
+        public int MagicArmor { get; set; }
+
         // DAMAGES
         public List<string> WeaponTypes { get; set; }
         public int MinDamages { get; set; }
         public int MaxDamages { get; set; }
+
+        public List<Network.Skills.BuiltSkill> Skills { get; set; }
     }
 }

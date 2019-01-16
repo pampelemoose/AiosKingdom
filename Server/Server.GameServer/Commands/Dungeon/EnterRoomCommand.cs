@@ -17,14 +17,13 @@ namespace Server.GameServer.Commands.Dungeon
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
-            var datas = SoulManager.Instance.GetDatas(_args.ClientId);
             var adventure = AdventureManager.Instance.GetAdventure(soulId);
 
             if (adventure != null)
             {
                 var dungeonId = adventure.AdventureId;
 
-                AdventureManager.Instance.OpenRoom(soulId, datas, dungeonId);
+                AdventureManager.Instance.OpenRoom(soulId, dungeonId);
 
                 ret.ClientResponse = new Network.Message
                 {

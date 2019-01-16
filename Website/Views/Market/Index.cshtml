@@ -66,7 +66,7 @@
                     <div class="card card-dark text-center mt-3">
                         <div class="card-header">
                             @{ 
-                                var item = DataRepositories.ItemRepository.GetById(slot.ItemId);
+                                var item = DataRepositories.ItemRepository.GetById(slot.ItemVid);
                             }
                             @item.Type - @item.Name
                         </div>

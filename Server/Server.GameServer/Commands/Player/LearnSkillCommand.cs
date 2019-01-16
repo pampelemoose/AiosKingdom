@@ -20,7 +20,6 @@ namespace Server.GameServer.Commands.Player
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
             var bookId = Guid.Parse(_args.Args[0]);
-            //var rank = int.Parse(_args.Args[1]);
 
             var knowledges = SoulManager.Instance.GetKnowledges(ret.ClientId);
             var currencies = SoulManager.Instance.GetCurrencies(ret.ClientId);
@@ -70,6 +69,7 @@ namespace Server.GameServer.Commands.Player
                 Id = Guid.NewGuid(),
                 BookId = bookId,
                 TalentPoints = 0,
+                Talents = new List<Network.TalentUnlocked>(),
                 IsNew = true
             });
 

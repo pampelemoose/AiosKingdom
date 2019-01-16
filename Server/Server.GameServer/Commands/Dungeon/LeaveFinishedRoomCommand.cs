@@ -121,22 +121,22 @@ namespace Server.GameServer.Commands.Dungeon
 
                     AdventureManager.Instance.ExitRoom(soulId);
 
-                    List<Network.AdventureState.ActionResult> json = new List<Network.AdventureState.ActionResult>();
-                    json.Add(new Network.AdventureState.ActionResult
+                    List<Network.ActionResult> json = new List<Network.ActionResult>();
+                    json.Add(new Network.ActionResult
                     {
-                        ResultType = Network.AdventureState.ActionResult.Type.EarnExperience,
+                        ResultType = Network.ActionResult.Type.EarnExperience,
                         Amount = adventureState.StackedExperience + adventureState.ExperienceReward
                     });
-                    json.Add(new Network.AdventureState.ActionResult
+                    json.Add(new Network.ActionResult
                     {
-                        ResultType = Network.AdventureState.ActionResult.Type.EarnShards,
+                        ResultType = Network.ActionResult.Type.EarnShards,
                         Amount = adventureState.StackedShards + adventureState.ShardReward
                     });
                     if (leveledUp > 0)
                     {
-                        json.Add(new Network.AdventureState.ActionResult
+                        json.Add(new Network.ActionResult
                         {
-                            ResultType = Network.AdventureState.ActionResult.Type.LevelUp,
+                            ResultType = Network.ActionResult.Type.LevelUp,
                             Amount = leveledUp
                         });
                     }

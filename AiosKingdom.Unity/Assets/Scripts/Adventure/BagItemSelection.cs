@@ -9,7 +9,7 @@ public class BagItemSelection : MonoBehaviour
     public GameObject Items;
     public GameObject BagItemListPrefab;
 
-    public GameObject ItemDetails;
+    public ItemDetails ItemDetails;
 
     [Space(10)]
     [Header("Pagination")]
@@ -37,6 +37,9 @@ public class BagItemSelection : MonoBehaviour
         _pagination.Setup(ItemPerPage, _inventory.Count, SetItems);
 
         SetItems();
+
+        gameObject.SetActive(true);
+        transform.SetAsLastSibling();
     }
 
     public void TakeItem(JsonObjects.Items.Item item, int quantity)
@@ -98,7 +101,7 @@ public class BagItemSelection : MonoBehaviour
 
             itemScript.Action.onClick.AddListener(() =>
             {
-                ItemDetails.GetComponent<ItemDetails>().ShowDetails(item);
+                ItemDetails.ShowDetails(item);
             });
 
             itemScript.AddToBag.onClick.AddListener(() =>

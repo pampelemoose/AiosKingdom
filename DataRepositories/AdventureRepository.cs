@@ -40,7 +40,7 @@ namespace DataRepositories
                     .Include(a => a.Locks)
                     .Include(a => a.Rooms.Select(r => r.ShopItems))
                     .Include(a => a.Rooms.Select(r => r.Ennemies))
-                    .FirstOrDefault(a => a.Vid.Equals(id));
+                    .FirstOrDefault(a => a.Id.Equals(id));
             }
         }
 

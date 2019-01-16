@@ -160,6 +160,8 @@ namespace DataRepositories
                             else
                             {
                                 var onlineTalent = context.TalentUnlocked.FirstOrDefault(i => i.Id.Equals(tal.Id));
+                                onlineTalent.TalentId = tal.TalentId;
+                                onlineTalent.UnlockedAt = tal.UnlockedAt;
                                 know.Talents.Add(onlineTalent);
                                 oldTalents.Remove(oldTalents.FirstOrDefault(o => o.Id.Equals(tal.Id)));
                             }

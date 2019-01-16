@@ -9,7 +9,13 @@ public class Equipment : MonoBehaviour
 {
     public GameObject Content;
     public GameObject ItemSlot;
-    public GameObject ItemDetails;
+
+    public ItemDetails ItemDetails;
+
+    void Awake()
+    {
+        UpdateEquipment();
+    }
 
     public void UpdateEquipment()
     {
@@ -41,7 +47,7 @@ public class Equipment : MonoBehaviour
                 script.Initialize(head);
                 script.Action.onClick.AddListener(() =>
                 {
-                    ItemDetails.GetComponent<ItemDetails>().ShowDetails(head);
+                    ItemDetails.ShowDetails(head);
                 });
             }
         }
@@ -54,7 +60,7 @@ public class Equipment : MonoBehaviour
             script.Initialize(leftHand);
             script.Action.onClick.AddListener(() =>
             {
-                ItemDetails.GetComponent<ItemDetails>().ShowDetails(leftHand);
+                ItemDetails.ShowDetails(leftHand);
             });
         }
         if (!Guid.Empty.Equals(equipment.WeaponRight))
@@ -65,7 +71,7 @@ public class Equipment : MonoBehaviour
             script.Initialize(rightHand);
             script.Action.onClick.AddListener(() =>
             {
-                ItemDetails.GetComponent<ItemDetails>().ShowDetails(rightHand);
+                ItemDetails.ShowDetails(rightHand);
             });
         }
         if (!Guid.Empty.Equals(equipment.Bag))
@@ -76,7 +82,7 @@ public class Equipment : MonoBehaviour
             script.Initialize(bag);
             script.Action.onClick.AddListener(() =>
             {
-                ItemDetails.GetComponent<ItemDetails>().ShowDetails(bag);
+                ItemDetails.ShowDetails(bag);
             });
         }
     }

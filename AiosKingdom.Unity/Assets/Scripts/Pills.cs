@@ -22,7 +22,7 @@ public class Pills : MonoBehaviour
     private Text _selectedText;
     private JsonObjects.Stats _currentStat;
 
-    void Start()
+    void Awake()
     {
         Stamina.onClick.RemoveAllListeners();
         Stamina.onClick.AddListener(() =>
@@ -81,6 +81,7 @@ public class Pills : MonoBehaviour
         Buy.onClick.RemoveAllListeners();
         Buy.onClick.AddListener(() =>
         {
+            UIManager.This.ShowLoading();
             NetworkManager.This.UseSpiritPills(_currentStat, _quantity);
         });
 
@@ -91,6 +92,7 @@ public class Pills : MonoBehaviour
     public void UpdateCurrencies()
     {
         SelectStat(_currentStat);
+        UIManager.This.HideLoading();
     }
 
     private void SelectStat(JsonObjects.Stats stat)

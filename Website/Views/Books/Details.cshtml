@@ -95,61 +95,50 @@
     </div>
 </section>
 
-<section class="p-2">
-    <div class="container">
-        @for (int i = 0; i < 30; ++i)
-        {
+@*
+    <section class="p-2">
+        <div class="container">
             <div class="row">
-                @for (int j = 0; j < 12; ++j)
-                {
-                    <div class="col-md-1 test text-center">
-                        @if (Model.Talents.Any(t => t.Branch == j && t.Leaf == i))
-                        {
-                            @Html.Raw('+');
-                        }
-                    </div>
-                }
-            </div>
-            <div class="row">
-                @for (int j = 0; j < 12; ++j)
-                {
-                <div class="col-md-1 test text-center">
-                    @{
-                        var talent = Model.Talents.FirstOrDefault(t => t.Branch == j && t.Leaf == i);
-                    }
-                    @if (talent != null)
-                    {
-                        if (talent.Unlocks.Any(u => u == DataModels.Skills.TalentUnlock.Left))
-                        {
-                            @Html.Raw("/");
-                        }
-                        else
-                        {
-                            @Html.Raw(".");
-                        }
-                        if (talent.Unlocks.Any(u => u == DataModels.Skills.TalentUnlock.Next))
-                        {
-                            @Html.Raw('|');
-                        }
-                        else
-                        {
-                            @Html.Raw(".");
-                        }
-                        if (talent.Unlocks.Any(u => u == DataModels.Skills.TalentUnlock.Right))
-                        {
-                            @Html.Raw("\\");
-                        }
-                        else
-                        {
-                            @Html.Raw(".");
-                        }
-                    }
+                <div class="col-md-12">
+                    <table class="table table-borderless">
+                        <tbody>
+                            @{
+                                int talentSize = Model.Quality == DataModels.Skills.BookQuality.TierOne ? 6 :
+                                    (Model.Quality == DataModels.Skills.BookQuality.TierTwo ? 12 :
+                                    (Model.Quality == DataModels.Skills.BookQuality.TierThree ? 18 :
+                                    (Model.Quality == DataModels.Skills.BookQuality.TierFour ? 24 : 30)));
+                            }
+                            @for (int i = 0; i < talentSize; ++i)
+                            {
+                                <tr>
+                                    @for (int j = 0; j < 12; ++j)
+                                    {
+                                        var talent = Model.Talents.FirstOrDefault(t => t.Branch == j && t.Leaf == i);
+                                        <td colspan="3" class="@(talent != null ? "talent-box" : "") talent">
+                                            @if (talent != null)
+                                            {
+                                                @talent.TalentPointsRequired
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+                                <tr>
+                                    @for (int j = 0; j < 12; ++j)
+                                    {
+                                        var talent = Model.Talents.FirstOrDefault(t => t.Branch == j && t.Leaf == i);
+                                        <td class="@(talent != null && talent.Unlocks.Any(u => u == DataModels.Skills.TalentUnlock.Left) ? "test" : "") branch"></td>
+                                        <td class="@(talent != null && talent.Unlocks.Any(u => u == DataModels.Skills.TalentUnlock.Next) ? "test" : "") branch"></td>
+                                        <td class="@(talent != null && talent.Unlocks.Any(u => u == DataModels.Skills.TalentUnlock.Right) ? "test" : "") branch"></td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-                }
             </div>
-        }
-    </div>
-</section>
+        </div>
+    </section>
+*@
 
 <section class="p-2">
     <div class="container">
@@ -215,5 +204,21 @@
 <style>
     .test {
         color: red;
+        background-color: red;
+    }
+
+    .talent {
+        width: 64px;
+        height: 64px;
+    }
+
+    .talent-box {
+        border: 2px solid red !important;
+        color: red;
+    }
+
+    .branch {
+        width: 21px;
+        height: 21px;
     }
 </style>

@@ -12,9 +12,10 @@ public class BagSetup : MonoBehaviour
     public GameObject Items;
     public GameObject BagListPrefab;
     public Button EnterDungeonButton;
-    public GameObject ItemDetails;
 
-    public GameObject BagItemSelection;
+    public ItemDetails ItemDetails;
+
+    public BagItemSelection BagItemSelection;
 
     [Space(10)]
     [Header("Pagination")]
@@ -28,7 +29,7 @@ public class BagSetup : MonoBehaviour
     private int _bagSize;
     private int _currentBagSlotCount = 0;
 
-    void Awake()
+    public void SetDatas(JsonObjects.Adventures.Adventure adventure)
     {
         if (_pagination == null)
         {
@@ -40,15 +41,9 @@ public class BagSetup : MonoBehaviour
         AddItemButton.onClick.RemoveAllListeners();
         AddItemButton.onClick.AddListener(() =>
         {
-            BagItemSelection.SetActive(true);
-            BagItemSelection.transform.SetAsLastSibling();
-            BagItemSelection.GetComponent<BagItemSelection>().Initialize(AddItem);
+            BagItemSelection.Initialize(AddItem);
         });
 
-    }
-
-    public void SetDatas(JsonObjects.Adventures.Adventure adventure)
-    {
         _bagSize = DatasManager.Instance.Datas.BagSpace;
         _bag = new List<JsonObjects.AdventureState.BagItem>();
 
@@ -65,14 +60,16 @@ public class BagSetup : MonoBehaviour
         });
 
         SetItems();
+
+        gameObject.SetActive(true);
+        transform.SetAsLastSibling();
     }
 
     private void AddItem(JsonObjects.Items.Item item, int quantity)
     {
         if (_currentBagSlotCount + (quantity * item.Space) < _bagSize)
         {
-            var itemSelector = BagItemSelection.GetComponent<BagItemSelection>();
-            var inventorySlot = itemSelector.Inventory.FirstOrDefault(i => i.ItemId.Equals(item.Id));
+            var inventorySlot = BagItemSelection.Inventory.FirstOrDefault(i => i.ItemId.Equals(item.Id));
             var exists = _bag.FirstOrDefault(b => b.ItemId.Equals(item.Id));
             if (exists == null)
             {
@@ -88,7 +85,7 @@ public class BagSetup : MonoBehaviour
 
             exists.Quantity += quantity;
 
-            itemSelector.TakeItem(item, quantity);
+            BagItemSelection.TakeItem(item, quantity);
 
             _bag.Add(exists);
 
@@ -120,12 +117,12 @@ public class BagSetup : MonoBehaviour
 
             itemScript.Action.onClick.AddListener(() =>
             {
-                ItemDetails.GetComponent<ItemDetails>().ShowDetails(item);
+                ItemDetails.ShowDetails(item);
             });
 
             itemScript.Remove.onClick.AddListener(() =>
             {
-                BagItemSelection.GetComponent<BagItemSelection>().PutBack(slot.InventoryId, slot.Quantity);
+                BagItemSelection.PutBack(slot.InventoryId, slot.Quantity);
                 _bag.Remove(slot);
                 Destroy(itemObj);
             });

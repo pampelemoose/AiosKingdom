@@ -22,6 +22,8 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         Market,
         Equipment,
         Knowledges,
+        Talents,
+        TalentChoices,
         Bookstore,
         Inventory,
         AdventureSelection,
@@ -35,6 +37,8 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     private GameObject _loadingScreen;
 
     [Header("Content Objects")]
+    public GameObject Menu;
+
     public GameObject Settings;
     public GameObject AccountForm;
     public GameObject ServerList;
@@ -47,6 +51,8 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public GameObject AdventureSelection;
     public GameObject Inventory;
     public GameObject Knowledges;
+    public GameObject Talents;
+    public GameObject TalentChoices;
     public GameObject Bookstore;
 
     public GameObject Adventure;
@@ -54,6 +60,11 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     void Awake()
     {
         This = this;
+    }
+
+    public void HideMenu()
+    {
+        Menu.GetComponent<Menu>().Hide();
     }
 
     public void ShowSettings()
@@ -104,68 +115,8 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         ChangeView(Views.Home);
 
-        HideLoading();
-    }
-
-    public void ShowMarket()
-    {
-        ChangeView(Views.Market, true);
-
-        HideLoading();
-    }
-
-    public void ShowPills()
-    {
-        ChangeView(Views.Pills, true);
-
-        var script = Pills.GetComponent<Pills>();
-        script.UpdateCurrencies();
-
-        HideLoading();
-    }
-
-    public void ShowEquipment()
-    {
-        ChangeView(Views.Equipment, true);
-        
-        var script = Equipment.GetComponent<Equipment>();
-        script.UpdateEquipment();
-
-        HideLoading();
-    }
-
-    public void ShowKnowledges()
-    {
-        ChangeView(Views.Knowledges, true);
-
-        //var script = _currentPage.GetComponent<Knowledges>();
-
-        HideLoading();
-    }
-
-    public void ShowBookstore()
-    {
-        ChangeView(Views.Bookstore, true);
-
-        //var script = _currentPage.GetComponent<Bookstore>();
-
-        HideLoading();
-    }
-
-    public void ShowInventory()
-    {
-        ChangeView(Views.Inventory, true);
-
-        //var script = _currentPage.GetComponent<Inventory>();
-
-        HideLoading();
-    }
-
-    public void ShowAdventures()
-    {
-        ChangeView(Views.AdventureSelection, true);
-        
-        //var script = _currentPage.GetComponent<AdventureSelection>();
+        Menu.SetActive(true);
+        Menu.transform.SetAsLastSibling();
 
         HideLoading();
     }
@@ -173,9 +124,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public void StartAdventure()
     {
         ChangeView(Views.Adventure, true);
-
-        var script = Adventure.GetComponent<Adventure>();
-        script.Initialize();
 
         HideLoading();
     }
@@ -208,27 +156,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
                 case Views.Home:
                     newPage = Home;
                     break;
-                case Views.Pills:
-                    newPage = Pills;
-                    break;
-                case Views.Equipment:
-                    newPage = Equipment;
-                    break;
-                case Views.Knowledges:
-                    newPage = Knowledges;
-                    break;
-                case Views.Bookstore:
-                    newPage = Bookstore;
-                    break;
-                case Views.Inventory:
-                    newPage = Inventory;
-                    break;
-                case Views.Market:
-                    newPage = Market;
-                    break;
-                case Views.AdventureSelection:
-                    newPage = AdventureSelection;
-                    break;
                 case Views.Adventure:
                     newPage = Adventure;
                     break;
@@ -247,97 +174,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
             }
         }
     }
-
-    #region Network Callbacks
-
-    public void ContentLoaded(string name)
-    {
-        var script = ContentLoadingScreen.GetComponent<ContentLoadingScreen>();
-        script.IsLoaded(name);
-
-        if (script.IsFinishedLoading)
-        {
-            ShowLoading();
-            ShowHome();
-        }
-    }
-
-    public void UpdatePlayerDatas()
-    {
-        var script = Home.GetComponent<Home>();
-        script.UpdatePlayerDatas();
-    }
-
-    public void UpdateCurrencies()
-    {
-        var homeScript = Home.GetComponent<Home>();
-        homeScript.UpdateCurrencies();
-
-        var pillsScript = Pills.GetComponent<Pills>();
-        pillsScript.UpdateCurrencies();
-    }
-
-    public void UpdateEquipment()
-    {
-        var script = Equipment.GetComponent<Equipment>();
-        script.UpdateEquipment();
-    }
-
-    public void UpdateInventory()
-    {
-        var script = Inventory.GetComponent<Inventory>();
-        script.UpdateItems();
-    }
-
-    public void UpdateKnowledges()
-    {
-        var script = Knowledges.GetComponent<Knowledges>();
-        script.LoadKnowledges();
-    }
-
-    public void UpdateMarket()
-    {
-        var script = Market.GetComponent<Market>();
-        script.UpdateItems();
-    }
-
-    public void UpdateSpecialMarket()
-    {
-        var script = Market.GetComponent<Market>();
-        script.UpdateSpecialItems();
-    }
-
-    public void UpdateAdventure()
-    {
-        var script = Adventure.GetComponent<Adventure>();
-        script.UpdateCurrentState();
-    }
-
-    public void AdventureLogResults(List<JsonObjects.AdventureState.ActionResult> actionResults)
-    {
-        var script = Adventure.GetComponent<Adventure>();
-        script.LogResults(actionResults);
-    }
-
-    public void AdventureTriggerEnemyTurn()
-    {
-        var script = Adventure.GetComponent<Adventure>();
-        script.TriggerEnemyTurn();
-    }
-
-    public void AdventureShowLoots(List<JsonObjects.LootItem> loots)
-    {
-        var script = Adventure.GetComponent<Adventure>();
-        script.ShowLoots(loots);
-    }
-
-    public void AdventureShowEndResults(List<JsonObjects.AdventureState.ActionResult> actionResults)
-    {
-        var script = Adventure.GetComponent<Adventure>();
-        script.ShowEndResults(actionResults);
-    }
-
-    #endregion
 
     #region Loading Screen
 

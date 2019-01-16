@@ -40,7 +40,7 @@ namespace DataRepositories
                 return context.Books
                     .Include(a => a.Inscriptions)
                     .Include(a => a.Talents)
-                    .FirstOrDefault(a => a.Vid.Equals(id));
+                    .FirstOrDefault(a => a.Id.Equals(id));
             }
         }
 

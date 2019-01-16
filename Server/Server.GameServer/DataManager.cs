@@ -341,6 +341,7 @@ namespace Server.GameServer
                     var tal = new Network.Skills.Talent
                     {
                         Id = talent.Id,
+                        BookId = book.Vid,
                         Branch = talent.Branch,
                         Leaf = talent.Leaf,
                         InternalUnlocks = talent.InternalUnlocks,
@@ -351,23 +352,8 @@ namespace Server.GameServer
 
                     switch (talent.Type)
                     {
-                        case DataModels.Skills.TalentType.AddAgilityRatio:
-                            tal.Type = Network.Skills.TalentType.AddAgilityRatio;
-                            break;
-                        case DataModels.Skills.TalentType.AddEnergyRatio:
-                            tal.Type = Network.Skills.TalentType.AddEnergyRatio;
-                            break;
-                        case DataModels.Skills.TalentType.AddIntelligenceRatio:
-                            tal.Type = Network.Skills.TalentType.AddIntelligenceRatio;
-                            break;
-                        case DataModels.Skills.TalentType.AddStaminaRatio:
-                            tal.Type = Network.Skills.TalentType.AddStaminaRatio;
-                            break;
-                        case DataModels.Skills.TalentType.AddStrengthRatio:
-                            tal.Type = Network.Skills.TalentType.AddStrengthRatio;
-                            break;
-                        case DataModels.Skills.TalentType.AddWisdomRatio:
-                            tal.Type = Network.Skills.TalentType.AddWisdomRatio;
+                        case DataModels.Skills.TalentType.StatValue:
+                            tal.Type = Network.Skills.TalentType.StatValue;
                             break;
                         case DataModels.Skills.TalentType.BaseValue:
                             tal.Type = Network.Skills.TalentType.BaseValue;
