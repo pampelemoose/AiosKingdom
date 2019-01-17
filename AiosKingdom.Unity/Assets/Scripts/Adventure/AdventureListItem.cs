@@ -6,14 +6,12 @@ using UnityEngine.UI;
 public class AdventureListItem : MonoBehaviour
 {
     public Text Name;
-    public Text MinLevel;
-    public Text MaxLevel;
+    public Text Level;
     public Button Action;
 
     public void SetDatas(JsonObjects.Adventures.Adventure adventure)
     {
         Name.text = adventure.Name;
-        MinLevel.text = adventure.RequiredLevel.ToString();
-        MaxLevel.text = adventure.MaxLevelAuthorized.ToString();
+        Level.text = string.Format("{0}-{1}", adventure.RequiredLevel.ToString(), adventure.MaxLevelAuthorized.ToString());
     }
 }

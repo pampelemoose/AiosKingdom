@@ -112,7 +112,7 @@ public class Bookstore : MonoBehaviour
             books = books.Where(b => (b.Inscriptions.Where(i => i.StatType == _filterStat)).Any()).ToList();
         }
 
-        books = _books.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
+        books = books.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
 
         foreach (var book in books)
         {
@@ -127,6 +127,6 @@ public class Bookstore : MonoBehaviour
             });
         }
 
-        _pagination.SetIndicator((_books.Count / ItemPerPage) + (_books.Count % ItemPerPage > 0 ? 1 : 0));
+        _pagination.SetIndicator((books.Count / ItemPerPage) + (books.Count % ItemPerPage > 0 ? 1 : 0));
     }
 }

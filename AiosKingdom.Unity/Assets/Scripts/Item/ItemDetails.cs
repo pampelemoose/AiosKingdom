@@ -13,6 +13,8 @@ public class ItemDetails : MonoBehaviour
     public Text RequiredLevel;
     public Text SpecialLabel;
     public Text SpecialValue;
+    public Text SpecialTwoLabel;
+    public Text SpecialTwoValue;
     public GameObject Stats;
     public GameObject StatUI;
     public GameObject EffectUI;
@@ -35,20 +37,24 @@ public class ItemDetails : MonoBehaviour
         {
             case JsonObjects.Items.ItemType.Armor:
                 {
-                    SpecialLabel.text = " * Armor        :";
-                    SpecialValue.text = string.Format("[{0}]", item.ArmorValue);
+                    SpecialLabel.text = " * Armor";
+                    SpecialValue.text = string.Format(": [{0}]", item.ArmorValue);
+                    SpecialTwoLabel.text = " * Magic Armor";
+                    SpecialTwoValue.text = string.Format(": [{0}]", item.MagicArmorValue);
 
-                    Type.text = string.Format("Armor - {0}", item.Slot);
+                    Type.text = string.Format(": Armor - {0}", item.Slot);
 
                     InitStats(item.Stats);
                 }
                 break;
             case JsonObjects.Items.ItemType.Bag:
                 {
-                    SpecialLabel.text = " * Slots        :";
-                    SpecialValue.text = string.Format("[{0}]", item.SlotCount);
+                    SpecialLabel.text = " * Slots";
+                    SpecialValue.text = string.Format(": [{0}]", item.SlotCount);
+                    SpecialTwoLabel.gameObject.SetActive(false);
+                    SpecialTwoValue.gameObject.SetActive(false);
 
-                    Type.text = "Bag";
+                    Type.text = ": Bag";
 
                     InitStats(item.Stats);
                 }
@@ -57,18 +63,22 @@ public class ItemDetails : MonoBehaviour
                 {
                     SpecialLabel.gameObject.SetActive(false);
                     SpecialValue.gameObject.SetActive(false);
+                    SpecialTwoLabel.gameObject.SetActive(false);
+                    SpecialTwoValue.gameObject.SetActive(false);
 
-                    Type.text = "Cons.";
+                    Type.text = ": Cons.";
 
                     InitEffects(item.Effects);
                 }
                 break;
             default:
                 {
-                    SpecialLabel.text = " * Damages      :";
-                    SpecialValue.text = string.Format("[{0} - {1}]", item.MinDamages, item.MaxDamages);
+                    SpecialLabel.text = " * Min Damages";
+                    SpecialValue.text = string.Format(": [{0}]", item.MinDamages);
+                    SpecialTwoLabel.text = " * Max Damages";
+                    SpecialTwoValue.text = string.Format(": [{0}]", item.MaxDamages);
 
-                    Type.text = string.Format("{0} - {1}", item.Slot, item.Type);
+                    Type.text = string.Format(": {0} - {1}", item.Slot, item.Type);
 
                     InitStats(item.Stats);
                 }
@@ -81,22 +91,13 @@ public class ItemDetails : MonoBehaviour
         gameObject.SetActive(true);
         transform.SetAsLastSibling();
 
-        Name.text = item.Name;
-        Quality.text = item.Quality.ToString();
+        Name.text = string.Format(": [{0}]", item.Name);
+        Quality.text = string.Format(": [{0}]", item.Quality);
 
-        ItemLevel.text = string.Format("[{0}]", item.ItemLevel);
-        RequiredLevel.text = string.Format("[{0}]", item.UseLevelRequired);
+        ItemLevel.text = string.Format(": [{0}]", item.ItemLevel);
+        RequiredLevel.text = string.Format(": [{0}]", item.UseLevelRequired);
     }
-
-    private static Dictionary<JsonObjects.Stats, string> _statSpaces = new Dictionary<JsonObjects.Stats, string>
-    {
-        { JsonObjects.Stats.Stamina, "      " },
-        { JsonObjects.Stats.Energy, "       " },
-        { JsonObjects.Stats.Strength, "     " },
-        { JsonObjects.Stats.Agility, "      " },
-        { JsonObjects.Stats.Intelligence, " " },
-        { JsonObjects.Stats.Wisdom, "       " }
-    };
+    
     private static Dictionary<JsonObjects.Stats, Color> _statColors = new Dictionary<JsonObjects.Stats, Color>
     {
         { JsonObjects.Stats.Stamina, new Color(1, 0, 0) },
@@ -136,9 +137,9 @@ public class ItemDetails : MonoBehaviour
             var statObj = Instantiate(StatUI, Stats.transform);
             var script = statObj.GetComponent<StatUI>();
 
-            script.Label.text = string.Format(" * {0}{1}:", stat.Type, _statSpaces[stat.Type]);
+            script.Label.text = string.Format(" * {0}", stat.Type);
             script.Label.color = _statColors[stat.Type];
-            script.Value.text = string.Format("[+{0}]", stat.StatValue);
+            script.Value.text = string.Format(": [+{0}]", stat.StatValue);
             script.Value.color = _statColors[stat.Type];
         }
 

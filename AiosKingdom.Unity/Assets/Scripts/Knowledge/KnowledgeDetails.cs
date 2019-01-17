@@ -12,17 +12,16 @@ public class KnowledgeDetails : MonoBehaviour
     public Text Description;
     public GameObject Inscriptions;
     public GameObject InscriptionItem;
-    public GameObject InscriptionUpgradableItem;
 
     public void ShowDetails(JsonObjects.Skills.Book book, JsonObjects.Knowledge knowledge)
     {
         gameObject.SetActive(true);
         transform.SetAsLastSibling();
 
-        Name.text = book.Name;
+        Name.text = string.Format(": {0}", book.Name);
         Description.text = book.Description;
-        Quality.text = book.Quality.ToString();
-        TalentPoints.text = knowledge.TalentPoints.ToString();
+        Quality.text = string.Format(": {0}", book.Quality);
+        TalentPoints.text = string.Format(": [{0}]", knowledge.TalentPoints);
 
         ShowInscriptions(book);
     }

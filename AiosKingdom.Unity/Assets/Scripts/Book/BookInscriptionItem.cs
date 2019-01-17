@@ -5,21 +5,10 @@ using UnityEngine.UI;
 
 public class BookInscriptionItem : MonoBehaviour
 {
-    public Text Type;
-    public Text BaseValue;
-    public Text StatType;
-    public Text Ratio;
-    public Text Duration;
-    public Text Calculated;
+    public Text Text;
 
     public void SetDatas(JsonObjects.Skills.Inscription inscription)
     {
-        Type.text = inscription.Type.ToString();
-        BaseValue.text = inscription.BaseValue.ToString();
-        StatType.text = inscription.StatType.ToString();
-        Ratio.text = inscription.Ratio.ToString();
-        Duration.text = inscription.Duration.ToString();
-
         int value = 0;
         switch (inscription.StatType)
         {
@@ -43,17 +32,15 @@ public class BookInscriptionItem : MonoBehaviour
                 break;
         }
 
-        Calculated.text = (inscription.BaseValue + (inscription.Ratio * value)).ToString("0");
+        Text.text = string.Format("* {0} ({1}+([{2}]*{3}) over {4}) <{5}>",
+            inscription.Type,
+            inscription.BaseValue, inscription.StatType, inscription.Ratio,
+            inscription.Duration,
+            inscription.BaseValue + (inscription.Ratio * value));
     }
 
     public void SetBuiltDatas(JsonObjects.Skills.BuiltInscription inscription)
     {
-        Type.text = inscription.Type.ToString();
-        BaseValue.text = inscription.BaseMinValue.ToString();
-        StatType.text = inscription.StatType.ToString();
-        Ratio.text = inscription.Ratio.ToString();
-        Duration.text = inscription.Duration.ToString();
-
         int value = 0;
         switch (inscription.StatType)
         {
@@ -77,6 +64,11 @@ public class BookInscriptionItem : MonoBehaviour
                 break;
         }
 
-        Calculated.text = (inscription.BaseMinValue + (inscription.Ratio * value)).ToString("0");
+        Text.text = string.Format("* {0} ([{1}-{2}]+([{3}]*{4}) over {5}) <{6}-{7}>",
+            inscription.Type,
+            inscription.BaseMinValue, inscription.BaseMaxValue, inscription.StatType, inscription.Ratio,
+            inscription.Duration,
+            inscription.BaseMinValue + (inscription.Ratio * value),
+            inscription.BaseMaxValue + (inscription.Ratio * value));
     }
 }

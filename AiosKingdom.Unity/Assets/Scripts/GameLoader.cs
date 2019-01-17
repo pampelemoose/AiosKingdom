@@ -6,6 +6,8 @@ public class GameLoader : MonoBehaviour
 {
     void Awake()
     {
+        Screen.SetResolution(480, 800, false);
+
         StartCoroutine(Auth());
     }
 
