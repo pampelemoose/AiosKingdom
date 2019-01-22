@@ -29,6 +29,7 @@ namespace Network
 
         public Type ResultType { get; set; }
         public Guid Id { get; set; }
+        public string Action { get; set; }
         public bool IsConsumable { get; set; }
 
         public double Amount { get; set; }

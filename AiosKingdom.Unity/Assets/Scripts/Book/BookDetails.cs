@@ -16,6 +16,15 @@ public class BookDetails : MonoBehaviour
     public Text EmberPrice;
     public Button BuyButton;
 
+    [Space(10)]
+    [Header("Pagination")]
+    public GameObject PaginationBox;
+    public GameObject PaginationPrefab;
+    public int ItemPerPage = 5;
+
+    private Pagination _pagination;
+    private List<JsonObjects.Skills.Inscription> _inscriptions;
+
     private JsonObjects.Skills.Book _currentBook;
 
     public void SetDatas(JsonObjects.Skills.Book book)
@@ -27,6 +36,15 @@ public class BookDetails : MonoBehaviour
 
         Name.text = book.Name;
         Quality.text = book.Quality.ToString();
+
+        _inscriptions = book.Inscriptions;
+
+        if (_pagination == null)
+        {
+            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            _pagination = pagination.GetComponent<Pagination>();
+        }
+        _pagination.Setup(ItemPerPage, _inscriptions.Count, ShowInscriptions);
 
         ShowInscriptions();
 
@@ -42,7 +60,7 @@ public class BookDetails : MonoBehaviour
 
     private void ShowInscriptions()
     {
-        var inscriptions = _currentBook.Inscriptions.OrderBy(i => i.Type).OrderByDescending(i => i.BaseValue).Skip(0).Take(8);
+        var inscriptions = _inscriptions.OrderBy(i => i.Type).Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
 
         Description.text = _currentBook.Description;
         EmberPrice.text = _currentBook.EmberCost.ToString();
@@ -59,5 +77,7 @@ public class BookDetails : MonoBehaviour
             var script = inscObj.GetComponent<BookInscriptionItem>();
             script.SetDatas(insc);
         }
+
+        _pagination.SetIndicator((_inscriptions.Count / ItemPerPage) + (_inscriptions.Count % ItemPerPage > 0 ? 1 : 0));
     }
 }

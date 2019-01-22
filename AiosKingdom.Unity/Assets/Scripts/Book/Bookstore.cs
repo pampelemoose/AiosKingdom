@@ -20,6 +20,8 @@ public class Bookstore : MonoBehaviour
     [Header("Book Details")]
     public BookDetails BookDetails;
 
+    [Space(10)]
+    [Header("Pagination")]
     public GameObject PaginationBox;
     public GameObject PaginationPrefab;
     public int ItemPerPage = 5;
@@ -112,6 +114,8 @@ public class Bookstore : MonoBehaviour
             books = books.Where(b => (b.Inscriptions.Where(i => i.StatType == _filterStat)).Any()).ToList();
         }
 
+        _pagination.SetIndicator((books.Count / ItemPerPage) + (books.Count % ItemPerPage > 0 ? 1 : 0));
+
         books = books.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
 
         foreach (var book in books)
@@ -126,7 +130,5 @@ public class Bookstore : MonoBehaviour
                 BookDetails.SetDatas(book);
             });
         }
-
-        _pagination.SetIndicator((books.Count / ItemPerPage) + (books.Count % ItemPerPage > 0 ? 1 : 0));
     }
 }

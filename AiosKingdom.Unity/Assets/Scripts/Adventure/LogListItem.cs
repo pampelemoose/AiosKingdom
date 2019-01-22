@@ -12,11 +12,12 @@ public class LogListItem : MonoBehaviour
     public void SetDatas(JsonObjects.AdventureState.ActionResult result)
     {
         var from = (result.FromId.Equals(Guid.Empty) ? "You" : DatasManager.Instance.Monsters.FirstOrDefault(m => m.Id.Equals(result.FromId)).Name);
-        var action = (result.IsConsumable ? DatasManager.Instance.Items.FirstOrDefault(m => m.Id.Equals(result.Id)).Name :
-                (result.FromId.Equals(Guid.Empty) ? DatasManager.Instance.Adventure.State.Skills.FirstOrDefault(m => m.Id.Equals(result.Id)).Name :
-                    DatasManager.Instance.Adventure.Enemies.FirstOrDefault(e => e.Value.MonsterId.Equals(result.FromId)).Value.State.Skills.FirstOrDefault(m => m.Inscriptions.Any(i => i.Id.Equals(result.Id))).Name));
         var target = (result.ToId.Equals(Guid.Empty) ? "You" : DatasManager.Instance.Monsters.FirstOrDefault(m => m.Id.Equals(result.ToId)).Name);
 
-        Content.text = string.Format("{0} used {1} on {2} : {3} for {4}", from, action, target, result.ResultType, result.Amount);
+        //var action = (result.IsConsumable ? DatasManager.Instance.Items.FirstOrDefault(m => m.Id.Equals(result.Id)).Name :
+        //        (result.FromId.Equals(Guid.Empty) ? DatasManager.Instance.Adventure.State.Skills.FirstOrDefault(m => m.Id.Equals(result.Id)).Name :
+        //            DatasManager.Instance.Adventure.Enemies.FirstOrDefault(e => e.Value.MonsterId.Equals(result.FromId)).Value.State.Skills.FirstOrDefault(m => m.Inscriptions.Any(i => i.Id.Equals(result.Id))).Name));
+
+        Content.text = string.Format("{0} used {1} on {2} : {3} for {4}", from, result.Action, target, result.ResultType, result.Amount);
     }
 }

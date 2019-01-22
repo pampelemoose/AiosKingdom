@@ -5,7 +5,12 @@ using UnityEngine.UI;
 
 public class BookInscriptionItem : MonoBehaviour
 {
-    public Text Text;
+    public Text Type;
+    public Text BaseValue;
+    public Text Stat;
+    public Text Ratio;
+    public Text Duration;
+    public Text Current;
 
     public void SetDatas(JsonObjects.Skills.Inscription inscription)
     {
@@ -32,11 +37,12 @@ public class BookInscriptionItem : MonoBehaviour
                 break;
         }
 
-        Text.text = string.Format("* {0} ({1}+([{2}]*{3}) over {4}) <{5}>",
-            inscription.Type,
-            inscription.BaseValue, inscription.StatType, inscription.Ratio,
-            inscription.Duration,
-            inscription.BaseValue + (inscription.Ratio * value));
+        Type.text = string.Format(": {0}", inscription.Type);
+        BaseValue.text = string.Format(": {0}", inscription.BaseValue);
+        Stat.text = string.Format(": {0}", inscription.StatType);
+        Ratio.text = string.Format(": {0}", inscription.Ratio);
+        Duration.text = string.Format(": {0}", inscription.Duration);
+        Current.text = string.Format(": {0}", inscription.BaseValue + (inscription.Ratio * value));
     }
 
     public void SetBuiltDatas(JsonObjects.Skills.BuiltInscription inscription)
@@ -64,11 +70,11 @@ public class BookInscriptionItem : MonoBehaviour
                 break;
         }
 
-        Text.text = string.Format("* {0} ([{1}-{2}]+([{3}]*{4}) over {5}) <{6}-{7}>",
-            inscription.Type,
-            inscription.BaseMinValue, inscription.BaseMaxValue, inscription.StatType, inscription.Ratio,
-            inscription.Duration,
-            inscription.BaseMinValue + (inscription.Ratio * value),
-            inscription.BaseMaxValue + (inscription.Ratio * value));
+        Type.text = string.Format(": {0}", inscription.Type);
+        BaseValue.text = string.Format(": [{0}-{1}]", inscription.BaseMinValue, inscription.BaseMaxValue);
+        Stat.text = string.Format(": {0}", inscription.StatType);
+        Ratio.text = string.Format(": {0}", inscription.Ratio);
+        Duration.text = string.Format(": {0}", inscription.Duration);
+        Current.text = string.Format(": [{0}-{1}]", inscription.BaseMinValue + (inscription.Ratio * value), inscription.BaseMaxValue + (inscription.Ratio * value));
     }
 }

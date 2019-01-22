@@ -15,10 +15,10 @@ public class TalentChoiceListItem : MonoBehaviour
 
     public void SetDatas(JsonObjects.Skills.Talent talent, string name)
     {
-        Name.text = name;
-        Type.text = talent.Type.ToString();
-        Value.text = talent.Value.ToString();
-        Cost.text = talent.TalentPointsRequired.ToString();
+        Name.text = string.Format(": {0}", name);
+        Type.text = string.Format(": {0}", talent.Type);
+        Value.text = string.Format(": [{0}]", talent.Value);
+        Cost.text = string.Format(": [{0}]", talent.TalentPointsRequired);
     }
 
     public void Select()

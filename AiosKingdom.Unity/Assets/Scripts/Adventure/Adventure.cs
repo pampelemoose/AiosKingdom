@@ -10,20 +10,23 @@ public class Adventure : MonoBehaviour
     [Header("General")]
     public Text Name;
     public Text Room;
-    public Button Exit;
+
+    public GameObject Menu;
     public GameObject List;
-    public Button LogsButton;
-    public Button StatsButton;
+    public Text EnemyTimer;
     public GameObject StatsPanel;
 
     [Header("Actions")]
+    public Button CommandsButton;
+    public Button LogsButton;
+    public Button StatsButton;
     public Button AttackButton;
     public Button ConsumableButton;
     public Button WaitButton;
     public Button NextRoomButton;
     public Button FinishButton;
     public Button BackToMainButton;
-    public Text EnemyTimer;
+    public Button Exit;
 
     [Header("Headers")]
     public GameObject EnemiesHeader;
@@ -63,12 +66,6 @@ public class Adventure : MonoBehaviour
     public Text Wisdom;
     public Text Damages;
 
-    [Header("Enemy Stats")]
-    public GameObject EnemyBox;
-    public Text EnemyHealth;
-    public Text EnemyDamages;
-    public Text EnemyPhase;
-
     [Header("Logs")]
     public LogBox LogBox;
 
@@ -96,9 +93,16 @@ public class Adventure : MonoBehaviour
 
     void Awake()
     {
+        CommandsButton.onClick.RemoveAllListeners();
+        CommandsButton.onClick.AddListener(() =>
+        {
+            Menu.SetActive(!Menu.activeSelf);
+        });
+
         Exit.onClick.RemoveAllListeners();
         Exit.onClick.AddListener(() =>
         {
+            Menu.SetActive(false);
             NetworkManager.This.ExitDungeon();
             gameObject.SetActive(false);
         });
@@ -106,18 +110,21 @@ public class Adventure : MonoBehaviour
         LogsButton.onClick.RemoveAllListeners();
         LogsButton.onClick.AddListener(() =>
         {
+            Menu.SetActive(false);
             LogBox.ShowLogs();
         });
 
         StatsButton.onClick.RemoveAllListeners();
         StatsButton.onClick.AddListener(() =>
         {
+            Menu.SetActive(false);
             StatsPanel.SetActive(true);
         });
 
         AttackButton.onClick.RemoveAllListeners();
         AttackButton.onClick.AddListener(() =>
         {
+            Menu.SetActive(false);
             SetHeaders("skills");
 
             _skills = DatasManager.Instance.Adventure.State.Skills;
@@ -130,6 +137,7 @@ public class Adventure : MonoBehaviour
         ConsumableButton.onClick.RemoveAllListeners();
         ConsumableButton.onClick.AddListener(() =>
         {
+            Menu.SetActive(false);
             SetHeaders("consumables");
 
             _bag = DatasManager.Instance.Adventure.Bag;
@@ -142,6 +150,7 @@ public class Adventure : MonoBehaviour
         WaitButton.onClick.RemoveAllListeners();
         WaitButton.onClick.AddListener(() =>
         {
+            Menu.SetActive(false);
             _showActionPanel = false;
 
             ResetActions();
@@ -152,12 +161,14 @@ public class Adventure : MonoBehaviour
         NextRoomButton.onClick.RemoveAllListeners();
         NextRoomButton.onClick.AddListener(() =>
         {
+            Menu.SetActive(false);
             NetworkManager.This.OpenDungeonRoom();
         });
 
         FinishButton.onClick.RemoveAllListeners();
         FinishButton.onClick.AddListener(() =>
         {
+            Menu.SetActive(false);
             _showActionPanel = true;
             NetworkManager.This.LeaveFinishedRoom();
         });
@@ -165,6 +176,7 @@ public class Adventure : MonoBehaviour
         BackToMainButton.onClick.RemoveAllListeners();
         BackToMainButton.onClick.AddListener(() =>
         {
+            Menu.SetActive(false);
             NetworkManager.This.DungeonLeft();
             gameObject.SetActive(false);
             UIManager.This.ShowHome();
@@ -189,7 +201,6 @@ public class Adventure : MonoBehaviour
 
         ResetActions();
         RestInfos.SetActive(false);
-        EnemyBox.SetActive(false);
         EndResultBox.SetActive(false);
         if (adventure.IsFightArea)
         {

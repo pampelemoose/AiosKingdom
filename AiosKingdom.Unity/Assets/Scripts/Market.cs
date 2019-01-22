@@ -13,6 +13,7 @@ public class Market : MonoBehaviour
     public Text FirstFilterLabel;
     public Dropdown FirstFilterDropdown;
     public Button Specials;
+    public Button Normals;
 
     [Space(10)]
     [Header("Content")]
@@ -64,6 +65,18 @@ public class Market : MonoBehaviour
                 SceneLoom.Loom.QueueOnMainThread(() =>
                 {
                     NetworkManager.This.AskSpecialMarketItems();
+                    Specials.gameObject.SetActive(false);
+                    Normals.gameObject.SetActive(true);
+                });
+            });
+
+            Normals.onClick.AddListener(() =>
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    NetworkManager.This.AskMarketItems();
+                    Normals.gameObject.SetActive(false);
+                    Specials.gameObject.SetActive(true);
                 });
             });
 

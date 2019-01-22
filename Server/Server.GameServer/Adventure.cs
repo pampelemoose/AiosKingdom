@@ -87,6 +87,7 @@ namespace Server.GameServer
             foreach (var inscription in skill.Inscriptions)
             {
                 var res = ExecutePlayerInscription(inscription, enemyId);
+                res.Action = skill.Name;
                 var inside = message.FirstOrDefault(m => m.IsConsumable == false && m.Id.Equals(res.Id));
                 if (inside != null)
                 {
@@ -120,6 +121,7 @@ namespace Server.GameServer
             message.Add(new Network.ActionResult
             {
                 Id = skill.Id,
+                Action = skill.Name,
                 ResultType = Network.ActionResult.Type.ConsumedMana,
                 Amount = skill.ManaCost
             });
@@ -144,6 +146,7 @@ namespace Server.GameServer
             foreach (var effect in consumable.Effects)
             {
                 var res = ExecutePlayerEffects(effect);
+                res.Action = consumable.Name;
                 var inside = message.FirstOrDefault(m => m.IsConsumable == false && m.Id.Equals(res.Id));
                 if (inside != null)
                 {
@@ -186,6 +189,7 @@ namespace Server.GameServer
                 foreach (var inscription in skill.Inscriptions)
                 {
                     var res = ExecuteEnemyInscription(inscription, enemyKeys);
+                    res.Action = skill.Name;
                     var inside = message.FirstOrDefault(m => m.IsConsumable == false && m.FromId.Equals(res.FromId) && m.Id.Equals(res.Id));
                     if (inside != null)
                     {
