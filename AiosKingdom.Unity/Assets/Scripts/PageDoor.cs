@@ -15,7 +15,7 @@ public class PageDoor : MonoBehaviour
         button.onClick.AddListener(() =>
         {
             Page.SetActive(true);
-            Page.transform.SetAsLastSibling();
+            //Page.transform.SetAsLastSibling();
 
             UIManager.This.HideMenu();
         });

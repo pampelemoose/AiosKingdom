@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ public class BookInscriptionItem : MonoBehaviour
     public Text Duration;
     public Text Current;
 
-    public void SetDatas(JsonObjects.Skills.Inscription inscription)
+    public void SetDatas(JsonObjects.Skills.Inscription inscription, List<JsonObjects.Skills.Talent> talents)
     {
         int value = 0;
         switch (inscription.StatType)
@@ -37,12 +38,18 @@ public class BookInscriptionItem : MonoBehaviour
                 break;
         }
 
+        var talBaseValue = talents.Where(t => t.Type == JsonObjects.Skills.TalentType.BaseValue).Sum(t => t.Value);
+        var talRatio = talents.Where(t => t.Type == JsonObjects.Skills.TalentType.Ratio).Sum(t => t.Value);
+        var talStatValue = talents.Where(t => t.Type == JsonObjects.Skills.TalentType.StatValue).Sum(t => t.Value);
+        //var talCooldown = talents.Where(t => t.Type == JsonObjects.Skills.TalentType.BaseValue).Sum(t => t.Value);
+        var talDuration = talents.Where(t => t.Type == JsonObjects.Skills.TalentType.Duration).Sum(t => t.Value);
+
         Type.text = string.Format(": {0}", inscription.Type);
-        BaseValue.text = string.Format(": {0}", inscription.BaseValue);
+        BaseValue.text = string.Format(": {0} (+{1})", inscription.BaseValue, talBaseValue);
         Stat.text = string.Format(": {0}", inscription.StatType);
-        Ratio.text = string.Format(": {0}", inscription.Ratio);
-        Duration.text = string.Format(": {0}", inscription.Duration);
-        Current.text = string.Format(": {0}", inscription.BaseValue + (inscription.Ratio * value));
+        Ratio.text = string.Format(": {0} (+{1})", inscription.Ratio, talRatio);
+        Duration.text = string.Format(": {0} (+{1})", inscription.Duration, talDuration);
+        Current.text = string.Format(": {0}", inscription.BaseValue + talBaseValue + ((inscription.Ratio + talRatio) * (value + talStatValue)));
     }
 
     public void SetBuiltDatas(JsonObjects.Skills.BuiltInscription inscription)

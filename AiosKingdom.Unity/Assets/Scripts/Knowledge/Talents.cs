@@ -47,7 +47,7 @@ public class Talents : MonoBehaviour
     public void ShowTalents()
     {
         gameObject.SetActive(true);
-        transform.SetAsLastSibling();
+        //transform.SetAsLastSibling();
         UIManager.This.HideLoading();
     }
 

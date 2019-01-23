@@ -200,12 +200,18 @@ public class Market : MonoBehaviour
     {
         _slots = DatasManager.Instance.MarketItems;
 
+        Normals.gameObject.SetActive(false);
+        Specials.gameObject.SetActive(true);
+        
         ResetItems();
     }
 
     public void UpdateSpecialItems()
     {
         _slots = DatasManager.Instance.SpecialMarketItems;
+
+        Specials.gameObject.SetActive(false);
+        Normals.gameObject.SetActive(true);
 
         ResetItems();
     }

@@ -18,15 +18,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         SoulList,
         ContentLoadingScreen,
         Home,
-        Pills,
-        Market,
-        Equipment,
-        Knowledges,
-        Talents,
-        TalentChoices,
-        Bookstore,
-        Inventory,
-        AdventureSelection,
         Adventure
     }
 
@@ -45,16 +36,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public GameObject SoulList;
     public GameObject ContentLoadingScreen;
     public GameObject Home;
-    public GameObject Market;
-    public GameObject Pills;
-    public GameObject Equipment;
-    public GameObject AdventureSelection;
-    public GameObject Inventory;
-    public GameObject Knowledges;
-    public GameObject Talents;
-    public GameObject TalentChoices;
-    public GameObject Bookstore;
-
     public GameObject Adventure;
 
     void Awake()
@@ -116,7 +97,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         ChangeView(Views.Home);
 
         Menu.SetActive(true);
-        Menu.transform.SetAsLastSibling();
+        //Menu.transform.SetAsLastSibling();
 
         HideLoading();
     }
@@ -164,7 +145,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
             if (newPage != null)
             {
                 newPage.SetActive(true);
-                newPage.transform.SetAsLastSibling();
+                //newPage.transform.SetAsLastSibling();
 
                 if (!push)
                 {

@@ -58,12 +58,7 @@ namespace JsonObjects.Skills
         Ratio,
         Duration,
 
-        AddStaminaRatio,
-        AddEnergyRatio,
-        AddStrengthRatio,
-        AddAgilityRatio,
-        AddIntelligenceRatio,
-        AddWisdomRatio
+        StatValue,
     }
 
     public class Book
