@@ -1,0 +1,73 @@
+﻿@model Website.Models.UserModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<section>
+    <div class="container">
+        <h2>Edit</h2>
+    </div>
+</section>
+
+@using (Html.BeginForm())
+{
+    <section class="p-2">
+        <div class="container">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <input type="hidden" name="Id" value="@Model.Id" />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Roles, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.DropDownListFor(model => model.Roles, new SelectList(DataRepositories.UserRepository.Roles, "Name", "Name"), new { @class = "form-control", multiple = "multiple" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Roles, "", new { @class = "text-danger" })
+                </div>
+
+                @*
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Roles, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.DropDownListFor(model => model.Roles, new SelectList(new List<string> { "Child", "Parent", "Backer" }), new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Roles, "", new { @class = "text-danger" })
+                </div>
+                *@
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <input type="submit" value="Edit" class="btn btn-success btn-block" />
+        </div>
+    </section>
+}

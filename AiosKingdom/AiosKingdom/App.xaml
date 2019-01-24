@@ -1,21 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:styles="clr-namespace:AiosKingdom;assembly=AiosKingdom"
+             xmlns:converters="clr-namespace:AiosKingdom.Converters;assembly=AiosKingdom"
              x:Class="AiosKingdom.App">
     <Application.Resources>
-        <ResourceDictionary>
-            <Color x:Key="Primary">#2196F3</Color>
-            <Color x:Key="PrimaryDark">#1976D2</Color>
-            <Color x:Key="Accent">#96d1ff</Color>
-            <Color x:Key="LightBackgroundColor">#FAFAFA</Color>
-            <Color x:Key="DarkBackgroundColor">#C0C0C0</Color>
-            <Color x:Key="MediumGrayTextColor">#4d4d4d</Color>
-            <Color x:Key="LightTextColor">#999999</Color>
-
+        <ResourceDictionary MergedWith="styles:Style">
             <Style TargetType="NavigationPage">
-                <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="BarBackgroundColor" Value="{StaticResource MainColor}" />
                 <Setter Property="BarTextColor" Value="White" />
             </Style>
+
+            <converters:ItemQualityToColorConverter x:Key="itemQualityToColor" />
+            <converters:BookQualityToColorConverter x:Key="bookQualityToColor" />
+            <converters:StatToColorConverter x:Key="statToColor" />
+            <converters:ListToHeightConverter x:Key="listToHeight" />
+            <converters:InverseBooleanConverter x:Key="inverseBoolean" />
+            <converters:ObjectToImageConverter x:Key="objectToImage" />
+            <converters:BookToPriceConverter x:Key="bookToPrice" />
+            <converters:InscriptionToCalculatedValueConverter x:Key="inscToCalcVal" />
+            <converters:LootItemToNameConverter x:Key="lootItemToName" />
+            <converters:EnemyTypeToColorConverter x:Key="enemyTypeToColor" />
+            <converters:RoomTypeToColorConverter x:Key="roomTypeToColor" />
+            <converters:EnemyToNameConverter x:Key="enemyToName" />
+            <converters:ShopItemToNameConverter x:Key="shopItemToName" />
+            <converters:ActionResultToImageConverter x:Key="actionResultToImage" />
+            <converters:ActionResultTypeToImageConverter x:Key="actionResultTypeToImage" />
+            <converters:ActionResultTargetToImageConverter x:Key="actionResultTargetToImage" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

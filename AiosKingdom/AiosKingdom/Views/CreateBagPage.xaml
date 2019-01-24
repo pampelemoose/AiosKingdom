@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
+             x:Class="AiosKingdom.Views.CreateBagPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <Grid>
+            <Grid
+                BackgroundColor="{StaticResource PrimaryColor_0}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <Grid
+                    Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid
+                        Grid.Column="0">
+                        <Image
+                            Margin="5"
+                            Source="Assets/Images/leftarrow.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding BackAction}"/>
+                    </Grid>
+
+                    <Label
+                        Grid.Column="1"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        Margin="5, 0"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding Slots, StringFormat='Slots available : ({0})'}"/>
+
+                    <Button
+                        Grid.Column="2"
+                        Margin="5"
+                        Style="{StaticResource MenuButton}"
+                        Text="Add"
+                        Command="{Binding AddItemAction}"/>
+                </Grid>
+
+                <ListView
+                    Grid.Row="1"
+                    BackgroundColor="Transparent"
+                    ItemsSource="{Binding Items}"
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                    RowHeight="50"
+                    SeparatorVisibility="None"
+                    ItemTemplate="{StaticResource InventoryConsumableListItem}"/>
+
+                <Grid
+                    Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="0"
+                        Style="{StaticResource SecondaryMenuButton}"
+                        Text="Remove"
+                        Command="{Binding RemoveItemAction}"/>
+
+                    <Button
+                        Grid.Column="1"
+                        Style="{StaticResource MenuButton}"
+                        Text="Enter Dungeon"
+                        Command="{Binding EnterDungeonAction}"/>
+                </Grid>
+
+                <Grid
+                    Grid.RowSpan="3"
+                    BackgroundColor="{StaticResource SecondaryColor_3}"
+                    IsVisible="{Binding ShowAddPanel}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button
+                            Grid.Column="1"
+                            Margin="5"
+                            Style="{StaticResource SecondaryMenuButton}"
+                            Text="Close"
+                            Command="{Binding CloseAction}"/>
+                    </Grid>
+
+                    <Grid
+                        Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+
+                        <ListView
+                            Grid.Row="0"
+                            BackgroundColor="Transparent"
+                            ItemsSource="{Binding Inventory}"
+                            SelectedItem="{Binding SelectedInventory, Mode=TwoWay}"
+                            RowHeight="50"
+                            SeparatorVisibility="None"
+                            ItemTemplate="{StaticResource InventoryConsumableListItem}"/>
+
+                        <Grid
+                            Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button
+                                Grid.Column="0"
+                                Text="-"
+                                Style="{StaticResource TertiaryMenuButton}"
+                                Command="{Binding SubQuantityAction}"/>
+                            <Label
+                                Grid.Column="1"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center"
+                                FontAttributes="Bold"
+                                Text="{Binding Quantity}"/>
+                            <Button
+                                Grid.Column="2"
+                                Text="+"
+                                Style="{StaticResource TertiaryMenuButton}"
+                                Command="{Binding AddQuantityAction}"/>
+
+                            <Button
+                                Grid.Column="3"
+                                Style="{StaticResource SecondaryMenuButton}"
+                                Text="Add"
+                                Command="{Binding AddAction}"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+                <ctrl:LoadingIndicator
+                    Grid.RowSpan="3"/>
+            </Grid>
+
+            <Grid
+                IsVisible="{Binding IsInfoVisible}"
+                BackgroundColor="Black"
+                Opacity="0.7">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource PrimaryColor_3}">
+                        <Label
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="Center"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            Text="Prepare your Bag"/>
+                    </Grid>
+
+                    <Label
+                        Grid.Row="1"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        TextColor="{StaticResource PrimaryColor_4}"
+                        Text="Fill your bag with Items from your Inventory that you want to go with."/>
+
+                </Grid>
+
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="3"
+                    BackgroundColor="Transparent"
+                    Command="{Binding CloseInfoAction}"/>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,45 @@
+﻿@model Website.Models.LootModel
+
+<div class="col-md-12 mt-2">
+    @using (Html.BeginCollectionItem("Loots"))
+    {
+        <div class="card card-dark">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.DropDownListFor(model => model.SelectedItem, new SelectList(Model.Items, "Vid", "Name"), new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.DropRate, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.EditorFor(model => model.DropRate, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DropRate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    }
+</div>

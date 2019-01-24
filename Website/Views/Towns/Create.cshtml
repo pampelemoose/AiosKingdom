@@ -1,0 +1,205 @@
+﻿@model DataModels.Town
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<section>
+    <div class="container">
+        <h2>Create</h2>
+    </div>
+</section>
+
+@using (Html.BeginForm())
+{
+    <section class="p-2">
+        <div class="container">
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Host, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Host, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Host, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Port, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Port, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Port, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row mt-1">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Difficulty, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EnumDropDownListFor(model => model.Difficulty, new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Difficulty, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.SlotLimit, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.SlotLimit, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.SlotLimit, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-dark p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.BaseExperience, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.BaseExperience, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.BaseExperience, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ExperiencePerLevelRatio, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ExperiencePerLevelRatio, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ExperiencePerLevelRatio, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.SpiritsPerLevelUp, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.SpiritsPerLevelUp, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.SpiritsPerLevelUp, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.EmbersPerLevelUp, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.EmbersPerLevelUp, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.EmbersPerLevelUp, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-dark p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.BaseHealth, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.BaseHealth, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.BaseHealth, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.HealthPerLevelRatio, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.HealthPerLevelRatio, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.HealthPerLevelRatio, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.HealthPerStaminaRatio, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.HealthPerStaminaRatio, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.HealthPerStaminaRatio, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.BaseMana, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.BaseMana, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.BaseMana, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ManaPerLevelRatio, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ManaPerLevelRatio, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ManaPerLevelRatio, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ManaPerEnergyRatio, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ManaPerEnergyRatio, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ManaPerEnergyRatio, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <input type="submit" value="<Create>" class="btn btn-block" />
+        </div>
+    </section>
+}
+

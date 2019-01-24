@@ -1,0 +1,285 @@
+﻿@model Website.Models.AdventureModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<section>
+    <div class="container">
+        <h2>Edit</h2>
+    </div>
+</section>
+
+@using (Html.BeginForm())
+{
+    <section class="p-2">
+        <div class="container">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <input type="hidden" name="AdventureId" value="@Model.AdventureId" />
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.SelectedVersion, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(DataRepositories.VersionRepository.GetAll(), "Id", null), new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.SelectedVersion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-9">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-info p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.RequiredLevel, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.RequiredLevel, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.RequiredLevel, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.MaxLevelAuthorized, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.MaxLevelAuthorized, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.MaxLevelAuthorized, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ExperienceReward, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ExperienceReward, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ExperienceReward, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ShardReward, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ShardReward, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ShardReward, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h2>@Html.LabelFor(model => model.Rooms, htmlAttributes: new { @class = "control-label" })</h2>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => Model.NewRooms, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => Model.NewRooms, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="input-group-append">
+                            <input type="submit" value="+" class="btn btn-primary btn-block" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2" id="roomList">
+                @if (Model != null && Model.Rooms != null)
+                {
+                    for (var i = 0; i < Model.Rooms.Count; i++)
+                    {
+                        var roomId = Guid.NewGuid();
+
+                        <div id="room-card-@roomId" class="col-md-6 mb-2">
+
+                            @Html.HiddenFor(model => Model.Rooms[i].Id)
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <ul class="nav nav-tabs card-header-tabs pull-right" id="room-tab-list-@roomId" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="room-tab-@roomId" data-toggle="tab" href="#room-@roomId" role="tab" aria-controls="room-@roomId" aria-selected="true">Room</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="shop-items-tab-@roomId" data-toggle="tab" href="#shop-items-@roomId" role="tab" aria-controls="shop-items-@roomId" aria-selected="false">
+                                                @Html.LabelFor(model => Model.Rooms[i].ShopItems, htmlAttributes: new { @class = "control-label" })
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="ennemies-tab-@roomId" data-toggle="tab" href="#ennemies-@roomId" role="tab" aria-controls="ennemies-@roomId" aria-selected="false">
+                                                @Html.LabelFor(model => Model.Rooms[i].Enemies, htmlAttributes: new { @class = "control-label" })
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="room-@roomId" role="tabpanel" aria-labelledby="room-tab-@roomId">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            @Html.LabelFor(model => Model.Rooms[i].Type, htmlAttributes: new { @class = "input-group-text" })
+                                                        </div>
+                                                        @Html.EnumDropDownListFor(model => Model.Rooms[i].Type, new { @class = "form-control item-list-changer" })
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => Model.Rooms[i].Type, "", new { @class = "text-danger" })
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            @Html.LabelFor(model => Model.Rooms[i].RoomNumber, htmlAttributes: new { @class = "input-group-text" })
+                                                        </div>
+                                                        @Html.EditorFor(model => Model.Rooms[i].RoomNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => Model.Rooms[i].RoomNumber, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="shop-items-@roomId" role="tabpanel" aria-labelledby="shop-items-tab-@roomId">
+                                            <div class="row mt-1">
+                                                <div class="offset-md-4 col-md-8">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            @Html.LabelFor(model => Model.Rooms[i].NewItems, htmlAttributes: new { @class = "input-group-text" })
+                                                        </div>
+                                                        @Html.EditorFor(model => Model.Rooms[i].NewItems, new { htmlAttributes = new { @class = "form-control" } })
+                                                        <div class="input-group-append">
+                                                            <input type="submit" value="+" class="btn btn-primary btn-block" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-1" id="shop_item_list_@roomId">
+                                                @if (Model != null && Model.Rooms[i].ShopItems != null)
+                                                {
+                                                    for (var j = 0; j < Model.Rooms[i].ShopItems.Count; j++)
+                                                    {
+                                                        Model.Rooms[i].ShopItems[j].RoomId = i.ToString();
+                                                        Html.RenderPartial("ShopItemPartial", Model.Rooms[i].ShopItems[j]);
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="ennemies-@roomId" role="tabpanel" aria-labelledby="ennemies-tab-@roomId">
+                                            <div class="row mt-1">
+                                                <div class="offset-md-4 col-md-8">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            @Html.LabelFor(model => Model.Rooms[i].NewEnemies, htmlAttributes: new { @class = "input-group-text" })
+                                                        </div>
+                                                        @Html.EditorFor(model => Model.Rooms[i].NewEnemies, new { htmlAttributes = new { @class = "form-control" } })
+                                                        <div class="input-group-append">
+                                                            <input type="submit" value="+" class="btn btn-primary btn-block" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-1" id="enemy_list_@roomId">
+                                                @if (Model != null && Model.Rooms[i].Enemies != null)
+                                                {
+                                                    for (var j = 0; j < Model.Rooms[i].Enemies.Count; j++)
+                                                    {
+                                                        Model.Rooms[i].Enemies[j].RoomId = i.ToString();
+                                                        Html.RenderPartial("EnemyPartial", Model.Rooms[i].Enemies[j]);
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <input type="submit" value="Edit" class="btn btn-success btn-block" />
+        </div>
+    </section>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#addRoomToDungeon").click(function () {
+                $.ajax({
+                    url: "/Dungeons/AddRoomPartial",
+                    cache: false,
+                    type: "GET",
+                    success: function (data) {
+                        $('#roomList').append(data);
+                        $('#roomList').fadeIn('fast');
+                    }
+                });
+            });
+        });
+
+        function addShopItemToRoom(room) {
+            var elem = document.getElementById('room-card-' + room.id);
+            $.ajax({
+                url: "/Dungeons/AddShopItemPartial",
+                cache: false,
+                type: "GET",
+                data: {
+                    "id": $(elem).children("input[name='Rooms.index']").val()
+                },
+                success: function (data) {
+                    $('#shop_item_list_' + room.id).append(data);
+                    $('#shop_item_list_' + room.id).fadeIn('fast');
+                }
+            });
+        }
+
+        function addEnnemyToRoom(ennemy) {
+            var elem = document.getElementById('room-card-' + ennemy.id);
+            $.ajax({
+                url: "/Dungeons/AddEnemyPartial",
+                cache: false,
+                type: "GET",
+                data: {
+                    "id": $(elem).children("input[name='Rooms.index']").val()
+                },
+                success: function (data) {
+                    $('#enemy_list_' + ennemy.id).append(data);
+                    $('#enemy_list_' + ennemy.id).fadeIn('fast');
+                }
+            });
+        }
+    </script>
+}

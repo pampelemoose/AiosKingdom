@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
+             x:Class="AiosKingdom.Views.DungeonListPage"
+             BackgroundColor="{StaticResource PrimaryColor_0}">
+    <ContentView.Content>
+        <Grid>
+            <ListView
+                ItemsSource="{Binding Dungeons}"
+                SelectedItem="{Binding SelectedDungeon, Mode=TwoWay}"
+                RowHeight="50"
+                ItemTemplate="{StaticResource DungeonListItem}"/>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

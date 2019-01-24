@@ -1,0 +1,246 @@
+﻿@model DataModels.Monsters.Monster
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<section class="p-2">
+    <div class="container">
+        <div class="row">
+            <div class="media">
+                <div class="media-body">
+                    <h5 class="mt-0">@Model.Name</h5>
+                    <p class="lead">@Model.Description</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="p-2">
+    <div class="container">
+        <p class="mb-0">@Model.Story</p>
+    </div>
+</section>
+
+<section class="p-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card card-dark card-body">
+                    <table class="table">
+                        <thead class="table-borderless">
+                            <tr>
+                                <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().DropRate)</th>
+                                <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().ItemVid)</th>
+                                <th>@Html.LabelFor(model => model.Loots.FirstOrDefault().Quantity)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loot in Model.Loots)
+                            {
+                                <tr>
+                                    <td>@loot.DropRate</td>
+                                    <td>
+                                        @DataRepositories.ItemRepository.GetById(loot.ItemVid).Name
+                                    </td>
+                                    <td>@loot.Quantity</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-dark card-body">
+                    <div class="row">
+                        <div class="col-md-10">
+                            @Html.LabelFor(model => model.BaseHealth, new { @class = "font-weight-bold" })
+                        </div>
+                        <div class="col-md-2">
+                            @Model.BaseHealth
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            @Html.LabelFor(model => model.HealthPerLevel, new { @class = "font-weight-bold" })
+                        </div>
+                        <div class="col-md-2">
+                            @Model.HealthPerLevel
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            @Html.LabelFor(model => model.BaseExperience, new { @class = "font-weight-bold" })
+                        </div>
+                        <div class="col-md-2">
+                            @Model.BaseExperience
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            @Html.LabelFor(model => model.ExperiencePerLevelRatio, new { @class = "font-weight-bold" })
+                        </div>
+                        <div class="col-md-2">
+                            @Model.ExperiencePerLevelRatio
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-dark card-body mt-2">
+                    <div class="row">
+                        <table class="table col-md-12">
+                            <thead class="table-borderless">
+                                <tr>
+                                    <th>@Html.LabelFor(model => model.Types)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var type in Model.Types)
+                                {
+                                    <tr>
+                                        <td>@type</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+<section class="p-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Phases</h2>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var phase in Model.Phases)
+            {
+                var skill = DataRepositories.BookRepository.GetAllForVersion(Model.VersionId).FirstOrDefault(i => i.Vid.Equals(phase.BookVid));
+
+                <div class="col-md-6">
+                    <div class="card card-dark">
+                        <div class="card-header">
+                            <h4>@skill.Description</h4>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var insc in skill.Inscriptions)
+                            {
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-6 font-weight-bold">
+                                            Type
+                                        </div>
+                                        <div class="col-md-6">
+                                            @insc.Type
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-8 font-weight-bold">
+                                            BaseValue
+                                        </div>
+                                        <div class="col-md-4">
+                                            @insc.BaseValue
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-6 font-weight-bold">
+                                            StatType
+                                        </div>
+                                        <div class="col-md-6">
+                                            @insc.StatType
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-8 font-weight-bold">
+                                            Ratio
+                                        </div>
+                                        <div class="col-md-4">
+                                            @insc.Ratio
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-8 font-weight-bold">
+                                            Duration
+                                        </div>
+                                        <div class="col-md-4">
+                                            @insc.Duration
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    @if (insc.IncludeWeaponDamages)
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <strong>Weapon Types</strong>
+                                                <div class="row border">
+                                                    <div class="col-md-8">
+                                                        WD Ratio
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        @insc.WeaponDamagesRatio
+                                                    </div>
+                                                </div>
+                                                @foreach (var type in insc.WeaponTypes)
+                                                {
+                                                    @type
+                                                }
+                                            </div>
+                                            @if (insc.PreferredWeaponTypes.Count > 0)
+                                            {
+                                                <div class="col-md-6 border-left">
+                                                    <strong>Preferred Weapon Types</strong>
+                                                    <div class="row border">
+                                                        <div class="col-md-8">
+                                                            WD Ratio
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            @insc.PreferredWeaponDamagesRatio
+                                                        </div>
+                                                    </div>
+                                                    @foreach (var type in insc.PreferredWeaponTypes)
+                                                    {
+                                                        @type
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>
+
+@if (User.IsInRole("SuperAdmin"))
+{
+    <section class="p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.Vid }, new { @class = "btn btn-block" })
+                </div>
+            </div>
+        </div>
+    </section>
+}

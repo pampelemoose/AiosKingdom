@@ -1,0 +1,176 @@
+﻿@model Website.Models.BookModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<section>
+    <div class="container">
+        <h2>Create</h2>
+    </div>
+</section>
+
+@using (Html.BeginForm())
+{
+    <section class="p-2">
+        <div class="container">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-12 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.SelectedVersion, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(DataRepositories.VersionRepository.GetAll(), "Id", null), new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.SelectedVersion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Quality, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EnumDropDownListFor(model => model.Quality, new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Quality, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-dark text-muted p-3">
+        <div class="container">
+            <div class="row mt-1">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.StatCost, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.StatCost, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.StatCost, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ManaCost, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ManaCost, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ManaCost, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Cooldown, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Cooldown, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Cooldown, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="p-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10">
+                    <h2>@Html.LabelFor(model => model.Inscriptions, htmlAttributes: new { @class = "control-label" })</h2>
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-block" type="button" onclick="addInscToBook()" value="<Add Inscription>" />
+                </div>
+            </div>
+
+            <div class="row mt-2" id="inscList">
+                @if (Model != null && Model.Inscriptions != null)
+                {
+                    for (var i = 0; i < Model.Inscriptions.Count; i++)
+                    {
+
+                        Html.RenderPartial("InscPartial", Model.Inscriptions[i]);
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-2">
+        <div class="container">
+            <input type="submit" value="<Create>" class="btn btn-block" />
+        </div>
+    </section>
+}
+
+@section Scripts {
+    <script>
+        function addInscToBook() {
+            $.ajax({
+                url: "/Books/AddInscPartial",
+                cache: false,
+                type: "GET",
+                success: function (data) {
+                    $('#inscList').append(data);
+                    $('#inscList').fadeIn('fast');
+                }
+            });
+        }
+
+        function addWeaponTypeToInsc(insc) {
+            var elem = document.getElementById('insc-card-' + insc.id);
+            $.ajax({
+                url: "/Books/AddWeaponTypePartial",
+                cache: false,
+                type: "GET",
+                data: {
+                    "inscId": $(elem).children("input[name='Inscriptions.index']").val(),
+                    "typeExtension": "WeaponTypes"
+                },
+                success: function (data) {
+                    $('#weaponTypeList_' + insc.id).append(data);
+                    $('#weaponTypeList_' + insc.id).fadeIn('fast');
+                }
+            });
+        }
+
+        function addPrefferedWeaponTypeToInsc(insc) {
+            var elem = document.getElementById('insc-card-' + insc.id);
+            $.ajax({
+                url: "/Books/AddWeaponTypePartial",
+                cache: false,
+                type: "GET",
+                data: {
+                    "inscId": $(elem).children("input[name='Inscriptions.index']").val(),
+                    "typeExtension": "PreferredWeaponTypes"
+                },
+                success: function (data) {
+                    $('#prefferedWeaponTypeList_' + insc.id).append(data);
+                    $('#prefferedWeaponTypeList_' + insc.id).fadeIn('fast');
+                }
+            });
+        }
+    </script>
+}

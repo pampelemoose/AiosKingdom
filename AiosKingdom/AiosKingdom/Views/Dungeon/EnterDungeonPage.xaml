@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
+             x:Class="AiosKingdom.Views.Dungeon.EnterDungeonPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <Grid
+            BackgroundColor="{StaticResource PrimaryColor_0}"
+            Padding="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+            <Label 
+                Grid.Row="0"
+                Text="{Binding Dungeon.Name}"
+                FontSize="15"
+                FontAttributes="Bold"
+                HorizontalOptions="CenterAndExpand"/>
+            <StackLayout
+                Grid.Row="1">
+                <Label 
+                    Text="{Binding Confirmation}"
+                    FontSize="20"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand" />
+                <Label 
+                    Text="{Binding Warning}"
+                    FontAttributes="Italic"
+                    FontSize="13"
+                    Margin="20"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+
+            <Grid
+                Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Text="Close"
+                    Style="{StaticResource LightMenuButton}"
+                    Command="{Binding CloseAction}"/>
+                <Button
+                    Grid.Column="2"
+                    Text="Enter"
+                    Style="{StaticResource MenuButton}"
+                    Command="{Binding EnterAction}"/>
+            </Grid>
+
+            <ctrl:LoadingIndicator
+                Grid.RowSpan="3"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

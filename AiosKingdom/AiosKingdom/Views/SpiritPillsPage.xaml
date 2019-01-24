@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
+             xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+             x:Class="AiosKingdom.Views.SpiritPillsPage"
+             BackgroundColor="{StaticResource PrimaryColor_0}">
+    <ContentView.BindingContext>
+        <vm:SpiritPillsPageViewModel />
+    </ContentView.BindingContext>
+    <ContentView.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid
+                Grid.Column="0"
+                Margin="5"
+                BackgroundColor="{Binding StatType, Converter={StaticResource statToColor}}">
+                <Grid
+                    Margin="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="1"
+                        BackgroundColor="Transparent"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding StatType}" />
+
+                    <ContentView
+                        Grid.Row="2"
+                        Padding="5"
+                        BackgroundColor="{StaticResource SecondaryColor_2}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="3*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button
+                                Grid.Column="0"
+                                Text="-"
+                                Style="{StaticResource TertiaryMenuButton}"
+                                Command="{Binding DecreasePillAmountAction}" />
+                            <Label
+                                Grid.Column="1"
+                                BackgroundColor="{StaticResource SecondaryColor_3}"
+                                TextColor="{StaticResource SecondaryColor_1}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding PillsAmount}" />
+                            <Label
+                                Grid.Column="2"
+                                BackgroundColor="{StaticResource SecondaryColor_3}"
+                                TextColor="{StaticResource SecondaryColor_1}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding Spirits}" />
+                            <Button
+                                Grid.Column="3"
+                                Text="+"
+                                Style="{StaticResource TertiaryMenuButton}"
+                                Command="{Binding IncreasePillAmountAction}" />
+                        </Grid>
+                    </ContentView>
+
+                    <Button
+                        Grid.Row="3"
+                        Text="Use"
+                        Style="{StaticResource MenuButton}"
+                        Command="{Binding UsePillAction}" />
+                </Grid>
+            </Grid>
+
+            <Grid
+                Grid.Column="1"
+                Margin="0, 0, 5, 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid
+                    Grid.Row="0"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        BackgroundColor="{StaticResource StatColor_Stamina}"
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Stamina"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding StaminaPillsAction}" />
+                </Grid>
+
+                <Grid
+                    Grid.Row="1"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        BackgroundColor="{StaticResource StatColor_Energy}"
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Energy"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding EnergyPillsAction}" />
+                </Grid>
+
+                <Grid
+                    Grid.Row="2"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource StatColor_Strength}"
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Strength"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding StrengthPillsAction}" />
+                </Grid>
+
+                <Grid
+                    Grid.Row="3"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource StatColor_Agility}"
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Agility"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding AgilityPillsAction}" />
+                </Grid>
+
+                <Grid
+                    Grid.Row="4"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource StatColor_Intelligence}"
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Intelligence"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding IntelligencePillsAction}" />
+                </Grid>
+
+                <Grid
+                    Grid.Row="5"
+                    BackgroundColor="{StaticResource PrimaryColor_3}"
+                    Padding="5"
+                    Margin="0, 5">
+
+                    <Label
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource StatColor_Wisdom}"
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Wisdom"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding WisdomPillsAction}" />
+                </Grid>
+
+            </Grid>
+
+            <Grid
+                Grid.ColumnSpan="2"
+                IsVisible="{Binding IsInfoVisible}"
+                BackgroundColor="Black"
+                Opacity="0.7">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource PrimaryColor_3}">
+                        <Label
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="Center"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            Text="Shop"/>
+                    </Grid>
+
+                    <Label
+                        Grid.Row="1"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        TextColor="{StaticResource PrimaryColor_4}"
+                        Text="{Binding ResultMessage}"/>
+
+                </Grid>
+
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="3"
+                    BackgroundColor="Transparent"
+                    Command="{Binding CloseInfoAction}"/>
+            </Grid>
+            
+            <ctrl:LoadingIndicator
+                Grid.ColumnSpan="2"/>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

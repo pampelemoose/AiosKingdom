@@ -1,0 +1,53 @@
+﻿@model List<DataModels.Website.Category>
+
+@{
+    ViewBag.Title = "Forum";
+}
+
+<section class="p-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <h2>Forum</h2>
+            </div>
+            @if (User.IsInRole("SuperAdmin"))
+            {
+                Html.RenderPartial("CategoryFormPartial", new Website.Models.CategoryModel());
+            }
+        </div>
+    </div>
+</section>
+
+@foreach (var categoryIt in Model.Select((value, index) => new { index, value }))
+{
+    <section class="p-2">
+        <div class="container">
+            <div class="row forum-category-header mt-2">
+                <div class="col-md-12 h3">
+                    <a class="d-block" href="/Forum/Category/@(categoryIt.value.Id)">
+                        @categoryIt.value.Name <span class="badge badge-primary">@categoryIt.value.Threads.Count</span>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var thread in categoryIt.value.Threads.OrderBy(t => t.IsAnnoucment).OrderByDescending(t => t.CreatedAt).Take(5))
+                {
+                    var commentCount = thread.Comments != null ? thread.Comments.Count : 0;
+                    <div class="col-md-12 forum-thread mt-2">
+                        <a class="d-block" href="/Forum/Thread/@(thread.Id)">
+                            <div>
+                                <strong>@thread.Name</strong> <span class="badge badge-secondary">@commentCount</span>
+                            </div>
+                            <div>
+                                <small>
+
+                                    @thread.CreatedAt - <strong>@thread.CreatedByUsername</strong>
+                                </small>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}

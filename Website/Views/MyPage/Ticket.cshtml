@@ -1,0 +1,48 @@
+﻿@model DataModels.Website.Ticket
+
+@{
+    ViewBag.Title = "Ticket";
+}
+
+<section class="p-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <span class="h2">@Model.Category</span> - <span class="h5"><a href="/MyPage">MyPage</a></span>
+            </div>
+            <div class="col-md-12">
+                @if (!Guid.Empty.Equals(Model.AssignedTo))
+                {
+                    <small>@Model.AssignedAt - <strong>@Model.AssignedToUsername</strong></small>
+                }
+                else
+                {
+                    <small><strong>Unassigned</strong></small>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="p-2">
+    <div class="container">
+        <div class="row">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="col-md-12 card card-dark mt-2">
+                    <div class="card-body">
+                        @Html.Raw(comment.Content)
+                    </div>
+                    <div class="card-footer text-right">
+                        @comment.CreatedAt - @comment.CreatedByUsername
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@if (Model.IsOpen)
+{
+    Html.RenderPartial("CommentFormPartial", new Website.Models.CommentModel());
+}

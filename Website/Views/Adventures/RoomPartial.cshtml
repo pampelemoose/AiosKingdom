@@ -1,0 +1,96 @@
+﻿@model Website.Models.RoomModel
+
+@{
+    var roomId = Guid.NewGuid();
+}
+
+<div id="room-card-@roomId" class="col-md-6 mb-2">
+    @using (Html.BeginCollectionItem("Rooms"))
+    {
+        @Html.HiddenFor(model => Model.Id)
+
+        <div class="card card-dark">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs pull-right" id="room-tab-list-@roomId" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="room-tab-@roomId" data-toggle="tab" href="#room-@roomId" role="tab" aria-controls="room-@roomId" aria-selected="true">Room</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="shop-items-tab-@roomId" data-toggle="tab" href="#shop-items-@roomId" role="tab" aria-controls="shop-items-@roomId" aria-selected="false">
+                            @Html.LabelFor(model => model.ShopItems, htmlAttributes: new { @class = "control-label" })
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="ennemies-tab-@roomId" data-toggle="tab" href="#ennemies-@roomId" role="tab" aria-controls="ennemies-@roomId" aria-selected="false">
+                            @Html.LabelFor(model => model.Enemies, htmlAttributes: new { @class = "control-label" })
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="room-@roomId" role="tabpanel" aria-labelledby="room-tab-@roomId">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "input-group-text" })
+                                    </div>
+                                    @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control item-list-changer" })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "input-group-text" })
+                                    </div>
+                                    @Html.EditorFor(model => model.RoomNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.RoomNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="shop-items-@roomId" role="tabpanel" aria-labelledby="shop-items-tab-@roomId">
+                        <div class="row mt-1">
+                            <div class="offset-md-8 col-md-4">
+                                <input class="btn btn-block" type="button" onclick="addShopItemToRoom(this)" value="<Add ShopItem>" id="@roomId" />
+                            </div>
+                        </div>
+
+                        <div class="row mt-1" id="shop_item_list_@roomId">
+                            @if (Model != null && Model.ShopItems != null)
+                            {
+                                for (var i = 0; i < Model.ShopItems.Count; i++)
+                                {
+                                    Html.RenderPartial("ShopItemPartial", Model.ShopItems[i]);
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="ennemies-@roomId" role="tabpanel" aria-labelledby="ennemies-tab-@roomId">
+                        <div class="row mt-1">
+                            <div class="offset-md-8 col-md-4">
+                                <input class="btn btn-block" type="button" onclick="addEnnemyToRoom(this)" value="<Add Ennemy>" id="@roomId" />
+                            </div>
+                        </div>
+                        <div class="row mt-1" id="enemy_list_@roomId">
+                            @if (Model != null && Model.Enemies != null)
+                            {
+                                for (var i = 0; i < Model.Enemies.Count; i++)
+                                {
+                                    Html.RenderPartial("EnemyPartial", Model.Enemies[i]);
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
+             xmlns:views="clr-namespace:AiosKingdom.Views;"
+             x:Class="AiosKingdom.Views.HomePage">
+    <ContentPage.Content>
+        <Grid
+            RowSpacing="0"
+            BackgroundColor="{StaticResource PrimaryColor_0}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0"
+                ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="0"
+                    ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="8*" />
+                        <ColumnDefinition Width="4*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ContentView
+                        Grid.Column="0"
+                        Padding="3"
+                        BackgroundColor="{StaticResource PrimaryColor_2}">
+                        <Label
+                            BackgroundColor="{StaticResource PrimaryColor_3}"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            FontSize="28"
+                            FontAttributes="Bold"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding Datas.Level}"/>
+                    </ContentView>
+
+                    <Grid
+                        Grid.Column="1"
+                        RowSpacing="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <ContentView
+                            Grid.Row="0"
+                            Padding="5"
+                            BackgroundColor="{StaticResource PrimaryColor_2}">
+                            <Label
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Text="{Binding Datas.Name}" />
+                        </ContentView>
+
+                        <Grid
+                            Grid.Row="1"
+                            BackgroundColor="{StaticResource PrimaryColor_1}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="6*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label
+                                Grid.Column="0"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                FontSize="10"
+                                Text="Experience : " />
+
+                            <Label
+                                Grid.Column="1"
+                                HorizontalTextAlignment="End"
+                                VerticalTextAlignment="Center"
+                                FontSize="10"
+                                FontAttributes="Bold"
+                                Text="{Binding Datas.CurrentExperience}" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="Start"
+                                VerticalTextAlignment="Center"
+                                FontSize="10"
+                                FontAttributes="Bold"
+                                Text="{Binding Datas.RequiredExperience, StringFormat='/ {0}'}" />
+                        </Grid>
+                    </Grid>
+
+                    <Grid
+                        Grid.Column="2"
+                        BackgroundColor="{StaticResource TertiaryColor_0}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="10"
+                            Text="Health :" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="10"
+                            FontAttributes="Bold"
+                            Text="{Binding Datas.MaxHealth}" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="10"
+                            Text="Mana :" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="10"
+                            FontAttributes="Bold"
+                            Text="{Binding Datas.MaxMana}" />
+
+                    </Grid>
+                </Grid>
+
+                <Button
+                    Grid.Column="0"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ShowSoulDetailsAction}"/>
+
+                <Grid
+                    Grid.Column="1">
+                    <Image
+                        Margin="5"
+                        Source="Assets/Images/settings.png"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Clicked="ShowSetting_Clicked"/>
+                </Grid>
+
+            </Grid>
+
+            <Grid
+                Grid.Row="1"
+                ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="0"
+                    ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="0"
+                        BackgroundColor="{StaticResource SecondaryColor_0}"
+                        TextColor="{StaticResource SecondaryColor_4}"
+                        BorderWidth="5"
+                        FontSize="60"
+                        Text="PvE"
+                        Command="{Binding ShowContentAction}"
+                        CommandParameter="Dungeons"/>
+                    <Button
+                        Grid.Column="1"
+                        BackgroundColor="{StaticResource SecondaryColor_0}"
+                        TextColor="{StaticResource SecondaryColor_4}"
+                        BorderWidth="5"
+                        FontSize="60"
+                        Text="PvP"
+                        IsEnabled="False"/>
+                    <Label
+                        Grid.Column="1"
+                        Margin="20"
+                        BackgroundColor="Transparent"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="End"
+                        FontSize="10"
+                        Text="(Coming soon)" />
+
+                    <ContentView
+                        Grid.ColumnSpan="2"
+                        Content="{Binding HomeContent}"
+                        IsVisible="{Binding ShowContent}"/>
+                </Grid>
+
+                <StackLayout
+                    Grid.Column="1"
+                    VerticalOptions="End"
+                    Padding="0"
+                    Spacing="0">
+
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/home.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Home"/>
+                    </Grid>
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/chest.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Inventory"/>
+                    </Grid>
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/pill.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Spirits"/>
+                    </Grid>
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/knowledge.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Knowledge"/>
+                    </Grid>
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/shop.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Market"/>
+                    </Grid>
+                    <Grid
+                        HeightRequest="40"
+                        BackgroundColor="{StaticResource TertiaryColor_1}">
+                        <Image
+                            Margin="2"
+                            BackgroundColor="{StaticResource TertiaryColor_0}"
+                            Source="Assets/Images/bookstore.png"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ShowContentAction}"
+                            CommandParameter="Bookstore"/>
+                    </Grid>
+                </StackLayout>
+            </Grid>
+
+            <views:DashboardView
+                Grid.Row="1"
+                IsVisible="{Binding ShowSoulDetails}"/>
+
+            <ctrl:LoadingIndicator
+                Grid.RowSpan="2"/>
+
+            <ctrl:TutorialLayer
+                Grid.RowSpan="2"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

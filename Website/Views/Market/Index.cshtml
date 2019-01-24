@@ -1,0 +1,104 @@
+﻿@model Website.Models.Filters.MarketSlotFilter
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@using (Html.BeginForm())
+{
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11">
+                    <h2>Market Items</h2>
+                </div>
+                <div class="col-md-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group">
+                            <button class="btn btn-primary dropdown-toggle dropdown-toggle-split" type="button" data-toggle="collapse" data-target="#filter-body" aria-expanded="false" aria-controls="filter-body">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-info collapse p-2" id="filter-body">
+        <div class="container">
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.SelectedServer, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.DropDownListFor(model => model.SelectedServer, new SelectList(DataRepositories.TownRepository.GetAll(), "Id", "Name"), new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.IsSpecial, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.IsSpecial, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="offset-md-10 col-md-2">
+                    <input type="submit" value="Filter" class="btn btn-default btn-block" />
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<section>
+    <div class="container">
+        <div class="row">
+            @foreach (var slot in Model.Slots)
+            {
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                    <div class="card card-dark text-center mt-3">
+                        <div class="card-header">
+                            @{ 
+                                var item = DataRepositories.ItemRepository.GetById(slot.ItemVid);
+                            }
+                            @item.Type - @item.Name
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-8">Is Special</div>
+                                    <div class="col-4">@slot.IsSpecial</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-8">Quantity</div>
+                                    <div class="col-4">@slot.Quantity</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-8">Price</div>
+                                    <div class="col-4">@slot.Price</div>
+                                </div>
+                            </li>
+                        </ul>
+                        @if (User.IsInRole("SuperAdmin") && slot.IsSpecial)
+                        {
+                            <div class="card-footer">
+                                @Html.ActionLink("<Edit>", "Edit", new { id = slot.Id }, new { @class = "btn btn-block" })
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AiosKingdom.Views.Dungeon.ConsumableSelectionPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <Grid
+            BackgroundColor="{StaticResource PrimaryColor_0}"
+            Padding="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+            <Label 
+                Grid.Row="0"
+                Text="Consumables"
+                FontSize="20"
+                FontAttributes="Bold"
+                HorizontalOptions="CenterAndExpand"/>
+
+            <ListView
+                Grid.Row="1"
+                BackgroundColor="{StaticResource PrimaryColor_3}"
+                ItemsSource="{Binding Consumables}"
+                SelectedItem="{Binding SelectedConsumable}"
+                RowHeight="50"
+                SeparatorVisibility="None"
+                ItemTemplate="{StaticResource DungeonSelectConsumableListItem}"/>
+
+            <Grid
+                Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Text="Close"
+                    Style="{StaticResource SecondaryMenuButton}"
+                    Command="{Binding CloseAction}"/>
+                <Button
+                    Grid.Column="2"
+                    Text="Validate"
+                    Style="{StaticResource MenuButton}"
+                    Command="{Binding ValidateAction}"/>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

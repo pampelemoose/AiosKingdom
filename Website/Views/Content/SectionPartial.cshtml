@@ -1,0 +1,83 @@
+﻿@model List<DataModels.Website.Section>
+
+@if (Model != null)
+{
+    foreach (var section in Model)
+    {
+        if (section.Type == DataModels.Website.ContentType.Carrousel)
+        {
+            <section class="section">
+                <div id="carouselHeader" class="carousel @(section.Contents.Count > 1 ? "slide" : "")" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        @if (section.Contents.Count > 1)
+                        {
+                            for (int i = 0; i < section.Contents.Count; ++i)
+                            {
+                                <li data-target="#carouselHeader" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+                            }
+                        }
+                    </ol>
+                    <div class="carousel-inner">
+                        @foreach (var banner in section.Contents.Select((value, i) => new { i, value }))
+                        {
+                            <div class="carousel-item @(banner.i == 0 ? "active" : "")" style="background-color: @banner.value.BackgroundColor">
+                                @if (!string.IsNullOrEmpty(banner.value.Image))
+                                {
+                                    <img class="d-block w-100" src="@banner.value.Image">
+                                }
+                                <div class="@(!string.IsNullOrEmpty(banner.value.Image) ? "carousel-caption" : "carousel-content") d-none d-md-block" style="color: @banner.value.TextColor">
+                                    @Html.Raw(banner.value.Content)
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    @if (section.Contents.Count > 1)
+                    {
+                        <a class="carousel-control-prev" href="#carouselHeader" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselHeader" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    }
+                </div>
+            </section>
+        }
+
+        if (section.Type == DataModels.Website.ContentType.Row)
+        {
+            if (section.Contents.Count > 0)
+            {
+                foreach (var banner in section.Contents.Select((value, i) => new { i, value }))
+                {
+                    <section class="section p-5" style="background-color: @banner.value.BackgroundColor">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                @{
+                                    bool hasImage = !string.IsNullOrEmpty(banner.value.Image);
+                                }
+                                @if (hasImage && banner.value.ImageSide == DataModels.Website.ImageSide.Left)
+                                {
+                                    <div class="col-md-5">
+                                        <img class="d-block w-100" src="@banner.value.Image">
+                                    </div>
+                                }
+                                <div class="@(hasImage ? "col-md-7" : "col-md-12 text-center p-5")" style="color: @banner.value.TextColor">
+                                    @Html.Raw(banner.value.Content)
+                                </div>
+                                @if (hasImage && banner.value.ImageSide == DataModels.Website.ImageSide.Right)
+                                {
+                                    <div class="col-md-5">
+                                        <img class="d-block w-100" src="@banner.value.Image">
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </section>
+                }
+            }
+        }
+    }
+}

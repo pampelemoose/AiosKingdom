@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
+             x:Class="AiosKingdom.Views.BuyItemPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <Grid>
+            <Grid
+                BackgroundColor="{StaticResource PrimaryColor_0}"
+                Padding="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                <Label 
+                    Grid.Row="0"
+                    Text="{Binding Item.Item.Name}"
+                    FontSize="15"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand"/>
+
+                <Grid
+                    Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid
+                        Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="140"/>
+                            <RowDefinition Height="60"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid
+                            Grid.Row="1"
+                            IsVisible="{Binding IsConsumable}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                            </Grid.RowDefinitions>
+
+                            <Button
+                                Grid.Row="0"
+                                Text="Min"
+                                Style="{StaticResource TertiaryMenuButton}"
+                                Command="{Binding MinAction}"/>
+
+                            <Grid
+                                Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                <Button
+                                    Grid.Column="0"
+                                    Text="-"
+                                    Style="{StaticResource TertiaryMenuButton}"
+                                    Command="{Binding SubAction}"/>
+                                <Label
+                                    Grid.Column="1"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    FontAttributes="Bold"
+                                    Text="{Binding Quantity}"/>
+                                <Button
+                                    Grid.Column="2"
+                                    Text="+"
+                                    Style="{StaticResource TertiaryMenuButton}"
+                                    Command="{Binding AddAction}"/>
+                            </Grid>
+
+                            <Button
+                                Grid.Row="2"
+                                Text="Max"
+                                Style="{StaticResource TertiaryMenuButton}"
+                                Command="{Binding MaxAction}"/>
+                        </Grid>
+
+                        <Grid
+                            Grid.Row="2"
+                            Padding="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <ContentView
+                                Grid.Column="0"
+                                BackgroundColor="{StaticResource SecondaryColor_1}"
+                                IsVisible="{Binding IsShardSelected}"/>
+
+                            <Button
+                                Grid.Column="0"
+                                Margin="5"
+                                BackgroundColor="{StaticResource SecondaryColor_3}"
+                                TextColor="{StaticResource SecondaryColor_1}"
+                                Text="{Binding Shards}"
+                                Command="{Binding SelectShardAction}"/>
+
+                            <ContentView
+                                Grid.Column="1"
+                                BackgroundColor="Red"
+                                IsVisible="{Binding IsBitSelected}"/>
+
+                            <Button
+                                Grid.Column="1"
+                                Margin="5"
+                                BackgroundColor="{StaticResource SecondaryColor_3}"
+                                TextColor="{StaticResource SecondaryColor_1}"
+                                Text="{Binding Bits}"
+                                Command="{Binding SelectBitAction}"
+                                IsVisible="{Binding IsBitSelected}"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+                <Grid
+                    Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="5*" />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        Grid.Column="0"
+                        Text="Close"
+                        Style="{StaticResource LightMenuButton}"
+                        Command="{Binding CloseAction}"/>
+                    <Button
+                        Grid.Column="2"
+                        Text="Buy"
+                        Style="{StaticResource MenuButton}"
+                        Command="{Binding BuyAction}"/>
+                </Grid>
+            </Grid>
+            
+            <Grid
+                IsVisible="{Binding IsInfoVisible}"
+                BackgroundColor="Black"
+                Opacity="0.7">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource PrimaryColor_3}">
+                        <Label
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="Center"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            Text="Shop"/>
+                    </Grid>
+
+                    <Label
+                        Grid.Row="1"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        TextColor="{StaticResource PrimaryColor_4}"
+                        Text="{Binding ResultMessage}"/>
+
+                </Grid>
+
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="3"
+                    BackgroundColor="Transparent"
+                    Command="{Binding CloseInfoAction}"/>
+            </Grid>
+
+            <ctrl:LoadingIndicator/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

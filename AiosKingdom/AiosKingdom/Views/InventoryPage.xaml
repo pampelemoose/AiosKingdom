@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView    xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:inv="clr-namespace:AiosKingdom.Controls.Inventory;"
+                xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
+                xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+                x:Class="AiosKingdom.Views.InventoryPage"
+                BackgroundColor="{StaticResource PrimaryColor_0}">
+    <ContentView.BindingContext>
+        <vm:InventoryPageViewModel />
+    </ContentView.BindingContext>
+    <ContentView.Content>
+        <Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Column="1">
+                    <Grid
+                        IsVisible="{Binding IsArmorPanelActive}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <inv:ArmorDetailsPanel
+                            Grid.Column="0"/>
+
+                        <ListView
+                            Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            ItemsSource="{Binding Armors}"
+                            SelectedItem="{Binding SelectedArmor}"
+                            RowHeight="50"
+                            SeparatorVisibility="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid 
+                                            Margin="0, 5">
+                                            <ContentView
+                                                BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
+                                                Padding="5, 0, 0, 0">
+                                                <Grid
+                                                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                                                    <Label
+                                                        Margin="5, 0"
+                                                        FontAttributes="Bold"
+                                                        FontSize="15"
+                                                        VerticalTextAlignment="Center"
+                                                        Text="{Binding Item.Name}"/>
+                                                </Grid>
+                                            </ContentView>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+
+                    <Grid
+                        IsVisible="{Binding IsWeaponPanelActive}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <inv:WeaponDetailsPanel
+                            Grid.Column="0"/>
+
+                        <ListView
+                            Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            ItemsSource="{Binding Weapons}"
+                            SelectedItem="{Binding SelectedWeapon}"
+                            RowHeight="50"
+                            SeparatorVisibility="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid 
+                                            Margin="0, 5">
+                                            <ContentView
+                                                BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
+                                                Padding="5, 0, 0, 0">
+                                                <Grid
+                                                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                                                    <Label
+                                                        Margin="5, 0"
+                                                        FontAttributes="Bold"
+                                                        FontSize="15"
+                                                        VerticalTextAlignment="Center"
+                                                        Text="{Binding Item.Name}"/>
+                                                </Grid>
+                                            </ContentView>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+
+                    <Grid
+                        IsVisible="{Binding IsBagPanelActive}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <inv:BagDetailsPanel
+                            Grid.Column="0"/>
+
+                        <ListView
+                            Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            ItemsSource="{Binding Bags}"
+                            SelectedItem="{Binding SelectedBag}"
+                            RowHeight="50"
+                            SeparatorVisibility="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid 
+                                            Margin="0, 5">
+                                            <ContentView
+                                                BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
+                                                Padding="5, 0, 0, 0">
+                                                <Grid
+                                                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                                                    <Label
+                                                        Margin="5, 0"
+                                                        FontAttributes="Bold"
+                                                        FontSize="15"
+                                                        VerticalTextAlignment="Center"
+                                                        Text="{Binding Item.Name}"/>
+                                                </Grid>
+                                            </ContentView>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+
+                    <Grid
+                        IsVisible="{Binding IsConsumablePanelActive}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <inv:ConsumableDetailsPanel
+                            Grid.Column="0"/>
+
+                        <ListView
+                            Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            ItemsSource="{Binding Consumables}"
+                            SelectedItem="{Binding SelectedConsumable}"
+                            RowHeight="50"
+                            SeparatorVisibility="None"
+                            ItemTemplate="{StaticResource InventoryConsumableListItem}"/>
+                    </Grid>
+                </Grid>
+
+                <StackLayout
+                    VerticalOptions="End"
+                    Grid.Column="0"
+                    Spacing="0">
+
+                    <ContentView
+                        HeightRequest="40"
+                        Padding="3">
+                        <ContentView.Triggers>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsArmorPanelActive}" Value="False">
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsArmorPanelActive}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
+                            </DataTrigger>
+                        </ContentView.Triggers>
+                        <Grid
+                            HeightRequest="40">
+                            <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/shield.png"/>
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding ShowPanelAction}"
+                                CommandParameter="Armors"/>
+                        </Grid>
+                    </ContentView>
+
+                    <ContentView
+                        HeightRequest="40"
+                        Padding="3">
+                        <ContentView.Triggers>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsWeaponPanelActive}" Value="False">
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsWeaponPanelActive}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
+                            </DataTrigger>
+                        </ContentView.Triggers>
+                        <Grid
+                            HeightRequest="40">
+                            <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/swords.png"/>
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding ShowPanelAction}"
+                                CommandParameter="Weapons"/>
+                        </Grid>
+                    </ContentView>
+
+                    <ContentView
+                        HeightRequest="40"
+                        Padding="3">
+                        <ContentView.Triggers>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsBagPanelActive}" Value="False">
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsBagPanelActive}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
+                            </DataTrigger>
+                        </ContentView.Triggers>
+                        <Grid
+                            HeightRequest="40">
+                            <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/backpack.png"/>
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding ShowPanelAction}"
+                                CommandParameter="Bags"/>
+                        </Grid>
+                    </ContentView>
+
+                    <ContentView
+                        HeightRequest="40"
+                        Padding="3">
+                        <ContentView.Triggers>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsConsumablePanelActive}" Value="False">
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="ContentView" Binding="{Binding IsConsumablePanelActive}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
+                            </DataTrigger>
+                        </ContentView.Triggers>
+                        <Grid
+                            HeightRequest="40">
+                            <Image
+                                BackgroundColor="{StaticResource PrimaryColor_1}"
+                                Source="Assets/Images/flask.png"/>
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding ShowPanelAction}"
+                                CommandParameter="Consumables"/>
+                        </Grid>
+                    </ContentView>
+
+                </StackLayout>
+            </Grid>
+
+            <Grid
+                IsVisible="{Binding IsInfoVisible}"
+                BackgroundColor="Black"
+                Opacity="0.7">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0"
+                        BackgroundColor="{StaticResource PrimaryColor_3}">
+                        <Label
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="Center"
+                            TextColor="{StaticResource PrimaryColor_1}"
+                            Text="Inventory"/>
+                    </Grid>
+
+                    <Label
+                        Grid.Row="1"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        TextColor="{StaticResource PrimaryColor_4}"
+                        Text="{Binding ResultMessage}"/>
+
+                </Grid>
+
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="3"
+                    BackgroundColor="Transparent"
+                    Command="{Binding CloseInfoAction}"/>
+            </Grid>
+
+            <ctrl:LoadingIndicator/>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

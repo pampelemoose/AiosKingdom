@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AiosKingdom.Controls.Inventory.ArmorDetailsPanel"
+             IsVisible="{Binding ArmorSlotIsSelected}"
+             Padding="5">
+    <Grid
+        BackgroundColor="{Binding SelectedArmor.Item.Quality, Converter={StaticResource itemQualityToColor}}"
+        Padding="5">
+        <Grid
+            BackgroundColor="{StaticResource PrimaryColor_1}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Image
+                    Grid.Column="0"
+                    Source="{Binding SelectedArmor.Item, Converter={StaticResource objectToImage}}" />
+                <ContentView
+                    Grid.Column="1"
+                    BackgroundColor="Blue"
+                    Padding="5">
+                    <Label
+                        BackgroundColor="Gray"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding SelectedArmor.Item.UseLevelRequired}"/>
+                </ContentView>
+                <Grid
+                    Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontSize="10"
+                        Text="Item Level :"/>
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontSize="10"
+                        FontAttributes="Bold"
+                        Text="{Binding SelectedArmor.Item.ItemLevel}"/>
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        FontSize="10"
+                        Text="Armor :"/>
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontSize="10"
+                        FontAttributes="Bold"
+                        Text="{Binding SelectedArmor.Item.ArmorValue}"/>
+                </Grid>
+            </Grid>
+            
+            <ListView
+                Grid.Row="1"
+                BackgroundColor="Transparent"
+                ItemsSource="{Binding SelectedArmor.Item.Stats}"
+                HeightRequest="{Binding SelectedArmor.Item.Stats, Converter={StaticResource listToHeight}, ConverterParameter=20}"
+                RowHeight="20"
+                SeparatorVisibility="None"
+                IsEnabled="false"
+                ItemTemplate="{StaticResource StatListItem}"/>
+
+            <Grid
+                Grid.Row="2"
+                Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Style="{StaticResource SecondaryMenuButton}"
+                    Text="{Binding SelectedArmor.Item.SellingPrice, StringFormat='Sell({0})'}"
+                    Command="{Binding SellItemAction}"/>
+                
+                <Button
+                    Grid.Column="1"
+                    Style="{StaticResource MenuButton}"
+                    Text="Equip"
+                    Command="{Binding ArmorSlotEquipAction}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentView>

@@ -1,0 +1,23 @@
+﻿@model Website.Models.PhaseModel
+
+<div class="col-md-12 mt-1">
+    @using (Html.BeginCollectionItem("Phases"))
+    {
+        <div class="row">
+            <div class="col-md-10">
+                <div class="input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.Skills, htmlAttributes: new { @class = "input-group-text" })
+                    </div>
+                    @Html.DropDownListFor(model => model.SelectedSkill, new SelectList(Model.Skills.Where(s => s.VersionId.Equals(Model.SelectedVersion)), "SkillId", "Name"), new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(model => model.Skills, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    }
+</div>

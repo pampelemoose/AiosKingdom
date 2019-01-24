@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:AiosKingdom.Controls;"
+             xmlns:vm="clr-namespace:AiosKingdom.ViewModels;"
+             x:Class="AiosKingdom.Views.ServerListPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <Grid
+            BackgroundColor="{StaticResource PrimaryColor_0}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Grid.Column="0"
+                    FontSize="30"
+                    FontAttributes="Bold"
+                    Margin="5, 0"
+                    VerticalTextAlignment="Center"
+                    Text="Servers"/>
+
+                <Grid
+                    Grid.Column="1">
+                    <Image
+                        Margin="5"
+                        Source="Assets/Images/refreshbutton.png"/>
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding RefreshServersAction}"/>
+                </Grid>
+            </Grid>
+
+            <ListView
+                Grid.Row="1"
+                ItemsSource="{Binding ServerInfos}"
+                SelectedItem="{Binding SelectedInfo, Mode=TwoWay}"
+                RowHeight="50"
+                IsPullToRefreshEnabled="True"
+                RefreshCommand="{Binding RefreshServersAction}"
+                ItemTemplate="{StaticResource ServerListItem}"/>
+
+            <ctrl:LoadingIndicator
+                Grid.RowSpan="2"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

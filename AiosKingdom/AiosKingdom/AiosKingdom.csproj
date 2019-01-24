@@ -4,26 +4,142 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="2.5.0.280555" />
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\AboutPage.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Remove="Controls\TopMenu.xaml.cs" />
+    <Compile Remove="ViewModels\AboutViewModel.cs" />
+    <Compile Remove="ViewModels\ItemDetailViewModel.cs" />
+    <Compile Remove="ViewModels\ItemsViewModel.cs" />
+    <Compile Remove="Views\AboutPage.xaml.cs" />
+    <Compile Remove="Views\ItemDetailPage.xaml.cs" />
+    <Compile Remove="Views\ItemsPage.xaml.cs" />
+    <Compile Remove="Views\MainPage.xaml.cs" />
+    <Compile Remove="Views\NewItemPage.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Controls\TopMenu.xaml" />
+    <EmbeddedResource Remove="Views\AboutPage.xaml" />
+    <EmbeddedResource Remove="Views\ItemDetailPage.xaml" />
+    <EmbeddedResource Remove="Views\ItemsPage.xaml" />
+    <EmbeddedResource Remove="Views\MainPage.xaml" />
+    <EmbeddedResource Remove="Views\NewItemPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CardsView" Version="1.6.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Xamarin.Forms" Version="3.1.0.637273" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Network\Network.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\DashboardView.xaml.cs">
+      <DependentUpon>DashboardView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ItemDetailPage.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Update="Views\BuyItemPage.xaml.cs">
+      <DependentUpon>BuyItemPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ItemsPage.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\MainPage.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\NewItemPage.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Controls\Dungeon\ActionResultPopup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\Inventory\ArmorDetailsPanel.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\Inventory\BagDetailsPanel.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\Inventory\ConsumableDetailsPanel.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\Inventory\WeaponDetailsPanel.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\LoadingIndicator.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\TutorialLayer.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Style.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\BookstorePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\CreateBagPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\DashboardView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\DefaultPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\DungeonListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Dungeon\ConsumableSelectionPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Dungeon\DungeonPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Dungeon\EnterDungeonPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\Dungeon\ExitDungeonPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Dungeon\SkillSelectionPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\HomePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\InventoryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\KnowledgePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\LoadingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\BuyItemPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MarketPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ServerListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SoulListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SpiritPillsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

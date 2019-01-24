@@ -1,0 +1,1058 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AiosKingdom.Style">
+
+    <Color x:Key="PrimaryColor_0">#542B72</Color>
+    <Color x:Key="PrimaryColor_1">#B043FF</Color>
+    <Color x:Key="PrimaryColor_2">#7A36AB</Color>
+    <Color x:Key="PrimaryColor_3">#2C1939</Color>
+    <Color x:Key="PrimaryColor_4">#000000</Color>
+
+    <Color x:Key="SecondaryColor_0">#832C65</Color>
+    <Color x:Key="SecondaryColor_1">#FF36B9</Color>
+    <Color x:Key="SecondaryColor_2">#C53693</Color>
+    <Color x:Key="SecondaryColor_3">#421A34</Color>
+    <Color x:Key="SecondaryColor_4">#000000</Color>
+
+    <Color x:Key="TertiaryColor_0">#3D3175</Color>
+    <Color x:Key="TertiaryColor_1">#6F4FFF</Color>
+    <Color x:Key="TertiaryColor_2">#5440B0</Color>
+    <Color x:Key="TertiaryColor_3">#211C3B</Color>
+    <Color x:Key="TertiaryColor_4">#000000</Color>
+
+    <Color x:Key="LightMainColor">Aqua</Color>
+    <Color x:Key="MainColor">Blue</Color>
+    <Color x:Key="DarkMainColor">Teal</Color>
+    <Color x:Key="LightBackgroundColor">Aqua</Color>
+    <Color x:Key="BackgroundColor">#02A8C4</Color>
+    <Color x:Key="DarkBackgroundColor">Teal</Color>
+
+    <Color x:Key="ItemQualityColor_Common">White</Color>
+    <Color x:Key="ItemQualityColor_Uncommon">Green</Color>
+    <Color x:Key="ItemQualityColor_Rare">Aqua</Color>
+    <Color x:Key="ItemQualityColor_Epic">Purple</Color>
+    <Color x:Key="ItemQualityColor_Legendary">Yellow</Color>
+
+    <Color x:Key="BookQualityColor_TierFive">Blue</Color>
+    <Color x:Key="BookQualityColor_TierFour">Green</Color>
+    <Color x:Key="BookQualityColor_TierThree">Yellow</Color>
+    <Color x:Key="BookQualityColor_TierTwo">Orange</Color>
+    <Color x:Key="BookQualityColor_TierOne">Red</Color>
+
+    <Color x:Key="StatColor_Stamina">Lime</Color>
+    <Color x:Key="StatColor_Energy">Blue</Color>
+    <Color x:Key="StatColor_Strength">Red</Color>
+    <Color x:Key="StatColor_Agility">Green</Color>
+    <Color x:Key="StatColor_Intelligence">Aqua</Color>
+    <Color x:Key="StatColor_Wisdom">Teal</Color>
+
+    <Color x:Key="EnemyTypeColor_Normal">#6F4FFF</Color>
+    <Color x:Key="EnemyTypeColor_Elite">#B043FF</Color>
+    <Color x:Key="EnemyTypeColor_Boss">#FF36B9</Color>
+
+    <Color x:Key="RoomTypeColor_Normal">#3D3175</Color>
+    <Color x:Key="RoomTypeColor_Elite">#832C65</Color>
+    <Color x:Key="RoomTypeColor_Boss">#832C65</Color>
+
+
+    <Style x:Key="LoginButton" TargetType="Button">
+        <Setter Property="BorderColor" Value="{StaticResource BackgroundColor}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderRadius" Value="5" />
+        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+    </Style>
+
+    <Style x:Key="LoginEntry" TargetType="Entry">
+        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource MainColor}" />
+        <Setter Property="TextColor" Value="{StaticResource MainColor}" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="MenuButton" TargetType="Button">
+        <Setter Property="BorderColor" Value="{StaticResource PrimaryColor_1}" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="BorderRadius" Value="5" />
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_4}" />
+        <Setter Property="TextColor" Value="{StaticResource PrimaryColor_0}" />
+    </Style>
+
+    <Style x:Key="LightMenuButton" TargetType="Button">
+        <Setter Property="BorderColor" Value="{StaticResource PrimaryColor_3}" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="BorderRadius" Value="5" />
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_1}" />
+        <Setter Property="TextColor" Value="{StaticResource PrimaryColor_4}" />
+    </Style>
+
+    <Style x:Key="SecondaryMenuButton" TargetType="Button">
+        <Setter Property="BorderColor" Value="{StaticResource SecondaryColor_1}" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="BorderRadius" Value="5" />
+        <Setter Property="BackgroundColor" Value="{StaticResource SecondaryColor_4}" />
+        <Setter Property="TextColor" Value="{StaticResource SecondaryColor_0}" />
+    </Style>
+
+    <Style x:Key="TertiaryMenuButton" TargetType="Button">
+        <Setter Property="BorderColor" Value="{StaticResource TertiaryColor_1}" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="BorderRadius" Value="5" />
+        <Setter Property="BackgroundColor" Value="{StaticResource TertiaryColor_0}" />
+        <Setter Property="TextColor" Value="{StaticResource TertiaryColor_4}" />
+    </Style>
+
+    <Style x:Key="HomeMenuButton" TargetType="Button">
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="BorderColor" Value="{StaticResource TertiaryColor_1}" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="BorderRadius" Value="5" />
+        <Setter Property="BackgroundColor" Value="{StaticResource TertiaryColor_0}" />
+        <Setter Property="TextColor" Value="{StaticResource TertiaryColor_4}" />
+    </Style>
+
+    <Style x:Key="TitleLabel" TargetType="Label">
+        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+        <Setter Property="FontSize" Value="40" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="MenuList" TargetType="ListView">
+        <Setter Property="RowHeight" Value="50" />
+        <Setter Property="SeparatorVisibility" Value="None" />
+        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+    </Style>
+
+    <DataTemplate x:Key="MenuListItem">
+        <ViewCell>
+            <Grid 
+                BackgroundColor="{StaticResource LightBackgroundColor}"
+                Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label 
+                    Grid.Row="0" 
+                    Grid.Column="0" 
+                    TextColor="{StaticResource MainColor}" 
+                    FontAttributes="Italic" 
+                    FontSize="22" 
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" 
+                    Text="{Binding Title}" />
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ServerListItem">
+        <ViewCell>
+            <Grid
+                Margin="5">
+                <Grid.Triggers>
+                    <DataTrigger TargetType="Grid" Binding="{Binding Online}" Value="False">
+                        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_3}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Grid" Binding="{Binding Online}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor_2}" />
+                    </DataTrigger>
+                </Grid.Triggers>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    Margin="5, 0"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding Name}"/>
+
+                <Grid
+                    Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label 
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="End"
+                        Text="Soul Count :"/>
+                    <Label 
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontSize="12"
+                        FontAttributes="Bold"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding SoulCount}"/>
+                    <Label 
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="End"
+                        Text="Availability :"/>
+                    <Label 
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontSize="12"
+                        FontAttributes="Bold"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Availability}"/>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SoulListItem">
+        <ViewCell>
+            <Grid
+                Margin="5"
+                BackgroundColor="{StaticResource PrimaryColor_2}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    Margin="5, 0"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding Name}"/>
+
+                <Grid
+                    Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label 
+                        Grid.Column="0"
+                        FontSize="10"
+                        VerticalTextAlignment="End"
+                        HorizontalTextAlignment="End"
+                        Text="Level :"/>
+                    <Label 
+                        Grid.Column="1"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Level}"/>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="InventoryConsumableListItem">
+        <ViewCell>
+            <Grid 
+                Margin="0, 5"
+                ColumnSpacing="0">
+                <ContentView
+                    BackgroundColor="{Binding Item.Quality, Converter={StaticResource itemQualityToColor}}"
+                    Padding="5, 0, 0, 0">
+                    <Grid
+                        BackgroundColor="{StaticResource PrimaryColor_2}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Column="0"
+                            Margin="5, 0"
+                            FontAttributes="Bold"
+                            FontSize="15"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding Item.Name}"/>
+
+                        <Grid
+                            Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height="7*"/>
+                            </Grid.RowDefinitions>
+
+                            <Label
+                                Grid.Row="0"
+                                FontSize="10"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center"
+                                Text="Quantity :"/>
+
+                            <Label
+                                Grid.Row="1"
+                                FontAttributes="Bold"
+                                FontSize="12"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center"
+                                Text="{Binding Slot.Quantity}"/>
+                        </Grid>
+                    </Grid>
+                </ContentView>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DungeonListItem">
+        <ViewCell>
+            <Grid
+                Margin="5"
+                BackgroundColor="{StaticResource PrimaryColor_2}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontSize="15"
+                    FontAttributes="Bold"
+                    Margin="5, 0"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding Name}"/>
+
+                <Grid
+                    Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="8*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label 
+                        Grid.Row="0"
+                        Grid.ColumnSpan="3"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Level :"/>
+                    <Label 
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding RequiredLevel}"/>
+                    <Label 
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="-"/>
+                    <Label 
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding MaxLevelAuthorized}"/>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DungeonSelectConsumableListItem">
+        <ViewCell>
+            <Grid 
+                Margin="5"
+                ColumnSpacing="0">
+                <Grid
+                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Margin="5, 0"
+                        Grid.Column="0"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding Consumable.Name}"/>
+
+                    <Grid
+                        Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="5*"/>
+                            <RowDefinition Height="7*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            FontSize="10"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            Text="Quantity :"/>
+
+                        <Label
+                            Grid.Row="1"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            FontAttributes="Bold"
+                            Text="{Binding Quantity}"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DungeonSelectSkillListItem">
+        <ViewCell>
+            <Grid 
+                Margin="5"
+                ColumnSpacing="0">
+                <Grid
+                    BackgroundColor="{StaticResource PrimaryColor_2}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        FontSize="20"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding BookName}"/>
+                    <Label
+                        Grid.Column="1"
+                        FontSize="15"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding Skill.Rank, StringFormat='(Rank {0})'}"/>
+
+                    <Grid
+                        Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid
+                            Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label
+                                Grid.Column="0"
+                                VerticalTextAlignment="Center"
+                                FontSize="10"
+                                Text="Mana Cost :"/>
+
+                            <Label
+                                Grid.Column="1"
+                                VerticalTextAlignment="Center"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                Text="{Binding Skill.ManaCost}"/>
+                        </Grid>
+
+                        <Grid
+                            Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label
+                                Grid.Column="0"
+                                VerticalTextAlignment="Center"
+                                FontSize="10"
+                                Text="Cooldown :"/>
+
+                            <Label
+                                Grid.Column="1"
+                                VerticalTextAlignment="Center"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                Text="{Binding Skill.Cooldown}"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DungeonEnemyListItem">
+        <ViewCell>
+            <Grid
+                Margin="5"
+                BackgroundColor="{Binding Value.EnemyType, Converter={StaticResource enemyTypeToColor}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontSize="15"
+                    FontAttributes="Bold"
+                    Margin="5, 0"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding Value, Converter={StaticResource enemyToName}}"/>
+
+                <Grid
+                    Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="7*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label 
+                        Grid.Row="0"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Health :"/>
+
+                    <Grid
+                        Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label 
+                            Grid.Column="0"
+                            FontSize="13"
+                            FontAttributes="Bold"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding Value.State.CurrentHealth}"/>
+
+                        <Label 
+                            Grid.Column="1"
+                            FontSize="10"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Start"
+                            Text="{Binding Value.State.MaxHealth, StringFormat='/ {0}'}"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DungeonShopListItem">
+        <ViewCell>
+            <Grid
+                BackgroundColor="{StaticResource SecondaryColor_2}"
+                Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    Margin="5, 0"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding Value, Converter={StaticResource shopItemToName}}"/>
+
+                <Grid
+                    Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label 
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="End"
+                        Text="Quantity :"/>
+                    <Label 
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontSize="12"
+                        FontAttributes="Bold"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Value.Quantity}"/>
+                    <Label 
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="End"
+                        Text="Shard Price :"/>
+                    <Label 
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontSize="12"
+                        FontAttributes="Bold"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Value.ShardPrice}"/>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DungeonLootListItem">
+        <ViewCell>
+            <Grid
+                Margin="5"
+                BackgroundColor="{StaticResource PrimaryColor_2}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    Margin="5, 0"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding ., Converter={StaticResource lootItemToName}}"/>
+
+                <Label
+                    Grid.Column="1"
+                    FontSize="10"
+                    Margin="5, 0"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding Type, StringFormat='({0})'}"/>
+
+                <Grid
+                    Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="7*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        FontSize="10"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Text="Quantity :"/>
+
+                    <Label
+                        Grid.Row="1"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        FontAttributes="Bold"
+                        Text="{Binding Quantity}"/>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ARListItem">
+        <ViewCell>
+            <Grid
+                Margin="5"
+                BackgroundColor="{StaticResource PrimaryColor_2}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image
+                    Grid.Column="0"
+                    Source="{Binding TargetId, Converter={StaticResource actionResultTargetToImage}}" />
+                
+                <Image
+                    Grid.Column="1"
+                    Source="{Binding ., Converter={StaticResource actionResultToImage}}" />
+                
+                <Image
+                    Grid.Column="2"
+                    Source="{Binding ResultType, Converter={StaticResource actionResultTypeToImage}}" />
+
+                <!--
+                <Label
+                    Grid.Column="0"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    Margin="5, 0"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding ., Converter={StaticResource lootItemToName}}"/>
+                -->
+
+                <Grid
+                    Grid.Column="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="7*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        FontSize="10"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Text="{Binding ResultType}"/>
+
+                    <Label
+                        Grid.Row="1"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        FontAttributes="Bold"
+                        Text="{Binding Amount, StringFormat='{0:F0}'}"/>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="EmtyTemplateLul">
+
+    </DataTemplate>
+
+    <DataTemplate x:Key="StatListItem">
+        <ViewCell>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*" />
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
+
+                <Label 
+                    Grid.Column="0"
+                    FontSize="10"
+                    Text="{Binding Type, StringFormat='{0} :'}" />
+                <Label
+                    Grid.Column="1"
+                    FontSize="13"
+                    FontAttributes="Bold"
+                    Text="{Binding StatValue}" />
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="EffectListItem">
+        <ViewCell>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+
+                <Label 
+                    Grid.Column="0"
+                    FontSize="10"
+                    Text="{Binding Type, StringFormat='{0} :'}" />
+                <Label
+                    Grid.Column="1"
+                    FontSize="13"
+                    FontAttributes="Bold"
+                    Text="{Binding AffectValue}" />
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="InscriptionListItem">
+        <ViewCell>
+            <Grid
+                BackgroundColor="{StaticResource PrimaryColor_2}"
+                ColumnSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                <Grid
+                    Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding Type, StringFormat='Base {0} :'}"/>
+                    <Label
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding BaseValue}"/>
+                    <Label
+                        Grid.Column="2"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding StatType, StringFormat='{0} Ratio :'}"/>
+                    <Label
+                        Grid.Column="3"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding Ratio, StringFormat='{0}'}"/>
+                </Grid>
+                <Grid
+                    Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        Text="Duration :"/>
+                    <Label
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding Duration}"/>
+                </Grid>
+                <Grid
+                    Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        Text="Min :"/>
+                    <Label
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding ., Converter={StaticResource inscToCalcVal}, ConverterParameter='min', StringFormat='{0:N}'}"/>
+                    <Label
+                        Grid.Column="2"
+                        FontSize="10"
+                        VerticalTextAlignment="Center"
+                        Text="Max :"/>
+                    <Label
+                        Grid.Column="3"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        VerticalTextAlignment="Center"
+                        Text="{Binding ., Converter={StaticResource inscToCalcVal}, ConverterParameter='max', StringFormat='{0:N}'}"/>
+                </Grid>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="BodyValuesListItem">
+        <ViewCell>
+            <Frame 
+                Padding="0"
+                Margin="5">
+                <Frame.Triggers>
+                    <DataTrigger TargetType="Frame" Binding="{Binding IsShared}" Value="False">
+                        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+                        <Setter Property="OutlineColor" Value="{StaticResource LightBackgroundColor}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Frame" Binding="{Binding IsShared}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+                        <Setter Property="OutlineColor" Value="{StaticResource BackgroundColor}" />
+                    </DataTrigger>
+                </Frame.Triggers>
+                <Grid BackgroundColor="{StaticResource LightBackgroundColor}">
+                    <Grid.Triggers>
+                        <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="False">
+                            <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+                        </DataTrigger>
+                    </Grid.Triggers>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label 
+                        Grid.Row="0" 
+                        Grid.Column="0" 
+                        FontAttributes="Bold" 
+                        FontSize="22" 
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center" 
+                        Text="{Binding Date, StringFormat='{0:D}'}">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsShared}" Value="False">
+                                <Setter Property="TextColor" Value="{StaticResource MainColor}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsShared}" Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource LightMainColor}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+
+                    <Grid   Grid.Row="1"
+                            BackgroundColor="{StaticResource DarkBackgroundColor}">
+                        <Grid.Triggers>
+                            <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="False">
+                                <Setter Property="BackgroundColor" Value="{StaticResource DarkBackgroundColor}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+                            </DataTrigger>
+                        </Grid.Triggers>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label 
+                            Grid.Column="0" 
+                            FontAttributes="Bold" 
+                            FontSize="16" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" 
+                            Text="Height :" />
+
+                        <Label 
+                            Grid.Column="1" 
+                            FontAttributes="Italic" 
+                            FontSize="16" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Start" 
+                            Text="{Binding Height, StringFormat='{0} cm'}" />
+
+                        <BoxView 
+                            Grid.ColumnSpan="2"
+                            BackgroundColor="Gray"
+                            WidthRequest="2"
+                            HeightRequest="20"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center" />
+
+                        <Label 
+                            Grid.Column="2" 
+                            FontAttributes="Bold" 
+                            FontSize="16" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" 
+                            Text="Weight :" />
+
+                        <Label 
+                            Grid.Column="3" 
+                            FontAttributes="Italic" 
+                            FontSize="16" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Start" 
+                            Text="{Binding Weight, StringFormat='{0} kg'}}" />
+                    </Grid>
+                </Grid>
+            </Frame>
+        </ViewCell>
+    </DataTemplate>
+
+    <DataTemplate x:Key="BodyValuesListItemAction">
+        <Button
+            BackgroundColor="{StaticResource LightBackgroundColor}"
+            TextColor="{StaticResource MainColor}"
+            Text="{Binding IsShared, Converter={StaticResource shareable}"
+            Command="{Binding ShareDatasAction}">
+        </Button>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DrugUsesItem">
+        <ViewCell>
+            <Frame 
+                Padding="0"
+                Margin="5">
+
+                <Frame.Triggers>
+                    <DataTrigger TargetType="Frame" Binding="{Binding IsShared}" Value="False">
+                        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+                        <Setter Property="OutlineColor" Value="{StaticResource LightBackgroundColor}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Frame" Binding="{Binding IsShared}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+                        <Setter Property="OutlineColor" Value="{StaticResource BackgroundColor}" />
+                    </DataTrigger>
+                </Frame.Triggers>
+
+                <Grid BackgroundColor="{StaticResource LightBackgroundColor}">
+                    <Grid.Triggers>
+                        <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="False">
+                            <Setter Property="BackgroundColor" Value="{StaticResource DarkBackgroundColor}" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Grid" Binding="{Binding IsShared}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{StaticResource LightBackgroundColor}" />
+                        </DataTrigger>
+                    </Grid.Triggers>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+
+                    <Label 
+                        Grid.Row="0" 
+                        Grid.Column="0" 
+                        FontAttributes="Bold" 
+                        FontSize="22" 
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center" 
+                        Text="{Binding Date, StringFormat='{0:D}'}">
+
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsShared}" Value="False">
+                                <Setter Property="TextColor" Value="{StaticResource MainColor}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsShared}" Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource DarkMainColor}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </Grid>
+            </Frame>
+            <ViewCell.ContextActions>
+                <MenuItem 
+                    Text="Show"
+                    Command="{Binding DetailsAction}"
+                />
+            </ViewCell.ContextActions>
+        </ViewCell>
+    </DataTemplate>
+
+</ResourceDictionary>

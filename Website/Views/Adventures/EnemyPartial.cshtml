@@ -1,0 +1,57 @@
+﻿@model Website.Models.EnemyModel
+
+<div class="col-md-12 mt-2">
+    @using (Html.BeginCollectionItem($"Rooms[{Model.RoomId}].Enemies"))
+    {
+        @Html.HiddenFor(model => Model.Id)
+
+        @Html.HiddenFor(model => model.RoomId);
+        <div class="card card-dark">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.MonsterId, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.DropDownListFor(model => model.MonsterId, new SelectList(DataRepositories.MonsterRepository.GetAll(), "Vid", "Name"), new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.MonsterId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.EnemyType, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.EnumDropDownListFor(model => model.EnemyType, new { @class = "form-control item-list-changer" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.EnemyType, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.Level, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.EditorFor(model => model.Level, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Level, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.ShardReward, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.EditorFor(model => model.ShardReward, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.ShardReward, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    }
+</div>

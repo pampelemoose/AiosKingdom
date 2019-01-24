@@ -1,0 +1,201 @@
+﻿@model Website.Models.AdventureModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<section>
+    <div class="container">
+        <h2>Create</h2>
+    </div>
+</section>
+
+@using (Html.BeginForm())
+{
+    <section class="p-2">
+        <div class="container">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.SelectedVersion, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.DropDownListFor(model => model.SelectedVersion, new SelectList(DataRepositories.VersionRepository.GetAll(), "Id", null), new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.SelectedVersion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-9">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.RequiredLevel, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.RequiredLevel, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.RequiredLevel, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.MaxLevelAuthorized, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.MaxLevelAuthorized, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.MaxLevelAuthorized, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ExperienceReward, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ExperienceReward, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ExperienceReward, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6 mt-1">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.ShardReward, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.ShardReward, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ShardReward, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10">
+                    <h2>@Html.LabelFor(model => model.Rooms, htmlAttributes: new { @class = "control-label" })</h2>
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-block" type="button" id="addRoomToDungeon" value="<Add Room>" />
+                </div>
+            </div>
+            <div class="row mt-2" id="roomList">
+                @if (Model != null && Model.Rooms != null)
+                {
+                    for (var i = 0; i < Model.Rooms.Count; i++)
+                    {
+                        Html.RenderPartial("RoomPartial", Model.Rooms[i]);
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <section class="p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10">
+                    <h2>@Html.LabelFor(model => model.Locks, htmlAttributes: new { @class = "control-label" })</h2>
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-block" type="button" id="addLockToDungeon" value="<Add Lock>" />
+                </div>
+            </div>
+            <div class="row mt-2" id="lockList">
+                @if (Model != null && Model.Locks != null)
+                {
+                    for (var i = 0; i < Model.Locks.Count; i++)
+                    {
+                        Html.RenderPartial("lockPartial", Model.Locks[i]);
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <input type="submit" value="<Create>" class="btn btn-block" />
+        </div>
+    </section>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#addRoomToDungeon").click(function () {
+                $.ajax({
+                    url: "/Adventures/AddRoomPartial",
+                    cache: false,
+                    type: "GET",
+                    success: function (data) {
+                        $('#roomList').append(data);
+                        $('#roomList').fadeIn('fast');
+                    }
+                });
+            });
+
+            $("#addLockToDungeon").click(function () {
+                $.ajax({
+                    url: "/Adventures/AddLockPartial",
+                    cache: false,
+                    type: "GET",
+                    success: function (data) {
+                        $('#lockList').append(data);
+                        $('#lockList').fadeIn('fast');
+                    }
+                });
+            });
+        });
+
+        function addShopItemToRoom(room) {
+            var elem = document.getElementById('room-card-' + room.id);
+            $.ajax({
+                url: "/Adventures/AddShopItemPartial",
+                cache: false,
+                type: "GET",
+                data: {
+                    "id": $(elem).children("input[name='Rooms.index']").val()
+                },
+                success: function (data) {
+                    $('#shop_item_list_' + room.id).append(data);
+                    $('#shop_item_list_' + room.id).fadeIn('fast');
+                }
+            });
+        }
+
+        function addEnnemyToRoom(ennemy) {
+            var elem = document.getElementById('room-card-' + ennemy.id);
+            $.ajax({
+                url: "/Adventures/AddEnemyPartial",
+                cache: false,
+                type: "GET",
+                data: {
+                    "id": $(elem).children("input[name='Rooms.index']").val()
+                },
+                success: function (data) {
+                    $('#enemy_list_' + ennemy.id).append(data);
+                    $('#enemy_list_' + ennemy.id).fadeIn('fast');
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,87 @@
+﻿@model Website.Models.Filters.UserFilter
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<section>
+    <div class="container">
+        <h2>List of Users</h2>
+    </div>
+</section>
+
+@using (Html.BeginForm())
+{
+    <section class="bg-info">
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr class="row" data-toggle="collapse" href="#filter-body" aria-expanded="false" aria-controls="filter-body">
+                        <th scope="col" class="col-md-11">
+                            Filters
+                        </th>
+                        <th scope="col" class="col-md-1"></th>
+                    </tr>
+                </thead>
+                <tbody id="filter-body" class="collapse">
+                    <tr class="row">
+                        <td class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td class="col-md-2">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.IsActive, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td class="col-md-2">
+                            <input type="submit" value="Filter" class="btn btn-default btn-block" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+}
+<section>
+    <div class="container">
+        <div class="row mt-3">
+            <table class="table table-hover table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">Email</th>
+                        <th scope="col">ActivationCode</th>
+                        <th scope="col">IsActivated</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr>
+                            <td>@user.Email</td>
+                            <td>@user.ActivationCode</td>
+                            <td>@user.IsActivated</td>
+                            <td>
+                                @Html.ActionLink("<Edit>", "Edit", new { id = user.Id }, new { @class = "btn btn-block" })
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-block">@Html.Label("<Delete>")</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

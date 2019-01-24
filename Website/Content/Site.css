@@ -1,0 +1,272 @@
+﻿body {
+    padding-top: 56px;
+    padding-bottom: 20px;
+    background-color: black;
+    color: white;
+    font-family: 'press_start_2pregular';
+    font-size: x-small;
+}
+
+.legendary {
+    border-color: #ffeb10;
+}
+
+    .legendary > .card-header {
+        background-color: #ffeb10;
+        color: #061539;
+    }
+
+.legendary-text {
+    color: #ffeb10;
+}
+
+.epic {
+    border-color: #b915ff;
+}
+
+    .epic > .card-header {
+        background-color: #b915ff;
+        color: #061539;
+    }
+
+.epic-text {
+    color: #b915ff;
+}
+
+.rare {
+    border-color: #4551ff;
+}
+
+    .rare > .card-header {
+        background-color: #4551ff;
+        color: #061539;
+    }
+
+.rare-text {
+    color: #4551ff;
+}
+
+.uncommon {
+    border-color: #42ff0e;
+}
+
+    .uncommon > .card-header {
+        background-color: #42ff0e;
+        color: #061539;
+    }
+
+.uncommon-text {
+    color: #42ff0e;
+}
+
+.common {
+    border-color: #232323;
+}
+
+    .common > .card-header {
+        background-color: #232323;
+        color: #7887AB;
+    }
+
+.common-text {
+    color: #7887AB;
+}
+
+.tierone {
+    background-color: #ff1c1c;
+    color: #1d0101;
+}
+
+    .tierone:hover {
+        background-color: #5a0e0e;
+    }
+
+.tierone-text {
+    color: #ff1c1c;
+}
+
+.tiertwo {
+    background-color: #ff8a0c;
+}
+
+    .tiertwo:hover {
+        background-color: #5a3d09;
+    }
+
+.tierthree {
+    background-color: #fffa0e;
+}
+
+    .tierthree:hover {
+        background-color: #444206;
+    }
+
+.tierfour {
+    background-color: #22ff00;
+}
+
+    .tierfour:hover {
+        background-color: #0b4502;
+    }
+
+.tierfive {
+    background-color: #0fe2ff;
+}
+
+    .tierfive:hover {
+        background-color: #07505a;
+    }
+
+/*Sticky Footer*/
+body {
+    margin-bottom: 60px;
+}
+
+    body > .container {
+        padding: 60px 15px 0;
+    }
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background-color: black;
+}
+
+    .footer > .container {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
+/* Menu */
+.admin-section {
+    margin-top: 56px !important;
+}
+
+/* Loading page */
+#loading_screen {
+    background-color: rgba(0, 0, 26, 0.86);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+}
+
+#loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -64px;
+    margin-left: -64px;
+    border: 16px solid #447fa1;
+    border-top: 16px solid #00085f;
+    border-radius: 50%;
+    width: 128px;
+    height: 128px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Register / Login dropdown fixed width */
+.account-dropdown-menu {
+    width: 300px !important;
+}
+
+/* Section Carousel*/
+.section {
+    min-height: 50px;
+}
+
+.carousel-content {
+    margin-bottom: 20px;
+    z-index: 10;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #fff;
+    text-align: center;
+}
+
+/* FORUM */
+.forum-category-header {
+    border-bottom: 2px solid white;
+}
+
+.forum-thread {
+    border-bottom: 1px solid white;
+}
+
+.forum-category-header a:link {
+    text-decoration: none;
+    color: white;
+}
+
+.forum-category-header a:visited {
+    text-decoration: none;
+    color: white;
+}
+
+.forum-thread a:link {
+    text-decoration: none;
+    color: white;
+}
+
+.forum-thread a:visited {
+    text-decoration: none;
+    color: white;
+}
+
+.badge {
+    background-color: white;
+    color: black;
+}
+
+.forum-text-box {
+    background-color: transparent;
+}
+
+/* FONTS */
+@font-face {
+    font-family: 'press_start_2pregular';
+    src: url('press_start_p2-webfont.woff2') format('woff2'), url('press_start_p2-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.btn {
+    font-size: smaller;
+    background-color: transparent;
+    color: white;
+}
+
+.btn:hover {
+    color: red;
+}
+
+.dropdown-item {
+    font-size: x-small !important;
+}
+
+.card-dark {
+    background-color: black;
+}
+
+    .card-dark .list-group-item {
+        background-color: black;
+    }
+
+.navbar {
+    background-color: black;
+}

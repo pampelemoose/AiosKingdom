@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9DF16A79-E196-4EFC-8384-C3812B55691C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Server.GameServer</RootNamespace>
+    <AssemblyName>Server.GameServer</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Adventure.cs" />
+    <Compile Include="AdventureManager.cs" />
+    <Compile Include="ClientsManager.cs" />
+    <Compile Include="CommandManager.cs" />
+    <Compile Include="Commands\ACommand.cs" />
+    <Compile Include="Commands\Dungeon\BuyShopItemCommand.cs" />
+    <Compile Include="Commands\Dungeon\EnterRoomCommand.cs" />
+    <Compile Include="Commands\Dungeon\LootDungeonItemCommand.cs" />
+    <Compile Include="Commands\Dungeon\PlayerRestCommand.cs" />
+    <Compile Include="Commands\Player\AdventureUnlockedCommand.cs" />
+    <Compile Include="Commands\Listing\ItemCommand.cs" />
+    <Compile Include="Commands\Listing\BookCommand.cs" />
+    <Compile Include="Commands\Listing\SpecialMarketCommand.cs" />
+    <Compile Include="Commands\Player\CurrenciesCommand.cs" />
+    <Compile Include="Commands\Player\EquipmentCommand.cs" />
+    <Compile Include="Commands\Player\InventoryCommand.cs" />
+    <Compile Include="Commands\Player\KnowledgeCommand.cs" />
+    <Compile Include="Commands\Player\LearnTalentCommand.cs" />
+    <Compile Include="Commands\Player\SellItemCommand.cs" />
+    <Compile Include="Commands\Server\AuthenticateCommand.cs" />
+    <Compile Include="Commands\Player\MarketPlaceOrderCommand.cs" />
+    <Compile Include="Commands\Server\ConnectSoulCommand.cs" />
+    <Compile Include="Commands\Server\CreateSoulCommand.cs" />
+    <Compile Include="Commands\Player\CurrentSoulDatasCommand.cs" />
+    <Compile Include="Commands\Player\EquipItemCommand.cs" />
+    <Compile Include="Commands\Player\LearnSkillCommand.cs" />
+    <Compile Include="Commands\Listing\MarketCommand.cs" />
+    <Compile Include="Commands\Server\DisconnectSoulCommand.cs" />
+    <Compile Include="Commands\Server\SoulListCommand.cs" />
+    <Compile Include="Commands\Player\UseSpiritPillsCommand.cs" />
+    <Compile Include="Commands\Dungeon\EnterCommand.cs" />
+    <Compile Include="Commands\Dungeon\ExitCommand.cs" />
+    <Compile Include="Commands\Dungeon\LeaveFinishedRoomCommand.cs" />
+    <Compile Include="Commands\Listing\DungeonCommand.cs" />
+    <Compile Include="Commands\Dungeon\GetLootsCommand.cs" />
+    <Compile Include="Commands\Dungeon\UpdateRoomCommand.cs" />
+    <Compile Include="Commands\Dungeon\UseSkillCommand.cs" />
+    <Compile Include="Commands\Dungeon\DoNothingTurnCommand.cs" />
+    <Compile Include="Commands\Dungeon\EnemyTurnCommand.cs" />
+    <Compile Include="Commands\Dungeon\UseConsumableCommand.cs" />
+    <Compile Include="Commands\Listing\MonsterCommand.cs" />
+    <Compile Include="Commands\PingCommand.cs" />
+    <Compile Include="DataManager.cs" />
+    <Compile Include="InventoryManager.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Market.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="SkillAndEffect.cs" />
+    <Compile Include="SoulManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DataModels\DataModels.csproj">
+      <Project>{5617d24d-807a-445f-ac2f-6774b442761e}</Project>
+      <Name>DataModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataRepositories\DataRepositories.csproj">
+      <Project>{603f0313-3e25-4142-8487-cec37669e0de}</Project>
+      <Name>DataRepositories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Network\Network.csproj">
+      <Project>{fd6a34fe-f77d-4f4c-a342-d52ced5a9937}</Project>
+      <Name>Network</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
