@@ -42,7 +42,7 @@
                                 <tr>
                                     <td>@loot.DropRate</td>
                                     <td>
-                                        @DataRepositories.ItemRepository.GetById(loot.ItemVid).Name
+                                        @loot.ItemVid
                                     </td>
                                     <td>@loot.Quantity</td>
                                 </tr>
@@ -238,7 +238,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.Vid }, new { @class = "btn btn-block" })
+                    @Html.ActionLink("<Edit>", "Edit", new { id = Model.Id }, new { @class = "btn btn-block" })
                 </div>
             </div>
         </div>

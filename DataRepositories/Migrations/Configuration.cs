@@ -21,6 +21,8 @@ namespace DataRepositories.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
 
+            return;
+
             try
             {
                 context.Versions.RemoveRange(context.Versions);

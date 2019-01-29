@@ -380,23 +380,23 @@ namespace Server.GameServer
                     });
                 }
 
-                --_loots[lootId].Quantity;
-                if (_loots[lootId].Quantity <= 0)
-                {
-                    _loots.Remove(lootId);
-                }
-
                 var history = new DataModels.Items.LootHistory
                 {
                     LooterId = clientId,
                     AdventureVid = _adventure.Id,
                     MonsterVid = _loots[lootId].MonsterId,
                     ItemVid = _loots[lootId].ItemId,
-                    Quantity = _loots[lootId].Quantity,
+                    Quantity = 1,
                     LootedAt = DateTime.Now
                 };
 
                 DataRepositories.LootingHistoryRepository.Create(history);
+
+                --_loots[lootId].Quantity;
+                if (_loots[lootId].Quantity <= 0)
+                {
+                    _loots.Remove(lootId);
+                }
 
                 return true;
             }
