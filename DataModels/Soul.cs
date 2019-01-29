@@ -61,5 +61,7 @@ namespace DataModels
         public List<Knowledge> Knowledge { get; set; }
 
         public List<AdventureUnlocked> AdventureLocks { get; set; }
+
+        public Jobs.Job Job { get; set; }
     }
 }

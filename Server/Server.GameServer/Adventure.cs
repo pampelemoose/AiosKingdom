@@ -243,6 +243,7 @@ namespace Server.GameServer
                             _loots.Add(id, new Network.LootItem
                             {
                                 LootId = id,
+                                MonsterId = enemy.MonsterId,
                                 ItemId = loot.ItemId,
                                 Quantity = loot.Quantity
                             });
@@ -384,6 +385,18 @@ namespace Server.GameServer
                 {
                     _loots.Remove(lootId);
                 }
+
+                var history = new DataModels.Items.LootHistory
+                {
+                    LooterId = clientId,
+                    AdventureVid = _adventure.Id,
+                    MonsterVid = _loots[lootId].MonsterId,
+                    ItemVid = _loots[lootId].ItemId,
+                    Quantity = _loots[lootId].Quantity,
+                    LootedAt = DateTime.Now
+                };
+
+                DataRepositories.LootingHistoryRepository.Create(history);
 
                 return true;
             }

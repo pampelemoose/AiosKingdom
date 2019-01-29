@@ -125,7 +125,7 @@ namespace Server.GameServer
 
                 var history = new DataModels.MarketHistory
                 {
-                    Type = DataModels.TransactionType.Buy,
+                    Type = DataModels.MarketTransactionType.Buy,
                     MarketId = order.MarketSlotId,
                     BuyerId = order.Buyer,
                     Price = order.Price,

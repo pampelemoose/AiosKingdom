@@ -46,5 +46,10 @@ namespace DataModels
         public float ManaPerEnergyRatio { get; set; }
 
         public Guid DefaultBagId { get; set; }
+
+        public int PractitionerJobExperience { get; set; }
+        public int MasterJobExperience { get; set; }
+        public int GrandMasterJobExperience { get; set; }
+        public int LegendJobExperience { get; set; }
     }
 }

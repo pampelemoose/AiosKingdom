@@ -7,37 +7,37 @@ using System.Threading.Tasks;
 
 namespace DataRepositories
 {
-    public static class MarketHistoryRepository
+    public class LootingHistoryRepository
     {
-        public static List<DataModels.MarketHistory> GetAll()
+        public static List<DataModels.Items.LootHistory> GetAll()
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.MarketHistory.ToList();
+                return context.LootHistory.ToList();
             }
         }
 
-        public static List<DataModels.MarketHistory> GetAllForSoul(Guid soulId)
+        public static List<DataModels.Items.LootHistory> GetAllForSoul(Guid soulId)
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.MarketHistory.Where(m => m.BuyerId.Equals(soulId) || m.SellerId.Equals(soulId)).ToList();
+                return context.LootHistory.Where(m => m.LooterId.Equals(soulId)).ToList();
             }
         }
 
-        public static DataModels.MarketHistory GetById(Guid id)
+        public static DataModels.Items.LootHistory GetById(Guid id)
         {
             using (var context = new AiosKingdomContext())
             {
-                return context.MarketHistory.FirstOrDefault(a => a.Id.Equals(id));
+                return context.LootHistory.FirstOrDefault(a => a.Id.Equals(id));
             }
         }
 
-        public static bool Create(DataModels.MarketHistory history)
+        public static bool Create(DataModels.Items.LootHistory history)
         {
             using (var context = new AiosKingdomContext())
             {
-                context.MarketHistory.Add(history);
+                context.LootHistory.Add(history);
                 try
                 {
                     context.SaveChanges();

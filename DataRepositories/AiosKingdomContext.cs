@@ -38,7 +38,6 @@ namespace DataRepositories
         public DbSet<DataModels.Knowledge> Knowledges { get; set; }
 
         public DbSet<DataModels.MarketSlot> Market { get; set; }
-        public DbSet<DataModels.MarketHistory> MarketHistory { get; set; }
 
         public DbSet<DataModels.Monsters.Monster> Monsters { get; set; }
         public DbSet<DataModels.Monsters.Loot> Loots { get; set; }
@@ -52,6 +51,10 @@ namespace DataRepositories
 
         public DbSet<DataModels.AdventureUnlocked> AdventureUnlocked { get; set; }
         public DbSet<DataModels.TalentUnlocked> TalentUnlocked { get; set; }
+
+        public DbSet<DataModels.MarketHistory> MarketHistory { get; set; }
+        public DbSet<DataModels.Items.LootHistory> LootHistory { get; set; }
+        public DbSet<DataModels.Jobs.CraftingHistory> CraftingHistory { get; set; }
 
         public DbSet<DataModels.Website.Section> Sections { get; set; }
         public DbSet<DataModels.Website.Banner> Contents { get; set; }

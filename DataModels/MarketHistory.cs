@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataModels
 {
-    public enum TransactionType
+    public enum MarketTransactionType
     {
         Buy,
         Sell
@@ -20,7 +20,7 @@ namespace DataModels
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public TransactionType Type { get; set; }
+        public MarketTransactionType Type { get; set; }
         public bool ToServer { get; set; }
 
         public Guid BuyerId { get; set; }
