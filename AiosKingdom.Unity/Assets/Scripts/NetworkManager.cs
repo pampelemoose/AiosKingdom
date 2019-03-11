@@ -802,6 +802,19 @@ public class NetworkManager : MonoBehaviour
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
                         ContentLoadingScreen.IsLoaded("adventures");
+                        AskRecipeList();
+                    });
+                    //MessagingCenter.Send(this, MessengerCodes.DungeonListUpdated);
+                }
+                break;
+            case JsonObjects.CommandCodes.Listing.Recipes:
+                {
+                    var recipes = JsonConvert.DeserializeObject<List<JsonObjects.Recipe>>(message.Json);
+                    DatasManager.Instance.Recipes = recipes;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        ContentLoadingScreen.IsLoaded("recipes");
                         UIManager.This.ShowLoading();
                         UIManager.This.ShowHome();
                     });
@@ -1080,6 +1093,64 @@ public class NetworkManager : MonoBehaviour
                 }
                 break;
 
+            // JOB
+            case JsonObjects.CommandCodes.Job.Get:
+                {
+                    if (message.Success)
+                    {
+                        var job = JsonConvert.DeserializeObject<JsonObjects.Job>(message.Json);
+                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
+
+                        DatasManager.Instance.Job.Value = job;
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Resting", message.Json);
+                    }
+                }
+                break;
+            case JsonObjects.CommandCodes.Job.Learn:
+                {
+                    if (message.Success)
+                    {
+                        var job = JsonConvert.DeserializeObject<JsonObjects.Job>(message.Json);
+                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
+
+                        DatasManager.Instance.Job.Value = job;
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.HideLoading();
+                        });
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Resting", message.Json);
+                    }
+                }
+                break;
+            case JsonObjects.CommandCodes.Job.Craft:
+                {
+                    if (message.Success)
+                    {
+                        var item = JsonConvert.DeserializeObject<JsonObjects.Items.Item>(message.Json);
+                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
+
+                        GetJob();
+                        AskInventory();
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.HideLoading();
+                        });
+                    }
+                    else
+                    {
+                        //ScreenManager.Instance.AlertScreen("Resting", message.Json);
+                    }
+                }
+                break;
+
             default:
                 return false;
         }
@@ -1143,6 +1214,11 @@ public class NetworkManager : MonoBehaviour
     public void AskSpecialMarketItems()
     {
         SendRequest(JsonObjects.CommandCodes.Listing.SpecialsMarket);
+    }
+
+    public void AskRecipeList()
+    {
+        SendRequest(JsonObjects.CommandCodes.Listing.Recipes);
     }
 
     #endregion
@@ -1279,6 +1355,25 @@ public class NetworkManager : MonoBehaviour
         AskCurrencies();
         AskInventory();
         AskSoulCurrentDatas();
+    }
+
+    #endregion
+
+    #region Job Commands
+
+    public void GetJob()
+    {
+        SendRequest(JsonObjects.CommandCodes.Job.Get);
+    }
+
+    public void LearnJob(JsonObjects.JobType type)
+    {
+        SendRequest(JsonObjects.CommandCodes.Job.Learn, new string[1] { type.ToString() });
+    }
+
+    public void CraftItem(JsonObjects.JobTechnique technique, List<JsonObjects.CraftingComponent> components)
+    {
+        SendRequest(JsonObjects.CommandCodes.Job.Craft, new string[2] { technique.ToString(), JsonConvert.SerializeObject(components) });
     }
 
     #endregion

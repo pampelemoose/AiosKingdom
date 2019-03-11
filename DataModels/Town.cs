@@ -47,9 +47,13 @@ namespace DataModels
 
         public Guid DefaultBagId { get; set; }
 
-        public int PractitionerJobExperience { get; set; }
-        public int MasterJobExperience { get; set; }
-        public int GrandMasterJobExperience { get; set; }
-        public int LegendJobExperience { get; set; }
+        public int PractitionerJobPoints { get; set; }
+        public int PractitionerRecipeCount { get; set; }
+        public int MasterJobPoints { get; set; }
+        public int MasterRecipeCount { get; set; }
+        public int GrandMasterJobPoints { get; set; }
+        public int GrandMasterRecipeCount { get; set; }
+        public int LegendJobPoints { get; set; }
+        public int LegendRecipeCount { get; set; }
     }
 }

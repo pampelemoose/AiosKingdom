@@ -43,9 +43,7 @@ namespace DataModels.Jobs
         public int Points { get; set; }
 
         public JobRank Rank { get; set; }
-        public int Experience { get; set; }
 
         public List<RecipeUnlocked> Recipes { get; set; }
-        public List<DiscoveryUnlocked> Discoveries { get; set; }
     }
 }

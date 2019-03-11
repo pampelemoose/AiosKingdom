@@ -281,6 +281,7 @@ GameObject:
   - component: {fileID: 222313006210573540}
   - component: {fileID: 114649959243915484}
   - component: {fileID: 114479605921206748}
+  - component: {fileID: 114698706941513796}
   m_Layer: 5
   m_Name: Jobs
   m_TagString: Untagged
@@ -432,7 +433,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1929130889046864
 GameObject:
   m_ObjectHideFlags: 1
@@ -777,7 +778,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114649959243915484}
   m_OnClick:
     m_PersistentCalls:
@@ -1139,7 +1140,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1159,7 +1160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.47794116, g: 0.47794116, b: 0.47794116, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1221,6 +1222,19 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114698706941513796
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1637343687698996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f06a5dcb33e42084fb991121a42a105c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  JobSelection: {fileID: 0}
+  Recipes: {fileID: 0}
 --- !u!114 &114704926703998988
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1936,7 +1950,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1765418309784288}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 212.11664, y: 405.435, z: 0}
+  m_LocalPosition: {x: 212.11621, y: 405.435, z: 0}
   m_LocalScale: {x: 1.0001999, y: 1.0001999, z: 1.0001999}
   m_Children:
   - {fileID: 224033031562153610}
@@ -1945,7 +1959,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.80024993, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 212.11664, y: 405.435}
+  m_AnchoredPosition: {x: 212.11621, y: 405.435}
   m_SizeDelta: {x: 105.86752, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224114831892511478

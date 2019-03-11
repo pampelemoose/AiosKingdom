@@ -58,6 +58,7 @@ namespace Network
             public const int Dungeon = _default + 4;
             public const int Market = _default + 5;
             public const int SpecialsMarket = _default + 6;
+            public const int Recipes = _default + 7;
         }
 
         public static class Dungeon
@@ -78,6 +79,15 @@ namespace Network
             public const int BuyShopItem = _default + 12;
             public const int PlayerDied = _default + 13;
             public const int PlayerRest = _default + 14;
+        }
+
+        public static class Job
+        {
+            private const int _default = 200;
+
+            public const int Get = _default + 1;
+            public const int Learn = _default + 2;
+            public const int Craft = _default + 3;
         }
     }
 }

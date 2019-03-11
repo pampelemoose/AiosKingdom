@@ -34,6 +34,7 @@ namespace Server.GameServer
             LoadBooks();
             LoadAdventures();
             LoadMonsters();
+            LoadRecipes();
         }
 
         public List<Network.Items.Item> Items { get; private set; }
@@ -41,6 +42,7 @@ namespace Server.GameServer
         public List<Network.Adventures.Adventure> Dungeons { get; private set; }
         public List<Network.Monsters.Monster> Monsters { get; private set; }
         public List<Network.MarketSlot> Market { get; private set; }
+        public List<Network.Recipe> Recipes { get; private set; }
 
         #region Loaders
         private void LoadItems()
@@ -537,6 +539,52 @@ namespace Server.GameServer
             Monsters = monsterList;
         }
 
+        private void LoadRecipes()
+        {
+            var recipes = DataRepositories.RecipeRepository.GetAllForVersion(_config.VersionId);
+            var recipeList = new List<Network.Recipe>();
+
+            foreach (var recipe in recipes)
+            {
+                var rec = new Network.Recipe
+                {
+                    Id = recipe.Vid,
+                    Name = recipe.Name,
+                    Price = recipe.Price,
+                    JobType = ConvertJobType(recipe.JobType),
+                    Technique = ConvertJobTechnique(recipe.Technique),
+                    CommonCraftedItemId = recipe.CommonCraftedItemId,
+                    UncommonCraftedItemId = recipe.UncommonCraftedItemId,
+                    RareCraftedItemId = recipe.RareCraftedItemId,
+                    EpicCraftedItemId = recipe.EpicCraftedItemId,
+                    LegendaryCraftedItemId = recipe.LegendaryCraftedItemId,
+                    Combinaisons = new List<Network.Combinaison>()
+                };
+
+                foreach (var combinaison in recipe.Combinaisons)
+                {
+                    var comb = new Network.Combinaison
+                    {
+                        Id = combinaison.Id,
+                        CommonItemId = combinaison.CommonItemId,
+                        UncommonItemId = combinaison.UncommonItemId,
+                        RareItemId = combinaison.RareItemId,
+                        EpicItemId = combinaison.EpicItemId,
+                        LegendaryItemId = combinaison.LegendaryItemId,
+                        PercentagePerItem = combinaison.PercentagePerItem,
+                        MinQuantity = combinaison.MinQuantity,
+                        MaxQuantity = combinaison.MaxQuantity
+                    };
+
+                    rec.Combinaisons.Add(comb);
+                }
+
+                recipeList.Add(rec);
+            }
+
+            Recipes = recipeList;
+        }
+
         private Network.Items.ItemType ConvertItemType(DataModels.Items.ItemType type)
         {
             switch (type)
@@ -577,6 +625,13 @@ namespace Server.GameServer
                     return Network.Items.ItemType.Sword;
                 case DataModels.Items.ItemType.Wand:
                     return Network.Items.ItemType.Wand;
+
+                case DataModels.Items.ItemType.CraftingMaterial:
+                    return Network.Items.ItemType.CraftingMaterial;
+                case DataModels.Items.ItemType.Enchant:
+                    return Network.Items.ItemType.Enchant;
+                case DataModels.Items.ItemType.Gem:
+                    return Network.Items.ItemType.Gem;
             }
 
             return Network.Items.ItemType.Whip;
@@ -612,6 +667,108 @@ namespace Server.GameServer
             }
 
             return Network.Adventures.RoomType.Shop;
+        }
+
+        public static Network.JobType ConvertJobType(DataModels.Jobs.JobType type)
+        {
+            switch (type)
+            {
+                case DataModels.Jobs.JobType.Alchemistry:
+                    return Network.JobType.Alchemistry;
+                case DataModels.Jobs.JobType.ArmorSmithing:
+                    return Network.JobType.ArmorSmithing;
+                case DataModels.Jobs.JobType.Enchanting:
+                    return Network.JobType.Enchanting;
+                case DataModels.Jobs.JobType.Herborism:
+                    return Network.JobType.Herborism;
+                case DataModels.Jobs.JobType.Mining:
+                    return Network.JobType.Mining;
+                case DataModels.Jobs.JobType.RuneSmithing:
+                    return Network.JobType.RuneSmithing;
+                case DataModels.Jobs.JobType.ScrollWriting:
+                    return Network.JobType.ScrollWriting;
+                case DataModels.Jobs.JobType.WeaponSmithing:
+                    return Network.JobType.WeaponSmithing;
+            }
+
+            return Network.JobType.None;
+        }
+
+        public static Network.JobRank ConvertJobRank(DataModels.Jobs.JobRank type)
+        {
+            switch (type)
+            {
+                case DataModels.Jobs.JobRank.GrandMaster:
+                    return Network.JobRank.GrandMaster;
+                case DataModels.Jobs.JobRank.Legend:
+                    return Network.JobRank.Legend;
+                case DataModels.Jobs.JobRank.Master:
+                    return Network.JobRank.Master;
+                case DataModels.Jobs.JobRank.Practitioner:
+                    return Network.JobRank.Practitioner;
+            }
+
+            return Network.JobRank.Apprentice;
+        }
+
+        public static DataModels.Jobs.JobRank ConvertBackJobRank(Network.JobRank type)
+        {
+            switch (type)
+            {
+                case Network.JobRank.GrandMaster:
+                    return DataModels.Jobs.JobRank.GrandMaster;
+                case Network.JobRank.Legend:
+                    return DataModels.Jobs.JobRank.Legend;
+                case Network.JobRank.Master:
+                    return DataModels.Jobs.JobRank.Master;
+                case Network.JobRank.Practitioner:
+                    return DataModels.Jobs.JobRank.Practitioner;
+            }
+
+            return DataModels.Jobs.JobRank.Apprentice;
+        }
+
+        public static Network.JobTechnique ConvertJobTechnique(DataModels.Jobs.JobTechnique type)
+        {
+            switch (type)
+            {
+                case DataModels.Jobs.JobTechnique.Bend:
+                    return Network.JobTechnique.Bend;
+                case DataModels.Jobs.JobTechnique.Blow:
+                    return Network.JobTechnique.Blow;
+                case DataModels.Jobs.JobTechnique.Boil:
+                    return Network.JobTechnique.Boil;
+                case DataModels.Jobs.JobTechnique.Carve:
+                    return Network.JobTechnique.Carve;
+                case DataModels.Jobs.JobTechnique.Chop:
+                    return Network.JobTechnique.Chop;
+                case DataModels.Jobs.JobTechnique.Cool:
+                    return Network.JobTechnique.Cool;
+                case DataModels.Jobs.JobTechnique.Cut:
+                    return Network.JobTechnique.Cut;
+                case DataModels.Jobs.JobTechnique.Dip:
+                    return Network.JobTechnique.Dip;
+                case DataModels.Jobs.JobTechnique.Dry:
+                    return Network.JobTechnique.Dry;
+                case DataModels.Jobs.JobTechnique.Fold:
+                    return Network.JobTechnique.Fold;
+                case DataModels.Jobs.JobTechnique.Meld:
+                    return Network.JobTechnique.Meld;
+                case DataModels.Jobs.JobTechnique.Melt:
+                    return Network.JobTechnique.Melt;
+                case DataModels.Jobs.JobTechnique.Mix:
+                    return Network.JobTechnique.Mix;
+                case DataModels.Jobs.JobTechnique.Sand:
+                    return Network.JobTechnique.Sand;
+                case DataModels.Jobs.JobTechnique.Shape:
+                    return Network.JobTechnique.Shape;
+                case DataModels.Jobs.JobTechnique.Shatter:
+                    return Network.JobTechnique.Shatter;
+                case DataModels.Jobs.JobTechnique.Write:
+                    return Network.JobTechnique.Write;
+            }
+
+            return Network.JobTechnique.Assemble;
         }
         #endregion
     }

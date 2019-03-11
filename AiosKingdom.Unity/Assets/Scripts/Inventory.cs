@@ -243,6 +243,15 @@ public class Inventory : MonoBehaviour
                         });
                     }
                     break;
+                case JsonObjects.Items.ItemType.CraftingMaterial:
+                case JsonObjects.Items.ItemType.Enchant:
+                case JsonObjects.Items.ItemType.Gem:
+                    {
+                        var itemObj = Instantiate(ItemListItem, Items.transform);
+                        var itemScript = itemObj.GetComponent<InventoryListItem>();
+                        itemScript.Initialize(item, slot);
+                    }
+                    break;
             }
         }
 

@@ -10,6 +10,9 @@ namespace Network.Items
         Bag = 1,
         Armor = 2,
         Jewelry = 4,
+        CraftingMaterial = 5,
+        Enchant = 6,
+        Gem = 7,
 
         Junk = 10,
 

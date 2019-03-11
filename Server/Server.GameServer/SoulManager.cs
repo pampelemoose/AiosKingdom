@@ -35,6 +35,8 @@ namespace Server.GameServer
             public List<Network.Knowledge> Knowledge { get; set; }
 
             public List<Network.AdventureUnlocked> AdventureLocks { get; set; }
+
+            public Network.Job Job { get; set; }
         }
 
         private static SoulManager _instance;
@@ -146,7 +148,9 @@ namespace Server.GameServer
                     Inventory = new List<Network.InventorySlot>(),
                     Knowledge = new List<Network.Knowledge>(),
 
-                    AdventureLocks = new List<Network.AdventureUnlocked>()
+                    AdventureLocks = new List<Network.AdventureUnlocked>(),
+
+                    Job = null
                 };
 
                 foreach (var inventorySlot in soul.Inventory)
@@ -154,6 +158,7 @@ namespace Server.GameServer
                     var slot = new Network.InventorySlot
                     {
                         Id = inventorySlot.Id,
+                        IsNew = false,
                         ItemId = inventorySlot.ItemVid,
                         Quantity = inventorySlot.Quantity,
                         LootedAt = inventorySlot.LootedAt
@@ -200,6 +205,34 @@ namespace Server.GameServer
                     };
 
                     component.AdventureLocks.Add(advLock);
+                }
+
+                if (soul.Job != null)
+                {
+                    var job = new Network.Job
+                    {
+                        Id = soul.Job.Id,
+                        Rank = DataManager.ConvertJobRank(soul.Job.Rank),
+                        Type = DataManager.ConvertJobType(soul.Job.Type),
+                        Points = soul.Job.Points,
+                        Recipes = new List<Network.RecipeUnlocked>()
+                    };
+
+                    foreach (var recipeUnlocked in soul.Job.Recipes)
+                    {
+                        var recUn = new Network.RecipeUnlocked
+                        {
+                            Id = recipeUnlocked.Id,
+                            RecipeId = recipeUnlocked.RecipeId,
+                            SoulId = recipeUnlocked.SoulId,
+                            UnlockedAt = recipeUnlocked.UnlockedAt,
+                            IsNew = false
+                        };
+
+                        job.Recipes.Add(recUn);
+                    }
+
+                    component.Job = job;
                 }
 
                 lock (_componentLock)
@@ -268,7 +301,7 @@ namespace Server.GameServer
             {
                 var slot = new DataModels.InventorySlot
                 {
-                    Id = inventorySlot.Id,
+                    Id = inventorySlot.IsNew ? Guid.Empty : inventorySlot.Id,
                     ItemVid = inventorySlot.ItemId,
                     Quantity = inventorySlot.Quantity,
                     LootedAt = inventorySlot.LootedAt,
@@ -449,6 +482,21 @@ namespace Server.GameServer
             }
         }
 
+        public void UpdateJob(Guid token, Network.Job job)
+        {
+            if (_ids.ContainsKey(token))
+            {
+                var component = _components[token];
+
+                component.Job = job;
+
+                lock (_componentLock)
+                {
+                    _components[token] = component;
+                }
+            }
+        }
+
         public Network.SoulDatas GetDatas(Guid token)
         {
             if (_ids.ContainsKey(token))
@@ -514,6 +562,16 @@ namespace Server.GameServer
             if (_ids.ContainsKey(token))
             {
                 return _components[token].AdventureLocks;
+            }
+
+            return null;
+        }
+
+        public Network.Job GetJob(Guid token)
+        {
+            if (_ids.ContainsKey(token))
+            {
+                return _components[token].Job;
             }
 
             return null;

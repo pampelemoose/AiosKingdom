@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BagSelectionListItem : MonoBehaviour
+public class SelectionListItem : MonoBehaviour
 {
     public Text Name;
     public Button Action;

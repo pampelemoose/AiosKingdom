@@ -81,6 +81,7 @@ namespace DataRepositories.Migrations
                 context.Roles.Add(new DataModels.Role { Name = "AdventureCreator" });
                 context.Roles.Add(new DataModels.Role { Name = "MonsterCreator" });
                 context.Roles.Add(new DataModels.Role { Name = "MarketRegulator" });
+                context.Roles.Add(new DataModels.Role { Name = "JobCreator" });
 
                 context.Roles.Add(new DataModels.Role { Name = "TicketMaster" });
                 context.Roles.Add(new DataModels.Role { Name = "Ticketer" });

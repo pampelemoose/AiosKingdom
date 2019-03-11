@@ -367,7 +367,7 @@ namespace Server.GameServer
                 if (exists != null)
                 {
                     _state.Bag.Remove(exists);
-                    ++exists.Quantity;
+                    exists.Quantity += _loots[lootId].Quantity;
                     _state.Bag.Add(exists);
                 }
                 else
@@ -376,7 +376,7 @@ namespace Server.GameServer
                     {
                         InventoryId = Guid.NewGuid(),
                         ItemId = _loots[lootId].ItemId,
-                        Quantity = 1
+                        Quantity = _loots[lootId].Quantity
                     });
                 }
 
@@ -386,17 +386,13 @@ namespace Server.GameServer
                     AdventureVid = _adventure.Id,
                     MonsterVid = _loots[lootId].MonsterId,
                     ItemVid = _loots[lootId].ItemId,
-                    Quantity = 1,
+                    Quantity = _loots[lootId].Quantity,
                     LootedAt = DateTime.Now
                 };
 
                 DataRepositories.LootingHistoryRepository.Create(history);
 
-                --_loots[lootId].Quantity;
-                if (_loots[lootId].Quantity <= 0)
-                {
-                    _loots.Remove(lootId);
-                }
+                _loots.Remove(lootId);
 
                 return true;
             }

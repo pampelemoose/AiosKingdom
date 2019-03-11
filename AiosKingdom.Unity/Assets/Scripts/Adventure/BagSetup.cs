@@ -15,7 +15,7 @@ public class BagSetup : MonoBehaviour
 
     public ItemDetails ItemDetails;
 
-    public BagItemSelection BagItemSelection;
+    public ItemSelection BagItemSelection;
 
     [Space(10)]
     [Header("Pagination")]
@@ -41,7 +41,7 @@ public class BagSetup : MonoBehaviour
         AddItemButton.onClick.RemoveAllListeners();
         AddItemButton.onClick.AddListener(() =>
         {
-            BagItemSelection.Initialize(AddItem);
+            BagItemSelection.Initialize(AddItem, new List<JsonObjects.Items.ItemType> { JsonObjects.Items.ItemType.Consumable });
         });
 
         _bagSize = DatasManager.Instance.Datas.BagSpace;

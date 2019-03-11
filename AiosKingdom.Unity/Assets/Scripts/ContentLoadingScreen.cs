@@ -5,35 +5,41 @@ using UnityEngine.UI;
 
 public class ContentLoadingScreen : MonoBehaviour
 {
-    public GameObject Items;
-    public GameObject Books;
-    public GameObject Monsters;
-    public GameObject Adventures;
+    public Text Items;
+    public Text Books;
+    public Text Monsters;
+    public Text Adventures;
+    public Text Recipes;
 
     private bool _itemsLoaded = false;
     private bool _booksLoaded = false;
     private bool _monstersLoaded = false;
     private bool _adventuresLoaded = false;
+    private bool _recipesLoaded = false;
 
     public void IsLoaded(string name)
     {
         switch (name)
         {
             case "items":
-                Items.SetActive(true);
+                Items.text = "[x]";
                 _itemsLoaded = true;
                 break;
             case "books":
-                Books.SetActive(true);
+                Books.text = "[x]";
                 _booksLoaded = true;
                 break;
             case "monsters":
-                Monsters.SetActive(true);
+                Monsters.text = "[x]";
                 _monstersLoaded = true;
                 break;
             case "adventures":
-                Adventures.SetActive(true);
+                Adventures.text = "[x]";
                 _adventuresLoaded = true;
+                break;
+            case "recipes":
+                Recipes.text = "[x]";
+                _recipesLoaded = true;
                 break;
         }
     }
@@ -42,7 +48,7 @@ public class ContentLoadingScreen : MonoBehaviour
     {
         get
         {
-            return _itemsLoaded && _booksLoaded && _monstersLoaded && _adventuresLoaded;
+            return _itemsLoaded && _booksLoaded && _monstersLoaded && _adventuresLoaded && _recipesLoaded;
         }
     }
 }

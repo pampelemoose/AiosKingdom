@@ -29,6 +29,16 @@ namespace DataRepositories
             }
         }
 
+        public static List<DataModels.Items.Item> GetAllNullableForQuality(DataModels.Items.ItemQuality quality)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                var result = new List<DataModels.Items.Item> { null };
+                result.AddRange(context.Items.Where(i => i.Quality == quality).ToList());
+                return result;
+            }
+        }
+
         public static DataModels.Items.Item GetById(Guid id)
         {
             using (var context = new AiosKingdomContext())

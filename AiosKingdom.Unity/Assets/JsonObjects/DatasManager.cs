@@ -5,6 +5,25 @@ using System.Text;
 
 public class DatasManager
 {
+    public class Watchable<T>
+    {
+        public event Action<T> Changed;
+
+        private T _value;
+        public T Value
+        {
+            get { return _value; }
+            set
+            {
+                if (Changed != null)
+                {
+                    Changed.Invoke(value);
+                }
+                _value = value;
+            }
+        }
+    }
+
     private static DatasManager _instance;
     public static DatasManager Instance
     {
@@ -41,4 +60,9 @@ public class DatasManager
     public List<JsonObjects.Adventures.Adventure> Dungeons { get; set; }
 
     public JsonObjects.AdventureState Adventure { get; set; }
+
+    public List<JsonObjects.Recipe> Recipes { get; set; }
+
+    private Watchable<JsonObjects.Job> _job = new Watchable<JsonObjects.Job>();
+    public Watchable<JsonObjects.Job> Job { get { return _job; } }
 }

@@ -114,6 +114,7 @@ namespace Network
     public class InventorySlot
     {
         public Guid Id { get; set; }
+        public bool IsNew { get; set; }
 
         public Guid ItemId { get; set; }
         public int Quantity { get; set; }

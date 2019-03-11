@@ -162,6 +162,8 @@
     <Compile Include="Controllers\AdventuresController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
+    <Compile Include="Controllers\JobsController.cs" />
+    <Compile Include="Controllers\RecipesController.cs" />
     <Compile Include="Controllers\TalentsController.cs" />
     <Compile Include="Controllers\TownsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -185,6 +187,8 @@
     <Compile Include="Models\BookModel.cs" />
     <Compile Include="Models\Filters\DungeonFilter.cs" />
     <Compile Include="Models\Filters\ItemFilter.cs" />
+    <Compile Include="Models\Filters\JobFilter.cs" />
+    <Compile Include="Models\Filters\RecipeFilter.cs" />
     <Compile Include="Models\ItemModel.cs" />
     <Compile Include="Models\Filters\MarketSlotFilter.cs" />
     <Compile Include="Models\MarketSlotModel.cs" />
@@ -192,6 +196,7 @@
     <Compile Include="Models\MonsterModel.cs" />
     <Compile Include="Models\MyPageModel.cs" />
     <Compile Include="Models\Filters\UserFilter.cs" />
+    <Compile Include="Models\RecipeModel.cs" />
     <Compile Include="Models\ThreadModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -458,6 +463,10 @@
     <Content Include="Views\Talents\UnlockTypePartial.cshtml" />
     <Content Include="Views\Talents\Create.cshtml" />
     <Content Include="Views\Talents\Edit.cshtml" />
+    <Content Include="Views\Jobs\Index.cshtml" />
+    <Content Include="Views\Recipes\Index.cshtml" />
+    <Content Include="Views\Recipes\Create.cshtml" />
+    <Content Include="Views\Recipes\CombinaisonPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

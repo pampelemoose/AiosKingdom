@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BagItemSelection : MonoBehaviour
+public class ItemSelection : MonoBehaviour
 {
     public GameObject Items;
     public GameObject BagItemListPrefab;
@@ -23,10 +23,12 @@ public class BagItemSelection : MonoBehaviour
     public List<JsonObjects.InventorySlot> Inventory { get { return _inventory; } }
 
     private Action<JsonObjects.Items.Item, int> _addItemToBag;
+    private List<JsonObjects.Items.ItemType> _allowedTypes;
 
-    public void Initialize(Action<JsonObjects.Items.Item, int> addItemToBag)
+    public void Initialize(Action<JsonObjects.Items.Item, int> addItemToBag, List<JsonObjects.Items.ItemType> allowedTypes)
     {
         _addItemToBag = addItemToBag;
+        _allowedTypes = allowedTypes;
         _inventory = DatasManager.Instance.Inventory.ToList();
 
         if (_pagination == null)
@@ -90,13 +92,13 @@ public class BagItemSelection : MonoBehaviour
         }
 
         var inventoryIds = _inventory.Select(i => i.ItemId).ToList();
-        var consumables = DatasManager.Instance.Items.Where(i => inventoryIds.Contains(i.Id) && i.Type == JsonObjects.Items.ItemType.Consumable).ToList();
+        var consumables = DatasManager.Instance.Items.Where(i => inventoryIds.Contains(i.Id) && _allowedTypes.Contains(i.Type)).ToList();
 
         foreach (var item in consumables)
         {
             var slot = DatasManager.Instance.Inventory.FirstOrDefault(i => i.ItemId.Equals(item.Id));
             var itemObj = Instantiate(BagItemListPrefab, Items.transform);
-            var itemScript = itemObj.GetComponent<BagSelectionListItem>();
+            var itemScript = itemObj.GetComponent<SelectionListItem>();
             itemScript.Initialize(item, slot);
 
             itemScript.Action.onClick.AddListener(() =>

@@ -52,7 +52,6 @@ namespace DataRepositories
         public DbSet<DataModels.AdventureUnlocked> AdventureUnlocked { get; set; }
         public DbSet<DataModels.TalentUnlocked> TalentUnlocked { get; set; }
         public DbSet<DataModels.RecipeUnlocked> RecipeUnlocked { get; set; }
-        public DbSet<DataModels.DiscoveryUnlocked> DiscoveryUnlocked { get; set; }
 
         public DbSet<DataModels.MarketHistory> MarketHistory { get; set; }
         public DbSet<DataModels.Items.LootHistory> LootHistory { get; set; }
@@ -60,7 +59,6 @@ namespace DataRepositories
 
         public DbSet<DataModels.Jobs.Job> Jobs { get; set; }
         public DbSet<DataModels.Jobs.Recipe> Recipes { get; set; }
-        public DbSet<DataModels.Jobs.Discovery> Discoveries { get; set; }
 
         public DbSet<DataModels.Website.Section> Sections { get; set; }
         public DbSet<DataModels.Website.Banner> Contents { get; set; }

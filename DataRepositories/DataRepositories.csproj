@@ -50,6 +50,7 @@
     <Compile Include="AppUserRepository.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="AiosKingdomContext.cs" />
+    <Compile Include="JobRepository.cs" />
     <Compile Include="LootingHistoryRepository.cs" />
     <Compile Include="Migrations\201812280320246_InitialMigration.cs" />
     <Compile Include="Migrations\201812280320246_InitialMigration.Designer.cs">
@@ -59,6 +60,39 @@
     <Compile Include="Migrations\201901290819301_Job&amp;Histories.Designer.cs">
       <DependentUpon>201901290819301_Job&amp;Histories.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901300155041_RecipeDiscoveryJobIdRemoved.cs" />
+    <Compile Include="Migrations\201901300155041_RecipeDiscoveryJobIdRemoved.Designer.cs">
+      <DependentUpon>201901300155041_RecipeDiscoveryJobIdRemoved.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902120638409_AddRecipeName.cs" />
+    <Compile Include="Migrations\201902120638409_AddRecipeName.Designer.cs">
+      <DependentUpon>201902120638409_AddRecipeName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902190814169_RemovedCombinaisonVersionized.cs" />
+    <Compile Include="Migrations\201902190814169_RemovedCombinaisonVersionized.Designer.cs">
+      <DependentUpon>201902190814169_RemovedCombinaisonVersionized.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902190918465_AddedRecipeIsShop.cs" />
+    <Compile Include="Migrations\201902190918465_AddedRecipeIsShop.Designer.cs">
+      <DependentUpon>201902190918465_AddedRecipeIsShop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902191004325_RemovedDiscovery.cs" />
+    <Compile Include="Migrations\201902191004325_RemovedDiscovery.Designer.cs">
+      <DependentUpon>201902191004325_RemovedDiscovery.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902200951169_JobExperienceChanges.cs" />
+    <Compile Include="Migrations\201902200951169_JobExperienceChanges.Designer.cs">
+      <DependentUpon>201902200951169_JobExperienceChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903080332126_JobQualityItemsChanges.cs" />
+    <Compile Include="Migrations\201903080332126_JobQualityItemsChanges.Designer.cs">
+      <DependentUpon>201903080332126_JobQualityItemsChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903080351188_JobQualityItemsNullable.cs" />
+    <Compile Include="Migrations\201903080351188_JobQualityItemsNullable.Designer.cs">
+      <DependentUpon>201903080351188_JobQualityItemsNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RecipeRepository.cs" />
     <Compile Include="TownRepository.cs" />
     <Compile Include="AdventureRepository.cs" />
     <Compile Include="ForumRepository.cs" />
@@ -91,6 +125,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901290819301_Job&amp;Histories.resx">
       <DependentUpon>201901290819301_Job&amp;Histories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901300155041_RecipeDiscoveryJobIdRemoved.resx">
+      <DependentUpon>201901300155041_RecipeDiscoveryJobIdRemoved.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902120638409_AddRecipeName.resx">
+      <DependentUpon>201902120638409_AddRecipeName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902190814169_RemovedCombinaisonVersionized.resx">
+      <DependentUpon>201902190814169_RemovedCombinaisonVersionized.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902190918465_AddedRecipeIsShop.resx">
+      <DependentUpon>201902190918465_AddedRecipeIsShop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902191004325_RemovedDiscovery.resx">
+      <DependentUpon>201902191004325_RemovedDiscovery.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902200951169_JobExperienceChanges.resx">
+      <DependentUpon>201902200951169_JobExperienceChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903080332126_JobQualityItemsChanges.resx">
+      <DependentUpon>201903080332126_JobQualityItemsChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903080351188_JobQualityItemsNullable.resx">
+      <DependentUpon>201903080351188_JobQualityItemsNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

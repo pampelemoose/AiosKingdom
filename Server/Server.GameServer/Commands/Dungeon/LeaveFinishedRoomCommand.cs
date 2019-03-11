@@ -61,6 +61,8 @@ namespace Server.GameServer.Commands.Dungeon
                         {
                             inventory.Add(new Network.InventorySlot
                             {
+                                Id = bag.InventoryId,
+                                IsNew = true,
                                 ItemId = bag.ItemId,
                                 Quantity = bag.Quantity,
                                 LootedAt = DateTime.Now

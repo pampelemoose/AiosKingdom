@@ -1,0 +1,101 @@
+﻿@model DataModels.Jobs.Combinaison
+
+@{
+    var combId = Guid.NewGuid();
+}
+
+<div id="insc-card-@combId" class="col-md-6 mt-2">
+    @using (Html.BeginCollectionItem($"Combinaisons"))
+    {
+        @Html.HiddenFor(model => Model.Id)
+
+        <div class="card card-dark">
+            <div class="card-body">
+                <div class="row mt-1">
+                    <div class="col-md-12">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.CommonItemId, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.DropDownListFor(model => model.CommonItemId, 
+                           new SelectList(DataRepositories.ItemRepository.GetAllNullableForQuality(DataModels.Items.ItemQuality.Common), "Vid", "Name"), new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.CommonItemId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.UncommonItemId, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.DropDownListFor(model => model.UncommonItemId, 
+                           new SelectList(DataRepositories.ItemRepository.GetAllNullableForQuality(DataModels.Items.ItemQuality.Uncommon), "Vid", "Name"), new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.UncommonItemId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.RareItemId, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.DropDownListFor(model => model.RareItemId, 
+                           new SelectList(DataRepositories.ItemRepository.GetAllNullableForQuality(DataModels.Items.ItemQuality.Rare), "Vid", "Name"), new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.RareItemId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.EpicItemId, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.DropDownListFor(model => model.EpicItemId, 
+                           new SelectList(DataRepositories.ItemRepository.GetAllNullableForQuality(DataModels.Items.ItemQuality.Epic), "Vid", "Name"), new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.EpicItemId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.LegendaryItemId, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.DropDownListFor(model => model.LegendaryItemId, 
+                           new SelectList(DataRepositories.ItemRepository.GetAllNullableForQuality(DataModels.Items.ItemQuality.Legendary), "Vid", "Name"), new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.LegendaryItemId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.PercentagePerItem, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.EditorFor(model => model.PercentagePerItem, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.PercentagePerItem, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.MinQuantity, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.EditorFor(model => model.MinQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.MinQuantity, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.MaxQuantity, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.EditorFor(model => model.MaxQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.MaxQuantity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="close" aria-label="Close" onclick="$(this).parent().parent().parent().remove();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    }
+</div>

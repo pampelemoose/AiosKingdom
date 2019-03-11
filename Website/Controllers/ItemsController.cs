@@ -70,11 +70,24 @@ namespace Website.Controllers
                     return View(itemModel);
                 }
 
+                if ((itemModel.Type == DataModels.Items.ItemType.Enchant
+                    || itemModel.Type == DataModels.Items.ItemType.Gem)
+                    && ((itemModel.Effects == null || (itemModel.Effects != null && itemModel.Effects.Count == 0))
+                    || (itemModel.Stats == null || (itemModel.Stats != null && itemModel.Stats.Count == 0))))
+                {
+                    Alert(AlertMessage.AlertType.Danger, $"Need at least one effect or one stat.", "Effect missing !");
+                    itemModel.SetupLists();
+                    return View(itemModel);
+                }
+
                 if (itemModel.Type != DataModels.Items.ItemType.Armor
                     && itemModel.Type != DataModels.Items.ItemType.Bag
                     && itemModel.Type != DataModels.Items.ItemType.Consumable
                     && itemModel.Type != DataModels.Items.ItemType.Jewelry
                     && itemModel.Type != DataModels.Items.ItemType.Junk
+                    && itemModel.Type != DataModels.Items.ItemType.CraftingMaterial
+                    && itemModel.Type != DataModels.Items.ItemType.Enchant
+                    && itemModel.Type != DataModels.Items.ItemType.Gem
                     && (itemModel.Slot == null || itemModel.MinDamages == null || itemModel.MaxDamages == null))
                 {
                     Alert(AlertMessage.AlertType.Danger, $"Need minDamages, maxDamages and Slot for weapons.", "Value missing !");

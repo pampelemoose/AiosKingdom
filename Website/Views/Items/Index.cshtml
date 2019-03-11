@@ -136,7 +136,10 @@
                                         </div>
                                     </li>
                                 }
-                                else if (item.Type != DataModels.Items.ItemType.Consumable)
+                                else if (item.Type != DataModels.Items.ItemType.Consumable 
+                                    && item.Type != DataModels.Items.ItemType.CraftingMaterial
+                                    && item.Type != DataModels.Items.ItemType.Enchant
+                                    && item.Type != DataModels.Items.ItemType.Gem)
                                 {
                                     <li class="list-group-item">
                                         <div class="row">

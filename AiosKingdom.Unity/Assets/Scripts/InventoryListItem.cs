@@ -28,6 +28,15 @@ public class InventoryListItem : MonoBehaviour
             case JsonObjects.Items.ItemType.Armor:
                 Slot.text = item.Slot.ToString();
                 break;
+            case JsonObjects.Items.ItemType.CraftingMaterial:
+                Slot.text = "Cft.";
+                break;
+            case JsonObjects.Items.ItemType.Enchant:
+                Slot.text = "Ect.";
+                break;
+            case JsonObjects.Items.ItemType.Gem:
+                Slot.text = "Gem";
+                break;
             default:
                 Slot.text = string.Format("{0}.{1}", item.Slot == JsonObjects.Items.ItemSlot.OneHand ? "1H" : "2H", item.Type);
                 break;
@@ -74,6 +83,9 @@ public class InventoryListItem : MonoBehaviour
         {
             case JsonObjects.Items.ItemType.Consumable:
             case JsonObjects.Items.ItemType.Junk:
+            case JsonObjects.Items.ItemType.CraftingMaterial:
+            case JsonObjects.Items.ItemType.Enchant:
+            case JsonObjects.Items.ItemType.Gem:
                 return false;
         }
 

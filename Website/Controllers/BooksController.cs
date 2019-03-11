@@ -9,7 +9,6 @@ namespace Website.Controllers
 {
     public class BooksController : AKBaseController
     {
-        // GET: Books
         public ActionResult Index(Models.Filters.BookFilter filter)
         {
             var books = DataRepositories.BookRepository.GetAll();

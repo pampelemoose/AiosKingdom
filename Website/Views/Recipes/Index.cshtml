@@ -1,0 +1,72 @@
+﻿@model Website.Models.Filters.RecipeFilter
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@using (Html.BeginForm())
+{
+    <section class="p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "input-group-text" })
+                        </div>
+                        @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control" })
+                        <div class="input-group-append">
+                            <input type="submit" value="Search" class="btn btn-primary btn-block" />
+                            <button class="btn btn-primary dropdown-toggle dropdown-toggle-split" type="button" data-toggle="collapse" data-target="#filter-body" aria-expanded="false" aria-controls="filter-body">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-info collapse p-2" id="filter-body">
+        <div class="container">
+            @*<div class="row mt-2">
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                @Html.LabelFor(model => model.Rank, htmlAttributes: new { @class = "input-group-text" })
+                            </div>
+                            @Html.EnumDropDownListFor(model => model.Rank, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>*@
+
+            <div class="row mt-2">
+                <div class="offset-md-10 col-md-2">
+                    <input type="submit" value="Filter" class="btn btn-default btn-block" />
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<section>
+    <div class="container">
+        <table class="table table-striped table-hover">
+            <thead class="table-borderless">
+                <tr>
+                    <th class="col-md-12">Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var recipe in Model.Recipes)
+                {
+                    <tr>
+                        <td>
+                            <h3 class="mt-0">@recipe.Name</h3>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

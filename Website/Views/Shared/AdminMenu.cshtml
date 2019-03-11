@@ -72,6 +72,18 @@
                             </div>
                         </li>
                     }
+                    @if (User.IsInRole("JobCreator"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="item-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Jobs</a>
+                            <div class="dropdown-menu" aria-labelledby="item-dropdown">
+                                @Html.ActionLink("List", "Index", "Jobs", null, new { @class = "dropdown-item" })
+                                <h6 class="dropdown-header">Recipes</h6>
+                                @Html.ActionLink("List", "Index", "Recipes", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Create", "Create", "Recipes", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                    }
                     @if (User.IsInRole("MarketRegulator"))
                     {
                         <li class="nav-item dropdown">

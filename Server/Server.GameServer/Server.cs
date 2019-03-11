@@ -131,6 +131,7 @@ namespace Server.GameServer
             SetupListingDelegates();
             SetupPlayerDelegates();
             SetupDungeonDelegates();
+            SetupJobDelegates();
         }
 
         private void SetupServerDelegates()
@@ -156,6 +157,7 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Listing.Dungeon, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Market, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.SpecialsMarket, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Recipes, 0);
 
             _delegates.Add(Network.CommandCodes.Listing.Item, (args) => { return new Commands.Listing.ItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Book, (args) => { return new Commands.Listing.BookCommand(args); });
@@ -163,6 +165,7 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Listing.Dungeon, (args) => { return new Commands.Listing.DungeonCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Market, (args) => { return new Commands.Listing.MarketCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.SpecialsMarket, (args) => { return new Commands.Listing.SpecialMarketCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Recipes, (args) => { return new Commands.Listing.RecipeCommand(args); });
         }
 
         private void SetupPlayerDelegates()
@@ -225,6 +228,17 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Dungeon.DoNothingTurn, (args) => { return new Commands.Dungeon.DoNothingTurnCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.BuyShopItem, (args) => { return new Commands.Dungeon.BuyShopItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.PlayerRest, (args) => { return new Commands.Dungeon.PlayerRestCommand(args); });
+        }
+
+        private void SetupJobDelegates()
+        {
+            _commandArgCount.Add(Network.CommandCodes.Job.Get, 0);
+            _commandArgCount.Add(Network.CommandCodes.Job.Learn, 1);
+            _commandArgCount.Add(Network.CommandCodes.Job.Craft, 2);
+
+            _delegates.Add(Network.CommandCodes.Job.Get, (args) => { return new Commands.Jobs.GetCommand(args); });
+            _delegates.Add(Network.CommandCodes.Job.Learn, (args) => { return new Commands.Jobs.LearnCommand(args); });
+            _delegates.Add(Network.CommandCodes.Job.Craft, (args) => { return new Commands.Jobs.CraftCommand(args); });
         }
 
         private void Run()
@@ -589,6 +603,8 @@ namespace Server.GameServer
                     break;
                 case Network.CommandCodes.Listing.SpecialsMarket:
                     break;
+                case Network.CommandCodes.Listing.Recipes:
+                    break;
 
                 // DUNGEON
                 case Network.CommandCodes.Dungeon.Enter:
@@ -621,6 +637,16 @@ namespace Server.GameServer
                     retVal.Args = new string[2] { args[0], args[1] };
                     break;
                 case Network.CommandCodes.Dungeon.PlayerRest:
+                    break;
+
+                // JOB
+                case Network.CommandCodes.Job.Get:
+                    break;
+                case Network.CommandCodes.Job.Learn:
+                    retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Job.Craft:
+                    retVal.Args = new string[2] { args[0], args[1] };
                     break;
 
                 default:

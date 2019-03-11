@@ -51,6 +51,7 @@ public class Home : MonoBehaviour
         NetworkManager.This.AskEquipment();
         NetworkManager.This.AskKnowledges();
         NetworkManager.This.AskInventory();
+        NetworkManager.This.GetJob();
     }
 
     public void UpdatePlayerDatas()
