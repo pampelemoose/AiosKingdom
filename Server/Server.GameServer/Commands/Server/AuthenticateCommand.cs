@@ -34,7 +34,7 @@ namespace Server.GameServer.Commands.Server
 
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Client_Authenticate,
+                        Code = Network.CommandCodes.Game_Authenticate,
                         Json = JsonConvert.SerializeObject(authToken),
                         Success = true
                     };
@@ -49,7 +49,7 @@ namespace Server.GameServer.Commands.Server
 
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Client_Authenticate,
+                    Code = Network.CommandCodes.Game_Authenticate,
                     Json = "Failure in authentication. Try again later.",
                     Success = false
                 };

@@ -79,80 +79,91 @@ namespace Server.GameServer
             var itemRatios = DataModels.Jobs.RecipeQualityResults.ItemRatios[rank];
 
             var jobToken = ((int)job.Rank) + 1;
-            double recipeToken = 0.0f;
+            double[] recipeToken = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
 
             foreach (var component in components)
             {
                 var item = DataManager.Instance.Items.FirstOrDefault(i => i.Id.Equals(component.ItemId));
+                var combinaison = recipe.Combinaisons.FirstOrDefault(c => c.ItemId(item.Quality).Equals(item.Id));
+                int itemQuality = (int)item.Quality;
 
-                switch (item.Quality)
+                if (itemQuality >= 4)
                 {
-                    case Network.Items.ItemQuality.Common:
-                        {
 
-                            var combinaison = recipe.Combinaisons.FirstOrDefault(c => c.ItemId(Network.Items.ItemQuality.Common).Equals(item.Id));
-                            recipeToken += (component.Quantity * itemRatios.Common * combinaison.PercentagePerItem);
-                        }
-                        break;
-                    case Network.Items.ItemQuality.Uncommon:
-                        {
-                            var combinaison = recipe.Combinaisons.FirstOrDefault(c => c.ItemId(Network.Items.ItemQuality.Uncommon).Equals(item.Id));
-                            recipeToken += (component.Quantity * itemRatios.Uncommon * combinaison.PercentagePerItem);
-                        }
-                        break;
-                    case Network.Items.ItemQuality.Rare:
-                        {
-                            var combinaison = recipe.Combinaisons.FirstOrDefault(c => c.ItemId(Network.Items.ItemQuality.Rare).Equals(item.Id));
-                            recipeToken += (component.Quantity * itemRatios.Rare * combinaison.PercentagePerItem);
-                        }
-                        break;
-                    case Network.Items.ItemQuality.Epic:
-                        {
-                            var combinaison = recipe.Combinaisons.FirstOrDefault(c => c.ItemId(Network.Items.ItemQuality.Epic).Equals(item.Id));
-                            recipeToken += (component.Quantity * itemRatios.Epic * combinaison.PercentagePerItem);
-                        }
-                        break;
-                    case Network.Items.ItemQuality.Legendary:
-                        {
-                            var combinaison = recipe.Combinaisons.FirstOrDefault(c => c.ItemId(Network.Items.ItemQuality.Legendary).Equals(item.Id));
-                            recipeToken += (component.Quantity * itemRatios.Legendary * combinaison.PercentagePerItem);
-                        }
-                        break;
+                    recipeToken[4] += (component.Quantity * itemRatios.Legendary * combinaison.PercentagePerItem);
+                    recipeToken[3] += (component.Quantity * itemRatios.Epic * combinaison.PercentagePerItem);
+                    recipeToken[2] += (component.Quantity * itemRatios.Rare * combinaison.PercentagePerItem);
+                    recipeToken[1] += (component.Quantity * itemRatios.Uncommon * combinaison.PercentagePerItem);
+                    recipeToken[0] += (component.Quantity * itemRatios.Common * combinaison.PercentagePerItem);
+                }
+                if (itemQuality >= 3)
+                {
+                    recipeToken[3] += (component.Quantity * itemRatios.Epic * combinaison.PercentagePerItem);
+                    recipeToken[2] += (component.Quantity * itemRatios.Rare * combinaison.PercentagePerItem);
+                    recipeToken[1] += (component.Quantity * itemRatios.Uncommon * combinaison.PercentagePerItem);
+                    recipeToken[0] += (component.Quantity * itemRatios.Common * combinaison.PercentagePerItem);
+                }
+                if (itemQuality >= 2)
+                {
+                    recipeToken[2] += (component.Quantity * itemRatios.Rare * combinaison.PercentagePerItem);
+                    recipeToken[1] += (component.Quantity * itemRatios.Uncommon * combinaison.PercentagePerItem);
+                    recipeToken[0] += (component.Quantity * itemRatios.Common * combinaison.PercentagePerItem);
+                }
+                if (itemQuality >= 1)
+                {
+                    recipeToken[1] += (component.Quantity * itemRatios.Uncommon * combinaison.PercentagePerItem);
+                    recipeToken[0] += (component.Quantity * itemRatios.Common * combinaison.PercentagePerItem);
+                }
+                if (itemQuality >= 0)
+                {
+                    recipeToken[0] += (component.Quantity * itemRatios.Common * combinaison.PercentagePerItem);
                 }
             }
 
-            double commonFinalTicket = recipeToken * recipeQuality.Common;
-            double uncommonFinalTicket = recipeToken * recipeQuality.Uncommon;
-            double rareFinalTicket = recipeToken * recipeQuality.Rare;
-            double epicFinalTicket = recipeToken * recipeQuality.Epic;
-            double LegendaryFinalTicket = recipeToken * recipeQuality.Legendary;
+            double commonFinalTicket = recipeToken[0] * recipeQuality.Common;
+            double uncommonFinalTicket = recipeToken[1] * recipeQuality.Uncommon;
+            double rareFinalTicket = recipeToken[2] * recipeQuality.Rare;
+            double epicFinalTicket = recipeToken[3] * recipeQuality.Epic;
+            double LegendaryFinalTicket = recipeToken[4] * recipeQuality.Legendary;
 
             var rand = new Random();
-            var commonChances = commonFinalTicket * rand.Next(0, 100);
-            var uncommonChances = uncommonFinalTicket * rand.Next(0, 100);
-            var rareChances = rareFinalTicket * rand.Next(0, 100);
-            var epicChances = epicFinalTicket * rand.Next(0, 100);
-            var legendaryChances = LegendaryFinalTicket * rand.Next(0, 100);
+            var commonChances = rand.Next(0, (int)Math.Round(commonFinalTicket * 100)) / 100.0f;
+            var uncommonChances = rand.Next(0, (int)Math.Round(uncommonFinalTicket * 100)) / 100.0f;
+            var rareChances = rand.Next(0, (int)Math.Round(rareFinalTicket * 100)) / 100.0f;
+            var epicChances = rand.Next(0, (int)Math.Round(epicFinalTicket * 100)) / 100.0f;
+            var legendaryChances = rand.Next(0, (int)Math.Round(LegendaryFinalTicket * 100)) / 100.0f;
 
-            return null;
-        }
+            Console.WriteLine($"Crafting chances C[{commonChances}],UC[{uncommonChances}],R[{rareChances}], E[{epicChances}], L[{legendaryChances}] .");
 
-        private static Network.Items.ItemQuality _calculateCraftingQuality(Network.JobRank jobRank, List<Network.CraftingComponent> components)
-        {
-            var rank = DataManager.ConvertBackJobRank(jobRank);
-            var recipeQuality = DataModels.Jobs.RecipeQualityResults.Results[rank];
-
-            foreach (var component in components)
+            Guid? itemId = null;
+            if (commonChances > uncommonChances
+                && commonChances > rareChances
+                && commonChances > epicChances
+                && commonChances > legendaryChances)
             {
-                var item = DataManager.Instance.Items.FirstOrDefault(i => i.Id.Equals(component.ItemId));
-
-                switch (item.Quality)
-                {
-
-                }
+                itemId = recipe.CraftedItemId(Network.Items.ItemQuality.Common);
+            }
+            else if (uncommonChances > rareChances
+                && uncommonChances > epicChances
+                && uncommonChances > legendaryChances)
+            {
+                itemId = recipe.CraftedItemId(Network.Items.ItemQuality.Uncommon);
+            }
+            else if (rareChances > epicChances
+                && rareChances > legendaryChances)
+            {
+                itemId = recipe.CraftedItemId(Network.Items.ItemQuality.Rare);
+            }
+            else if (epicChances > legendaryChances)
+            {
+                itemId = recipe.CraftedItemId(Network.Items.ItemQuality.Epic);
+            }
+            else
+            {
+                itemId = recipe.CraftedItemId(Network.Items.ItemQuality.Legendary);
             }
 
-            return Network.Items.ItemQuality.Common;
+            return DataManager.Instance.Items.FirstOrDefault(i => i.Id.Equals(itemId));
         }
     }
 }

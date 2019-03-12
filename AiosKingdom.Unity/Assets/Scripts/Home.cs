@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Home : MonoBehaviour
+public class Home : MonoBehaviour, ICallbackHooker
 {
     [Header("TopBar")]
     public Text Level;
@@ -44,49 +45,205 @@ public class Home : MonoBehaviour
     public Text Bits;
     public Text Shards;
 
-    void Start()
+    public void HookCallbacks()
     {
-        NetworkManager.This.AskSoulCurrentDatas();
-        NetworkManager.This.AskCurrencies();
-        NetworkManager.This.AskEquipment();
-        NetworkManager.This.AskKnowledges();
-        NetworkManager.This.AskInventory();
-        NetworkManager.This.GetJob();
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Listing.Recipes, (message) =>
+        {
+            if (message.Success)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    gameObject.SetActive(true);
+
+                    NetworkManager.This.AskSoulCurrentDatas();
+                    NetworkManager.This.AskCurrencies();
+                    NetworkManager.This.AskEquipment();
+                    NetworkManager.This.AskKnowledges();
+                    NetworkManager.This.AskInventory();
+                    NetworkManager.This.GetJob();
+                });
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.CurrentSoulDatas, (message) =>
+        {
+            if (message.Success)
+            {
+                var soulDatas = JsonConvert.DeserializeObject<JsonObjects.SoulDatas>(message.Json);
+
+                if (soulDatas.TotalStamina == 0 && soulDatas.TotalEnergy == 0
+                    && soulDatas.TotalStrength == 0 && soulDatas.TotalAgility == 0
+                    && soulDatas.TotalIntelligence == 0 && soulDatas.TotalWisdom == 0)
+                {
+                    // TODO : Tutorial
+                    //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
+                    //Application.Current.SavePropertiesAsync();
+                    //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+                }
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _updatePlayerDatas(soulDatas);
+                });
+            }
+            else
+            {
+                Debug.Log("Soul Datas error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.Market_OrderProcessed, (message) =>
+        {
+            if (message.Success)
+            {
+                Debug.Log(JsonConvert.DeserializeObject<JsonObjects.MarketOrderProcessed>(message.Json));
+
+                NetworkManager.This.AskInventory();
+            }
+            else
+            {
+                Debug.Log("Market Order Processed error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.EquipItem, (message) =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
+            if (message.Success)
+            {
+                NetworkManager.This.AskInventory();
+                NetworkManager.This.AskEquipment();
+                NetworkManager.This.AskSoulCurrentDatas();
+            }
+            else
+            {
+                Debug.Log("Equip Item error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.UseSpiritPills, (message) =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
+            if (message.Success)
+            {
+                NetworkManager.This.AskCurrencies();
+                NetworkManager.This.AskSoulCurrentDatas();
+
+                // TODO : Tutorial
+                //Application.Current.Properties["AiosKingdom_TutorialStep"] = 4;
+                //Application.Current.SavePropertiesAsync();
+                //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+            }
+            else
+            {
+                Debug.Log("Use Spirit Pills error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.LearnSkill, (message) =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
+            if (message.Success)
+            {
+                NetworkManager.This.AskCurrencies();
+                NetworkManager.This.AskKnowledges();
+
+                // TODO : Tutorial
+                //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
+                //Application.Current.SavePropertiesAsync();
+                //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+            }
+            else
+            {
+                Debug.Log("Learn Skill error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.LearnTalent, (message) =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
+            if (message.Success)
+            {
+                NetworkManager.This.AskKnowledges();
+
+                // TODO : tutorial
+                //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
+                //Application.Current.SavePropertiesAsync();
+                //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+            }
+            else
+            {
+                Debug.Log("Learn Talent error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.Currencies, (message) =>
+        {
+            if (message.Success)
+            {
+                var currencies = JsonConvert.DeserializeObject<JsonObjects.Currencies>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _updateCurrencies(currencies);
+                });
+            }
+            else
+            {
+                Debug.Log("Currencies error : " + message.Json);
+            }
+        });
     }
 
-    public void UpdatePlayerDatas()
+    private void _updatePlayerDatas(JsonObjects.SoulDatas datas)
     {
-        Level.text = DatasManager.Instance.Datas.Level.ToString();
-        Name.text = DatasManager.Instance.Datas.Name;
+        Level.text = datas.Level.ToString();
+        Name.text = datas.Name;
 
-        Experience.text = string.Format(": [{0} / {1}]", DatasManager.Instance.Datas.CurrentExperience, DatasManager.Instance.Datas.RequiredExperience);
+        Experience.text = string.Format(": [{0} / {1}]", datas.CurrentExperience, datas.RequiredExperience);
 
-        Health.text = string.Format(": [{0}]", DatasManager.Instance.Datas.MaxHealth);
-        Mana.text = string.Format(": [{0}]", DatasManager.Instance.Datas.MaxMana);
-        Armor.text = string.Format(": [{0}]", DatasManager.Instance.Datas.Armor);
-        MagicArmor.text = string.Format(": [{0}]", DatasManager.Instance.Datas.MagicArmor);
-        ItemLevel.text = string.Format(": [{0}]", DatasManager.Instance.Datas.ItemLevel);
+        Health.text = string.Format(": [{0}]", datas.MaxHealth);
+        Mana.text = string.Format(": [{0}]", datas.MaxMana);
+        Armor.text = string.Format(": [{0}]", datas.Armor);
+        MagicArmor.text = string.Format(": [{0}]", datas.MagicArmor);
+        ItemLevel.text = string.Format(": [{0}]", datas.ItemLevel);
 
-        Stamina.text = string.Format(": [{0}]", DatasManager.Instance.Datas.TotalStamina);
-        Energy.text = string.Format(": [{0}]", DatasManager.Instance.Datas.TotalEnergy);
-        Strength.text = string.Format(": [{0}]", DatasManager.Instance.Datas.TotalStrength);
-        Agility.text = string.Format(": [{0}]", DatasManager.Instance.Datas.TotalAgility);
-        Intelligence.text = string.Format(": [{0}]", DatasManager.Instance.Datas.TotalIntelligence);
-        Wisdom.text = string.Format(": [{0}]", DatasManager.Instance.Datas.TotalWisdom);
+        Stamina.text = string.Format(": [{0}]", datas.TotalStamina);
+        Energy.text = string.Format(": [{0}]", datas.TotalEnergy);
+        Strength.text = string.Format(": [{0}]", datas.TotalStrength);
+        Agility.text = string.Format(": [{0}]", datas.TotalAgility);
+        Intelligence.text = string.Format(": [{0}]", datas.TotalIntelligence);
+        Wisdom.text = string.Format(": [{0}]", datas.TotalWisdom);
 
-        MinDamages.text = string.Format(": [{0}]", DatasManager.Instance.Datas.MinDamages);
-        MaxDamages.text = string.Format(": [{0}]", DatasManager.Instance.Datas.MaxDamages);
+        MinDamages.text = string.Format(": [{0}]", datas.MinDamages);
+        MaxDamages.text = string.Format(": [{0}]", datas.MaxDamages);
     }
 
-    public void UpdateCurrencies()
+    private void _updateCurrencies(JsonObjects.Currencies currencies)
     {
-        Spirits.text = string.Format(": [{0}]", DatasManager.Instance.Currencies.Spirits);
-        Embers.text = string.Format(": [{0}]", DatasManager.Instance.Currencies.Embers);
-        Bits.text = string.Format(": [{0}]", DatasManager.Instance.Currencies.Bits);
-        Shards.text = string.Format(": [{0}]", DatasManager.Instance.Currencies.Shards);
+        Spirits.text = string.Format(": [{0}]", currencies.Spirits);
+        Embers.text = string.Format(": [{0}]", currencies.Embers);
+        Bits.text = string.Format(": [{0}]", currencies.Bits);
+        Shards.text = string.Format(": [{0}]", currencies.Shards);
 
         PointsAvailable.gameObject.SetActive(false);
-        if (DatasManager.Instance.Currencies.Spirits > 0)
+        if (currencies.Spirits > 0)
         {
             PointsAvailable.gameObject.SetActive(true);
         }

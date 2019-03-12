@@ -60,7 +60,7 @@ namespace DataModels.Jobs
                 new RecipeResult
                 {
                     Common = 0.8f,
-                    Uncommon = 0.01f,
+                    Uncommon = 0.1f,
                     Rare = 0.01f,
                     Epic = 0.005f,
                     Legendary = 0.00005f

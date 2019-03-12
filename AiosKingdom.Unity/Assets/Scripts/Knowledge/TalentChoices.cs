@@ -60,6 +60,7 @@ public class TalentChoices : MonoBehaviour
                 gameObject.SetActive(false);
             });
 
+            script.Unselect();
             if (_unlocked != null && _unlocked.TalentId.Equals(talent.Id))
             {
                 script.Select();

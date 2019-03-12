@@ -1,43 +1,75 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class JobDoor : MonoBehaviour
+public class JobDoor : MonoBehaviour, ICallbackHooker
 {
     public GameObject JobSelection;
     public GameObject Recipes;
 
-    void Awake()
+    public void HookCallbacks()
+    {
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Job.Get, (message) =>
+        {
+            if (message.Success)
+            {
+                var job = JsonConvert.DeserializeObject<JsonObjects.Job>(message.Json);
+
+                if (job != null)
+                {
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        _setJob(job);
+                    });
+                }
+            }
+            else
+            {
+                Debug.Log("Job Get error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Job.Learn, (message) =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
+            if (message.Success)
+            {
+                var job = JsonConvert.DeserializeObject<JsonObjects.Job>(message.Json);
+
+                if (job != null)
+                {
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        _setJob(job);
+                    });
+                }
+            }
+            else
+            {
+                Debug.Log("Job Learn error : " + message.Json);
+            }
+        });
+    }
+
+    void Start()
     {
         var button = GetComponent<Button>();
 
-        button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() =>
         {
             JobSelection.SetActive(true);
 
             UIManager.This.HideMenu();
         });
-
-        if (DatasManager.Instance.Job.Value != null)
-        {
-            SetJob(DatasManager.Instance.Job.Value);
-        }
-
-        DatasManager.Instance.Job.Changed += (job) =>
-        {
-            SceneLoom.Loom.QueueOnMainThread(() =>
-            {
-                if (job != null)
-                {
-                    SetJob(job);
-                }
-            });
-        };
     }
 
-    private void SetJob(JsonObjects.Job job)
+    private void _setJob(JsonObjects.Job job)
     {
         var button = GetComponent<Button>();
 
@@ -52,11 +84,11 @@ public class JobDoor : MonoBehaviour
 
         this.GetComponentInChildren<Text>().text = string.Format("<{0}>", job.Type);
 
-        switch (job.Type)
-        {
-            case JsonObjects.JobType.Alchemistry:
+        //switch (job.Type)
+        //{
+        //    case JsonObjects.JobType.Alchemistry:
 
-                break;
-        }
+        //        break;
+        //}
     }
 }

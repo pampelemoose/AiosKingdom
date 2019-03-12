@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Pills : MonoBehaviour
+public class Pills : MonoBehaviour, ICallbackHooker
 {
     public Button Stamina;
     public Button Energy;
@@ -21,88 +22,100 @@ public class Pills : MonoBehaviour
     private int _quantity;
     private Text _selectedText;
     private JsonObjects.Stats _currentStat;
+    private JsonObjects.Currencies _currencies;
 
-    void Awake()
+    public void HookCallbacks()
     {
-        Stamina.onClick.RemoveAllListeners();
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.Currencies, (message) =>
+        {
+            if (message.Success)
+            {
+                var currencies = JsonConvert.DeserializeObject<JsonObjects.Currencies>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _updateCurrencies(currencies);
+                });
+            }
+        });
+    }
+
+    void Start()
+    {
         Stamina.onClick.AddListener(() =>
         {
-            SelectStat(JsonObjects.Stats.Stamina);
-            SetSelectedButtonColor(Stamina.GetComponentInChildren<Text>(), new Color(1, 0, 0));
+            _selectStat(JsonObjects.Stats.Stamina);
+            _setSelectedButtonColor(Stamina.GetComponentInChildren<Text>(), new Color(1, 0, 0));
         });
 
-        Energy.onClick.RemoveAllListeners();
         Energy.onClick.AddListener(() =>
         {
-            SelectStat(JsonObjects.Stats.Energy);
-            SetSelectedButtonColor(Energy.GetComponentInChildren<Text>(), new Color(0.9f, 1, 0));
+            _selectStat(JsonObjects.Stats.Energy);
+            _setSelectedButtonColor(Energy.GetComponentInChildren<Text>(), new Color(0.9f, 1, 0));
         });
 
-        Strength.onClick.RemoveAllListeners();
         Strength.onClick.AddListener(() =>
         {
-            SelectStat(JsonObjects.Stats.Strength);
-            SetSelectedButtonColor(Strength.GetComponentInChildren<Text>(), new Color(1, 0, 0.8f));
+            _selectStat(JsonObjects.Stats.Strength);
+            _setSelectedButtonColor(Strength.GetComponentInChildren<Text>(), new Color(1, 0, 0.8f));
         });
 
-        Agility.onClick.RemoveAllListeners();
         Agility.onClick.AddListener(() =>
         {
-            SelectStat(JsonObjects.Stats.Agility);
-            SetSelectedButtonColor(Agility.GetComponentInChildren<Text>(), new Color(0, 1, 0.3f));
+            _selectStat(JsonObjects.Stats.Agility);
+            _setSelectedButtonColor(Agility.GetComponentInChildren<Text>(), new Color(0, 1, 0.3f));
         });
 
-        Intelligence.onClick.RemoveAllListeners();
         Intelligence.onClick.AddListener(() =>
         {
-            SelectStat(JsonObjects.Stats.Intelligence);
-            SetSelectedButtonColor(Intelligence.GetComponentInChildren<Text>(), new Color(0, 0.5f, 1));
+            _selectStat(JsonObjects.Stats.Intelligence);
+            _setSelectedButtonColor(Intelligence.GetComponentInChildren<Text>(), new Color(0, 0.5f, 1));
         });
 
-        Wisdom.onClick.RemoveAllListeners();
         Wisdom.onClick.AddListener(() =>
         {
-            SelectStat(JsonObjects.Stats.Wisdom);
-            SetSelectedButtonColor(Wisdom.GetComponentInChildren<Text>(), new Color(0, 1, 1));
+            _selectStat(JsonObjects.Stats.Wisdom);
+            _setSelectedButtonColor(Wisdom.GetComponentInChildren<Text>(), new Color(0, 1, 1));
         });
 
-        Minus.onClick.RemoveAllListeners();
         Minus.onClick.AddListener(() =>
         {
-            SetQuantity(_quantity - 1);
+            _setQuantity(_quantity - 1);
         });
 
-        Plus.onClick.RemoveAllListeners();
         Plus.onClick.AddListener(() =>
         {
-            SetQuantity(_quantity + 1);
+            _setQuantity(_quantity + 1);
         });
 
-        Buy.onClick.RemoveAllListeners();
         Buy.onClick.AddListener(() =>
         {
             UIManager.This.ShowLoading();
             NetworkManager.This.UseSpiritPills(_currentStat, _quantity);
         });
-
-        SelectStat(JsonObjects.Stats.Stamina);
-        SetSelectedButtonColor(Stamina.GetComponentInChildren<Text>(), new Color(1, 0, 0));
     }
 
-    public void UpdateCurrencies()
+    void Awake()
     {
-        SelectStat(_currentStat);
-        UIManager.This.HideLoading();
+        _selectStat(JsonObjects.Stats.Stamina);
+        _setSelectedButtonColor(Stamina.GetComponentInChildren<Text>(), new Color(1, 0, 0));
     }
 
-    private void SelectStat(JsonObjects.Stats stat)
+    private void _updateCurrencies(JsonObjects.Currencies currency)
     {
-        SetQuantity(0);
+        _currencies = currency;
+
+        _selectStat(_currentStat);
+    }
+
+    private void _selectStat(JsonObjects.Stats stat)
+    {
+        _setQuantity(0);
 
         _currentStat = stat;
     }
 
-    private void SetSelectedButtonColor(Text selected, Color color)
+    private void _setSelectedButtonColor(Text selected, Color color)
     {
         if (_selectedText != null)
         {
@@ -113,15 +126,15 @@ public class Pills : MonoBehaviour
         _selectedText.color = color;
     }
 
-    private void SetQuantity(int quantity)
+    private void _setQuantity(int quantity)
     {
-        QuantityAvailable.text = DatasManager.Instance.Currencies.Spirits.ToString();
+        QuantityAvailable.text = _currencies.Spirits.ToString();
 
         Minus.interactable = false;
         Plus.interactable = false;
         Buy.interactable = false;
 
-        if (quantity > DatasManager.Instance.Currencies.Spirits)
+        if (quantity > _currencies.Spirits)
             quantity = 0;
 
         _quantity = quantity;
@@ -133,7 +146,7 @@ public class Pills : MonoBehaviour
             Buy.interactable = true;
         }
 
-        if (_quantity < DatasManager.Instance.Currencies.Spirits)
+        if (_quantity < _currencies.Spirits)
             Plus.interactable = true;
     }
 }

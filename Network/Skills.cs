@@ -184,6 +184,7 @@ namespace Network.Skills
     public class BuiltSkill
     {
         public Guid Id { get; set; }
+        public Guid BookId { get; set; }
 
         public string Name { get; set; }
         public string Description { get; set; }

@@ -136,13 +136,13 @@ namespace Server.GameServer
 
         private void SetupServerDelegates()
         {
-            _commandArgCount.Add(Network.CommandCodes.Client_Authenticate, 1);
+            _commandArgCount.Add(Network.CommandCodes.Game_Authenticate, 1);
             _commandArgCount.Add(Network.CommandCodes.Server.SoulList, 0);
             _commandArgCount.Add(Network.CommandCodes.Server.CreateSoul, 1);
             _commandArgCount.Add(Network.CommandCodes.Server.ConnectSoul, 1);
             _commandArgCount.Add(Network.CommandCodes.Server.DisconnectSoul, 0);
 
-            _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.Server.AuthenticateCommand(args); });
+            _delegates.Add(Network.CommandCodes.Game_Authenticate, (args) => { return new Commands.Server.AuthenticateCommand(args); });
             _delegates.Add(Network.CommandCodes.Server.SoulList, (args) => { return new Commands.Server.SoulListCommand(args); });
             _delegates.Add(Network.CommandCodes.Server.CreateSoul, (args) => { return new Commands.Server.CreateSoulCommand(args, _town); });
             _delegates.Add(Network.CommandCodes.Server.ConnectSoul, (args) => { return new Commands.Server.ConnectSoulCommand(args, _town); });
@@ -541,7 +541,7 @@ namespace Server.GameServer
                 case Network.CommandCodes.Ping:
                     retVal.IsValid = true;
                     break;
-                case Network.CommandCodes.Client_Authenticate:
+                case Network.CommandCodes.Game_Authenticate:
                     retVal.IsValid = true;
                     retVal.Args = new string[1] { args[0] };
                     break;

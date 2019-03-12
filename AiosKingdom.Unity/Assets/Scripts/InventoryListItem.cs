@@ -60,6 +60,7 @@ public class InventoryListItem : MonoBehaviour
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
+                UIManager.This.ShowLoading();
                 NetworkManager.This.EquipItem(slot.Id);
             });
         });

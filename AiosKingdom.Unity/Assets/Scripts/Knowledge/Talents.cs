@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Talents : MonoBehaviour
+public class Talents : MonoBehaviour, ICallbackHooker
 {
     [Serializable]
     public class Branch
@@ -22,6 +23,22 @@ public class Talents : MonoBehaviour
 
     [Header("Tree")]
     public Branch[] Branches;
+
+    public void HookCallbacks()
+    {
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.Knowledges, (message) =>
+        {
+            if (message.Success)
+            {
+                var knowledges = JsonConvert.DeserializeObject<List<JsonObjects.Knowledge>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _loadTalents(knowledges);
+                });
+            }
+        });
+    }
 
     void Awake()
     {
@@ -42,6 +59,8 @@ public class Talents : MonoBehaviour
         });
 
         Next.gameObject.SetActive(false);
+
+        _loadTalents(DatasManager.Instance.Knowledges);
     }
 
     public void ShowTalents()
@@ -51,10 +70,10 @@ public class Talents : MonoBehaviour
         UIManager.This.HideLoading();
     }
 
-    public void LoadTalents()
+    private void _loadTalents(List<JsonObjects.Knowledge> knowledges)
     {
-        var talentUnlocked = DatasManager.Instance.Knowledges.SelectMany(k => k.Talents).ToList();
-        var knowledgesBookIds = DatasManager.Instance.Knowledges.Select(t => t.BookId).ToList();
+        var talentUnlocked = knowledges.SelectMany(k => k.Talents).ToList();
+        var knowledgesBookIds = knowledges.Select(t => t.BookId).ToList();
         var talents = DatasManager.Instance.Books.Where(b => knowledgesBookIds.Contains(b.Id)).SelectMany(t => t.Talents).ToList();
 
         var disabledColor = new Color(1, 1, 1, 0.1f);
@@ -93,7 +112,7 @@ public class Talents : MonoBehaviour
                 var leafAvailableTalents = new List<JsonObjects.Skills.Talent>();
                 foreach (var leafTal in leafTalents)
                 {
-                    var knowledge = DatasManager.Instance.Knowledges.FirstOrDefault(k => k.BookId.Equals(leafTal.BookId));
+                    var knowledge = knowledges.FirstOrDefault(k => k.BookId.Equals(leafTal.BookId));
                     if (leafTal.TalentPointsRequired <= knowledge.TalentPoints)
                     {
                         leafAvailableTalents.Add(leafTal);

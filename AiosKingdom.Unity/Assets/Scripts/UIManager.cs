@@ -13,12 +13,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         None,
         Settings,
-        Account,
-        ServerList,
-        SoulList,
-        ContentLoadingScreen,
-        Home,
-        Adventure
     }
 
     private Views _currentView = Views.None;
@@ -31,16 +25,17 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public GameObject Menu;
 
     public GameObject Settings;
-    public GameObject AccountForm;
-    public GameObject ServerList;
-    public GameObject SoulList;
-    public GameObject ContentLoadingScreen;
-    public GameObject Home;
-    public GameObject Adventure;
+
+    public MonoBehaviour[] CallbackHookers;
 
     void Awake()
     {
         This = this;
+
+        foreach (ICallbackHooker hooker in CallbackHookers)
+        {
+            hooker.HookCallbacks();
+        }
     }
 
     public void HideMenu()
@@ -51,60 +46,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public void ShowSettings()
     {
         ChangeView(Views.Settings);
-
-        HideLoading();
-    }
-
-    public void ShowAccountForm()
-    {
-        ChangeView(Views.Account);
-
-        HideLoading();
-    }
-
-    public void ShowLogin(Guid safeKey)
-    {
-        AccountForm.GetComponent<AccountForm>().AccountCreated(safeKey);
-    }
-
-    public void ShowServerList(List<JsonObjects.GameServerInfos> servers)
-    {
-        ChangeView(Views.ServerList);
-
-        var script = ServerList.GetComponent<ServerList>();
-        script.SetServers(servers);
-
-        HideLoading();
-    }
-
-    public void ShowSoulList(List<JsonObjects.SoulInfos> souls)
-    {
-        ChangeView(Views.SoulList);
-
-        var script = SoulList.GetComponent<SoulList>();
-        script.SetSouls(souls);
-
-        HideLoading();
-    }
-
-    public void ShowContentLoadingScreen()
-    {
-        ChangeView(Views.ContentLoadingScreen);
-    }
-
-    public void ShowHome()
-    {
-        ChangeView(Views.Home);
-
-        Menu.SetActive(true);
-        //Menu.transform.SetAsLastSibling();
-
-        HideLoading();
-    }
-
-    public void StartAdventure()
-    {
-        ChangeView(Views.Adventure, true);
 
         HideLoading();
     }
@@ -121,24 +62,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
             {
                 case Views.Settings:
                     newPage = Settings;
-                    break;
-                case Views.Account:
-                    newPage = AccountForm;
-                    break;
-                case Views.ServerList:
-                    newPage = ServerList;
-                    break;
-                case Views.SoulList:
-                    newPage = SoulList;
-                    break;
-                case Views.ContentLoadingScreen:
-                    newPage = ContentLoadingScreen;
-                    break;
-                case Views.Home:
-                    newPage = Home;
-                    break;
-                case Views.Adventure:
-                    newPage = Adventure;
                     break;
             }
 

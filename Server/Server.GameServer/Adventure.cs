@@ -441,6 +441,7 @@ namespace Server.GameServer
                 var built = new Network.Skills.BuiltSkill
                 {
                     Id = Guid.NewGuid(),
+                    BookId = skill.Id,
                     Name = skill.Name,
                     Description = skill.Description,
                     Quality = skill.Quality,

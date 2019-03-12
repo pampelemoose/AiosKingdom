@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Adventure : MonoBehaviour
+public class Adventure : MonoBehaviour, ICallbackHooker
 {
     [Header("General")]
     public Text Name;
@@ -91,6 +92,253 @@ public class Adventure : MonoBehaviour
 
     private bool _showActionPanel = true;
 
+    public void HookCallbacks()
+    {
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.Enter, (message) =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
+            if (message.Success)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    gameObject.SetActive(true);
+                });
+            }
+            else
+            {
+                Debug.Log("Dungeon Enter error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.EnterRoom, (message) =>
+        {
+            if (message.Success)
+            {
+                NetworkManager.This.UpdateDungeonRoom();
+            }
+            else
+            {
+                Debug.Log("Dungeon Enter Room error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.Exit, (message) =>
+        {
+            if (message.Success)
+            {
+                NetworkManager.This.AskCurrencies();
+                NetworkManager.This.AskInventory();
+                NetworkManager.This.AskSoulCurrentDatas();
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    gameObject.SetActive(false);
+                });
+            }
+            else
+            {
+                Debug.Log("Dungeon Exit error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.UpdateRoom, (message) =>
+        {
+            if (message.Success)
+            {
+                var adventure = JsonConvert.DeserializeObject<JsonObjects.AdventureState>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _updateCurrentState(adventure);
+                });
+            }
+            else
+            {
+                Debug.Log("Dungeon Update Room error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.UseSkill, (message) =>
+        {
+            if (message.Success)
+            {
+                NetworkManager.This.UpdateDungeonRoom();
+
+                var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _logResults(arList);
+                    _triggerEnemyTurn();
+                });
+            }
+            else
+            {
+                Debug.Log("Dungeon Use Skill error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.UseConsumable, (message) =>
+        {
+            if (message.Success)
+            {
+                NetworkManager.This.UpdateDungeonRoom();
+
+                var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _logResults(arList);
+                    _triggerEnemyTurn();
+                });
+            }
+            else
+            {
+                Debug.Log("Dungeon Use Consumable error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.EnemyTurn, (message) =>
+        {
+            if (message.Success)
+            {
+                NetworkManager.This.UpdateDungeonRoom();
+
+                var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _logResults(arList);
+                });
+            }
+            else
+            {
+                Debug.Log("Dungeon Enemy Turn error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.DoNothingTurn, (message) =>
+        {
+            if (message.Success)
+            {
+                NetworkManager.This.UpdateDungeonRoom();
+
+                var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _logResults(arList);
+                    _triggerEnemyTurn();
+                });
+            }
+            else
+            {
+                Debug.Log("Dungeon Do Nothing Turn error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.GetLoots, (message) =>
+        {
+            if (message.Success)
+            {
+                var loots = JsonConvert.DeserializeObject<List<JsonObjects.LootItem>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _showLoots(loots);
+                });
+            }
+            else
+            {
+                Debug.Log("Dungeon Get Loots error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.LootItem, (message) =>
+        {
+            if (message.Success)
+            {
+                NetworkManager.This.GetDungeonRoomLoots();
+            }
+            else
+            {
+                Debug.Log("Dungeon Loot Item error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.LeaveFinishedRoom, (message) =>
+        {
+            if (message.Success)
+            {
+                NetworkManager.This.AskKnowledges();
+
+                var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _showEndResults(arList);
+                });
+            }
+            else
+            {
+                Debug.Log("Dungeon Leave Finished Room error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.BuyShopItem, (message) =>
+        {
+            if (message.Success)
+            {
+                NetworkManager.This.AskCurrencies();
+                NetworkManager.This.UpdateDungeonRoom();
+            }
+            else
+            {
+                Debug.Log("Dungeon Buy Shop Item error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.PlayerDied, (message) =>
+        {
+            if (message.Success)
+            {
+                var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _showEndResults(arList);
+                });
+            }
+            else
+            {
+                Debug.Log("Dungeon Player Died error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.PlayerRest, (message) =>
+        {
+            if (message.Success)
+            {
+                NetworkManager.This.OpenDungeonRoom();
+
+                var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _logResults(arList);
+                });
+            }
+            else
+            {
+                Debug.Log("Dungeon Player Rest error : " + message.Json);
+            }
+        });
+    }
+
     void Awake()
     {
         CommandsButton.onClick.RemoveAllListeners();
@@ -125,26 +373,26 @@ public class Adventure : MonoBehaviour
         AttackButton.onClick.AddListener(() =>
         {
             Menu.SetActive(false);
-            SetHeaders("skills");
+            _setHeaders("skills");
 
             _skills = DatasManager.Instance.Adventure.State.Skills;
 
-            _pagination.Setup(ItemPerPage, _skills.Count, SetSkills);
+            _pagination.Setup(ItemPerPage, _skills.Count, _setSkills);
 
-            SetSkills();
+            _setSkills();
         });
 
         ConsumableButton.onClick.RemoveAllListeners();
         ConsumableButton.onClick.AddListener(() =>
         {
             Menu.SetActive(false);
-            SetHeaders("consumables");
+            _setHeaders("consumables");
 
             _bag = DatasManager.Instance.Adventure.Bag;
 
-            _pagination.Setup(ItemPerPage, _bag.Count, SetConsumables);
+            _pagination.Setup(ItemPerPage, _bag.Count, _setConsumables);
 
-            SetConsumables();
+            _setConsumables();
         });
 
         WaitButton.onClick.RemoveAllListeners();
@@ -153,7 +401,7 @@ public class Adventure : MonoBehaviour
             Menu.SetActive(false);
             _showActionPanel = false;
 
-            ResetActions();
+            _resetActions();
 
             NetworkManager.This.DoNothingTurn();
         });
@@ -179,7 +427,6 @@ public class Adventure : MonoBehaviour
             Menu.SetActive(false);
             NetworkManager.This.DungeonLeft();
             gameObject.SetActive(false);
-            UIManager.This.ShowHome();
         });
 
         if (_pagination == null)
@@ -192,19 +439,19 @@ public class Adventure : MonoBehaviour
         LogBox.ClearLogs();
     }
 
-    public void UpdateCurrentState()
+    private void _updateCurrentState(JsonObjects.AdventureState state)
     {
-        var adventure = DatasManager.Instance.Adventure;
+        var adventure = state;
 
         Name.text = adventure.Name;
         Room.text = string.Format("[{0}/{1}]", adventure.CurrentRoom, adventure.TotalRoomCount);
 
-        ResetActions();
+        _resetActions();
         RestInfos.SetActive(false);
         EndResultBox.SetActive(false);
         if (adventure.IsFightArea)
         {
-            SetHeaders("enemies");
+            _setHeaders("enemies");
 
             if (adventure.Enemies.Count == 0 && !adventure.IsExit)
             {
@@ -212,26 +459,26 @@ public class Adventure : MonoBehaviour
             }
 
             _enemies = adventure.Enemies;
-            _pagination.Setup(ItemPerPage, _enemies.Count, SetCombat);
+            _pagination.Setup(ItemPerPage, _enemies.Count, _setCombat);
 
-            if (_showActionPanel) ShowCombatActions();
-            else ShowEnemyTurnActions();
+            if (_showActionPanel) _showCombatActions();
+            else _showEnemyTurnActions();
 
-            SetCombat();
+            _setCombat();
         }
         else if (adventure.IsShopArea)
         {
-            SetHeaders("shop");
+            _setHeaders("shop");
 
             _shopItems = adventure.Shops;
-            _pagination.Setup(ItemPerPage, _shopItems.Count, SetShop);
+            _pagination.Setup(ItemPerPage, _shopItems.Count, _setShop);
 
-            ShowShoppingActions();
-            SetShop();
+            _showShoppingActions();
+            _setShop();
         }
         else if (adventure.IsRestingArea)
         {
-            SetHeaders("none");
+            _setHeaders("none");
 
             foreach (Transform child in List.transform)
             {
@@ -244,7 +491,7 @@ public class Adventure : MonoBehaviour
         }
         else if (adventure.IsExit)
         {
-            SetHeaders("none");
+            _setHeaders("none");
 
             foreach (Transform child in List.transform)
             {
@@ -267,7 +514,7 @@ public class Adventure : MonoBehaviour
         Damages.text = string.Format("[{0}/{1}]", adventure.State.MinDamages, adventure.State.MaxDamages);
     }
 
-    private void SetHeaders(string toShow)
+    private void _setHeaders(string toShow)
     {
         EnemiesHeader.SetActive(false);
         LootsHeader.SetActive(false);
@@ -295,7 +542,7 @@ public class Adventure : MonoBehaviour
         }
     }
 
-    private void ResetActions()
+    private void _resetActions()
     {
         AttackButton.gameObject.SetActive(false);
         ConsumableButton.gameObject.SetActive(false);
@@ -306,7 +553,7 @@ public class Adventure : MonoBehaviour
         BackToMainButton.gameObject.SetActive(false);
     }
 
-    private void ShowCombatActions()
+    private void _showCombatActions()
     {
         AttackButton.gameObject.SetActive(true);
 
@@ -316,22 +563,22 @@ public class Adventure : MonoBehaviour
         WaitButton.gameObject.SetActive(true);
     }
 
-    private void ShowShoppingActions()
+    private void _showShoppingActions()
     {
         NextRoomButton.gameObject.SetActive(true);
     }
 
-    private void ShowEnemyTurnActions()
+    private void _showEnemyTurnActions()
     {
         EnemyTimer.gameObject.SetActive(true);
     }
 
-    private void ShowLootingActions()
+    private void _showLootingActions()
     {
         NextRoomButton.gameObject.SetActive(true);
     }
 
-    public void LogResults(List<JsonObjects.AdventureState.ActionResult> actionResults)
+    private void _logResults(List<JsonObjects.AdventureState.ActionResult> actionResults)
     {
         foreach (var result in actionResults)
         {
@@ -339,22 +586,22 @@ public class Adventure : MonoBehaviour
         }
     }
 
-    public void ShowLoots(List<JsonObjects.LootItem> loots)
+    private void _showLoots(List<JsonObjects.LootItem> loots)
     {
-        SetHeaders("loots");
+        _setHeaders("loots");
 
-        ResetActions();
+        _resetActions();
 
-        ShowLootingActions();
+        _showLootingActions();
 
         _loots = loots;
 
-        _pagination.Setup(ItemPerPage, _loots.Count, SetLoots);
+        _pagination.Setup(ItemPerPage, _loots.Count, _setLoots);
 
-        SetLoots();
+        _setLoots();
     }
 
-    private void SetLoots()
+    private void _setLoots()
     {
         foreach (Transform child in List.transform)
         {
@@ -382,15 +629,15 @@ public class Adventure : MonoBehaviour
         _pagination.SetIndicator((_loots.Count / ItemPerPage) + (_loots.Count % ItemPerPage > 0 ? 1 : 0));
     }
 
-    public void TriggerEnemyTurn()
+    private void _triggerEnemyTurn()
     {
         var adventure = DatasManager.Instance.Adventure;
 
         if (adventure.Enemies.Count > 0)
-            StartCoroutine(ExecuteEnemyTurn());
+            StartCoroutine(_executeEnemyTurn());
     }
 
-    private IEnumerator ExecuteEnemyTurn()
+    private IEnumerator _executeEnemyTurn()
     {
         for (int i = 0; i < 5; ++i)
         {
@@ -402,9 +649,9 @@ public class Adventure : MonoBehaviour
         _showActionPanel = true;
     }
 
-    public void ShowEndResults(List<JsonObjects.AdventureState.ActionResult> actionResults)
+    private void _showEndResults(List<JsonObjects.AdventureState.ActionResult> actionResults)
     {
-        ResetActions();
+        _resetActions();
         BackToMainButton.gameObject.SetActive(true);
         EndResultBox.SetActive(true);
 
@@ -421,7 +668,7 @@ public class Adventure : MonoBehaviour
         }
     }
 
-    private void SetCombat()
+    private void _setCombat()
     {
         foreach (Transform child in List.transform)
         {
@@ -466,7 +713,7 @@ public class Adventure : MonoBehaviour
         _pagination.SetIndicator((_enemies.Count / ItemPerPage) + (_enemies.Count % ItemPerPage > 0 ? 1 : 0));
     }
 
-    private void SetShop()
+    private void _setShop()
     {
         foreach (Transform child in List.transform)
         {
@@ -494,7 +741,7 @@ public class Adventure : MonoBehaviour
         _pagination.SetIndicator((_shopItems.Count / ItemPerPage) + (_shopItems.Count % ItemPerPage > 0 ? 1 : 0));
     }
 
-    private void SetSkills()
+    private void _setSkills()
     {
         foreach (Transform child in List.transform)
         {
@@ -512,7 +759,7 @@ public class Adventure : MonoBehaviour
             {
                 _showActionPanel = false;
 
-                ResetActions();
+                _resetActions();
 
                 NetworkManager.This.AdventureUseSkill(skill.Id, _selectedEnemy);
             });
@@ -525,7 +772,7 @@ public class Adventure : MonoBehaviour
         _pagination.SetIndicator((_skills.Count / ItemPerPage) + (_skills.Count % ItemPerPage > 0 ? 1 : 0));
     }
 
-    private void SetConsumables()
+    private void _setConsumables()
     {
         foreach (Transform child in List.transform)
         {
@@ -544,7 +791,7 @@ public class Adventure : MonoBehaviour
             {
                 _showActionPanel = false;
 
-                ResetActions();
+                _resetActions();
 
                 NetworkManager.This.AdventureUseConsumable(bagItem.InventoryId, _selectedEnemy);
             });

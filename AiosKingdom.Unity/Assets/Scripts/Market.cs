@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Market : MonoBehaviour
+public class Market : MonoBehaviour, ICallbackHooker
 {
     public Dropdown ItemTypeDropdown;
 
@@ -42,6 +43,61 @@ public class Market : MonoBehaviour
 
     private bool _init = false;
 
+    public void HookCallbacks()
+    {
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Listing.Market, (message) =>
+        {
+            if (message.Success)
+            {
+                var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _updateItems(items);
+                });
+            }
+            else
+            {
+                Debug.Log("Market error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Listing.SpecialsMarket, (message) =>
+        {
+            if (message.Success)
+            {
+                var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _updateSpecialItems(items);
+                });
+            }
+            else
+            {
+                Debug.Log("Specials Market error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.Market_PlaceOrder, (message) =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
+            if (message.Success)
+            {
+                NetworkManager.This.AskCurrencies();
+                NetworkManager.This.AskMarketItems();
+            }
+            else
+            {
+                Debug.Log("Market Place Order error : " + message.Json);
+            }
+        });
+    }
+
     void Awake()
     {
         if (!_init)
@@ -57,7 +113,7 @@ public class Market : MonoBehaviour
 
                 SetupFilters();
 
-                ResetItems();
+                _resetItems();
             });
 
             Specials.onClick.AddListener(() =>
@@ -128,7 +184,7 @@ public class Market : MonoBehaviour
                                 _itemSlot = (JsonObjects.Items.ItemSlot)Enum.Parse(typeof(JsonObjects.Items.ItemSlot), FirstFilterDropdown.options.ElementAt(value).text);
                             }
 
-                            ResetItems();
+                            _resetItems();
                         });
                     }
                     break;
@@ -166,7 +222,7 @@ public class Market : MonoBehaviour
                                 _itemSlot = (JsonObjects.Items.ItemSlot)Enum.Parse(typeof(JsonObjects.Items.ItemSlot), FirstFilterDropdown.options.ElementAt(value).text);
                             }
 
-                            ResetItems();
+                            _resetItems();
                         });
                     }
                     break;
@@ -188,7 +244,7 @@ public class Market : MonoBehaviour
                                 _effectType = (JsonObjects.Items.EffectType)Enum.Parse(typeof(JsonObjects.Items.EffectType), FirstFilterDropdown.options.ElementAt(value).text);
                             }
 
-                            ResetItems();
+                            _resetItems();
                         });
                     }
                     break;
@@ -196,39 +252,39 @@ public class Market : MonoBehaviour
         }
     }
 
-    public void UpdateItems()
+    private void _updateItems(List<JsonObjects.MarketSlot> items)
     {
-        _slots = DatasManager.Instance.MarketItems;
+        _slots = items;
 
         Normals.gameObject.SetActive(false);
         Specials.gameObject.SetActive(true);
         
-        ResetItems();
+        _resetItems();
     }
 
-    public void UpdateSpecialItems()
+    private void _updateSpecialItems(List<JsonObjects.MarketSlot> items)
     {
-        _slots = DatasManager.Instance.SpecialMarketItems;
+        _slots = items;
 
         Specials.gameObject.SetActive(false);
         Normals.gameObject.SetActive(true);
 
-        ResetItems();
+        _resetItems();
     }
 
-    private void ResetItems()
+    private void _resetItems()
     {
         if (_pagination == null)
         {
             var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
-        _pagination.Setup(ItemPerPage, _slots.Count, SetItems);
+        _pagination.Setup(ItemPerPage, _slots.Count, _setItems);
 
-        SetItems();
+        _setItems();
     }
 
-    private void SetItems()
+    private void _setItems()
     {
         foreach (Transform child in Items.transform)
         {
@@ -282,7 +338,7 @@ public class Market : MonoBehaviour
 
                         itemScript.Buy.onClick.AddListener(() =>
                         {
-                            BindItemToBuyBox(slot);
+                            _bindItemToBuyBox(slot);
                         });
                     }
                     break;
@@ -300,7 +356,7 @@ public class Market : MonoBehaviour
 
                         itemScript.Buy.onClick.AddListener(() =>
                         {
-                            BindItemToBuyBox(slot);
+                            _bindItemToBuyBox(slot);
                         });
                     }
                     break;
@@ -310,7 +366,7 @@ public class Market : MonoBehaviour
         _pagination.SetIndicator((_slots.Count / ItemPerPage) + (_slots.Count % ItemPerPage > 0 ? 1 : 0));
     }
 
-    private void BindItemToBuyBox(JsonObjects.MarketSlot slot)
+    private void _bindItemToBuyBox(JsonObjects.MarketSlot slot)
     {
         BuyBox.SetActive(true);
         Price.text = string.Format("[{0}]", slot.Price);
@@ -319,6 +375,7 @@ public class Market : MonoBehaviour
         {
             SceneLoom.Loom.QueueOnMainThread(() =>
             {
+                UIManager.This.ShowLoading();
                 NetworkManager.This.OrderMarketItem(slot.Id);
             });
 

@@ -34,19 +34,18 @@ public class CraftPanel : MonoBehaviour
             SetCraftingResult();
         });
 
-        AddItemButton.onClick.RemoveAllListeners();
         AddItemButton.onClick.AddListener(() =>
         {
             BagItemSelection.Initialize(AddItem, new List<JsonObjects.Items.ItemType> { JsonObjects.Items.ItemType.CraftingMaterial });
         });
 
-        Craft.onClick.RemoveAllListeners();
         Craft.onClick.AddListener(() =>
         {
             if (Techniques.value > 0)
             {
                 var technique = (JsonObjects.JobTechnique)Enum.Parse(typeof(JsonObjects.JobTechnique), Techniques.options[Techniques.value].text);
 
+                UIManager.This.ShowLoading();
                 NetworkManager.This.CraftItem(technique, _craftingItems);
 
                 Techniques.value = 0;
@@ -142,7 +141,7 @@ public class CraftPanel : MonoBehaviour
         if (Techniques.value > 0)
         {
             var technique = (JsonObjects.JobTechnique)Enum.Parse(typeof(JsonObjects.JobTechnique), Techniques.options[Techniques.value].text);
-            var knownRecipesIds = DatasManager.Instance.Job.Value.Recipes.Select(r => r.RecipeId).ToList();
+            var knownRecipesIds = DatasManager.Instance.Job.Recipes.Select(r => r.RecipeId).ToList();
             var availableRecipes = DatasManager.Instance.Recipes.Where(r => r.Technique == technique && knownRecipesIds.Contains(r.Id)).ToList();
 
             if (availableRecipes.Count > 0)

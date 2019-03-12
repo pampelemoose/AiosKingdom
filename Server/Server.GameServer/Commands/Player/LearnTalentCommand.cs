@@ -17,16 +17,15 @@ namespace Server.GameServer.Commands.Player
         {
             var talentId = Guid.Parse(_args.Args[0]);
             var knowledges = SoulManager.Instance.GetKnowledges(_args.ClientId);
-            var talents = DataManager.Instance.Books.SelectMany(b => b.Talents);
-            var unlocks = knowledges.SelectMany(k => k.Talents);
+            var talents = DataManager.Instance.Books.Where(b => knowledges.Select(k => k.BookId).Contains(b.Id)).SelectMany(b => b.Talents);
             var talent = talents.FirstOrDefault(t => t.Id.Equals(talentId));
-            var talentsAtLeaf = talents.Where(t => t.Branch == talent.Branch && t.Leaf == talent.Leaf);
-            var talentAtLeafIds = talentsAtLeaf.Select(t => t.Id);
-            var unlock = unlocks.FirstOrDefault(u => talentAtLeafIds.Contains(u.TalentId));
 
             if (talent != null)
             {
                 var knowledge = knowledges.FirstOrDefault(k => k.BookId.Equals(talent.BookId));
+                var unlocks = knowledges.SelectMany(k => k.Talents);
+                var talentsAtLeaf = talents.Where(t => t.Branch == talent.Branch && t.Leaf == talent.Leaf);
+                var unlock = unlocks.FirstOrDefault(u => talentsAtLeaf.Select(t => t.Id).Contains(u.TalentId));
 
                 if (knowledge.TalentPoints >= talent.TalentPointsRequired)
                 {
@@ -46,14 +45,33 @@ namespace Server.GameServer.Commands.Player
                     }
                     else
                     {
-                        // CHANGE TALENT
-                        var lUnlock = knowledge.Talents.FirstOrDefault(t => t.TalentId.Equals(talent.Id));
-                        knowledge.Talents.Remove(lUnlock);
+                        knowledge.Talents.RemoveAll(t => t.TalentId.Equals(unlock.TalentId));
 
-                        lUnlock.TalentId = talent.Id;
-                        lUnlock.UnlockedAt = DateTime.Now;
+                        if (unlock.KnowledgeId.Equals(knowledge.Id))
+                        {
+                            unlock.TalentId = talent.Id;
+                            unlock.UnlockedAt = DateTime.Now;
 
-                        knowledge.Talents.Add(lUnlock);
+                            knowledge.Talents.Add(unlock);
+                        }
+                        else
+                        {
+                            var oldKnowledge = knowledges.FirstOrDefault(k => k.Id.Equals(unlock.KnowledgeId));
+                            knowledges.Remove(oldKnowledge);
+
+                            oldKnowledge.Talents.RemoveAll(t => t.TalentId.Equals(unlock.TalentId));
+                            knowledges.Add(oldKnowledge);
+
+                            // CREATE TALENT
+                            knowledge.Talents.Add(new Network.TalentUnlocked
+                            {
+                                Id = Guid.NewGuid(),
+                                KnowledgeId = knowledge.Id,
+                                TalentId = talent.Id,
+                                IsNew = true,
+                                UnlockedAt = DateTime.Now
+                            });
+                        }
                     }
 
                     knowledge.TalentPoints -= talent.TalentPointsRequired;

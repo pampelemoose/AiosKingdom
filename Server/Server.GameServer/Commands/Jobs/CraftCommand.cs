@@ -42,15 +42,23 @@ namespace Server.GameServer.Commands.Jobs
 
                 var item = Crafting.CraftItem(ref job, technique, components);
 
+                int itemPoints = 1;
+
                 if (item != null)
                 {
                     inventory.Add(new Network.InventorySlot
                     {
+                        Id = Guid.NewGuid(),
+                        IsNew = true,
                         ItemId = item.Id,
                         Quantity = 1,
                         LootedAt = DateTime.Now
                     });
+
+                    itemPoints += (int)item.Quality;
                 }
+
+                job.Points += (1 * itemPoints);
 
                 SoulManager.Instance.UpdateJob(ret.ClientId, job);
                 SoulManager.Instance.UpdateInventory(ret.ClientId, inventory);

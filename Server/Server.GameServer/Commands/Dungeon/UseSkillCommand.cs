@@ -29,11 +29,14 @@ namespace Server.GameServer.Commands.Dungeon
                 var skillKnown = state.State.Skills.FirstOrDefault(s => s.Id.Equals(skillId));
                 if (skillKnown != null)
                 {
-                    var datas = SoulManager.Instance.GetDatas(ret.ClientId);
-
                     List<Network.ActionResult> skillResult;
                     if (adventure.UseSkill(skillKnown, enemyId, out skillResult))
                     {
+                        var know = knowledges.FirstOrDefault(k => k.BookId.Equals(skillKnown.BookId));
+                        ++know.TalentPoints;
+
+                        SoulManager.Instance.UpdateKnowledge(_args.ClientId, knowledges);
+
                         state = adventure.GetActualState();
 
                         if (state.State.CurrentHealth <= 0)

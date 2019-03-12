@@ -20,10 +20,6 @@ public class GameLoader : MonoBehaviour
             UIManager.This.ShowLoading();
             NetworkManager.This.AskAuthentication(PlayerPrefs.GetString("AiosKingdom_IdentifyingKey"));
         }
-        else
-        {
-            UIManager.This.ShowAccountForm();
-        }
 
         Destroy(gameObject);
     }

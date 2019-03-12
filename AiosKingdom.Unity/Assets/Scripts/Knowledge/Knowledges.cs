@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Knowledges : MonoBehaviour
+public class Knowledges : MonoBehaviour, ICallbackHooker
 {
     public Button Talents;
     public Talents TalentsPanel;
@@ -23,33 +24,58 @@ public class Knowledges : MonoBehaviour
     private Pagination _pagination;
     private List<JsonObjects.Knowledge> _knowledges;
 
-    void Awake()
+    public void HookCallbacks()
     {
-        Talents.onClick.RemoveAllListeners();
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.Knowledges, (message) =>
+        {
+            if (message.Success)
+            {
+                var knowledges = JsonConvert.DeserializeObject<List<JsonObjects.Knowledge>>(message.Json);
+
+                if (knowledges.Count == 0)
+                {
+                    //Application.Current.Properties["AiosKingdom_IsNewCharacter"] = true;
+                    //Application.Current.Properties["AiosKingdom_TutorialStep"] = 1;
+                    //Application.Current.SavePropertiesAsync();
+                    //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+                }
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _loadKnowledges(knowledges);
+                });
+            }
+            else
+            {
+                Debug.Log("Knowledges error : " + message.Json);
+            }
+        });
+    }
+
+    void Start()
+    {
         Talents.onClick.AddListener(() =>
         {
             UIManager.This.ShowLoading();
             TalentsPanel.ShowTalents();
         });
-
-        NetworkManager.This.AskKnowledges();
     }
 
-    public void LoadKnowledges()
+    private void _loadKnowledges(List<JsonObjects.Knowledge> knowledges)
     {
-        _knowledges = DatasManager.Instance.Knowledges;
+        _knowledges = knowledges;
 
         if (_pagination == null)
         {
             var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
-        _pagination.Setup(ItemPerPage, _knowledges.Count, SetKnowledges);
+        _pagination.Setup(ItemPerPage, _knowledges.Count, _setKnowledges);
 
-        SetKnowledges();
+        _setKnowledges();
     }
 
-    private void SetKnowledges()
+    private void _setKnowledges()
     {
         foreach (Transform child in Content.transform)
         {

@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ServerList : MonoBehaviour
+public class ServerList : MonoBehaviour, ICallbackHooker
 {
     public GameObject List;
     public GameObject PaginationBox;
@@ -15,7 +16,65 @@ public class ServerList : MonoBehaviour
     private Pagination _pagination;
     private List<JsonObjects.GameServerInfos> _servers;
 
-    public void SetServers(List<JsonObjects.GameServerInfos> servers)
+    public void HookCallbacks()
+    {
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Client_ServerList, (message) =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
+            if (message.Success)
+            {
+                var servers = JsonConvert.DeserializeObject<List<JsonObjects.GameServerInfos>>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    gameObject.SetActive(true);
+                    _setServers(servers);
+                });
+            }
+            else
+            {
+                Debug.Log("ServerList error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Client_AnnounceGameConnection, (message) =>
+        {
+            if (!message.Success)
+            {
+                Debug.Log("AnnounceGameConnection error : " + message.Json);
+                NetworkManager.This.AskServerList();
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Game_Authenticate, (message) =>
+        {
+            if (message.Success)
+            {
+                NetworkManager.This.AskSoulList();
+            }
+            else
+            {
+                Debug.Log("Authenticate error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Server.SoulList, (message) =>
+        {
+            if (message.Success)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    gameObject.SetActive(false);
+                });
+            }
+        });
+    }
+
+    private void _setServers(List<JsonObjects.GameServerInfos> servers)
     {
         _servers = servers;
 
@@ -24,12 +83,12 @@ public class ServerList : MonoBehaviour
             var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
-        _pagination.Setup(ItemPerPage, _servers.Count, SetServerList);
+        _pagination.Setup(ItemPerPage, _servers.Count, _setServerList);
 
-        SetServerList();
+        _setServerList();
     }
 
-    private void SetServerList()
+    private void _setServerList()
     {
         foreach (Transform child in List.transform)
         {

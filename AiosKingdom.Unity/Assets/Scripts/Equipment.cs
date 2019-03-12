@@ -1,30 +1,45 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Equipment : MonoBehaviour
+public class Equipment : MonoBehaviour, ICallbackHooker
 {
     public GameObject Content;
     public GameObject ItemSlot;
 
     public ItemDetails ItemDetails;
 
-    void Awake()
+    public void HookCallbacks()
     {
-        UpdateEquipment();
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Player.Equipment, (message) =>
+        {
+            if (message.Success)
+            {
+                var equipment = JsonConvert.DeserializeObject<JsonObjects.Equipment>(message.Json);
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    _updateEquipment(equipment);
+                });
+            }
+            else
+            {
+                Debug.Log("Equipment error : " + message.Json);
+            }
+        });
     }
 
-    public void UpdateEquipment()
+    public void _updateEquipment(JsonObjects.Equipment equipment)
     {
         foreach (Transform child in Content.transform)
         {
             Destroy(child.gameObject);
         }
 
-        var equipment = DatasManager.Instance.Equipment;
         var equipmentSlots = new List<JsonObjects.Items.ItemSlot>
         {
             JsonObjects.Items.ItemSlot.Belt,

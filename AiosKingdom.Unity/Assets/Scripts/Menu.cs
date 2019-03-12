@@ -3,14 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Menu : MonoBehaviour
+public class Menu : MonoBehaviour, ICallbackHooker
 {
     public Button Commands;
     public GameObject MenuBox;
 
-    private void Awake()
+    public void HookCallbacks()
     {
-        Commands.onClick.RemoveAllListeners();
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Listing.Recipes, (message) =>
+        {
+            if (message.Success)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    gameObject.SetActive(true);
+                });
+            }
+        });
+    }
+
+    void Start()
+    {
         Commands.onClick.AddListener(() =>
         {
             MenuBox.SetActive(!MenuBox.activeSelf);

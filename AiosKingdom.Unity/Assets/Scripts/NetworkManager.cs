@@ -15,16 +15,21 @@ public class NetworkManager : MonoBehaviour
 
     private static bool _created = false;
 
-    [Header("Callbacks")]
-    public ContentLoadingScreen ContentLoadingScreen;
-    public Home Home;
-    public Pills Pills;
-    public Inventory Inventory;
-    public Knowledges Knowledges;
-    public Equipment Equipment;
-    public Market Market;
-    public Adventure Adventure;
-    public Talents Talents;
+    // CALLBACKS
+    public event Action<string> GlobalMessageCallback;
+    public class NetworkCallback
+    {
+        public event Action<JsonObjects.Message> Callback;
+
+        public void Call(JsonObjects.Message message)
+        {
+            if (Callback != null)
+            {
+                Callback.Invoke(message);
+            }
+        }
+    }
+    private Dictionary<int, NetworkCallback> _callbacks = new Dictionary<int, NetworkCallback>();
 
     private bool _isDispatchRunning;
     private TcpClient _dispatch;
@@ -71,6 +76,28 @@ public class NetworkManager : MonoBehaviour
     //        _network.Disconnect();
     //    }
     //}
+
+    public void AddCallback(int id, Action<JsonObjects.Message> callback)
+    {
+        if (_callbacks.ContainsKey(id))
+        {
+            _callbacks[id].Callback += callback;
+        }
+        else
+        {
+            var networkCallback = new NetworkCallback();
+            networkCallback.Callback += callback;
+            _callbacks.Add(id, networkCallback);
+        }
+    }
+
+    private void _invokeCallback(int id, JsonObjects.Message message)
+    {
+        if (_callbacks.ContainsKey(id))
+        {
+            _callbacks[id].Call(message);
+        }
+    }
 
     #region Dispatch Functions
 
@@ -168,29 +195,14 @@ public class NetworkManager : MonoBehaviour
                 {
                     //ScreenManager.Instance.AlertScreen("Server Message", message.Json);
                     Debug.Log("Server Message : " + message.Json);
+
+                    if (GlobalMessageCallback != null) GlobalMessageCallback.Invoke(message.Json);
                 }
                 break;
 
             case JsonObjects.CommandCodes.Client_CreateAccount:
                 {
-                    if (message.Success)
-                    {
-                        var appUser = JsonConvert.DeserializeObject<JsonObjects.NewAccount>(message.Json);
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            PlayerPrefs.SetString("AiosKingdom_IdentifyingKey", appUser.Identifier.ToString());
-                            PlayerPrefs.Save();
-                            UIManager.This.ShowLogin(appUser.SafeKey);
-                        });
-
-                        //MessagingCenter.Send(this, MessengerCodes.CreateNewAccount, appUser.SafeKey);
-                    }
-                    else
-                    {
-                        //MessagingCenter.Send(this, MessengerCodes.CreateNewAccountFailed, message.Json);
-                        Debug.Log("CreateAccount error : " + message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Client_CreateAccount, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Client_Authenticate:
@@ -198,33 +210,16 @@ public class NetworkManager : MonoBehaviour
                     if (message.Success)
                     {
                         var authToken = JsonConvert.DeserializeObject<Guid>(message.Json);
-
                         _dispatchAuthToken = authToken;
-                        //MessagingCenter.Send(this, MessengerCodes.LoginSuccessful);
-                        AskServerInfos();
+                        AskServerList();
                     }
-                    else
-                    {
-                        //MessagingCenter.Send(this, MessengerCodes.LoginFailed, message.Json);
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            PlayerPrefs.DeleteKey("AiosKingdom_IdentifyingKey");
-                            PlayerPrefs.Save();
-                            UIManager.This.ShowAccountForm();
-                        });
 
-                        Debug.Log("Authenticate error : " + message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Client_Authenticate, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Client_ServerList:
                 {
-                    var servers = JsonConvert.DeserializeObject<List<JsonObjects.GameServerInfos>>(message.Json);
-                    //MessagingCenter.Send(this, MessengerCodes.ServerListReceived, servers);
-                    SceneLoom.Loom.QueueOnMainThread(() =>
-                    {
-                        UIManager.This.ShowServerList(servers);
-                    });
+                    _invokeCallback(JsonObjects.CommandCodes.Client_ServerList, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Client_AnnounceGameConnection:
@@ -234,32 +229,13 @@ public class NetworkManager : MonoBehaviour
                         var connection = JsonConvert.DeserializeObject<JsonObjects.GameServerConnection>(message.Json);
                         ConnectToGameServer(connection);
                     }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Server Connection", message.Json);
-                        Debug.Log("Server Connection : " + message.Json);
-                        AskServerInfos();
-                    }
+
+                    _invokeCallback(JsonObjects.CommandCodes.Client_AnnounceGameConnection, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Client_RetrieveAccount:
                 {
-                    if (message.Success)
-                    {
-                        var appUser = JsonConvert.DeserializeObject<JsonObjects.NewAccount>(message.Json);
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            PlayerPrefs.SetString("AiosKingdom_IdentifyingKey", appUser.Identifier.ToString());
-                            PlayerPrefs.Save();
-                            AskAuthentication(appUser.Identifier.ToString());
-                        });
-                        //MessagingCenter.Send(this, MessengerCodes.RetrievedAccount);
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Failed", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Client_RetrieveAccount, message);
                 }
                 break;
             default:
@@ -312,7 +288,7 @@ public class NetworkManager : MonoBehaviour
         SendJsonToDispatch(JsonConvert.SerializeObject(retMess));
     }
 
-    public void AskServerInfos()
+    public void AskServerList()
     {
         var args = new string[0];
         var retMess = new JsonObjects.Message
@@ -416,7 +392,7 @@ public class NetworkManager : MonoBehaviour
             args[0] = _gameConnection.Token.ToString();
             var retMess = new JsonObjects.Message
             {
-                Code = JsonObjects.CommandCodes.Client_Authenticate,
+                Code = JsonObjects.CommandCodes.Game_Authenticate,
                 Json = JsonConvert.SerializeObject(args)
             };
             SendJsonToGame(JsonConvert.SerializeObject(retMess));
@@ -498,72 +474,37 @@ public class NetworkManager : MonoBehaviour
                 {
                     //ScreenManager.Instance.AlertScreen("Kingdom Message", message.Json);
                     Debug.Log("Server Message : " + message.Json);
+
+                    if (GlobalMessageCallback != null) GlobalMessageCallback.Invoke(message.Json);
                 }
                 break;
 
             // SERVER
-            case JsonObjects.CommandCodes.Client_Authenticate:
+            case JsonObjects.CommandCodes.Game_Authenticate:
                 {
                     if (message.Success)
                     {
                         var authToken = JsonConvert.DeserializeObject<Guid>(message.Json);
 
-                        if (!Guid.Empty.Equals(authToken))
-                        {
-                            _gameAuthToken = authToken;
-                            AskSoulList();
-                        }
+                        _gameAuthToken = authToken;
                     }
-                    else
-                    {
-                        //MessagingCenter.Send(this, MessengerCodes.ConnectedToServerFailed, message.Json);
-                        Debug.Log("Authenticate error : " + message.Json);
-                    }
+
+                    _invokeCallback(JsonObjects.CommandCodes.Game_Authenticate, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Server.CreateSoul:
                 {
-                    if (message.Success)
-                    {
-                        AskSoulList();
-                        //MessagingCenter.Send(this, MessengerCodes.CreateSoulSuccess);
-                    }
-                    else
-                    {
-                        //MessagingCenter.Send(this, MessengerCodes.CreateSoulFailed);
-                        Debug.Log("New Soul error : " + message.Json);
-                    }
-                    //ScreenManager.Instance.AlertScreen("Soul Creation", message.Json);
+                    _invokeCallback(JsonObjects.CommandCodes.Server.CreateSoul, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Server.SoulList:
                 {
-                    var souls = JsonConvert.DeserializeObject<List<JsonObjects.SoulInfos>>(message.Json);
-
-                    //MessagingCenter.Send(this, MessengerCodes.SoulListReceived, souls);
-                    SceneLoom.Loom.QueueOnMainThread(() =>
-                    {
-                        UIManager.This.ShowSoulList(souls);
-                    });
+                    _invokeCallback(JsonObjects.CommandCodes.Server.SoulList, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Server.ConnectSoul:
                 {
-                    if (message.Success)
-                    {
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            UIManager.This.ShowContentLoadingScreen();
-                        });
-
-                        //MessagingCenter.Send(this, MessengerCodes.SoulConnected);
-                        AskItemList();
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Soul Connection", message.Json);
-                        Debug.Log("Connect Soul error : " + message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Server.ConnectSoul, message);
                 }
                 break;
 
@@ -574,58 +515,24 @@ public class NetworkManager : MonoBehaviour
                     {
                         var soulDatas = JsonConvert.DeserializeObject<JsonObjects.SoulDatas>(message.Json);
                         DatasManager.Instance.Datas = soulDatas;
-
-                        if (soulDatas.TotalStamina == 0 && soulDatas.TotalEnergy == 0
-                            && soulDatas.TotalStrength == 0 && soulDatas.TotalAgility == 0
-                            && soulDatas.TotalIntelligence == 0 && soulDatas.TotalWisdom == 0)
-                        {
-                            //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
-                            //Application.Current.SavePropertiesAsync();
-                            //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
-                        }
-
-                        //MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Home.UpdatePlayerDatas();
-                        });
                     }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Current Soul Datas", message.Json);
-                    }
+
+                    _invokeCallback(JsonObjects.CommandCodes.Player.CurrentSoulDatas, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.Market_PlaceOrder:
                 {
-                    if (message.Success)
-                    {
-                        AskCurrencies();
-                        AskMarketItems();
-                    }
-                    //MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
+                    _invokeCallback(JsonObjects.CommandCodes.Player.Market_PlaceOrder, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.Market_OrderProcessed:
                 {
-                    if (message.Success)
-                    {
-                        Debug.Log(JsonConvert.DeserializeObject<JsonObjects.MarketOrderProcessed>(message.Json));
-
-                        AskInventory();
-                    }
-                    //MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
+                    _invokeCallback(JsonObjects.CommandCodes.Player.Market_OrderProcessed, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.EquipItem:
                 {
-                    if (message.Success)
-                    {
-                        AskInventory();
-                        AskEquipment();
-                        AskSoulCurrentDatas();
-                    }
-                    //MessagingCenter.Send(this, MessengerCodes.ItemEquiped, message.Json);
+                    _invokeCallback(JsonObjects.CommandCodes.Player.EquipItem, message);
                 }
                 break;
             //case Network.CommandCodes.Player.SellItem:
@@ -640,49 +547,17 @@ public class NetworkManager : MonoBehaviour
             //    break;
             case JsonObjects.CommandCodes.Player.UseSpiritPills:
                 {
-                    if (message.Success)
-                    {
-                        AskCurrencies();
-                        AskSoulCurrentDatas();
-
-                        //Application.Current.Properties["AiosKingdom_TutorialStep"] = 4;
-                        //Application.Current.SavePropertiesAsync();
-                        //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
-                    }
-
-                    //MessagingCenter.Send(this, MessengerCodes.LearnSpiritPills, message.Json);
+                    _invokeCallback(JsonObjects.CommandCodes.Player.UseSpiritPills, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.LearnSkill:
                 {
-                    if (message.Success)
-                    {
-                        AskCurrencies();
-                        AskKnowledges();
-
-                        //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
-                        //Application.Current.SavePropertiesAsync();
-                        //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
-                    }
-                    //MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
+                    _invokeCallback(JsonObjects.CommandCodes.Player.LearnSkill, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.LearnTalent:
                 {
-                    if (message.Success)
-                    {
-                        AskKnowledges();
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            UIManager.This.HideLoading();
-                        });
-
-                        //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
-                        //Application.Current.SavePropertiesAsync();
-                        //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
-                    }
-                    //MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
+                    _invokeCallback(JsonObjects.CommandCodes.Player.LearnTalent, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.Currencies:
@@ -691,14 +566,9 @@ public class NetworkManager : MonoBehaviour
                     {
                         var currencies = JsonConvert.DeserializeObject<JsonObjects.Currencies>(message.Json);
                         DatasManager.Instance.Currencies = currencies;
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Home.UpdateCurrencies();
-                            Pills.UpdateCurrencies();
-                        });
                     }
-                    //MessagingCenter.Send(this, MessengerCodes.CurrenciesUpdated);
+
+                    _invokeCallback(JsonObjects.CommandCodes.Player.Currencies, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.Inventory:
@@ -707,13 +577,9 @@ public class NetworkManager : MonoBehaviour
                     {
                         var inventory = JsonConvert.DeserializeObject<List<JsonObjects.InventorySlot>>(message.Json);
                         DatasManager.Instance.Inventory = inventory;
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Inventory.UpdateItems();
-                        });
                     }
-                    //MessagingCenter.Send(this, MessengerCodes.InventoryUpdated);
+
+                    _invokeCallback(JsonObjects.CommandCodes.Player.Inventory, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.Knowledges:
@@ -721,24 +587,10 @@ public class NetworkManager : MonoBehaviour
                     if (message.Success)
                     {
                         var knowledges = JsonConvert.DeserializeObject<List<JsonObjects.Knowledge>>(message.Json);
-
-                        if (knowledges.Count == 0)
-                        {
-                            //Application.Current.Properties["AiosKingdom_IsNewCharacter"] = true;
-                            //Application.Current.Properties["AiosKingdom_TutorialStep"] = 1;
-                            //Application.Current.SavePropertiesAsync();
-                            //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
-                        }
-
                         DatasManager.Instance.Knowledges = knowledges;
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Knowledges.LoadKnowledges();
-                            Talents.LoadTalents();
-                        });
                     }
-                    //MessagingCenter.Send(this, MessengerCodes.KnowledgeUpdated);
+
+                    _invokeCallback(JsonObjects.CommandCodes.Player.Knowledges, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.Equipment:
@@ -747,159 +599,107 @@ public class NetworkManager : MonoBehaviour
                     {
                         var equipment = JsonConvert.DeserializeObject<JsonObjects.Equipment>(message.Json);
                         DatasManager.Instance.Equipment = equipment;
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Equipment.UpdateEquipment();
-                        });
                     }
-                    //MessagingCenter.Send(this, MessengerCodes.EquipmentUpdated);
+
+                    _invokeCallback(JsonObjects.CommandCodes.Player.Equipment, message);
                 }
                 break;
 
             // LISTING
             case JsonObjects.CommandCodes.Listing.Item:
                 {
-                    var items = JsonConvert.DeserializeObject<List<JsonObjects.Items.Item>>(message.Json);
-                    DatasManager.Instance.Items = items;
-
-                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    if (message.Success)
                     {
-                        ContentLoadingScreen.IsLoaded("items");
-                        AskBookList();
-                    });
+                        var items = JsonConvert.DeserializeObject<List<JsonObjects.Items.Item>>(message.Json);
+                        DatasManager.Instance.Items = items;
+                    }
+
+                    _invokeCallback(JsonObjects.CommandCodes.Listing.Item, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Book:
                 {
-                    var books = JsonConvert.DeserializeObject<List<JsonObjects.Skills.Book>>(message.Json);
-                    DatasManager.Instance.Books = books;
-
-                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    if (message.Success)
                     {
-                        ContentLoadingScreen.IsLoaded("books");
-                        AskMonsterList();
-                    });
+                        var books = JsonConvert.DeserializeObject<List<JsonObjects.Skills.Book>>(message.Json);
+                        DatasManager.Instance.Books = books;
+                    }
+
+                    _invokeCallback(JsonObjects.CommandCodes.Listing.Book, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Monster:
                 {
-                    var monsters = JsonConvert.DeserializeObject<List<JsonObjects.Monsters.Monster>>(message.Json);
-                    DatasManager.Instance.Monsters = monsters;
-
-                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    if (message.Success)
                     {
-                        ContentLoadingScreen.IsLoaded("monsters");
-                        AskAdventureList();
-                    });
+                        var monsters = JsonConvert.DeserializeObject<List<JsonObjects.Monsters.Monster>>(message.Json);
+                        DatasManager.Instance.Monsters = monsters;
+                    }
+
+                    _invokeCallback(JsonObjects.CommandCodes.Listing.Monster, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Dungeon:
                 {
-                    var dungeons = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Adventure>>(message.Json);
-                    DatasManager.Instance.Dungeons = dungeons;
-
-                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    if (message.Success)
                     {
-                        ContentLoadingScreen.IsLoaded("adventures");
-                        AskRecipeList();
-                    });
-                    //MessagingCenter.Send(this, MessengerCodes.DungeonListUpdated);
+                        var dungeons = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Adventure>>(message.Json);
+                        DatasManager.Instance.Dungeons = dungeons;
+                    }
+
+                    _invokeCallback(JsonObjects.CommandCodes.Listing.Dungeon, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Recipes:
                 {
-                    var recipes = JsonConvert.DeserializeObject<List<JsonObjects.Recipe>>(message.Json);
-                    DatasManager.Instance.Recipes = recipes;
-
-                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    if (message.Success)
                     {
-                        ContentLoadingScreen.IsLoaded("recipes");
-                        UIManager.This.ShowLoading();
-                        UIManager.This.ShowHome();
-                    });
-                    //MessagingCenter.Send(this, MessengerCodes.DungeonListUpdated);
+                        var recipes = JsonConvert.DeserializeObject<List<JsonObjects.Recipe>>(message.Json);
+                        DatasManager.Instance.Recipes = recipes;
+                    }
+
+                    _invokeCallback(JsonObjects.CommandCodes.Listing.Recipes, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Market:
                 {
-                    //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
-                    var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
-                    DatasManager.Instance.MarketItems = items;
-
-                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    if (message.Success)
                     {
-                        Market.UpdateItems();
-                    });
-                    //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
+                        //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
+                        var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
+                        DatasManager.Instance.MarketItems = items;
+                    }
+
+                    _invokeCallback(JsonObjects.CommandCodes.Listing.Market, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.SpecialsMarket:
                 {
-                    //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
-                    var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
-                    DatasManager.Instance.SpecialMarketItems = items;
-
-                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    if (message.Success)
                     {
-                        Market.UpdateSpecialItems();
-                    });
-                    //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
+                        //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
+                        var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
+                        DatasManager.Instance.SpecialMarketItems = items;
+                    }
+
+                    _invokeCallback(JsonObjects.CommandCodes.Listing.SpecialsMarket, message);
                 }
                 break;
 
             // DUNGEON
             case JsonObjects.CommandCodes.Dungeon.Enter:
                 {
-                    if (message.Success)
-                    {
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            UIManager.This.StartAdventure();
-                        });
-                        //MessagingCenter.Send(this, MessengerCodes.EnterDungeon);
-                    }
-                    else
-                    {
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            UIManager.This.HideLoading();
-                        });
-                        //ScreenManager.Instance.AlertScreen("Enter Dungeon", message.Json);
-                    }
-                    Debug.Log(message.Json);
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.Enter, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.EnterRoom:
                 {
-                    if (message.Success)
-                    {
-                        UpdateDungeonRoom();
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Enter Room", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.EnterRoom, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.Exit:
                 {
-                    if (message.Success)
-                    {
-                        AskCurrencies();
-                        AskInventory();
-                        AskSoulCurrentDatas();
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            UIManager.This.ShowHome();
-                        });
-                        //MessagingCenter.Send(this, MessengerCodes.ExitedDungeon);
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Exit Room", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.Exit, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.UpdateRoom:
@@ -908,188 +708,59 @@ public class NetworkManager : MonoBehaviour
                     {
                         var adventure = JsonConvert.DeserializeObject<JsonObjects.AdventureState>(message.Json);
                         DatasManager.Instance.Adventure = adventure;
+                    }
 
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Adventure.UpdateCurrentState();
-                        });
-                        //MessagingCenter.Send(this, MessengerCodes.DungeonUpdated);
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Update Room", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.UpdateRoom, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.UseSkill:
                 {
-                    if (message.Success)
-                    {
-                        UpdateDungeonRoom();
-
-                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
-                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Adventure.LogResults(arList);
-                            Adventure.TriggerEnemyTurn();
-                        });
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Skill", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.UseSkill, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.UseConsumable:
                 {
-                    if (message.Success)
-                    {
-                        AskInventory();
-                        UpdateDungeonRoom();
-
-                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
-                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Adventure.LogResults(arList);
-                            Adventure.TriggerEnemyTurn();
-                        });
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Consumable", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.UseConsumable, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.EnemyTurn:
                 {
-                    if (message.Success)
-                    {
-                        UpdateDungeonRoom();
-
-                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
-                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Adventure.LogResults(arList);
-                        });
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Turn", message.Json);
-                    }
-                    //MessagingCenter.Send(this, MessengerCodes.EnemyTurnEnded);
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.EnemyTurn, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.DoNothingTurn:
                 {
-                    if (message.Success)
-                    {
-                        UpdateDungeonRoom();
-
-                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
-                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Adventure.LogResults(arList);
-                            Adventure.TriggerEnemyTurn();
-                        });
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Turn", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.DoNothingTurn, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.GetLoots:
                 {
-                    if (message.Success)
-                    {
-                        var loots = JsonConvert.DeserializeObject<List<JsonObjects.LootItem>>(message.Json);
-                        //MessagingCenter.Send(this, MessengerCodes.DungeonLootsReceived, loots);
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Adventure.ShowLoots(loots);
-                        });
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.GetLoots, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.LootItem:
                 {
-                    if (message.Success)
-                    {
-                        GetDungeonRoomLoots();
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Looting", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.LootItem, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.LeaveFinishedRoom:
                 {
-                    if (message.Success)
-                    {
-                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
-                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Adventure.ShowEndResults(arList);
-                        });
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Dungeon", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.LeaveFinishedRoom, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.BuyShopItem:
                 {
-                    if (message.Success)
-                    {
-                        AskCurrencies();
-                        AskInventory();
-                        UpdateDungeonRoom();
-                    }
-                    //MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.BuyShopItem, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.PlayerDied:
                 {
-                    var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
-                    //MessagingCenter.Send(this, MessengerCodes.PlayerDied, arList);
-
-                    SceneLoom.Loom.QueueOnMainThread(() =>
-                    {
-                        Adventure.ShowEndResults(arList);
-                    });
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.PlayerDied, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Dungeon.PlayerRest:
                 {
-                    if (message.Success)
-                    {
-                        OpenDungeonRoom();
-
-                        var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
-                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            Adventure.LogResults(arList);
-                        });
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Resting", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Dungeon.PlayerDied, message);
                 }
                 break;
 
@@ -1099,14 +770,10 @@ public class NetworkManager : MonoBehaviour
                     if (message.Success)
                     {
                         var job = JsonConvert.DeserializeObject<JsonObjects.Job>(message.Json);
-                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
+                        DatasManager.Instance.Job = job;
+                    }
 
-                        DatasManager.Instance.Job.Value = job;
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Resting", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Job.Get, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Job.Learn:
@@ -1114,40 +781,15 @@ public class NetworkManager : MonoBehaviour
                     if (message.Success)
                     {
                         var job = JsonConvert.DeserializeObject<JsonObjects.Job>(message.Json);
-                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-
-                        DatasManager.Instance.Job.Value = job;
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            UIManager.This.HideLoading();
-                        });
+                        DatasManager.Instance.Job = job;
                     }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Resting", message.Json);
-                    }
+
+                    _invokeCallback(JsonObjects.CommandCodes.Job.Learn, message);
                 }
                 break;
             case JsonObjects.CommandCodes.Job.Craft:
                 {
-                    if (message.Success)
-                    {
-                        var item = JsonConvert.DeserializeObject<JsonObjects.Items.Item>(message.Json);
-                        //MessagingCenter.Send(this, MessengerCodes.RoundResults, arList);
-
-                        GetJob();
-                        AskInventory();
-
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            UIManager.This.HideLoading();
-                        });
-                    }
-                    else
-                    {
-                        //ScreenManager.Instance.AlertScreen("Resting", message.Json);
-                    }
+                    _invokeCallback(JsonObjects.CommandCodes.Job.Craft, message);
                 }
                 break;
 
