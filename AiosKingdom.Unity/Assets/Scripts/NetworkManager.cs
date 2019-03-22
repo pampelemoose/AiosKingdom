@@ -16,7 +16,6 @@ public class NetworkManager : MonoBehaviour
     private static bool _created = false;
 
     // CALLBACKS
-    public event Action<string> GlobalMessageCallback;
     public class NetworkCallback
     {
         public event Action<JsonObjects.Message> Callback;
@@ -46,18 +45,10 @@ public class NetworkManager : MonoBehaviour
 
     void Start()
     {
-        ConnectToDispatchServer();
-    }
-
-    void Awake()
-    {
-        if (!_created)
-        {
-            DontDestroyOnLoad(this.gameObject);
-            _created = true;
-        }
-
         This = this;
+        DontDestroyOnLoad(this.gameObject);
+
+        ConnectToDispatchServer();
     }
 
     void OnApplicationQuit()
@@ -196,7 +187,7 @@ public class NetworkManager : MonoBehaviour
                     //ScreenManager.Instance.AlertScreen("Server Message", message.Json);
                     Debug.Log("Server Message : " + message.Json);
 
-                    if (GlobalMessageCallback != null) GlobalMessageCallback.Invoke(message.Json);
+                    UIManager.This.ShowAlert(message.Json, "Server Alert");
                 }
                 break;
 
@@ -475,7 +466,7 @@ public class NetworkManager : MonoBehaviour
                     //ScreenManager.Instance.AlertScreen("Kingdom Message", message.Json);
                     Debug.Log("Server Message : " + message.Json);
 
-                    if (GlobalMessageCallback != null) GlobalMessageCallback.Invoke(message.Json);
+                    UIManager.This.ShowAlert(message.Json, "Server Alert");
                 }
                 break;
 

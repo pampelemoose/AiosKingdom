@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class AdventureSelection : MonoBehaviour
+public class AdventureSelection : MonoBehaviour, ICallbackHooker
 {
     public GameObject Content;
     public GameObject AdventureListItem;
@@ -20,6 +20,21 @@ public class AdventureSelection : MonoBehaviour
 
     private Pagination _pagination;
     private List<JsonObjects.Adventures.Adventure> _adventures;
+
+    public void HookCallbacks()
+    {
+        InputController.This.AddCallback("Adventures", (direction) =>
+        {
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Down)
+                        GetComponent<Page>().CloseAction();
+                });
+            }
+        });
+    }
 
     void Awake()
     {

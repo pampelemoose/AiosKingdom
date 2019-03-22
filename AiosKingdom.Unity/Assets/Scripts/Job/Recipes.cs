@@ -7,11 +7,15 @@ using UnityEngine.UI;
 
 public class Recipes : MonoBehaviour, ICallbackHooker
 {
+    public Button Craft;
+    public CraftPanel CraftPanel;
+
     public Text JobRank;
     public Text JobPoints;
 
     public GameObject Content;
     public GameObject RecipeListItem;
+    public RecipeDetails RecipeDetails;
 
     [Header("Pagination")]
     public GameObject PaginationPrefab;
@@ -65,6 +69,34 @@ public class Recipes : MonoBehaviour, ICallbackHooker
                 Debug.Log("Job Craft error : " + message.Json);
             }
         });
+
+        InputController.This.AddCallback("Recipes", (direction) =>
+        {
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Up)
+                    {
+                        InputController.This.SetId("Craft");
+                        UIManager.This.ShowLoading();
+                        CraftPanel.ShowCraft();
+                    }
+                    if (direction == SwipeDirection.Down)
+                        GetComponent<Page>().CloseAction();
+                });
+            }
+        });
+    }
+
+    void Start()
+    {
+        Craft.onClick.AddListener(() =>
+        {
+            InputController.This.SetId("Craft");
+            UIManager.This.ShowLoading();
+            CraftPanel.ShowCraft();
+        });
     }
 
     public void LoadRecipes(JsonObjects.Job job)
@@ -101,10 +133,17 @@ public class Recipes : MonoBehaviour, ICallbackHooker
 
             var script = advObj.GetComponent<RecipeListItem>();
             script.SetDatas(recipe, unlocked);
-            //script.Action.onClick.AddListener(() =>
-            //{
-            //    BagSetup.SetDatas(adventure);
-            //});
+            script.Action.onClick.AddListener(() =>
+            {
+                if (unlocked != null)
+                {
+                    RecipeDetails.SetDatas(recipe);
+                }
+                else
+                {
+
+                }
+            });
         }
 
         _pagination.SetIndicator((_recipes.Count / ItemPerPage) + (_recipes.Count % ItemPerPage > 0 ? 1 : 0));

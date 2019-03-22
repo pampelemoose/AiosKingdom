@@ -38,6 +38,18 @@ public class Pills : MonoBehaviour, ICallbackHooker
                 });
             }
         });
+
+        InputController.This.AddCallback("Pills", (direction) =>
+        {
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Down)
+                        GetComponent<Page>().CloseAction();
+                });
+            }
+        });
     }
 
     void Start()

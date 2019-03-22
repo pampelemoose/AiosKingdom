@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PageDoor : MonoBehaviour
 {
     public GameObject Page;
+    public string InputId;
 
     void Awake()
     {
@@ -14,6 +15,7 @@ public class PageDoor : MonoBehaviour
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() =>
         {
+            InputController.This.SetId(InputId);
             Page.SetActive(true);
             //Page.transform.SetAsLastSibling();
 

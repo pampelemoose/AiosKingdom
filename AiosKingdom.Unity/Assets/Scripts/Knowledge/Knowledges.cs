@@ -50,6 +50,24 @@ public class Knowledges : MonoBehaviour, ICallbackHooker
                 Debug.Log("Knowledges error : " + message.Json);
             }
         });
+
+        InputController.This.AddCallback("Knowledges", (direction) =>
+        {
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Up)
+                    {
+                        InputController.This.SetId("Talents");
+                        UIManager.This.ShowLoading();
+                        TalentsPanel.ShowTalents();
+                    }
+                    if (direction == SwipeDirection.Down)
+                        GetComponent<Page>().CloseAction();
+                });
+            }
+        });
     }
 
     void Start()

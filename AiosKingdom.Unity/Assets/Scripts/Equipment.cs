@@ -31,6 +31,18 @@ public class Equipment : MonoBehaviour, ICallbackHooker
                 Debug.Log("Equipment error : " + message.Json);
             }
         });
+
+        InputController.This.AddCallback("Equipment", (direction) =>
+        {
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Down)
+                        GetComponent<Page>().CloseAction();
+                });
+            }
+        });
     }
 
     public void _updateEquipment(JsonObjects.Equipment equipment)

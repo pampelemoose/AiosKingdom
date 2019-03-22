@@ -76,6 +76,7 @@ public class JobDoor : MonoBehaviour, ICallbackHooker
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() =>
         {
+            InputController.This.SetId("Recipes");
             Recipes.SetActive(true);
             Recipes.GetComponent<Recipes>().LoadRecipes(job);
 

@@ -16,7 +16,7 @@ public class JobSelector : MonoBehaviour
         button.onClick.AddListener(() =>
         {
             UIManager.This.ShowLoading();
-            JobSelection.SetActive(false);
+            JobSelection.GetComponent<Page>().CloseAction();
             NetworkManager.This.LearnJob(Job);
         });
     }

@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftPanel : MonoBehaviour
+public class CraftPanel : MonoBehaviour, ICallbackHooker
 {
     public Button AddItemButton;
     public ItemSelection BagItemSelection;
@@ -14,7 +14,6 @@ public class CraftPanel : MonoBehaviour
     public GameObject ItemListPrefab;
 
     public Dropdown Techniques;
-    public Text CraftResult;
     public Button Craft;
 
     [Space(10)]
@@ -26,14 +25,23 @@ public class CraftPanel : MonoBehaviour
     private Pagination _pagination;
     private List<JsonObjects.CraftingComponent> _craftingItems;
 
-    void Start()
+    public void HookCallbacks()
     {
-        Techniques.AddOptions(Enum.GetNames(typeof(JsonObjects.JobTechnique)).ToList());
-        Techniques.onValueChanged.AddListener((value) =>
+        InputController.This.AddCallback("Craft", (direction) =>
         {
-            SetCraftingResult();
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Down)
+                        GetComponent<Page>().CloseAction();
+                });
+            }
         });
 
+    }
+    void Start()
+    {
         AddItemButton.onClick.AddListener(() =>
         {
             BagItemSelection.Initialize(AddItem, new List<JsonObjects.Items.ItemType> { JsonObjects.Items.ItemType.CraftingMaterial });
@@ -51,11 +59,17 @@ public class CraftPanel : MonoBehaviour
                 Techniques.value = 0;
                 _craftingItems = new List<JsonObjects.CraftingComponent>();
                 SetItems();
-                SetCraftingResult();
             }
         });
 
         SetDatas();
+    }
+
+    public void ShowCraft()
+    {
+        gameObject.SetActive(true);
+        //transform.SetAsLastSibling();
+        UIManager.This.HideLoading();
     }
 
     public void SetDatas()
@@ -93,7 +107,6 @@ public class CraftPanel : MonoBehaviour
         _craftingItems.Add(exists);
 
         SetItems();
-        SetCraftingResult();
     }
 
     private void SetItems()
@@ -125,51 +138,11 @@ public class CraftPanel : MonoBehaviour
             {
                 BagItemSelection.PutBack(slot.InventoryId, slot.Quantity);
                 _craftingItems.Remove(slot);
-                SetCraftingResult();
                 Destroy(itemObj);
             });
 
         }
 
         _pagination.SetIndicator((_craftingItems.Count / ItemPerPage) + (_craftingItems.Count % ItemPerPage > 0 ? 1 : 0));
-    }
-
-    private void SetCraftingResult()
-    {
-        var resultString = "Unknown";
-
-        if (Techniques.value > 0)
-        {
-            var technique = (JsonObjects.JobTechnique)Enum.Parse(typeof(JsonObjects.JobTechnique), Techniques.options[Techniques.value].text);
-            var knownRecipesIds = DatasManager.Instance.Job.Recipes.Select(r => r.RecipeId).ToList();
-            var availableRecipes = DatasManager.Instance.Recipes.Where(r => r.Technique == technique && knownRecipesIds.Contains(r.Id)).ToList();
-
-            if (availableRecipes.Count > 0)
-            {
-                foreach (var recipe in availableRecipes)
-                {
-                    var isFulfilled = true;
-                    foreach (var crafting in _craftingItems)
-                    {
-                        var item = DatasManager.Instance.Items.FirstOrDefault(i => i.Id.Equals(crafting.ItemId));
-                        var combinaison = recipe.Combinaisons.FirstOrDefault(c => c.ItemId(item.Quality).Equals(item.Id));
-                        if (combinaison == null
-                            || (combinaison != null && combinaison.MinQuantity > crafting.Quantity && combinaison.MaxQuantity < crafting.Quantity))
-                        {
-                            isFulfilled = false;
-                            break;
-                        }
-                    }
-
-                    if (isFulfilled)
-                    {
-                        resultString = recipe.Name;
-                        break;
-                    }
-                }
-            }
-        }
-
-        CraftResult.text = string.Format("<{0}>", resultString);
     }
 }

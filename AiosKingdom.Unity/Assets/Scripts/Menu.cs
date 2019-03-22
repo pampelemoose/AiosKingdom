@@ -20,6 +20,24 @@ public class Menu : MonoBehaviour, ICallbackHooker
                 });
             }
         });
+
+        InputController.This.AddCallback("Home", (direction) =>
+        {
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Up && !MenuBox.activeSelf)
+                    {
+                        MenuBox.SetActive(true);
+                    }
+                    else if (direction == SwipeDirection.Down && MenuBox.activeSelf)
+                    {
+                        MenuBox.SetActive(false);
+                    }
+                });
+            }
+        });
     }
 
     void Start()

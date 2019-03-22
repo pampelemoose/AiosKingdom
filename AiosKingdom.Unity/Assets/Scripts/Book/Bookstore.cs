@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Bookstore : MonoBehaviour
+public class Bookstore : MonoBehaviour, ICallbackHooker
 {
     public GameObject Content;
     public GameObject BookListItem;
@@ -32,6 +32,21 @@ public class Bookstore : MonoBehaviour
     private JsonObjects.Skills.BookQuality? _filterQuality;
     private JsonObjects.Skills.InscriptionType? _filterType;
     private JsonObjects.Stats? _filterStat;
+
+    public void HookCallbacks()
+    {
+        InputController.This.AddCallback("Bookstore", (direction) =>
+        {
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Down)
+                        GetComponent<Page>().CloseAction();
+                });
+            }
+        });
+    }
 
     void Start()
     {

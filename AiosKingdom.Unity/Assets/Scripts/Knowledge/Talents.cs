@@ -38,6 +38,18 @@ public class Talents : MonoBehaviour, ICallbackHooker
                 });
             }
         });
+
+        InputController.This.AddCallback("Talents", (direction) =>
+        {
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Down)
+                        GetComponent<Page>().CloseAction();
+                });
+            }
+        });
     }
 
     void Awake()
@@ -94,11 +106,30 @@ public class Talents : MonoBehaviour, ICallbackHooker
                 var leafTalents = talents.Where(t => t.Branch == i && t.Leaf == j).ToList();
                 var leafUnlocked = talentUnlocked.FirstOrDefault(u => leafTalents.Select(t => t.Id).Contains(u.TalentId));
 
+                // --- FILTER AVAILABLE TALENTS IF TREE IS BUILT ALREADY
+                // NEXT LEAF TALENT CHECK
+                var nextLeafTalents = talents.Where(t => t.Branch == i && t.Leaf == j + 1).ToList();
+                var nextLeafUnlocked = talentUnlocked.FirstOrDefault(u => nextLeafTalents.Select(t => t.Id).Contains(u.TalentId));
+
+                // LEFT LEAF TALENT CHECK
+                var leftLeafTalents = talents.Where(t => t.Branch == i + 1 && t.Leaf == j + 1).ToList();
+                var leftLeafUnlocked = talentUnlocked.FirstOrDefault(u => leftLeafTalents.Select(t => t.Id).Contains(u.TalentId));
+
+                // RIGHT LEAF TALENT CHECK
+                var rightLeafTalents = talents.Where(t => t.Branch == i - 1 && t.Leaf == j + 1).ToList();
+                var rightLeafUnlocked = talentUnlocked.FirstOrDefault(u => rightLeafTalents.Select(t => t.Id).Contains(u.TalentId));
+
+                if (nextLeafUnlocked != null || leftLeafUnlocked != null || rightLeafUnlocked != null)
+                {
+                    leafTalents.RemoveAll(t => t.Unlocks.Contains(JsonObjects.Skills.TalentUnlock.None));
+                }
+                // --- END OF FILTERING
+
                 if (leafUnlocked != null)
                 {
                     talentButton.interactable = true;
                     talentButton.GetComponentInChildren<Text>().color = learnedColor;
-                    SetTalentBox(talentButton,
+                    _setTalentBox(talentButton,
                             i, j,
                             leafUnlocked, leafTalents);
 
@@ -131,7 +162,7 @@ public class Talents : MonoBehaviour, ICallbackHooker
                     {
                         talentButton.GetComponentInChildren<Text>().color = canLearnColor;
 
-                        SetTalentBox(talentButton,
+                        _setTalentBox(talentButton,
                             i, j,
                             null, leafTalents);
 
@@ -153,7 +184,7 @@ public class Talents : MonoBehaviour, ICallbackHooker
         }
     }
 
-    private void SetTalentBox(Button talentButton,
+    private void _setTalentBox(Button talentButton,
         int branch, int leaf,
         JsonObjects.TalentUnlocked unlocked, List<JsonObjects.Skills.Talent> talents)
     {

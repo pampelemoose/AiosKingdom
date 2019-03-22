@@ -53,6 +53,7 @@ public class Home : MonoBehaviour, ICallbackHooker
             {
                 SceneLoom.Loom.QueueOnMainThread(() =>
                 {
+                    InputController.This.SetId("Home");
                     gameObject.SetActive(true);
 
                     NetworkManager.This.AskSoulCurrentDatas();

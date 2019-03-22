@@ -103,6 +103,8 @@ public class Adventure : MonoBehaviour, ICallbackHooker
 
             if (message.Success)
             {
+                InputController.This.SetId("Adventure");
+
                 SceneLoom.Loom.QueueOnMainThread(() =>
                 {
                     gameObject.SetActive(true);
@@ -130,6 +132,8 @@ public class Adventure : MonoBehaviour, ICallbackHooker
         {
             if (message.Success)
             {
+                InputController.This.SetId("Adventures");
+
                 NetworkManager.This.AskCurrencies();
                 NetworkManager.This.AskInventory();
                 NetworkManager.This.AskSoulCurrentDatas();
@@ -337,6 +341,20 @@ public class Adventure : MonoBehaviour, ICallbackHooker
                 Debug.Log("Dungeon Player Rest error : " + message.Json);
             }
         });
+
+        InputController.This.AddCallback("Adventure", (direction) =>
+        {
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Up)
+                        Menu.SetActive(true);
+                    if (direction == SwipeDirection.Down)
+                        Menu.SetActive(false);
+                });
+            }
+        });
     }
 
     void Awake()
@@ -424,6 +442,7 @@ public class Adventure : MonoBehaviour, ICallbackHooker
         BackToMainButton.onClick.RemoveAllListeners();
         BackToMainButton.onClick.AddListener(() =>
         {
+            InputController.This.SetId("Adventures");
             Menu.SetActive(false);
             NetworkManager.This.DungeonLeft();
             gameObject.SetActive(false);

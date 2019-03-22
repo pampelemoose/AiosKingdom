@@ -23,12 +23,13 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
 
     [Header("Content Objects")]
     public GameObject Menu;
+    public GameObject Alert;
 
     public GameObject Settings;
 
     public MonoBehaviour[] CallbackHookers;
 
-    void Awake()
+    void Start()
     {
         This = this;
 
@@ -48,6 +49,11 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         ChangeView(Views.Settings);
 
         HideLoading();
+    }
+
+    public void ShowAlert(string content, string title = null)
+    {
+        Alert.GetComponent<Alert>().Show(content, title);
     }
 
     private void ChangeView(Views viewType, bool push = false)

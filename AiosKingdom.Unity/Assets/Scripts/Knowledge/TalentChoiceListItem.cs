@@ -24,10 +24,12 @@ public class TalentChoiceListItem : MonoBehaviour
     public void Select()
     {
         Selected.SetActive(true);
+        Action.interactable = false;
     }
 
     public void Unselect()
     {
         Selected.SetActive(false);
+        Action.interactable = true;
     }
 }

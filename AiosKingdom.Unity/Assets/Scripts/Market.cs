@@ -34,6 +34,7 @@ public class Market : MonoBehaviour, ICallbackHooker
     public Button BuyItemButton;
     public Button CloseBuyBox;
 
+    private bool _isSpecial = false;
     private JsonObjects.Items.ItemType? _itemType;
     private JsonObjects.Items.ItemSlot? _itemSlot;
     private JsonObjects.Items.EffectType? _effectType;
@@ -96,53 +97,78 @@ public class Market : MonoBehaviour, ICallbackHooker
                 Debug.Log("Market Place Order error : " + message.Json);
             }
         });
+
+        InputController.This.AddCallback("Market", (direction) =>
+        {
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Up)
+                    {
+                        if (!_isSpecial)
+                        {
+                            NetworkManager.This.AskSpecialMarketItems();
+                            Specials.gameObject.SetActive(false);
+                            Normals.gameObject.SetActive(true);
+                        }
+                    }
+                    else if (direction == SwipeDirection.Down)
+                    {
+                        if (_isSpecial)
+                        {
+                            NetworkManager.This.AskMarketItems();
+                            Normals.gameObject.SetActive(false);
+                            Specials.gameObject.SetActive(true);
+                        }
+                        else
+                            GetComponent<Page>().CloseAction();
+                    }
+                });
+            }
+        });
     }
 
-    void Awake()
+    void Start()
     {
-        if (!_init)
+        ItemTypeDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Items.ItemType)).ToList());
+        ItemTypeDropdown.onValueChanged.AddListener((value) =>
         {
-            ItemTypeDropdown.AddOptions(Enum.GetNames(typeof(JsonObjects.Items.ItemType)).ToList());
-            ItemTypeDropdown.onValueChanged.AddListener((value) =>
+            _itemType = null;
+            if (value > 0)
             {
-                _itemType = null;
-                if (value > 0)
-                {
-                    _itemType = (JsonObjects.Items.ItemType)Enum.Parse(typeof(JsonObjects.Items.ItemType), ItemTypeDropdown.options.ElementAt(value).text);
-                }
+                _itemType = (JsonObjects.Items.ItemType)Enum.Parse(typeof(JsonObjects.Items.ItemType), ItemTypeDropdown.options.ElementAt(value).text);
+            }
 
-                SetupFilters();
+            SetupFilters();
 
-                _resetItems();
-            });
+            _resetItems();
+        });
 
-            Specials.onClick.AddListener(() =>
+        Specials.onClick.AddListener(() =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                SceneLoom.Loom.QueueOnMainThread(() =>
-                {
-                    NetworkManager.This.AskSpecialMarketItems();
-                    Specials.gameObject.SetActive(false);
-                    Normals.gameObject.SetActive(true);
-                });
+                NetworkManager.This.AskSpecialMarketItems();
+                Specials.gameObject.SetActive(false);
+                Normals.gameObject.SetActive(true);
             });
+        });
 
-            Normals.onClick.AddListener(() =>
+        Normals.onClick.AddListener(() =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
             {
-                SceneLoom.Loom.QueueOnMainThread(() =>
-                {
-                    NetworkManager.This.AskMarketItems();
-                    Normals.gameObject.SetActive(false);
-                    Specials.gameObject.SetActive(true);
-                });
+                NetworkManager.This.AskMarketItems();
+                Normals.gameObject.SetActive(false);
+                Specials.gameObject.SetActive(true);
             });
+        });
 
-            CloseBuyBox.onClick.AddListener(() =>
-            {
-                BuyBox.SetActive(false);
-            });
-
-            _init = true;
-        }
+        CloseBuyBox.onClick.AddListener(() =>
+        {
+            BuyBox.SetActive(false);
+        });
 
         NetworkManager.This.AskMarketItems();
     }
@@ -254,16 +280,18 @@ public class Market : MonoBehaviour, ICallbackHooker
 
     private void _updateItems(List<JsonObjects.MarketSlot> items)
     {
+        _isSpecial = false;
         _slots = items;
 
         Normals.gameObject.SetActive(false);
         Specials.gameObject.SetActive(true);
-        
+
         _resetItems();
     }
 
     private void _updateSpecialItems(List<JsonObjects.MarketSlot> items)
     {
+        _isSpecial = true;
         _slots = items;
 
         Specials.gameObject.SetActive(false);

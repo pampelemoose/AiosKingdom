@@ -27,6 +27,45 @@ namespace Server.GameServer.Commands.Player
                 var talentsAtLeaf = talents.Where(t => t.Branch == talent.Branch && t.Leaf == talent.Leaf);
                 var unlock = unlocks.FirstOrDefault(u => talentsAtLeaf.Select(t => t.Id).Contains(u.TalentId));
 
+                var prevUnlocked = talents.FirstOrDefault(t => t.Branch == talent.Branch && t.Leaf == talent.Leaf - 1 && unlocks.Select(u => u.TalentId).Contains(t.Id) && t.Unlocks.Contains(Network.Skills.TalentUnlock.Next));
+                var leftUnlocked = talents.FirstOrDefault(t => t.Branch == talent.Branch + 1 && t.Leaf == talent.Leaf - 1 && unlocks.Select(u => u.TalentId).Contains(t.Id) && t.Unlocks.Contains(Network.Skills.TalentUnlock.Left));
+                var rightUnlocked = talents.FirstOrDefault(t => t.Branch == talent.Branch - 1 && t.Leaf == talent.Leaf - 1 && unlocks.Select(u => u.TalentId).Contains(t.Id) && t.Unlocks.Contains(Network.Skills.TalentUnlock.Right));
+
+                if (unlock != null)
+                {
+                    var nextUnlocked = talents.FirstOrDefault(t => t.Branch == talent.Branch && t.Leaf == talent.Leaf + 1 && unlocks.Select(u => u.TalentId).Contains(t.Id));
+                    var leftNextUnlocked = talents.FirstOrDefault(t => t.Branch == talent.Branch + 1 && t.Leaf == talent.Leaf + 1 && unlocks.Select(u => u.TalentId).Contains(t.Id));
+                    var rightNextUnlocked = talents.FirstOrDefault(t => t.Branch == talent.Branch - 1 && t.Leaf == talent.Leaf + 1 && unlocks.Select(u => u.TalentId).Contains(t.Id));
+
+                    if ((nextUnlocked != null && !talent.Unlocks.Contains(Network.Skills.TalentUnlock.Next))
+                        || (leftNextUnlocked != null && !talent.Unlocks.Contains(Network.Skills.TalentUnlock.Right))
+                        || (rightNextUnlocked != null && !talent.Unlocks.Contains(Network.Skills.TalentUnlock.Left)))
+                    {
+                        ret.ClientResponse = new Network.Message
+                        {
+                            Code = Network.CommandCodes.Player.LearnTalent,
+                            Success = false,
+                            Json = "Cannot replace talent."
+                        };
+                        ret.Succeeded = true;
+
+                        return ret;
+                    }
+                }
+
+                if (talent.Leaf > 0 && prevUnlocked == null && leftUnlocked == null && rightUnlocked == null)
+                {
+                    ret.ClientResponse = new Network.Message
+                    {
+                        Code = Network.CommandCodes.Player.LearnTalent,
+                        Success = false,
+                        Json = "Could not learn talent."
+                    };
+                    ret.Succeeded = true;
+
+                    return ret;
+                }
+
                 if (knowledge.TalentPoints >= talent.TalentPointsRequired)
                 {
                     knowledges.Remove(knowledge);

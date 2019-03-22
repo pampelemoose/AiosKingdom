@@ -6,13 +6,20 @@ using UnityEngine.UI;
 public class Page : MonoBehaviour
 {
     public Button Close;
+    public string InputId;
 
     void Start()
     {
         Close.onClick.RemoveAllListeners();
         Close.onClick.AddListener(() =>
         {
-            gameObject.SetActive(false);
+            CloseAction();
         });
+    }
+
+    public void CloseAction()
+    {
+        InputController.This.SetId(InputId);
+        gameObject.SetActive(false);
     }
 }

@@ -41,6 +41,18 @@ public class Inventory : MonoBehaviour, ICallbackHooker
                 Debug.Log("Inventory error : " + message.Json);
             }
         });
+
+        InputController.This.AddCallback("Inventory", (direction) =>
+        {
+            if (gameObject.activeSelf)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    if (direction == SwipeDirection.Down)
+                        GetComponent<Page>().CloseAction();
+                });
+            }
+        });
     }
 
     private void _updateItems(List<JsonObjects.InventorySlot> inventory)
