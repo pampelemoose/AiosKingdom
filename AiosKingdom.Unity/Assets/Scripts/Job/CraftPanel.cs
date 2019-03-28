@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,10 @@ using UnityEngine.UI;
 
 public class CraftPanel : MonoBehaviour, ICallbackHooker
 {
+    public Text CraftItem;
+    public Button ShowRecipe;
+    public RecipeDetails RecipeDetails;
+
     public Button AddItemButton;
     public ItemSelection BagItemSelection;
 
@@ -25,8 +30,21 @@ public class CraftPanel : MonoBehaviour, ICallbackHooker
     private Pagination _pagination;
     private List<JsonObjects.CraftingComponent> _craftingItems;
 
+    private Guid _craftId;
+
     public void HookCallbacks()
     {
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Job.Craft, (message) =>
+        {
+            if (message.Success)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    GetComponent<Page>().CloseAction();
+                });
+            }
+        });
+
         InputController.This.AddCallback("Craft", (direction) =>
         {
             if (gameObject.activeSelf)
@@ -47,16 +65,19 @@ public class CraftPanel : MonoBehaviour, ICallbackHooker
             BagItemSelection.Initialize(AddItem, new List<JsonObjects.Items.ItemType> { JsonObjects.Items.ItemType.CraftingMaterial });
         });
 
+        Techniques.AddOptions(Enum.GetNames(typeof(JsonObjects.JobTechnique)).ToList());
+
         Craft.onClick.AddListener(() =>
         {
-            if (Techniques.value > 0)
+            if (Techniques.value > 0 && !Guid.Empty.Equals(_craftId) && _craftingItems.Count > 0)
             {
                 var technique = (JsonObjects.JobTechnique)Enum.Parse(typeof(JsonObjects.JobTechnique), Techniques.options[Techniques.value].text);
 
                 UIManager.This.ShowLoading();
-                NetworkManager.This.CraftItem(technique, _craftingItems);
+                NetworkManager.This.CraftItem(_craftId, technique, _craftingItems);
 
                 Techniques.value = 0;
+                _craftId = Guid.Empty;
                 _craftingItems = new List<JsonObjects.CraftingComponent>();
                 SetItems();
             }
@@ -65,8 +86,21 @@ public class CraftPanel : MonoBehaviour, ICallbackHooker
         SetDatas();
     }
 
-    public void ShowCraft()
+    public void ShowCraft(JsonObjects.Recipe recipe, bool showDetails)
     {
+        _craftId = recipe.Id;
+
+        CraftItem.text = string.Format(": {0}", recipe.Name);
+
+        ShowRecipe.onClick.RemoveAllListeners();
+        if (showDetails)
+        {
+            ShowRecipe.onClick.AddListener(() =>
+            {
+                RecipeDetails.SetDatas(recipe);
+            });
+        }
+
         gameObject.SetActive(true);
         //transform.SetAsLastSibling();
         UIManager.This.HideLoading();

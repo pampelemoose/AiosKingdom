@@ -138,9 +138,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224036197641742112}
+  - component: {fileID: 114378428682254666}
   - component: {fileID: 222376438748303516}
   - component: {fileID: 114573544729240690}
-  - component: {fileID: 114378428682254666}
+  - component: {fileID: 114203401342269262}
   m_Layer: 5
   m_Name: RecipeDetails
   m_TagString: Untagged
@@ -214,6 +215,19 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: <Close>
+--- !u!114 &114203401342269262
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1973874132410882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893ce121d246d834e863e74f9fffa08a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Close: {fileID: 114978847006062666}
+  InputId: Recipes
 --- !u!114 &114378428682254666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -227,6 +241,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: {fileID: 114407723343327424}
   Technique: {fileID: 114966886552063248}
+  Combinaisons: {fileID: 1705987312658490}
+  CombinaisonListItem: {fileID: 1646989724612456, guid: 457fd77e3a2f1484c8d0bcb2e2b35599,
+    type: 2}
 --- !u!114 &114407723343327424
 MonoBehaviour:
   m_ObjectHideFlags: 1

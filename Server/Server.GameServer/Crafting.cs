@@ -8,64 +8,62 @@ namespace Server.GameServer
 {
     public static class Crafting
     {
-        public static Network.Items.Item CraftItem(ref Network.Job job, Network.JobTechnique technique, List<Network.CraftingComponent> components)
+        public static Network.Items.Item CraftItem(ref Network.Job job, Guid recipeId, Network.JobTechnique technique, List<Network.CraftingComponent> components)
         {
             var localJob = job;
-            var jobRecipes = DataManager.Instance.Recipes.Where(r => r.JobType == localJob.Type && r.Technique == technique);
+            var recipe = DataManager.Instance.Recipes.FirstOrDefault(r => r.Id.Equals(recipeId) && r.JobType == localJob.Type && r.Technique == technique);
 
-            if (jobRecipes != null)
+            if (recipe != null)
             {
                 var componentIds = components.Select(c => c.ItemId).ToList();
-                foreach (var recipe in jobRecipes)
+
+                var isRecipe = true;
+                foreach (var combinaison in recipe.Combinaisons)
                 {
-                    var isRecipe = true;
-                    foreach (var combinaison in recipe.Combinaisons)
+                    int componentCombinaisonCount = 0;
+                    foreach (Network.Items.ItemQuality quality in Enum.GetValues(typeof(Network.Items.ItemQuality)))
                     {
-                        int componentCombinaisonCount = 0;
-                        foreach (Network.Items.ItemQuality quality in Enum.GetValues(typeof(Network.Items.ItemQuality)))
+                        var component = components.FirstOrDefault(c => c.ItemId.Equals(combinaison.ItemId(quality)));
+                        if (component != null)
                         {
-                            var component = components.FirstOrDefault(c => c.ItemId.Equals(combinaison.ItemId(quality)));
-                            if (component != null)
-                            {
-                                componentCombinaisonCount += component.Quantity;
-                            }
-                        }
-
-                        if (combinaison.MinQuantity > componentCombinaisonCount || combinaison.MaxQuantity < componentCombinaisonCount)
-                        {
-                            isRecipe = false;
-                            break;
+                            componentCombinaisonCount += component.Quantity;
                         }
                     }
 
-                    //foreach (var component in components)
-                    //{
-                    //    var combinaison = recipe.Combinaisons.FirstOrDefault(c => c.ItemId.Equals(component.ItemId));
-
-                    //    if (combinaison.MinQuantity > component.Quantity || combinaison.MaxQuantity < component.Quantity)
-                    //    {
-                    //        isRecipe = false;
-                    //        break;
-                    //    }
-                    //}
-
-                    if (isRecipe)
+                    if (combinaison.MinQuantity > componentCombinaisonCount || combinaison.MaxQuantity < componentCombinaisonCount)
                     {
-                        if (!localJob.Recipes.Any(r => r.RecipeId.Equals(recipe.Id)))
-                        {
-                            job.Recipes.Add(new Network.RecipeUnlocked
-                            {
-                                Id = Guid.NewGuid(),
-                                RecipeId = recipe.Id,
-                                IsNew = true,
-                                UnlockedAt = DateTime.Now
-                            });
-                        }
-
-                        var item = _craftItem(localJob, recipe, components);
-
-                        return item;
+                        isRecipe = false;
+                        break;
                     }
+                }
+
+                //foreach (var component in components)
+                //{
+                //    var combinaison = recipe.Combinaisons.FirstOrDefault(c => c.ItemId.Equals(component.ItemId));
+
+                //    if (combinaison.MinQuantity > component.Quantity || combinaison.MaxQuantity < component.Quantity)
+                //    {
+                //        isRecipe = false;
+                //        break;
+                //    }
+                //}
+
+                if (isRecipe)
+                {
+                    if (!localJob.Recipes.Any(r => r.RecipeId.Equals(recipe.Id)))
+                    {
+                        job.Recipes.Add(new Network.RecipeUnlocked
+                        {
+                            Id = Guid.NewGuid(),
+                            RecipeId = recipe.Id,
+                            IsNew = true,
+                            UnlockedAt = DateTime.Now
+                        });
+                    }
+
+                    var item = _craftItem(localJob, recipe, components);
+
+                    return item;
                 }
             }
 
@@ -124,44 +122,59 @@ namespace Server.GameServer
             double uncommonFinalTicket = recipeToken[1] * recipeQuality.Uncommon;
             double rareFinalTicket = recipeToken[2] * recipeQuality.Rare;
             double epicFinalTicket = recipeToken[3] * recipeQuality.Epic;
-            double LegendaryFinalTicket = recipeToken[4] * recipeQuality.Legendary;
+            double legendaryFinalTicket = recipeToken[4] * recipeQuality.Legendary;
+
+            Log.Instance.Write(Log.Type.Job, Log.Level.Infos, $"Crafting Tickets: common[{commonFinalTicket}], uncommon[{uncommonFinalTicket}], rare[{rareFinalTicket}], epic[{epicFinalTicket}], legendary[{legendaryFinalTicket}]");
 
             var rand = new Random();
-            var commonChances = rand.Next(0, (int)Math.Round(commonFinalTicket * 100)) / 100.0f;
-            var uncommonChances = rand.Next(0, (int)Math.Round(uncommonFinalTicket * 100)) / 100.0f;
-            var rareChances = rand.Next(0, (int)Math.Round(rareFinalTicket * 100)) / 100.0f;
-            var epicChances = rand.Next(0, (int)Math.Round(epicFinalTicket * 100)) / 100.0f;
-            var legendaryChances = rand.Next(0, (int)Math.Round(LegendaryFinalTicket * 100)) / 100.0f;
+            var randTokenRaw = rand.Next(0, 100000000);
+            double randToken = randTokenRaw / 1000000.0f;
 
-            Console.WriteLine($"Crafting chances C[{commonChances}],UC[{uncommonChances}],R[{rareChances}], E[{epicChances}], L[{legendaryChances}] .");
+            Log.Instance.Write(Log.Type.Job, Log.Level.Infos, $"Rand token [{randToken}]");
 
             Guid? itemId = null;
-            if (commonChances > uncommonChances
-                && commonChances > rareChances
-                && commonChances > epicChances
-                && commonChances > legendaryChances)
+            if (commonFinalTicket >= randToken)
             {
                 itemId = recipe.CraftedItemId(Network.Items.ItemQuality.Common);
             }
-            else if (uncommonChances > rareChances
-                && uncommonChances > epicChances
-                && uncommonChances > legendaryChances)
+            if (uncommonFinalTicket >= randToken)
             {
-                itemId = recipe.CraftedItemId(Network.Items.ItemQuality.Uncommon);
+                var overItemId = recipe.CraftedItemId(Network.Items.ItemQuality.Uncommon);
+
+                if (overItemId != null)
+                {
+                    itemId = overItemId;
+                }
             }
-            else if (rareChances > epicChances
-                && rareChances > legendaryChances)
+            if (rareFinalTicket >= randToken)
             {
-                itemId = recipe.CraftedItemId(Network.Items.ItemQuality.Rare);
+                var overItemId = recipe.CraftedItemId(Network.Items.ItemQuality.Rare);
+
+                if (overItemId != null)
+                {
+                    itemId = overItemId;
+                }
             }
-            else if (epicChances > legendaryChances)
+            if (epicFinalTicket >= randToken)
             {
-                itemId = recipe.CraftedItemId(Network.Items.ItemQuality.Epic);
+                var overItemId = recipe.CraftedItemId(Network.Items.ItemQuality.Epic);
+
+                if (overItemId != null)
+                {
+                    itemId = overItemId;
+                }
             }
-            else
+            if (legendaryFinalTicket >= randToken)
             {
-                itemId = recipe.CraftedItemId(Network.Items.ItemQuality.Legendary);
+                var overItemId = recipe.CraftedItemId(Network.Items.ItemQuality.Legendary);
+
+                if (overItemId != null)
+                {
+                    itemId = overItemId;
+                }
             }
+
+            Log.Instance.Write(Log.Type.Job, Log.Level.Infos, $"Crafted id: [{itemId}]");
 
             return DataManager.Instance.Items.FirstOrDefault(i => i.Id.Equals(itemId));
         }

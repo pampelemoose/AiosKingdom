@@ -89,7 +89,7 @@ namespace Server.DispatchServer
         {
             var exc = e.ExceptionObject as Exception;
 
-            Log.Instance.Write(Log.Level.Error, $"Unhandled exception from {exc.Source} : {exc.Message} ({exc.StackTrace}).");
+            Log.Instance.Write(Log.Type.Log, Log.Level.Error, $"Unhandled exception from {exc.Source} : {exc.Message} ({exc.StackTrace}).");
         }
     }
 }

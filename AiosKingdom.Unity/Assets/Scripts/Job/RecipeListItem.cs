@@ -8,6 +8,10 @@ public class RecipeListItem : MonoBehaviour
     public Text Name;
     public Text Price;
     public Button Action;
+    public Button More;
+    public GameObject MoreBox;
+    public Button Craft;
+    public Button Learn;
 
     public void SetDatas(JsonObjects.Recipe recipe, JsonObjects.RecipeUnlocked unlocked)
     {
@@ -17,6 +21,12 @@ public class RecipeListItem : MonoBehaviour
         if (unlocked != null)
         {
             Price.gameObject.SetActive(false);
+            Learn.gameObject.SetActive(false);
         }
+
+        More.onClick.AddListener(() =>
+        {
+            MoreBox.SetActive(!MoreBox.activeSelf);
+        });
     }
 }

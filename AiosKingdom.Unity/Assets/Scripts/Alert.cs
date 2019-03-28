@@ -19,6 +19,8 @@ public class Alert : MonoBehaviour
 
     public void Show(string content, string title = null)
     {
+        gameObject.SetActive(true);
+
         Title.text = "";
         if (title != null)
         {

@@ -18,8 +18,9 @@ namespace Server.GameServer.Commands.Jobs
         {
             var job = SoulManager.Instance.GetJob(ret.ClientId);
             var inventory = SoulManager.Instance.GetInventory(ret.ClientId);
-            var technique = (Network.JobTechnique)Enum.Parse(typeof(Network.JobTechnique), _args.Args[0]);
-            var components = JsonConvert.DeserializeObject<List<Network.CraftingComponent>>(_args.Args[1]);
+            var recipeId = Guid.Parse(_args.Args[0]);
+            var technique = (Network.JobTechnique)Enum.Parse(typeof(Network.JobTechnique), _args.Args[1]);
+            var components = JsonConvert.DeserializeObject<List<Network.CraftingComponent>>(_args.Args[2]);
 
             var componentInvIds = components.Select(c => c.InventoryId).ToList();
             var inInventory = inventory.Where(i => componentInvIds.Contains(i.Id)).ToList();
@@ -40,7 +41,7 @@ namespace Server.GameServer.Commands.Jobs
                     }
                 }
 
-                var item = Crafting.CraftItem(ref job, technique, components);
+                var item = Crafting.CraftItem(ref job, recipeId, technique, components);
 
                 int itemPoints = 1;
 

@@ -80,7 +80,7 @@ namespace Server.GameServer
             _dbSaverTimer.Enabled = true;
             _dbSaverTimer.Elapsed += (sender, e) =>
             {
-                Log.Instance.Write(Log.Level.Infos, "Updating DB from current game state.");
+                Log.Instance.Write(Log.Type.Log, Log.Level.Infos, "Updating DB from current game state.");
                 lock (_componentLock)
                 {
                     foreach (var id in _ids)
@@ -96,7 +96,7 @@ namespace Server.GameServer
         {
             var soul = DataRepositories.SoulRepository.GetById(soulId);
 
-            Log.Instance.Write(Log.Level.Infos, $"SoulManager().ConnectSoul({token})");
+            Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"SoulManager().ConnectSoul({token})");
             if (soul != null && !_ids.ContainsKey(token))
             {
                 _souls.Add(token, soul);
@@ -247,7 +247,7 @@ namespace Server.GameServer
 
         public bool DisconnectSoul(Guid token)
         {
-            Log.Instance.Write(Log.Level.Infos, $"SoulManager().DisconnectSoul({token})");
+            Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"SoulManager().DisconnectSoul({token})");
             if (_ids.ContainsKey(token))
             {
                 AdventureManager.Instance.ExitRoom(_ids[token]);
@@ -366,7 +366,7 @@ namespace Server.GameServer
 
         public void UpdateCurrentDatas(Guid token, DataModels.Town config)
         {
-            Log.Instance.Write(Log.Level.Infos, $"SoulManager().UpdateCurrentDatas({token})");
+            Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"SoulManager().UpdateCurrentDatas({token})");
             if (_ids.ContainsKey(token))
             {
                 var datas = _soulDatas[token];

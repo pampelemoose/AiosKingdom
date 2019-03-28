@@ -64,7 +64,7 @@ namespace Server.DispatchServer
             string portStr = ConfigurationManager.AppSettings.Get("Port");
             int port = int.Parse(portStr);
 
-            Log.Instance.Write(Log.Level.Infos, $"Starting TCPListener at address : {host}:{port} ...");
+            Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Starting TCPListener at address : {host}:{port} ...");
             Console.WriteLine($"Starting TCPListener at address : {host}:{port} ...");
 
             _listener = new TcpListener(IPAddress.Parse(host), port);
@@ -140,7 +140,7 @@ namespace Server.DispatchServer
                         // TODO : Pinger not used in this server anymore ?
                         //AddPingerToClient(clientId);
 
-                        Log.Instance.Write(Log.Level.Infos, $"New client [{newClient.RemoteEndPoint}] given id ({clientId})");
+                        Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"New client [{newClient.RemoteEndPoint}] given id ({clientId})");
                     }
                 }
 
@@ -179,7 +179,7 @@ namespace Server.DispatchServer
                                 if (commandArgs.IsValid)
                                 {
                                     if (commandArgs.CommandCode >= 0)
-                                        Log.Instance.Write(Log.Level.Infos, $"Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
+                                        Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
 
                                     ClientsManager.Instance.Ping(commandArgs.ClientId);
 
@@ -187,12 +187,12 @@ namespace Server.DispatchServer
                                 }
                                 else
                                 {
-                                    Log.Instance.Write(Log.Level.Warning, $"Wrong command Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
+                                    Log.Instance.Write(Log.Type.Network, Log.Level.Warning, $"Wrong command Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
                                 }
                             }
                             catch (JsonReaderException jsonReaderException)
                             {
-                                Log.Instance.Write(Log.Level.Error, $"Received {message} but exception : {jsonReaderException.Message}");
+                                Log.Instance.Write(Log.Type.Network, Log.Level.Error, $"Received {message} but exception : {jsonReaderException.Message}");
                                 AddIpWarning(client.Key);
                             }
                         }
@@ -215,7 +215,7 @@ namespace Server.DispatchServer
                             }
                             catch (SocketException sockEx)
                             {
-                                Log.Instance.Write(Log.Level.Error, $"Tried to send packet to {response.ClientId} but exception : {sockEx.Message}");
+                                Log.Instance.Write(Log.Type.Network, Log.Level.Error, $"Tried to send packet to {response.ClientId} but exception : {sockEx.Message}");
                                 Console.WriteLine($"Server is not online(1)... [{sockEx.Message}]");
                                 ClientsManager.Instance.DisconnectClient(response.ClientId);
                             }
@@ -229,7 +229,7 @@ namespace Server.DispatchServer
 
                     if (ClientsManager.Instance.RemoveClient(disc))
                     {
-                        Log.Instance.Write(Log.Level.Warning, $"Client [{socket.RemoteEndPoint}] closed");
+                        Log.Instance.Write(Log.Type.Network, Log.Level.Warning, $"Client [{socket.RemoteEndPoint}] closed");
                         Console.WriteLine($"Client [{socket.RemoteEndPoint}] closed");
                         socket.Shutdown(SocketShutdown.Both);
                         socket.Close();
@@ -237,11 +237,11 @@ namespace Server.DispatchServer
                 }
             }
 
-            Log.Instance.Write(Log.Level.Infos, $"Stopping server.");
+            Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Stopping server.");
 
             foreach (var client in ClientsManager.Instance.Clients)
             {
-                Log.Instance.Write(Log.Level.Infos, $"Disconnecting {client.Value.RemoteEndPoint}");
+                Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Disconnecting {client.Value.RemoteEndPoint}");
 
                 try
                 {
@@ -254,7 +254,7 @@ namespace Server.DispatchServer
                 }
                 catch (SocketException sockEx)
                 {
-                    Log.Instance.Write(Log.Level.Error, $"Tried to send packet to {client.Key} but exception : {sockEx.Message}");
+                    Log.Instance.Write(Log.Type.Network, Log.Level.Error, $"Tried to send packet to {client.Key} but exception : {sockEx.Message}");
                     Console.WriteLine($"Server is not online(1)... [{sockEx.Message}]");
                     ClientsManager.Instance.DisconnectClient(client.Key);
                 }
@@ -270,7 +270,7 @@ namespace Server.DispatchServer
             Console.WriteLine($"TCP Server stopped.");
 
             _thread.Abort();
-            Log.Instance.Write(Log.Level.Infos, $"Server Stopped.");
+            Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Server Stopped.");
         }
 
         private void SendPacketOnSocket(Socket socket, Network.Message message)
@@ -280,7 +280,7 @@ namespace Server.DispatchServer
             var mess = encoder.GetBytes(jsonObj + "|");
 
             if (message.Code >= 0)
-                Log.Instance.Write(Log.Level.Infos, $"Sending[{message.Code}] to {socket.RemoteEndPoint} : {jsonObj}");
+                Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Sending[{message.Code}] to {socket.RemoteEndPoint} : {jsonObj}");
 
             object tmpLock = new object();
             int offset = 0;
@@ -295,7 +295,7 @@ namespace Server.DispatchServer
 
         private void AddPingerToClient(Guid clientId)
         {
-            Log.Instance.Write(Log.Level.Infos, $"Adding pinger to [{clientId}]");
+            Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Adding pinger to [{clientId}]");
 
             AddCommand(new Commands.CommandArgs
             {
@@ -318,7 +318,7 @@ namespace Server.DispatchServer
                     {
                         AddIpWarning(ret.ClientId);
 
-                        Log.Instance.Write(Log.Level.Warning, $"Couldn't execute command[{ret.ClientResponse.Code}] for {ret.ClientId}");
+                        Log.Instance.Write(Log.Type.Network, Log.Level.Warning, $"Couldn't execute command[{ret.ClientResponse.Code}] for {ret.ClientId}");
                         Console.WriteLine("[ERROR] - Command failed to execute.");
                         return;
                     }
@@ -326,7 +326,7 @@ namespace Server.DispatchServer
                     if (!Guid.Empty.Equals(ret.ClientId))
                     {
                         if (ret.ClientResponse.Code >= 0)
-                            Log.Instance.Write(Log.Level.Infos, $"Add response[{ret.ClientId}]: {ret.ClientResponse.Code}, {ret.ClientResponse.Json}");
+                            Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Add response[{ret.ClientId}]: {ret.ClientResponse.Code}, {ret.ClientResponse.Json}");
 
                         lock (_responsesLock)
                         {
@@ -342,7 +342,7 @@ namespace Server.DispatchServer
         public void AddCommand(Commands.CommandArgs args)
         {
             if (args.CommandCode >= 0)
-                Log.Instance.Write(Log.Level.Infos, $"{args.ClientId} creating command[{args.CommandCode}]->({string.Join(", ", args.Args)})");
+                Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"{args.ClientId} creating command[{args.CommandCode}]->({string.Join(", ", args.Args)})");
 
             var command = CreateCommand(args);
 
@@ -380,7 +380,7 @@ namespace Server.DispatchServer
                 return ret;
             }
 
-            Log.Instance.Write(Log.Level.Warning, $"Taking response but stack is empty ?..");
+            Log.Instance.Write(Log.Type.Network, Log.Level.Warning, $"Taking response but stack is empty ?..");
             return new Commands.CommandResult
             {
                 Succeeded = false,
@@ -429,7 +429,7 @@ namespace Server.DispatchServer
                     retVal.Args = new string[1] { args[0] };
                     break;
                 default:
-                    Log.Instance.Write(Log.Level.Warning, $"Message code {message.Code} is not accepted by the server.");
+                    Log.Instance.Write(Log.Type.Network, Log.Level.Warning, $"Message code {message.Code} is not accepted by the server.");
                     retVal.IsValid = false;
                     break;
             }
@@ -454,7 +454,7 @@ namespace Server.DispatchServer
                 ClientsManager.Instance.DisconnectClient(clientId);
                 _blockedIps.Add(endPoint.Address);
 
-                Log.Instance.Write(Log.Level.Warning, $"{clientId} [{endPoint.Address}] blocked until next flush.");
+                Log.Instance.Write(Log.Type.Network, Log.Level.Warning, $"{clientId} [{endPoint.Address}] blocked until next flush.");
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -35,7 +36,7 @@ namespace Server.GameServer.Commands
             ret.ClientId = _args.ClientId;
 
             if (_args.CommandCode >= 0)
-                Log.Instance.Write(Log.Level.Infos, $"ACommand({_args.CommandCode}, {_args.ClientId}, {_args.Args})");
+                Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"ACommand({_args.CommandCode}, {_args.ClientId}, {JsonConvert.SerializeObject(_args.Args)})");
 
             ret = ExecuteLogic(ret);
 

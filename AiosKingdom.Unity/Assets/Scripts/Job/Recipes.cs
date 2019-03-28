@@ -59,10 +59,13 @@ public class Recipes : MonoBehaviour, ICallbackHooker
                 NetworkManager.This.GetJob();
                 NetworkManager.This.AskInventory();
 
-                SceneLoom.Loom.QueueOnMainThread(() =>
+                if (item != null)
                 {
-                    UIManager.This.HideLoading();
-                });
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        UIManager.This.ShowAlert(string.Format("You successfully crafted < {0} >", item.Name), "Crafting Successful");
+                    });
+                }
             }
             else
             {
@@ -76,12 +79,6 @@ public class Recipes : MonoBehaviour, ICallbackHooker
             {
                 SceneLoom.Loom.QueueOnMainThread(() =>
                 {
-                    if (direction == SwipeDirection.Up)
-                    {
-                        InputController.This.SetId("Craft");
-                        UIManager.This.ShowLoading();
-                        CraftPanel.ShowCraft();
-                    }
                     if (direction == SwipeDirection.Down)
                         GetComponent<Page>().CloseAction();
                 });
@@ -91,12 +88,7 @@ public class Recipes : MonoBehaviour, ICallbackHooker
 
     void Start()
     {
-        Craft.onClick.AddListener(() =>
-        {
-            InputController.This.SetId("Craft");
-            UIManager.This.ShowLoading();
-            CraftPanel.ShowCraft();
-        });
+
     }
 
     public void LoadRecipes(JsonObjects.Job job)
@@ -138,11 +130,14 @@ public class Recipes : MonoBehaviour, ICallbackHooker
                 if (unlocked != null)
                 {
                     RecipeDetails.SetDatas(recipe);
+                    InputController.This.SetId("RecipeDetails");
                 }
-                else
-                {
-
-                }
+            });
+            script.Craft.onClick.AddListener(() =>
+            {
+                InputController.This.SetId("Craft");
+                UIManager.This.ShowLoading();
+                CraftPanel.ShowCraft(recipe, unlocked != null);
             });
         }
 

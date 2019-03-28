@@ -45,13 +45,13 @@ namespace Server.GameServer
 
         public void AddClient(Guid id, Socket socket)
         {
-            Log.Instance.Write(Log.Level.Infos, $"ClientsManager().AddClient({id}, {socket})");
+            Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"ClientsManager().AddClient({id}, {socket})");
             _clients.Add(id, socket);
         }
 
         public void DisconnectClient(Guid id)
         {
-            Log.Instance.Write(Log.Level.Infos, $"ClientsManager().DisconnectClient({id})");
+            Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"ClientsManager().DisconnectClient({id})");
             if (_clients.ContainsKey(id))
             {
                 _disconnectedClients.Add(id);
@@ -68,7 +68,7 @@ namespace Server.GameServer
 
         public bool RemoveClient(Guid id)
         {
-            Log.Instance.Write(Log.Level.Infos, $"ClientsManager().RemoveClient({id})");
+            Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"ClientsManager().RemoveClient({id})");
             if (_clients.ContainsKey(id))
             {
                 _clients.Remove(id);
@@ -113,13 +113,13 @@ namespace Server.GameServer
 
         public void AuthenticateClient(Guid clientId, Guid token)
         {
-            Log.Instance.Write(Log.Level.Infos, $"ClientsManager().AuthenticateClient({clientId}, {token})");
+            Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"ClientsManager().AuthenticateClient({clientId}, {token})");
             _authTokens.Add(clientId, token);
         }
 
         public void SetUserId(Guid token, Guid id)
         {
-            Log.Instance.Write(Log.Level.Infos, $"ClientsManager().SetUserId({token}, {id})");
+            Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"ClientsManager().SetUserId({token}, {id})");
             _userIds.Add(token, id);
         }
 
@@ -135,7 +135,7 @@ namespace Server.GameServer
 
         public void RemoveUserId(Guid token)
         {
-            Log.Instance.Write(Log.Level.Infos, $"ClientsManager().RemoveUserId({token})");
+            Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"ClientsManager().RemoveUserId({token})");
             if (_userIds.ContainsKey(token))
             {
                 _userIds.Remove(token);

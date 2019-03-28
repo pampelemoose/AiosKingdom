@@ -16,8 +16,6 @@ public class Settings : MonoBehaviour
             gameObject.SetActive(false);
             UIManager.This.ShowLoading();
             NetworkManager.This.DisconnectSoul();
-            NetworkManager.This.DisconnectGame();
-            NetworkManager.This.AskServerList();
         });
 
         Quit.onClick.RemoveAllListeners();

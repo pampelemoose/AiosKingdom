@@ -97,9 +97,15 @@ public class Home : MonoBehaviour, ICallbackHooker
         {
             if (message.Success)
             {
-                Debug.Log(JsonConvert.DeserializeObject<JsonObjects.MarketOrderProcessed>(message.Json));
+                var order = JsonConvert.DeserializeObject<JsonObjects.MarketOrderProcessed>(message.Json);
+                var item = DatasManager.Instance.Items.FirstOrDefault(i => i.Id.Equals(order.ItemId));
 
                 NetworkManager.This.AskInventory();
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    UIManager.This.ShowAlert(string.Format("Your order has been processed. You received < {0} > * {1}.", item.Name, order.Quantity), "Market Order Processed");
+                });
             }
             else
             {
@@ -119,6 +125,11 @@ public class Home : MonoBehaviour, ICallbackHooker
                 NetworkManager.This.AskInventory();
                 NetworkManager.This.AskEquipment();
                 NetworkManager.This.AskSoulCurrentDatas();
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    UIManager.This.ShowAlert(message.Json);
+                });
             }
             else
             {
@@ -137,6 +148,11 @@ public class Home : MonoBehaviour, ICallbackHooker
             {
                 NetworkManager.This.AskCurrencies();
                 NetworkManager.This.AskSoulCurrentDatas();
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    UIManager.This.ShowAlert(message.Json);
+                });
 
                 // TODO : Tutorial
                 //Application.Current.Properties["AiosKingdom_TutorialStep"] = 4;
@@ -161,6 +177,11 @@ public class Home : MonoBehaviour, ICallbackHooker
                 NetworkManager.This.AskCurrencies();
                 NetworkManager.This.AskKnowledges();
 
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    UIManager.This.ShowAlert(message.Json);
+                });
+
                 // TODO : Tutorial
                 //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
                 //Application.Current.SavePropertiesAsync();
@@ -182,6 +203,11 @@ public class Home : MonoBehaviour, ICallbackHooker
             if (message.Success)
             {
                 NetworkManager.This.AskKnowledges();
+
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    UIManager.This.ShowAlert(message.Json);
+                });
 
                 // TODO : tutorial
                 //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
@@ -208,6 +234,20 @@ public class Home : MonoBehaviour, ICallbackHooker
             else
             {
                 Debug.Log("Currencies error : " + message.Json);
+            }
+        });
+
+        NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Server.DisconnectSoul, (message) =>
+        {
+            if (message.Success)
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    gameObject.SetActive(false);
+                });
+
+                NetworkManager.This.DisconnectGame();
+                NetworkManager.This.AskServerList();
             }
         });
     }

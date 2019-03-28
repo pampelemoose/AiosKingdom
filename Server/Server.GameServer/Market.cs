@@ -52,7 +52,7 @@ namespace Server.GameServer
             LoadSpecialMarket();
 
             Console.WriteLine($"Market Initialized. Ready to take Orders");
-            Log.Instance.Write(Log.Level.Infos, $"Market Initialized. Ready to take Orders");
+            Log.Instance.Write(Log.Type.Market, Log.Level.Infos, $"Market Initialized. Ready to take Orders");
         }
 
         public bool CanBuy(Guid itemId, Network.Currencies currency)
@@ -99,7 +99,7 @@ namespace Server.GameServer
                     _orders.Add(order);
                     return true;
                 }
-                Log.Instance.Write(Log.Level.Infos, $"Order placed for {order.MarketSlotId}, by {order.Buyer}");
+                Log.Instance.Write(Log.Type.Market, Log.Level.Infos, $"Order placed for {order.MarketSlotId}, by {order.Buyer}");
             }
 
             return false;
@@ -132,6 +132,7 @@ namespace Server.GameServer
                     BoughtAt = DateTime.Now
                 };
 
+                Guid itemId = Guid.Empty;
                 int quantity = 0;
                 bool isSpecial = false;
                 bool processed = false;
@@ -146,6 +147,7 @@ namespace Server.GameServer
                     history.Quantity = item.Quantity;
                     history.SellerId = item.SellerId;
                     processed = true;
+                    itemId = item.ItemId;
                 }
                 var special = Specials.FirstOrDefault(i => i.Id.Equals(order.MarketSlotId));
                 if (special != null)
@@ -157,6 +159,7 @@ namespace Server.GameServer
                     history.Quantity = special.Quantity;
                     history.ToServer = true;
                     processed = true;
+                    itemId = special.ItemId;
                 }
 
                 if (processed)
@@ -172,7 +175,7 @@ namespace Server.GameServer
                             Success = true,
                             Json = JsonConvert.SerializeObject(new Network.MarketOrderProcessed
                             {
-                                ItemId = order.MarketSlotId,
+                                ItemId = itemId,
                                 Quantity = quantity
                             })
                         },

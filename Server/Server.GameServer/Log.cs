@@ -10,6 +10,16 @@ namespace Server.GameServer
 {
     public class Log
     {
+        public enum Type
+        {
+            Network,
+            Stacktrace,
+            Log,
+            Job,
+            Adventures,
+            Market
+        }
+
         public enum Level
         {
             Infos,
@@ -33,28 +43,32 @@ namespace Server.GameServer
             }
         }
 
-        private StreamWriter _file;
-        private StreamWriter _errorFile;
+        private Dictionary<Type, StreamWriter> _files;
         private Log(string name)
         {
             Console.WriteLine($"Logging[{name}]");
-            Directory.CreateDirectory("Logs/");
-            _file = new StreamWriter(name + ".log", true);
-            _file.WriteLine("\n\n=========================================================\n\n");
-            _file.AutoFlush = true;
-            _errorFile = new StreamWriter(name + "_error.log", true);
-            _errorFile.WriteLine("\n\n=========================================================\n\n");
-            _errorFile.AutoFlush = true;
+            Directory.CreateDirectory(name);
+
+            _files = new Dictionary<Type, StreamWriter>();
+            foreach (Type type in Enum.GetValues(typeof(Type)))
+            {
+                var file = new StreamWriter($"{name}/{type}.log", true);
+                file.WriteLine("\n\n=========================================================\n\n");
+                file.AutoFlush = true;
+                _files.Add(type, file);
+            }
         }
 
         ~Log()
         {
-            _file.Close();
-            _errorFile.Close();
+            foreach (var file in _files)
+            {
+                file.Value.Close();
+            }
         }
 
         private object _writeLock = new object();
-        public void Write(Level level, string message)
+        public void Write(Type type, Level level, string message)
         {
             lock (_writeLock)
             {
@@ -65,13 +79,13 @@ namespace Server.GameServer
                 {
                     foreach (var r in stackTrace.GetFrames())
                     {
-                        _errorFile.WriteLine($"[{DateTime.Now.ToLongTimeString()}][{level}][{id}]: Filename: {r.GetFileName()} Method: {r.GetMethod()} Line: {r.GetFileLineNumber()} Column: {r.GetFileColumnNumber()}");
+                        _files[Type.Stacktrace].WriteLine($"[{DateTime.Now.ToLongTimeString()}][{level}][{id}]: Filename: {r.GetFileName()} Method: {r.GetMethod()} Line: {r.GetFileLineNumber()} Column: {r.GetFileColumnNumber()}");
                     }
-                    _errorFile.Flush();
+                    _files[Type.Stacktrace].Flush();
                 }
 
-                _file.WriteLine($"[{DateTime.Now.ToLongTimeString()}][{level}][{id}]: {message}");
-                _file.Flush();
+                _files[type].WriteLine($"[{DateTime.Now.ToLongTimeString()}][{level}][{id}]: {message}");
+                _files[type].Flush();
             }
         }
     }

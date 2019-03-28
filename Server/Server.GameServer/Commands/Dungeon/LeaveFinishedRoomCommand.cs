@@ -82,7 +82,7 @@ namespace Server.GameServer.Commands.Dungeon
                         currencies.Spirits += _config.SpiritsPerLevelUp;
                         currencies.Embers += _config.EmbersPerLevelUp;
 
-                        Log.Instance.Write(Log.Level.Infos, $"{soulDatas.Name} Level up {soulDatas.CurrentExperience}/{soulDatas.RequiredExperience} => ({soulDatas.Level}).");
+                        Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"{soulDatas.Name} Level up {soulDatas.CurrentExperience}/{soulDatas.RequiredExperience} => ({soulDatas.Level}).");
 
                         soulBaseDatas.CurrentExperience -= soulDatas.RequiredExperience;
 

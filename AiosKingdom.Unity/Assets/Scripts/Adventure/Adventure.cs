@@ -130,6 +130,7 @@ public class Adventure : MonoBehaviour, ICallbackHooker
 
         NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.Exit, (message) =>
         {
+
             if (message.Success)
             {
                 InputController.This.SetId("Adventures");
@@ -140,6 +141,7 @@ public class Adventure : MonoBehaviour, ICallbackHooker
 
                 SceneLoom.Loom.QueueOnMainThread(() =>
                 {
+                    UIManager.This.ShowLoading();
                     gameObject.SetActive(false);
                 });
             }
@@ -151,6 +153,11 @@ public class Adventure : MonoBehaviour, ICallbackHooker
 
         NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.UpdateRoom, (message) =>
         {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
             if (message.Success)
             {
                 var adventure = JsonConvert.DeserializeObject<JsonObjects.AdventureState>(message.Json);
@@ -247,6 +254,11 @@ public class Adventure : MonoBehaviour, ICallbackHooker
 
         NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.GetLoots, (message) =>
         {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
             if (message.Success)
             {
                 var loots = JsonConvert.DeserializeObject<List<JsonObjects.LootItem>>(message.Json);
@@ -276,6 +288,11 @@ public class Adventure : MonoBehaviour, ICallbackHooker
 
         NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.LeaveFinishedRoom, (message) =>
         {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
             if (message.Success)
             {
                 NetworkManager.This.AskKnowledges();
@@ -308,6 +325,11 @@ public class Adventure : MonoBehaviour, ICallbackHooker
 
         NetworkManager.This.AddCallback(JsonObjects.CommandCodes.Dungeon.PlayerDied, (message) =>
         {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.HideLoading();
+            });
+
             if (message.Success)
             {
                 var arList = JsonConvert.DeserializeObject<List<JsonObjects.AdventureState.ActionResult>>(message.Json);
@@ -368,6 +390,11 @@ public class Adventure : MonoBehaviour, ICallbackHooker
         Exit.onClick.RemoveAllListeners();
         Exit.onClick.AddListener(() =>
         {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.ShowLoading();
+            });
+
             Menu.SetActive(false);
             NetworkManager.This.ExitDungeon();
             gameObject.SetActive(false);
@@ -416,6 +443,11 @@ public class Adventure : MonoBehaviour, ICallbackHooker
         WaitButton.onClick.RemoveAllListeners();
         WaitButton.onClick.AddListener(() =>
         {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.ShowLoading();
+            });
+
             Menu.SetActive(false);
             _showActionPanel = false;
 
@@ -427,6 +459,11 @@ public class Adventure : MonoBehaviour, ICallbackHooker
         NextRoomButton.onClick.RemoveAllListeners();
         NextRoomButton.onClick.AddListener(() =>
         {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.ShowLoading();
+            });
+
             Menu.SetActive(false);
             NetworkManager.This.OpenDungeonRoom();
         });
@@ -434,6 +471,11 @@ public class Adventure : MonoBehaviour, ICallbackHooker
         FinishButton.onClick.RemoveAllListeners();
         FinishButton.onClick.AddListener(() =>
         {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.ShowLoading();
+            });
+
             Menu.SetActive(false);
             _showActionPanel = true;
             NetworkManager.This.LeaveFinishedRoom();
@@ -749,6 +791,11 @@ public class Adventure : MonoBehaviour, ICallbackHooker
             script.Initialize(item, shopItem.Value);
             script.Buy.onClick.AddListener(() =>
             {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    UIManager.This.ShowLoading();
+                });
+
                 NetworkManager.This.BuyShopItem(shopItem.Key, 1);
             });
             script.Action.onClick.AddListener(() =>
@@ -776,6 +823,11 @@ public class Adventure : MonoBehaviour, ICallbackHooker
             script.SetDatas(skill);
             script.Use.onClick.AddListener(() =>
             {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    UIManager.This.ShowLoading();
+                });
+
                 _showActionPanel = false;
 
                 _resetActions();
@@ -808,6 +860,11 @@ public class Adventure : MonoBehaviour, ICallbackHooker
             script.SetDatas(bagItem);
             script.Use.onClick.AddListener(() =>
             {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    UIManager.This.ShowLoading();
+                });
+
                 _showActionPanel = false;
 
                 _resetActions();

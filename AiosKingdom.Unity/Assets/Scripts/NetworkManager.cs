@@ -187,7 +187,10 @@ public class NetworkManager : MonoBehaviour
                     //ScreenManager.Instance.AlertScreen("Server Message", message.Json);
                     Debug.Log("Server Message : " + message.Json);
 
-                    UIManager.This.ShowAlert(message.Json, "Server Alert");
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        UIManager.This.ShowAlert(message.Json, "Server Alert");
+                    });
                 }
                 break;
 
@@ -466,7 +469,10 @@ public class NetworkManager : MonoBehaviour
                     //ScreenManager.Instance.AlertScreen("Kingdom Message", message.Json);
                     Debug.Log("Server Message : " + message.Json);
 
-                    UIManager.This.ShowAlert(message.Json, "Server Alert");
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        UIManager.This.ShowAlert(message.Json, "Server Alert");
+                    });
                 }
                 break;
 
@@ -496,6 +502,11 @@ public class NetworkManager : MonoBehaviour
             case JsonObjects.CommandCodes.Server.ConnectSoul:
                 {
                     _invokeCallback(JsonObjects.CommandCodes.Server.ConnectSoul, message);
+                }
+                break;
+            case JsonObjects.CommandCodes.Server.DisconnectSoul:
+                {
+                    _invokeCallback(JsonObjects.CommandCodes.Server.DisconnectSoul, message);
                 }
                 break;
 
@@ -984,7 +995,6 @@ public class NetworkManager : MonoBehaviour
 
     public void DungeonLeft()
     {
-        //MessagingCenter.Send(this, MessengerCodes.SoulConnected);
         AskCurrencies();
         AskInventory();
         AskSoulCurrentDatas();
@@ -1004,9 +1014,9 @@ public class NetworkManager : MonoBehaviour
         SendRequest(JsonObjects.CommandCodes.Job.Learn, new string[1] { type.ToString() });
     }
 
-    public void CraftItem(JsonObjects.JobTechnique technique, List<JsonObjects.CraftingComponent> components)
+    public void CraftItem(Guid recpeId, JsonObjects.JobTechnique technique, List<JsonObjects.CraftingComponent> components)
     {
-        SendRequest(JsonObjects.CommandCodes.Job.Craft, new string[2] { technique.ToString(), JsonConvert.SerializeObject(components) });
+        SendRequest(JsonObjects.CommandCodes.Job.Craft, new string[3] { recpeId.ToString(), technique.ToString(), JsonConvert.SerializeObject(components) });
     }
 
     #endregion

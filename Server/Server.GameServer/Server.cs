@@ -66,7 +66,7 @@ namespace Server.GameServer
 
             if (_town == null || (_town != null && _town.Online))
             {
-                Log.Instance.Write(Log.Level.Error, $"Town id {townId} isn't pointing to any config or is not offline.");
+                Log.Instance.Write(Log.Type.Network, Log.Level.Error, $"Town id {townId} isn't pointing to any config or is not offline.");
                 Console.WriteLine("Wrong Config Id or Server already running... Specify a valid GameServer Id present in DB and a server isnt already running.");
                 return;
             }
@@ -74,7 +74,7 @@ namespace Server.GameServer
             _town.Online = true;
             DataRepositories.TownRepository.Update(_town);
 
-            Log.Instance.Write(Log.Level.Infos, $"Starting TCPListener at address : {_town.Host}:{_town.Port} ...");
+            Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Starting TCPListener at address : {_town.Host}:{_town.Port} ...");
             Console.WriteLine($"Starting TCPListener at address : {_town.Host}:{_town.Port} ...");
 
             DataManager.Instance.Initialize(_town);
@@ -234,7 +234,7 @@ namespace Server.GameServer
         {
             _commandArgCount.Add(Network.CommandCodes.Job.Get, 0);
             _commandArgCount.Add(Network.CommandCodes.Job.Learn, 1);
-            _commandArgCount.Add(Network.CommandCodes.Job.Craft, 2);
+            _commandArgCount.Add(Network.CommandCodes.Job.Craft, 3);
 
             _delegates.Add(Network.CommandCodes.Job.Get, (args) => { return new Commands.Jobs.GetCommand(args); });
             _delegates.Add(Network.CommandCodes.Job.Learn, (args) => { return new Commands.Jobs.LearnCommand(args); });
@@ -263,7 +263,7 @@ namespace Server.GameServer
                         // TODO : Pinger only in PVP, or check that players are both still live
                         //AddPingerToClient(clientId);
 
-                        Log.Instance.Write(Log.Level.Infos, $"New client [{newClient.RemoteEndPoint}] given id ({clientId})");
+                        Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"New client [{newClient.RemoteEndPoint}] given id ({clientId})");
                     }
                 }
 
@@ -301,7 +301,7 @@ namespace Server.GameServer
                                 if (commandArgs.IsValid)
                                 {
                                     if (commandArgs.CommandCode >= 0)
-                                        Log.Instance.Write(Log.Level.Infos, $"Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
+                                        Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
 
                                     ClientsManager.Instance.Ping(commandArgs.ClientId);
 
@@ -309,12 +309,12 @@ namespace Server.GameServer
                                 }
                                 else
                                 {
-                                    Log.Instance.Write(Log.Level.Warning, $"Wrong command Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
+                                    Log.Instance.Write(Log.Type.Network, Log.Level.Warning, $"Wrong command Received [{commandArgs.CommandCode}] from [{socket.RemoteEndPoint}] : ({string.Join(", ", commandArgs.Args)})");
                                 }
                             }
                             catch (JsonReaderException jsonReaderException)
                             {
-                                Log.Instance.Write(Log.Level.Error, $"Received {message} but exception : {jsonReaderException.Message}");
+                                Log.Instance.Write(Log.Type.Network, Log.Level.Error, $"Received {message} but exception : {jsonReaderException.Message}");
                                 AddIpWarning(client.Key);
                             }
                         }
@@ -337,7 +337,7 @@ namespace Server.GameServer
                             }
                             catch (SocketException sockEx)
                             {
-                                Log.Instance.Write(Log.Level.Error, $"Tried to send packet to {response.ClientId} but exception : {sockEx.Message}");
+                                Log.Instance.Write(Log.Type.Network, Log.Level.Error, $"Tried to send packet to {response.ClientId} but exception : {sockEx.Message}");
                                 Console.WriteLine($"Server is not online(1)... [{sockEx.Message}]");
                                 ClientsManager.Instance.DisconnectClient(response.ClientId);
                             }
@@ -356,18 +356,18 @@ namespace Server.GameServer
 
                     if (ClientsManager.Instance.RemoveClient(disc))
                     {
-                        Log.Instance.Write(Log.Level.Warning, $"Client [{socket.RemoteEndPoint}] closed");
+                        Log.Instance.Write(Log.Type.Network, Log.Level.Warning, $"Client [{socket.RemoteEndPoint}] closed");
                         socket.Shutdown(SocketShutdown.Both);
                         socket.Close();
                     }
                 }
             }
 
-            Log.Instance.Write(Log.Level.Infos, $"Stopping server.");
+            Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"Stopping server.");
 
             foreach (var client in ClientsManager.Instance.Clients)
             {
-                Log.Instance.Write(Log.Level.Infos, $"Disconnecting {client.Value.RemoteEndPoint}");
+                Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Disconnecting {client.Value.RemoteEndPoint}");
                 if (SoulManager.Instance.DisconnectSoul(client.Key))
                 {
                     try
@@ -381,7 +381,7 @@ namespace Server.GameServer
                     }
                     catch (SocketException sockEx)
                     {
-                        Log.Instance.Write(Log.Level.Error, $"Tried to send packet to {client.Key} but exception : {sockEx.Message}");
+                        Log.Instance.Write(Log.Type.Network, Log.Level.Error, $"Tried to send packet to {client.Key} but exception : {sockEx.Message}");
                         Console.WriteLine($"Server is not online(2)... [{sockEx.Message}]");
                         ClientsManager.Instance.DisconnectClient(client.Key);
                     }
@@ -402,7 +402,7 @@ namespace Server.GameServer
 
             _thread.Abort();
 
-            Log.Instance.Write(Log.Level.Infos, $"Server Stopped.");
+            Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Server Stopped.");
         }
 
         private void SendPacketOnSocket(Socket socket, Network.Message message)
@@ -412,7 +412,7 @@ namespace Server.GameServer
             var mess = encoder.GetBytes(jsonObj + "|");
 
             if (message.Code >= 0)
-                Log.Instance.Write(Log.Level.Infos, $"Sending[{message.Code}] to {socket.RemoteEndPoint} : {jsonObj}");
+                Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Sending[{message.Code}] to {socket.RemoteEndPoint} : {jsonObj}");
 
             int offset = 0;
             int sent = 0;
@@ -426,7 +426,7 @@ namespace Server.GameServer
 
         private void AddPingerToClient(Guid clientId)
         {
-            Log.Instance.Write(Log.Level.Infos, $"Adding pinger to [{clientId}]");
+            Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Adding pinger to [{clientId}]");
 
             AddCommand(new Commands.CommandArgs
             {
@@ -449,7 +449,7 @@ namespace Server.GameServer
                     {
                         AddIpWarning(ret.ClientId);
 
-                        Log.Instance.Write(Log.Level.Warning, $"Couldn't execute command[{ret.ClientResponse.Code}] for {ret.ClientId}");
+                        Log.Instance.Write(Log.Type.Log, Log.Level.Warning, $"Couldn't execute command[{ret.ClientResponse.Code}] for {ret.ClientId}");
                         Console.WriteLine("[ERROR] - Command failed to execute.");
                         return;
                     }
@@ -457,7 +457,7 @@ namespace Server.GameServer
                     if (!Guid.Empty.Equals(ret.ClientId))
                     {
                         if (ret.ClientResponse.Code >= 0)
-                            Log.Instance.Write(Log.Level.Infos, $"Add response[{ret.ClientId}]: {ret.ClientResponse.Code}, {ret.ClientResponse.Json}");
+                            Log.Instance.Write(Log.Type.Network, Log.Level.Infos, $"Add response[{ret.ClientId}]: {ret.ClientResponse.Code}, {ret.ClientResponse.Json}");
 
                         lock (_responsesLock)
                         {
@@ -472,9 +472,6 @@ namespace Server.GameServer
 
         public void AddCommand(Commands.CommandArgs args)
         {
-            if (args.CommandCode >= 0)
-                Log.Instance.Write(Log.Level.Infos, $"{args.ClientId} creating command[{args.CommandCode}]->({string.Join(", ", args.Args)})");
-
             var command = CreateCommand(args);
 
             if (command != null)
@@ -511,7 +508,7 @@ namespace Server.GameServer
                 return ret;
             }
 
-            Log.Instance.Write(Log.Level.Warning, $"Taking response but stack is empty ?..");
+            Log.Instance.Write(Log.Type.Network, Log.Level.Warning, $"Taking response but stack is empty ?..");
             return new Commands.CommandResult
             {
                 Succeeded = false,
@@ -646,11 +643,11 @@ namespace Server.GameServer
                     retVal.Args = new string[1] { args[0] };
                     break;
                 case Network.CommandCodes.Job.Craft:
-                    retVal.Args = new string[2] { args[0], args[1] };
+                    retVal.Args = new string[3] { args[0], args[1], args[2] };
                     break;
 
                 default:
-                    Log.Instance.Write(Log.Level.Warning, $"Message code {message.Code} is not accepted by the server.");
+                    Log.Instance.Write(Log.Type.Network, Log.Level.Warning, $"Message code {message.Code} is not accepted by the server.");
                     retVal.IsValid = false;
                     break;
             }
@@ -693,7 +690,7 @@ namespace Server.GameServer
                 ClientsManager.Instance.DisconnectClient(clientId);
                 _blockedIps.Add(endPoint.Address);
 
-                Log.Instance.Write(Log.Level.Warning, $"{clientId} [{endPoint.Address}] blocked until next flush.");
+                Log.Instance.Write(Log.Type.Network, Log.Level.Warning, $"{clientId} [{endPoint.Address}] blocked until next flush.");
             }
         }
     }

@@ -21,7 +21,7 @@ namespace Server.DispatchServer.Commands
 
             if (user != null)
             {
-                Log.Instance.Write(Log.Level.Infos, $"User [{user.Identifier}] retrieved with safeKey.");
+                Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"User [{user.Identifier}] retrieved with safeKey.");
 
                 ret.ClientResponse = new Network.Message
                 {

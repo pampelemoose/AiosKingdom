@@ -61,7 +61,7 @@ namespace Server.GameServer
 
         public Adventure Start(Guid soulId, Network.SoulDatas datas, Guid dungeonId, List<Network.Knowledge> knowledges, List<Network.AdventureState.BagItem> bagItems = null)
         {
-            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().OpenRoom({soulId}, {dungeonId})");
+            Log.Instance.Write(Log.Type.Adventures, Log.Level.Infos, $"AdventureManager().OpenRoom({soulId}, {dungeonId})");
             var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(dungeonId));
 
             if (!_adventures.ContainsKey(soulId) || 
@@ -80,7 +80,7 @@ namespace Server.GameServer
 
         public Adventure OpenRoom(Guid soulId, Guid dungeonId)
         {
-            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().OpenRoom({soulId}, {dungeonId})");
+            Log.Instance.Write(Log.Type.Adventures, Log.Level.Infos, $"AdventureManager().OpenRoom({soulId}, {dungeonId})");
             var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(dungeonId));
 
             if (_adventures.ContainsKey(soulId) && _adventures[soulId].AdventureId.Equals(dungeonId))
@@ -100,7 +100,7 @@ namespace Server.GameServer
 
         public void ExitRoom(Guid soulId)
         {
-            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().ExitRoom({soulId})");
+            Log.Instance.Write(Log.Type.Adventures, Log.Level.Infos, $"AdventureManager().ExitRoom({soulId})");
             if (_adventures.ContainsKey(soulId))
             {
                 var adventure = _adventures[soulId];
@@ -111,7 +111,7 @@ namespace Server.GameServer
 
         public void PlayerDied(Guid soulId)
         {
-            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().PlayerDied({soulId})");
+            Log.Instance.Write(Log.Type.Adventures, Log.Level.Infos, $"AdventureManager().PlayerDied({soulId})");
             if (_adventures.ContainsKey(soulId))
             {
                 var adventure = _adventures[soulId];

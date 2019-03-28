@@ -35,7 +35,7 @@ namespace Server.DispatchServer.Commands
             ret.ClientId = _args.ClientId;
 
             if (_args.CommandCode >= 0)
-                Log.Instance.Write(Log.Level.Infos, $"ACommand({_args.CommandCode}, {_args.ClientId}, {_args.Args})");
+                Log.Instance.Write(Log.Type.Log, Log.Level.Infos, $"ACommand({_args.CommandCode}, {_args.ClientId}, {_args.Args})");
 
             ret = ExecuteLogic(ret);
 
