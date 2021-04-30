@@ -50,6 +50,10 @@
     <Compile Include="AppUserRepository.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="AiosKingdomContext.cs" />
+    <Compile Include="Migrations\202104300559282_InitialMigration.cs" />
+    <Compile Include="Migrations\202104300559282_InitialMigration.Designer.cs">
+      <DependentUpon>202104300559282_InitialMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="TownRepository.cs" />
     <Compile Include="AdventureRepository.cs" />
     <Compile Include="ForumRepository.cs" />
@@ -75,6 +79,11 @@
       <Project>{5617d24d-807a-445f-ac2f-6774b442761e}</Project>
       <Name>DataModels</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202104300559282_InitialMigration.resx">
+      <DependentUpon>202104300559282_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

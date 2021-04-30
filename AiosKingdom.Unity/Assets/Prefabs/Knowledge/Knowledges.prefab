@@ -51,17 +51,17 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224988818314022122}
-  - component: {fileID: 114760394731589204}
   - component: {fileID: 222706927539929692}
   - component: {fileID: 114753112822393350}
   - component: {fileID: 114644219279271928}
+  - component: {fileID: 114197617996947454}
   m_Layer: 5
   m_Name: Knowledges
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1217660892812486
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,7 +275,7 @@ Animator:
   m_GameObject: {fileID: 1217660892812486}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 886f0aa611c355741b1ad809b8fd79d5, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -371,7 +371,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -404,7 +404,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -437,7 +437,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -450,6 +450,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: _______
+--- !u!114 &114197617996947454
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1110788457065798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8da176cb424863f40804c8533a7e1052, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Close: {fileID: 114033374145140056}
 --- !u!114 &114303196636319608
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -470,7 +482,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -544,7 +556,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -577,7 +589,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -637,7 +649,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -658,10 +670,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1110788457065798}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 893ce121d246d834e863e74f9fffa08a, type: 3}
+  m_Script: {fileID: 11500000, guid: 65a3e9c5a404bbe468aac39bc2c444b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Close: {fileID: 114033374145140056}
+  Talents: {fileID: 114311994211114710}
+  TalentsPanel: {fileID: 0}
+  Content: {fileID: 1242236621120160}
+  KnowledgeListItem: {fileID: 1977780769672290, guid: 4400d38a7607757458d79c726753b833,
+    type: 2}
+  KnowledgeDetails: {fileID: 0}
+  PaginationBox: {fileID: 1002476606929878}
+  PaginationPrefab: {fileID: 1757429679454454, guid: 4925f5d6e1a0199489c786902ac8aaac,
+    type: 2}
+  ItemPerPage: 5
 --- !u!114 &114709691440141490
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -682,7 +703,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -722,27 +743,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114760394731589204
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1110788457065798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6939a4fe314b1914499d61e3b1016e40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Talents: {fileID: 114311994211114710}
-  TalentsPanel: {fileID: 0}
-  Content: {fileID: 1242236621120160}
-  KnowledgeListItem: {fileID: 1977780769672290, guid: ff0f0a4c11106244bbf77f53955763a1,
-    type: 2}
-  KnowledgeDetails: {fileID: 0}
-  PaginationBox: {fileID: 1002476606929878}
-  PaginationPrefab: {fileID: 1757429679454454, guid: 09a7494bfbbe0e143bf419bdbdddb755,
-    type: 2}
-  ItemPerPage: 5
 --- !u!114 &114869568088759710
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -785,7 +785,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0

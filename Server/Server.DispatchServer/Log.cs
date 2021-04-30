@@ -49,8 +49,15 @@ namespace Server.DispatchServer
 
         ~Log()
         {
-            _file.Close();
-            _errorFile.Close();
+            if (_file != null)
+            {
+                _file.Close();
+            }
+
+            if (_errorFile != null)
+            {
+                _errorFile.Close();
+            }
         }
 
         private object _writeLock = new object();
