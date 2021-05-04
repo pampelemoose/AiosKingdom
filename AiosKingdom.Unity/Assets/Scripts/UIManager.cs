@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public enum Views
     {
         None,
+        Unavailable,
         Settings,
         Account,
         ServerList,
@@ -30,6 +31,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     [Header("Content Objects")]
     public GameObject Menu;
 
+    public GameObject Unavailable;
     public GameObject Settings;
     public GameObject AccountForm;
     public GameObject ServerList;
@@ -55,6 +57,13 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         HideLoading();
     }
 
+    public void ShowUnavailable()
+    {
+        ChangeView(Views.Unavailable);
+
+        HideLoading();
+    }    
+    
     public void ShowAccountForm()
     {
         ChangeView(Views.Account);
@@ -139,6 +148,9 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
                     break;
                 case Views.Adventure:
                     newPage = Adventure;
+                    break;                
+                case Views.Unavailable:
+                    newPage = Unavailable;
                     break;
             }
 

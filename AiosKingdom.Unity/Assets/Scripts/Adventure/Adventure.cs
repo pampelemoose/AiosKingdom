@@ -187,7 +187,10 @@ public class Adventure : MonoBehaviour
             var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
+    }
 
+    public void StartDungeon()
+    {
         NetworkManager.This.UpdateDungeonRoom();
         LogBox.ClearLogs();
     }

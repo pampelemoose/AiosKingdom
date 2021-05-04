@@ -790,7 +790,7 @@ Animator:
   m_GameObject: {fileID: 1833799011560112}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 886f0aa611c355741b1ad809b8fd79d5, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -807,7 +807,7 @@ Animator:
   m_GameObject: {fileID: 1894998483722136}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 886f0aa611c355741b1ad809b8fd79d5, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -824,7 +824,7 @@ Animator:
   m_GameObject: {fileID: 1670598405961842}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 886f0aa611c355741b1ad809b8fd79d5, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -879,7 +879,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -912,7 +912,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -1231,7 +1231,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -1421,7 +1421,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -1499,7 +1499,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -1775,7 +1775,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -1876,26 +1876,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1273832638683292}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56ce4e7dd6474fd49a3e70260eea4c85, type: 3}
+  m_Script: {fileID: 11500000, guid: 8da176cb424863f40804c8533a7e1052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemTypeDropdown: {fileID: 114693776566899068}
-  FirstFilterLabel: {fileID: 114469029795955638}
-  FirstFilterDropdown: {fileID: 114077427141996416}
-  Specials: {fileID: 114206901316376050}
-  Normals: {fileID: 114642287885035696}
-  Items: {fileID: 1009597383350984}
-  ItemListItem: {fileID: 1760769090921566, guid: 75d92d0768efdf143880609088150e8e,
-    type: 2}
-  ItemDetails: {fileID: 0}
-  PaginationBox: {fileID: 1456858160732452}
-  PaginationPrefab: {fileID: 1757429679454454, guid: 09a7494bfbbe0e143bf419bdbdddb755,
-    type: 2}
-  ItemPerPage: 7
-  BuyBox: {fileID: 1872383837051186}
-  Price: {fileID: 114229318789120456}
-  BuyItemButton: {fileID: 114377589794194580}
-  CloseBuyBox: {fileID: 114519798223888074}
+  Close: {fileID: 114543707017952252}
 --- !u!114 &114543707017952252
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2254,7 +2238,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -2287,7 +2271,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -2308,10 +2292,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1273832638683292}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 893ce121d246d834e863e74f9fffa08a, type: 3}
+  m_Script: {fileID: 11500000, guid: aa6f0558f97be4d4c8309069a90b97e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Close: {fileID: 114543707017952252}
+  ItemTypeDropdown: {fileID: 114693776566899068}
+  FirstFilterLabel: {fileID: 114469029795955638}
+  FirstFilterDropdown: {fileID: 114077427141996416}
+  Specials: {fileID: 114206901316376050}
+  Normals: {fileID: 114642287885035696}
+  Items: {fileID: 1009597383350984}
+  ItemListItem: {fileID: 1760769090921566, guid: c42996ea36d8bcd42ab0ddb3963bfab8,
+    type: 2}
+  ItemDetails: {fileID: 0}
+  PaginationBox: {fileID: 1456858160732452}
+  PaginationPrefab: {fileID: 1757429679454454, guid: 4925f5d6e1a0199489c786902ac8aaac,
+    type: 2}
+  ItemPerPage: 5
+  BuyBox: {fileID: 1872383837051186}
+  Price: {fileID: 114229318789120456}
+  BuyItemButton: {fileID: 114377589794194580}
+  CloseBuyBox: {fileID: 114519798223888074}
 --- !u!114 &114801051113591394
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2359,7 +2359,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -2392,7 +2392,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -2452,7 +2452,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
@@ -2512,7 +2512,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9d1f4497db389a84f84ddbfbee5b3243, type: 3}
+    m_Font: {fileID: 12800000, guid: 0011921da2427914f9f2146f69142bd5, type: 3}
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0

@@ -42,6 +42,17 @@ namespace DataRepositories
             }
         }
 
+        public static DataModels.Monsters.Monster GetByVid(Guid vid)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Monsters
+                    .Include(a => a.Loots)
+                    .Include(a => a.Phases)
+                    .FirstOrDefault(a => a.Vid.Equals(vid));
+            }
+        }
+
         public static bool Create(DataModels.Monsters.Monster monster)
         {
             using (var context = new AiosKingdomContext())

@@ -36,9 +36,12 @@ namespace Server.GameServer.Commands.Dungeon
                 var adventureState = adventure.GetActualState();
                 var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(adventure.AdventureId));
 
+                Console.WriteLine($"Adventure {dungeon.Name} cleared.");
+
                 // We get exp and loots and everything only if we exit finished adventure.
                 if (adventureState.IsExit)
                 {
+                    Console.WriteLine($"Adventure {dungeon.Name} is exit.");
                     if (soulDatas.Level < kingdom.CurrentMaxLevel)
                     {
                         soulBaseDatas.CurrentExperience += adventureState.StackedExperience;

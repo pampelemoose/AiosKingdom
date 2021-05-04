@@ -63,6 +63,16 @@ public class NetworkManager : MonoBehaviour
         Disconnect();
     }
 
+    public void Reconnect()
+    {
+        SceneLoom.Loom.QueueOnMainThread(() =>
+        {
+            UIManager.This.ShowAccountForm();
+        });
+
+        ConnectToDispatchServer();
+    }
+
     //void OnApplicationFocus(bool hasFocus)
     //{
     //    if (!hasFocus)
@@ -146,6 +156,11 @@ public class NetworkManager : MonoBehaviour
         catch (SocketException sockE)
         {
             Debug.Log("Socket exception : " + sockE);
+
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.ShowUnavailable();
+            });
         }
     }
 
@@ -843,6 +858,7 @@ public class NetworkManager : MonoBehaviour
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
                             UIManager.This.StartAdventure();
+                            Adventure.StartDungeon();
                         });
                         //MessagingCenter.Send(this, MessengerCodes.EnterDungeon);
                     }

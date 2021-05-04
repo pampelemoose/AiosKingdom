@@ -40,6 +40,17 @@ namespace DataRepositories
             }
         }
 
+        public static DataModels.Items.Item GetByVid(Guid vid)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Items
+                    .Include(a => a.Stats)
+                    .Include(a => a.Effects)
+                    .FirstOrDefault(a => a.Vid.Equals(vid));
+            }
+        }
+
         public static bool Create(DataModels.Items.Item item)
         {
             using (var context = new AiosKingdomContext())

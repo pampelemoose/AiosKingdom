@@ -44,6 +44,17 @@ namespace DataRepositories
             }
         }
 
+        public static DataModels.Skills.Book GetByVid(Guid vid)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Books
+                    .Include(a => a.Inscriptions)
+                    .Include(a => a.Talents)
+                    .FirstOrDefault(a => a.Vid.Equals(vid));
+            }
+        }
+
         public static bool Create(DataModels.Skills.Book book)
         {
             using (var context = new AiosKingdomContext())

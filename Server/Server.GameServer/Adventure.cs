@@ -225,6 +225,7 @@ namespace Server.GameServer
                 if (enemy.State.CurrentHealth <= 0)
                 {
                     var monster = DataManager.Instance.Monsters.FirstOrDefault(m => m.Id.Equals(enemy.MonsterId));
+                    Console.WriteLine($"{monster.Name} died.");
 
                     _state.StackedExperience += monster.BaseExperience + (int)(enemyStats.Level * monster.ExperiencePerLevelRatio);
                     _state.StackedShards += enemyStats.ShardReward;

@@ -13,7 +13,7 @@ namespace Website.Controllers
         [HttpGet]
         public ActionResult Create(Guid id)
         {
-            var book = DataRepositories.BookRepository.GetById(id);
+            var book = DataRepositories.BookRepository.GetByVid(id);
 
             if (book != null && book.Talents.Count == 0)
             {
@@ -35,7 +35,7 @@ namespace Website.Controllers
         {
             if (bookModel.Talents != null && bookModel.Talents.Count > 0)
             {
-                var book = DataRepositories.BookRepository.GetById(bookModel.Id);
+                var book = DataRepositories.BookRepository.GetByVid(bookModel.Id);
 
                 foreach (var talentModel in bookModel.Talents)
                 {
@@ -65,7 +65,7 @@ namespace Website.Controllers
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
-            var book = DataRepositories.BookRepository.GetById(id);
+            var book = DataRepositories.BookRepository.GetByVid(id);
 
             if (book != null && book.Talents.Count > 0)
             {
@@ -115,7 +115,7 @@ namespace Website.Controllers
         {
             if (bookModel.Talents != null && bookModel.Talents.Count > 0)
             {
-                var book = DataRepositories.BookRepository.GetById(bookModel.Id);
+                var book = DataRepositories.BookRepository.GetByVid(bookModel.Id);
 
                 foreach (var talentModel in bookModel.Talents)
                 {
@@ -146,7 +146,7 @@ namespace Website.Controllers
         [HttpGet]
         public ActionResult AddTalentPartial(string bookId)
         {
-            var book = DataRepositories.BookRepository.GetById(Guid.Parse(bookId));
+            var book = DataRepositories.BookRepository.GetByVid(Guid.Parse(bookId));
 
             var talent = new Models.TalentModel
             {
