@@ -171,7 +171,7 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Player.Market_PlaceOrder, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.EquipItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.SellItem, 1);
-            _commandArgCount.Add(Network.CommandCodes.Player.UseSpiritPills, 2);
+            _commandArgCount.Add(Network.CommandCodes.Player.UseSpiritPills, 3);
             _commandArgCount.Add(Network.CommandCodes.Player.LearnSkill, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.LearnTalent, 1);
 
@@ -557,7 +557,7 @@ namespace Server.GameServer
                     retVal.Args = new string[1] { args[0] };
                     break;
                 case Network.CommandCodes.Player.UseSpiritPills:
-                    retVal.Args = new string[2] { args[0], args[1] };
+                    retVal.Args = args;
                     break;
                 case Network.CommandCodes.Player.LearnSkill:
                     retVal.Args = new string[1] { args[0] };

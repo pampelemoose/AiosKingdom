@@ -179,7 +179,7 @@ public class Adventure : MonoBehaviour
             Menu.SetActive(false);
             NetworkManager.This.DungeonLeft();
             gameObject.SetActive(false);
-            UIManager.This.ShowHome();
+            UIManager.This.ShowMain();
         });
 
         if (_pagination == null)

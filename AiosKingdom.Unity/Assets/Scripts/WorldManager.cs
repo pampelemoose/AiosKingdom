@@ -13,7 +13,6 @@ public class WorldManager : MonoBehaviour
     }
 
     public static WorldManager This { get; set; }
-
     private static bool _created = false;
 
     public GameObject Character;
@@ -29,13 +28,12 @@ public class WorldManager : MonoBehaviour
     {
         if (!_created)
         {
-            DontDestroyOnLoad(this.gameObject);
+            This = this;
             _created = true;
+            _loadManager();
+            
+            DontDestroyOnLoad(this.gameObject);
         }
-
-        This = this;
-
-        _loadManager();
     }
 
     private void _loadManager()
@@ -54,20 +52,26 @@ public class WorldManager : MonoBehaviour
                 _currentMap = Instantiate(_worldMapsPrefabs[DefaultMapIdentifier], WorldParent.transform);
                 var mapLoader = _currentMap.GetComponent<MapLoader>();
                 var spawnAt = mapLoader.SpawnPosition;
-                Character.transform.position = new Vector3(spawnAt.position.x, spawnAt.position.y, -1f);
+                var character = Character.GetComponent<CharacterInput>();
+                character.Spawn(spawnAt);
 
                 _currentMapIdentifier = DefaultMapIdentifier;
             }
         }
     }
 
-    void Start()
+    public void LoadMap(string identifier)
     {
-        
-    }
+        if (_worldMapsPrefabs.ContainsKey(identifier))
+        {
+            Destroy(_currentMap);
 
-    void Update()
-    {
-        
+            _currentMap = Instantiate(_worldMapsPrefabs[identifier], WorldParent.transform);
+            var mapLoader = _currentMap.GetComponent<MapLoader>();
+            var spawnAt = mapLoader.SpawnPosition;
+            Character.transform.position = new Vector3(spawnAt.x, spawnAt.y, -1f);
+
+            _currentMapIdentifier = identifier;
+        }
     }
 }

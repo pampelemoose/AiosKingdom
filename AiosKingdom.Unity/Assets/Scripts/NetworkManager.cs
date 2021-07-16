@@ -16,12 +16,11 @@ public class NetworkManager : MonoBehaviour
     private static bool _created = false;
 
     [Header("Callbacks")]
-    public ContentLoadingScreen ContentLoadingScreen;
-    public Home Home;
-    public Pills Pills;
-    public Inventory Inventory;
+    public MainController Main;
+    public EquipmentController Equipment;
+    public InventoryController Inventory;
+
     public Knowledges Knowledges;
-    public Equipment Equipment;
     public Market Market;
     public Adventure Adventure;
     public Talents Talents;
@@ -67,7 +66,7 @@ public class NetworkManager : MonoBehaviour
     {
         SceneLoom.Loom.QueueOnMainThread(() =>
         {
-            UIManager.This.ShowAccountForm();
+            UIManager.This.ShowLogin();
         });
 
         ConnectToDispatchServer();
@@ -196,7 +195,7 @@ public class NetworkManager : MonoBehaviour
                         {
                             PlayerPrefs.SetString("AiosKingdom_IdentifyingKey", appUser.Identifier.ToString());
                             PlayerPrefs.Save();
-                            UIManager.This.ShowLogin(appUser.SafeKey);
+                            UIManager.This.AccountCreated(appUser.SafeKey);
                         });
 
                         //MessagingCenter.Send(this, MessengerCodes.CreateNewAccount, appUser.SafeKey);
@@ -225,7 +224,7 @@ public class NetworkManager : MonoBehaviour
                         {
                             PlayerPrefs.DeleteKey("AiosKingdom_IdentifyingKey");
                             PlayerPrefs.Save();
-                            UIManager.This.ShowAccountForm();
+                            UIManager.This.ShowLogin();
                         });
 
                         Debug.Log("Authenticate error : " + message.Json);
@@ -566,11 +565,6 @@ public class NetworkManager : MonoBehaviour
                 {
                     if (message.Success)
                     {
-                        SceneLoom.Loom.QueueOnMainThread(() =>
-                        {
-                            UIManager.This.ShowContentLoadingScreen();
-                        });
-
                         //MessagingCenter.Send(this, MessengerCodes.SoulConnected);
                         AskItemList();
                     }
@@ -600,10 +594,10 @@ public class NetworkManager : MonoBehaviour
                         }
 
                         //MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
-                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        SceneLoom.Loom.QueueOnMainThread((Action)(() =>
                         {
-                            Home.UpdatePlayerDatas();
-                        });
+                            Main.UpdatePlayerDatas();
+                        }));
                     }
                     else
                     {
@@ -660,6 +654,12 @@ public class NetworkManager : MonoBehaviour
                         AskCurrencies();
                         AskSoulCurrentDatas();
 
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            UIManager.This.HideLoading();
+                            UIManager.This.ShowMain();
+                        });
+
                         //Application.Current.Properties["AiosKingdom_TutorialStep"] = 4;
                         //Application.Current.SavePropertiesAsync();
                         //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
@@ -707,11 +707,10 @@ public class NetworkManager : MonoBehaviour
                         var currencies = JsonConvert.DeserializeObject<JsonObjects.Currencies>(message.Json);
                         DatasManager.Instance.Currencies = currencies;
 
-                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        SceneLoom.Loom.QueueOnMainThread((Action)(() =>
                         {
-                            Home.UpdateCurrencies();
-                            Pills.UpdateCurrencies();
-                        });
+                            Main.UpdateCurrencies();
+                        }));
                     }
                     //MessagingCenter.Send(this, MessengerCodes.CurrenciesUpdated);
                 }
@@ -780,7 +779,6 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ContentLoadingScreen.IsLoaded("items");
                         AskBookList();
                     });
                 }
@@ -792,7 +790,6 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ContentLoadingScreen.IsLoaded("books");
                         AskMonsterList();
                     });
                 }
@@ -804,7 +801,6 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ContentLoadingScreen.IsLoaded("monsters");
                         AskAdventureList();
                     });
                 }
@@ -816,9 +812,7 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        ContentLoadingScreen.IsLoaded("adventures");
-                        UIManager.This.ShowLoading();
-                        UIManager.This.ShowHome();
+                        UIManager.This.ShowMain();
                     });
                     //MessagingCenter.Send(this, MessengerCodes.DungeonListUpdated);
                 }
@@ -895,7 +889,7 @@ public class NetworkManager : MonoBehaviour
 
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.ShowHome();
+                            UIManager.This.ShowMain();
                         });
                         //MessagingCenter.Send(this, MessengerCodes.ExitedDungeon);
                     }
@@ -1185,9 +1179,22 @@ public class NetworkManager : MonoBehaviour
     //    SendRequest(Network.CommandCodes.Player.SellItem, new string[1] { slotId.ToString() });
     //}
 
-    public void UseSpiritPills(JsonObjects.Stats statType, int quantity)
+    public void UseSpiritPills(Dictionary<JsonObjects.Stats, int> statsDic)
     {
-        SendRequest(JsonObjects.CommandCodes.Player.UseSpiritPills, new string[2] { statType.ToString(), quantity.ToString() });
+        string[] stats = new string[(statsDic.Count * 2) + 1];
+
+        stats[0] = statsDic.Count.ToString();
+
+        int index = 1;
+        foreach (var statDic in statsDic)
+        {
+            stats[index] = statDic.Key.ToString();
+            stats[index + 1] = statDic.Value.ToString();
+
+            index += 2;
+        }
+
+        SendRequest(JsonObjects.CommandCodes.Player.UseSpiritPills, stats);
     }
 
     public void LearnSkill(Guid bookId)

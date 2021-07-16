@@ -82,7 +82,7 @@ public class Pills : MonoBehaviour
         Buy.onClick.AddListener(() =>
         {
             UIManager.This.ShowLoading();
-            NetworkManager.This.UseSpiritPills(_currentStat, _quantity);
+            //NetworkManager.This.UseSpiritPills(_currentStat, _quantity);
         });
 
         SelectStat(JsonObjects.Stats.Stamina);

@@ -13,36 +13,112 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         None,
         Unavailable,
+        Login,
+        ServerSelection,
+        SoulSelection,
+        CreateSoul,
+
+        Main,
+        StatSelection,
+        Equipment,
+        Inventory,
+
         Settings,
-        Account,
-        ServerList,
-        SoulList,
-        ContentLoadingScreen,
-        Home,
         Adventure
     }
 
     private Views _currentView = Views.None;
     private GameObject _currentPage;
 
-    public GameObject LoadingScreen;
+    public GameObject LoadingScreenPrefab;
     private GameObject _loadingScreen;
 
     [Header("Content Objects")]
+    public GameObject LandingScreen;
+    public GameObject Unavailable;
+    public GameObject Login;
+    public GameObject ServerSelection;
+    public GameObject SoulSelection;
+    public GameObject CreateSoul;
+
+    public GameObject Main;
+    public GameObject StatSelection;
+    public GameObject Equipment;
+    public GameObject Inventory;
+
     public GameObject Menu;
 
-    public GameObject Unavailable;
     public GameObject Settings;
-    public GameObject AccountForm;
-    public GameObject ServerList;
-    public GameObject SoulList;
-    public GameObject ContentLoadingScreen;
-    public GameObject Home;
     public GameObject Adventure;
+
+    public static Dictionary<JsonObjects.Items.ItemQuality, Color> QualityColor = new Dictionary<JsonObjects.Items.ItemQuality, Color>
+    {
+        { JsonObjects.Items.ItemQuality.Common, new Color(1, 0, 0) },
+        { JsonObjects.Items.ItemQuality.Uncommon, new Color(0.9f, 1, 0) },
+        { JsonObjects.Items.ItemQuality.Rare, new Color(1, 0, 0.8f) },
+        { JsonObjects.Items.ItemQuality.Epic, new Color(0, 1, 0.3f) },
+        { JsonObjects.Items.ItemQuality.Legendary, new Color(0, 0.5f, 1) },
+    };
+
+    public static Dictionary<JsonObjects.Stats, Color> StatColors = new Dictionary<JsonObjects.Stats, Color>
+    {
+        { JsonObjects.Stats.Stamina, new Color(1, 0, 0) },
+        { JsonObjects.Stats.Energy, new Color(0.9f, 1, 0) },
+        { JsonObjects.Stats.Strength, new Color(1, 0, 0.8f) },
+        { JsonObjects.Stats.Agility, new Color(0, 1, 0.3f) },
+        { JsonObjects.Stats.Intelligence, new Color(0, 0.5f, 1) },
+        { JsonObjects.Stats.Wisdom, new Color(0, 1, 1) }
+    };
 
     void Awake()
     {
         This = this;
+
+        _currentPage = LandingScreen;
+    }
+
+    public void ShowUnavailable()
+    {
+        ChangeView(Views.Unavailable);
+
+        HideLoading();
+    }
+
+    public void ShowLogin()
+    {
+        ChangeView(Views.Login);
+
+        HideLoading();
+    }   
+    
+    public void AccountCreated(Guid safeKey)
+    {
+        Login.GetComponent<LoginController>().AccountCreated(safeKey);
+    }
+
+    public void ShowServerList(List<JsonObjects.GameServerInfos> servers)
+    {
+        ChangeView(Views.ServerSelection);
+
+        var script = ServerSelection.GetComponent<ServerSelectionController>();
+        script.SetServers(servers);
+
+        HideLoading();
+    }
+
+    public void ShowSoulList(List<JsonObjects.SoulInfos> souls)
+    {
+        ChangeView(Views.SoulSelection);
+
+        var script = SoulSelection.GetComponent<SoulSelectionController>();
+        script.SetSouls(souls);
+
+        HideLoading();
+    }
+
+    public void ShowCreateSoul()
+    {
+        ChangeView(Views.CreateSoul);
     }
 
     public void HideMenu()
@@ -57,58 +133,29 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         HideLoading();
     }
 
-    public void ShowUnavailable()
+    public void ShowMain()
     {
-        ChangeView(Views.Unavailable);
+        ChangeView(Views.Main);
 
-        HideLoading();
-    }    
-    
-    public void ShowAccountForm()
-    {
-        ChangeView(Views.Account);
-
-        HideLoading();
-    }
-
-    public void ShowLogin(Guid safeKey)
-    {
-        AccountForm.GetComponent<AccountForm>().AccountCreated(safeKey);
-    }
-
-    public void ShowServerList(List<JsonObjects.GameServerInfos> servers)
-    {
-        ChangeView(Views.ServerList);
-
-        var script = ServerList.GetComponent<ServerList>();
-        script.SetServers(servers);
-
-        HideLoading();
-    }
-
-    public void ShowSoulList(List<JsonObjects.SoulInfos> souls)
-    {
-        ChangeView(Views.SoulList);
-
-        var script = SoulList.GetComponent<SoulList>();
-        script.SetSouls(souls);
-
-        HideLoading();
-    }
-
-    public void ShowContentLoadingScreen()
-    {
-        ChangeView(Views.ContentLoadingScreen);
-    }
-
-    public void ShowHome()
-    {
-        ChangeView(Views.Home);
-
-        Menu.SetActive(true);
+        //Menu.SetActive(true);
         //Menu.transform.SetAsLastSibling();
 
         HideLoading();
+    }
+
+    public void ShowStatSelection()
+    {
+        ChangeView(Views.StatSelection);
+    }
+
+    public void ShowEquipment()
+    {
+        ChangeView(Views.Equipment);
+    }
+
+    public void ShowInventory()
+    {
+        ChangeView(Views.Inventory);
     }
 
     public void StartAdventure()
@@ -128,30 +175,45 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
 
             switch (viewType)
             {
-                case Views.Settings:
-                    newPage = Settings;
+                case Views.None:
+                    newPage = LandingScreen;
                     break;
-                case Views.Account:
-                    newPage = AccountForm;
-                    break;
-                case Views.ServerList:
-                    newPage = ServerList;
-                    break;
-                case Views.SoulList:
-                    newPage = SoulList;
-                    break;
-                case Views.ContentLoadingScreen:
-                    newPage = ContentLoadingScreen;
-                    break;
-                case Views.Home:
-                    newPage = Home;
-                    break;
-                case Views.Adventure:
-                    newPage = Adventure;
-                    break;                
                 case Views.Unavailable:
                     newPage = Unavailable;
                     break;
+                case Views.Login:
+                    newPage = Login;
+                    break;
+                case Views.ServerSelection:
+                    newPage = ServerSelection;
+                    break;
+                case Views.SoulSelection:
+                    newPage = SoulSelection;
+                    break;
+                case Views.CreateSoul:
+                    newPage = CreateSoul;
+                    break;
+
+                case Views.Main:
+                    newPage = Main;
+                    break;
+                case Views.StatSelection:
+                    newPage = StatSelection;
+                    break;
+                case Views.Equipment:
+                    newPage = Equipment;
+                    break;
+                case Views.Inventory:
+                    newPage = Inventory;
+                    break;
+
+                case Views.Settings:
+                    newPage = Settings;
+                    break;
+                
+                case Views.Adventure:
+                    newPage = Adventure;
+                    break;    
             }
 
             if (newPage != null)
@@ -174,7 +236,7 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         if (_loadingScreen == null)
         {
-            _loadingScreen = Instantiate(LoadingScreen, transform);
+            _loadingScreen = Instantiate(LoadingScreenPrefab, transform);
         }
 
         _loadingScreen.transform.SetAsLastSibling();

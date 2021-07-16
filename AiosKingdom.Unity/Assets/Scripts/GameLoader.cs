@@ -22,7 +22,7 @@ public class GameLoader : MonoBehaviour
         }
         else
         {
-            UIManager.This.ShowAccountForm();
+            UIManager.This.ShowLogin();
         }
 
         Destroy(gameObject);

@@ -24,37 +24,52 @@ namespace Server.GameServer.Commands.Player
         {
             var currencies = SoulManager.Instance.GetCurrencies(ret.ClientId);
             var datas = SoulManager.Instance.GetBaseDatas(ret.ClientId);
-            Network.Stats statId = (Network.Stats)Enum.Parse(typeof(Network.Stats), _args.Args[0]);
-            int amount = int.Parse(_args.Args[1]);
+            int statCount = int.Parse(_args.Args[0]);
+            int statIndex = 1;
+            int totalAmount = 0;
 
-            if (currencies.Spirits >= amount && amount > 0)
+            while (statCount > 0)
             {
-                currencies.Spirits -= amount;
-                switch (statId)
+                Network.Stats statId = (Network.Stats)Enum.Parse(typeof(Network.Stats), _args.Args[statIndex]);
+                int amount = int.Parse(_args.Args[statIndex + 1]);
+
+                if (currencies.Spirits >= amount && amount > 0)
                 {
-                    case Network.Stats.Stamina:
-                        datas.Stamina += amount;
-                        break;
-                    case Network.Stats.Energy:
-                        datas.Energy += amount;
-                        break;
-                    case Network.Stats.Strength:
-                        datas.Strength += amount;
-                        break;
-                    case Network.Stats.Agility:
-                        datas.Agility += amount;
-                        break;
-                    case Network.Stats.Intelligence:
-                        datas.Intelligence += amount;
-                        break;
-                    case Network.Stats.Wisdom:
-                        datas.Wisdom += amount;
-                        break;
-                    default:
-                        currencies.Spirits += amount;
-                        break;
+                    totalAmount += amount;
+                    currencies.Spirits -= amount;
+                    switch (statId)
+                    {
+                        case Network.Stats.Stamina:
+                            datas.Stamina += amount;
+                            break;
+                        case Network.Stats.Energy:
+                            datas.Energy += amount;
+                            break;
+                        case Network.Stats.Strength:
+                            datas.Strength += amount;
+                            break;
+                        case Network.Stats.Agility:
+                            datas.Agility += amount;
+                            break;
+                        case Network.Stats.Intelligence:
+                            datas.Intelligence += amount;
+                            break;
+                        case Network.Stats.Wisdom:
+                            datas.Wisdom += amount;
+                            break;
+                        default:
+                            currencies.Spirits += amount;
+                            break;
+                    }
+
                 }
 
+                statIndex += 2;
+                --statCount;
+            }
+
+            if (totalAmount > 0)
+            {
                 SoulManager.Instance.UpdateBaseDatas(ret.ClientId, datas);
                 SoulManager.Instance.UpdateCurrencies(ret.ClientId, currencies);
                 SoulManager.Instance.UpdateCurrentDatas(ret.ClientId, _config);
@@ -63,7 +78,7 @@ namespace Server.GameServer.Commands.Player
                 {
                     Code = Network.CommandCodes.Player.UseSpiritPills,
                     Success = true,
-                    Json = $"Used {amount} pill{(amount > 0 ? "s" : "")} in {statId}."
+                    Json = $"Used {statIndex} pill{(statIndex > 0 ? "s" : "")}."
                 };
                 ret.Succeeded = true;
 
