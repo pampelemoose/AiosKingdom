@@ -9,9 +9,12 @@ namespace Server.GameServer.Commands.Server
 {
     public class SoulListCommand : ACommand
     {
-        public SoulListCommand(CommandArgs args) 
+        private DataModels.Town _config;
+
+        public SoulListCommand(CommandArgs args, DataModels.Town config) 
             : base(args)
         {
+            _config = config;
         }
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
@@ -22,11 +25,22 @@ namespace Server.GameServer.Commands.Server
             var soulList = new List<Network.SoulInfos>();
             foreach (var soul in souls)
             {
+                var requiredExp = SoulManager.Instance.GetSoulRequiredExperienceToLevelUp(soul, _config);
+
                 soulList.Add(new Network.SoulInfos
                 {
                     Id = soul.Id,
                     Name = soul.Name,
-                    Level = soul.Level
+                    Level = soul.Level,
+
+                    TotalExperience = requiredExp,
+                    Experience = soul.CurrentExperience,
+                    Stamina = soul.Stamina,
+                    Energy = soul.Energy,
+                    Strength = soul.Strength,
+                    Agility = soul.Agility,
+                    Intelligence = soul.Intelligence,
+                    Wisdom = soul.Wisdom
                 });
             }
 

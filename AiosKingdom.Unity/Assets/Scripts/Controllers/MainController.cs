@@ -73,6 +73,24 @@ public class MainController : MonoBehaviour
             UIManager.This.ShowInventory();
         });
 
+        Knowledges.onClick.RemoveAllListeners();
+        Knowledges.onClick.AddListener(() =>
+        {
+            UIManager.This.ShowKnowledges();
+        });
+
+        Bookstore.onClick.RemoveAllListeners();
+        Bookstore.onClick.AddListener(() =>
+        {
+            UIManager.This.ShowBookstore();
+        });
+
+        Market.onClick.RemoveAllListeners();
+        Market.onClick.AddListener(() =>
+        {
+            UIManager.This.ShowMarket();
+        });
+
         PointsAvailable.onClick.RemoveAllListeners();
         PointsAvailable.onClick.AddListener(() =>
         {

@@ -19,11 +19,11 @@ public class NetworkManager : MonoBehaviour
     public MainController Main;
     public EquipmentController Equipment;
     public InventoryController Inventory;
+    public KnowledgesController Knowledges;
+    public TalentController Talents;
+    public MarketController Market;
 
-    public Knowledges Knowledges;
-    public Market Market;
     public Adventure Adventure;
-    public Talents Talents;
 
     private bool _isDispatchRunning;
     private TcpClient _dispatch;

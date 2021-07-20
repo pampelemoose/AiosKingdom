@@ -3,27 +3,35 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class InventoryController : PaginationBox
+public class MarketController : PaginationBox
 {
-    [Header("Filters")]
-    public Dropdown ItemTypeDropdown;
-    public Text FirstFilterLabel;
-    public Dropdown FirstFilterDropdown;
-
     [Space(10)]
     [Header("Content")]
-    public GameObject Items;
-    public GameObject ItemListItem;
-    public GameObject ItemDetails;
-    public Button Close;
+    public Dropdown ItemTypeDropdown;
+
+    public Text FirstFilterLabel;
+    public Dropdown FirstFilterDropdown;
+    public Button Specials;
+    public Button Normals;
+    public Button CloseButton;
+
+    public ItemDetails ItemDetails;
+
+    [Space(10)]
+    [Header("BuyBox")]
+    public GameObject BuyBox;
+    public Text Price;
+    public Button BuyItemButton;
+    public Button CloseBuyBox;
 
     private JsonObjects.Items.ItemType? _itemType;
     private JsonObjects.Items.ItemSlot? _itemSlot;
     private JsonObjects.Items.EffectType? _effectType;
 
-    private List<JsonObjects.InventorySlot> _inventory;
+    private List<JsonObjects.MarketSlot> _slots;
 
     private bool _init = false;
 
@@ -42,19 +50,46 @@ public class InventoryController : PaginationBox
 
                 SetupFilters();
 
-                UpdateItems();
+                ResetItems();
+            });
+
+            Specials.onClick.RemoveAllListeners();
+            Specials.onClick.AddListener(() =>
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    NetworkManager.This.AskSpecialMarketItems();
+                    Specials.gameObject.SetActive(false);
+                    Normals.gameObject.SetActive(true);
+                });
+            });
+
+            Normals.onClick.RemoveAllListeners();
+            Normals.onClick.AddListener(() =>
+            {
+                SceneLoom.Loom.QueueOnMainThread(() =>
+                {
+                    NetworkManager.This.AskMarketItems();
+                    Normals.gameObject.SetActive(false);
+                    Specials.gameObject.SetActive(true);
+                });
+            });
+
+            CloseButton.onClick.RemoveAllListeners();
+            CloseButton.onClick.AddListener(() =>
+            {
+                UIManager.This.ShowMain();
+            });
+
+            CloseBuyBox.onClick.AddListener(() =>
+            {
+                BuyBox.SetActive(false);
             });
 
             _init = true;
         }
 
-        NetworkManager.This.AskInventory();
-
-        Close.onClick.RemoveAllListeners();
-        Close.onClick.AddListener(() =>
-        {
-            UIManager.This.ShowMain();
-        });
+        NetworkManager.This.AskMarketItems();
     }
 
     private void SetupFilters()
@@ -94,7 +129,7 @@ public class InventoryController : PaginationBox
                                 _itemSlot = (JsonObjects.Items.ItemSlot)Enum.Parse(typeof(JsonObjects.Items.ItemSlot), FirstFilterDropdown.options.ElementAt(value).text);
                             }
 
-                            UpdateItems();
+                            ResetItems();
                         });
                     }
                     break;
@@ -132,7 +167,7 @@ public class InventoryController : PaginationBox
                                 _itemSlot = (JsonObjects.Items.ItemSlot)Enum.Parse(typeof(JsonObjects.Items.ItemSlot), FirstFilterDropdown.options.ElementAt(value).text);
                             }
 
-                            UpdateItems();
+                            ResetItems();
                         });
                     }
                     break;
@@ -154,7 +189,7 @@ public class InventoryController : PaginationBox
                                 _effectType = (JsonObjects.Items.EffectType)Enum.Parse(typeof(JsonObjects.Items.EffectType), FirstFilterDropdown.options.ElementAt(value).text);
                             }
 
-                            UpdateItems();
+                            ResetItems();
                         });
                     }
                     break;
@@ -164,28 +199,46 @@ public class InventoryController : PaginationBox
 
     public void UpdateItems()
     {
-        _inventory = DatasManager.Instance.Inventory;
+        _slots = DatasManager.Instance.MarketItems;
 
+        Normals.gameObject.SetActive(false);
+        Specials.gameObject.SetActive(true);
+
+        ResetItems();
+    }
+
+    public void UpdateSpecialItems()
+    {
+        _slots = DatasManager.Instance.SpecialMarketItems;
+
+        Specials.gameObject.SetActive(false);
+        Normals.gameObject.SetActive(true);
+
+        ResetItems();
+    }
+
+    private void ResetItems()
+    {
         if (_pagination == null)
         {
             var pagination = Instantiate(PaginationPrefab, Box.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
-        _pagination.Setup(ItemPerPage, _inventory.Count, SetItems);
+        _pagination.Setup(ItemPerPage, _slots.Count, SetItems);
 
         SetItems();
     }
 
     private void SetItems()
     {
-        foreach (Transform child in Items.transform)
+        foreach (Transform child in List.transform)
         {
             Destroy(child.gameObject);
         }
 
-        var inventoryList = _inventory.ToList();
-        var inventoryIds = inventoryList.Select(s => s.ItemId).ToList();
-        var items = DatasManager.Instance.Items.Where(a => inventoryIds.Contains(a.Id)).ToList();
+        var marketList = _slots.ToList();
+        var marketListIds = marketList.Select(s => s.ItemId).ToList();
+        var items = DatasManager.Instance.Items.Where(a => marketListIds.Contains(a.Id)).ToList();
 
         if (_itemType != null)
         {
@@ -198,7 +251,7 @@ public class InventoryController : PaginationBox
 
         foreach (var item in items)
         {
-            var slot = inventoryList.FirstOrDefault(m => m.ItemId.Equals(item.Id));
+            var slot = marketList.FirstOrDefault(m => m.ItemId.Equals(item.Id));
             switch (item.Type)
             {
                 case JsonObjects.Items.ItemType.Armor:
@@ -219,32 +272,58 @@ public class InventoryController : PaginationBox
                 case JsonObjects.Items.ItemType.Bag:
                     if (_itemSlot == null || (_itemSlot != null && item.Slot == _itemSlot))
                     {
-                        var itemObj = Instantiate(ItemListItem, Items.transform);
-                        var itemScript = itemObj.GetComponent<InventoryListItem>();
+                        var itemObj = Instantiate(ListItemPrefab, List.transform);
+                        var itemScript = itemObj.GetComponent<MarketListItem>();
                         itemScript.Initialize(item, slot);
 
                         itemScript.Action.onClick.AddListener(() =>
                         {
-                            ItemDetails.GetComponent<ItemDetails>().ShowDetails(item);
+                            ItemDetails.ShowDetails(item);
+                        });
+
+                        itemScript.Buy.onClick.AddListener(() =>
+                        {
+                            BindItemToBuyBox(slot);
                         });
                     }
                     break;
                 case JsonObjects.Items.ItemType.Consumable:
                     if (_effectType == null || (_effectType != null && item.Effects.Where(e => e.Type == _effectType).Any()))
                     {
-                        var itemObj = Instantiate(ItemListItem, Items.transform);
-                        var itemScript = itemObj.GetComponent<InventoryListItem>();
+                        var itemObj = Instantiate(ListItemPrefab, List.transform);
+                        var itemScript = itemObj.GetComponent<MarketListItem>();
                         itemScript.Initialize(item, slot);
 
                         itemScript.Action.onClick.AddListener(() =>
                         {
-                            ItemDetails.GetComponent<ItemDetails>().ShowDetails(item);
+                            ItemDetails.ShowDetails(item);
+                        });
+
+                        itemScript.Buy.onClick.AddListener(() =>
+                        {
+                            BindItemToBuyBox(slot);
                         });
                     }
                     break;
             }
         }
 
-        _pagination.SetIndicator((_inventory.Count / ItemPerPage) + (_inventory.Count % ItemPerPage > 0 ? 1 : 0));
+        _pagination.SetIndicator((_slots.Count / ItemPerPage) + (_slots.Count % ItemPerPage > 0 ? 1 : 0));
+    }
+
+    private void BindItemToBuyBox(JsonObjects.MarketSlot slot)
+    {
+        BuyBox.SetActive(true);
+        Price.text = string.Format("[{0}]", slot.Price);
+        BuyItemButton.onClick.RemoveAllListeners();
+        BuyItemButton.onClick.AddListener(() =>
+        {
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                NetworkManager.This.OrderMarketItem(slot.Id);
+            });
+
+            BuyBox.SetActive(false);
+        });
     }
 }

@@ -4,16 +4,19 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemDetails : MonoBehaviour
+public class ItemDetails : PaginationBox
 {
+    [Header("Item Details")]
     public Image BorderImage;
     public Text Name;
     public Text Type;
     public Text Quality;
     public Text ItemLevel;
     public Text RequiredLevel;
+    public GameObject Special;
     public Text SpecialLabel;
     public Text SpecialValue;
+    public GameObject SpecialTwo;
     public Text SpecialTwoLabel;
     public Text SpecialTwoValue;
     public GameObject Stats;
@@ -21,14 +24,19 @@ public class ItemDetails : MonoBehaviour
     public GameObject EffectUI;
     public EffectDetails EffectDetailPanel;
 
-    public GameObject PaginationBox;
-    public GameObject PaginationPrefab;
-    public int ItemPerPage = 5;
-
-    private Pagination _pagination;
+    public Button Close;
 
     private List<JsonObjects.Items.ItemStat> _stats;
     private List<JsonObjects.Items.ItemEffect> _effects;
+
+    private void Awake()
+    {
+        Close.onClick.RemoveAllListeners();
+        Close.onClick.AddListener(() =>
+        {
+            gameObject.SetActive(false);
+        });
+    }
 
     public void ShowDetails(JsonObjects.Items.Item item)
     {
@@ -38,9 +46,9 @@ public class ItemDetails : MonoBehaviour
         {
             case JsonObjects.Items.ItemType.Armor:
                 {
-                    SpecialLabel.text = "Armor:";
+                    SpecialLabel.text = "AR:";
                     SpecialValue.text = $"{item.ArmorValue}";
-                    SpecialTwoLabel.text = "Magic Armor:";
+                    SpecialTwoLabel.text = "MR:";
                     SpecialTwoValue.text = $"{item.MagicArmorValue}";
 
                     Type.text = item.Slot.ToString();
@@ -50,10 +58,9 @@ public class ItemDetails : MonoBehaviour
                 break;
             case JsonObjects.Items.ItemType.Bag:
                 {
-                    SpecialLabel.text = "Slots:";
+                    SpecialLabel.text = "SLT:";
                     SpecialValue.text = $"{item.SlotCount}";
-                    SpecialTwoLabel.gameObject.SetActive(false);
-                    SpecialTwoValue.gameObject.SetActive(false);
+                    SpecialTwo.SetActive(false);
 
                     Type.text = "Bag";
 
@@ -62,10 +69,8 @@ public class ItemDetails : MonoBehaviour
                 break;
             case JsonObjects.Items.ItemType.Consumable:
                 {
-                    SpecialLabel.gameObject.SetActive(false);
-                    SpecialValue.gameObject.SetActive(false);
-                    SpecialTwoLabel.gameObject.SetActive(false);
-                    SpecialTwoValue.gameObject.SetActive(false);
+                    Special.SetActive(false);
+                    SpecialTwo.SetActive(false);
 
                     Type.text = "Consumable";
 
@@ -74,9 +79,9 @@ public class ItemDetails : MonoBehaviour
                 break;
             default:
                 {
-                    SpecialLabel.text = "Min Damages:";
+                    SpecialLabel.text = "Min.Dmg:";
                     SpecialValue.text = $"{item.MinDamages}";
-                    SpecialTwoLabel.text = "Max Damages:";
+                    SpecialTwoLabel.text = "Max.Dmg:";
                     SpecialTwoValue.text = $"{item.MaxDamages}";
 
                     Type.text = item.Type.ToString();
@@ -99,8 +104,11 @@ public class ItemDetails : MonoBehaviour
 
         ItemLevel.text = $"{item.ItemLevel}";
         RequiredLevel.text = $"{item.UseLevelRequired}";
+
+        Special.SetActive(true);
+        SpecialTwo.SetActive(true);
     }
-    
+
     private void InitStats(List<JsonObjects.Items.ItemStat> stats)
     {
         _stats = stats;
@@ -108,7 +116,7 @@ public class ItemDetails : MonoBehaviour
 
         if (_pagination == null)
         {
-            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            var pagination = Instantiate(PaginationPrefab, Box.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
         _pagination.Setup(ItemPerPage, (_stats != null ? _stats.Count : 0), SetStats);
@@ -146,7 +154,7 @@ public class ItemDetails : MonoBehaviour
 
         if (_pagination == null)
         {
-            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            var pagination = Instantiate(PaginationPrefab, Box.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
         _pagination.Setup(ItemPerPage, (_effects != null ? _effects.Count : 0), SetEffects);

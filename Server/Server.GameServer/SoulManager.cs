@@ -597,6 +597,18 @@ namespace Server.GameServer
             }
         }
 
+        public int GetSoulRequiredExperienceToLevelUp(DataModels.Soul soul, DataModels.Town config)
+        {
+            int calculated = config.BaseExperience;
+
+            for (int i = 0; i < soul.Level - 1; ++i)
+            {
+                calculated += (int)Math.Round(calculated / config.ExperiencePerLevelRatio);
+            }
+
+            return calculated;
+        }
+
         private int GetRequiredExperienceToLevelUp(Guid token, DataModels.Town config)
         {
             var soul = _components[token];

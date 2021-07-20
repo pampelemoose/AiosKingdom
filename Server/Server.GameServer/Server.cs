@@ -142,7 +142,7 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Server.DisconnectSoul, 0);
 
             _delegates.Add(Network.CommandCodes.Client_Authenticate, (args) => { return new Commands.Server.AuthenticateCommand(args); });
-            _delegates.Add(Network.CommandCodes.Server.SoulList, (args) => { return new Commands.Server.SoulListCommand(args); });
+            _delegates.Add(Network.CommandCodes.Server.SoulList, (args) => { return new Commands.Server.SoulListCommand(args, _town); });
             _delegates.Add(Network.CommandCodes.Server.CreateSoul, (args) => { return new Commands.Server.CreateSoulCommand(args, _town); });
             _delegates.Add(Network.CommandCodes.Server.ConnectSoul, (args) => { return new Commands.Server.ConnectSoulCommand(args, _town); });
             _delegates.Add(Network.CommandCodes.Server.DisconnectSoul, (args) => { return new Commands.Server.DisconnectSoulCommand(args); });
