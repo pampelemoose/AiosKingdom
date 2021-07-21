@@ -851,7 +851,7 @@ public class NetworkManager : MonoBehaviour
                     {
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            UIManager.This.StartAdventure();
+                            //UIManager.This.StartAdventure(); // TODO : ADVENTURE IMPLEMENTATION
                             Adventure.StartDungeon();
                         });
                         //MessagingCenter.Send(this, MessengerCodes.EnterDungeon);

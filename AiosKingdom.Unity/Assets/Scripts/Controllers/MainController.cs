@@ -91,6 +91,12 @@ public class MainController : MonoBehaviour
             UIManager.This.ShowMarket();
         });
 
+        Adventures.onClick.RemoveAllListeners();
+        Adventures.onClick.AddListener(() =>
+        {
+            UIManager.This.ShowAdventureSelection();
+        });
+
         PointsAvailable.onClick.RemoveAllListeners();
         PointsAvailable.onClick.AddListener(() =>
         {

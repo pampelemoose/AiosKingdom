@@ -25,13 +25,15 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         Knowledges,
         Bookstore,
         Market,
+        AdventureSelection,
 
         Settings,
-        Adventure
     }
 
     private Views _currentView = Views.None;
     private GameObject _currentPage;
+
+    public GameObject MenuCamera;
 
     public GameObject LoadingScreenPrefab;
     private GameObject _loadingScreen;
@@ -51,11 +53,14 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public GameObject Knowledges;
     public GameObject Bookstore;
     public GameObject Market;
+    public GameObject AdventureSelection;
 
     public GameObject Menu;
 
     public GameObject Settings;
-    public GameObject Adventure;
+
+    [Header("World")]
+    public GameObject AdventureUIHandler;
 
     public static Dictionary<JsonObjects.Items.ItemQuality, Color> ItemQualityColor = new Dictionary<JsonObjects.Items.ItemQuality, Color>
     {
@@ -188,12 +193,24 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         ChangeView(Views.Market);
     }
 
-    public void StartAdventure()
+    public void ShowAdventureSelection()
     {
-        ChangeView(Views.Adventure, true);
-
-        HideLoading();
+        ChangeView(Views.AdventureSelection);
     }
+
+    public void ShowAdventureWorld()
+    {
+        MenuCamera.SetActive(false);
+        gameObject.SetActive(false);
+        AdventureUIHandler.SetActive(true);
+    }
+
+    //public void StartAdventure()
+    //{
+    //    ChangeView(Views.Adventure, true);
+
+    //    HideLoading();
+    //}
 
     private void ChangeView(Views viewType, bool push = false)
     {
@@ -245,14 +262,13 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
                 case Views.Market:
                     newPage = Market;
                     break;
+                case Views.AdventureSelection:
+                    newPage = AdventureSelection;
+                    break;    
 
                 case Views.Settings:
                     newPage = Settings;
                     break;
-                
-                case Views.Adventure:
-                    newPage = Adventure;
-                    break;    
             }
 
             if (newPage != null)

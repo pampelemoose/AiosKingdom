@@ -1,33 +1,30 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class AdventureSelection : MonoBehaviour
+public class AdventureSelectionController : PaginationBox
 {
-    public GameObject Content;
-    public GameObject AdventureListItem;
+    [Header("Adventure Selection")]
+    public AdventureBagSetup BagSetup;
+    public Button CloseButton;
 
-    public BagSetup BagSetup;
-
-    [Space(10)]
-    [Header("Pagination")]
-    public GameObject PaginationBox;
-    public GameObject PaginationPrefab;
-    public int ItemPerPage = 5;
-
-    private Pagination _pagination;
     private List<JsonObjects.Adventures.Adventure> _adventures;
 
     void Awake()
     {
         _adventures = DatasManager.Instance.Dungeons;
 
+        CloseButton.onClick.RemoveAllListeners();
+        CloseButton.onClick.AddListener(() =>
+        {
+            UIManager.This.ShowMain();
+        });
+
         if (_pagination == null)
         {
-            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            var pagination = Instantiate(PaginationPrefab, Box.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
         _pagination.Setup(ItemPerPage, _adventures.Count, SetAdventures);
@@ -37,7 +34,7 @@ public class AdventureSelection : MonoBehaviour
 
     private void SetAdventures()
     {
-        foreach (Transform child in Content.transform)
+        foreach (Transform child in List.transform)
         {
             Destroy(child.gameObject);
         }
@@ -46,9 +43,9 @@ public class AdventureSelection : MonoBehaviour
 
         foreach (var adventure in items)
         {
-            var advObj = Instantiate(AdventureListItem, Content.transform);
+            var advObj = Instantiate(ListItemPrefab, List.transform);
 
-            var script = advObj.GetComponent<AdventureListItem>();
+            var script = advObj.GetComponent<AdventureSelectionListItem>();
             script.SetDatas(adventure);
             script.Action.onClick.AddListener(() =>
             {

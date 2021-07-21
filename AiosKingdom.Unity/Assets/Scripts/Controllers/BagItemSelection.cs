@@ -3,21 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class BagItemSelection : MonoBehaviour
+public class BagItemSelection : PaginationBox
 {
-    public GameObject Items;
-    public GameObject BagItemListPrefab;
-
-    public ItemDetails ItemDetails;
-
     [Space(10)]
-    [Header("Pagination")]
-    public GameObject PaginationBox;
-    public GameObject PaginationPrefab;
-    public int ItemPerPage = 5;
-
-    private Pagination _pagination;
+    [Header("Item Selection")]
+    public Button CloseButton;
+    public ItemDetails ItemDetails;
 
     private List<JsonObjects.InventorySlot> _inventory;
     public List<JsonObjects.InventorySlot> Inventory { get { return _inventory; } }
@@ -31,12 +24,18 @@ public class BagItemSelection : MonoBehaviour
 
         if (_pagination == null)
         {
-            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            var pagination = Instantiate(PaginationPrefab, Box.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
         _pagination.Setup(ItemPerPage, _inventory.Count, SetItems);
 
         SetItems();
+
+        CloseButton.onClick.RemoveAllListeners();
+        CloseButton.onClick.AddListener(() =>
+        {
+            gameObject.SetActive(false);
+        });
 
         gameObject.SetActive(true);
         transform.SetAsLastSibling();
@@ -84,7 +83,7 @@ public class BagItemSelection : MonoBehaviour
 
     private void SetItems()
     {
-        foreach (Transform child in Items.transform)
+        foreach (Transform child in List.transform)
         {
             Destroy(child.gameObject);
         }
@@ -95,7 +94,7 @@ public class BagItemSelection : MonoBehaviour
         foreach (var item in consumables)
         {
             var slot = DatasManager.Instance.Inventory.FirstOrDefault(i => i.ItemId.Equals(item.Id));
-            var itemObj = Instantiate(BagItemListPrefab, Items.transform);
+            var itemObj = Instantiate(ListItemPrefab, List.transform);
             var itemScript = itemObj.GetComponent<BagSelectionListItem>();
             itemScript.Initialize(item, slot);
 

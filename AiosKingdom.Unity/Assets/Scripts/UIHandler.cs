@@ -29,6 +29,7 @@ public class UIHandler : MonoBehaviour
         Chatbox
     }
 
+    public GameObject WorldCamera;
     public GameObject World;
     public UIEntry[] UIPrefabs;
 
@@ -44,6 +45,7 @@ public class UIHandler : MonoBehaviour
             This = this;
 
             World.SetActive(true);
+            WorldCamera.SetActive(true);
         }
     }
 

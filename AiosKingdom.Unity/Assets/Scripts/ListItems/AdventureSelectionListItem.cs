@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AdventureListItem : MonoBehaviour
+public class AdventureSelectionListItem : MonoBehaviour
 {
     public Text Name;
-    public Text Level;
+    public Text MinLevel;
+    public Text MaxLevel;
     public Button Action;
 
     public void SetDatas(JsonObjects.Adventures.Adventure adventure)
     {
         Name.text = adventure.Name;
-        Level.text = string.Format("{0}-{1}", adventure.RequiredLevel.ToString(), adventure.MaxLevelAuthorized.ToString());
+        MinLevel.text = $"{adventure.RequiredLevel}";
+        MaxLevel.text = $"{adventure.MaxLevelAuthorized}";
     }
 }

@@ -5,35 +5,39 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BagSetup : MonoBehaviour
+public class AdventureBagSetup : PaginationBox
 {
-    public Text BagSlot;
+    [Space(10)]
+    [Header("Bag Setup")]
+    public Text BagSlotCount;
     public Button AddItemButton;
-    public GameObject Items;
-    public GameObject BagListPrefab;
+
     public Button EnterDungeonButton;
+    public Button CloseButton;
 
     public ItemDetails ItemDetails;
 
     public BagItemSelection BagItemSelection;
 
-    [Space(10)]
-    [Header("Pagination")]
-    public GameObject PaginationBox;
-    public GameObject PaginationPrefab;
-    public int ItemPerPage = 5;
-
-    private Pagination _pagination;
     private List<JsonObjects.AdventureState.BagItem> _bag;
 
     private int _bagSize;
     private int _currentBagSlotCount = 0;
 
+    private void Awake()
+    {
+        CloseButton.onClick.RemoveAllListeners();
+        CloseButton.onClick.AddListener(() =>
+        {
+            gameObject.SetActive(false);
+        });
+    }
+
     public void SetDatas(JsonObjects.Adventures.Adventure adventure)
     {
         if (_pagination == null)
         {
-            var pagination = Instantiate(PaginationPrefab, PaginationBox.transform);
+            var pagination = Instantiate(PaginationPrefab, Box.transform);
             _pagination = pagination.GetComponent<Pagination>();
         }
         _pagination.Setup(5, 0, SetItems);
@@ -47,16 +51,22 @@ public class BagSetup : MonoBehaviour
         _bagSize = DatasManager.Instance.Datas.BagSpace;
         _bag = new List<JsonObjects.AdventureState.BagItem>();
 
-        BagSlot.text = string.Format("[{0} / {1}]", _currentBagSlotCount, _bagSize);
+        BagSlotCount.text = $"{_currentBagSlotCount} / {_bagSize}";
 
         EnterDungeonButton.onClick.RemoveAllListeners();
+        //EnterDungeonButton.onClick.AddListener(() =>
+        //{
+        //    gameObject.SetActive(false);
+
+        //    UIManager.This.ShowLoading();
+
+        //    NetworkManager.This.EnterDungeon(adventure.Id, _bag);
+        //});        
         EnterDungeonButton.onClick.AddListener(() =>
         {
             gameObject.SetActive(false);
 
-            UIManager.This.ShowLoading();
-
-            NetworkManager.This.EnterDungeon(adventure.Id, _bag);
+            UIManager.This.ShowAdventureWorld();
         });
 
         SetItems();
@@ -67,7 +77,7 @@ public class BagSetup : MonoBehaviour
 
     private void AddItem(JsonObjects.Items.Item item, int quantity)
     {
-        if (_currentBagSlotCount + (quantity * item.Space) < _bagSize)
+        if (_currentBagSlotCount + (quantity * item.Space) <= _bagSize)
         {
             var inventorySlot = BagItemSelection.Inventory.FirstOrDefault(i => i.ItemId.Equals(item.Id));
             var exists = _bag.FirstOrDefault(b => b.ItemId.Equals(item.Id));
@@ -90,6 +100,7 @@ public class BagSetup : MonoBehaviour
             _bag.Add(exists);
 
             _currentBagSlotCount += (quantity * item.Space);
+            BagSlotCount.text = $"{_currentBagSlotCount} / {_bagSize}";
 
             SetItems();
         }
@@ -97,7 +108,7 @@ public class BagSetup : MonoBehaviour
 
     private void SetItems()
     {
-        foreach (Transform child in Items.transform)
+        foreach (Transform child in List.transform)
         {
             Destroy(child.gameObject);
         }
@@ -111,8 +122,8 @@ public class BagSetup : MonoBehaviour
         foreach (var item in items)
         {
             var slot = bagList.FirstOrDefault(m => m.ItemId.Equals(item.Id));
-            var itemObj = Instantiate(BagListPrefab, Items.transform);
-            var itemScript = itemObj.GetComponent<BagListItem>();
+            var itemObj = Instantiate(ListItemPrefab, List.transform);
+            var itemScript = itemObj.GetComponent<AdventureBagListItem>();
             itemScript.Initialize(item, slot);
 
             itemScript.Action.onClick.AddListener(() =>
@@ -122,6 +133,9 @@ public class BagSetup : MonoBehaviour
 
             itemScript.Remove.onClick.AddListener(() =>
             {
+                _currentBagSlotCount -= (slot.Quantity * item.Space);
+                BagSlotCount.text = $"{_currentBagSlotCount} / {_bagSize}";
+
                 BagItemSelection.PutBack(slot.InventoryId, slot.Quantity);
                 _bag.Remove(slot);
                 Destroy(itemObj);
