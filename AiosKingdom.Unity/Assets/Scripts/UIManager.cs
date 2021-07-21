@@ -57,13 +57,13 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public GameObject Settings;
     public GameObject Adventure;
 
-    public static Dictionary<JsonObjects.Items.ItemQuality, Color> QualityColor = new Dictionary<JsonObjects.Items.ItemQuality, Color>
+    public static Dictionary<JsonObjects.Items.ItemQuality, Color> ItemQualityColor = new Dictionary<JsonObjects.Items.ItemQuality, Color>
     {
-        { JsonObjects.Items.ItemQuality.Common, new Color(1, 0, 0) },
-        { JsonObjects.Items.ItemQuality.Uncommon, new Color(0.9f, 1, 0) },
-        { JsonObjects.Items.ItemQuality.Rare, new Color(1, 0, 0.8f) },
-        { JsonObjects.Items.ItemQuality.Epic, new Color(0, 1, 0.3f) },
-        { JsonObjects.Items.ItemQuality.Legendary, new Color(0, 0.5f, 1) },
+        { JsonObjects.Items.ItemQuality.Common, new Color(0.1372f, 0.1372f, 0.1372f) }, // #232323
+        { JsonObjects.Items.ItemQuality.Uncommon, new Color(0f, 1f, 0f) }, // #42ff0e
+        { JsonObjects.Items.ItemQuality.Rare, new Color(0.3f, 0.3f, 1f) }, // #4551FF
+        { JsonObjects.Items.ItemQuality.Epic, new Color(0.7f, 0.1f, 1f) }, // #b915ff
+        { JsonObjects.Items.ItemQuality.Legendary, new Color(1f, 0.9f, 0f) }, // #ffeb10
     };
 
     public static Dictionary<JsonObjects.Stats, Color> StatColors = new Dictionary<JsonObjects.Stats, Color>
@@ -74,6 +74,15 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         { JsonObjects.Stats.Agility, new Color(0, 1, 0.3f) },
         { JsonObjects.Stats.Intelligence, new Color(0, 0.5f, 1) },
         { JsonObjects.Stats.Wisdom, new Color(0, 1, 1) }
+    };
+
+    public static Dictionary<JsonObjects.Skills.BookQuality, Color> BookQualityColor = new Dictionary<JsonObjects.Skills.BookQuality, Color>
+    {
+        { JsonObjects.Skills.BookQuality.TierOne, new Color(1, 0, 0) }, // #ff1c1c
+        { JsonObjects.Skills.BookQuality.TierTwo, new Color(1, 0.5f, 0) }, // #ff8a0c
+        { JsonObjects.Skills.BookQuality.TierThree, new Color(1, 0.9f, 0) }, // #fffa0e
+        { JsonObjects.Skills.BookQuality.TierFour, new Color(0.1f, 1f, 0) }, // #22ff00
+        { JsonObjects.Skills.BookQuality.TierFive, new Color(0, 0.8f, 1f) }, // #0fe2ff
     };
 
     void Awake()

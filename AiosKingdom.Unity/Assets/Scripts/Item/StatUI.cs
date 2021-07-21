@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class StatUI : MonoBehaviour
 {
+    public Image Border;
     public Text Label;
     public Text Value;
 }

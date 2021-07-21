@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class InventoryListItem : MonoBehaviour
 {
-    public Text Slot;
     public Text Name;
+    public Text Slot;
+    public Text Quality;
+    public Text Quantity;
+
     public Button Action;
-    public Button More;
-    public GameObject MoreBox;
     public Button Sell;
     public Button Equip;
 
@@ -23,7 +24,7 @@ public class InventoryListItem : MonoBehaviour
                 Slot.text = "Bag";
                 break;
             case JsonObjects.Items.ItemType.Consumable:
-                Slot.text = "Cons.";
+                Slot.text = "Consumable";
                 break;
             case JsonObjects.Items.ItemType.Armor:
                 Slot.text = item.Slot.ToString();
@@ -32,12 +33,6 @@ public class InventoryListItem : MonoBehaviour
                 Slot.text = string.Format("{0}.{1}", item.Slot == JsonObjects.Items.ItemSlot.OneHand ? "1H" : "2H", item.Type);
                 break;
         }
-
-        More.onClick.RemoveAllListeners();
-        More.onClick.AddListener(() =>
-        {
-            MoreBox.SetActive(!MoreBox.activeSelf);
-        });
 
         Sell.onClick.RemoveAllListeners();
         Sell.onClick.AddListener(() =>
@@ -58,13 +53,16 @@ public class InventoryListItem : MonoBehaviour
 
     private void SetName(JsonObjects.Items.Item item, JsonObjects.InventorySlot slot)
     {
+        Name.text = item.Name;
+        Quality.text = item.Quality.ToString();
+
         if (slot.Quantity > 0)
         {
-            Name.text = string.Format("{0} * [{1}]", item.Name, slot.Quantity);
+            Quantity.text = $"{slot.Quantity}";
         }
         else
         {
-            Name.text = string.Format("{0}", item.Name);
+            Quantity.gameObject.SetActive(false);
         }
     }
 

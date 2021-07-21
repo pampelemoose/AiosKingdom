@@ -14,6 +14,8 @@ public class KnowledgeListItem : MonoBehaviour
     public void SetDatas(JsonObjects.Skills.Book book, int talentPoints)
     {
         NameText.text = book.Name;
+        BorderImage.color = UIManager.BookQualityColor[book.Quality];
+        QualityText.color = UIManager.BookQualityColor[book.Quality];
         QualityText.text = book.Quality.ToString();
         TalentPointsText.text = talentPoints.ToString();
     }

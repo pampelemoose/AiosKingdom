@@ -49,14 +49,21 @@ namespace Server.GameServer
 
         ~Log()
         {
-            if (_file != null)
+            try
             {
-                _file.Close();
-            }
+                if (_file != null)
+                {
+                    _file.Close();
+                }
 
-            if (_errorFile != null)
+                if (_errorFile != null)
+                {
+                    _errorFile.Close();
+                }
+            }
+            catch (Exception e)
             {
-                _errorFile.Close();
+                Console.WriteLine($"Error closing log files : {e.Message}");
             }
         }
 

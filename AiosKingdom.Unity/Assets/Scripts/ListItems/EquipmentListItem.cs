@@ -14,7 +14,7 @@ public class EquipmentListItem : MonoBehaviour
 
     public void SetData(JsonObjects.Items.Item item)
     {
-        BorderImage.color = UIManager.QualityColor[item.Quality];
+        BorderImage.color = UIManager.ItemQualityColor[item.Quality];
 
         NameText.text = item.Name;
 
@@ -25,7 +25,7 @@ public class EquipmentListItem : MonoBehaviour
         }
 
         QualityText.text = item.Quality.ToString();
-        QualityText.color = UIManager.QualityColor[item.Quality];
+        QualityText.color = UIManager.ItemQualityColor[item.Quality];
         ItemLevelText.text = $"{item.ItemLevel}";
 
         ShowDetailsButton.onClick.RemoveAllListeners();

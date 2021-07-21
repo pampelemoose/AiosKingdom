@@ -53,10 +53,10 @@ public class EquipmentController : MonoBehaviour
                 var script = newObj.GetComponent<EquipmentListItem>();
                 var head = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(armorId));
                 script.SetData(head);
-                //script.Action.onClick.AddListener(() =>
-                //{
-                //    ItemDetails.ShowDetails(head);
-                //});
+                script.ShowDetailsButton.onClick.AddListener(() =>
+                {
+                    ItemDetails.ShowDetails(head);
+                });
             }
         }
         
@@ -66,10 +66,10 @@ public class EquipmentController : MonoBehaviour
             var script = newObj.GetComponent<EquipmentListItem>();
             var leftHand = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.WeaponLeft));
             script.SetData(leftHand);
-            //script.Action.onClick.AddListener(() =>
-            //{
-            //    ItemDetails.ShowDetails(leftHand);
-            //});
+            script.ShowDetailsButton.onClick.AddListener(() =>
+            {
+                ItemDetails.ShowDetails(leftHand);
+            });
         }
         if (!Guid.Empty.Equals(equipment.WeaponRight))
         {
@@ -77,10 +77,10 @@ public class EquipmentController : MonoBehaviour
             var script = newObj.GetComponent<EquipmentListItem>();
             var rightHand = DatasManager.Instance.Items.FirstOrDefault(b => b.Id.Equals(equipment.WeaponRight));
             script.SetData(rightHand);
-            //script.Action.onClick.AddListener(() =>
-            //{
-            //    ItemDetails.ShowDetails(rightHand);
-            //});
+            script.ShowDetailsButton.onClick.AddListener(() =>
+            {
+                ItemDetails.ShowDetails(rightHand);
+            });
         }
         if (!Guid.Empty.Equals(equipment.Bag))
         {

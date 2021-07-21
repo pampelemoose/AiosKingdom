@@ -13,16 +13,19 @@ public class ItemDetails : PaginationBox
     public Text Quality;
     public Text ItemLevel;
     public Text RequiredLevel;
+
     public GameObject Special;
     public Text SpecialLabel;
     public Text SpecialValue;
     public GameObject SpecialTwo;
     public Text SpecialTwoLabel;
     public Text SpecialTwoValue;
+
     public GameObject Stats;
     public GameObject StatUI;
+
+    public GameObject Effects;
     public GameObject EffectUI;
-    public EffectDetails EffectDetailPanel;
 
     public Button Close;
 
@@ -99,8 +102,8 @@ public class ItemDetails : PaginationBox
 
         Name.text = $"{item.Name}";
         Quality.text = item.Quality.ToString();
-        Quality.color = UIManager.QualityColor[item.Quality];
-        BorderImage.color = UIManager.QualityColor[item.Quality];
+        Quality.color = UIManager.ItemQualityColor[item.Quality];
+        BorderImage.color = UIManager.ItemQualityColor[item.Quality];
 
         ItemLevel.text = $"{item.ItemLevel}";
         RequiredLevel.text = $"{item.UseLevelRequired}";
@@ -114,12 +117,18 @@ public class ItemDetails : PaginationBox
         _stats = stats;
         _effects = null;
 
-        if (_pagination == null)
+        Stats.SetActive(true);
+        Effects.SetActive(false);
+
+        if (_pagination != null)
         {
-            var pagination = Instantiate(PaginationPrefab, Box.transform);
-            _pagination = pagination.GetComponent<Pagination>();
+            foreach (Transform child in Box.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            _pagination = null;
         }
-        _pagination.Setup(ItemPerPage, (_stats != null ? _stats.Count : 0), SetStats);
 
         SetStats();
     }
@@ -131,26 +140,48 @@ public class ItemDetails : PaginationBox
             Destroy(child.gameObject);
         }
 
-        var paginatedStats = _stats.Skip((_pagination.CurrentPage - 1) * ItemPerPage).Take(ItemPerPage).ToList();
-
-        foreach (var stat in paginatedStats)
+        foreach (var stat in _stats)
         {
             var statObj = Instantiate(StatUI, Stats.transform);
             var script = statObj.GetComponent<StatUI>();
 
-            script.Label.text = $"{stat.Type}:";
+            script.Border.color = UIManager.StatColors[stat.Type];
+
+            switch (stat.Type)
+            {
+                case JsonObjects.Stats.Stamina:
+                    script.Label.text = $"STA:";
+                    break;
+                case JsonObjects.Stats.Energy:
+                    script.Label.text = $"ENE:";
+                    break;
+                case JsonObjects.Stats.Strength:
+                    script.Label.text = $"STR:";
+                    break;
+                case JsonObjects.Stats.Agility:
+                    script.Label.text = $"AGI:";
+                    break;
+                case JsonObjects.Stats.Intelligence:
+                    script.Label.text = $"INT:";
+                    break;
+                case JsonObjects.Stats.Wisdom:
+                    script.Label.text = $"WIS:";
+                    break;
+            }
+
             script.Label.color = UIManager.StatColors[stat.Type];
-            script.Value.text = $"+{stat.StatValue}";
+            script.Value.text = $"{stat.StatValue}";
             script.Value.color = UIManager.StatColors[stat.Type];
         }
-
-        _pagination.SetIndicator((_stats.Count / ItemPerPage) + (_stats.Count % ItemPerPage > 0 ? 1 : 0));
     }
 
     private void InitEffects(List<JsonObjects.Items.ItemEffect> effects)
     {
         _stats = null;
         _effects = effects;
+
+        Stats.SetActive(false);
+        Effects.SetActive(true);
 
         if (_pagination == null)
         {
@@ -164,7 +195,7 @@ public class ItemDetails : PaginationBox
 
     private void SetEffects()
     {
-        foreach (Transform child in Stats.transform)
+        foreach (Transform child in Effects.transform)
         {
             Destroy(child.gameObject);
         }
@@ -173,14 +204,14 @@ public class ItemDetails : PaginationBox
 
         foreach (var effect in paginatedEffects)
         {
-            var statObj = Instantiate(EffectUI, Stats.transform);
+            var statObj = Instantiate(EffectUI, Effects.transform);
             var script = statObj.GetComponent<EffectUI>();
 
-            script.Label.text = $"{effect.Name}:";
-            script.More.onClick.AddListener(() =>
-            {
-                EffectDetailPanel.SetDatas(effect);
-            });
+            script.Name.text = effect.Name;
+            script.Description.text = effect.Description;
+            script.Type.text = $"{effect.Type}:";
+            script.Value.text = $"{effect.AffectValue}";
+            script.Duration.text = $"{effect.AffectTime}";
         }
 
         _pagination.SetIndicator((_effects.Count / ItemPerPage) + (_effects.Count % ItemPerPage > 0 ? 1 : 0));

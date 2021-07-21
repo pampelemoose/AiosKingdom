@@ -25,7 +25,6 @@ public class MarketController : PaginationBox
     public GameObject BuyBox;
     public Text Price;
     public Button BuyItemButton;
-    public Button CloseBuyBox;
 
     private JsonObjects.Items.ItemType? _itemType;
     private JsonObjects.Items.ItemSlot? _itemSlot;
@@ -79,11 +78,6 @@ public class MarketController : PaginationBox
             CloseButton.onClick.AddListener(() =>
             {
                 UIManager.This.ShowMain();
-            });
-
-            CloseBuyBox.onClick.AddListener(() =>
-            {
-                BuyBox.SetActive(false);
             });
 
             _init = true;
@@ -314,7 +308,7 @@ public class MarketController : PaginationBox
     private void BindItemToBuyBox(JsonObjects.MarketSlot slot)
     {
         BuyBox.SetActive(true);
-        Price.text = string.Format("[{0}]", slot.Price);
+        Price.text = $"{slot.Price}";
         BuyItemButton.onClick.RemoveAllListeners();
         BuyItemButton.onClick.AddListener(() =>
         {

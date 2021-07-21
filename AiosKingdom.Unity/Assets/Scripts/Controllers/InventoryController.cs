@@ -14,8 +14,6 @@ public class InventoryController : PaginationBox
 
     [Space(10)]
     [Header("Content")]
-    public GameObject Items;
-    public GameObject ItemListItem;
     public GameObject ItemDetails;
     public Button Close;
 
@@ -178,7 +176,7 @@ public class InventoryController : PaginationBox
 
     private void SetItems()
     {
-        foreach (Transform child in Items.transform)
+        foreach (Transform child in List.transform)
         {
             Destroy(child.gameObject);
         }
@@ -219,7 +217,7 @@ public class InventoryController : PaginationBox
                 case JsonObjects.Items.ItemType.Bag:
                     if (_itemSlot == null || (_itemSlot != null && item.Slot == _itemSlot))
                     {
-                        var itemObj = Instantiate(ItemListItem, Items.transform);
+                        var itemObj = Instantiate(ListItemPrefab, List.transform);
                         var itemScript = itemObj.GetComponent<InventoryListItem>();
                         itemScript.Initialize(item, slot);
 
@@ -232,7 +230,7 @@ public class InventoryController : PaginationBox
                 case JsonObjects.Items.ItemType.Consumable:
                     if (_effectType == null || (_effectType != null && item.Effects.Where(e => e.Type == _effectType).Any()))
                     {
-                        var itemObj = Instantiate(ItemListItem, Items.transform);
+                        var itemObj = Instantiate(ListItemPrefab, List.transform);
                         var itemScript = itemObj.GetComponent<InventoryListItem>();
                         itemScript.Initialize(item, slot);
 
