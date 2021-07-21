@@ -11,15 +11,14 @@ namespace DataModels.Adventures
     {
         Normal = 0,
         Elite = 1,
-        Boss = 2
+        Boss = 2,
+        Rare = 3
     }
 
-    public class Enemy
+    public class Enemy : AVersionized
     {
         [Key]
         public Guid Id { get; set; }
-
-        public Guid RoomId { get; set; }
         public Guid MonsterVid { get; set; }
 
         public EnemyType EnemyType { get; set; }

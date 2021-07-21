@@ -7,16 +7,11 @@ using System.Threading.Tasks;
 
 namespace DataModels.Adventures
 {
-    public class ShopItem
+    public class Quest : AVersionized
     {
         [Key]
         public Guid Id { get; set; }
 
-        public Guid TavernId { get; set; }
-        public Guid ItemVid { get; set; }
-
-        public Items.ItemType Type { get; set; }
-        public int Quantity { get; set; }
-        public int Price { get; set; }
+        public string Name { get; set; }
     }
 }

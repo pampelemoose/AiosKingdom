@@ -13,7 +13,9 @@ namespace DataModels.Adventures
         public string Name { get; set; }
         public int RequiredLevel { get; set; }
         public int MaxLevelAuthorized { get; set; }
-        public List<Room> Rooms { get; set; }
+
+        public List<Quest> Quests { get; set; }
+
         public int ExperienceReward { get; set; }
         public int ShardReward { get; set; }
         public List<Lock> Locks { get; set; }

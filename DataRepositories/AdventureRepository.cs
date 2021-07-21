@@ -23,10 +23,27 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 return context.Adventures
-                    .Include(a => a.Rooms)
+                    .Include(a => a.Quests)
                     .Include(a => a.Locks)
-                    .Include(a => a.Rooms.Select(r => r.ShopItems))
-                    .Include(a => a.Rooms.Select(r => r.Ennemies))
+                    .Where(b => b.VersionId.Equals(versionId)).ToList();
+            }
+        }
+
+        public static List<DataModels.Adventures.Tavern> GetAllTavernsForVersion(Guid versionId)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Taverns
+                    .Include(a => a.ShopItems)
+                    .Where(b => b.VersionId.Equals(versionId)).ToList();
+            }
+        }
+
+        public static List<DataModels.Adventures.Enemy> GetAllEnemiesForVersion(Guid versionId)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Enemies
                     .Where(b => b.VersionId.Equals(versionId)).ToList();
             }
         }
@@ -36,10 +53,8 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 return context.Adventures
-                    .Include(a => a.Rooms)
+                    .Include(a => a.Quests)
                     .Include(a => a.Locks)
-                    .Include(a => a.Rooms.Select(r => r.ShopItems))
-                    .Include(a => a.Rooms.Select(r => r.Ennemies))
                     .FirstOrDefault(a => a.Id.Equals(id));
             }
         }
@@ -79,10 +94,8 @@ namespace DataRepositories
             using (var context = new AiosKingdomContext())
             {
                 var online = context.Adventures
-                    .Include(a => a.Rooms)
+                    .Include(a => a.Quests)
                     .Include(a => a.Locks)
-                    .Include(a => a.Rooms.Select(r => r.ShopItems))
-                    .Include(a => a.Rooms.Select(r => r.Ennemies))
                     .FirstOrDefault(a => a.Id.Equals(adventure.Id));
 
                 if (online == null)
@@ -94,89 +107,6 @@ namespace DataRepositories
                 online.MaxLevelAuthorized = adventure.MaxLevelAuthorized;
                 online.ExperienceReward = adventure.ExperienceReward;
                 online.ShardReward = adventure.ShardReward;
-
-                // ROOMS
-                var oldRooms = online.Rooms;
-                online.Rooms = new List<DataModels.Adventures.Room>();
-                foreach (var room in adventure.Rooms)
-                {
-                    if (Guid.Empty.Equals(room.Id))
-                    {
-                        room.Id = Guid.NewGuid();
-                        online.Rooms.Add(room);
-                    }
-                    else
-                    {
-                        var onlineRoom = context.Rooms
-                            .Include(i => i.ShopItems)
-                            .Include(i => i.Ennemies)
-                            .FirstOrDefault(i => i.Id.Equals(room.Id));
-                        onlineRoom.Type = room.Type;
-                        onlineRoom.RoomNumber = room.RoomNumber;
-
-                        // SHOPITEMS
-                        var oldShopItems = onlineRoom.ShopItems;
-                        onlineRoom.ShopItems = new List<DataModels.Adventures.ShopItem>();
-                        foreach (var shopItem in room.ShopItems)
-                        {
-                            if (Guid.Empty.Equals(shopItem.Id))
-                            {
-                                shopItem.Id = Guid.NewGuid();
-                                onlineRoom.ShopItems.Add(shopItem);
-                            }
-                            else
-                            {
-                                var onlineShopItem = context.ShopItems.FirstOrDefault(i => i.Id.Equals(shopItem.Id));
-                                onlineShopItem.ItemVid = shopItem.ItemVid;
-                                onlineShopItem.Type = shopItem.Type;
-                                onlineShopItem.Quantity = shopItem.Quantity;
-                                onlineShopItem.Price = shopItem.Price;
-                                onlineRoom.ShopItems.Add(onlineShopItem);
-                                oldShopItems.Remove(oldShopItems.FirstOrDefault(o => o.Id.Equals(shopItem.Id)));
-                            }
-                        }
-
-                        foreach (var toDel in oldShopItems)
-                        {
-                            context.ShopItems.Remove(toDel);
-                        }
-
-                        // ENEMIES
-                        var oldEnemies = onlineRoom.Ennemies;
-                        onlineRoom.Ennemies = new List<DataModels.Adventures.Enemy>();
-                        foreach (var enemy in room.Ennemies)
-                        {
-                            if (Guid.Empty.Equals(enemy.Id))
-                            {
-                                enemy.Id = Guid.NewGuid();
-                                onlineRoom.Ennemies.Add(enemy);
-                            }
-                            else
-                            {
-                                var onlineEnemy = context.Enemies.FirstOrDefault(i => i.Id.Equals(enemy.Id));
-                                onlineEnemy.EnemyType = enemy.EnemyType;
-                                onlineEnemy.MonsterVid = enemy.MonsterVid;
-                                onlineEnemy.Level = enemy.Level;
-                                onlineEnemy.ShardReward = enemy.ShardReward;
-                                onlineRoom.Ennemies.Add(onlineEnemy);
-                                oldEnemies.Remove(oldEnemies.FirstOrDefault(o => o.Id.Equals(enemy.Id)));
-                            }
-                        }
-
-                        foreach (var toDel in oldShopItems)
-                        {
-                            context.ShopItems.Remove(toDel);
-                        }
-
-                        online.Rooms.Add(onlineRoom);
-                        oldRooms.Remove(oldRooms.FirstOrDefault(o => o.Id.Equals(room.Id)));
-                    }
-                }
-
-                foreach (var toDel in oldRooms)
-                {
-                    context.Rooms.Remove(toDel);
-                }
 
                 // LOCKS
                 var oldLocks = online.Locks;

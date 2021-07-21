@@ -55,7 +55,8 @@ namespace DataRepositories.Migrations
                 context.Phases.RemoveRange(context.Phases);
 
                 context.Adventures.RemoveRange(context.Adventures);
-                context.Rooms.RemoveRange(context.Rooms);
+                context.Taverns.RemoveRange(context.Taverns);
+                context.Quests.RemoveRange(context.Quests);
                 context.ShopItems.RemoveRange(context.ShopItems);
                 context.Enemies.RemoveRange(context.Enemies);
 
