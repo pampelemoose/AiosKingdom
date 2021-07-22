@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 
 namespace DataModels.Adventures
 {
-    public class Quest : AVersionized
+    public class Npc : AVersionized
     {
         [Key]
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        public List<QuestObjective> Objectives { get; set; }
+        List<NpcDialogue> Dialogues { get; set; }
     }
 }

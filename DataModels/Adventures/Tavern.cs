@@ -16,5 +16,8 @@ namespace DataModels.Adventures
 
         public int RestShardCost { get; set; }
         public int RestStamina { get; set; }
+
+        public int FoodCost { get; set; }
+        public int FoodHealth { get; set; }
     }
 }

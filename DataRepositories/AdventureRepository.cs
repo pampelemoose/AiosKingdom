@@ -70,6 +70,7 @@ namespace DataRepositories
                     return false;
 
                 context.Adventures.Add(dungeon);
+
                 try
                 {
                     context.SaveChanges();

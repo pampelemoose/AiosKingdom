@@ -16,6 +16,10 @@ namespace DataModels.Adventures
 
         public List<Quest> Quests { get; set; }
 
+        public Guid MapIdentifier { get; set; }
+        public int SpawnCoordinateX { get; set; }
+        public int SpawnCoordinateY { get; set; }
+
         public int ExperienceReward { get; set; }
         public int ShardReward { get; set; }
         public List<Lock> Locks { get; set; }

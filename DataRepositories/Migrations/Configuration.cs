@@ -56,9 +56,12 @@ namespace DataRepositories.Migrations
 
                 context.Adventures.RemoveRange(context.Adventures);
                 context.Taverns.RemoveRange(context.Taverns);
+                context.QuestObjectives.RemoveRange(context.QuestObjectives);
                 context.Quests.RemoveRange(context.Quests);
                 context.ShopItems.RemoveRange(context.ShopItems);
                 context.Enemies.RemoveRange(context.Enemies);
+                context.NpcDialogues.RemoveRange(context.NpcDialogues);
+                context.Npcs.RemoveRange(context.Npcs);
 
                 context.AdventureUnlocked.RemoveRange(context.AdventureUnlocked);
 
@@ -157,6 +160,8 @@ namespace DataRepositories.Migrations
                     DefaultBagId = bag.Vid
                 });
 
+                _createBasicItems(context, version);
+
                 context.SaveChanges();
             }
             catch (DbEntityValidationException e)
@@ -178,6 +183,489 @@ namespace DataRepositories.Migrations
                     sb.ToString(), e
                 );
             }
+        }
+
+        private void _createBasicItems(AiosKingdomContext context, DataModels.Version version)
+        {
+            // CONSUMABLE ITEMS
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Consumable, null)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Earth Health Restoration Pill",
+                Description = "Low grade pill that restore a small amount of health.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
+            {
+                Type = DataModels.Items.EffectType.RestoreHealth,
+                Name = "Earth health regeneration",
+                Description = "Restore 10 H.P.",
+                AffectTime = 1,
+                AffectValue = 10
+            } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Consumable, null)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Heaven Health Restoration Pill",
+                Description = "Middle grade pill that restore a medium amount of health.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Rare,
+                UseLevelRequired = 5,
+                SellingPrice = 10,
+                Space = 1,
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
+            {
+                Type = DataModels.Items.EffectType.RestoreHealth,
+                Name = "Heaven health regeneration",
+                Description = "Restore 50 H.P.",
+                AffectTime = 1,
+                AffectValue = 50
+            } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Consumable, null)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "God Health Restoration Pill",
+                Description = "High grade pill that restore a big amount of health.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Epic,
+                UseLevelRequired = 10,
+                SellingPrice = 100,
+                Space = 1,
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
+            {
+                Type = DataModels.Items.EffectType.RestoreHealth,
+                Name = "God health regeneration",
+                Description = "Restore 300 H.P.",
+                AffectTime = 1,
+                AffectValue = 300
+            } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Consumable, null)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Earth Mana Restoration Pill",
+                Description = "Low grade pill that restore a small amount of mana.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
+            {
+                Type = DataModels.Items.EffectType.ResoreMana,
+                Name = "Earth mana regeneration",
+                Description = "Restore 5 M.P.",
+                AffectTime = 1,
+                AffectValue = 5
+            } }
+            });
+
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Consumable, null)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Heaven Mana Restoration Pill",
+                Description = "Low grade pill that restore a small amount of mana.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Rare,
+                UseLevelRequired = 5,
+                SellingPrice = 10,
+                Space = 1,
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
+            {
+                Type = DataModels.Items.EffectType.ResoreMana,
+                Name = "Heaven mana regeneration",
+                Description = "Restore 20 M.P.",
+                AffectTime = 1,
+                AffectValue = 10
+            } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Consumable, null)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "God Mana Restoration Pill",
+                Description = "Low grade pill that restore a small amount of mana.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Epic,
+                UseLevelRequired = 10,
+                SellingPrice = 100,
+                Space = 1,
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
+            {
+                Type = DataModels.Items.EffectType.ResoreMana,
+                Name = "God mana regeneration",
+                Description = "Restore 100 M.P.",
+                AffectTime = 1,
+                AffectValue = 100
+            } }
+            });
+
+            // STATS
+            //var stamina1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Stamina, StatValue = 1 });
+            //var energy1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Energy, StatValue = 1 });
+            //var strength1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Strength, StatValue = 1 });
+            //var agility1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Agility, StatValue = 1 });
+            //var intelligence1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Intelligence, StatValue = 1 });
+            //var wisdom1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Wisdom, StatValue = 1 });
+
+            // ARMOR ITEMS
+            // LEATHER SET
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Pants)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Leather Pants",
+                Description = "Leather pants that offers below average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 1,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Torso)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Leather Torso",
+                Description = "Leather torso that offers below average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 1,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Belt)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Leather Belt",
+                Description = "Leather belt that offers below average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 1,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Feet)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Leather Shoes",
+                Description = "Leather shoes that offers below average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 1,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Hand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Leather Gloves",
+                Description = "Leather gloves that offers below average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 1,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Head)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Leather Hood",
+                Description = "Leather hood that offers below average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 1,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Leg)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Leather Lower Pants",
+                Description = "Leather lower pants that offers below average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 1,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+
+            // CLOTH SET
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Pants)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Cloth Pants",
+                Description = "Cloth pants that offers below average magic protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 0,
+                MagicArmorValue = 1,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Intelligence, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Torso)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Cloth Torso",
+                Description = "Cloth torso that offers below average magic protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 0,
+                MagicArmorValue = 1,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Intelligence, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Belt)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Cloth Belt",
+                Description = "Cloth belt that offers below average magic protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 0,
+                MagicArmorValue = 1,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Intelligence, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Feet)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Cloth Shoes",
+                Description = "Cloth shoes that offers below average magic protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 0,
+                MagicArmorValue = 1,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Intelligence, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Hand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Cloth Gloves",
+                Description = "Cloth gloves that offers below average magic protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 0,
+                MagicArmorValue = 1,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Intelligence, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Head)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Cloth Hood",
+                Description = "Cloth hood that offers below average magic protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 0,
+                MagicArmorValue = 1,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Intelligence, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Leg)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Cloth Lower Pants",
+                Description = "Cloth lower pants that offers below average magic protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 0,
+                MagicArmorValue = 1,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Intelligence, StatValue = 1 } }
+            });
+
+            // PLATE SET
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Pants)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Plate Pants",
+                Description = "Plate pants that offers average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 3,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Stamina, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Torso)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Plate Torso",
+                Description = "Plate torso that offers average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 3,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Stamina, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Belt)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Plate Belt",
+                Description = "Plate belt that offers average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 3,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Stamina, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Feet)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Plate Shoes",
+                Description = "Plate shoes that offers average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 3,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Stamina, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Hand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Plate Gloves",
+                Description = "Plate gloves that offers average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 3,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Stamina, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Head)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Plate Hood",
+                Description = "Plate hood that offers average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 3,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Stamina, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Armor, DataModels.Items.ItemSlot.Leg)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Plate Lower Pants",
+                Description = "Plate lower pants that offers average protection.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 3,
+                MagicArmorValue = 0,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Stamina, StatValue = 1 } }
+            });
         }
     }
 }

@@ -47,9 +47,12 @@ namespace DataRepositories
         public DbSet<DataModels.Adventures.Adventure> Adventures { get; set; }
         public DbSet<DataModels.Adventures.Tavern> Taverns { get; set; }
         public DbSet<DataModels.Adventures.Quest> Quests { get; set; }
+        public DbSet<DataModels.Adventures.QuestObjective> QuestObjectives { get; set; }
         public DbSet<DataModels.Adventures.Lock> Locks { get; set; }
         public DbSet<DataModels.Adventures.ShopItem> ShopItems { get; set; }
         public DbSet<DataModels.Adventures.Enemy> Enemies { get; set; }
+        public DbSet<DataModels.Adventures.Npc> Npcs { get; set; }
+        public DbSet<DataModels.Adventures.NpcDialogue> NpcDialogues { get; set; }
 
         public DbSet<DataModels.AdventureUnlocked> AdventureUnlocked { get; set; }
         public DbSet<DataModels.TalentUnlocked> TalentUnlocked { get; set; }
