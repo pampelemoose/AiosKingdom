@@ -41,12 +41,25 @@ namespace Network
             public int Quantity { get; set; }
         }
 
+        public class TavernState
+        {
+            public Dictionary<Guid, ShopState> Shops { get; set; }
+        }
+
+        public class QuestState
+        {
+            public Guid ObjectiveId { get; set; }
+            public int Quantity { get; set; }
+            public bool Completed { get; set; }
+        }
+
         public string Name { get; set; }
-        public int CurrentRoom { get; set; }
-        public int TotalRoomCount { get; set; }
+        public int CurrentCoordinateX { get; set; }
+        public int CurrentCoordinateY { get; set; }
 
         public Dictionary<Guid, EnemyState> Enemies { get; set; }
-        public Dictionary<Guid, ShopState> Shops { get; set; }
+        public Dictionary<Guid, QuestState> Quests { get; set; }
+        public Dictionary<Guid, TavernState> Taverns { get; set; }
 
         public List<SkillCooldown> Cooldowns { get; set; }
 
@@ -54,13 +67,6 @@ namespace Network
         public List<ModifierApplied> Effects { get; set; }
 
         public List<BagItem> Bag { get; set; }
-
-        public bool IsRestingArea { get; set; }
-        public bool IsFightArea { get; set; }
-        public bool IsShopArea { get; set; }
-        public bool IsEliteArea { get; set; }
-        public bool IsBossFight { get; set; }
-        public bool IsExit { get; set; }
 
         public PlayerState State { get; set; }
 

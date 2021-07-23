@@ -38,7 +38,10 @@ namespace Server.GameServer
 
         public List<Network.Items.Item> Items { get; private set; }
         public List<Network.Skills.Book> Books { get; private set; }
-        public List<Network.Adventures.Adventure> Dungeons { get; private set; }
+        public List<Network.Adventures.Adventure> Adventures { get; private set; }
+        public List<Network.Adventures.Tavern> Taverns { get; private set; }
+        public List<Network.Adventures.Enemy> Enemies { get; private set; }
+        public List<Network.Adventures.Npc> Npcs { get; private set; }
         public List<Network.Monsters.Monster> Monsters { get; private set; }
         public List<Network.MarketSlot> Market { get; private set; }
 
@@ -395,50 +398,34 @@ namespace Server.GameServer
                     RequiredLevel = adventure.RequiredLevel,
                     MaxLevelAuthorized = adventure.MaxLevelAuthorized,
                     ExperienceReward = adventure.ExperienceReward,
-                    ShardReward = adventure.ShardReward
+                    ShardReward = adventure.ShardReward,
+                    Quests = new List<Network.Adventures.Quest>()
                 };
 
-                adv.Rooms = new List<Network.Adventures.Room>();
-                foreach (var room in adventure.Rooms)
+                foreach (var quest in adventure.Quests)
                 {
-                    var roo = new Network.Adventures.Room
+                    var que = new Network.Adventures.Quest
                     {
-                        RoomNumber = room.RoomNumber
+                        Id = quest.Vid,
+                        Name = quest.Name,
+                        Description = quest.Description,
+                        Objectives = new List<Network.Adventures.QuestObjective>()
                     };
 
-                    roo.ShopItems = new List<Network.Adventures.ShopItem>();
-                    foreach (var shopItem in room.ShopItems)
+                    foreach (var objective in quest.Objectives)
                     {
-                        var shopIt = new Network.Adventures.ShopItem
+                        var obje = new Network.Adventures.QuestObjective
                         {
-                            ItemId = shopItem.ItemVid,
-                            Quantity = shopItem.Quantity,
-                            ShardPrice = shopItem.Price
+                            Id = objective.Vid,
+                            Title = objective.Title,
+                            Type = ConvertQuestType(objective.Type),
+                            DataContent = objective.ObjectiveDataJson
                         };
 
-                        shopIt.Type = ConvertItemType(shopItem.Type);
-
-                        roo.ShopItems.Add(shopIt);
+                        que.Objectives.Add(obje);
                     }
 
-                    roo.Ennemies = new List<Network.Adventures.Enemy>();
-                    foreach (var enemy in room.Ennemies)
-                    {
-                        var enn = new Network.Adventures.Enemy
-                        {
-                            MonsterId = enemy.MonsterVid,
-                            Level = enemy.Level,
-                            ShardReward = enemy.ShardReward
-                        };
-
-                        enn.EnemyType = ConvertEnemyType(enemy.EnemyType);
-
-                        roo.Ennemies.Add(enn);
-                    }
-
-                    roo.Type = ConvertRoomType(room.Type);
-
-                    adv.Rooms.Add(roo);
+                    adv.Quests.Add(que);
                 }
 
                 adv.Locks = new List<Network.Adventures.Lock>();
@@ -453,7 +440,99 @@ namespace Server.GameServer
                 adventureList.Add(adv);
             }
 
-            Dungeons = adventureList;
+            Adventures = adventureList;
+
+            var enemies = DataRepositories.AdventureRepository.GetAllEnemiesForVersion(_config.VersionId);
+            var enemyList = new List<Network.Adventures.Enemy>();
+
+            foreach (var enemy in enemies)
+            {
+                var ene = new Network.Adventures.Enemy
+                {
+                    MonsterId = enemy.MonsterVid,
+                    EnemyType = ConvertEnemyType(enemy.EnemyType),
+                    Level = enemy.Level,
+                    ShardReward = enemy.ShardReward
+                };
+
+                enemyList.Add(ene);
+            }
+
+            Enemies = enemyList;
+
+            var taverns = DataRepositories.AdventureRepository.GetAllTavernsForVersion(_config.VersionId);
+            var tavernList = new List<Network.Adventures.Tavern>();
+
+            foreach (var tavern in taverns)
+            {
+                var tav = new Network.Adventures.Tavern
+                {
+                    Id = tavern.Vid,
+                    FoodCost = tavern.FoodCost,
+                    FoodHealth = tavern.FoodHealth,
+                    RestShardCost = tavern.RestShardCost,
+                    RestStamina = tavern.RestStamina,
+                    ShopItems = new List<Network.Adventures.ShopItem>()
+                };
+
+                foreach (var shopItem in tavern.ShopItems)
+                {
+                    var shopIt = new Network.Adventures.ShopItem
+                    {
+                        ItemId = shopItem.ItemVid,
+                        Quantity = shopItem.Quantity,
+                        ShardPrice = shopItem.Price
+                    };
+
+                    tav.ShopItems.Add(shopIt);
+                }
+
+                tavernList.Add(tav);
+            }
+
+            Taverns = tavernList;
+
+            var npcs = DataRepositories.AdventureRepository.GetAllNpcsForVersion(_config.VersionId);
+            var npcList = new List<Network.Adventures.Npc>();
+
+            foreach (var npc in npcs)
+            {
+                var np = new Network.Adventures.Npc
+                {
+                    Id = npc.Vid,
+                    Name = npc.Name,
+                    Dialogues = new List<Network.Adventures.NpcDialogue>()
+                };
+
+                foreach (var dialogue in npc.Dialogues)
+                {
+                    var shopIt = BuildNpcDialogue(dialogue);
+
+                    np.Dialogues.Add(shopIt);
+                }
+
+                npcList.Add(np);
+            }
+
+            Npcs = npcList;
+        }
+
+        private Network.Adventures.NpcDialogue BuildNpcDialogue(DataModels.Adventures.NpcDialogue dialogue)
+        {
+            var dial = new Network.Adventures.NpcDialogue
+            {
+                Content = dialogue.Content,
+                NextDialogues = new List<Network.Adventures.NpcDialogue>()
+            };
+
+            var nextDialogues = DataRepositories.AdventureRepository.GetNextDialoguesForDialogue(_config.VersionId, dialogue.Vid);
+            foreach(var nextDial in nextDialogues)
+            {
+                var nextDi = BuildNpcDialogue(nextDial);
+                dial.NextDialogues.Add(nextDi);
+            }
+
+            return dial;
         }
 
         private void LoadMonsters()
@@ -590,28 +669,25 @@ namespace Server.GameServer
                     return Network.Adventures.EnemyType.Normal;
                 case DataModels.Adventures.EnemyType.Elite:
                     return Network.Adventures.EnemyType.Elite;
+                case DataModels.Adventures.EnemyType.Boss:
+                    return Network.Adventures.EnemyType.Boss;
+                default:
+                    return Network.Adventures.EnemyType.Rare;
             }
 
-            return Network.Adventures.EnemyType.Boss;
         }
 
-        private Network.Adventures.RoomType ConvertRoomType(DataModels.Adventures.RoomType type)
+        private Network.Adventures.ObjectiveType ConvertQuestType(DataModels.Adventures.QuestObjective.ObjectiveType type)
         {
             switch (type)
             {
-                case DataModels.Adventures.RoomType.Boss:
-                    return Network.Adventures.RoomType.Boss;
-                case DataModels.Adventures.RoomType.Elite:
-                    return Network.Adventures.RoomType.Elite;
-                case DataModels.Adventures.RoomType.Exit:
-                    return Network.Adventures.RoomType.Exit;
-                case DataModels.Adventures.RoomType.Fight:
-                    return Network.Adventures.RoomType.Fight;
-                case DataModels.Adventures.RoomType.Rest:
-                    return Network.Adventures.RoomType.Rest;   
+                case DataModels.Adventures.QuestObjective.ObjectiveType.EnemyKill:
+                    return Network.Adventures.ObjectiveType.EnemyKill;
+                case DataModels.Adventures.QuestObjective.ObjectiveType.NpcDialogue:
+                    return Network.Adventures.ObjectiveType.NpcDialogue;
+                default:
+                    return Network.Adventures.ObjectiveType.ExploreArea;
             }
-
-            return Network.Adventures.RoomType.Shop;
         }
         #endregion
     }

@@ -14,6 +14,6 @@ namespace DataModels.Adventures
 
         public string Content { get; set; }
 
-        public Guid? NextDialogueVid { get; set; }
+        public List<NpcDialogue> NextDialogues { get; set; }
     }
 }

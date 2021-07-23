@@ -24,6 +24,7 @@ namespace DataRepositories
             {
                 return context.Adventures
                     .Include(a => a.Quests)
+                    .Include(a => a.Quests.Select(q => q.Objectives))
                     .Include(a => a.Locks)
                     .Where(b => b.VersionId.Equals(versionId)).ToList();
             }
@@ -36,6 +37,25 @@ namespace DataRepositories
                 return context.Taverns
                     .Include(a => a.ShopItems)
                     .Where(b => b.VersionId.Equals(versionId)).ToList();
+            }
+        }
+
+        public static List<DataModels.Adventures.Npc> GetAllNpcsForVersion(Guid versionId)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Npcs
+                    .Include(a => a.Dialogues)
+                    .Where(b => b.VersionId.Equals(versionId)).ToList();
+            }
+        }
+
+        public static List<DataModels.Adventures.NpcDialogue> GetNextDialoguesForDialogue(Guid versionId, Guid diologueId)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.NpcDialogues
+                    .Where(b => b.VersionId.Equals(versionId) && b.Vid.Equals(diologueId)).ToList();
             }
         }
 

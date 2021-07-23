@@ -51,12 +51,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adventures\Lock.cs" />
+    <Compile Include="Adventures\NpcDialogue.cs" />
+    <Compile Include="Adventures\Npc.cs" />
+    <Compile Include="Adventures\QuestObjectiveDataExploreArea.cs" />
+    <Compile Include="Adventures\QuestObjectiveDataNpcDialogue.cs" />
+    <Compile Include="Adventures\QuestObjectiveDataEnemyKill.cs" />
+    <Compile Include="Adventures\QuestObjective.cs" />
+    <Compile Include="Adventures\Quest.cs" />
+    <Compile Include="Adventures\Tavern.cs" />
     <Compile Include="AdventureUnlocked.cs" />
     <Compile Include="AppUser.cs" />
     <Compile Include="Adventures\Enemy.cs" />
     <Compile Include="Adventures\ShopItem.cs" />
     <Compile Include="Adventures\Adventure.cs" />
-    <Compile Include="Adventures\Room.cs" />
     <Compile Include="Equipment.cs" />
     <Compile Include="AVersionized.cs" />
     <Compile Include="Skills\Talent.cs" />

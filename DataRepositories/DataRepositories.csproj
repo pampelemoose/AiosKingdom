@@ -36,6 +36,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -50,9 +53,9 @@
     <Compile Include="AppUserRepository.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="AiosKingdomContext.cs" />
-    <Compile Include="Migrations\202104300559282_InitialMigration.cs" />
-    <Compile Include="Migrations\202104300559282_InitialMigration.Designer.cs">
-      <DependentUpon>202104300559282_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\202107230510120_InitialMigration.cs" />
+    <Compile Include="Migrations\202107230510120_InitialMigration.Designer.cs">
+      <DependentUpon>202107230510120_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="TownRepository.cs" />
     <Compile Include="AdventureRepository.cs" />
@@ -81,8 +84,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202104300559282_InitialMigration.resx">
-      <DependentUpon>202104300559282_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202107230510120_InitialMigration.resx">
+      <DependentUpon>202107230510120_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

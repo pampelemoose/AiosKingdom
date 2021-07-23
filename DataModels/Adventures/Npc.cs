@@ -12,6 +12,8 @@ namespace DataModels.Adventures
         [Key]
         public Guid Id { get; set; }
 
-        List<NpcDialogue> Dialogues { get; set; }
+        public string Name { get; set; }
+
+        public List<NpcDialogue> Dialogues { get; set; }
     }
 }

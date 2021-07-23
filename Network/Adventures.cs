@@ -4,21 +4,19 @@ using System.Text;
 
 namespace Network.Adventures
 {
-    public enum RoomType
+    public enum ObjectiveType
     {
-        Fight = 0,
-        Rest = 1,
-        Shop = 2,
-        Elite = 3,
-        Boss = 4,
-        Exit = 5
+        EnemyKill = 0,
+        NpcDialogue = 1,
+        ExploreArea = 2
     }
 
     public enum EnemyType
     {
         Normal = 0,
         Elite = 1,
-        Boss = 2
+        Boss = 2,
+        Rare = 3
     }
 
     public class Adventure
@@ -29,7 +27,7 @@ namespace Network.Adventures
         public int RequiredLevel { get; set; }
         public int MaxLevelAuthorized { get; set; }
 
-        public List<Room> Rooms { get; set; }
+        public List<Quest> Quests { get; set; }
 
         public int ExperienceReward { get; set; }
         public int ShardReward { get; set; }
@@ -37,14 +35,33 @@ namespace Network.Adventures
         public List<Lock> Locks { get; set; }
     }
 
-    public class Room
+    public class Quest
     {
-        public RoomType Type { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public List<QuestObjective> Objectives { get; set; }
+    }
 
-        public int RoomNumber { get; set; }
+    public class QuestObjective
+    {
+        public Guid Id { get; set; }
+        public ObjectiveType Type { get; set; }
+        public string Title { get; set; }
+        public string DataContent { get; set; }
+    }
+
+    public class Tavern
+    {
+        public Guid Id { get; set; }
 
         public List<ShopItem> ShopItems { get; set; }
-        public List<Enemy> Ennemies { get; set; }
+
+        public int RestShardCost { get; set; }
+        public int RestStamina { get; set; }
+
+        public int FoodCost { get; set; }
+        public int FoodHealth { get; set; }
     }
 
     public class Lock
@@ -70,5 +87,20 @@ namespace Network.Adventures
 
         public int Level { get; set; }
         public int ShardReward { get; set; }
+    }
+
+    public class Npc
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+
+        public List<NpcDialogue> Dialogues { get; set; }
+    }
+
+    public class NpcDialogue
+    {
+        public string Content { get; set; }
+
+        public List<NpcDialogue> NextDialogues { get; set; }
     }
 }

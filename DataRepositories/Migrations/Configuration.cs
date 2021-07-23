@@ -1,5 +1,6 @@
 namespace DataRepositories.Migrations
 {
+    using Newtonsoft.Json;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -160,7 +161,12 @@ namespace DataRepositories.Migrations
                     DefaultBagId = bag.Vid
                 });
 
+                context.SaveChanges();
+
                 _createBasicItems(context, version);
+                _createBasicBooks(context, version);
+                _createMonsters(context, version);
+                _createAdventures(context, version);
 
                 context.SaveChanges();
             }
@@ -185,6 +191,7 @@ namespace DataRepositories.Migrations
             }
         }
 
+        #region ITEMS
         private void _createBasicItems(AiosKingdomContext context, DataModels.Version version)
         {
             // CONSUMABLE ITEMS
@@ -200,14 +207,18 @@ namespace DataRepositories.Migrations
                 UseLevelRequired = 1,
                 SellingPrice = 1,
                 Space = 1,
-                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
-            {
-                Type = DataModels.Items.EffectType.RestoreHealth,
-                Name = "Earth health regeneration",
-                Description = "Restore 10 H.P.",
-                AffectTime = 1,
-                AffectValue = 10
-            } }
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect>
+                {
+                    new DataModels.Items.ItemEffect
+                    {
+                        Id = Guid.NewGuid(),
+                        Type = DataModels.Items.EffectType.RestoreHealth,
+                        Name = "Earth health regeneration",
+                        Description = "Restore 10 H.P.",
+                        AffectTime = 1,
+                        AffectValue = 10
+                    }
+                }
             });
             context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Consumable, null)
             {
@@ -221,14 +232,18 @@ namespace DataRepositories.Migrations
                 UseLevelRequired = 5,
                 SellingPrice = 10,
                 Space = 1,
-                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
-            {
-                Type = DataModels.Items.EffectType.RestoreHealth,
-                Name = "Heaven health regeneration",
-                Description = "Restore 50 H.P.",
-                AffectTime = 1,
-                AffectValue = 50
-            } }
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect>
+                {
+                    new DataModels.Items.ItemEffect
+                    {
+                        Id = Guid.NewGuid(),
+                        Type = DataModels.Items.EffectType.RestoreHealth,
+                        Name = "Heaven health regeneration",
+                        Description = "Restore 50 H.P.",
+                        AffectTime = 1,
+                        AffectValue = 50
+                    }
+                }
             });
             context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Consumable, null)
             {
@@ -242,14 +257,18 @@ namespace DataRepositories.Migrations
                 UseLevelRequired = 10,
                 SellingPrice = 100,
                 Space = 1,
-                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
-            {
-                Type = DataModels.Items.EffectType.RestoreHealth,
-                Name = "God health regeneration",
-                Description = "Restore 300 H.P.",
-                AffectTime = 1,
-                AffectValue = 300
-            } }
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect>
+                {
+                    new DataModels.Items.ItemEffect
+                    {
+                        Id = Guid.NewGuid(),
+                        Type = DataModels.Items.EffectType.RestoreHealth,
+                        Name = "God health regeneration",
+                        Description = "Restore 300 H.P.",
+                        AffectTime = 1,
+                        AffectValue = 300
+                    }
+                }
             });
             context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Consumable, null)
             {
@@ -263,14 +282,18 @@ namespace DataRepositories.Migrations
                 UseLevelRequired = 1,
                 SellingPrice = 1,
                 Space = 1,
-                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
-            {
-                Type = DataModels.Items.EffectType.ResoreMana,
-                Name = "Earth mana regeneration",
-                Description = "Restore 5 M.P.",
-                AffectTime = 1,
-                AffectValue = 5
-            } }
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect>
+                {
+                    new DataModels.Items.ItemEffect
+                    {
+                        Id = Guid.NewGuid(),
+                        Type = DataModels.Items.EffectType.ResoreMana,
+                        Name = "Earth mana regeneration",
+                        Description = "Restore 5 M.P.",
+                        AffectTime = 1,
+                        AffectValue = 5
+                    }
+                }
             });
 
             context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Consumable, null)
@@ -285,14 +308,18 @@ namespace DataRepositories.Migrations
                 UseLevelRequired = 5,
                 SellingPrice = 10,
                 Space = 1,
-                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
-            {
-                Type = DataModels.Items.EffectType.ResoreMana,
-                Name = "Heaven mana regeneration",
-                Description = "Restore 20 M.P.",
-                AffectTime = 1,
-                AffectValue = 10
-            } }
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect>
+                {
+                    new DataModels.Items.ItemEffect
+                    {
+                        Id = Guid.NewGuid(),
+                        Type = DataModels.Items.EffectType.ResoreMana,
+                        Name = "Heaven mana regeneration",
+                        Description = "Restore 20 M.P.",
+                        AffectTime = 1,
+                        AffectValue = 10
+                    }
+                }
             });
             context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Consumable, null)
             {
@@ -306,23 +333,19 @@ namespace DataRepositories.Migrations
                 UseLevelRequired = 10,
                 SellingPrice = 100,
                 Space = 1,
-                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect> { new DataModels.Items.ItemEffect
-            {
-                Type = DataModels.Items.EffectType.ResoreMana,
-                Name = "God mana regeneration",
-                Description = "Restore 100 M.P.",
-                AffectTime = 1,
-                AffectValue = 100
-            } }
+                Effects = new System.Collections.Generic.List<DataModels.Items.ItemEffect>
+                {
+                    new DataModels.Items.ItemEffect
+                    {
+                        Id = Guid.NewGuid(),
+                        Type = DataModels.Items.EffectType.ResoreMana,
+                        Name = "God mana regeneration",
+                        Description = "Restore 100 M.P.",
+                        AffectTime = 1,
+                        AffectValue = 100
+                    }
+                }
             });
-
-            // STATS
-            //var stamina1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Stamina, StatValue = 1 });
-            //var energy1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Energy, StatValue = 1 });
-            //var strength1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Strength, StatValue = 1 });
-            //var agility1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Agility, StatValue = 1 });
-            //var intelligence1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Intelligence, StatValue = 1 });
-            //var wisdom1 = context.ItemStats.Add(new DataModels.Items.ItemStat { ItemId = Guid.NewGuid(), Type = DataModels.Soul.Stats.Wisdom, StatValue = 1 });
 
             // ARMOR ITEMS
             // LEATHER SET
@@ -666,6 +689,647 @@ namespace DataRepositories.Migrations
                 MagicArmorValue = 0,
                 Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Stamina, StatValue = 1 } }
             });
+
+            // WEAPONS
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Axe, DataModels.Items.ItemSlot.OneHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Small Axe",
+                Description = "Small axe that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 2,
+                MaxDamages = 4,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Strength, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Bow, DataModels.Items.ItemSlot.TwoHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Bow",
+                Description = "Bow that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 4,
+                MaxDamages = 8,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Crossbow, DataModels.Items.ItemSlot.TwoHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Crossbow",
+                Description = "Crossbow that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 3,
+                MaxDamages = 6,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Dagger, DataModels.Items.ItemSlot.OneHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Small Dagger",
+                Description = "Small dagger that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 1,
+                MaxDamages = 4,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Fist, DataModels.Items.ItemSlot.OneHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Small Handplate",
+                Description = "Small handplate that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 1,
+                MaxDamages = 3,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Strength, StatValue = 2 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Gun, DataModels.Items.ItemSlot.TwoHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Riffle",
+                Description = "Riffle that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 3,
+                MaxDamages = 8,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Wisdom, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Mace, DataModels.Items.ItemSlot.OneHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Small Mace",
+                Description = "Small mace that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 2,
+                MaxDamages = 4,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Strength, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Polearm, DataModels.Items.ItemSlot.TwoHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Polearm",
+                Description = "Polearm that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 4,
+                MaxDamages = 8,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Shield, DataModels.Items.ItemSlot.OneHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Small Shield",
+                Description = "Small shield that can defend a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                ArmorValue = 4,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Stamina, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Staff, DataModels.Items.ItemSlot.TwoHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Magic Staff",
+                Description = "Magic staff that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 1,
+                MaxDamages = 3,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Intelligence, StatValue = 2 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Staff, DataModels.Items.ItemSlot.TwoHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Staff",
+                Description = "Staff that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 4,
+                MaxDamages = 8,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 2 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Sword, DataModels.Items.ItemSlot.OneHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Small Sword",
+                Description = "Small sword that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 2,
+                MaxDamages = 4,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Strength, StatValue = 1 } }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Wand, DataModels.Items.ItemSlot.OneHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Small Wand",
+                Description = "Small want that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 1,
+                MaxDamages = 2,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat>
+                {
+                    new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Intelligence, StatValue = 1 },
+                    new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Wisdom, StatValue = 1 }
+                }
+            });
+            context.Items.Add(new DataModels.Items.Item(DataModels.Items.ItemType.Whip, DataModels.Items.ItemSlot.OneHand)
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Small Whip",
+                Description = "Small whip that can deal a little amount of damages.",
+                ItemLevel = 1,
+                Quality = DataModels.Items.ItemQuality.Common,
+                UseLevelRequired = 1,
+                SellingPrice = 1,
+                Space = 1,
+                MinDamages = 2,
+                MaxDamages = 6,
+                Stats = new System.Collections.Generic.List<DataModels.Items.ItemStat> { new DataModels.Items.ItemStat { Type = DataModels.Soul.Stats.Agility, StatValue = 1 } }
+            });
+
+            context.SaveChanges();
         }
+        #endregion
+
+        #region BOOKS
+        private void _createBasicBooks(AiosKingdomContext context, DataModels.Version version)
+        {
+            _createSimplePunchBook(context, version);
+            _createEnergyBallBook(context, version);
+
+            _createMonsterBooks(context, version);
+
+            context.SaveChanges();
+        }
+
+        private void _createSimplePunchBook(AiosKingdomContext context, DataModels.Version version)
+        {
+            var punchPhysicalDamageStrInscription = Guid.NewGuid();
+            var punchPhysicalDamageAgiInscription = Guid.NewGuid();
+            context.Books.Add(new DataModels.Skills.Book
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Simple Punch",
+                Description = "A simple punch that deal small physical damages.",
+                Quality = DataModels.Skills.BookQuality.TierOne,
+                ManaCost = 5,
+                Cooldown = 0,
+                EmberCost = 1,
+                Inscriptions = new System.Collections.Generic.List<DataModels.Skills.Inscription>
+                {
+                    new DataModels.Skills.Inscription
+                    {
+                        Id = punchPhysicalDamageStrInscription,
+                        Type = DataModels.Skills.InscriptionType.PhysicDamages,
+                        BaseValue = 1,
+                        StatType = DataModels.Soul.Stats.Strength,
+                        Ratio = 1,
+                        Duration = 0,
+                        IncludeWeaponDamages = false,
+                        PreferredWeaponTypes = new System.Collections.Generic.List<DataModels.Items.ItemType>
+                        {
+                            DataModels.Items.ItemType.Fist
+                        },
+                        PreferredWeaponDamagesRatio = 2f
+                    },
+                    new DataModels.Skills.Inscription
+                    {
+                        Id = punchPhysicalDamageAgiInscription,
+                        Type = DataModels.Skills.InscriptionType.PhysicDamages,
+                        BaseValue = 1,
+                        StatType = DataModels.Soul.Stats.Agility,
+                        Ratio = 0.5f,
+                        Duration = 0,
+                        IncludeWeaponDamages = false,
+                        PreferredWeaponTypes = new System.Collections.Generic.List<DataModels.Items.ItemType>
+                        {
+                            DataModels.Items.ItemType.Fist
+                        },
+                        PreferredWeaponDamagesRatio = 1f
+                    }
+                },
+                Talents = new System.Collections.Generic.List<DataModels.Skills.Talent>
+                {
+                    new DataModels.Skills.Talent
+                    {
+                        Id = Guid.NewGuid(),
+                        Branch = 0,
+                        Leaf = 0,
+                        Unlocks = new System.Collections.Generic.List<DataModels.Skills.TalentUnlock> { DataModels.Skills.TalentUnlock.Next },
+                        TargetInscription = punchPhysicalDamageStrInscription,
+                        TalentPointsRequired = 1,
+                        Type = DataModels.Skills.TalentType.BaseValue,
+                        Value = 2
+                    },
+                    new DataModels.Skills.Talent
+                    {
+                        Id = Guid.NewGuid(),
+                        Branch = 0,
+                        Leaf = 1,
+                        Unlocks = new System.Collections.Generic.List<DataModels.Skills.TalentUnlock> { DataModels.Skills.TalentUnlock.Next },
+                        TargetInscription = punchPhysicalDamageAgiInscription,
+                        TalentPointsRequired = 1,
+                        Type = DataModels.Skills.TalentType.StatValue,
+                        Value = 2
+                    },
+                    new DataModels.Skills.Talent
+                    {
+                        Id = Guid.NewGuid(),
+                        Branch = 0,
+                        Leaf = 2,
+                        Unlocks = new System.Collections.Generic.List<DataModels.Skills.TalentUnlock> { DataModels.Skills.TalentUnlock.Next },
+                        TargetInscription = punchPhysicalDamageAgiInscription,
+                        TalentPointsRequired = 2,
+                        Type = DataModels.Skills.TalentType.StatValue,
+                        Value = 5
+                    },
+                    new DataModels.Skills.Talent
+                    {
+                        Id = Guid.NewGuid(),
+                        Branch = 0,
+                        Leaf = 3,
+                        Unlocks = new System.Collections.Generic.List<DataModels.Skills.TalentUnlock> { DataModels.Skills.TalentUnlock.Next },
+                        TargetInscription = punchPhysicalDamageStrInscription,
+                        TalentPointsRequired = 3,
+                        Type = DataModels.Skills.TalentType.Ratio,
+                        Value = 2
+                    },
+                    new DataModels.Skills.Talent
+                    {
+                        Id = Guid.NewGuid(),
+                        Branch = 0,
+                        Leaf = 4,
+                        Unlocks = new System.Collections.Generic.List<DataModels.Skills.TalentUnlock> { DataModels.Skills.TalentUnlock.None },
+                        TargetInscription = punchPhysicalDamageStrInscription,
+                        TalentPointsRequired = 5,
+                        Type = DataModels.Skills.TalentType.StatValue,
+                        Value = 10
+                    },
+                }
+            });
+        }
+
+        private void _createEnergyBallBook(AiosKingdomContext context, DataModels.Version version)
+        {
+            var punchMagicDamageIntInscription = Guid.NewGuid();
+            var punchMagicDamageWisInscription = Guid.NewGuid();
+            context.Books.Add(new DataModels.Skills.Book
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Energy Ball",
+                Description = "An energy ball that deal small magic damages.",
+                Quality = DataModels.Skills.BookQuality.TierOne,
+                ManaCost = 5,
+                Cooldown = 0,
+                EmberCost = 1,
+                Inscriptions = new System.Collections.Generic.List<DataModels.Skills.Inscription>
+                {
+                    new DataModels.Skills.Inscription
+                    {
+                        Id = punchMagicDamageIntInscription,
+                        Type = DataModels.Skills.InscriptionType.MagicDamages,
+                        BaseValue = 1,
+                        StatType = DataModels.Soul.Stats.Intelligence,
+                        Ratio = 2,
+                        Duration = 0,
+                        IncludeWeaponDamages = false,
+                        PreferredWeaponTypes = new System.Collections.Generic.List<DataModels.Items.ItemType>
+                        {
+                            DataModels.Items.ItemType.Book,
+                        },
+                        PreferredWeaponDamagesRatio = 2f
+                    },
+                    new DataModels.Skills.Inscription
+                    {
+                        Id = punchMagicDamageWisInscription,
+                        Type = DataModels.Skills.InscriptionType.MagicDamages,
+                        BaseValue = 1,
+                        StatType = DataModels.Soul.Stats.Wisdom,
+                        Ratio = 0.5f,
+                        Duration = 0,
+                        IncludeWeaponDamages = false,
+                        PreferredWeaponTypes = new System.Collections.Generic.List<DataModels.Items.ItemType>
+                        {
+                            DataModels.Items.ItemType.Book
+                        },
+                        PreferredWeaponDamagesRatio = 1f
+                    }
+                },
+                Talents = new System.Collections.Generic.List<DataModels.Skills.Talent>
+                {
+                    new DataModels.Skills.Talent
+                    {
+                        Id = Guid.NewGuid(),
+                        Branch = 0,
+                        Leaf = 0,
+                        Unlocks = new System.Collections.Generic.List<DataModels.Skills.TalentUnlock> { DataModels.Skills.TalentUnlock.Next },
+                        TargetInscription = punchMagicDamageIntInscription,
+                        TalentPointsRequired = 1,
+                        Type = DataModels.Skills.TalentType.BaseValue,
+                        Value = 2
+                    },
+                    new DataModels.Skills.Talent
+                    {
+                        Id = Guid.NewGuid(),
+                        Branch = 0,
+                        Leaf = 1,
+                        Unlocks = new System.Collections.Generic.List<DataModels.Skills.TalentUnlock> { DataModels.Skills.TalentUnlock.Next },
+                        TargetInscription = punchMagicDamageWisInscription,
+                        TalentPointsRequired = 1,
+                        Type = DataModels.Skills.TalentType.StatValue,
+                        Value = 2
+                    },
+                    new DataModels.Skills.Talent
+                    {
+                        Id = Guid.NewGuid(),
+                        Branch = 0,
+                        Leaf = 2,
+                        Unlocks = new System.Collections.Generic.List<DataModels.Skills.TalentUnlock> { DataModels.Skills.TalentUnlock.Next },
+                        TargetInscription = punchMagicDamageWisInscription,
+                        TalentPointsRequired = 2,
+                        Type = DataModels.Skills.TalentType.StatValue,
+                        Value = 5
+                    },
+                    new DataModels.Skills.Talent
+                    {
+                        Id = Guid.NewGuid(),
+                        Branch = 0,
+                        Leaf = 3,
+                        Unlocks = new System.Collections.Generic.List<DataModels.Skills.TalentUnlock> { DataModels.Skills.TalentUnlock.Next },
+                        TargetInscription = punchMagicDamageIntInscription,
+                        TalentPointsRequired = 3,
+                        Type = DataModels.Skills.TalentType.Ratio,
+                        Value = 2
+                    },
+                    new DataModels.Skills.Talent
+                    {
+                        Id = Guid.NewGuid(),
+                        Branch = 0,
+                        Leaf = 4,
+                        Unlocks = new System.Collections.Generic.List<DataModels.Skills.TalentUnlock> { DataModels.Skills.TalentUnlock.None },
+                        TargetInscription = punchMagicDamageIntInscription,
+                        TalentPointsRequired = 5,
+                        Type = DataModels.Skills.TalentType.StatValue,
+                        Value = 10
+                    },
+                }
+            });
+        }
+
+        // MONSTER SKILLS
+        private void _createMonsterBooks(AiosKingdomContext context, DataModels.Version version)
+        {
+            _createScratchBook(context, version);
+        }
+
+        private void _createScratchBook(AiosKingdomContext context, DataModels.Version version)
+        {
+            var scratchStrInscription = Guid.NewGuid();
+            context.Books.Add(new DataModels.Skills.Book
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Scratch",
+                Description = "Scratch the enemy, inflicting a small amount of physical damages.",
+                Quality = DataModels.Skills.BookQuality.TierOne,
+                ManaCost = 1,
+                Cooldown = 0,
+                EmberCost = 0,
+                Inscriptions = new System.Collections.Generic.List<DataModels.Skills.Inscription>
+                {
+                    new DataModels.Skills.Inscription
+                    {
+                        Id = scratchStrInscription,
+                        Type = DataModels.Skills.InscriptionType.PhysicDamages,
+                        BaseValue = 1,
+                        StatType = DataModels.Soul.Stats.Strength,
+                        Ratio = 2,
+                        Duration = 0
+                    }
+                }
+            });
+        }
+        #endregion
+
+        #region MONSTERS
+        private void _createMonsters(AiosKingdomContext context, DataModels.Version version)
+        {
+            _createWolfMonster(context, version);
+
+            context.SaveChanges();
+        }
+
+        private void _createWolfMonster(AiosKingdomContext context, DataModels.Version version)
+        {
+            var scratchSkill = context.Books.FirstOrDefault(s => s.Name == "Scratch");
+            context.Monsters.Add(new DataModels.Monsters.Monster
+            {
+                Id = Guid.NewGuid(),
+                Types = new System.Collections.Generic.List<DataModels.Monsters.MonsterType> { DataModels.Monsters.MonsterType.Animal },
+                Name = "Wolf",
+                Description = "Lonely wolf trying to survive. He is aggressive and fight for his life.",
+                Story = "After a fight in the pack, he was forced to live on his own. Fighting for food everyday, he became ferocious towards all living beings.",
+                BaseHealth = 5,
+                HealthPerLevel = 2,
+                BaseExperience = 10,
+                ExperiencePerLevelRatio = 1.8f,
+                StaminaPerLevel = 2,
+                EnergyPerLevel = 1,
+                StrengthPerLevel = 2,
+                AgilityPerLevel = 1,
+                IntelligencePerLevel = 0,
+                WisdomPerLevel = 0,
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Phases = new System.Collections.Generic.List<DataModels.Monsters.Phase> { new DataModels.Monsters.Phase { Id = Guid.NewGuid(), BookVid = scratchSkill.Vid } },
+                Loots = new System.Collections.Generic.List<DataModels.Monsters.Loot> { }
+            });
+        }
+        #endregion
+
+        #region ADVENTURES
+        private void _createAdventures(AiosKingdomContext context, DataModels.Version version)
+        {
+            _createNpcs(context, version);
+
+            context.SaveChanges();
+
+            _createHauntedHouseAdventure(context, version);
+
+            context.SaveChanges();
+        }
+
+        private void _createNpcs(AiosKingdomContext context, DataModels.Version version)
+        {
+            context.Npcs.Add(new DataModels.Adventures.Npc
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Nice Guy",
+                Dialogues = new System.Collections.Generic.List<DataModels.Adventures.NpcDialogue>
+                {
+                    new DataModels.Adventures.NpcDialogue
+                    {
+                        Id = Guid.NewGuid(),
+                        VersionId = version.Id,
+                        Vid = Guid.NewGuid(),
+                        Content = "Hello traveler, how is it going ?",
+                        NextDialogues = new System.Collections.Generic.List<DataModels.Adventures.NpcDialogue>
+                        {
+                            new DataModels.Adventures.NpcDialogue
+                            {
+                                Id = Guid.NewGuid(),
+                                VersionId = version.Id,
+                                Vid = Guid.NewGuid(),
+                                Content = "Doing fine, thanks."
+                            },
+                            new DataModels.Adventures.NpcDialogue
+                            {
+                                Id = Guid.NewGuid(),
+                                VersionId = version.Id,
+                                Vid = Guid.NewGuid(),
+                                Content = "Not so good.."
+                            },
+                        }
+                    }
+                }
+            });
+        }
+
+        private void _createHauntedHouseAdventure(AiosKingdomContext context, DataModels.Version version)
+        {
+            var wolf = context.Monsters.FirstOrDefault(m => m.Name == "Wolf");
+            var wolfEnemy = context.Enemies.Add(new DataModels.Adventures.Enemy
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                EnemyType = DataModels.Adventures.EnemyType.Normal,
+                MonsterVid = wolf.Vid,
+                Level = 1,
+                ShardReward = 2
+            });
+
+            context.Adventures.Add(new DataModels.Adventures.Adventure
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                Name = "Welcome to Aios Kingdom.",
+                RequiredLevel = 1,
+                MaxLevelAuthorized = 5,
+                MapIdentifier = Guid.NewGuid(),
+                ExperienceReward = 100,
+                ShardReward = 10,
+                SpawnCoordinateX = 0,
+                SpawnCoordinateY = 0,
+                Quests = new System.Collections.Generic.List<DataModels.Adventures.Quest>
+                {
+                    new DataModels.Adventures.Quest
+                    {
+                        Id = Guid.NewGuid(),
+                        VersionId = version.Id,
+                        Vid = Guid.NewGuid(),
+                        Name = "The Wolf in the garden.",
+                        Description = "There is a wold killing our chickens in the garden. Get rid of it. The garden is located in the north of the village.",
+                        Objectives = new System.Collections.Generic.List<DataModels.Adventures.QuestObjective>
+                        {
+                            new DataModels.Adventures.QuestObjective
+                            {
+                                Id = Guid.NewGuid(),
+                                VersionId = version.Id,
+                                Vid = Guid.NewGuid(),
+                                Title = "Kill the wolf.",
+                                Type = DataModels.Adventures.QuestObjective.ObjectiveType.EnemyKill,
+                                ObjectiveDataJson = JsonConvert.SerializeObject(new DataModels.Adventures.QuestObjectiveDataEnemyKill
+                                {
+                                    EnemyVid = wolfEnemy.Vid,
+                                    KillCount = 1
+                                })
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        #endregion
     }
 }
