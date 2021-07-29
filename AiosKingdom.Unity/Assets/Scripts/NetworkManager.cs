@@ -818,7 +818,6 @@ public class NetworkManager : MonoBehaviour
                 break;
             case JsonObjects.CommandCodes.Listing.Tavern:
                 {
-                    //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
                     var items = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Tavern>>(message.Json);
                     DatasManager.Instance.Taverns = items;
 
@@ -826,12 +825,10 @@ public class NetworkManager : MonoBehaviour
                     {
                         AskNpcList();
                     });
-                    //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Npc:
                 {
-                    //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
                     var items = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Npc>>(message.Json);
                     DatasManager.Instance.Npcs = items;
 
@@ -839,12 +836,10 @@ public class NetworkManager : MonoBehaviour
                     {
                         AskEnemyList();
                     });
-                    //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
                 }
                 break;
             case JsonObjects.CommandCodes.Listing.Enemy:
                 {
-                    //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
                     var items = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Enemy>>(message.Json);
                     DatasManager.Instance.Enemies = items;
 
@@ -852,7 +847,6 @@ public class NetworkManager : MonoBehaviour
                     {
                         UIManager.This.ShowMain();
                     });
-                    //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
                 }
                 break;
 
@@ -866,7 +860,6 @@ public class NetworkManager : MonoBehaviour
                             //UIManager.This.StartAdventure(); // TODO : ADVENTURE IMPLEMENTATION
                             Adventure.StartDungeon();
                         });
-                        //MessagingCenter.Send(this, MessengerCodes.EnterDungeon);
                     }
                     else
                     {
