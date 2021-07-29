@@ -13,7 +13,7 @@ public class WorldDoor : MonoBehaviour
         if (collider.gameObject.tag == "MyPlayer")
         {
             Debug.Log($"Let's go to {GoToMapIdentifier}");
-            WorldManager.This.LoadMap(GoToMapIdentifier);
+            //WorldManager.This.LoadMap(GoToMapIdentifier);
         }
     }
 }

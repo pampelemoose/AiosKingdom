@@ -397,6 +397,9 @@ namespace Server.GameServer
                     Name = adventure.Name,
                     RequiredLevel = adventure.RequiredLevel,
                     MaxLevelAuthorized = adventure.MaxLevelAuthorized,
+                    MapIdentifier = adventure.MapIdentifier,
+                    SpawnCoordinateX = adventure.SpawnCoordinateX,
+                    SpawnCoordinateY = adventure.SpawnCoordinateY,
                     ExperienceReward = adventure.ExperienceReward,
                     ShardReward = adventure.ShardReward,
                     Quests = new List<Network.Adventures.Quest>()
@@ -525,7 +528,7 @@ namespace Server.GameServer
                 NextDialogues = new List<Network.Adventures.NpcDialogue>()
             };
 
-            var nextDialogues = DataRepositories.AdventureRepository.GetNextDialoguesForDialogue(_config.VersionId, dialogue.Vid);
+            var nextDialogues = DataRepositories.AdventureRepository.GetNextDialoguesForDialogue(_config.VersionId, dialogue.Id);
             foreach(var nextDial in nextDialogues)
             {
                 var nextDi = BuildNpcDialogue(nextDial);

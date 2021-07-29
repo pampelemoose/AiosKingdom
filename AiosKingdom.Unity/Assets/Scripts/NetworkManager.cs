@@ -197,12 +197,9 @@ public class NetworkManager : MonoBehaviour
                             PlayerPrefs.Save();
                             UIManager.This.AccountCreated(appUser.SafeKey);
                         });
-
-                        //MessagingCenter.Send(this, MessengerCodes.CreateNewAccount, appUser.SafeKey);
                     }
                     else
                     {
-                        //MessagingCenter.Send(this, MessengerCodes.CreateNewAccountFailed, message.Json);
                         Debug.Log("CreateAccount error : " + message.Json);
                     }
                 }
@@ -214,12 +211,10 @@ public class NetworkManager : MonoBehaviour
                         var authToken = JsonConvert.DeserializeObject<Guid>(message.Json);
 
                         _dispatchAuthToken = authToken;
-                        //MessagingCenter.Send(this, MessengerCodes.LoginSuccessful);
                         AskServerInfos();
                     }
                     else
                     {
-                        //MessagingCenter.Send(this, MessengerCodes.LoginFailed, message.Json);
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
                             PlayerPrefs.DeleteKey("AiosKingdom_IdentifyingKey");
@@ -234,7 +229,6 @@ public class NetworkManager : MonoBehaviour
             case JsonObjects.CommandCodes.Client_ServerList:
                 {
                     var servers = JsonConvert.DeserializeObject<List<JsonObjects.GameServerInfos>>(message.Json);
-                    //MessagingCenter.Send(this, MessengerCodes.ServerListReceived, servers);
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
                         UIManager.This.ShowServerList(servers);
@@ -250,7 +244,6 @@ public class NetworkManager : MonoBehaviour
                     }
                     else
                     {
-                        //ScreenManager.Instance.AlertScreen("Server Connection", message.Json);
                         Debug.Log("Server Connection : " + message.Json);
                         AskServerInfos();
                     }
@@ -268,11 +261,11 @@ public class NetworkManager : MonoBehaviour
                             PlayerPrefs.Save();
                             AskAuthentication(appUser.Identifier.ToString());
                         });
-                        //MessagingCenter.Send(this, MessengerCodes.RetrievedAccount);
                     }
                     else
                     {
                         //ScreenManager.Instance.AlertScreen("Failed", message.Json);
+                        Debug.Log("Could not retrieve account: " + message.Json);
                     }
                 }
                 break;
@@ -379,14 +372,12 @@ public class NetworkManager : MonoBehaviour
                 }
                 catch (SocketException sockE)
                 {
-                    //MessagingCenter.Send(this, MessengerCodes.Disconnected, sockE.Message);
                     Debug.Log("Socket exception : " + sockE);
                 }
             }, null);
 
             if (!result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
             {
-                //MessagingCenter.Send(this, MessengerCodes.Disconnected, "Connection lost, please reconnect..");
                 Debug.Log("Connection lost, please reconnect..");
             }
         }
@@ -530,7 +521,6 @@ public class NetworkManager : MonoBehaviour
                     }
                     else
                     {
-                        //MessagingCenter.Send(this, MessengerCodes.ConnectedToServerFailed, message.Json);
                         Debug.Log("Authenticate error : " + message.Json);
                     }
                 }
@@ -539,22 +529,19 @@ public class NetworkManager : MonoBehaviour
                 {
                     if (message.Success)
                     {
+                        //ScreenManager.Instance.AlertScreen("Soul Creation", message.Json);
                         AskSoulList();
-                        //MessagingCenter.Send(this, MessengerCodes.CreateSoulSuccess);
                     }
                     else
                     {
-                        //MessagingCenter.Send(this, MessengerCodes.CreateSoulFailed);
                         Debug.Log("New Soul error : " + message.Json);
                     }
-                    //ScreenManager.Instance.AlertScreen("Soul Creation", message.Json);
                 }
                 break;
             case JsonObjects.CommandCodes.Server.SoulList:
                 {
                     var souls = JsonConvert.DeserializeObject<List<JsonObjects.SoulInfos>>(message.Json);
 
-                    //MessagingCenter.Send(this, MessengerCodes.SoulListReceived, souls);
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
                         UIManager.This.ShowSoulList(souls);
@@ -570,7 +557,6 @@ public class NetworkManager : MonoBehaviour
                     }
                     else
                     {
-                        //ScreenManager.Instance.AlertScreen("Soul Connection", message.Json);
                         Debug.Log("Connect Soul error : " + message.Json);
                     }
                 }
@@ -679,7 +665,6 @@ public class NetworkManager : MonoBehaviour
                         //Application.Current.SavePropertiesAsync();
                         //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
                     }
-                    //MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.LearnTalent:
@@ -697,7 +682,6 @@ public class NetworkManager : MonoBehaviour
                         //Application.Current.SavePropertiesAsync();
                         //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
                     }
-                    //MessagingCenter.Send(this, MessengerCodes.SkillLearned, message.Json);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.Currencies:
@@ -712,7 +696,6 @@ public class NetworkManager : MonoBehaviour
                             Main.UpdateCurrencies();
                         }));
                     }
-                    //MessagingCenter.Send(this, MessengerCodes.CurrenciesUpdated);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.Inventory:
@@ -752,7 +735,6 @@ public class NetworkManager : MonoBehaviour
                             Talents.LoadTalents();
                         });
                     }
-                    //MessagingCenter.Send(this, MessengerCodes.KnowledgeUpdated);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.Equipment:
@@ -767,7 +749,30 @@ public class NetworkManager : MonoBehaviour
                             Equipment.UpdateEquipment();
                         });
                     }
-                    //MessagingCenter.Send(this, MessengerCodes.EquipmentUpdated);
+                }
+                break;
+
+            // MARKET
+            case JsonObjects.CommandCodes.Listing.Market:
+                {
+                    var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
+                    DatasManager.Instance.MarketItems = items;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        Market.UpdateItems();
+                    });
+                }
+                break;
+            case JsonObjects.CommandCodes.Listing.SpecialsMarket:
+                {
+                    var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
+                    DatasManager.Instance.SpecialMarketItems = items;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        Market.UpdateSpecialItems();
+                    });
                 }
                 break;
 
@@ -808,37 +813,50 @@ public class NetworkManager : MonoBehaviour
             case JsonObjects.CommandCodes.Listing.Dungeon:
                 {
                     var dungeons = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Adventure>>(message.Json);
-                    DatasManager.Instance.Dungeons = dungeons;
+                    DatasManager.Instance.Adventures = dungeons;
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        UIManager.This.ShowMain();
+                        AskTavernList();
                     });
                     //MessagingCenter.Send(this, MessengerCodes.DungeonListUpdated);
                 }
                 break;
-            case JsonObjects.CommandCodes.Listing.Market:
+            case JsonObjects.CommandCodes.Listing.Tavern:
                 {
                     //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
-                    var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
-                    DatasManager.Instance.MarketItems = items;
+                    var items = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Tavern>>(message.Json);
+                    DatasManager.Instance.Taverns = items;
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        Market.UpdateItems();
+                        AskNpcList();
                     });
                     //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
                 }
                 break;
-            case JsonObjects.CommandCodes.Listing.SpecialsMarket:
+            case JsonObjects.CommandCodes.Listing.Npc:
                 {
                     //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
-                    var items = JsonConvert.DeserializeObject<List<JsonObjects.MarketSlot>>(message.Json);
-                    DatasManager.Instance.SpecialMarketItems = items;
+                    var items = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Npc>>(message.Json);
+                    DatasManager.Instance.Npcs = items;
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
-                        Market.UpdateSpecialItems();
+                        AskEnemyList();
+                    });
+                    //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
+                }
+                break;
+            case JsonObjects.CommandCodes.Listing.Enemy:
+                {
+                    //, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }
+                    var items = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Enemy>>(message.Json);
+                    DatasManager.Instance.Enemies = items;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
+                        UIManager.This.ShowMain();
                     });
                     //MessagingCenter.Send(this, MessengerCodes.MarketUpdated);
                 }
@@ -1090,6 +1108,44 @@ public class NetworkManager : MonoBehaviour
                 }
                 break;
 
+            // ADVENTURE
+            case JsonObjects.CommandCodes.Adventure.Start:
+                {
+                    if (message.Success)
+                    {
+                        var adventureId = Guid.Parse(message.Json);
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            AdventureUIManager.This.StartAdventure(adventureId);
+                            UIManager.This.StartAdventure();
+                        });
+                    }
+                }
+                break;
+            case JsonObjects.CommandCodes.Adventure.Move:
+                {
+                    if (message.Success)
+                    {
+                        var movement = (JsonObjects.Adventures.Movement)Enum.Parse(typeof(JsonObjects.Adventures.Movement), message.Json);
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            WorldManager.This.Move(movement);
+                        });
+                    }
+                }
+                break;
+            case JsonObjects.CommandCodes.Adventure.RestInTavern:
+                {
+                    if (message.Success)
+                    {
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            WorldManager.This.RestInTavern();
+                        });
+                    }
+                }
+                break;
+
             default:
                 return false;
         }
@@ -1123,6 +1179,18 @@ public class NetworkManager : MonoBehaviour
 
     #endregion
 
+    #region Market Commands
+    public void AskMarketItems()
+    {
+        SendRequest(JsonObjects.CommandCodes.Listing.Market);
+    }
+
+    public void AskSpecialMarketItems()
+    {
+        SendRequest(JsonObjects.CommandCodes.Listing.SpecialsMarket);
+    }
+    #endregion
+
     #region Listing Commands
 
     public void AskItemList()
@@ -1145,14 +1213,19 @@ public class NetworkManager : MonoBehaviour
         SendRequest(JsonObjects.CommandCodes.Listing.Dungeon);
     }
 
-    public void AskMarketItems()
+    public void AskTavernList()
     {
-        SendRequest(JsonObjects.CommandCodes.Listing.Market);
+        SendRequest(JsonObjects.CommandCodes.Listing.Tavern);
     }
 
-    public void AskSpecialMarketItems()
+    public void AskNpcList()
     {
-        SendRequest(JsonObjects.CommandCodes.Listing.SpecialsMarket);
+        SendRequest(JsonObjects.CommandCodes.Listing.Npc);
+    }
+
+    public void AskEnemyList()
+    {
+        SendRequest(JsonObjects.CommandCodes.Listing.Enemy);
     }
 
     #endregion
@@ -1225,6 +1298,24 @@ public class NetworkManager : MonoBehaviour
     public void AskEquipment()
     {
         SendRequest(JsonObjects.CommandCodes.Player.Equipment);
+    }
+
+    #endregion
+
+    #region Adventure Commands
+    public void StartAdventure(Guid adventureId, List<JsonObjects.AdventureState.BagItem> items)
+    {
+        SendRequest(JsonObjects.CommandCodes.Adventure.Start, new string[2] { adventureId.ToString(), JsonConvert.SerializeObject(items) });
+    }
+
+    public void Move(JsonObjects.Adventures.Movement move)
+    {
+        SendRequest(JsonObjects.CommandCodes.Adventure.Move, new string[1] { move.ToString() });
+    }
+
+    public void RestInTavern(Guid tavernId)
+    {
+        SendRequest(JsonObjects.CommandCodes.Adventure.RestInTavern, new string[1] { tavernId.ToString() });
     }
 
     #endregion

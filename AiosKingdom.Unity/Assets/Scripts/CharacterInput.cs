@@ -32,9 +32,40 @@ public class CharacterInput : MonoBehaviour
         }
     }
 
+    public void Move(JsonObjects.Adventures.Movement move)
+    {
+        switch (move)
+        {
+            case JsonObjects.Adventures.Movement.Up:
+                {
+                    var newPosition = new Vector2(_currentPosition.x, _currentPosition.y + TileSize);
+                    _move(newPosition);
+                }
+                break;
+            case JsonObjects.Adventures.Movement.Down:
+                {
+                    var newPosition = new Vector2(_currentPosition.x, _currentPosition.y - TileSize);
+                    _move(newPosition);
+                }
+                break;
+            case JsonObjects.Adventures.Movement.Left:
+                {
+                    var newPosition = new Vector2(_currentPosition.x - TileSize, _currentPosition.y);
+                    _move(newPosition);
+                }
+                break;
+            case JsonObjects.Adventures.Movement.Right:
+                {
+                    var newPosition = new Vector2(_currentPosition.x + TileSize, _currentPosition.y);
+                    _move(newPosition);
+                }
+                break;
+        }
+    }
+
     private void _keyboardInputs()
     {
-        if (!UIHandler.This.CanMove)
+        if (!AdventureUIManager.This.CanMove)
         {
             return;
         }
@@ -43,23 +74,19 @@ public class CharacterInput : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                var newPosition = new Vector2(_currentPosition.x, _currentPosition.y + TileSize);
-                _move(newPosition);
+                NetworkManager.This.Move(JsonObjects.Adventures.Movement.Up);
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                var newPosition = new Vector2(_currentPosition.x, _currentPosition.y - TileSize);
-                _move(newPosition);
+                NetworkManager.This.Move(JsonObjects.Adventures.Movement.Down);
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                var newPosition = new Vector2(_currentPosition.x + TileSize, _currentPosition.y);
-                _move(newPosition);
+                NetworkManager.This.Move(JsonObjects.Adventures.Movement.Right);
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                var newPosition = new Vector2(_currentPosition.x - TileSize, _currentPosition.y);
-                _move(newPosition);
+                NetworkManager.This.Move(JsonObjects.Adventures.Movement.Left);
             }
         }
 
@@ -71,7 +98,7 @@ public class CharacterInput : MonoBehaviour
 
     private void _screenTouchInputs()
     {
-        if (!UIHandler.This.CanMove)
+        if (!AdventureUIManager.This.CanMove)
         {
             return;
         }

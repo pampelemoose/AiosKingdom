@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Server.GameServer.Commands.Listing
 {
-    public class DungeonCommand : ACommand
+    public class TavernCommand : ACommand
     {
-        public DungeonCommand(CommandArgs args)
+        public TavernCommand(CommandArgs args)
             : base(args)
         {
         }
@@ -18,8 +18,8 @@ namespace Server.GameServer.Commands.Listing
         {
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Listing.Dungeon,
-                Json = JsonConvert.SerializeObject(DataManager.Instance.Dungeons),
+                Code = Network.CommandCodes.Listing.Tavern,
+                Json = JsonConvert.SerializeObject(DataManager.Instance.Taverns),
                 Success = true
             };
             ret.Succeeded = true;

@@ -58,10 +58,16 @@
     <Compile Include="ClientsManager.cs" />
     <Compile Include="CommandManager.cs" />
     <Compile Include="Commands\ACommand.cs" />
+    <Compile Include="Commands\Adventure\RestInTavernCommand.cs" />
+    <Compile Include="Commands\Adventure\MoveCommand.cs" />
+    <Compile Include="Commands\Adventure\StartCommand.cs" />
     <Compile Include="Commands\Dungeon\BuyShopItemCommand.cs" />
     <Compile Include="Commands\Dungeon\EnterRoomCommand.cs" />
     <Compile Include="Commands\Dungeon\LootDungeonItemCommand.cs" />
     <Compile Include="Commands\Dungeon\PlayerRestCommand.cs" />
+    <Compile Include="Commands\Listing\EnemyCommand.cs" />
+    <Compile Include="Commands\Listing\NpcCommand.cs" />
+    <Compile Include="Commands\Listing\TavernCommand.cs" />
     <Compile Include="Commands\Player\AdventureUnlockedCommand.cs" />
     <Compile Include="Commands\Listing\ItemCommand.cs" />
     <Compile Include="Commands\Listing\BookCommand.cs" />
@@ -86,7 +92,7 @@
     <Compile Include="Commands\Dungeon\EnterCommand.cs" />
     <Compile Include="Commands\Dungeon\ExitCommand.cs" />
     <Compile Include="Commands\Dungeon\LeaveFinishedRoomCommand.cs" />
-    <Compile Include="Commands\Listing\DungeonCommand.cs" />
+    <Compile Include="Commands\Listing\AdventureCommand.cs" />
     <Compile Include="Commands\Dungeon\GetLootsCommand.cs" />
     <Compile Include="Commands\Dungeon\UpdateRoomCommand.cs" />
     <Compile Include="Commands\Dungeon\UseSkillCommand.cs" />
@@ -97,6 +103,7 @@
     <Compile Include="Commands\PingCommand.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="InventoryManager.cs" />
+    <Compile Include="AdventureLog.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Market.cs" />
     <Compile Include="Program.cs" />

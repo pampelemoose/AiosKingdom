@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands.Dungeon
+namespace Server.GameServer.Commands.Adventure
 {
-    public class EnterCommand : ACommand
+    public class StartCommand : ACommand
     {
-        public EnterCommand(CommandArgs args)
+        public StartCommand(CommandArgs args)
             : base(args)
         {
         }
@@ -28,7 +28,7 @@ namespace Server.GameServer.Commands.Dungeon
             {
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Dungeon.Enter,
+                    Code = Network.CommandCodes.Adventure.Start,
                     Success = false,
                     Json = "You must have learned at least one skill."
                 };
@@ -41,7 +41,7 @@ namespace Server.GameServer.Commands.Dungeon
             {
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Dungeon.Enter,
+                    Code = Network.CommandCodes.Adventure.Start,
                     Success = false,
                     Json = "Couldn't enter because you didn't unlock this adventure yet."
                 };
@@ -56,7 +56,7 @@ namespace Server.GameServer.Commands.Dungeon
             {
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Dungeon.Enter,
+                    Code = Network.CommandCodes.Adventure.Start,
                     Success = false,
                     Json = "Couldn't enter because you didn't leave properly last time."
                 };
@@ -85,9 +85,9 @@ namespace Server.GameServer.Commands.Dungeon
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon.Enter,
+                Code = Network.CommandCodes.Adventure.Start,
                 Success = true,
-                Json = "Entered the adventure."
+                Json = adventure.AdventureId.ToString()
             };
             ret.Succeeded = true;
 

@@ -198,11 +198,10 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         ChangeView(Views.AdventureSelection);
     }
 
-    public void ShowAdventureWorld()
+    public void StartAdventure()
     {
         MenuCamera.SetActive(false);
         gameObject.SetActive(false);
-        AdventureUIHandler.SetActive(true);
     }
 
     //public void StartAdventure()

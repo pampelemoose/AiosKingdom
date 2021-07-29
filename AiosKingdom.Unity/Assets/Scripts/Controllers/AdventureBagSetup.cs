@@ -66,7 +66,7 @@ public class AdventureBagSetup : PaginationBox
         {
             gameObject.SetActive(false);
 
-            UIManager.This.ShowAdventureWorld();
+            NetworkManager.This.StartAdventure(adventure.Id, _bag);
         });
 
         SetItems();

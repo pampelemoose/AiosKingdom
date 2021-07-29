@@ -1227,6 +1227,7 @@ namespace DataRepositories.Migrations
         #region ADVENTURES
         private void _createAdventures(AiosKingdomContext context, DataModels.Version version)
         {
+            _createTaverns(context, version);
             _createNpcs(context, version);
 
             context.SaveChanges();
@@ -1234,6 +1235,21 @@ namespace DataRepositories.Migrations
             _createHauntedHouseAdventure(context, version);
 
             context.SaveChanges();
+        }
+
+        private void _createTaverns(AiosKingdomContext context, DataModels.Version version)
+        {
+            context.Taverns.Add(new DataModels.Adventures.Tavern
+            {
+                Id = Guid.NewGuid(),
+                VersionId = version.Id,
+                Vid = Guid.NewGuid(),
+                FoodCost = 1,
+                FoodHealth = 10,
+                RestShardCost = 1,
+                RestStamina = 2,
+                ShopItems = new System.Collections.Generic.List<DataModels.Adventures.ShopItem>()
+            });
         }
 
         private void _createNpcs(AiosKingdomContext context, DataModels.Version version)

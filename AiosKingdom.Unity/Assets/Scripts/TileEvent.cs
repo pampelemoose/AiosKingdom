@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class TileEvent : MonoBehaviour
     public enum EventType
     {
         ZoneConsuption,
-        RestoreStamina,
+        EnterTavern,
 
         EnterCombat
     }
@@ -31,12 +32,13 @@ public class TileEvent : MonoBehaviour
                 case EventType.ZoneConsuption:
                     characterScript.SetZoneConsumption(EventIntValue);
                     break;
-                case EventType.RestoreStamina:
-                    characterScript.RestoreStamina(characterScript.MaxStamina);
+                case EventType.EnterTavern:
+                    WorldManager.This.EnterTavern(Guid.Parse(EventStringValue));
+                    NetworkManager.This.RestInTavern(Guid.Parse(EventStringValue)); // TODO : TMP, NEED POPUP
                     break;
                 case EventType.EnterCombat:
                     Debug.Log($"Enter combat with {EventStringValue}");
-                    UIHandler.This.StartCombat(characterScript.Health, characterScript.Health, characterScript.Mana, characterScript.Mana, null);
+                    AdventureUIManager.This.StartCombat(characterScript.Health, characterScript.Health, characterScript.Mana, characterScript.Mana, null);
                     Destroy(gameObject);
                     break;
             }

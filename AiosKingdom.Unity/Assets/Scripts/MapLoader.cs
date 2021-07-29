@@ -19,9 +19,9 @@ public class MapLoader : MonoBehaviour
 
     void Update()
     {
-        if (!_mapLoaded && UIHandler.This != null)
+        if (!_mapLoaded && AdventureUIManager.This != null)
         {
-            UIHandler.This.SetPlayerCurrentMap(MapName);
+            AdventureUIManager.This.SetPlayerCurrentMap(MapName);
 
             _mapLoaded = true;
         }

@@ -18,7 +18,16 @@ public class Character : MonoBehaviour
 
     void Update()
     {
-        UIHandler.This.UpdateCharacterStats(_currentStamina);
+        AdventureUIManager.This.UpdateCharacterStats(_currentStamina);
+    }
+
+    public void Initialize(JsonObjects.SoulDatas data)
+    {
+        MaxStamina = data.TotalStamina * 10;
+        _currentStamina = MaxStamina;
+
+        Health = data.MaxHealth;
+        Mana = data.MaxMana;
     }
 
     public void SetZoneConsumption(int val)

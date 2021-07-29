@@ -19,22 +19,22 @@ namespace Server.GameServer.Commands.Dungeon
             var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
             var adventure = AdventureManager.Instance.GetAdventure(soulId);
 
-            if (adventure != null)
-            {
-                var dungeonId = adventure.AdventureId;
+            //if (adventure != null)
+            //{
+            //    var dungeonId = adventure.AdventureId;
 
-                AdventureManager.Instance.OpenRoom(soulId, dungeonId);
+            //    AdventureManager.Instance.OpenRoom(soulId, dungeonId);
 
-                ret.ClientResponse = new Network.Message
-                {
-                    Code = Network.CommandCodes.Dungeon.EnterRoom,
-                    Success = true,
-                    Json = "Entered next room."
-                };
-                ret.Succeeded = true;
+            //    ret.ClientResponse = new Network.Message
+            //    {
+            //        Code = Network.CommandCodes.Dungeon.EnterRoom,
+            //        Success = true,
+            //        Json = "Entered next room."
+            //    };
+            //    ret.Succeeded = true;
 
-                return ret;
-            }
+            //    return ret;
+            //}
 
             ret.ClientResponse = new Network.Message
             {

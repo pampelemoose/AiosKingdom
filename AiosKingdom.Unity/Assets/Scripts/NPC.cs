@@ -54,7 +54,7 @@ public class NPC : MonoBehaviour
         {
             if (Types.Contains(NpcType.Talk))
             {
-                UIHandler.This.ShowMenuAction(MenuBox.ActionType.Talk, _setAction);
+                AdventureUIManager.This.ShowMenuAction(MenuBox.ActionType.Talk, _setAction);
             }
         }
     }
@@ -63,7 +63,7 @@ public class NPC : MonoBehaviour
     {
         if (collider.gameObject.tag == "MyPlayer")
         {
-            UIHandler.This.RemoveMenuAction(MenuBox.ActionType.Talk);
+            AdventureUIManager.This.RemoveMenuAction(MenuBox.ActionType.Talk);
         }
     }
 
@@ -72,7 +72,7 @@ public class NPC : MonoBehaviour
         var action = Actions.FirstOrDefault(a => a.Index == _currentAction);
         action.Choices = action.Choices.OrderBy(c => c.Order).ToArray();
 
-        UIHandler.This.ShowChat(Actions[_currentAction].ChatText);
+        AdventureUIManager.This.ShowChat(Actions[_currentAction].ChatText);
 
         foreach (var choice in action.Choices)
         {
@@ -80,7 +80,7 @@ public class NPC : MonoBehaviour
             {
                 case NpcActionType.Next:
                     {
-                        UIHandler.This.ChatboxAddChoice(choice.ActionText != "" ? choice.ActionText : "Next", () =>
+                        AdventureUIManager.This.ChatboxAddChoice(choice.ActionText != "" ? choice.ActionText : "Next", () =>
                         {
                             _nextAction(choice.GoToIndex);
                         });
@@ -88,7 +88,7 @@ public class NPC : MonoBehaviour
                     break;
                 case NpcActionType.Close:
                     {
-                        UIHandler.This.ChatboxAddChoice(choice.ActionText != "" ? choice.ActionText : "Close", _closeAction);
+                        AdventureUIManager.This.ChatboxAddChoice(choice.ActionText != "" ? choice.ActionText : "Close", _closeAction);
                     }
                     break;
             }
@@ -97,7 +97,7 @@ public class NPC : MonoBehaviour
 
     private void _nextAction(int index)
     {
-        UIHandler.This.ChatboxClearChoices();
+        AdventureUIManager.This.ChatboxClearChoices();
 
         _currentAction = index;
 
@@ -107,7 +107,7 @@ public class NPC : MonoBehaviour
     private void _closeAction()
     {
         _currentAction = 0;
-        UIHandler.This.CloseChat();
-        UIHandler.This.ChatboxClearChoices();
+        AdventureUIManager.This.CloseChat();
+        AdventureUIManager.This.ChatboxClearChoices();
     }
 }

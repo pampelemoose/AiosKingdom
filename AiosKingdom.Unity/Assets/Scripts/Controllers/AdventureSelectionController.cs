@@ -14,7 +14,7 @@ public class AdventureSelectionController : PaginationBox
 
     void Awake()
     {
-        _adventures = DatasManager.Instance.Dungeons;
+        _adventures = DatasManager.Instance.Adventures;
 
         CloseButton.onClick.RemoveAllListeners();
         CloseButton.onClick.AddListener(() =>

@@ -142,7 +142,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &26934578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1783,10 +1783,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Character: {fileID: 775438495}
   WorldMapPrefabs:
-  - Identifier: Test
+  - Identifier: FF4FDB3B-3CA8-4855-925A-AE3D61B918E0
     MapPrefab: {fileID: 7341004397497725273, guid: 3f3621b320b5a894e880e30e1adf1530,
       type: 3}
-  DefaultMapIdentifier: Test
   WorldParent: {fileID: 1496600426}
 --- !u!1001 &1560007606
 PrefabInstance:
@@ -2223,9 +2222,9 @@ RectTransform:
   - {fileID: 1177896356}
   - {fileID: 1818532842}
   - {fileID: 135372295}
+  - {fileID: 767056410}
   - {fileID: 1219864265}
   - {fileID: 1651017329}
-  - {fileID: 767056410}
   - {fileID: 1694196660}
   - {fileID: 484923845}
   - {fileID: 1471680446}
@@ -2572,7 +2571,7 @@ PrefabInstance:
     - target: {fileID: 1428750460997309611, guid: 762afe468318275449875b1b889e3730,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1428750460997309611, guid: 762afe468318275449875b1b889e3730,
         type: 3}
@@ -3862,7 +3861,7 @@ PrefabInstance:
     - target: {fileID: 7871814662295999293, guid: 9ca5a537a7e463a489d2e26202a392e7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7871814662295999293, guid: 9ca5a537a7e463a489d2e26202a392e7,
         type: 3}
@@ -4119,7 +4118,7 @@ PrefabInstance:
     - target: {fileID: 8368833486211791512, guid: 3670522fe745aed429260d8f235ea5f5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8368833486211791512, guid: 3670522fe745aed429260d8f235ea5f5,
         type: 3}

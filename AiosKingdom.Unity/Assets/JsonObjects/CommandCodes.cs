@@ -58,6 +58,9 @@ namespace JsonObjects
             public const int Dungeon = _default + 4;
             public const int Market = _default + 5;
             public const int SpecialsMarket = _default + 6;
+            public const int Tavern = _default + 7;
+            public const int Npc = _default + 8;
+            public const int Enemy = _default + 9;
         }
 
         public static class Dungeon
@@ -78,6 +81,15 @@ namespace JsonObjects
             public const int BuyShopItem = _default + 12;
             public const int PlayerDied = _default + 13;
             public const int PlayerRest = _default + 14;
+        }
+
+        public static class Adventure
+        {
+            private const int _default = 200;
+
+            public const int Start = _default + 1;
+            public const int Move = _default + 2;
+            public const int RestInTavern = _default + 3;
         }
     }
 }

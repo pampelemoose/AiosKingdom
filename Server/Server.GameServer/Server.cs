@@ -130,7 +130,10 @@ namespace Server.GameServer
             SetupServerDelegates();
             SetupListingDelegates();
             SetupPlayerDelegates();
+
             SetupDungeonDelegates();
+
+            SetupAdventureDelegates();
         }
 
         private void SetupServerDelegates()
@@ -153,16 +156,22 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Listing.Item, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Book, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Monster, 0);
-            _commandArgCount.Add(Network.CommandCodes.Listing.Dungeon, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Adventure, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Market, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.SpecialsMarket, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Tavern, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Npc, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Enemy, 0);
 
             _delegates.Add(Network.CommandCodes.Listing.Item, (args) => { return new Commands.Listing.ItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Book, (args) => { return new Commands.Listing.BookCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Monster, (args) => { return new Commands.Listing.MonsterCommand(args); });
-            _delegates.Add(Network.CommandCodes.Listing.Dungeon, (args) => { return new Commands.Listing.DungeonCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Adventure, (args) => { return new Commands.Listing.AdventureCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Market, (args) => { return new Commands.Listing.MarketCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.SpecialsMarket, (args) => { return new Commands.Listing.SpecialMarketCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Tavern, (args) => { return new Commands.Listing.TavernCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Npc, (args) => { return new Commands.Listing.NpcCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Enemy, (args) => { return new Commands.Listing.EnemyCommand(args); });
         }
 
         private void SetupPlayerDelegates()
@@ -225,6 +234,17 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Dungeon.DoNothingTurn, (args) => { return new Commands.Dungeon.DoNothingTurnCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.BuyShopItem, (args) => { return new Commands.Dungeon.BuyShopItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Dungeon.PlayerRest, (args) => { return new Commands.Dungeon.PlayerRestCommand(args); });
+        }
+
+        private void SetupAdventureDelegates()
+        {
+            _commandArgCount.Add(Network.CommandCodes.Adventure.Start, 2);
+            _commandArgCount.Add(Network.CommandCodes.Adventure.Move, 1);
+            _commandArgCount.Add(Network.CommandCodes.Adventure.RestInTavern, 1);
+
+            _delegates.Add(Network.CommandCodes.Adventure.Start, (args) => { return new Commands.Adventure.StartCommand(args); });
+            _delegates.Add(Network.CommandCodes.Adventure.Move, (args) => { return new Commands.Adventure.MoveCommand(args); });
+            _delegates.Add(Network.CommandCodes.Adventure.RestInTavern, (args) => { return new Commands.Adventure.RestInTavernCommand(args); });
         }
 
         private void Run()
@@ -583,11 +603,17 @@ namespace Server.GameServer
                     break;
                 case Network.CommandCodes.Listing.Monster:
                     break;
-                case Network.CommandCodes.Listing.Dungeon:
+                case Network.CommandCodes.Listing.Adventure:
                     break;
                 case Network.CommandCodes.Listing.Market:
                     break;
                 case Network.CommandCodes.Listing.SpecialsMarket:
+                    break;
+                case Network.CommandCodes.Listing.Tavern:
+                    break;
+                case Network.CommandCodes.Listing.Npc:
+                    break;
+                case Network.CommandCodes.Listing.Enemy:
                     break;
 
                 // DUNGEON
@@ -621,6 +647,17 @@ namespace Server.GameServer
                     retVal.Args = new string[2] { args[0], args[1] };
                     break;
                 case Network.CommandCodes.Dungeon.PlayerRest:
+                    break;
+
+                // ADVENTURE
+                case Network.CommandCodes.Adventure.Start:
+                    retVal.Args = new string[2] { args[0], args[1] };
+                    break;
+                case Network.CommandCodes.Adventure.Move:
+                    retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Adventure.RestInTavern:
+                    retVal.Args = new string[1] { args[0] };
                     break;
 
                 default:

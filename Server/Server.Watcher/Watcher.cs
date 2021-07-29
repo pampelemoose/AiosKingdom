@@ -10,15 +10,21 @@ namespace Server.Watcher
 {
     public class Watcher
     {
+        private Thread _thread;
+
         private bool _running;
 
         public Watcher()
         {
+            ThreadStart del = new ThreadStart(Run);
+            _thread = new Thread(del);
         }
 
         public void Start()
         {
             _running = true;
+
+            _thread.Start();
         }
 
         public void PrintStatus()
@@ -64,6 +70,18 @@ namespace Server.Watcher
         }
 
         public bool IsRunning => _running;
+
+        public void Run()
+        {
+            while (_running)
+            {
+                PrintStatus();
+
+                Thread.Sleep(30000);
+            }
+
+            _thread.Abort();
+        }
 
         public void Stop()
         {

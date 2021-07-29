@@ -54,6 +54,7 @@ namespace Network
         }
 
         public string Name { get; set; }
+        public int CurrentStamina { get; set; }
         public int CurrentCoordinateX { get; set; }
         public int CurrentCoordinateY { get; set; }
 

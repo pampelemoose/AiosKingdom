@@ -43,10 +43,10 @@ namespace Server.GameServer
 
         public bool IsUnlocked(Guid dungeonId, List<Network.AdventureUnlocked> unlocks)
         {
-            var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(dungeonId));
-            if (dungeon.Locks.Count > 0)
+            var netAdventure = DataManager.Instance.Adventures.FirstOrDefault(d => d.Id.Equals(dungeonId));
+            if (netAdventure.Locks.Count > 0)
             {
-                foreach (var locks in dungeon.Locks)
+                foreach (var locks in netAdventure.Locks)
                 {
                     if (!unlocks.Any(u => u.AdventureId.Equals(locks.LockedId)))
                     {
@@ -61,46 +61,54 @@ namespace Server.GameServer
 
         public Adventure Start(Guid soulId, Network.SoulDatas datas, Guid dungeonId, List<Network.Knowledge> knowledges, List<Network.AdventureState.BagItem> bagItems = null)
         {
-            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().OpenRoom({soulId}, {dungeonId})");
-            var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(dungeonId));
-
-            if (!_adventures.ContainsKey(soulId) || 
-                (_adventures.ContainsKey(soulId) && !_adventures[soulId].AdventureId.Equals(dungeonId)))
-            {
-                if (datas.Level > dungeon.MaxLevelAuthorized) return null;
-
-                var adventure = new Adventure(dungeon, datas, knowledges, bagItems);
-                _adventures.Add(soulId, adventure);
-
-                return adventure;
-            }
-
-            return null;
-        }
-
-        public Adventure OpenRoom(Guid soulId, Guid dungeonId)
-        {
-            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().OpenRoom({soulId}, {dungeonId})");
-            var dungeon = DataManager.Instance.Dungeons.FirstOrDefault(d => d.Id.Equals(dungeonId));
+            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().Start({soulId}, {dungeonId})");
+            var netAdventure = DataManager.Instance.Adventures.FirstOrDefault(d => d.Id.Equals(dungeonId));
 
             if (_adventures.ContainsKey(soulId) && _adventures[soulId].AdventureId.Equals(dungeonId))
             {
-                var adventure = _adventures[soulId];
-
-                if (adventure.IsCleared)
-                {
-                    adventure.OpenNextRoom();
-                    _adventures[soulId] = adventure;
-                    return adventure;
-                }
+                _adventures[soulId].End();
+                _adventures.Remove(soulId);
             }
 
-            return null;
+            if (datas.Level > netAdventure.MaxLevelAuthorized) return null;
+
+            var adventure = new Adventure(soulId, netAdventure, datas, knowledges, bagItems);
+            _adventures.Add(soulId, adventure);
+
+            return adventure;
         }
 
-        public void ExitRoom(Guid soulId)
+        public void Move(Guid soulId)
         {
-            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().ExitRoom({soulId})");
+            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().Move({soulId}, )");
+            //if (_adventures.ContainsKey(soulId) && _adventures[soulId].AdventureId.Equals(dungeonId))
+            //{
+            //    var adventure = _adventures[soulId];
+
+            //    if (adventure.IsCleared)
+            //    {
+            //        adventure.OpenNextRoom();
+            //        _adventures[soulId] = adventure;
+            //        return adventure;
+            //    }
+            //}
+
+            //return null;
+        }
+
+        public void StartCombat(Guid soulId)
+        {
+            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().StartCombat({soulId}, )");
+        }
+
+        public void EnterTavern(Guid soulId)
+        {
+            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().EnterTavern({soulId}, )");
+        }
+
+        public void FinishAdventure(Guid soulId)
+        {
+            Log.Instance.Write(Log.Level.Infos, $"AdventureManager().FinishAdventure({soulId})");
             if (_adventures.ContainsKey(soulId))
             {
                 var adventure = _adventures[soulId];

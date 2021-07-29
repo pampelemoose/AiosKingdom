@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static MenuBox;
 
-public class UIHandler : MonoBehaviour
+public class AdventureUIManager : MonoBehaviour
 {
     [Serializable]
     public struct UIEntry
@@ -14,7 +15,7 @@ public class UIHandler : MonoBehaviour
         public GameObject Prefab;
     }
 
-    public static UIHandler This;
+    public static AdventureUIManager This;
     private static bool _created = false;
 
     public enum UIEntity
@@ -44,8 +45,30 @@ public class UIHandler : MonoBehaviour
 
             This = this;
 
-            World.SetActive(true);
-            WorldCamera.SetActive(true);
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void StartAdventure(Guid adventureId)
+    {
+        gameObject.SetActive(true);
+
+        foreach (var child in _instances)
+        {
+            Destroy(child.Value);
+        }
+
+        _instances = new Dictionary<UIEntity, GameObject>();
+
+        World.SetActive(true);
+        WorldCamera.SetActive(true);
+
+        var adventure = DatasManager.Instance.Adventures.FirstOrDefault(a => a.Id == adventureId);
+
+        if (adventure != null)
+        {
+            WorldManager.This.LoadMap(adventure);
+            WorldManager.This.LoadCharacter();
         }
     }
 
