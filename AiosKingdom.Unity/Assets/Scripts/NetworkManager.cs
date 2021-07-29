@@ -552,7 +552,6 @@ public class NetworkManager : MonoBehaviour
                 {
                     if (message.Success)
                     {
-                        //MessagingCenter.Send(this, MessengerCodes.SoulConnected);
                         AskItemList();
                     }
                     else
@@ -579,7 +578,6 @@ public class NetworkManager : MonoBehaviour
                             //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
                         }
 
-                        //MessagingCenter.Send(this, MessengerCodes.SoulDatasUpdated);
                         SceneLoom.Loom.QueueOnMainThread((Action)(() =>
                         {
                             Main.UpdatePlayerDatas();
@@ -598,7 +596,6 @@ public class NetworkManager : MonoBehaviour
                         AskCurrencies();
                         AskMarketItems();
                     }
-                    //MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.Market_OrderProcessed:
@@ -609,7 +606,6 @@ public class NetworkManager : MonoBehaviour
 
                         AskInventory();
                     }
-                    //MessagingCenter.Send(this, MessengerCodes.BuyMarketItem, message.Json);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.EquipItem:
@@ -650,8 +646,6 @@ public class NetworkManager : MonoBehaviour
                         //Application.Current.SavePropertiesAsync();
                         //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
                     }
-
-                    //MessagingCenter.Send(this, MessengerCodes.LearnSpiritPills, message.Json);
                 }
                 break;
             case JsonObjects.CommandCodes.Player.LearnSkill:
