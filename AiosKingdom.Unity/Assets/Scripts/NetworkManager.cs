@@ -1100,10 +1100,12 @@ public class NetworkManager : MonoBehaviour
                 {
                     if (message.Success)
                     {
-                        var adventureId = Guid.Parse(message.Json);
+                        var adventure = JsonConvert.DeserializeObject<JsonObjects.AdventureState>(message.Json);
+                        DatasManager.Instance.Adventure = adventure;
+
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            AdventureUIManager.This.StartAdventure(adventureId);
+                            AdventureUIManager.This.StartAdventure(adventure.AdventureId);
                             UIManager.This.StartAdventure();
                         });
                     }
@@ -1113,10 +1115,12 @@ public class NetworkManager : MonoBehaviour
                 {
                     if (message.Success)
                     {
-                        var movement = (JsonObjects.Adventures.Movement)Enum.Parse(typeof(JsonObjects.Adventures.Movement), message.Json);
+                        var movementState = JsonConvert.DeserializeObject<JsonObjects.MovingState>(message.Json);
+                        DatasManager.Instance.Adventure.MovingState = movementState;
+
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            WorldManager.This.Move(movement);
+                            WorldManager.This.Move(movementState);
                         });
                     }
                 }
@@ -1125,9 +1129,12 @@ public class NetworkManager : MonoBehaviour
                 {
                     if (message.Success)
                     {
+                        var movementState = JsonConvert.DeserializeObject<JsonObjects.MovingState>(message.Json);
+                        DatasManager.Instance.Adventure.MovingState = movementState;
+
                         SceneLoom.Loom.QueueOnMainThread(() =>
                         {
-                            WorldManager.This.RestInTavern();
+                            WorldManager.This.RestInTavern(movementState);
                         });
                     }
                 }
@@ -1295,9 +1302,9 @@ public class NetworkManager : MonoBehaviour
         SendRequest(JsonObjects.CommandCodes.Adventure.Start, new string[2] { adventureId.ToString(), JsonConvert.SerializeObject(items) });
     }
 
-    public void Move(JsonObjects.Adventures.Movement move)
+    public void Move(JsonObjects.Adventures.Movement move, int consumption)
     {
-        SendRequest(JsonObjects.CommandCodes.Adventure.Move, new string[1] { move.ToString() });
+        SendRequest(JsonObjects.CommandCodes.Adventure.Move, new string[2] { move.ToString(), consumption.ToString() });
     }
 
     public void RestInTavern(Guid tavernId)

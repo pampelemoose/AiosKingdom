@@ -4,7 +4,7 @@ using System.Text;
 
 namespace JsonObjects
 {
-    public struct AdventureState
+    public class AdventureState
     {
         public class EnemyState
         {
@@ -72,6 +72,7 @@ namespace JsonObjects
             public double Amount { get; set; }
         }
 
+        public Guid AdventureId { get; set; }
         public string Name { get; set; }
         public int CurrentRoom { get; set; }
         public int TotalRoomCount { get; set; }
@@ -94,6 +95,7 @@ namespace JsonObjects
         public bool IsExit { get; set; }
 
         public PlayerState State { get; set; }
+        public MovingState MovingState { get; set; }
 
         public int ExperienceReward { get; set; }
         public int ShardReward { get; set; }

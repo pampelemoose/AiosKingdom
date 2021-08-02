@@ -53,10 +53,8 @@ namespace Network
             public bool Completed { get; set; }
         }
 
+        public Guid AdventureId { get; set; }
         public string Name { get; set; }
-        public int CurrentStamina { get; set; }
-        public int CurrentCoordinateX { get; set; }
-        public int CurrentCoordinateY { get; set; }
 
         public Dictionary<Guid, EnemyState> Enemies { get; set; }
         public Dictionary<Guid, QuestState> Quests { get; set; }
@@ -70,6 +68,7 @@ namespace Network
         public List<BagItem> Bag { get; set; }
 
         public PlayerState State { get; set; }
+        public MovingState MovingState { get; set; }
 
         public int ExperienceReward { get; set; }
         public int ShardReward { get; set; }

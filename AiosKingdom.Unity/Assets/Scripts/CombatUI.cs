@@ -51,7 +51,7 @@ public class CombatUI : MonoBehaviour
 
         if (_ennemiesData[ennemy]["Health"] == 0)
         {
-            AdventureUIManager.This.EndCombat();
+            //AdventureUIManager.This.EndCombat();
         }
     }
 

@@ -24,8 +24,8 @@ public class WorldManager : MonoBehaviour
     private string _currentMapIdentifier = null;
     private GameObject _currentMap;
 
-    // IN TAVERN
-    private JsonObjects.Adventures.Tavern _tavern;
+    public int StaminaConsumption => _currentStaminaConsumption;
+    private int _currentStaminaConsumption;
 
     void Awake()
     {
@@ -33,34 +33,20 @@ public class WorldManager : MonoBehaviour
         {
             This = this;
             _created = true;
-            _loadManager();
+
+            _worldMapsPrefabs = new Dictionary<string, GameObject>();
+            foreach (var mapEntry in WorldMapPrefabs)
+            {
+                _worldMapsPrefabs.Add(mapEntry.Identifier, mapEntry.MapPrefab);
+            }
 
             DontDestroyOnLoad(this.gameObject);
         }
     }
 
-    private void _loadManager()
+    public void SetZoneConsumption(int val)
     {
-        _worldMapsPrefabs = new Dictionary<string, GameObject>();
-        foreach (var mapEntry in WorldMapPrefabs)
-        {
-            _worldMapsPrefabs.Add(mapEntry.Identifier, mapEntry.MapPrefab);
-        }
-
-        if (_currentMapIdentifier == null)
-        {
-            //if (_worldMapsPrefabs.ContainsKey(DefaultMapIdentifier))
-            //{
-            //    Character.SetActive(true);
-            //    _currentMap = Instantiate(_worldMapsPrefabs[DefaultMapIdentifier], WorldParent.transform);
-            //    var mapLoader = _currentMap.GetComponent<MapLoader>();
-            //    var spawnAt = mapLoader.SpawnPosition;
-            //    var character = Character.GetComponent<CharacterInput>();
-            //    character.Spawn(spawnAt);
-
-            //    _currentMapIdentifier = DefaultMapIdentifier;
-            //}
-        }
+        _currentStaminaConsumption = val;
     }
 
     public void LoadMap(JsonObjects.Adventures.Adventure adventure)
@@ -85,15 +71,17 @@ public class WorldManager : MonoBehaviour
     public void LoadCharacter()
     {
         var soulData = DatasManager.Instance.Datas;
+        var adventureMovingState = DatasManager.Instance.Adventure.MovingState;
 
-        var characterScript = Character.GetComponent<Character>();
-        characterScript.Initialize(soulData);
+        AdventureUIManager.This.UpdateCharacterStats(adventureMovingState.CurrentStamina);
     }
 
-    public void Move(JsonObjects.Adventures.Movement move)
+    public void Move(JsonObjects.MovingState state)
     {
         var characterInputScript = Character.GetComponent<CharacterInput>();
-        characterInputScript.Move(move);
+        characterInputScript.Move(state);
+
+        AdventureUIManager.This.UpdateCharacterStats(state.CurrentStamina);
     }
 
     public void EnterTavern(Guid tavernId)
@@ -102,21 +90,12 @@ public class WorldManager : MonoBehaviour
 
         if (tavern != null)
         {
-            _tavern = tavern;
+            AdventureUIManager.This.EnterTavern(tavern);
         }
     }
 
-    public void ExitTavern()
+    public void RestInTavern(JsonObjects.MovingState state)
     {
-        _tavern = null;
-    }
-
-    public void RestInTavern()
-    {
-        if (_tavern != null)
-        {
-            var characterScript = Character.GetComponent<Character>();
-            characterScript.RestoreStamina(_tavern.RestStamina);
-        }
+        AdventureUIManager.This.UpdateCharacterStats(state.CurrentStamina);
     }
 }

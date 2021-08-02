@@ -83,11 +83,13 @@ namespace Server.GameServer.Commands.Adventure
 
             adventure.SetPlayerState(SoulManager.Instance.GetDatas(_args.ClientId), SoulManager.Instance.GetKnowledges(_args.ClientId));
 
+            var adventureState = adventure.GetActualState();
+
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Adventure.Start,
                 Success = true,
-                Json = adventure.AdventureId.ToString()
+                Json = JsonConvert.SerializeObject(adventureState)
             };
             ret.Succeeded = true;
 

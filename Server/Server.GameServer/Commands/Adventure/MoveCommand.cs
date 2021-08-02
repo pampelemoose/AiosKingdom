@@ -47,11 +47,13 @@ namespace Server.GameServer.Commands.Adventure
                 return ret;
             }
 
+            var state = adventure.GetActualState();
+
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Adventure.Move,
                 Success = true,
-                Json = movement.ToString()
+                Json = JsonConvert.SerializeObject(state.MovingState)
             };
             ret.Succeeded = true;
 

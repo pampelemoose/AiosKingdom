@@ -80,10 +80,26 @@ namespace Server.GameServer
 
         public bool Move(Movement move)
         {
-            if (_state.CurrentStamina > 0)
+            if (_state.MovingState.CurrentStamina > 0)
             {
-                --_state.CurrentStamina;
-                _log.Write($"Moved with: {move}\nStamina left: {_state.CurrentStamina}");
+                switch (move)
+                {
+                    case Movement.Up:
+                        ++_state.MovingState.CurrentCoordinateY;
+                        break;
+                    case Movement.Down:
+                        --_state.MovingState.CurrentCoordinateY;
+                        break;
+                    case Movement.Left:
+                        --_state.MovingState.CurrentCoordinateX;
+                        break;
+                    case Movement.Right:
+                        ++_state.MovingState.CurrentCoordinateX;
+                        break;
+                }
+
+                --_state.MovingState.CurrentStamina;
+                _log.Write($"Moved with: {move}\nStamina left: {_state.MovingState.CurrentStamina}");
 
                 return true;
             }
@@ -93,8 +109,15 @@ namespace Server.GameServer
 
         public bool RestInTavern(int staminaRestore)
         {
-            _state.CurrentStamina += staminaRestore;
-            _log.Write($"RestInTavern Stamina left: {_state.CurrentStamina}");
+            _state.MovingState.CurrentStamina += staminaRestore;
+
+            var limit = _state.State.Stamina * 10;
+            if (_state.MovingState.CurrentStamina > limit)
+            {
+                _state.MovingState.CurrentStamina = limit;
+            }
+
+            _log.Write($"RestInTavern Stamina left: {_state.MovingState.CurrentStamina}");
 
             return true;
         }
@@ -700,9 +723,15 @@ namespace Server.GameServer
 
         private void SetState()
         {
+            _state.AdventureId = _adventure.Id;
             _state.Name = _adventure.Name;
 
-            _state.CurrentStamina = _state.State.Stamina * 10;
+            _state.MovingState = new Network.MovingState
+            {
+                CurrentStamina = _state.State.Stamina * 10,
+                CurrentCoordinateX = _adventure.SpawnCoordinateX,
+                CurrentCoordinateY = _adventure.SpawnCoordinateY
+            };
 
             _enemiesStats = new Dictionary<Guid, EnemyStats>();
 

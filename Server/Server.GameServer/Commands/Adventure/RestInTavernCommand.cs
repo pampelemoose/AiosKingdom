@@ -51,12 +51,13 @@ namespace Server.GameServer.Commands.Adventure
 
             adventure.RestInTavern(tavern.RestStamina);
 
+            var state = adventure.GetActualState();
 
             ret.ClientResponse = new Network.Message
             {
                 Code = Network.CommandCodes.Adventure.RestInTavern,
                 Success = true,
-                Json = $"Restored {tavern.RestStamina} stamina."
+                Json = JsonConvert.SerializeObject(state.MovingState)
             };
             ret.Succeeded = true;
 
