@@ -94,6 +94,16 @@ public class WorldManager : MonoBehaviour
         }
     }
 
+    public void EnterBookstore(Guid bookstoreId)
+    {
+        var bookstore = DatasManager.Instance.Bookstores.FirstOrDefault(t => t.Id == bookstoreId);
+
+        if (bookstore != null)
+        {
+            AdventureUIManager.This.EnterBookstore(bookstore);
+        }
+    }
+
     public void RestInTavern(JsonObjects.MovingState state)
     {
         AdventureUIManager.This.UpdateCharacterStats(state.CurrentStamina);

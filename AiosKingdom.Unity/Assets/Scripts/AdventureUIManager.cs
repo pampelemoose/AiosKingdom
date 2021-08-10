@@ -12,6 +12,8 @@ public class AdventureUIManager : MonoBehaviour
     public GameObject PlayerCurrentMap;
     public GameObject Character;
     public GameObject TavernActionPopup;
+    public GameObject BookstoreActionPopup;
+    public GameObject BookstoreListPopup;
 
     public static AdventureUIManager This;
     private static bool _created = false;
@@ -86,6 +88,12 @@ public class AdventureUIManager : MonoBehaviour
     {
         var tavernScript = TavernActionPopup.GetComponent<TavernActionPopup>();
         tavernScript.Open(tavern);
+    }
+
+    public void EnterBookstore(JsonObjects.Adventures.Bookstore bookstore)
+    {
+        var bookstoreScript = BookstoreActionPopup.GetComponent<BookstoreActionPopup>();
+        bookstoreScript.Open(bookstore);
     }
 
     #endregion

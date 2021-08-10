@@ -48,6 +48,7 @@ public class DatasManager
     public List<JsonObjects.Adventures.Adventure> Adventures { get; set; }
     public List<JsonObjects.Adventures.Enemy> Enemies { get; set; }
     public List<JsonObjects.Adventures.Tavern> Taverns { get; set; }
+    public List<JsonObjects.Adventures.Bookstore> Bookstores { get; set; }
     public List<JsonObjects.Adventures.Npc> Npcs { get; set; }
 
     public JsonObjects.AdventureState Adventure { get; set; }

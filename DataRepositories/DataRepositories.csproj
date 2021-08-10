@@ -57,6 +57,18 @@
     <Compile Include="Migrations\202107230510120_InitialMigration.Designer.cs">
       <DependentUpon>202107230510120_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202108100600136_AddBookstoreAddTavernName.cs" />
+    <Compile Include="Migrations\202108100600136_AddBookstoreAddTavernName.Designer.cs">
+      <DependentUpon>202108100600136_AddBookstoreAddTavernName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108100602033_AddBookstore.cs" />
+    <Compile Include="Migrations\202108100602033_AddBookstore.Designer.cs">
+      <DependentUpon>202108100602033_AddBookstore.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108100746387_AddBookstoreItem.cs" />
+    <Compile Include="Migrations\202108100746387_AddBookstoreItem.Designer.cs">
+      <DependentUpon>202108100746387_AddBookstoreItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="TownRepository.cs" />
     <Compile Include="AdventureRepository.cs" />
     <Compile Include="ForumRepository.cs" />
@@ -86,6 +98,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202107230510120_InitialMigration.resx">
       <DependentUpon>202107230510120_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108100600136_AddBookstoreAddTavernName.resx">
+      <DependentUpon>202108100600136_AddBookstoreAddTavernName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108100602033_AddBookstore.resx">
+      <DependentUpon>202108100602033_AddBookstore.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108100746387_AddBookstoreItem.resx">
+      <DependentUpon>202108100746387_AddBookstoreItem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1227,14 +1227,27 @@ namespace DataRepositories.Migrations
         #region ADVENTURES
         private void _createAdventures(AiosKingdomContext context, DataModels.Version version)
         {
+            _createBookstores(context, version);
             _createTaverns(context, version);
             _createNpcs(context, version);
 
             context.SaveChanges();
 
-            _createHauntedHouseAdventure(context, version);
+            _createClassChoiceAdventure(context, version);
 
             context.SaveChanges();
+        }
+
+        private void _createBookstores(AiosKingdomContext context, DataModels.Version version)
+        {
+            context.Bookstores.Add(new DataModels.Adventures.Bookstore
+            {
+                Id = Guid.NewGuid(),
+                Name = "Beginner's Bookstore",
+                VersionId = version.Id,
+                Vid = Guid.Parse("A1CDC7A7-D86B-4829-A115-4219C709492C"),
+                Books = new System.Collections.Generic.List<DataModels.Adventures.BookstoreItem>()
+            });
         }
 
         private void _createTaverns(AiosKingdomContext context, DataModels.Version version)
@@ -1242,8 +1255,9 @@ namespace DataRepositories.Migrations
             context.Taverns.Add(new DataModels.Adventures.Tavern
             {
                 Id = Guid.NewGuid(),
+                Name = "Beginner's Tavern",
                 VersionId = version.Id,
-                Vid = Guid.NewGuid(),
+                Vid = Guid.Parse("E6C52ADC-7408-4CB6-BCEC-0D1D4B71C461"),
                 FoodCost = 1,
                 FoodHealth = 10,
                 RestShardCost = 1,
@@ -1290,19 +1304,19 @@ namespace DataRepositories.Migrations
             });
         }
 
-        private void _createHauntedHouseAdventure(AiosKingdomContext context, DataModels.Version version)
+        private void _createClassChoiceAdventure(AiosKingdomContext context, DataModels.Version version)
         {
-            var wolf = context.Monsters.FirstOrDefault(m => m.Name == "Wolf");
-            var wolfEnemy = context.Enemies.Add(new DataModels.Adventures.Enemy
-            {
-                Id = Guid.NewGuid(),
-                VersionId = version.Id,
-                Vid = Guid.NewGuid(),
-                EnemyType = DataModels.Adventures.EnemyType.Normal,
-                MonsterVid = wolf.Vid,
-                Level = 1,
-                ShardReward = 2
-            });
+            //var wolf = context.Monsters.FirstOrDefault(m => m.Name == "Wolf");
+            //var wolfEnemy = context.Enemies.Add(new DataModels.Adventures.Enemy
+            //{
+            //    Id = Guid.NewGuid(),
+            //    VersionId = version.Id,
+            //    Vid = Guid.NewGuid(),
+            //    EnemyType = DataModels.Adventures.EnemyType.Normal,
+            //    MonsterVid = wolf.Vid,
+            //    Level = 1,
+            //    ShardReward = 2
+            //});
 
             context.Adventures.Add(new DataModels.Adventures.Adventure
             {
@@ -1312,7 +1326,7 @@ namespace DataRepositories.Migrations
                 Name = "Welcome to Aios Kingdom.",
                 RequiredLevel = 1,
                 MaxLevelAuthorized = 5,
-                MapIdentifier = Guid.NewGuid(),
+                MapIdentifier = Guid.Parse("A17CB0E6-1D3C-42CD-AEC2-693B5FA0F0BE"),
                 ExperienceReward = 100,
                 ShardReward = 10,
                 SpawnCoordinateX = 0,
@@ -1328,19 +1342,19 @@ namespace DataRepositories.Migrations
                         Description = "There is a wold killing our chickens in the garden. Get rid of it. The garden is located in the north of the village.",
                         Objectives = new System.Collections.Generic.List<DataModels.Adventures.QuestObjective>
                         {
-                            new DataModels.Adventures.QuestObjective
-                            {
-                                Id = Guid.NewGuid(),
-                                VersionId = version.Id,
-                                Vid = Guid.NewGuid(),
-                                Title = "Kill the wolf.",
-                                Type = DataModels.Adventures.QuestObjective.ObjectiveType.EnemyKill,
-                                ObjectiveDataJson = JsonConvert.SerializeObject(new DataModels.Adventures.QuestObjectiveDataEnemyKill
-                                {
-                                    EnemyVid = wolfEnemy.Vid,
-                                    KillCount = 1
-                                })
-                            }
+                            //new DataModels.Adventures.QuestObjective
+                            //{
+                            //    Id = Guid.NewGuid(),
+                            //    VersionId = version.Id,
+                            //    Vid = Guid.NewGuid(),
+                            //    Title = "Kill the wolf.",
+                            //    Type = DataModels.Adventures.QuestObjective.ObjectiveType.EnemyKill,
+                            //    ObjectiveDataJson = JsonConvert.SerializeObject(new DataModels.Adventures.QuestObjectiveDataEnemyKill
+                            //    {
+                            //        EnemyVid = wolfEnemy.Vid,
+                            //        KillCount = 1
+                            //    })
+                            //}
                         }
                     }
                 }

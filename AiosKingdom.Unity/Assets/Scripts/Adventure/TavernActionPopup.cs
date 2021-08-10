@@ -13,7 +13,7 @@ public class TavernActionPopup : MonoBehaviour
 
     public void Open(JsonObjects.Adventures.Tavern tavern)
     {
-        TavernNameText.text = $"Tavern"; // TODO : add nme to tavern
+        TavernNameText.text = tavern.Name;
 
         SleepButton.onClick.RemoveAllListeners();
         SleepButton.onClick.AddListener(() =>

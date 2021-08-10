@@ -40,6 +40,16 @@ namespace DataRepositories
             }
         }
 
+        public static List<DataModels.Adventures.Bookstore> GetAllBookstoresForVersion(Guid versionId)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Bookstores
+                    .Include(a => a.Books)
+                    .Where(b => b.VersionId.Equals(versionId)).ToList();
+            }
+        }
+
         public static List<DataModels.Adventures.Npc> GetAllNpcsForVersion(Guid versionId)
         {
             using (var context = new AiosKingdomContext())

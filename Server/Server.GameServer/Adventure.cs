@@ -736,7 +736,8 @@ namespace Server.GameServer
             _enemiesStats = new Dictionary<Guid, EnemyStats>();
 
             _state.Enemies = new Dictionary<Guid, Network.AdventureState.EnemyState>();
-            //_state.Shops = new Dictionary<Guid, Network.AdventureState.ShopState>();
+
+            //_state.Taverns = new Dictionary<Guid, Network.AdventureState.TavernState>();
 
             _state.Cooldowns = new List<Network.AdventureState.SkillCooldown>();
 

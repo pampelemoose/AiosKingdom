@@ -61,6 +61,7 @@ namespace Network
             public const int Tavern = _default + 7;
             public const int Npc = _default + 8;
             public const int Enemy = _default + 9;
+            public const int Bookstore = _default + 10;
         }
 
         public static class Dungeon

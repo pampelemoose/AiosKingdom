@@ -13,7 +13,8 @@ namespace DataModels.Adventures
         {
             EnemyKill,
             NpcDialogue,
-            ExploreArea
+            ExploreArea,
+            LearnBook
         }
 
         [Key]

@@ -66,6 +66,8 @@ namespace JsonObjects.Adventures
     {
         public Guid Id { get; set; }
 
+        public string Name { get; set; }
+
         public List<ShopItem> ShopItems { get; set; }
 
         public int RestShardCost { get; set; }
@@ -73,6 +75,15 @@ namespace JsonObjects.Adventures
 
         public int FoodCost { get; set; }
         public int FoodHealth { get; set; }
+    }
+
+    public class Bookstore
+    {
+        public Guid Id { get; set; }
+
+        public string Name { get; set; }
+
+        public List<BookItem> Books { get; set; }
     }
 
     public class Lock
@@ -88,6 +99,11 @@ namespace JsonObjects.Adventures
 
         public int Quantity { get; set; }
         public int ShardPrice { get; set; }
+    }
+
+    public class BookItem
+    {
+        public Guid BookId { get; set; }
     }
 
     public class Enemy

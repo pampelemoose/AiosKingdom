@@ -162,6 +162,7 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Listing.Tavern, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Npc, 0);
             _commandArgCount.Add(Network.CommandCodes.Listing.Enemy, 0);
+            _commandArgCount.Add(Network.CommandCodes.Listing.Bookstore, 0);
 
             _delegates.Add(Network.CommandCodes.Listing.Item, (args) => { return new Commands.Listing.ItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Book, (args) => { return new Commands.Listing.BookCommand(args); });
@@ -172,6 +173,7 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Listing.Tavern, (args) => { return new Commands.Listing.TavernCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Npc, (args) => { return new Commands.Listing.NpcCommand(args); });
             _delegates.Add(Network.CommandCodes.Listing.Enemy, (args) => { return new Commands.Listing.EnemyCommand(args); });
+            _delegates.Add(Network.CommandCodes.Listing.Bookstore, (args) => { return new Commands.Listing.BookstoreCommand(args); });
         }
 
         private void SetupPlayerDelegates()
@@ -614,6 +616,8 @@ namespace Server.GameServer
                 case Network.CommandCodes.Listing.Npc:
                     break;
                 case Network.CommandCodes.Listing.Enemy:
+                    break;
+                case Network.CommandCodes.Listing.Bookstore:
                     break;
 
                 // DUNGEON

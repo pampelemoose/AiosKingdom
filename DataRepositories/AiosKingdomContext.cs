@@ -45,6 +45,7 @@ namespace DataRepositories
         public DbSet<DataModels.Monsters.Phase> Phases { get; set; }
 
         public DbSet<DataModels.Adventures.Adventure> Adventures { get; set; }
+        public DbSet<DataModels.Adventures.Bookstore> Bookstores { get; set; }
         public DbSet<DataModels.Adventures.Tavern> Taverns { get; set; }
         public DbSet<DataModels.Adventures.Quest> Quests { get; set; }
         public DbSet<DataModels.Adventures.QuestObjective> QuestObjectives { get; set; }

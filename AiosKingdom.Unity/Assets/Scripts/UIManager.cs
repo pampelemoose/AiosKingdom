@@ -23,7 +23,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         Equipment,
         Inventory,
         Knowledges,
-        Bookstore,
         Market,
         AdventureSelection,
 
@@ -51,7 +50,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     public GameObject Equipment;
     public GameObject Inventory;
     public GameObject Knowledges;
-    public GameObject Bookstore;
     public GameObject Market;
     public GameObject AdventureSelection;
 
@@ -182,11 +180,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
     {
         ChangeView(Views.Knowledges);
     }
-    
-    public void ShowBookstore()
-    {
-        ChangeView(Views.Bookstore);
-    }
 
     public void ShowMarket()
     {
@@ -254,9 +247,6 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
                     break;
                 case Views.Knowledges:
                     newPage = Knowledges;
-                    break;
-                case Views.Bookstore:
-                    newPage = Bookstore;
                     break;
                 case Views.Market:
                     newPage = Market;

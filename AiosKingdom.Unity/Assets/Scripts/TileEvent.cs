@@ -9,6 +9,7 @@ public class TileEvent : MonoBehaviour
     {
         ZoneConsuption,
         EnterTavern,
+        EnterBookstore,
 
         EnterCombat
     }
@@ -28,6 +29,9 @@ public class TileEvent : MonoBehaviour
                     break;
                 case EventType.EnterTavern:
                     WorldManager.This.EnterTavern(Guid.Parse(EventStringValue));
+                    break;
+                case EventType.EnterBookstore:
+                    WorldManager.This.EnterBookstore(Guid.Parse(EventStringValue));
                     break;
                 case EventType.EnterCombat:
                     Debug.Log($"Enter combat with {EventStringValue}");

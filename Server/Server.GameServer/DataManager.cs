@@ -40,6 +40,7 @@ namespace Server.GameServer
         public List<Network.Skills.Book> Books { get; private set; }
         public List<Network.Adventures.Adventure> Adventures { get; private set; }
         public List<Network.Adventures.Tavern> Taverns { get; private set; }
+        public List<Network.Adventures.Bookstore> Bookstores { get; private set; }
         public List<Network.Adventures.Enemy> Enemies { get; private set; }
         public List<Network.Adventures.Npc> Npcs { get; private set; }
         public List<Network.Monsters.Monster> Monsters { get; private set; }
@@ -471,6 +472,7 @@ namespace Server.GameServer
                 var tav = new Network.Adventures.Tavern
                 {
                     Id = tavern.Vid,
+                    Name = tavern.Name,
                     FoodCost = tavern.FoodCost,
                     FoodHealth = tavern.FoodHealth,
                     RestShardCost = tavern.RestShardCost,
@@ -494,6 +496,33 @@ namespace Server.GameServer
             }
 
             Taverns = tavernList;
+
+            var bookstores = DataRepositories.AdventureRepository.GetAllBookstoresForVersion(_config.VersionId);
+            var bookstoreList = new List<Network.Adventures.Bookstore>();
+
+            foreach (var bookstore in bookstores)
+            {
+                var bookst = new Network.Adventures.Bookstore
+                {
+                    Id = bookstore.Vid,
+                    Name = bookstore.Name,
+                    Books = new List<Network.Adventures.BookItem>()
+                };
+
+                foreach (var boo in bookstore.Books)
+                {
+                    var booIt = new Network.Adventures.BookItem
+                    {
+                        BookId = boo.BookVid
+                    };
+
+                    bookst.Books.Add(booIt);
+                }
+
+                bookstoreList.Add(bookst);
+            }
+
+            Bookstores = bookstoreList;
 
             var npcs = DataRepositories.AdventureRepository.GetAllNpcsForVersion(_config.VersionId);
             var npcList = new List<Network.Adventures.Npc>();

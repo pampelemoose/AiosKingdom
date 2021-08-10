@@ -24,19 +24,6 @@ namespace Server.GameServer.Commands.Adventure
             var dungeonId = Guid.Parse(_args.Args[0]);
             var bagItems = JsonConvert.DeserializeObject<List<Network.AdventureState.BagItem>>(_args.Args[1]);
 
-            if (knowledges.Count == 0)
-            {
-                ret.ClientResponse = new Network.Message
-                {
-                    Code = Network.CommandCodes.Adventure.Start,
-                    Success = false,
-                    Json = "You must have learned at least one skill."
-                };
-                ret.Succeeded = true;
-
-                return ret;
-            }
-
             if (!AdventureManager.Instance.IsUnlocked(dungeonId, unlocks))
             {
                 ret.ClientResponse = new Network.Message

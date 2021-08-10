@@ -7,19 +7,13 @@ using System.Threading.Tasks;
 
 namespace DataModels.Adventures
 {
-    public class Tavern : AVersionized
+    public class Bookstore : AVersionized
     {
         [Key]
         public Guid Id { get; set; }
 
         public string Name { get; set; }
 
-        public List<ShopItem> ShopItems { get; set; }
-
-        public int RestShardCost { get; set; }
-        public int RestStamina { get; set; }
-
-        public int FoodCost { get; set; }
-        public int FoodHealth { get; set; }
+        public List<BookstoreItem> Books { get; set; }
     }
 }

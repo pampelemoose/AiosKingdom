@@ -845,6 +845,17 @@ public class NetworkManager : MonoBehaviour
 
                     SceneLoom.Loom.QueueOnMainThread(() =>
                     {
+                        AskBooksoreList();
+                    });
+                }
+                break;
+            case JsonObjects.CommandCodes.Listing.Bookstore:
+                {
+                    var bookstores = JsonConvert.DeserializeObject<List<JsonObjects.Adventures.Bookstore>>(message.Json);
+                    DatasManager.Instance.Bookstores = bookstores;
+
+                    SceneLoom.Loom.QueueOnMainThread(() =>
+                    {
                         UIManager.This.ShowMain();
                     });
                 }
@@ -1220,6 +1231,11 @@ public class NetworkManager : MonoBehaviour
     public void AskEnemyList()
     {
         SendRequest(JsonObjects.CommandCodes.Listing.Enemy);
+    }
+
+    public void AskBooksoreList()
+    {
+        SendRequest(JsonObjects.CommandCodes.Listing.Bookstore);
     }
 
     #endregion
