@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,15 +12,20 @@ public class BookstoreActionPopup : MonoBehaviour
     public Button TalentButton;
     public Button CloseButton;
 
+    public GameObject BookstoreListPopup;
+
     public void Open(JsonObjects.Adventures.Bookstore bookstore)
     {
+        var bookIds = bookstore.Books.Select(o => o.BookId).ToList();
+        var books = DatasManager.Instance.Books.Where(b => bookIds.Contains(b.Id)).ToList();
+
         BookstoreNameText.text = bookstore.Name;
 
         BuyButton.onClick.RemoveAllListeners();
         BuyButton.onClick.AddListener(() =>
         {
-            //NetworkManager.This.RestInTavern(tavern.Id);
-            //gameObject.SetActive(false);
+            var bookListScript = BookstoreListPopup.GetComponent<BookstoreListPopup>();
+            bookListScript.Open(books);
         });
 
         TalentButton.onClick.RemoveAllListeners();

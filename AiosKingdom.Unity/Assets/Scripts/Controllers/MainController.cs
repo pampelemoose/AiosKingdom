@@ -49,7 +49,6 @@ public class MainController : MonoBehaviour
     public Button Inventory;
     public Button Equipment;
     public Button Knowledges;
-    public Button Bookstore;
     public Button Adventures;
     public Button Market;
 
@@ -77,12 +76,6 @@ public class MainController : MonoBehaviour
         Knowledges.onClick.AddListener(() =>
         {
             UIManager.This.ShowKnowledges();
-        });
-
-        Bookstore.onClick.RemoveAllListeners();
-        Bookstore.onClick.AddListener(() =>
-        {
-            UIManager.This.ShowBookstore();
         });
 
         Market.onClick.RemoveAllListeners();

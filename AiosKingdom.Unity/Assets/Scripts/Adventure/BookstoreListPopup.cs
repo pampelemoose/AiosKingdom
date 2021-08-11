@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BookstoreController : PaginationBox
+public class BookstoreListPopup : PaginationBox
 {
     [Space(5)]
     [Header("Filters")]
@@ -67,15 +67,20 @@ public class BookstoreController : PaginationBox
         Close.onClick.RemoveAllListeners();
         Close.onClick.AddListener(() =>
         {
-            UIManager.This.ShowMain();
+            gameObject.SetActive(false);
         });
-
-        LoadBooks();
     }
 
-    public void LoadBooks()
+    public void Open(List<JsonObjects.Skills.Book> books)
     {
-        _books = DatasManager.Instance.Books;
+        LoadBooks(books);
+
+        gameObject.SetActive(true);
+    }
+
+    public void LoadBooks(List<JsonObjects.Skills.Book> books)
+    {
+        _books = books;
 
         if (_pagination == null)
         {
