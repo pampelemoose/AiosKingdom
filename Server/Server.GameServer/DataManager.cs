@@ -219,6 +219,9 @@ namespace Server.GameServer
                     Id = book.Vid,
                     Name = book.Name,
                     Description = book.Description,
+                    Repetition = book.Repetition,
+                    RequireWeapon = book.RequireWeapon,
+                    InternalWeaponTypes = book.InternalWeaponTypes,
                     EmberCost = book.EmberCost,
                     ManaCost = book.ManaCost,
                     Cooldown = book.Cooldown
@@ -240,6 +243,37 @@ namespace Server.GameServer
                         break;
                     case DataModels.Skills.BookQuality.TierFive:
                         bok.Quality = Network.Skills.BookQuality.TierFive;
+                        break;
+                }
+
+                switch (book.Action)
+                {
+                    case DataModels.Skills.BookAction.Slash:
+                        bok.Action = Network.Skills.BookAction.Slash;
+                        break;
+                    case DataModels.Skills.BookAction.Thrust:
+                        bok.Action = Network.Skills.BookAction.Thrust;
+                        break;
+                    case DataModels.Skills.BookAction.Hammer:
+                        bok.Action = Network.Skills.BookAction.Hammer;
+                        break;
+                    case DataModels.Skills.BookAction.Cast:
+                        bok.Action = Network.Skills.BookAction.Cast;
+                        break;
+                    case DataModels.Skills.BookAction.Parry:
+                        bok.Action = Network.Skills.BookAction.Parry;
+                        break;
+                    case DataModels.Skills.BookAction.Evade:
+                        bok.Action = Network.Skills.BookAction.Evade;
+                        break;
+                    case DataModels.Skills.BookAction.Shoot:
+                        bok.Action = Network.Skills.BookAction.Shoot;
+                        break;
+                    case DataModels.Skills.BookAction.Hit:
+                        bok.Action = Network.Skills.BookAction.Hit;
+                        break;
+                    case DataModels.Skills.BookAction.Concentrate:
+                        bok.Action = Network.Skills.BookAction.Concentrate;
                         break;
                 }
 

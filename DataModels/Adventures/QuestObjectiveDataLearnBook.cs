@@ -9,7 +9,8 @@ namespace DataModels.Adventures
 {
     public class QuestObjectiveDataLearnBook
     {
+        public int NeedToLearnCount { get; set; }
 
-        public Guid BookVid { get; set; }
+        public List<Guid> Books { get; set; }
     }
 }

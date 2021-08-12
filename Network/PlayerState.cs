@@ -14,6 +14,8 @@ namespace Network
         public double CurrentHealth { get; set; }
         public double CurrentMana { get; set; }
 
+        public int Experience { get; set; }
+
         // STATS
         public int Stamina { get; set; }
         public int Energy { get; set; }

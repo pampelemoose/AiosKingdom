@@ -21,6 +21,19 @@ namespace JsonObjects
             public int ShardPrice { get; set; }
         }
 
+        public struct QuestState
+        {
+            public Guid QuestId { get; set; }
+            public bool Finished { get; set; }
+            public List<QuestObjectiveState> Objectives { get; set; }
+        }
+
+        public struct QuestObjectiveState
+        {
+            public Guid ObjectiveId { get; set; }
+            public int Quantity { get; set; }
+        }
+
         public class SkillCooldowns
         {
             public Guid SkillId { get; set; }
@@ -39,6 +52,12 @@ namespace JsonObjects
             public Guid InventoryId { get; set; }
             public Guid ItemId { get; set; }
             public int Quantity { get; set; }
+        }
+
+        public class TavernState
+        {
+            public Guid TavernId { get; set; }
+            public Dictionary<Guid, ShopState> Shops { get; set; }
         }
 
         public class ActionResult
@@ -74,11 +93,9 @@ namespace JsonObjects
 
         public Guid AdventureId { get; set; }
         public string Name { get; set; }
-        public int CurrentRoom { get; set; }
-        public int TotalRoomCount { get; set; }
 
         public Dictionary<Guid, EnemyState> Enemies { get; set; }
-        public Dictionary<Guid, ShopState> Shops { get; set; }
+        public Dictionary<Guid, TavernState> Taverns { get; set; }
 
         public List<SkillCooldowns> Cooldowns { get; set; }
 
@@ -86,21 +103,11 @@ namespace JsonObjects
         public List<ModifierApplied> Effects { get; set; }
 
         public List<BagItem> Bag { get; set; }
-
-        public bool IsRestingArea { get; set; }
-        public bool IsFightArea { get; set; }
-        public bool IsShopArea { get; set; }
-        public bool IsEliteArea { get; set; }
-        public bool IsBossFight { get; set; }
-        public bool IsExit { get; set; }
+        public List<QuestState> Quests { get; set; }
 
         public PlayerState State { get; set; }
         public MovingState MovingState { get; set; }
 
-        public int ExperienceReward { get; set; }
-        public int ShardReward { get; set; }
-
-        public int StackedExperience { get; set; }
-        public int StackedShards { get; set; }
+        public int Shards { get; set; }
     }
 }

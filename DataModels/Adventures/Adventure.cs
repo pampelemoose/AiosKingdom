@@ -14,6 +14,8 @@ namespace DataModels.Adventures
         public int RequiredLevel { get; set; }
         public int MaxLevelAuthorized { get; set; }
 
+        public bool Repeatable { get; set; }
+
         public List<Quest> Quests { get; set; }
 
         public Guid MapIdentifier { get; set; }

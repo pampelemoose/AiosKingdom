@@ -21,6 +21,19 @@ namespace Network
             public int ShardPrice { get; set; }
         }
 
+        public struct QuestState
+        {
+            public Guid QuestId { get; set; }
+            public bool Finished { get; set; }
+            public List<QuestObjectiveState> Objectives { get; set; }
+        }
+
+        public struct QuestObjectiveState
+        {
+            public Guid ObjectiveId { get; set; }
+            public int Quantity { get; set; }
+        }
+
         public class SkillCooldown
         {
             public Guid SkillId { get; set; }
@@ -43,21 +56,14 @@ namespace Network
 
         public class TavernState
         {
+            public Guid TavernId { get; set; }
             public Dictionary<Guid, ShopState> Shops { get; set; }
-        }
-
-        public class QuestState
-        {
-            public Guid ObjectiveId { get; set; }
-            public int Quantity { get; set; }
-            public bool Completed { get; set; }
         }
 
         public Guid AdventureId { get; set; }
         public string Name { get; set; }
 
         public Dictionary<Guid, EnemyState> Enemies { get; set; }
-        public Dictionary<Guid, QuestState> Quests { get; set; }
         public Dictionary<Guid, TavernState> Taverns { get; set; }
 
         public List<SkillCooldown> Cooldowns { get; set; }
@@ -66,14 +72,11 @@ namespace Network
         public List<ModifierApplied> Effects { get; set; }
 
         public List<BagItem> Bag { get; set; }
+        public List<QuestState> Quests { get; set; }
 
         public PlayerState State { get; set; }
         public MovingState MovingState { get; set; }
 
-        public int ExperienceReward { get; set; }
-        public int ShardReward { get; set; }
-
-        public int StackedExperience { get; set; }
-        public int StackedShards { get; set; }
+        public int Shards { get; set; }
     }
 }

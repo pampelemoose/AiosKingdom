@@ -28,7 +28,7 @@ public class TileEvent : MonoBehaviour
                     WorldManager.This.SetZoneConsumption(EventIntValue);
                     break;
                 case EventType.EnterTavern:
-                    WorldManager.This.EnterTavern(Guid.Parse(EventStringValue));
+                    NetworkManager.This.EnterTavern(Guid.Parse(EventStringValue));
                     break;
                 case EventType.EnterBookstore:
                     WorldManager.This.EnterBookstore(Guid.Parse(EventStringValue));

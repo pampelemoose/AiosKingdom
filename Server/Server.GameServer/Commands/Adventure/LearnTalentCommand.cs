@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands.Player
+namespace Server.GameServer.Commands.Adventure
 {
     public class LearnTalentCommand : ACommand
     {
@@ -63,7 +63,7 @@ namespace Server.GameServer.Commands.Player
 
                     ret.ClientResponse = new Network.Message
                     {
-                        Code = Network.CommandCodes.Player.LearnTalent,
+                        Code = Network.CommandCodes.Adventure.LearnTalent,
                         Success = true,
                         Json = "Talent Learned."
                     };
@@ -74,7 +74,7 @@ namespace Server.GameServer.Commands.Player
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Player.LearnTalent,
+                Code = Network.CommandCodes.Adventure.LearnTalent,
                 Success = false,
                 Json = "Could not learn talent."
             };

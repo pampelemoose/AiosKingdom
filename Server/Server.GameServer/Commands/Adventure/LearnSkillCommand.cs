@@ -5,10 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-/// <summary>
-/// TODO : test please.
-/// </summary>
-namespace Server.GameServer.Commands.Player
+namespace Server.GameServer.Commands.Adventure
 {
     public class LearnSkillCommand : ACommand
     {
@@ -29,7 +26,7 @@ namespace Server.GameServer.Commands.Player
             {
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Player.LearnSkill,
+                    Code = Network.CommandCodes.Adventure.LearnSkill,
                     Success = false,
                     Json = "Skill already known."
                 };
@@ -42,7 +39,7 @@ namespace Server.GameServer.Commands.Player
             {
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Player.LearnSkill,
+                    Code = Network.CommandCodes.Adventure.LearnSkill,
                     Success = false,
                     Json = "Skill rank doesn't exists."
                 };
@@ -54,7 +51,7 @@ namespace Server.GameServer.Commands.Player
             {
                 ret.ClientResponse = new Network.Message
                 {
-                    Code = Network.CommandCodes.Player.LearnSkill,
+                    Code = Network.CommandCodes.Adventure.LearnSkill,
                     Success = false,
                     Json = "Not enough embers."
                 };
@@ -178,7 +175,7 @@ namespace Server.GameServer.Commands.Player
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Player.LearnSkill,
+                Code = Network.CommandCodes.Adventure.LearnSkill,
                 Success = true,
                 Json = "Skill learned."
             };

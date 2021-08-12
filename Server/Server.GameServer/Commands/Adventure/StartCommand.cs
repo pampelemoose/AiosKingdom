@@ -68,8 +68,6 @@ namespace Server.GameServer.Commands.Adventure
 
             SoulManager.Instance.UpdateInventory(_args.ClientId, inventory);
 
-            adventure.SetPlayerState(SoulManager.Instance.GetDatas(_args.ClientId), SoulManager.Instance.GetKnowledges(_args.ClientId));
-
             var adventureState = adventure.GetActualState();
 
             ret.ClientResponse = new Network.Message

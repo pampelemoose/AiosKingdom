@@ -61,11 +61,12 @@ namespace Server.GameServer
 
             _state = new Network.AdventureState();
 
-            SetPlayerState(datas, knowledges);
+            SetPlayerStatState(datas);
+            SetPlayerKnowledgeState(datas, knowledges);
 
             _state.Bag = bagItems;
 
-            SetState();
+            SetAdventureState();
 
             _log.Write($"Started adventure.\nMap: {adventure.MapIdentifier}\nSpawned At: {adventure.SpawnCoordinateX}/{adventure.SpawnCoordinateY}");
         }
@@ -107,6 +108,50 @@ namespace Server.GameServer
             return false;
         }
 
+        public bool EnterTavern(Guid tavernId)
+        {
+            if (!_state.Taverns.ContainsKey(tavernId))
+            {
+                var tavern = DataManager.Instance.Taverns.FirstOrDefault(t => t.Id == tavernId);
+
+                if (tavern == null)
+                {
+                    return false;
+                }
+
+                var shopItems = new Dictionary<Guid, Network.AdventureState.ShopState>();
+                foreach (var shopItem in tavern.ShopItems)
+                {
+                    shopItems.Add(Guid.NewGuid(), new Network.AdventureState.ShopState
+                    {
+                        ItemId = shopItem.ItemId,
+                        Quantity = shopItem.Quantity,
+                        ShardPrice = shopItem.ShardPrice
+                    });
+                }
+
+                _state.Taverns.Add(tavernId, new Network.AdventureState.TavernState
+                {
+                    TavernId = tavernId,
+                    Shops = shopItems
+                });
+            }
+
+            _log.Write($"Entered tavern: {tavernId}");
+
+            return true;
+        }
+
+        public Network.AdventureState.TavernState GetTavernShopItems(Guid tavernId)
+        {
+            if (!_state.Taverns.ContainsKey(tavernId))
+            {
+                return null;
+            }
+
+            return _state.Taverns[tavernId];
+        }
+
         public bool RestInTavern(int staminaRestore)
         {
             _state.MovingState.CurrentStamina += staminaRestore;
@@ -121,6 +166,234 @@ namespace Server.GameServer
 
             return true;
         }
+
+        private void SetPlayerStatState(Network.SoulDatas datas)
+        {
+            _state.State = new Network.PlayerState
+            {
+                MaxHealth = datas.MaxHealth,
+                MaxMana = datas.MaxMana,
+
+                CurrentHealth = datas.MaxHealth,
+                CurrentMana = datas.MaxMana,
+
+                Experience = datas.CurrentExperience,
+
+                Stamina = datas.TotalStamina,
+                Energy = datas.TotalEnergy,
+                Strength = datas.TotalStrength,
+                Agility = datas.TotalAgility,
+                Intelligence = datas.TotalIntelligence,
+                Wisdom = datas.TotalWisdom,
+
+                Armor = datas.Armor,
+                MagicArmor = datas.MagicArmor,
+
+                WeaponTypes = datas.WeaponTypes,
+                MinDamages = datas.MinDamages,
+                MaxDamages = datas.MaxDamages
+            };
+        }
+
+        private void SetPlayerKnowledgeState(Network.SoulDatas datas, List<Network.Knowledge> knowledges)
+        {
+            _state.State.Skills = new List<Network.Skills.BuiltSkill>();
+
+            foreach (var knowledge in knowledges)
+            {
+                var skill = DataManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(knowledge.BookId));
+                var talents = skill.Talents.Where(t => knowledge.Talents.Any(u => u.TalentId.Equals(t.Id)));
+                var manaCost = (int)talents.Where(t => t.Type == Network.Skills.TalentType.ManaCost).Sum(t => t.Value);
+                var cooldown = (int)talents.Where(t => t.Type == Network.Skills.TalentType.Cooldown).Sum(t => t.Value);
+                var built = new Network.Skills.BuiltSkill
+                {
+                    Id = Guid.NewGuid(),
+                    Name = skill.Name,
+                    Description = skill.Description,
+                    Quality = skill.Quality,
+                    ManaCost = skill.ManaCost - manaCost,
+                    Cooldown = skill.Cooldown - cooldown,
+
+                    Inscriptions = new List<Network.Skills.BuiltInscription>()
+                };
+
+                foreach (var inscription in skill.Inscriptions)
+                {
+                    var baseValue = (int)talents.Where(t => t.Type == Network.Skills.TalentType.BaseValue).Sum(t => t.Value);
+                    var ratio = (int)talents.Where(t => t.Type == Network.Skills.TalentType.Ratio).Sum(t => t.Value);
+                    var duration = (int)talents.Where(t => t.Type == Network.Skills.TalentType.Duration).Sum(t => t.Value);
+                    var inscBuilt = new Network.Skills.BuiltInscription
+                    {
+                        Id = Guid.NewGuid(),
+                        Type = inscription.Type,
+                        BaseMinValue = inscription.BaseValue + baseValue + datas.MinDamages,
+                        BaseMaxValue = inscription.BaseValue + baseValue + datas.MaxDamages,
+                        StatType = inscription.StatType,
+                        Ratio = inscription.Ratio + ratio,
+                        Duration = inscription.Duration + duration
+                    };
+
+                    if (inscription.IncludeWeaponDamages)
+                    {
+                        if (inscription.PreferredWeaponTypes.Where(w => datas.WeaponTypes.Contains(w.ToString())).Count() > 0)
+                        {
+                            inscBuilt.BaseMinValue += (int)(datas.MinDamages * inscription.WeaponDamagesRatio);
+                            inscBuilt.BaseMaxValue += (int)(datas.MaxDamages * inscription.WeaponDamagesRatio);
+                        }
+                        else if (inscription.WeaponTypes.Where(w => datas.WeaponTypes.Contains(w.ToString())).Count() > 0)
+                        {
+                            inscBuilt.BaseMinValue += (int)(datas.MinDamages * inscription.WeaponDamagesRatio);
+                            inscBuilt.BaseMaxValue += (int)(datas.MaxDamages * inscription.WeaponDamagesRatio);
+                        }
+                    }
+
+                    built.Inscriptions.Add(inscBuilt);
+                }
+
+                // TODO : Use this for statistics... Dunno how but still...
+                TrackSkillBuild(skill, knowledges, built);
+
+                _state.State.Skills.Add(built);
+            }
+        }
+
+        private void SetAdventureState()
+        {
+            _state.AdventureId = _adventure.Id;
+            _state.Name = _adventure.Name;
+
+            _state.MovingState = new Network.MovingState
+            {
+                CurrentStamina = _state.State.Stamina * 10,
+                CurrentCoordinateX = _adventure.SpawnCoordinateX,
+                CurrentCoordinateY = _adventure.SpawnCoordinateY
+            };
+
+            _enemiesStats = new Dictionary<Guid, EnemyStats>();
+
+            _state.Enemies = new Dictionary<Guid, Network.AdventureState.EnemyState>();
+            _state.Taverns = new Dictionary<Guid, Network.AdventureState.TavernState>();
+
+            _state.Cooldowns = new List<Network.AdventureState.SkillCooldown>();
+
+            _state.Marks = new List<Network.AdventureState.ModifierApplied>();
+            _state.Effects = new List<Network.AdventureState.ModifierApplied>();
+
+            _loots = new Dictionary<Guid, Network.LootItem>();
+            _marks = new List<Network.Skills.BuiltInscription>();
+            _effects = new List<Network.Items.ItemEffect>();
+            _enemyMarks = new Dictionary<Guid, List<Network.Skills.BuiltInscription>>();
+
+            _state.Shards = 0;
+
+            // QUESTS
+            _state.Quests = new List<Network.AdventureState.QuestState>();
+
+            foreach (var quest in _adventure.Quests)
+            {
+                var objectives = new List<Network.AdventureState.QuestObjectiveState>();
+                foreach (var objective in quest.Objectives)
+                {
+                    objectives.Add(new Network.AdventureState.QuestObjectiveState
+                    {
+                        ObjectiveId = objective.Id,
+                        Quantity = 0
+                    });
+                }
+
+                _state.Quests.Add(new Network.AdventureState.QuestState
+                {
+                    QuestId = quest.Id,
+                    Finished = false,
+                    Objectives = objectives
+                });
+            }
+        }
+
+        private void SetEnemyState()
+        {
+            //foreach (var enemy in _adventure)
+            //{
+            //    var tempId = Guid.NewGuid();
+            //    var monster = DataManager.Instance.Monsters.FirstOrDefault(m => m.Id.Equals(enemy.MonsterId));
+            //    var state = new Network.AdventureState.EnemyState
+            //    {
+            //        MonsterId = enemy.MonsterId,
+            //        EnemyType = enemy.EnemyType.ToString(),
+            //        State = new Network.PlayerState
+            //        {
+            //            MaxHealth = monster.BaseHealth + (enemy.Level * monster.HealthPerLevel),
+            //            CurrentHealth = monster.BaseHealth + (enemy.Level * monster.HealthPerLevel),
+
+            //            Skills = new List<Network.Skills.BuiltSkill>()
+            //        }
+            //    };
+
+            //    foreach (var phase in monster.Phases)
+            //    {
+            //        var phaseSkill = DataManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(phase.SkillId));
+            //        var built = new Network.Skills.BuiltSkill
+            //        {
+            //            Id = Guid.NewGuid(),
+            //            Name = phaseSkill.Name,
+            //            Description = phaseSkill.Description,
+            //            Quality = phaseSkill.Quality,
+            //            ManaCost = phaseSkill.ManaCost,
+            //            Cooldown = phaseSkill.Cooldown,
+
+            //            Inscriptions = new List<Network.Skills.BuiltInscription>()
+            //        };
+
+            //        foreach (var phaseInscription in phaseSkill.Inscriptions)
+            //        {
+            //            var inscBuilt = new Network.Skills.BuiltInscription
+            //            {
+            //                Id = Guid.NewGuid(),
+            //                Type = phaseInscription.Type,
+            //                BaseMinValue = phaseInscription.BaseValue,
+            //                BaseMaxValue = phaseInscription.BaseValue,
+            //                StatType = phaseInscription.StatType,
+            //                Ratio = phaseInscription.Ratio,
+            //                Duration = phaseInscription.Duration
+            //            };
+            //            built.Inscriptions.Add(inscBuilt);
+            //        }
+
+            //        state.State.Skills.Add(built);
+            //    }
+
+            //    _state.Enemies.Add(tempId, state);
+
+            //    _enemiesStats.Add(tempId, new EnemyStats
+            //    {
+            //        Level = enemy.Level,
+            //        ShardReward = enemy.ShardReward,
+            //        Stamina = (int)(enemy.Level * monster.StaminaPerLevel),
+            //        Energy = (int)(enemy.Level * monster.EnergyPerLevel),
+            //        Strength = (int)(enemy.Level * monster.StrengthPerLevel),
+            //        Agility = (int)(enemy.Level * monster.AgilityPerLevel),
+            //        Intelligence = (int)(enemy.Level * monster.IntelligencePerLevel),
+            //        Wisdom = (int)(enemy.Level * monster.WisdomPerLevel)
+            //    });
+            //}
+        }
+
+        private void SetTavernState()
+        {
+            //foreach (var item in room.ShopItems)
+            //{
+            //    var tempId = Guid.NewGuid();
+
+            //    _state.Shops.Add(tempId, new Network.AdventureState.ShopState
+            //    {
+            //        ItemId = item.ItemId,
+            //        Quantity = item.Quantity,
+            //        ShardPrice = item.ShardPrice
+            //    });
+            //}
+        }
+
+        // OLD
 
         public bool StartCombat()
         {
@@ -271,51 +544,51 @@ namespace Server.GameServer
 
         private void ClearDeadEnemies()
         {
-            var enemies = _enemiesStats.Keys.ToList();
-            foreach (var enemyKeys in enemies)
-            {
-                var enemy = _state.Enemies[enemyKeys];
-                var enemyStats = _enemiesStats[enemyKeys];
+            //var enemies = _enemiesStats.Keys.ToList();
+            //foreach (var enemyKeys in enemies)
+            //{
+            //    var enemy = _state.Enemies[enemyKeys];
+            //    var enemyStats = _enemiesStats[enemyKeys];
 
-                if (enemy.State.CurrentHealth <= 0)
-                {
-                    var monster = DataManager.Instance.Monsters.FirstOrDefault(m => m.Id.Equals(enemy.MonsterId));
-                    Console.WriteLine($"{monster.Name} died.");
+            //    if (enemy.State.CurrentHealth <= 0)
+            //    {
+            //        var monster = DataManager.Instance.Monsters.FirstOrDefault(m => m.Id.Equals(enemy.MonsterId));
+            //        Console.WriteLine($"{monster.Name} died.");
 
-                    _state.StackedExperience += monster.BaseExperience + (int)(enemyStats.Level * monster.ExperiencePerLevelRatio);
-                    _state.StackedShards += enemyStats.ShardReward;
+            //        _state.StackedExperience += monster.BaseExperience + (int)(enemyStats.Level * monster.ExperiencePerLevelRatio);
+            //        _state.StackedShards += enemyStats.ShardReward;
 
-                    foreach (var loot in monster.Loots)
-                    {
-                        var lootExists = _loots.Values.FirstOrDefault(l => l.ItemId.Equals(loot.ItemId));
-                        if (lootExists != null)
-                        {
-                            lootExists.Quantity += loot.Quantity;
-                            _loots[lootExists.LootId] = lootExists;
-                        }
-                        else
-                        {
-                            var id = Guid.NewGuid();
-                            _loots.Add(id, new Network.LootItem
-                            {
-                                LootId = id,
-                                ItemId = loot.ItemId,
-                                Quantity = loot.Quantity
-                            });
-                        }
-                    }
+            //        foreach (var loot in monster.Loots)
+            //        {
+            //            var lootExists = _loots.Values.FirstOrDefault(l => l.ItemId.Equals(loot.ItemId));
+            //            if (lootExists != null)
+            //            {
+            //                lootExists.Quantity += loot.Quantity;
+            //                _loots[lootExists.LootId] = lootExists;
+            //            }
+            //            else
+            //            {
+            //                var id = Guid.NewGuid();
+            //                _loots.Add(id, new Network.LootItem
+            //                {
+            //                    LootId = id,
+            //                    ItemId = loot.ItemId,
+            //                    Quantity = loot.Quantity
+            //                });
+            //            }
+            //        }
 
-                    _enemiesStats.Remove(enemyKeys);
-                    _state.Enemies.Remove(enemyKeys);
-                    _state.Marks.RemoveAll(m => m.EnemyId.Equals(enemyKeys));
-                    _state.Effects.RemoveAll(m => m.EnemyId.Equals(enemyKeys));
-                }
-                else
-                {
-                    _enemiesStats[enemyKeys] = enemyStats;
-                    _state.Enemies[enemyKeys] = enemy;
-                }
-            }
+            //        _enemiesStats.Remove(enemyKeys);
+            //        _state.Enemies.Remove(enemyKeys);
+            //        _state.Marks.RemoveAll(m => m.EnemyId.Equals(enemyKeys));
+            //        _state.Effects.RemoveAll(m => m.EnemyId.Equals(enemyKeys));
+            //    }
+            //    else
+            //    {
+            //        _enemiesStats[enemyKeys] = enemyStats;
+            //        _state.Enemies[enemyKeys] = enemy;
+            //    }
+            //}
         }
 
         public bool BuyShopItem(Guid tempId, int quantity, Guid soulId, Guid clientId)
@@ -445,94 +718,6 @@ namespace Server.GameServer
         public Network.AdventureState GetActualState()
         {
             return _state;
-        }
-
-        public void SetPlayerState(Network.SoulDatas datas, List<Network.Knowledge> knowledges)
-        {
-            _state.State = new Network.PlayerState
-            {
-                MaxHealth = datas.MaxHealth,
-                MaxMana = datas.MaxMana,
-
-                CurrentHealth = datas.MaxHealth,
-                CurrentMana = datas.MaxMana,
-
-                Stamina = datas.TotalStamina,
-                Energy = datas.TotalEnergy,
-                Strength = datas.TotalStrength,
-                Agility = datas.TotalAgility,
-                Intelligence = datas.TotalIntelligence,
-                Wisdom = datas.TotalWisdom,
-
-                Armor = datas.Armor,
-                MagicArmor = datas.MagicArmor,
-
-                WeaponTypes = datas.WeaponTypes,
-                MinDamages = datas.MinDamages,
-                MaxDamages = datas.MaxDamages,
-
-                Skills = new List<Network.Skills.BuiltSkill>()
-            };
-
-            foreach (var knowledge in knowledges)
-            {
-                var skill = DataManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(knowledge.BookId));
-                var talents = skill.Talents.Where(t => knowledge.Talents.Any(u => u.TalentId.Equals(t.Id)));
-                var manaCost = (int)talents.Where(t => t.Type == Network.Skills.TalentType.ManaCost).Sum(t => t.Value);
-                var cooldown = (int)talents.Where(t => t.Type == Network.Skills.TalentType.Cooldown).Sum(t => t.Value);
-                var built = new Network.Skills.BuiltSkill
-                {
-                    Id = Guid.NewGuid(),
-                    Name = skill.Name,
-                    Description = skill.Description,
-                    Quality = skill.Quality,
-                    ManaCost = skill.ManaCost - manaCost,
-                    Cooldown = skill.Cooldown - cooldown,
-
-                    Inscriptions = new List<Network.Skills.BuiltInscription>()
-                };
-
-                foreach (var inscription in skill.Inscriptions)
-                {
-                    var baseValue = (int)talents.Where(t => t.Type == Network.Skills.TalentType.BaseValue).Sum(t => t.Value);
-                    var ratio = (int)talents.Where(t => t.Type == Network.Skills.TalentType.Ratio).Sum(t => t.Value);
-                    var duration = (int)talents.Where(t => t.Type == Network.Skills.TalentType.Duration).Sum(t => t.Value);
-                    var inscBuilt = new Network.Skills.BuiltInscription
-                    {
-                        Id = Guid.NewGuid(),
-                        Type = inscription.Type,
-                        BaseMinValue = inscription.BaseValue + baseValue + datas.MinDamages,
-                        BaseMaxValue = inscription.BaseValue + baseValue + datas.MaxDamages,
-                        StatType = inscription.StatType,
-                        Ratio = inscription.Ratio + ratio,
-                        Duration = inscription.Duration + duration
-                    };
-
-                    if (inscription.IncludeWeaponDamages)
-                    {
-                        if (inscription.PreferredWeaponTypes.Where(w => datas.WeaponTypes.Contains(w.ToString())).Count() > 0)
-                        {
-                            inscBuilt.BaseMinValue += (int)(datas.MinDamages * inscription.WeaponDamagesRatio);
-                            inscBuilt.BaseMaxValue += (int)(datas.MaxDamages * inscription.WeaponDamagesRatio);
-                        }
-                        else if (inscription.WeaponTypes.Where(w => datas.WeaponTypes.Contains(w.ToString())).Count() > 0)
-                        {
-                            inscBuilt.BaseMinValue += (int)(datas.MinDamages * inscription.WeaponDamagesRatio);
-                            inscBuilt.BaseMaxValue += (int)(datas.MaxDamages * inscription.WeaponDamagesRatio);
-                        }
-                    }
-
-                    built.Inscriptions.Add(inscBuilt);
-                }
-
-                // TODO : Use this for statistics... Dunno how but still...
-                TrackSkillBuild(skill, knowledges, built);
-
-                _state.State.Skills.Add(built);
-            }
-
-            _state.StackedExperience = 0;
-            _state.StackedShards = 0;
         }
 
         // This is meant to be used for statistics.. I would like to put in place some sort of tracking in the skills/talents setup for
@@ -719,115 +904,6 @@ namespace Server.GameServer
             }
 
             return result;
-        }
-
-        private void SetState()
-        {
-            _state.AdventureId = _adventure.Id;
-            _state.Name = _adventure.Name;
-
-            _state.MovingState = new Network.MovingState
-            {
-                CurrentStamina = _state.State.Stamina * 10,
-                CurrentCoordinateX = _adventure.SpawnCoordinateX,
-                CurrentCoordinateY = _adventure.SpawnCoordinateY
-            };
-
-            _enemiesStats = new Dictionary<Guid, EnemyStats>();
-
-            _state.Enemies = new Dictionary<Guid, Network.AdventureState.EnemyState>();
-
-            //_state.Taverns = new Dictionary<Guid, Network.AdventureState.TavernState>();
-
-            _state.Cooldowns = new List<Network.AdventureState.SkillCooldown>();
-
-            _state.Marks = new List<Network.AdventureState.ModifierApplied>();
-            _state.Effects = new List<Network.AdventureState.ModifierApplied>();
-
-            _loots = new Dictionary<Guid, Network.LootItem>();
-            _marks = new List<Network.Skills.BuiltInscription>();
-            _effects = new List<Network.Items.ItemEffect>();
-            _enemyMarks = new Dictionary<Guid, List<Network.Skills.BuiltInscription>>();
-
-            //foreach (var enemy in _adventure)
-            //{
-            //    var tempId = Guid.NewGuid();
-            //    var monster = DataManager.Instance.Monsters.FirstOrDefault(m => m.Id.Equals(enemy.MonsterId));
-            //    var state = new Network.AdventureState.EnemyState
-            //    {
-            //        MonsterId = enemy.MonsterId,
-            //        EnemyType = enemy.EnemyType.ToString(),
-            //        State = new Network.PlayerState
-            //        {
-            //            MaxHealth = monster.BaseHealth + (enemy.Level * monster.HealthPerLevel),
-            //            CurrentHealth = monster.BaseHealth + (enemy.Level * monster.HealthPerLevel),
-
-            //            Skills = new List<Network.Skills.BuiltSkill>()
-            //        }
-            //    };
-
-            //    foreach (var phase in monster.Phases)
-            //    {
-            //        var phaseSkill = DataManager.Instance.Books.FirstOrDefault(b => b.Id.Equals(phase.SkillId));
-            //        var built = new Network.Skills.BuiltSkill
-            //        {
-            //            Id = Guid.NewGuid(),
-            //            Name = phaseSkill.Name,
-            //            Description = phaseSkill.Description,
-            //            Quality = phaseSkill.Quality,
-            //            ManaCost = phaseSkill.ManaCost,
-            //            Cooldown = phaseSkill.Cooldown,
-
-            //            Inscriptions = new List<Network.Skills.BuiltInscription>()
-            //        };
-
-            //        foreach (var phaseInscription in phaseSkill.Inscriptions)
-            //        {
-            //            var inscBuilt = new Network.Skills.BuiltInscription
-            //            {
-            //                Id = Guid.NewGuid(),
-            //                Type = phaseInscription.Type,
-            //                BaseMinValue = phaseInscription.BaseValue,
-            //                BaseMaxValue = phaseInscription.BaseValue,
-            //                StatType = phaseInscription.StatType,
-            //                Ratio = phaseInscription.Ratio,
-            //                Duration = phaseInscription.Duration
-            //            };
-            //            built.Inscriptions.Add(inscBuilt);
-            //        }
-
-            //        state.State.Skills.Add(built);
-            //    }
-
-            //    _state.Enemies.Add(tempId, state);
-
-            //    _enemiesStats.Add(tempId, new EnemyStats
-            //    {
-            //        Level = enemy.Level,
-            //        ShardReward = enemy.ShardReward,
-            //        Stamina = (int)(enemy.Level * monster.StaminaPerLevel),
-            //        Energy = (int)(enemy.Level * monster.EnergyPerLevel),
-            //        Strength = (int)(enemy.Level * monster.StrengthPerLevel),
-            //        Agility = (int)(enemy.Level * monster.AgilityPerLevel),
-            //        Intelligence = (int)(enemy.Level * monster.IntelligencePerLevel),
-            //        Wisdom = (int)(enemy.Level * monster.WisdomPerLevel)
-            //    });
-            //}
-
-            //foreach (var item in room.ShopItems)
-            //{
-            //    var tempId = Guid.NewGuid();
-
-            //    _state.Shops.Add(tempId, new Network.AdventureState.ShopState
-            //    {
-            //        ItemId = item.ItemId,
-            //        Quantity = item.Quantity,
-            //        ShardPrice = item.ShardPrice
-            //    });
-            //}
-
-            _state.ExperienceReward = _adventure.ExperienceReward;
-            _state.ShardReward = _adventure.ShardReward;
         }
     }
 }

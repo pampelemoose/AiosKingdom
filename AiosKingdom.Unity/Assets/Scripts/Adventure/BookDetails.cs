@@ -49,6 +49,7 @@ public class BookDetails : PaginationBox
         BuyButton.onClick.AddListener(() =>
         {
             NetworkManager.This.LearnSkill(book.Id);
+
             gameObject.SetActive(false);
         });
 

@@ -36,8 +36,6 @@ namespace JsonObjects
             public const int EquipItem = _default + 2;
             public const int SellItem = _default + 11;
             public const int UseSpiritPills = _default + 3;
-            public const int LearnSkill = _default + 4;
-            public const int LearnTalent = _default + 14;
 
             public const int CurrentSoulDatas = _default + 6;
 
@@ -64,25 +62,25 @@ namespace JsonObjects
             public const int Bookstore = _default + 10;
         }
 
-        public static class Dungeon
-        {
-            private const int _default = 50;
+        //public static class Dungeon
+        //{
+        //    private const int _default = 50;
 
-            public const int Enter = _default + 1;
-            public const int EnterRoom = _default + 2;
-            public const int Exit = _default + 3;
-            public const int UpdateRoom = _default + 4;
-            public const int UseSkill = _default + 5;
-            public const int UseConsumable = _default + 6;
-            public const int EnemyTurn = _default + 7;
-            public const int GetLoots = _default + 8;
-            public const int LootItem = _default + 9;
-            public const int LeaveFinishedRoom = _default + 10;
-            public const int DoNothingTurn = _default + 11;
-            public const int BuyShopItem = _default + 12;
-            public const int PlayerDied = _default + 13;
-            public const int PlayerRest = _default + 14;
-        }
+        //    public const int Enter = _default + 1;
+        //    public const int EnterRoom = _default + 2;
+        //    public const int Exit = _default + 3;
+        //    public const int UpdateRoom = _default + 4;
+        //    public const int UseSkill = _default + 5;
+        //    public const int UseConsumable = _default + 6;
+        //    public const int EnemyTurn = _default + 7;
+        //    public const int GetLoots = _default + 8;
+        //    public const int LootItem = _default + 9;
+        //    public const int LeaveFinishedRoom = _default + 10;
+        //    public const int DoNothingTurn = _default + 11;
+        //    public const int BuyShopItem = _default + 12;
+        //    public const int PlayerDied = _default + 13;
+        //    public const int PlayerRest = _default + 14;
+        //}
 
         public static class Adventure
         {
@@ -90,7 +88,11 @@ namespace JsonObjects
 
             public const int Start = _default + 1;
             public const int Move = _default + 2;
-            public const int RestInTavern = _default + 3;
+            public const int EnterTavern = _default + 3;
+            public const int RestInTavern = _default + 4;
+
+            public const int LearnSkill = _default + 5;
+            public const int LearnTalent = _default + 6;
         }
     }
 }

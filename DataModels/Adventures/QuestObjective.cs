@@ -23,6 +23,8 @@ namespace DataModels.Adventures
         public string Title { get; set; }
         public ObjectiveType Type { get; set; }
 
+        public bool Required { get; set; }
+
         public string ObjectiveDataJson { get; set; }
     }
 }

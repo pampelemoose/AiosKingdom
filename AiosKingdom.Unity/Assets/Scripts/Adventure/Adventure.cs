@@ -103,7 +103,7 @@ public class Adventure : MonoBehaviour
         Exit.onClick.AddListener(() =>
         {
             Menu.SetActive(false);
-            NetworkManager.This.ExitDungeon();
+            //NetworkManager.This.ExitDungeon();
             gameObject.SetActive(false);
         });
 
@@ -155,14 +155,14 @@ public class Adventure : MonoBehaviour
 
             ResetActions();
 
-            NetworkManager.This.DoNothingTurn();
+            //NetworkManager.This.DoNothingTurn();
         });
 
         NextRoomButton.onClick.RemoveAllListeners();
         NextRoomButton.onClick.AddListener(() =>
         {
             Menu.SetActive(false);
-            NetworkManager.This.OpenDungeonRoom();
+            //NetworkManager.This.OpenDungeonRoom();
         });
 
         FinishButton.onClick.RemoveAllListeners();
@@ -170,14 +170,14 @@ public class Adventure : MonoBehaviour
         {
             Menu.SetActive(false);
             _showActionPanel = true;
-            NetworkManager.This.LeaveFinishedRoom();
+            //NetworkManager.This.LeaveFinishedRoom();
         });
 
         BackToMainButton.onClick.RemoveAllListeners();
         BackToMainButton.onClick.AddListener(() =>
         {
             Menu.SetActive(false);
-            NetworkManager.This.DungeonLeft();
+            //NetworkManager.This.DungeonLeft();
             gameObject.SetActive(false);
             UIManager.This.ShowMain();
         });
@@ -191,7 +191,7 @@ public class Adventure : MonoBehaviour
 
     public void StartDungeon()
     {
-        NetworkManager.This.UpdateDungeonRoom();
+        //NetworkManager.This.UpdateDungeonRoom();
         LogBox.ClearLogs();
     }
 
@@ -200,62 +200,62 @@ public class Adventure : MonoBehaviour
         var adventure = DatasManager.Instance.Adventure;
 
         Name.text = adventure.Name;
-        Room.text = string.Format("[{0}/{1}]", adventure.CurrentRoom, adventure.TotalRoomCount);
+        //Room.text = string.Format("[{0}/{1}]", adventure.CurrentRoom, adventure.TotalRoomCount);
 
         ResetActions();
         RestInfos.SetActive(false);
         EndResultBox.SetActive(false);
-        if (adventure.IsFightArea)
-        {
-            SetHeaders("enemies");
+        //if (adventure.IsFightArea)
+        //{
+        //    SetHeaders("enemies");
 
-            if (adventure.Enemies.Count == 0 && !adventure.IsExit)
-            {
-                NetworkManager.This.GetDungeonRoomLoots();
-            }
+        //    if (adventure.Enemies.Count == 0 && !adventure.IsExit)
+        //    {
+        //        NetworkManager.This.GetDungeonRoomLoots();
+        //    }
 
-            _enemies = adventure.Enemies;
-            _pagination.Setup(ItemPerPage, _enemies.Count, SetCombat);
+        //    _enemies = adventure.Enemies;
+        //    _pagination.Setup(ItemPerPage, _enemies.Count, SetCombat);
 
-            if (_showActionPanel) ShowCombatActions();
-            else ShowEnemyTurnActions();
+        //    if (_showActionPanel) ShowCombatActions();
+        //    else ShowEnemyTurnActions();
 
-            SetCombat();
-        }
-        else if (adventure.IsShopArea)
-        {
-            SetHeaders("shop");
+        //    SetCombat();
+        //}
+        //else if (adventure.IsShopArea)
+        //{
+        //    SetHeaders("shop");
 
-            _shopItems = adventure.Shops;
-            _pagination.Setup(ItemPerPage, _shopItems.Count, SetShop);
+        //    _shopItems = adventure.Shops;
+        //    _pagination.Setup(ItemPerPage, _shopItems.Count, SetShop);
 
-            ShowShoppingActions();
-            SetShop();
-        }
-        else if (adventure.IsRestingArea)
-        {
-            SetHeaders("none");
+        //    ShowShoppingActions();
+        //    SetShop();
+        //}
+        //else if (adventure.IsRestingArea)
+        //{
+        //    SetHeaders("none");
 
-            foreach (Transform child in List.transform)
-            {
-                Destroy(child.gameObject);
-            }
+        //    foreach (Transform child in List.transform)
+        //    {
+        //        Destroy(child.gameObject);
+        //    }
 
-            RestInfos.SetActive(true);
+        //    RestInfos.SetActive(true);
 
-            NetworkManager.This.PlayerRest();
-        }
-        else if (adventure.IsExit)
-        {
-            SetHeaders("none");
+        //    NetworkManager.This.PlayerRest();
+        //}
+        //else if (adventure.IsExit)
+        //{
+        //    SetHeaders("none");
 
-            foreach (Transform child in List.transform)
-            {
-                Destroy(child.gameObject);
-            }
+        //    foreach (Transform child in List.transform)
+        //    {
+        //        Destroy(child.gameObject);
+        //    }
 
-            FinishButton.gameObject.SetActive(true);
-        }
+        //    FinishButton.gameObject.SetActive(true);
+        //}
 
         Health.text = string.Format("[{0}/{1}]", adventure.State.CurrentHealth, adventure.State.MaxHealth);
         Mana.text = string.Format("[{0}/{1}]", adventure.State.CurrentMana, adventure.State.MaxMana);
@@ -374,7 +374,7 @@ public class Adventure : MonoBehaviour
             script.Initialize(item, loot);
             script.Loot.onClick.AddListener(() =>
             {
-                NetworkManager.This.LootDungeonItem(loot.LootId);
+                //NetworkManager.This.LootDungeonItem(loot.LootId);
             });
             script.Action.onClick.AddListener(() =>
             {
@@ -401,7 +401,7 @@ public class Adventure : MonoBehaviour
             yield return new WaitForSeconds(1.0f);
         }
 
-        NetworkManager.This.EnemyTurn();
+        //NetworkManager.This.EnemyTurn();
         _showActionPanel = true;
     }
 
@@ -486,7 +486,7 @@ public class Adventure : MonoBehaviour
             script.Initialize(item, shopItem.Value);
             script.Buy.onClick.AddListener(() =>
             {
-                NetworkManager.This.BuyShopItem(shopItem.Key, 1);
+                //NetworkManager.This.BuyShopItem(shopItem.Key, 1);
             });
             script.Action.onClick.AddListener(() =>
             {
@@ -517,7 +517,7 @@ public class Adventure : MonoBehaviour
 
                 ResetActions();
 
-                NetworkManager.This.AdventureUseSkill(skill.Id, _selectedEnemy);
+                //NetworkManager.This.AdventureUseSkill(skill.Id, _selectedEnemy);
             });
             script.Action.onClick.AddListener(() =>
             {
@@ -549,7 +549,7 @@ public class Adventure : MonoBehaviour
 
                 ResetActions();
 
-                NetworkManager.This.AdventureUseConsumable(bagItem.InventoryId, _selectedEnemy);
+                //NetworkManager.This.AdventureUseConsumable(bagItem.InventoryId, _selectedEnemy);
             });
             script.Action.onClick.AddListener(() =>
             {

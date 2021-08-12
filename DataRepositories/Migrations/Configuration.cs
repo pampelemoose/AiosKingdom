@@ -63,6 +63,7 @@ namespace DataRepositories.Migrations
                 context.Enemies.RemoveRange(context.Enemies);
                 context.NpcDialogues.RemoveRange(context.NpcDialogues);
                 context.Npcs.RemoveRange(context.Npcs);
+                context.Bookstores.RemoveRange(context.Bookstores);
 
                 context.AdventureUnlocked.RemoveRange(context.AdventureUnlocked);
 
@@ -946,6 +947,9 @@ namespace DataRepositories.Migrations
                 Name = "Simple Punch",
                 Description = "A simple punch that deal small physical damages.",
                 Quality = DataModels.Skills.BookQuality.TierOne,
+                Action = DataModels.Skills.BookAction.Hit,
+                Repetition = 1,
+                RequireWeapon = false,
                 ManaCost = 5,
                 Cooldown = 0,
                 EmberCost = 1,
@@ -1055,6 +1059,9 @@ namespace DataRepositories.Migrations
                 Name = "Energy Ball",
                 Description = "An energy ball that deal small magic damages.",
                 Quality = DataModels.Skills.BookQuality.TierOne,
+                Action = DataModels.Skills.BookAction.Cast,
+                Repetition = 1,
+                RequireWeapon = false,
                 ManaCost = 5,
                 Cooldown = 0,
                 EmberCost = 1,
@@ -1169,6 +1176,9 @@ namespace DataRepositories.Migrations
                 Name = "Scratch",
                 Description = "Scratch the enemy, inflicting a small amount of physical damages.",
                 Quality = DataModels.Skills.BookQuality.TierOne,
+                Action = DataModels.Skills.BookAction.Hit,
+                Repetition = 1,
+                RequireWeapon = false,
                 ManaCost = 1,
                 Cooldown = 0,
                 EmberCost = 0,
@@ -1318,6 +1328,9 @@ namespace DataRepositories.Migrations
             //    ShardReward = 2
             //});
 
+            var simplePunch = context.Books.FirstOrDefault(b => b.Name == "Simple Punch");
+            var energyBall = context.Books.FirstOrDefault(b => b.Name == "Energy Ball");
+
             context.Adventures.Add(new DataModels.Adventures.Adventure
             {
                 Id = Guid.NewGuid(),
@@ -1326,6 +1339,7 @@ namespace DataRepositories.Migrations
                 Name = "Welcome to Aios Kingdom.",
                 RequiredLevel = 1,
                 MaxLevelAuthorized = 5,
+                Repeatable = false,
                 MapIdentifier = Guid.Parse("A17CB0E6-1D3C-42CD-AEC2-693B5FA0F0BE"),
                 ExperienceReward = 100,
                 ShardReward = 10,
@@ -1338,23 +1352,27 @@ namespace DataRepositories.Migrations
                         Id = Guid.NewGuid(),
                         VersionId = version.Id,
                         Vid = Guid.NewGuid(),
-                        Name = "The Wolf in the garden.",
-                        Description = "There is a wold killing our chickens in the garden. Get rid of it. The garden is located in the north of the village.",
+                        Name = "Choose your first skill.",
+                        Description = "There are different path you can choose. Talk to people around and select your first skill.",
                         Objectives = new System.Collections.Generic.List<DataModels.Adventures.QuestObjective>
                         {
-                            //new DataModels.Adventures.QuestObjective
-                            //{
-                            //    Id = Guid.NewGuid(),
-                            //    VersionId = version.Id,
-                            //    Vid = Guid.NewGuid(),
-                            //    Title = "Kill the wolf.",
-                            //    Type = DataModels.Adventures.QuestObjective.ObjectiveType.EnemyKill,
-                            //    ObjectiveDataJson = JsonConvert.SerializeObject(new DataModels.Adventures.QuestObjectiveDataEnemyKill
-                            //    {
-                            //        EnemyVid = wolfEnemy.Vid,
-                            //        KillCount = 1
-                            //    })
-                            //}
+                            new DataModels.Adventures.QuestObjective
+                            {
+                                Id = Guid.NewGuid(),
+                                VersionId = version.Id,
+                                Vid = Guid.NewGuid(),
+                                Title = "Learn a skill.",
+                                Type = DataModels.Adventures.QuestObjective.ObjectiveType.LearnBook,
+                                ObjectiveDataJson = JsonConvert.SerializeObject(new DataModels.Adventures.QuestObjectiveDataLearnBook
+                                {
+                                    NeedToLearnCount = 1,
+                                    Books = new System.Collections.Generic.List<Guid>
+                                    {
+                                        simplePunch.Vid,
+                                        energyBall.Vid
+                                    }
+                                })
+                            }
                         }
                     }
                 }

@@ -69,6 +69,14 @@
     <Compile Include="Migrations\202108100746387_AddBookstoreItem.Designer.cs">
       <DependentUpon>202108100746387_AddBookstoreItem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202108120151520_UpdateBookActionAndRequireWeapon.cs" />
+    <Compile Include="Migrations\202108120151520_UpdateBookActionAndRequireWeapon.Designer.cs">
+      <DependentUpon>202108120151520_UpdateBookActionAndRequireWeapon.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108120220444_UpdateAdventureRepeatable.cs" />
+    <Compile Include="Migrations\202108120220444_UpdateAdventureRepeatable.Designer.cs">
+      <DependentUpon>202108120220444_UpdateAdventureRepeatable.cs</DependentUpon>
+    </Compile>
     <Compile Include="TownRepository.cs" />
     <Compile Include="AdventureRepository.cs" />
     <Compile Include="ForumRepository.cs" />
@@ -107,6 +115,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202108100746387_AddBookstoreItem.resx">
       <DependentUpon>202108100746387_AddBookstoreItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108120151520_UpdateBookActionAndRequireWeapon.resx">
+      <DependentUpon>202108120151520_UpdateBookActionAndRequireWeapon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108120220444_UpdateAdventureRepeatable.resx">
+      <DependentUpon>202108120220444_UpdateAdventureRepeatable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

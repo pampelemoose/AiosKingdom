@@ -131,7 +131,8 @@ namespace Server.GameServer
             SetupListingDelegates();
             SetupPlayerDelegates();
 
-            SetupDungeonDelegates();
+            // TODO : REMOVE
+            //SetupDungeonDelegates();
 
             SetupAdventureDelegates();
         }
@@ -183,8 +184,6 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Player.EquipItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.SellItem, 1);
             _commandArgCount.Add(Network.CommandCodes.Player.UseSpiritPills, 3);
-            _commandArgCount.Add(Network.CommandCodes.Player.LearnSkill, 1);
-            _commandArgCount.Add(Network.CommandCodes.Player.LearnTalent, 1);
 
             _commandArgCount.Add(Network.CommandCodes.Player.Currencies, 0);
             _commandArgCount.Add(Network.CommandCodes.Player.Inventory, 0);
@@ -197,8 +196,6 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Player.EquipItem, (args) => { return new Commands.Player.EquipItemCommand(args, _town); });
             _delegates.Add(Network.CommandCodes.Player.SellItem, (args) => { return new Commands.Player.SellItemCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.UseSpiritPills, (args) => { return new Commands.Player.UseSpiritPillsCommand(args, _town); });
-            _delegates.Add(Network.CommandCodes.Player.LearnSkill, (args) => { return new Commands.Player.LearnSkillCommand(args); });
-            _delegates.Add(Network.CommandCodes.Player.LearnTalent, (args) => { return new Commands.Player.LearnTalentCommand(args); });
 
             _delegates.Add(Network.CommandCodes.Player.Currencies, (args) => { return new Commands.Player.CurrenciesCommand(args); });
             _delegates.Add(Network.CommandCodes.Player.Inventory, (args) => { return new Commands.Player.InventoryCommand(args); });
@@ -207,46 +204,55 @@ namespace Server.GameServer
             _delegates.Add(Network.CommandCodes.Player.AdventureUnlocked, (args) => { return new Commands.Player.AdventureUnlockedCommand(args); });
         }
 
-        private void SetupDungeonDelegates()
-        {
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.Enter, 2);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.EnterRoom, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.UpdateRoom, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.Exit, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.EnemyTurn, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.UseSkill, 2);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.UseConsumable, 2);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.GetLoots, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.LootItem, 1);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.DoNothingTurn, 0);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.BuyShopItem, 2);
-            _commandArgCount.Add(Network.CommandCodes.Dungeon.PlayerRest, 0);
+        // TODO : REMOVE
+        //private void SetupDungeonDelegates()
+        //{
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.Enter, 2);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.EnterRoom, 0);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.UpdateRoom, 0);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.Exit, 0);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.EnemyTurn, 0);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.UseSkill, 2);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.UseConsumable, 2);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.GetLoots, 0);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.LootItem, 1);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, 0);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.DoNothingTurn, 0);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.BuyShopItem, 2);
+        //    _commandArgCount.Add(Network.CommandCodes.Dungeon.PlayerRest, 0);
 
-            _delegates.Add(Network.CommandCodes.Dungeon.Enter, (args) => { return new Commands.Dungeon.EnterCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.EnterRoom, (args) => { return new Commands.Dungeon.EnterRoomCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.UpdateRoom, (args) => { return new Commands.Dungeon.UpdateRoomCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.Exit, (args) => { return new Commands.Dungeon.ExitCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.EnemyTurn, (args) => { return new Commands.Dungeon.EnemyTurnCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.UseSkill, (args) => { return new Commands.Dungeon.UseSkillCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.UseConsumable, (args) => { return new Commands.Dungeon.UseConsumableCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.GetLoots, (args) => { return new Commands.Dungeon.GetLootsCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.LootItem, (args) => { return new Commands.Dungeon.LootDungeonItemCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, (args) => { return new Commands.Dungeon.LeaveFinishedRoomCommand(args, _town); });
-            _delegates.Add(Network.CommandCodes.Dungeon.DoNothingTurn, (args) => { return new Commands.Dungeon.DoNothingTurnCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.BuyShopItem, (args) => { return new Commands.Dungeon.BuyShopItemCommand(args); });
-            _delegates.Add(Network.CommandCodes.Dungeon.PlayerRest, (args) => { return new Commands.Dungeon.PlayerRestCommand(args); });
-        }
+        //    _delegates.Add(Network.CommandCodes.Dungeon.Enter, (args) => { return new Commands.Dungeon.EnterCommand(args); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.EnterRoom, (args) => { return new Commands.Dungeon.EnterRoomCommand(args); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.UpdateRoom, (args) => { return new Commands.Dungeon.UpdateRoomCommand(args); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.Exit, (args) => { return new Commands.Dungeon.ExitCommand(args); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.EnemyTurn, (args) => { return new Commands.Dungeon.EnemyTurnCommand(args); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.UseSkill, (args) => { return new Commands.Dungeon.UseSkillCommand(args); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.UseConsumable, (args) => { return new Commands.Dungeon.UseConsumableCommand(args); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.GetLoots, (args) => { return new Commands.Dungeon.GetLootsCommand(args); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.LootItem, (args) => { return new Commands.Dungeon.LootDungeonItemCommand(args); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.LeaveFinishedRoom, (args) => { return new Commands.Dungeon.LeaveFinishedRoomCommand(args, _town); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.DoNothingTurn, (args) => { return new Commands.Dungeon.DoNothingTurnCommand(args); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.BuyShopItem, (args) => { return new Commands.Dungeon.BuyShopItemCommand(args); });
+        //    _delegates.Add(Network.CommandCodes.Dungeon.PlayerRest, (args) => { return new Commands.Dungeon.PlayerRestCommand(args); });
+        //}
 
         private void SetupAdventureDelegates()
         {
             _commandArgCount.Add(Network.CommandCodes.Adventure.Start, 2);
             _commandArgCount.Add(Network.CommandCodes.Adventure.Move, 1);
+            _commandArgCount.Add(Network.CommandCodes.Adventure.EnterTavern, 1);
             _commandArgCount.Add(Network.CommandCodes.Adventure.RestInTavern, 1);
+
+            _commandArgCount.Add(Network.CommandCodes.Adventure.LearnSkill, 1);
+            _commandArgCount.Add(Network.CommandCodes.Adventure.LearnTalent, 1);
 
             _delegates.Add(Network.CommandCodes.Adventure.Start, (args) => { return new Commands.Adventure.StartCommand(args); });
             _delegates.Add(Network.CommandCodes.Adventure.Move, (args) => { return new Commands.Adventure.MoveCommand(args); });
+            _delegates.Add(Network.CommandCodes.Adventure.EnterTavern, (args) => { return new Commands.Adventure.EnterTavernCommand(args); });
             _delegates.Add(Network.CommandCodes.Adventure.RestInTavern, (args) => { return new Commands.Adventure.RestInTavernCommand(args); });
+
+            _delegates.Add(Network.CommandCodes.Adventure.LearnSkill, (args) => { return new Commands.Adventure.LearnSkillCommand(args); });
+            _delegates.Add(Network.CommandCodes.Adventure.LearnTalent, (args) => { return new Commands.Adventure.LearnTalentCommand(args); });
         }
 
         private void Run()
@@ -581,12 +587,6 @@ namespace Server.GameServer
                 case Network.CommandCodes.Player.UseSpiritPills:
                     retVal.Args = args;
                     break;
-                case Network.CommandCodes.Player.LearnSkill:
-                    retVal.Args = new string[1] { args[0] };
-                    break;
-                case Network.CommandCodes.Player.LearnTalent:
-                    retVal.Args = new string[1] { args[0] };
-                    break;
                 case Network.CommandCodes.Player.Currencies:
                     break;
                 case Network.CommandCodes.Player.Inventory:
@@ -620,38 +620,39 @@ namespace Server.GameServer
                 case Network.CommandCodes.Listing.Bookstore:
                     break;
 
+                // TODO : REMOVE
                 // DUNGEON
-                case Network.CommandCodes.Dungeon.Enter:
-                    retVal.Args = new string[2] { args[0], args[1] };
-                    break;
-                case Network.CommandCodes.Dungeon.EnterRoom:
-                    break;
-                case Network.CommandCodes.Dungeon.UpdateRoom:
-                    break;
-                case Network.CommandCodes.Dungeon.Exit:
-                    break;
-                case Network.CommandCodes.Dungeon.EnemyTurn:
-                    break;
-                case Network.CommandCodes.Dungeon.UseSkill:
-                    retVal.Args = new string[2] { args[0], args[1] };
-                    break;
-                case Network.CommandCodes.Dungeon.UseConsumable:
-                    retVal.Args = new string[2] { args[0], args[1] };
-                    break;
-                case Network.CommandCodes.Dungeon.GetLoots:
-                    break;
-                case Network.CommandCodes.Dungeon.LootItem:
-                    retVal.Args = new string[1] { args[0] };
-                    break;
-                case Network.CommandCodes.Dungeon.LeaveFinishedRoom:
-                    break;
-                case Network.CommandCodes.Dungeon.DoNothingTurn:
-                    break;
-                case Network.CommandCodes.Dungeon.BuyShopItem:
-                    retVal.Args = new string[2] { args[0], args[1] };
-                    break;
-                case Network.CommandCodes.Dungeon.PlayerRest:
-                    break;
+                //case Network.CommandCodes.Dungeon.Enter:
+                //    retVal.Args = new string[2] { args[0], args[1] };
+                //    break;
+                //case Network.CommandCodes.Dungeon.EnterRoom:
+                //    break;
+                //case Network.CommandCodes.Dungeon.UpdateRoom:
+                //    break;
+                //case Network.CommandCodes.Dungeon.Exit:
+                //    break;
+                //case Network.CommandCodes.Dungeon.EnemyTurn:
+                //    break;
+                //case Network.CommandCodes.Dungeon.UseSkill:
+                //    retVal.Args = new string[2] { args[0], args[1] };
+                //    break;
+                //case Network.CommandCodes.Dungeon.UseConsumable:
+                //    retVal.Args = new string[2] { args[0], args[1] };
+                //    break;
+                //case Network.CommandCodes.Dungeon.GetLoots:
+                //    break;
+                //case Network.CommandCodes.Dungeon.LootItem:
+                //    retVal.Args = new string[1] { args[0] };
+                //    break;
+                //case Network.CommandCodes.Dungeon.LeaveFinishedRoom:
+                //    break;
+                //case Network.CommandCodes.Dungeon.DoNothingTurn:
+                //    break;
+                //case Network.CommandCodes.Dungeon.BuyShopItem:
+                //    retVal.Args = new string[2] { args[0], args[1] };
+                //    break;
+                //case Network.CommandCodes.Dungeon.PlayerRest:
+                //    break;
 
                 // ADVENTURE
                 case Network.CommandCodes.Adventure.Start:
@@ -660,7 +661,17 @@ namespace Server.GameServer
                 case Network.CommandCodes.Adventure.Move:
                     retVal.Args = new string[1] { args[0] };
                     break;
+                case Network.CommandCodes.Adventure.EnterTavern:
+                    retVal.Args = new string[1] { args[0] };
+                    break;
                 case Network.CommandCodes.Adventure.RestInTavern:
+                    retVal.Args = new string[1] { args[0] };
+                    break;
+
+                case Network.CommandCodes.Adventure.LearnSkill:
+                    retVal.Args = new string[1] { args[0] };
+                    break;
+                case Network.CommandCodes.Adventure.LearnTalent:
                     retVal.Args = new string[1] { args[0] };
                     break;
 
