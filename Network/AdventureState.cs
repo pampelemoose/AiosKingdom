@@ -21,17 +21,19 @@ namespace Network
             public int ShardPrice { get; set; }
         }
 
-        public struct QuestState
+        public class QuestState
         {
             public Guid QuestId { get; set; }
             public bool Finished { get; set; }
             public List<QuestObjectiveState> Objectives { get; set; }
         }
 
-        public struct QuestObjectiveState
+        public class QuestObjectiveState
         {
             public Guid ObjectiveId { get; set; }
             public int Quantity { get; set; }
+            public bool Required { get; set; }
+            public bool Finished { get; set; }
         }
 
         public class SkillCooldown

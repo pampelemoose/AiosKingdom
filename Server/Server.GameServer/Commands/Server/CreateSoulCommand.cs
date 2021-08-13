@@ -38,8 +38,7 @@ namespace Server.GameServer.Commands.Server
                 Agility = 0,
                 Intelligence = 0,
                 Wisdom = 0,
-                Spirits = _config.SpiritsPerLevelUp,
-                Embers = _config.EmbersPerLevelUp,
+                StatPoints = _config.SpiritsPerLevelUp,
                 Shards = 0,
                 Bits = 0,
                 Equipment = new DataModels.Equipment

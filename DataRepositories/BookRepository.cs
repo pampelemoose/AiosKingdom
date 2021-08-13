@@ -101,7 +101,7 @@ namespace DataRepositories
                 online.Name = book.Name;
                 online.Description = book.Description;
                 online.Quality = book.Quality;
-                online.EmberCost = book.EmberCost;
+                online.ExperienceCost = book.ExperienceCost;
                 online.ManaCost = book.ManaCost;
                 online.Cooldown = book.Cooldown;
 

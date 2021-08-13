@@ -122,8 +122,7 @@ namespace Server.GameServer
 
                     Currency = new Network.Currencies
                     {
-                        Spirits = soul.Spirits,
-                        Embers = soul.Embers,
+                        StatPoints = soul.StatPoints,
                         Shards = soul.Shards,
                         Bits = soul.Bits
                     },
@@ -306,8 +305,7 @@ namespace Server.GameServer
                 soul.Knowledge.Add(knowledge);
             }
             // CURRENCIES
-            soul.Spirits = components.Currency.Spirits;
-            soul.Embers = components.Currency.Embers;
+            soul.StatPoints = components.Currency.StatPoints;
             soul.Shards = components.Currency.Shards;
             soul.Bits = components.Currency.Bits;
             // ADVENTURELOCKS

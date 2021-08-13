@@ -39,8 +39,7 @@ public class MainController : MonoBehaviour
 
     [Space(2)]
     [Header("Currencies")]
-    public Text Spirits;
-    public Text Embers;
+    public Text StatPoints;
     public Text Bits;
     public Text Shards;
 
@@ -102,7 +101,7 @@ public class MainController : MonoBehaviour
         Level.text = DatasManager.Instance.Datas.Level.ToString();
         Name.text = DatasManager.Instance.Datas.Name;
 
-        ExperienceBar.maxValue = DatasManager.Instance.Datas.RequiredExperience;
+        ExperienceBar.maxValue = DatasManager.Instance.Datas.CurrentExperience;
         ExperienceBar.value = DatasManager.Instance.Datas.CurrentExperience;
         ExperienceText.text = $"{DatasManager.Instance.Datas.CurrentExperience} / {DatasManager.Instance.Datas.RequiredExperience}";
 
@@ -130,13 +129,12 @@ public class MainController : MonoBehaviour
 
     public void UpdateCurrencies()
     {
-        Spirits.text = $"{DatasManager.Instance.Currencies.Spirits}";
-        Embers.text = $"{DatasManager.Instance.Currencies.Embers}";
+        StatPoints.text = $"{DatasManager.Instance.Currencies.StatPoints}";
         Bits.text = $"{DatasManager.Instance.Currencies.Bits}";
         Shards.text = $"{DatasManager.Instance.Currencies.Shards}";
 
         PointsAvailable.gameObject.SetActive(false);
-        if (DatasManager.Instance.Currencies.Spirits > 0)
+        if (DatasManager.Instance.Currencies.StatPoints > 0)
         {
             PointsAvailable.gameObject.SetActive(true);
         }

@@ -8,7 +8,8 @@ namespace Network.Adventures
     {
         EnemyKill = 0,
         NpcDialogue = 1,
-        ExploreArea = 2
+        ExploreArea = 2,
+        LearnBook = 3
     }
 
     public enum EnemyType

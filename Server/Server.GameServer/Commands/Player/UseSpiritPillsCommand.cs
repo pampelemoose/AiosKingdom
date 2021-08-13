@@ -33,10 +33,10 @@ namespace Server.GameServer.Commands.Player
                 Network.Stats statId = (Network.Stats)Enum.Parse(typeof(Network.Stats), _args.Args[statIndex]);
                 int amount = int.Parse(_args.Args[statIndex + 1]);
 
-                if (currencies.Spirits >= amount && amount > 0)
+                if (currencies.StatPoints >= amount && amount > 0)
                 {
                     totalAmount += amount;
-                    currencies.Spirits -= amount;
+                    currencies.StatPoints -= amount;
                     switch (statId)
                     {
                         case Network.Stats.Stamina:
@@ -58,7 +58,7 @@ namespace Server.GameServer.Commands.Player
                             datas.Wisdom += amount;
                             break;
                         default:
-                            currencies.Spirits += amount;
+                            currencies.StatPoints += amount;
                             break;
                     }
 

@@ -69,7 +69,7 @@ namespace JsonObjects.Skills
         public string Description { get; set; }
         public BookQuality Quality { get; set; }
 
-        public int EmberCost { get; set; }
+        public int ExperienceCost { get; set; }
         public int ManaCost { get; set; }
         public int Cooldown { get; set; }
 

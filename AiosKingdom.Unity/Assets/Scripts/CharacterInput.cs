@@ -12,13 +12,15 @@ public class CharacterInput : MonoBehaviour
     private bool _moved = false;
     private bool _moving = false;
 
-    void Start()
-    {
-        
-    }
+    public bool CanMove = true;
 
     void Update()
     {
+        if (!CanMove)
+        {
+            return;
+        }
+
         if (Application.platform != RuntimePlatform.Android)
         {
             _keyboardInputs();

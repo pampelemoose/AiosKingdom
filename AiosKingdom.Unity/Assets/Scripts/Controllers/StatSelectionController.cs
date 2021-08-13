@@ -22,7 +22,7 @@ public class StatSelectionController : MonoBehaviour
 
     void Awake()
     {
-        _updateSpiritValue(DatasManager.Instance.Currencies.Spirits);
+        _updateSpiritValue(DatasManager.Instance.Currencies.StatPoints);
 
         Stamina.Init(() =>
         {

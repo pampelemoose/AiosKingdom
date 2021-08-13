@@ -42,14 +42,8 @@ namespace DataModels
         public int Agility { get; set; }
         public int Intelligence { get; set; }
         public int Wisdom { get; set; }
+        public int StatPoints { get; set; }
 
-        private int _spirits = 25;
-        public int Spirits // Stats
-        {
-            get { return _spirits; }
-            set { _spirits = value; }
-        }
-        public int Embers { get; set; } // Skills
         public int Shards { get; set; } // GameTime Coins
         public int Bits { get; set; } // Basic Coins
 

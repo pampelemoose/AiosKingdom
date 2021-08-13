@@ -109,7 +109,8 @@ namespace Network.Skills
             }
         }
 
-        public int EmberCost { get; set; }
+        public int ExperienceCost { get; set; }
+
         public int ManaCost { get; set; }
         public int Cooldown { get; set; }
 

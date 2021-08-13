@@ -43,6 +43,7 @@ namespace Server.GameServer
         public List<Network.Adventures.Bookstore> Bookstores { get; private set; }
         public List<Network.Adventures.Enemy> Enemies { get; private set; }
         public List<Network.Adventures.Npc> Npcs { get; private set; }
+        public List<Network.Adventures.Quest> Quests { get; private set; }
         public List<Network.Monsters.Monster> Monsters { get; private set; }
         public List<Network.MarketSlot> Market { get; private set; }
 
@@ -222,7 +223,7 @@ namespace Server.GameServer
                     Repetition = book.Repetition,
                     RequireWeapon = book.RequireWeapon,
                     InternalWeaponTypes = book.InternalWeaponTypes,
-                    EmberCost = book.EmberCost,
+                    ExperienceCost = book.ExperienceCost,
                     ManaCost = book.ManaCost,
                     Cooldown = book.Cooldown
                 };
@@ -581,6 +582,37 @@ namespace Server.GameServer
             }
 
             Npcs = npcList;
+
+            var quests = DataRepositories.AdventureRepository.GetAllQuestsForVersion(_config.VersionId);
+            var questList = new List<Network.Adventures.Quest>();
+
+            foreach (var quest in quests)
+            {
+                var que = new Network.Adventures.Quest
+                {
+                    Id = quest.Vid,
+                    Name = quest.Name,
+                    Description = quest.Description,
+                    Objectives = new List<Network.Adventures.QuestObjective>()
+                };
+
+                foreach (var objective in quest.Objectives)
+                {
+                    var objecti = new Network.Adventures.QuestObjective
+                    {
+                        Id = objective.Vid,
+                        Title = objective.Title,
+                        Type = ConvertQuestType(objective.Type),
+                        DataContent = objective.ObjectiveDataJson
+                    };
+
+                    que.Objectives.Add(objecti);
+                }
+
+                questList.Add(que);
+            }
+
+            Quests = questList;
         }
 
         private Network.Adventures.NpcDialogue BuildNpcDialogue(DataModels.Adventures.NpcDialogue dialogue)
@@ -751,6 +783,8 @@ namespace Server.GameServer
                     return Network.Adventures.ObjectiveType.EnemyKill;
                 case DataModels.Adventures.QuestObjective.ObjectiveType.NpcDialogue:
                     return Network.Adventures.ObjectiveType.NpcDialogue;
+                case DataModels.Adventures.QuestObjective.ObjectiveType.LearnBook:
+                    return Network.Adventures.ObjectiveType.LearnBook;
                 default:
                     return Network.Adventures.ObjectiveType.ExploreArea;
             }

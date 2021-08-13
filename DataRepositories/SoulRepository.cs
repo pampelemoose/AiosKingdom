@@ -217,8 +217,7 @@ namespace DataRepositories
                 online.Wisdom = soul.Wisdom;
 
                 // MONEY VALUES
-                online.Spirits = soul.Spirits;
-                online.Embers = soul.Embers;
+                online.StatPoints = soul.StatPoints;
                 online.Shards = soul.Shards;
                 online.Bits = soul.Bits;
 

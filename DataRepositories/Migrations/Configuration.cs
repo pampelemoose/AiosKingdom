@@ -952,7 +952,7 @@ namespace DataRepositories.Migrations
                 RequireWeapon = false,
                 ManaCost = 5,
                 Cooldown = 0,
-                EmberCost = 1,
+                ExperienceCost = 0,
                 Inscriptions = new System.Collections.Generic.List<DataModels.Skills.Inscription>
                 {
                     new DataModels.Skills.Inscription
@@ -1064,7 +1064,7 @@ namespace DataRepositories.Migrations
                 RequireWeapon = false,
                 ManaCost = 5,
                 Cooldown = 0,
-                EmberCost = 1,
+                ExperienceCost = 0,
                 Inscriptions = new System.Collections.Generic.List<DataModels.Skills.Inscription>
                 {
                     new DataModels.Skills.Inscription
@@ -1181,7 +1181,7 @@ namespace DataRepositories.Migrations
                 RequireWeapon = false,
                 ManaCost = 1,
                 Cooldown = 0,
-                EmberCost = 0,
+                ExperienceCost = 0,
                 Inscriptions = new System.Collections.Generic.List<DataModels.Skills.Inscription>
                 {
                     new DataModels.Skills.Inscription
@@ -1269,9 +1269,9 @@ namespace DataRepositories.Migrations
                 VersionId = version.Id,
                 Vid = Guid.Parse("E6C52ADC-7408-4CB6-BCEC-0D1D4B71C461"),
                 FoodCost = 1,
-                FoodHealth = 10,
+                FoodHealth = 20,
                 RestShardCost = 1,
-                RestStamina = 2,
+                RestStamina = 10,
                 ShopItems = new System.Collections.Generic.List<DataModels.Adventures.ShopItem>()
             });
         }

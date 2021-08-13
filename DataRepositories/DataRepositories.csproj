@@ -77,6 +77,10 @@
     <Compile Include="Migrations\202108120220444_UpdateAdventureRepeatable.Designer.cs">
       <DependentUpon>202108120220444_UpdateAdventureRepeatable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202108130221500_UpdateExperienceCurrency.cs" />
+    <Compile Include="Migrations\202108130221500_UpdateExperienceCurrency.Designer.cs">
+      <DependentUpon>202108130221500_UpdateExperienceCurrency.cs</DependentUpon>
+    </Compile>
     <Compile Include="TownRepository.cs" />
     <Compile Include="AdventureRepository.cs" />
     <Compile Include="ForumRepository.cs" />
@@ -121,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202108120220444_UpdateAdventureRepeatable.resx">
       <DependentUpon>202108120220444_UpdateAdventureRepeatable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108130221500_UpdateExperienceCurrency.resx">
+      <DependentUpon>202108130221500_UpdateExperienceCurrency.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

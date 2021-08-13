@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CharacterDetails : MonoBehaviour
 {
+    public Button Close;
+
     [Header("TopBar")]
     public Slider ExperienceBar;
     public Text ExperienceText;
@@ -33,6 +35,16 @@ public class CharacterDetails : MonoBehaviour
     public Text Intelligence;
     public Text Wisdom;
 
+    void Awake()
+    {
+        Close.onClick.RemoveAllListeners();
+        Close.onClick.AddListener(() =>
+        {
+            WorldManager.This.SetCanMove(true);
+            gameObject.SetActive(false);
+        });
+    }
+
     public void Open()
     {
         ExperienceBar.maxValue = DatasManager.Instance.Adventure.State.Experience;
@@ -59,6 +71,7 @@ public class CharacterDetails : MonoBehaviour
         MinDamages.text = $"{DatasManager.Instance.Adventure.State.MinDamages}";
         MaxDamages.text = $"{DatasManager.Instance.Adventure.State.MaxDamages}";
 
+        WorldManager.This.SetCanMove(false);
         gameObject.SetActive(true);
     }
 }

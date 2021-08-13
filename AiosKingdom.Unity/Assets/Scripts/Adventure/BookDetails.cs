@@ -31,8 +31,8 @@ public class BookDetails : PaginationBox
         Cooldown.text = $"{book.Cooldown}";
         Manacost.text = $"{book.ManaCost}";
         Description.text = book.Description;
-        EmberPrice.text = $"{book.EmberCost}";
-        BuyButton.gameObject.SetActive(book.EmberCost <= DatasManager.Instance.Currencies.Embers);
+        EmberPrice.text = $"{book.ExperienceCost}";
+        BuyButton.gameObject.SetActive(book.ExperienceCost <= DatasManager.Instance.Datas.CurrentExperience);
 
         _inscriptions = book.Inscriptions;
 

@@ -20,11 +20,14 @@ public class ServerListItem : MonoBehaviour
         SlotText.text = $"{infos.SlotsLimit - infos.SlotsAvailable} / {infos.SlotsLimit}";
 
         ConnectButton.onClick.RemoveAllListeners();
-        ConnectButton.onClick.AddListener(() =>
+        if (infos.Online)
         {
-            UIManager.This.ShowLoading();
+            ConnectButton.onClick.AddListener(() =>
+            {
+                UIManager.This.ShowLoading();
 
-            NetworkManager.This.AnnounceGameServerConnection(infos.Id);
-        });
+                NetworkManager.This.AnnounceGameServerConnection(infos.Id);
+            });
+        }
     }
 }

@@ -6,8 +6,8 @@ namespace Network
 {
     public class Currencies
     {
-        public int Spirits { get; set; }
-        public int Embers { get; set; }
+        public int StatPoints { get; set; }
+
         public int Shards { get; set; }
         public int Bits { get; set; }
     }

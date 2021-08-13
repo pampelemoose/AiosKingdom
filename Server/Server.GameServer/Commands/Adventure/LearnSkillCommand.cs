@@ -16,10 +16,12 @@ namespace Server.GameServer.Commands.Adventure
 
         protected override CommandResult ExecuteLogic(CommandResult ret)
         {
+            var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
+
             var bookId = Guid.Parse(_args.Args[0]);
 
             var knowledges = SoulManager.Instance.GetKnowledges(ret.ClientId);
-            var currencies = SoulManager.Instance.GetCurrencies(ret.ClientId);
+            var data = SoulManager.Instance.GetBaseDatas(ret.ClientId);
 
             var alreadyLearned = knowledges.FirstOrDefault(k => k.Id.Equals(bookId));
             if (alreadyLearned != null)
@@ -47,19 +49,19 @@ namespace Server.GameServer.Commands.Adventure
                 return ret;
             }
 
-            if (skill.EmberCost > currencies.Embers)
+            if (skill.ExperienceCost > data.CurrentExperience)
             {
                 ret.ClientResponse = new Network.Message
                 {
                     Code = Network.CommandCodes.Adventure.LearnSkill,
                     Success = false,
-                    Json = "Not enough embers."
+                    Json = "Not enough experience."
                 };
                 ret.Succeeded = true;
                 return ret;
             }
 
-            currencies.Embers -= skill.EmberCost;
+            data.CurrentExperience -= skill.ExperienceCost;
 
             knowledges.Add(new Network.Knowledge
             {
@@ -69,6 +71,52 @@ namespace Server.GameServer.Commands.Adventure
                 Talents = new List<Network.TalentUnlocked>(),
                 IsNew = true
             });
+
+            // QUEST
+            var adventure = AdventureManager.Instance.GetAdventure(soulId);
+            var quests = adventure.GetQuests();
+            foreach (var questState in quests)
+            {
+                if (!questState.Finished)
+                {
+                    var quest = DataManager.Instance.Quests.FirstOrDefault(q => q.Id == questState.QuestId);
+
+                    if (quest == null)
+                    {
+                        continue;
+                    }
+
+                    foreach (var objective in quest.Objectives)
+                    {
+                        if (objective.Type == Network.Adventures.ObjectiveType.LearnBook)
+                        {
+                            var objectiveState = questState.Objectives.FirstOrDefault(o => o.ObjectiveId == objective.Id);
+
+                            if (objectiveState == null)
+                            {
+                                continue;
+                            }
+
+                            var objectiveContent = JsonConvert.DeserializeObject<DataModels.Adventures.QuestObjectiveDataLearnBook>(objective.DataContent);
+
+                            if (!objectiveContent.Books.Contains(bookId))
+                            {
+                                continue;
+                            }
+
+                            ++objectiveState.Quantity;
+
+                            if (objectiveState.Quantity == objectiveContent.NeedToLearnCount)
+                            {
+                                objectiveState.Finished = true;
+                            }
+
+                            adventure.UpdateQuest(questState);
+                            break;
+                        }
+                    }
+                }
+            }
 
             /*
             if (rank == 1)
@@ -170,8 +218,8 @@ namespace Server.GameServer.Commands.Adventure
             }
             */
 
+            SoulManager.Instance.UpdateBaseDatas(ret.ClientId, data);
             SoulManager.Instance.UpdateKnowledge(ret.ClientId, knowledges);
-            SoulManager.Instance.UpdateCurrencies(ret.ClientId, currencies);
 
             ret.ClientResponse = new Network.Message
             {

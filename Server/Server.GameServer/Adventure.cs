@@ -142,6 +142,19 @@ namespace Server.GameServer
             return true;
         }
 
+        public List<Network.AdventureState.QuestState> GetQuests()
+        {
+            return _state.Quests;
+        }
+
+        public void UpdateQuest(Network.AdventureState.QuestState quest)
+        {
+            var currentQuest = _state.Quests.FirstOrDefault(q => q.QuestId == quest.QuestId);
+            _state.Quests.Remove(currentQuest);
+
+            _state.Quests.Add(quest);
+        }
+
         public Network.AdventureState.TavernState GetTavernShopItems(Guid tavernId)
         {
             if (!_state.Taverns.ContainsKey(tavernId))
@@ -297,7 +310,9 @@ namespace Server.GameServer
                     objectives.Add(new Network.AdventureState.QuestObjectiveState
                     {
                         ObjectiveId = objective.Id,
-                        Quantity = 0
+                        Quantity = 0,
+                        Required = true,
+                        Finished = false
                     });
                 }
 

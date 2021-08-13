@@ -37,9 +37,11 @@ public class BookstoreActionPopup : MonoBehaviour
         CloseButton.onClick.RemoveAllListeners();
         CloseButton.onClick.AddListener(() =>
         {
+            WorldManager.This.SetCanMove(true);
             gameObject.SetActive(false);
         });
 
+        WorldManager.This.SetCanMove(false);
         gameObject.SetActive(true);
     }
 }

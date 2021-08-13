@@ -84,6 +84,12 @@ public class WorldManager : MonoBehaviour
         AdventureUIManager.This.UpdateCharacterStats(state.CurrentStamina);
     }
 
+    public void SetCanMove(bool canMove)
+    {
+        var characterInputScript = Character.GetComponent<CharacterInput>();
+        characterInputScript.CanMove = canMove;
+    }
+
     public void EnterTavern(Guid tavernId)
     {
         var tavern = DatasManager.Instance.Taverns.FirstOrDefault(t => t.Id == tavernId);

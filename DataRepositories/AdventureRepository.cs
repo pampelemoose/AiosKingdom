@@ -60,6 +60,16 @@ namespace DataRepositories
             }
         }
 
+        public static List<DataModels.Adventures.Quest> GetAllQuestsForVersion(Guid versionId)
+        {
+            using (var context = new AiosKingdomContext())
+            {
+                return context.Quests
+                    .Include(a => a.Objectives)
+                    .Where(b => b.VersionId.Equals(versionId)).ToList();
+            }
+        }
+
         public static List<DataModels.Adventures.NpcDialogue> GetNextDialoguesForDialogue(Guid versionId, Guid diologueId)
         {
             using (var context = new AiosKingdomContext())

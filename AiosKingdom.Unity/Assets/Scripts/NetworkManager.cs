@@ -479,6 +479,13 @@ public class NetworkManager : MonoBehaviour
         catch (SocketException sockE)
         {
             Debug.Log("Socket exception : " + sockE);
+
+            SceneLoom.Loom.QueueOnMainThread(() =>
+            {
+                UIManager.This.ShowLoading();
+
+                AskServerInfos();
+            });
         }
     }
 
