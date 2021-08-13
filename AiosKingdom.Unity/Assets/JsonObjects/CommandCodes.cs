@@ -93,6 +93,8 @@ namespace JsonObjects
 
             public const int LearnSkill = _default + 5;
             public const int LearnTalent = _default + 6;
+
+            public const int FinishQuest = _default + 7;
         }
     }
 }

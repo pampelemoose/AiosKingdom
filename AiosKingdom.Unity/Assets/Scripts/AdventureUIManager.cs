@@ -14,6 +14,10 @@ public class AdventureUIManager : MonoBehaviour
     public GameObject TavernActionPopup;
     public GameObject BookstoreActionPopup;
 
+    public GameObject QuestObjectivePopup;
+    public GameObject QuestFinishedPopup;
+    public GameObject AdventureFinishedPopup;
+
     public static AdventureUIManager This;
     private static bool _created = false;
 
@@ -93,6 +97,22 @@ public class AdventureUIManager : MonoBehaviour
     {
         var bookstoreScript = BookstoreActionPopup.GetComponent<BookstoreActionPopup>();
         bookstoreScript.Open(bookstore);
+    }
+
+    public void UpdateAdventure(JsonObjects.AdventureState adventureState)
+    {
+        UpdateSkills(adventureState);
+        UpdateQuests(adventureState);
+    }
+
+    public void QuestFinished(Guid questId)
+    {
+        var currentAdventure = DatasManager.Instance.Adventure;
+        var adventure = DatasManager.Instance.Adventures.FirstOrDefault(a => a.Id == currentAdventure.AdventureId);
+        var quest = adventure.Quests.FirstOrDefault(q => q.Id == questId);
+
+        var questFinishedScript = QuestFinishedPopup.GetComponent<QuestFinishedPopup>();
+        questFinishedScript.Open(quest);
     }
 
     #endregion
@@ -252,4 +272,96 @@ public class AdventureUIManager : MonoBehaviour
 
     //    return _instances[entity];
     //}
+
+    private void UpdateSkills(JsonObjects.AdventureState adventureState)
+    {
+        DatasManager.Instance.Adventure.State.Skills = adventureState.State.Skills;
+        DatasManager.Instance.Adventure.State.Experience = adventureState.State.Experience;
+    }
+
+    private void UpdateQuests(JsonObjects.AdventureState adventureState)
+    {
+        var quests = adventureState.Quests;
+        var liveQuests = DatasManager.Instance.Adventure.Quests;
+        var newQuests = new List<JsonObjects.AdventureState.QuestState>();
+
+        foreach (var quest in quests)
+        {
+            if (quest.Finished)
+            {
+                newQuests.Add(quest);
+                continue;
+            }
+
+            var liveQuest = liveQuests.FirstOrDefault(q => q.QuestId == quest.QuestId);
+
+            bool allFinished = true;
+            foreach (var objective in quest.Objectives)
+            {
+                if (!objective.Finished)
+                {
+                    allFinished = false;
+                    continue;
+                }
+
+                var liveObjective = liveQuest.Objectives.FirstOrDefault(o => o.ObjectiveId == objective.ObjectiveId);
+
+                if (!liveObjective.Finished)
+                {
+                    QuestObjectiveFinished(quest.QuestId, objective.ObjectiveId);
+                }
+            }
+
+            if (allFinished)
+            {
+                var que = quests.FirstOrDefault(q => q.QuestId == quest.QuestId);
+                que.Finished = true;
+
+                newQuests.Add(que);
+
+                NetworkManager.This.FinishQuest(quest.QuestId);
+            }
+            else
+            {
+                newQuests.Add(quest);
+            }
+        }
+
+        DatasManager.Instance.Adventure.Quests = newQuests;
+
+        {
+            bool allFinished = true;
+            foreach (var quest in newQuests)
+            {
+                if (!quest.Finished)
+                {
+                    allFinished = false;
+                }
+            }
+
+            if (allFinished)
+            {
+                QuestObjectiveFinished();
+            }
+        }
+    }
+
+    private void QuestObjectiveFinished(Guid questId, Guid objectiveId)
+    {
+        var adventureState = DatasManager.Instance.Adventure;
+        var adventure = DatasManager.Instance.Adventures.FirstOrDefault(a => a.Id == adventureState.AdventureId);
+        var quest = adventure.Quests.FirstOrDefault(q => q.Id == questId);
+
+        var questObjectiveScript = QuestObjectivePopup.GetComponent<QuestObjectivePopup>();
+        questObjectiveScript.Open(quest, objectiveId);
+    }    
+    
+    private void QuestObjectiveFinished()
+    {
+        var adventureState = DatasManager.Instance.Adventure;
+        var adventure = DatasManager.Instance.Adventures.FirstOrDefault(a => a.Id == adventureState.AdventureId);
+
+        var questObjectiveScript = AdventureFinishedPopup.GetComponent<AdventureFinishedPopup>();
+        questObjectiveScript.Open(adventure);
+    }
 }

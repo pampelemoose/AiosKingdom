@@ -246,6 +246,8 @@ namespace Server.GameServer
             _commandArgCount.Add(Network.CommandCodes.Adventure.LearnSkill, 1);
             _commandArgCount.Add(Network.CommandCodes.Adventure.LearnTalent, 1);
 
+            _commandArgCount.Add(Network.CommandCodes.Adventure.FinishQuest, 1);
+
             _delegates.Add(Network.CommandCodes.Adventure.Start, (args) => { return new Commands.Adventure.StartCommand(args); });
             _delegates.Add(Network.CommandCodes.Adventure.Move, (args) => { return new Commands.Adventure.MoveCommand(args); });
             _delegates.Add(Network.CommandCodes.Adventure.EnterTavern, (args) => { return new Commands.Adventure.EnterTavernCommand(args); });
@@ -253,6 +255,8 @@ namespace Server.GameServer
 
             _delegates.Add(Network.CommandCodes.Adventure.LearnSkill, (args) => { return new Commands.Adventure.LearnSkillCommand(args); });
             _delegates.Add(Network.CommandCodes.Adventure.LearnTalent, (args) => { return new Commands.Adventure.LearnTalentCommand(args); });
+
+            _delegates.Add(Network.CommandCodes.Adventure.FinishQuest, (args) => { return new Commands.Adventure.FinishQuestCommand(args); });
         }
 
         private void Run()
@@ -672,6 +676,10 @@ namespace Server.GameServer
                     retVal.Args = new string[1] { args[0] };
                     break;
                 case Network.CommandCodes.Adventure.LearnTalent:
+                    retVal.Args = new string[1] { args[0] };
+                    break;
+
+                case Network.CommandCodes.Adventure.FinishQuest:
                     retVal.Args = new string[1] { args[0] };
                     break;
 

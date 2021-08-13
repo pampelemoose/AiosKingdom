@@ -155,6 +155,16 @@ namespace Server.GameServer
             _state.Quests.Add(quest);
         }
 
+        public void FinishQuest(Guid questId)
+        {
+            var currentQuest = _state.Quests.FirstOrDefault(q => q.QuestId == questId);
+            _state.Quests.Remove(currentQuest);
+
+            currentQuest.Finished = true;
+
+            _state.Quests.Add(currentQuest);
+        }
+
         public Network.AdventureState.TavernState GetTavernShopItems(Guid tavernId)
         {
             if (!_state.Taverns.ContainsKey(tavernId))
@@ -178,6 +188,11 @@ namespace Server.GameServer
             _log.Write($"RestInTavern Stamina left: {_state.MovingState.CurrentStamina}");
 
             return true;
+        }
+
+        public void UpdateKnowledges(Network.SoulDatas datas, List<Network.Knowledge> knowledges)
+        {
+            SetPlayerKnowledgeState(datas, knowledges);
         }
 
         private void SetPlayerStatState(Network.SoulDatas datas)

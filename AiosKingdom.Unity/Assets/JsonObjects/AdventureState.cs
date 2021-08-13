@@ -32,6 +32,8 @@ namespace JsonObjects
         {
             public Guid ObjectiveId { get; set; }
             public int Quantity { get; set; }
+            public bool Required { get; set; }
+            public bool Finished { get; set; }
         }
 
         public class SkillCooldowns

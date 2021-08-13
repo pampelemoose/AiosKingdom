@@ -1156,8 +1156,12 @@ public class NetworkManager : MonoBehaviour
                 {
                     if (message.Success)
                     {
-                        AskCurrencies();
-                        AskKnowledges();
+                        var adventure = JsonConvert.DeserializeObject<JsonObjects.AdventureState>(message.Json);
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            AdventureUIManager.This.UpdateAdventure(adventure);
+                        });
 
                         //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
                         //Application.Current.SavePropertiesAsync();
@@ -1175,10 +1179,20 @@ public class NetworkManager : MonoBehaviour
                         {
                             UIManager.This.HideLoading();
                         });
+                    }
+                }
+                break;
 
-                        //Application.Current.Properties["AiosKingdom_TutorialStep"] = 3;
-                        //Application.Current.SavePropertiesAsync();
-                        //MessagingCenter.Send(this, MessengerCodes.TutorialChanged);
+            case JsonObjects.CommandCodes.Adventure.FinishQuest:
+                {
+                    if (message.Success)
+                    {
+                        var questId = Guid.Parse(message.Json);
+
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            AdventureUIManager.This.QuestFinished(questId);
+                        });
                     }
                 }
                 break;
@@ -1364,6 +1378,11 @@ public class NetworkManager : MonoBehaviour
     public void LearnTalent(Guid talentId)
     {
         SendRequest(JsonObjects.CommandCodes.Adventure.LearnTalent, new string[1] { talentId.ToString() });
+    }
+
+    public void FinishQuest(Guid questId)
+    {
+        SendRequest(JsonObjects.CommandCodes.Adventure.FinishQuest, new string[1] { questId.ToString() });
     }
 
     #endregion

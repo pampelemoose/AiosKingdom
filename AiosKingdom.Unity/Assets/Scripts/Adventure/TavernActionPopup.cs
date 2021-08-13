@@ -19,6 +19,7 @@ public class TavernActionPopup : MonoBehaviour
         SleepButton.onClick.AddListener(() =>
         {
             NetworkManager.This.RestInTavern(tavern.Id);
+            WorldManager.This.SetCanMove(true);
             gameObject.SetActive(false);
         });
 
