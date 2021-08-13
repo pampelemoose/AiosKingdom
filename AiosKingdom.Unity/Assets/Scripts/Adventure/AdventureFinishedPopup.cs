@@ -17,7 +17,7 @@ public class AdventureFinishedPopup : MonoBehaviour
         Close.onClick.RemoveAllListeners();
         Close.onClick.AddListener(() =>
         {
-            gameObject.SetActive(false);
+            NetworkManager.This.Exit();
         });
 
         gameObject.SetActive(true);

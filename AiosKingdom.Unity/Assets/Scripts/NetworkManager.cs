@@ -1196,6 +1196,18 @@ public class NetworkManager : MonoBehaviour
                     }
                 }
                 break;
+            case JsonObjects.CommandCodes.Adventure.Exit:
+                {
+                    if (message.Success)
+                    {
+                        SceneLoom.Loom.QueueOnMainThread(() =>
+                        {
+                            AdventureUIManager.This.FinishAdventure();
+                            UIManager.This.FinishAdventure();
+                        });
+                    }
+                }
+                break;
 
             default:
                 return false;
@@ -1383,6 +1395,16 @@ public class NetworkManager : MonoBehaviour
     public void FinishQuest(Guid questId)
     {
         SendRequest(JsonObjects.CommandCodes.Adventure.FinishQuest, new string[1] { questId.ToString() });
+    }
+
+    public void Exit()
+    {
+        SendRequest(JsonObjects.CommandCodes.Adventure.Exit);
+
+        AskKnowledges();
+        AskCurrencies();
+        AskInventory();
+        AskSoulCurrentDatas();
     }
 
     #endregion

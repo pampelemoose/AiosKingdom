@@ -96,6 +96,8 @@ namespace Network
             public const int LearnTalent = _default + 6;
 
             public const int FinishQuest = _default + 7;
+
+            public const int Exit = _default + 20;
         }
     }
 }

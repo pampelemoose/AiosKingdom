@@ -161,6 +161,7 @@ MonoBehaviour:
   BookstoreActionPopup: {fileID: 2049571738}
   QuestObjectivePopup: {fileID: 1438973887}
   QuestFinishedPopup: {fileID: 1225803418}
+  AdventureFinishedPopup: {fileID: 155648504}
   WorldCamera: {fileID: 1435046667}
   World: {fileID: 1496600426}
 --- !u!114 &26934579
@@ -408,6 +409,12 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 323772556617408745, guid: 495c5557039c0064e874c7044eea003b,
     type: 3}
   m_PrefabInstance: {fileID: 323772556750552814}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &155648504 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4883474866386749217, guid: 941f48c4fc41aba4caad13563c06985f,
+    type: 3}
+  m_PrefabInstance: {fileID: 527547045}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &167178827 stripped
 GameObject:

@@ -197,6 +197,14 @@ public class UIManager : MonoBehaviour, IEventSystemHandler
         gameObject.SetActive(false);
     }
 
+    public void FinishAdventure()
+    {
+        MenuCamera.SetActive(true);
+        gameObject.SetActive(true);
+
+        ChangeView(Views.Main);
+    }
+
     //public void StartAdventure()
     //{
     //    ChangeView(Views.Adventure, true);

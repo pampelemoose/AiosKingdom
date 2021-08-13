@@ -56,6 +56,20 @@ public class AdventureUIManager : MonoBehaviour
         Character.SetActive(true);
     }
 
+    public void FinishAdventure()
+    {
+        World.SetActive(false);
+        WorldCamera.SetActive(false);
+
+        PlayerCurrentMap.SetActive(false);
+        Character.SetActive(false);
+        TavernActionPopup.SetActive(false);
+        BookstoreActionPopup.SetActive(false);
+        QuestObjectivePopup.SetActive(false);
+        QuestFinishedPopup.SetActive(false);
+        AdventureFinishedPopup.SetActive(false);
+    }
+
     #region Player Current Map
     public void SetPlayerCurrentMap(string map)
     {

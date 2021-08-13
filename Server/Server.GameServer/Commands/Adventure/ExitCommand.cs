@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.GameServer.Commands.Dungeon
+namespace Server.GameServer.Commands.Adventure
 {
     public class ExitCommand : ACommand
     {
@@ -18,13 +18,13 @@ namespace Server.GameServer.Commands.Dungeon
         {
             var soulId = SoulManager.Instance.GetSoulId(_args.ClientId);
 
-            //AdventureManager.Instance.ExitRoom(soulId);
+            AdventureManager.Instance.FinishAdventure(soulId);
 
             ret.ClientResponse = new Network.Message
             {
-                Code = Network.CommandCodes.Dungeon.Exit,
+                Code = Network.CommandCodes.Adventure.Exit,
                 Success = true,
-                Json = "Exited the dungeon."
+                Json = "Exited the edventure."
             };
             ret.Succeeded = true;
 
